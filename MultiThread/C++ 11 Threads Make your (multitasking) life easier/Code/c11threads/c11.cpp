@@ -1,4 +1,6 @@
-﻿#include <string>
+﻿//z 2015-03-30 17:35
+//z C++ 11 Threads Make your (multitasking) life easier
+#include <string>
 #include <vector>
 #include <thread>
 #include <mutex>
