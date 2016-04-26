@@ -1,0 +1,12 @@
++---------+---------+---------+---------+---------+---------+---------+---------+ 
+d.2016/04/26.17_53_53.49.K.MzM.T@WS 
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   BugFree/Log/BugFree.cs
+	new file:   BugFree/Log/z.dbg.zip
+	modified:   History.txt
+
