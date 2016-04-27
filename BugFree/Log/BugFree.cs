@@ -14,3 +14,4 @@
     默认使用 127.0.0.1/live，可指定 app 为 demo 。 由输出时指定。
     5. 在得到 stream 之后如何分离V/A。
     分离VA后decode v，得到每一个frame。
+    
