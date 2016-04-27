@@ -3,6 +3,7 @@
     hVideoEvent
 
 2016/4/27
+    znote astyle -A1 -R -Z -z1 -n *.cpp 
     1. rtmpdump 例子
     Completed handshake with rtmp://127.0.0.1:1935/live in 3 ms.
     $ rtmpdump -r rtmp://example.com/path/to/video -o downloaded_file.mp4
