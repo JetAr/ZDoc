@@ -1,0 +1,448 @@
+From: WizBrother WizMime<support@wizbrother.com>
+Subject: =?gb2312?B?zrTD/MP7?=
+Date: Date: Wed, 27 Apr 2016 16:04:47 +0800
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="multipart/alternative";
+	boundary="----=_Next_Part_1814132100.041"
+
+This is a multi-part message in MIME format.
+
+------=_Next_Part_1814132100.041
+Content-Type: multipart/alternative;
+	boundary="----=_Next_Part_0604710700.467"
+
+
+------=_Next_Part_0604710700.467
+Content-Type: text/plain;
+	charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+
+This is a multi-part message in MIME format.
+
+------=_Next_Part_0604710700.467
+Content-Type: text/html;
+	charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">=0A=
+<HTML>=0A<HEAD>=0D=0A<meta http-equiv=3D"Content-Type" content=3D=
+"text/html; charset=3Dgb2312"><TITLE>=CE=B4=C3=FC=C3=FB</TITLE>=0A=
+=0A<META name=3DGENERATOR content=3D"MSHTML 11.00.9600.18283"></H=
+EAD>=0A<BODY>=0A<H1 class=3D"subject bg" style=3D"LIST-STYLE-TYPE=
+: none; FONT-SIZE: 14px; FONT-FAMILY: arial, simsun; FONT-VARIANT=
+: normal; BACKGROUND: url(&quot;&quot;) rgb(209,227,243) repeat-x=
+ 0px 0px; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM:=
+ none; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0px; FONT-STYLE: normal=
+; PADDING-TOP: 0px; PADDING-LEFT: 0px; MARGIN: 0px; WIDOWS: 1; LE=
+TTER-SPACING: normal; LINE-HEIGHT: 26px; PADDING-RIGHT: 0px; TEXT=
+-INDENT: 10px; -webkit-text-stroke-width: 0px">The H264 bitstream=
+ extraction to receive the flv stream in librtmp: according to</H=
+1>=0A<DIV class=3Dpgr_content style=3D"WIDTH: 730px; WHITE-SPACE:=
+ normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: left; CO=
+LOR: rgb(0,0,0); PADDING-BOTTOM: 10px; PADDING-TOP: 8px; FONT: 14=
+px arial, simsun; PADDING-LEFT: 8px; CLEAR: none; WIDOWS: 1; DISP=
+LAY: inline; LETTER-SPACING: normal; PADDING-RIGHT: 8px; BACKGROU=
+ND-COLOR: rgb(255,255,255); TEXT-INDENT: 0px; -webkit-text-stroke=
+-width: 0px">=0A<DIV class=3DGAtag style=3D"WORD-WRAP: break-word=
+; MARGIN-BOTTOM: 3px; FONT-SIZE: 14px; MAX-WIDTH: 730px !importan=
+t; FONT-FAMILY: arial, simsun; OVERFLOW-X: auto"></DIV>Rtmpdump c=
+an download the RTMP flow and save as flv file.<SPAN class=3DAppl=
+e-converted-space>&nbsp;</SPAN><BR style=3D"WORD-WRAP: break-word=
+; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">If the audio or=20=
+video convection in a separate processing, to extract respectivel=
+y based on flv protocol.<SPAN class=3DApple-converted-space>&nbsp=
+;</SPAN><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !imp=
+ortant; OVERFLOW-X: auto">Simple modifications to the rtmpdump co=
+de, to increase the corresponding function.<SPAN class=3DApple-co=
+nverted-space>&nbsp;</SPAN><BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto">1 audio extraction:<=
+BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; O=
+VERFLOW-X: auto">Rtmpdump download cycle in the Download function=
+:<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto">....<BR style=3D"WORD-WRAP: break-word; MAX-WI=
+DTH: 730px !important; OVERFLOW-X: auto">&nbsp;do<BR style=3D"WOR=
+D-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto=
+">&nbsp;{<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !im=
+portant; OVERFLOW-X: auto">....<BR style=3D"WORD-WRAP: break-word=
+; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">nRead =3D RTMP_R=
+ead(rtmp, buffer, bufferSize);<BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto">....<BR style=3D"=
+WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: a=
+uto">}while(!RTMP_ctrlC &amp;&amp; nRead &gt; -1 &amp;&amp; RTMP_=
+IsConnected(rtmp) &amp;&amp; !RTMP_IsTimedout(rtmp));<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">....<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !i=
+mportant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; M=
+AX-WIDTH: 730px !important; OVERFLOW-X: auto">The original progra=
+m is written documents received, generate flv.<SPAN class=3DApple=
+-converted-space>&nbsp;</SPAN><BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto">Now, are extracte=
+d from the audio and video before writing, audio extraction is si=
+mple, direct analysis of the buffer (Reference method for the RTM=
+P_Write function).<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH:=20=
+730px !important; OVERFLOW-X: auto">Note that, rtmpdump is used i=
+n the RTMP_Read to receive, pay attention to its parameters. For=20=
+the sake of convenience, can be directly used RTMP_ReadPacket. Be=
+hind the video using RTMP_ReadPacket to receive and process.<SPAN=
+ class=3DApple-converted-space>&nbsp;</SPAN><BR style=3D"WORD-WRA=
+P: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto">int RTMP_Write2(RTMP *r, const char *buf, int size=
+)<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto">{<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH=
+: 730px !important; OVERFLOW-X: auto">&nbsp; RTMPPacket *pkt =3D=20=
+&amp;r-&gt;m_write;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH:=
+ 730px !important; OVERFLOW-X: auto">&nbsp; char *pend, *enc;<BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto">&nbsp; int s2 =3D size, ret, num;<BR style=3D"WORD-=
+WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">=
+<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=20=
+OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH:=20=
+730px !important; OVERFLOW-X: auto">&nbsp;if (size &lt;11) {<BR s=
+tyle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERF=
+LOW-X: auto">&nbsp; &nbsp;/* FLV pkt too small */<BR style=3D"WOR=
+D-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto=
+">&nbsp; &nbsp;return 0;<BR style=3D"WORD-WRAP: break-word; MAX-W=
+IDTH: 730px !important; OVERFLOW-X: auto">&nbsp;}<BR style=3D"WOR=
+D-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto=
+"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important=
+; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH=
+: 730px !important; OVERFLOW-X: auto">&nbsp;if (buf[0] =3D=3D 'F'=
+ &amp;&amp; buf[1] =3D=3D 'L' &amp;&amp; buf[2] =3D=3D 'V')<BR st=
+yle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFL=
+OW-X: auto">&nbsp; &nbsp;{<BR style=3D"WORD-WRAP: break-word; MAX=
+-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp; &nbsp; &nbsp;b=
+uf +=3D 13;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !=
+important; OVERFLOW-X: auto">&nbsp; &nbsp; &nbsp;s2 -=3D 13;<BR s=
+tyle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERF=
+LOW-X: auto">&nbsp; &nbsp;}<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">&nbsp;pkt-&gt;m_packetType =3D *buf++;<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">&nbsp;pkt-&gt;m_nBodySize =3D AMF_DecodeInt24(buf);<BR styl=
+e=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW=
+-X: auto">&nbsp;buf +=3D 3;<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp;pkt-&gt;m_nTim=
+eStamp =3D AMF_DecodeInt24(buf);<BR style=3D"WORD-WRAP: break-wor=
+d; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp;buf +=3D=20=
+3;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important=
+; OVERFLOW-X: auto">&nbsp;pkt-&gt;m_nTimeStamp |=3D *buf++ &lt;&l=
+t;24;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !import=
+ant; OVERFLOW-X: auto">&nbsp;buf +=3D 3;<BR style=3D"WORD-WRAP: b=
+reak-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp;s=
+2 -=3D 11;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !i=
+mportant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; M=
+AX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-W=
+RAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&=
+nbsp;if (((pkt-&gt;m_packetType =3D=3D RTMP_PACKET_TYPE_AUDIO<BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &n=
+bsp; || pkt-&gt;m_packetType =3D=3D RTMP_PACKET_TYPE_VIDEO) &amp;=
+&amp;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !import=
+ant; OVERFLOW-X: auto">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=20=
+!pkt-&gt;m_nTimeStamp) || pkt-&gt;m_packetType =3D=3D RTMP_PACKET=
+_TYPE_INFO)<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !=
+important; OVERFLOW-X: auto">&nbsp; &nbsp;{<BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbs=
+p; &nbsp; &nbsp;pkt-&gt;m_headerType =3D RTMP_PACKET_SIZE_LARGE;<=
+BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; O=
+VERFLOW-X: auto">&nbsp; &nbsp; &nbsp;if (pkt-&gt;m_packetType =3D=
+=3D RTMP_PACKET_TYPE_INFO)<BR style=3D"WORD-WRAP: break-word; MAX=
+-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp; &nbsp; &nbsp;&=
+nbsp;pkt-&gt;m_nBodySize +=3D 16;<BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp; &nbsp;}=
+<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=20=
+OVERFLOW-X: auto">&nbsp;else<BR style=3D"WORD-WRAP: break-word; M=
+AX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp; &nbsp;{<BR s=
+tyle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERF=
+LOW-X: auto">&nbsp; &nbsp; &nbsp;pkt-&gt;m_headerType =3D RTMP_PA=
+CKET_SIZE_MEDIUM;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 7=
+30px !important; OVERFLOW-X: auto">&nbsp; &nbsp;}<BR style=3D"WOR=
+D-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto=
+"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important=
+; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH=
+: 730px !important; OVERFLOW-X: auto">BYTE outbuf2[640];<BR style=
+=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-=
+X: auto">int nLen2 =3D 640;<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">AVManager::GetInstance()-&gt;Decode((BYTE*)(pkt-&=
+gt;m_body+1), pkt-&gt;m_nBodySize-1, outbuf2, nLen2);<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">//The actual audio content for the pkt-&gt; m_body+1, size=20=
+is pkt-&gt; m_nBodySize-1. Here is the voice of Speex code.<SPAN=20=
+class=3DApple-converted-space>&nbsp;</SPAN><BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">Why=20=
+to skip the first byte, can refer to: http://bbs.rosoo.net/thread=
+-16488-1-1.html<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">evt_OnReceiveP=
+acket((char*)outbuf2, nLen2);//The callback.<BR style=3D"WORD-WRA=
+P: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">RTMPPacket_Fre=
+e(pkt);<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impo=
+rtant; OVERFLOW-X: auto">pkt-&gt;m_nBytesRead =3D 0;<BR style=3D"=
+WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: a=
+uto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !import=
+ant; OVERFLOW-X: auto">2&nbsp;<BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto">Video processing<=
+BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; O=
+VERFLOW-X: auto">You can refer to the rtmpsrv.c<BR style=3D"WORD-=
+WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">=
+The nRead =3D RTMP_Read (RTMP, buffer, bufferSize); change:<SPAN=20=
+class=3DApple-converted-space>&nbsp;</SPAN><BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto">RTMPPacket pc =3D { 0 }, ps =3D { 0 };<BR style=3D"=
+WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: a=
+uto">&nbsp;bool bFirst =3D true;<BR style=3D"WORD-WRAP: break-wor=
+d; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">while (RTMP_Rea=
+dPacket(rtmp, &amp;pc))<BR style=3D"WORD-WRAP: break-word; MAX-WI=
+DTH: 730px !important; OVERFLOW-X: auto">{<BR style=3D"WORD-WRAP:=
+ break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">if (R=
+TMPPacket_IsReady(&amp;pc))<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp;{<BR style=3D"=
+WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: a=
+uto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (pc.m_packetType =3D=3D RTM=
+P_PACKET_TYPE_VIDEO &amp;&amp; RTMP_ClientPacket(rtmp, &amp;pc))<=
+BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; O=
+VERFLOW-X: auto">&nbsp;&nbsp;&nbsp;&nbsp;{<BR style=3D"WORD-WRAP:=
+ break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bool bIsKeyFrame =3D f=
+alse;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !import=
+ant; OVERFLOW-X: auto">&nbsp; &nbsp; &nbsp;if (result =3D=3D 0x17=
+)//I frame<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !i=
+mportant; OVERFLOW-X: auto">&nbsp;&nbsp;&nbsp;&nbsp;{<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bIsKeyFrame=
+ =3D true;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !i=
+mportant; OVERFLOW-X: auto">&nbsp;&nbsp;&nbsp;&nbsp;}<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">&nbsp;&nbsp;&nbsp;&nbsp;else if (result =3D=3D 0x27)<BR sty=
+le=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLO=
+W-X: auto">&nbsp;&nbsp;&nbsp;&nbsp;{<BR style=3D"WORD-WRAP: break=
+-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bIsKeyFrame =3D false;<BR st=
+yle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFL=
+OW-X: auto">&nbsp;&nbsp;&nbsp;&nbsp;}<BR style=3D"WORD-WRAP: brea=
+k-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">static uns=
+igned char const start_code[4] =3D {0x00, 0x00, 0x00, 0x01};<BR s=
+tyle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERF=
+LOW-X: auto">fwrite(start_code, 1, 4, pf );<BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">//in=
+t ret =3D fwrite(pc.m_body + 9, 1, pc.m_nBodySize-9, pf);<BR styl=
+e=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW=
+-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !i=
+mportant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; M=
+AX-WIDTH: 730px !important; OVERFLOW-X: auto">if( bFirst) {<BR st=
+yle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFL=
+OW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px=20=
+!important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto">//AVCsequence hea=
+der<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !importan=
+t; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDT=
+H: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: br=
+eak-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">//ioBuff=
+er.put(foredata);<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 7=
+30px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-=
+word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">//Access to SPS<BR style=3D"WORD-WRAP: break-word; MAX-WIDT=
+H: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: br=
+eak-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR styl=
+e=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW=
+-X: auto">int spsnum =3D data[10]&amp;0x1f;<BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730p=
+x !important; OVERFLOW-X: auto">int number_sps =3D 11;<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-W=
+IDTH: 730px !important; OVERFLOW-X: auto">int count_sps =3D 1;<BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">while (count_s=
+ps&lt;=3Dspsnum){<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 7=
+30px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-=
+word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto">int spslen =3D(data[number_sps]&amp;0x000000FF)&lt;&lt;8 |(=
+data[number_sps+1]&amp;0x000000FF);<BR style=3D"WORD-WRAP: break-=
+word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto">number_sps +=3D 2;<BR style=3D"WORD-WRAP:=
+ break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR s=
+tyle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERF=
+LOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px=
+ !important; OVERFLOW-X: auto">fwrite(data+number_sps, 1, spslen,=
+ pf );<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto">fwrite(start_code, 1, 4, pf );<BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-W=
+IDTH: 730px !important; OVERFLOW-X: auto">//ioBuffer.put(data,num=
+ber_sps, spslen);<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 7=
+30px !important; OVERFLOW-X: auto">//ioBuffer.put(foredata);<BR s=
+tyle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERF=
+LOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px=
+ !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word=
+; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">number_sps +=3D=20=
+spslen;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impo=
+rtant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-=
+WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">coun=
+t_sps ++;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !im=
+portant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">}<=
+BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; O=
+VERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 7=
+30px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-=
+word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">//Get PPS<BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">int ppsnum =3D=
+ data[number_sps]&amp;0x1f;<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">int number_pps =3D number_sps+1;<BR style=3D"WORD=
+-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"=
+><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH:=
+ 730px !important; OVERFLOW-X: auto">int count_pps =3D 1;<BR styl=
+e=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW=
+-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !i=
+mportant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; M=
+AX-WIDTH: 730px !important; OVERFLOW-X: auto">while (count_pps&lt=
+;=3Dppsnum){<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px=20=
+!important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD=
+-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"=
+>int ppslen =3D(data[number_pps]&amp;0x000000FF)&lt;&lt;8|data[nu=
+mber_pps+1]&amp;0x000000FF;<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">number_pps +=3D 2;<BR style=3D"WORD-WRAP: break-w=
+ord; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"=
+WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: a=
+uto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !import=
+ant; OVERFLOW-X: auto">//ioBuffer.put(data,number_pps,ppslen);<BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">//ioBuffer.put=
+(foredata);<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !=
+important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word;=20=
+MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-=
+WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">=
+fwrite(data+number_pps, 1, ppslen, pf );<BR style=3D"WORD-WRAP: b=
+reak-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">fwrite(=
+start_code, 1, 4, pf );<BR style=3D"WORD-WRAP: break-word; MAX-WI=
+DTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP:=20=
+break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR st=
+yle=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFL=
+OW-X: auto">number_pps +=3D ppslen;<BR style=3D"WORD-WRAP: break-=
+word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto">count_pps ++;<BR style=3D"WORD-WRAP: brea=
+k-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto">}<BR style=3D"WORD-WRAP: break-word; MAX-=
+WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto">bFirst =3Dfalse;<BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD=
+-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"=
+><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto">} else {<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">//AVCNALU<BR style=3D"WORD-WRAP: break-word; MAX-=
+WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto">int len =3D0;<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">int num =3D5;<BR style=3D"WORD-WRAP: break-word;=20=
+MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-=
+WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">=
+<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=20=
+OVERFLOW-X: auto">//ioBuffer.put(foredata);<BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730p=
+x !important; OVERFLOW-X: auto">while(num&lt;pc.m_nBodySize)&nbsp=
+;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto">{<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH=
+: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: bre=
+ak-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=
+=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-=
+X: auto">len =3D(data[num]&amp;0x000000FF)&lt;&lt;24|(data[num+1]=
+&amp;0x000000FF)&lt;&lt;16|(data[num+2]&amp;0x000000FF)&lt;&lt;8|=
+data[num+3]&amp;0x000000FF;<BR style=3D"WORD-WRAP: break-word; MA=
+X-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WR=
+AP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><B=
+R style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OV=
+ERFLOW-X: auto">num =3D num+4;<BR style=3D"WORD-WRAP: break-word;=
+ MAX-WIDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD=
+-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"=
+><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto">//ioBuffer.put(data,num,len);<BR style=3D"WORD=
+-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto"=
+><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important;=
+ OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH:=
+ 730px !important; OVERFLOW-X: auto">//ioBuffer.put(foredata);<BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wo=
+rd; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">fwrite(data+nu=
+m, 1, len, pf );<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 73=
+0px !important; OVERFLOW-X: auto">fwrite(start_code, 1, 4, pf );<=
+BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; O=
+VERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 7=
+30px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-=
+word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">num =3D num=20=
++ len;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !impor=
+tant; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-W=
+IDTH: 730px !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP:=
+ break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">}<BR=20=
+style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVER=
+FLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730p=
+x !important; OVERFLOW-X: auto"><BR style=3D"WORD-WRAP: break-wor=
+d; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">} &nbsp; &nbsp;=
+ &nbsp;&nbsp;<BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px=
+ !important; OVERFLOW-X: auto">=0A<DIV style=3D"WORD-WRAP: break-=
+word; FONT-SIZE: 14px; MAX-WIDTH: 730px !important; FONT-FAMILY:=20=
+arial, simsun; WHITE-SPACE: nowrap; OVERFLOW-X: auto"><BR style=3D=
+"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X:=20=
+auto"></DIV><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px=20=
+!important; OVERFLOW-X: auto">&nbsp;&nbsp;}<BR style=3D"WORD-WRAP=
+: break-word; MAX-WIDTH: 730px !important; OVERFLOW-X: auto">}<BR=
+ style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730px !important; OVE=
+RFLOW-X: auto"><BR style=3D"WORD-WRAP: break-word; MAX-WIDTH: 730=
+px !important; OVERFLOW-X: auto">The video analysis.</DIV>&nbsp;<=
+/BODY>=0A</HTML>=0A
+
+------=_Next_Part_0604710700.467--
+
+------=_Next_Part_1814132100.041--
+
