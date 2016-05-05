@@ -15,3 +15,10 @@
     5. 在得到 stream 之后如何分离V/A。
     分离VA后decode v，得到每一个frame。
     
+2016/05/05
+    1. 杨成立 (winlin)
+    CTO at 北京观止云
+    https://cn.linkedin.com/in/winlinvip
+    http://blog.csdn.net/win_lin
+    ffmpeg 例子
+    http://dranger.com/ffmpeg/

@@ -1,0 +1,791 @@
+From: WizBrother WizMime<support@wizbrother.com>
+Subject: =?gb2312?B??=
+Date: Date: Thu, 5 May 2016 17:54:08 +0800
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="multipart/alternative";
+	boundary="----=_Next_Part_0089940018.041"
+
+This is a multi-part message in MIME format.
+
+------=_Next_Part_0089940018.041
+Content-Type: multipart/alternative;
+	boundary="----=_Next_Part_0029980006.467"
+
+
+------=_Next_Part_0029980006.467
+Content-Type: text/plain;
+	charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+
+This is a multi-part message in MIME format.
+
+------=_Next_Part_0029980006.467
+Content-Type: text/html;
+	charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">=0A=
+<HTML>=0A<HEAD>=0D=0A<meta http-equiv=3D"Content-Type" content=3D=
+"text/html; charset=3Dgb2312"><TITLE></TITLE>=0A=0A<META name=3DG=
+ENERATOR content=3D"MSHTML 11.00.9600.18283"></HEAD>=0A<BODY>Mpeg=
+ Tutorials<BR><BR>=0A<H2 style=3D"FONT-FAMILY: arial, sans-serif;=
+ FONT-VARIANT: normal; WHITE-SPACE: normal; WORD-SPACING: 0px; TE=
+XT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT-STYLE: normal; WIDOWS=
+: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-strok=
+e-width: 0px">Tutorial 01: Making Screencaps</H2><SPAN class=3Dco=
+delink style=3D"BORDER-TOP: rgb(221,221,221) 2px dashed; BORDER-R=
+IGHT: rgb(221,221,221) 2px dashed; WHITE-SPACE: normal; WORD-SPAC=
+ING: 0px; BORDER-BOTTOM: rgb(221,221,221) 2px dashed; TEXT-TRANSF=
+ORM: none; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP:=
+ 0.5em; FONT: 12px/19px arial, sans-serif; PADDING-LEFT: 0.5em; B=
+ORDER-LEFT: rgb(221,221,221) 2px dashed; WIDOWS: 1; LETTER-SPACIN=
+G: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text-s=
+troke-width: 0px">Code:<SPAN class=3DApple-converted-space>&nbsp;=
+</SPAN><A href=3D"http://dranger.com/ffmpeg/tutorial01.c">tutoria=
+l01.c</A></SPAN><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING:=
+ 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT:=
+ 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: inline !importa=
+nt; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke=
+-width: 0px"></SPAN>=0A<H3 style=3D"FONT-FAMILY: arial, sans-seri=
+f; FONT-VARIANT: normal; WHITE-SPACE: normal; WORD-SPACING: 0px;=20=
+TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT-STYLE: normal; WIDO=
+WS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-str=
+oke-width: 0px">Overview</H3>=0A<P style=3D"WHITE-SPACE: normal;=20=
+WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT:=
+ 12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal;=20=
+TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">=CB=E6=D7=C5=CA=
+=B1=BC=E4=CD=C6=D2=C6=A3=AC=D3=D0 video stream =D2=D4=BC=B0 audio=
+ stream =BF=C9=D3=C3=A1=A3 stream=D6=D0=B5=C4data elements=B3=C6=D7=
+=F7frames=A1=A3<BR>=C3=BF=D2=BB=C2=B7stream=B6=BC=CA=C7=CA=B9=D3=C3=
+=B2=BB=CD=AC=C0=E0=D0=CD=B5=C4codec=C0=B4=B1=E0=C2=EB=B5=C4=A1=A3=
+codec=B6=A8=D2=E5=C1=CB=CA=B5=BC=CA=B5=C4=CA=FD=BE=DD=CA=C7=C8=E7=
+=BA=CEcodeed=D2=D4=BC=B0decoded=A1=A3<BR>packets=B4=D3stream=D6=D0=
+=B6=C1=B3=F6=A3=BB=CA=C7=BD=E2=C2=EB=BA=F3=B5=C4frame data=A1=A3<=
+BR>Movie files have a few basic components. First, the file itsel=
+f is called a<SPAN class=3DApple-converted-space>&nbsp;</SPAN><B>=
+container</B>, and the type of container determines where the inf=
+ormation in the file goes. Examples of containers are AVI and Qui=
+cktime. Next, you have a bunch of<SPAN class=3DApple-converted-sp=
+ace>&nbsp;</SPAN><B>streams</B>; for example, you usually have an=
+ audio stream and a video stream. (A "stream" is just a fancy wor=
+d for "a succession of data elements made available over time".)=20=
+The data elements in a stream are called<SPAN class=3DApple-conve=
+rted-space>&nbsp;</SPAN><B>frames</B>. Each stream is encoded by=20=
+a different kind of<SPAN class=3DApple-converted-space>&nbsp;</SP=
+AN><B>codec</B>. The codec defines how the actual data is COded a=
+nd DECoded - hence the name CODEC. Examples of codecs are DivX an=
+d MP3.<SPAN class=3DApple-converted-space>&nbsp;</SPAN><B>Packets=
+</B><SPAN class=3DApple-converted-space>&nbsp;</SPAN>are then rea=
+d from the stream. Packets are pieces of data that can contain bi=
+ts of data that are decoded into raw frames that we can finally m=
+anipulate for our application. For our purposes, each packet cont=
+ains complete frames, or multiple frames in the case of audio.</P=
+>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRAN=
+SFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif=
+; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-te=
+xt-stroke-width: 0px">=D2=BB=B8=F6=BB=F9=B4=A1=B5=C4=B9=FD=B3=CC=A3=
+=BA<BR>10 =B4=D3 video.avi =B4=F2=BF=AA video_stream<BR>20 =B4=D3=
+ video_stream =B6=C1=C8=A1 packet =B5=BD frame<BR>30 if frame not=
+ complete goto 20<BR>40 do something with frame<BR>50 goto 20<BR>=
+At its very basic level, dealing with video and audio streams is=20=
+very easy:</P><PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px dotted;=20=
+BORDER-RIGHT: rgb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SPACING:=
+ 0px; BORDER-BOTTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: non=
+e; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em;=20=
+FONT: 12px/19px 'Courier New', courier, monospace; PADDING-LEFT:=20=
+0.5em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SP=
+ACING: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-te=
+xt-stroke-width: 0px">10 OPEN video_stream FROM video.avi=0A20 RE=
+AD packet FROM video_stream INTO frame=0A30 IF frame NOT COMPLETE=
+ GOTO 20=0A40 DO SOMETHING WITH frame=0A50 GOTO 20=0A</PRE><SPAN=20=
+style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM:=20=
+none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans=
+-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: no=
+rmal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">=BB=F9=B4=
+=A1=B5=C4=BF=F2=BC=DC=B4=F3=B8=C5=CA=C7=D5=E2=B8=F6=D1=F9=D7=D3<B=
+R>Handling multimedia with ffmpeg is pretty much as simple as thi=
+s program, although some programs might have a very complex "DO S=
+OMETHING" step. So in this tutorial, we're going to open a file,=20=
+read from the video stream inside it, and our DO SOMETHING is goi=
+ng to be writing the frame to a PPM file.</SPAN>=0A<P style=3D"WH=
+ITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR=
+: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; LETTE=
+R-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0=
+px"></P>=0A<H3 style=3D"FONT-FAMILY: arial, sans-serif; FONT-VARI=
+ANT: normal; WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFO=
+RM: none; COLOR: rgb(0,0,0); FONT-STYLE: normal; WIDOWS: 1; LETTE=
+R-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0=
+px">Opening the File</H3>=0A<P style=3D"WHITE-SPACE: normal; WORD=
+-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12p=
+x/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT=
+-INDENT: 0px; -webkit-text-stroke-width: 0px">=B3=F5=CA=BC=BB=AF=A3=
+=AC=B0=FC=BA=AC=CD=B7=CE=C4=BC=FE=A3=AC=B3=F5=CA=BC=BB=AF library=
+ =A1=A3<BR>First, let's see how we open a file in the first place=
+. With ffmpeg, you have to first initialize the library.</P><PRE=20=
+style=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0=
+,0,204) 1px dotted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM=
+: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0=
+); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Co=
+urier New', courier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT:=
+ rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADD=
+ING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0p=
+x">#include &lt;libavcodec/avcodec.h&gt;=0A#include &lt;libavform=
+at/avformat.h&gt;=0A#include &lt;ffmpeg/swscale.h&gt;=0A...=0Aint=
+ main(int argc, charg *argv[]) {=0A<A href=3D"http://dranger.com/=
+ffmpeg/functions.html#av_register_all">av_register_all</A>();=0A<=
+/PRE><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-=
+TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px=20=
+arial, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-=
+SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px=
+">=B5=C7=BC=C7=CB=F9=D3=D0=BF=C9=D3=C3=B5=C4file formats =D2=D4=BC=
+=B0 codecs=A1=A3<BR>=D6=BB=D0=E8=D2=AA=B5=F7=D3=C3 av_register_al=
+l =D2=BB=B4=CE=A1=A3 =D4=DAmain =D6=D0=B5=F7=D3=C3=D2=BB=B4=CE=BC=
+=B4=BF=C9=A1=A3<BR>This registers all available file formats and=20=
+codecs with the library so they will be used automatically when a=
+ file with the corresponding format/codec is opened. Note that yo=
+u only need to call</SPAN><A style=3D"WHITE-SPACE: normal; WORD-S=
+PACING: 0px; TEXT-TRANSFORM: none; FONT: 12px/19px arial, sans-se=
+rif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit=
+-text-stroke-width: 0px" href=3D"http://dranger.com/ffmpeg/functi=
+ons.html#av_register_all">av_register_all</A><SPAN style=3D"WHITE=
+-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: n=
+one; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS=
+: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-IND=
+ENT: 0px; -webkit-text-stroke-width: 0px">() once, so we do it he=
+re in main(). If you like, it's possible to register only certain=
+ individual file formats and codecs, but there's usually no reaso=
+n why you would have to do that.</SPAN>=0A<P style=3D"WHITE-SPACE=
+: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0=
+,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING=
+: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"></P>=0A=
+<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFOR=
+M: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WI=
+DOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-s=
+troke-width: 0px">=C8=BB=BA=F3=CA=B5=BC=CA=B4=F2=BF=AA=CE=C4=BC=FE=
+<BR>Now we can actually open the file:</P><PRE style=3D"BORDER-TO=
+P: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,204) 1px dotted=
+; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: rgb(0,0,204) 1px=
+ dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); PADDING-BOTTOM:=
+ 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Courier New', courie=
+r, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rgb(0,0,204) 1px=20=
+dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING-RIGHT: 0.5em;=20=
+TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"><A href=3D"http=
+://dranger.com/ffmpeg/data.html#AVFormatContext">AVFormatContext<=
+/A> *pFormatCtx =3D NULL;=0A<BR><BR><BR>=0A<BR>// Open video file=
+=0Aif(<A href=3D"http://dranger.com/ffmpeg/functions.html#avforma=
+t_open_input">avformat_open_input</A>(&amp;pFormatCtx, argv[1], N=
+ULL, 0, NULL)!=3D0)=0A  return -1; // Couldn't open file=0A</PRE>=
+<SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANS=
+FORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial=
+, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACI=
+NG: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">=B4=
+=D3=B5=DA=D2=BB=B8=F6 argument =B5=C3=B5=BDfilename=A3=AC=B6=C1=C8=
+=A1=CE=C4=BC=FEheader=A3=AC=BD=AB=D0=C5=CF=A2=B4=E6=B4=A2=B5=BDAV=
+FormatContext=A1=A3=D7=EE=BA=F3=B5=C4=C8=FD=B8=F6arguments=D3=C3=D3=
+=DA=D6=B8=C3=F7=CE=C4=BC=FE=B8=F1=CA=BD=A3=ACbuffer size =D2=D4=BC=
+=B0 format options=A1=A3 =CD=A8=B9=FD=C9=E8=D6=C3=D5=E2=B8=F6=CE=AA=
+NULL=A3=AC&nbsp; libavformat =BD=AB=BB=E1=D7=D4=B6=AF=BC=EC=B2=E2=
+=D5=E2=D0=A9=A1=A3<BR>We get our filename from the first argument=
+. This function reads the file header and stores information abou=
+t the file format in the<SPAN class=3DApple-converted-space>&nbsp=
+;</SPAN></SPAN><A style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px=
+; TEXT-TRANSFORM: none; FONT: 12px/19px arial, sans-serif; WIDOWS=
+: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-strok=
+e-width: 0px" href=3D"http://dranger.com/ffmpeg/data.html#AVForma=
+tContext">AVFormatContext</A><SPAN style=3D"WHITE-SPACE: normal;=20=
+WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(=
+0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: in=
+line !important; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webki=
+t-text-stroke-width: 0px"><SPAN class=3DApple-converted-space>&nb=
+sp;</SPAN>structure we have given it. The last three arguments ar=
+e used to specify the file format, buffer size, and format option=
+s, but by setting this to NULL or 0, libavformat will auto-detect=
+ these.</SPAN>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0=
+px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px aria=
+l, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0p=
+x; -webkit-text-stroke-width: 0px">This function only looks at th=
+e header, so next we need to check out the stream information in=20=
+the file.:</P><PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px dotted;=20=
+BORDER-RIGHT: rgb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SPACING:=
+ 0px; BORDER-BOTTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: non=
+e; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em;=20=
+FONT: 12px/19px 'Courier New', courier, monospace; PADDING-LEFT:=20=
+0.5em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SP=
+ACING: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-te=
+xt-stroke-width: 0px">// Retrieve stream information=0Aif(<A href=
+=3D"http://dranger.com/ffmpeg/functions.html#avformat_find_stream=
+_info">avformat_find_stream_info</A>(pFormatCtx, NULL)&lt;0)=0A =20=
+return -1; // Couldn't find stream information=0A</PRE><SPAN styl=
+e=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none=
+; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-ser=
+if; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal=
+; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">=BB=F1=C8=A1p=
+FormatCtx-&gt;stream =A1=A3<BR>This function populates<SPAN class=
+=3DApple-converted-space>&nbsp;</SPAN></SPAN><TT style=3D"WHITE-S=
+PACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb=
+(0,0,0); FONT: 12px/19px 'Courier New', courier, monospace; WIDOW=
+S: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stro=
+ke-width: 0px">pFormatCtx-&gt;streams</TT><SPAN style=3D"WHITE-SP=
+ACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none=
+; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1=
+; DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-INDENT=
+: 0px; -webkit-text-stroke-width: 0px"><SPAN class=3DApple-conver=
+ted-space>&nbsp;</SPAN>with the proper information. We introduce=20=
+a handy debugging function to show us what's inside:</SPAN><PRE s=
+tyle=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,=
+0,204) 1px dotted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM:=
+ rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0)=
+; PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Cou=
+rier New', courier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT:=20=
+rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDI=
+NG-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px=
+">// Dump information about file onto standard error=0Aav_dump_fo=
+rmat(pFormatCtx, 0, argv[1], 0);=0A</PRE><SPAN style=3D"WHITE-SPA=
+CE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none;=
+ COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1;=
+ DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-INDENT:=
+ 0px; -webkit-text-stroke-width: 0px">=CF=D6=D4=DA pFormatCtx-&gt=
+;streams =D6=BB=CA=C7=D2=BB=D7=E9=D6=B8=D5=EB=A1=A3<BR>Now<SPAN c=
+lass=3DApple-converted-space>&nbsp;</SPAN></SPAN><TT style=3D"WHI=
+TE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR:=
+ rgb(0,0,0); FONT: 12px/19px 'Courier New', courier, monospace; W=
+IDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-=
+stroke-width: 0px">pFormatCtx-&gt;streams</TT><SPAN style=3D"WHIT=
+E-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT:=20=
+none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOW=
+S: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-IN=
+DENT: 0px; -webkit-text-stroke-width: 0px"><SPAN class=3DApple-co=
+nverted-space>&nbsp;</SPAN>is just an array of pointers, of size<=
+SPAN class=3DApple-converted-space>&nbsp;</SPAN></SPAN><TT style=3D=
+"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; CO=
+LOR: rgb(0,0,0); FONT: 12px/19px 'Courier New', courier, monospac=
+e; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-t=
+ext-stroke-width: 0px">pFormatCtx-&gt;nb_streams</TT><SPAN style=3D=
+"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FL=
+OAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif;=20=
+WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TE=
+XT-INDENT: 0px; -webkit-text-stroke-width: 0px">, so let's walk t=
+hrough it until we find a video stream.</SPAN><PRE style=3D"BORDE=
+R-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,204) 1px do=
+tted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: rgb(0,0,204)=
+ 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); PADDING-BOT=
+TOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Courier New', co=
+urier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rgb(0,0,204)=20=
+1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING-RIGHT: 0.5=
+em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">int i;=0A<A=
+ href=3D"http://dranger.com/ffmpeg/data.html#AVCodecContext">AVCo=
+decContext</A> *pCodecCtxOrig =3D NULL;=0A<A href=3D"http://drang=
+er.com/ffmpeg/data.html#AVCodecContext">AVCodecContext</A> *pCode=
+cCtx =3D NULL;=0A=0A// Find the first video stream=0AvideoStream=3D=
+-1;=0Afor(i=3D0; i&lt;pFormatCtx-&gt;nb_streams; i++)=0A  if(pFor=
+matCtx-&gt;streams[i]-&gt;codec-&gt;codec_type=3D=3DAVMEDIA_TYPE_=
+VIDEO) {=0A    videoStream=3Di;=0A    break;=0A  }=0A<BR><BR>if(v=
+ideoStream=3D=3D-1)=0A  return -1; // Didn't find a video stream=0A=
+=0A// Get a pointer to the codec context for the video stream=0Ap=
+CodecCtx=3DpFormatCtx-&gt;streams[videoStream]-&gt;codec;=0A</PRE=
+><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRAN=
+SFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px aria=
+l, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPAC=
+ING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">=D3=
+=EBcodec=CF=E0=B9=D8=B5=C4stream information=A3=AC =B3=C6=D7=F7 "=
+codec context"=A1=A3 =B0=FC=BA=AC=C1=CB stream =CB=F9=CA=B9=D3=C3=
+=B5=C4 codec =D0=C5=CF=A2=A1=A3 =CF=D6=D4=DA=CE=D2=C3=C7=D3=D0=D2=
+=BB=B8=F6=D6=B8=CF=F2=C6=E4=B5=C4=D6=B8=D5=EB=A1=A3=D0=E8=D2=AA=D5=
+=D2=B5=BD=CA=B5=BC=CA=B5=C4 codec =B2=A2=C7=D2=B4=F2=BF=AA=CB=FC=A1=
+=A3<BR>The stream's information about the codec is in what we cal=
+l the "codec context." This contains all the information about th=
+e codec that the stream is using, and now we have a pointer to it=
+. But we still have to find the actual codec and open it:</SPAN><=
+PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: r=
+gb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BO=
+TTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0=
+,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px=
+ 'Courier New', courier, monospace; PADDING-LEFT: 0.5em; BORDER-L=
+EFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SPACING: normal;=20=
+PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text-stroke-width=
+: 0px">AVCodec *pCodec =3D NULL;=0A=0A// Find the decoder for the=
+ video stream<BR>//z =B8=F9=BE=DD codec_id =BB=F1=C8=A1=CA=B5=BC=CA=
+=B5=C4 pCodec =A1=A3=0ApCodec=3D<A href=3D"http://dranger.com/ffm=
+peg/functions.html#avcodec_find_decoder">avcodec_find_decoder</A>=
+(pCodecCtx-&gt;codec_id);<BR>//z =C8=E7=B9=FB pCodec =CE=AANULL=A1=
+=A3=0Aif(pCodec=3D=3DNULL) {=0A  fprintf(stderr, "Unsupported cod=
+ec!\n");=0A  return -1; // Codec not found=0A}=0A// Copy context<=
+BR>//z copy context =A1=A3=0ApCodecCtx =3D <A href=3D"http://dran=
+ger.com/ffmpeg/functions.html#avcodec_alloc_context3">avcodec_all=
+oc_context3</A>(pCodec);=0Aif(<A href=3D"http://dranger.com/ffmpe=
+g/functions.html#avcodec_copy_context">avcodec_copy_context</A>(p=
+CodecCtx, pCodecCtxOrig) !=3D 0) {=0A  fprintf(stderr, "Couldn't=20=
+copy codec context");=0A  return -1; // Error copying codec conte=
+xt=0A}=0A// Open codec<BR>//z =B8=F9=BE=DD stream =D0=C5=CF=A2=B4=
+=F2=BF=AA codec =0Aif(<A href=3D"http://dranger.com/ffmpeg/functi=
+ons.html#avcodec_open2">avcodec_open2</A>(pCodecCtx, pCodec)&lt;0=
+)=0A  return -1; // Could not open codec=0A</PRE><SPAN style=3D"W=
+HITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOA=
+T: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WI=
+DOWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TEXT=
+-INDENT: 0px; -webkit-text-stroke-width: 0px">=B2=BB=BF=C9=D6=B1=BD=
+=D3=CA=B9=D3=C3=B4=D3 video stream =B6=F8=C0=B4=B5=C4 &nbsp;AVCod=
+ecContext =A1=A3 =B2=BB=B5=C3=B2=BB=CA=B9=D3=C3 avcodec_copy_cont=
+ext =C0=B4=BF=BD=B1=B4 context =B5=BD=D2=BB=B8=F6=D0=C2=B5=C4 loc=
+ation =A1=A3<BR>Note that we must not use the AVCodecContext from=
+ the video stream directly! So we have to use</SPAN><A style=3D"W=
+HITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FONT=
+: 12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal;=
+ TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px" href=3D"http:/=
+/dranger.com/ffmpeg/functions.html">avcodec_copy_context</A><SPAN=
+ style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM:=
+ none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, san=
+s-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: n=
+ormal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">() to co=
+py the context to a new location (after allocating memory for it,=
+ of course).</SPAN>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACI=
+NG: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px=
+ arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDEN=
+T: 0px; -webkit-text-stroke-width: 0px"></P>=0A<H3 style=3D"FONT-=
+FAMILY: arial, sans-serif; FONT-VARIANT: normal; WHITE-SPACE: nor=
+mal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0);=20=
+FONT-STYLE: normal; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDEN=
+T: 0px; -webkit-text-stroke-width: 0px">Storing the Data</H3>=0A<=
+P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM=
+: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WID=
+OWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-st=
+roke-width: 0px">Now we need a place to actually store the frame:=
+<BR>=D0=E8=D2=AA=D2=BB=B8=F6=B5=D8=B7=BD=C0=B4=CA=B5=BC=CA=B4=E6=B4=
+=A2 frame =A1=A3</P><PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px do=
+tted; BORDER-RIGHT: rgb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SP=
+ACING: 0px; BORDER-BOTTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFOR=
+M: none; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0=
+.5em; FONT: 12px/19px 'Courier New', courier, monospace; PADDING-=
+LEFT: 0.5em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LET=
+TER-SPACING: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -web=
+kit-text-stroke-width: 0px"><A href=3D"http://dranger.com/ffmpeg/=
+data.html#AVFrame">AVFrame</A> *pFrame =3D NULL;=0A=0A// Allocate=
+ video frame<BR>// =B7=D6=C5=E4=D2=BB=B8=F6 frame =0ApFrame=3D<A=20=
+href=3D"http://dranger.com/ffmpeg/functions.html#av_frame_alloc">=
+av_frame_alloc</A>();=0A</PRE><SPAN style=3D"WHITE-SPACE: normal;=
+ WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb=
+(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: i=
+nline !important; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webk=
+it-text-stroke-width: 0px">=BC=C6=BB=AE=CA=E4=B3=F6 PPM =CE=C4=BC=
+=FE=A3=AC =CA=B9=D3=C3=C1=CB 24b =C0=B4=B4=E6=B4=A2 RGB=A1=A3 =BD=
+=AB=CE=D2=C3=C7=B5=C4 frame =D3=C9=C6=E4 native format =D7=AA=BB=BB=
+=CE=AA RGB=A1=A3 ffmpeg =BD=AB=BB=E1=CE=AA=CE=D2=C3=C7=CD=EA=B3=C9=
+=D5=E2=D0=A9=D7=AA=BB=BB=A1=A3<BR>=BD=AB=CE=D2=C3=C7initial frame=
+ =D7=AA=BB=BB=CE=AA=D2=BB=B8=F6=CC=D8=B6=A8=B5=C4fromat=A1=A3<BR>=
+=C1=ED=CD=E2=CE=AA=B4=CB=B7=D6=C5=E4=D2=BB=D6=A1=A3=AC=D3=C3=D3=DA=
+=B4=E6=B4=A2=D7=AA=BB=BB=BA=F3=B5=C4frame=A1=A3<BR>Since we're pl=
+anning to output PPM files, which are stored in 24-bit RGB, we're=
+ going to have to convert our frame from its native format to RGB=
+. ffmpeg will do these conversions for us. For most projects (inc=
+luding ours) we're going to want to convert our initial frame to=20=
+a specific format. Let's allocate a frame for the converted frame=
+ now.</SPAN><PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BO=
+RDER-RIGHT: rgb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SPACING: 0=
+px; BORDER-BOTTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: none;=
+ COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FO=
+NT: 12px/19px 'Courier New', courier, monospace; PADDING-LEFT: 0.=
+5em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SPAC=
+ING: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text=
+-stroke-width: 0px">// Allocate an <A href=3D"http://dranger.com/=
+ffmpeg/data.html#AVFrame">AVFrame</A> structure=0ApFrameRGB=3D<A=20=
+href=3D"http://dranger.com/ffmpeg/functions.html#av_frame_alloc">=
+av_frame_alloc</A>();=0Aif(pFrameRGB=3D=3DNULL)=0A  return -1;=0A=
+</PRE><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT=
+-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px=
+ arial, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER=
+-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0p=
+x">=BC=B4=B1=E3=B7=D6=C5=E4=C1=CB frame=A1=A3=CE=D2=C3=C7=D0=E8=D2=
+=AA=B5=D8=B7=BD=C0=B4=B7=C5=D6=C3raw data=A3=AC=CD=A8=B9=FD avpic=
+ture_get_size =C0=B4=BB=F1=C8=A1=CE=D2=C3=C7=CB=F9=D0=E8=B5=C4 si=
+ze=A1=A3 =B2=A2=C7=D2=CA=D6=B6=AF=B7=D6=C5=E4=BF=D5=BC=E4=A1=A3<B=
+R>Even though we've allocated the frame, we still need a place to=
+ put the raw data when we convert it. We use<SPAN class=3DApple-c=
+onverted-space>&nbsp;</SPAN></SPAN><TT style=3D"WHITE-SPACE: norm=
+al; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); F=
+ONT: 12px/19px 'Courier New', courier, monospace; WIDOWS: 1; LETT=
+ER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width:=20=
+0px"><A href=3D"http://dranger.com/ffmpeg/functions.html#avpictur=
+e_get_size">avpicture_get_size</A></TT><SPAN style=3D"WHITE-SPACE=
+: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; C=
+OLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; D=
+ISPLAY: inline !important; LETTER-SPACING: normal; TEXT-INDENT: 0=
+px; -webkit-text-stroke-width: 0px"><SPAN class=3DApple-converted=
+-space>&nbsp;</SPAN>to get the size we need, and allocate the spa=
+ce manually:</SPAN><PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px dot=
+ted; BORDER-RIGHT: rgb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SPA=
+CING: 0px; BORDER-BOTTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM=
+: none; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.=
+5em; FONT: 12px/19px 'Courier New', courier, monospace; PADDING-L=
+EFT: 0.5em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LETT=
+ER-SPACING: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webk=
+it-text-stroke-width: 0px">uint8_t *buffer =3D NULL;=0Aint numByt=
+es;=0A// Determine required buffer size and allocate buffer=0Anum=
+Bytes=3D<A href=3D"http://dranger.com/ffmpeg/functions.html#avpic=
+ture_get_size">avpicture_get_size</A>(PIX_FMT_RGB24, pCodecCtx-&g=
+t;width,=0A                            pCodecCtx-&gt;height);=0Ab=
+uffer=3D(uint8_t *)<A href=3D"http://dranger.com/ffmpeg/functions=
+.html#av_malloc">av_malloc</A>(numBytes*sizeof(uint8_t));=0A</PRE=
+><TT style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSF=
+ORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px 'Courier New', cour=
+ier, monospace; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0=
+px; -webkit-text-stroke-width: 0px"><A href=3D"http://dranger.com=
+/ffmpeg/functions.html#av_malloc">av_malloc</A></TT><SPAN style=3D=
+"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FL=
+OAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif;=20=
+WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TE=
+XT-INDENT: 0px; -webkit-text-stroke-width: 0px"><SPAN class=3DApp=
+le-converted-space>&nbsp;</SPAN>is ffmpeg's malloc that is just a=
+ simple wrapper around malloc that makes sure the memory addresse=
+s are aligned and such. It will<SPAN class=3DApple-converted-spac=
+e>&nbsp;</SPAN></SPAN><I style=3D"FONT-SIZE: 12px; FONT-FAMILY: a=
+rial, sans-serif; FONT-VARIANT: normal; WHITE-SPACE: normal; WORD=
+-SPACING: 0px; TEXT-TRANSFORM: none; FONT-WEIGHT: normal; COLOR:=20=
+rgb(0,0,0); WIDOWS: 1; LETTER-SPACING: normal; LINE-HEIGHT: 19px;=
+ TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">not</I><SPAN s=
+tyle=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: n=
+one; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-=
+serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: nor=
+mal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"><SPAN clas=
+s=3DApple-converted-space>&nbsp;</SPAN>protect you from memory le=
+aks, double freeing, or other malloc problems.</SPAN>=0A<P style=3D=
+"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; CO=
+LOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; LE=
+TTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width=
+: 0px"></P>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px;=
+ TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial,=20=
+sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px;=20=
+-webkit-text-stroke-width: 0px">Now we use<SPAN class=3DApple-con=
+verted-space>&nbsp;</SPAN><A href=3D"http://dranger.com/ffmpeg/fu=
+nctions.html#avpicture_fill">avpicture_fill</A><SPAN class=3DAppl=
+e-converted-space>&nbsp;</SPAN>to associate the frame with our ne=
+wly allocated buffer. About the<SPAN class=3DApple-converted-spac=
+e>&nbsp;</SPAN><A href=3D"http://dranger.com/ffmpeg/data.html#AVP=
+icture">AVPicture</A>cast: the AVPicture struct is a subset of th=
+e<SPAN class=3DApple-converted-space>&nbsp;</SPAN><A href=3D"http=
+://dranger.com/ffmpeg/data.html#AVFrame">AVFrame</A><SPAN class=3D=
+Apple-converted-space>&nbsp;</SPAN>struct - the beginning of the=20=
+AVFrame struct is identical to the AVPicture struct.</P><PRE styl=
+e=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,2=
+04) 1px dotted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: rg=
+b(0,0,204) 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); P=
+ADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Courie=
+r New', courier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rgb=
+(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING-=
+RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">/=
+/ Assign appropriate parts of buffer to image planes in pFrameRGB=
+=0A// Note that pFrameRGB is an <A href=3D"http://dranger.com/ffm=
+peg/data.html#AVFrame">AVFrame</A>, but AVFrame is a superset=0A/=
+/ of <A href=3D"http://dranger.com/ffmpeg/data.html#AVPicture">AV=
+Picture</A>=0A<A href=3D"http://dranger.com/ffmpeg/functions.html=
+#avpicture_fill">avpicture_fill</A>((<A href=3D"http://dranger.co=
+m/ffmpeg/data.html#AVPicture">AVPicture</A> *)pFrameRGB, buffer,=20=
+PIX_FMT_RGB24,=0A                pCodecCtx-&gt;width, pCodecCtx-&=
+gt;height);=0A</PRE><SPAN style=3D"WHITE-SPACE: normal; WORD-SPAC=
+ING: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); F=
+ONT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: inline !imp=
+ortant; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-st=
+roke-width: 0px">Finally! Now we're ready to read from the stream=
+!</SPAN>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TE=
+XT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, san=
+s-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -we=
+bkit-text-stroke-width: 0px"></P>=0A<H3 style=3D"FONT-FAMILY: ari=
+al, sans-serif; FONT-VARIANT: normal; WHITE-SPACE: normal; WORD-S=
+PACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT-STYLE:=
+ normal; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -we=
+bkit-text-stroke-width: 0px">Reading the Data</H3>=0A<P style=3D"=
+WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COL=
+OR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; LET=
+TER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width:=
+ 0px">What we're going to do is read through the entire video str=
+eam by reading in the packet, decoding it into our frame, and onc=
+e our frame is complete, we will convert and save it.</P><PRE sty=
+le=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,=
+204) 1px dotted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: r=
+gb(0,0,204) 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0);=20=
+PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Couri=
+er New', courier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rg=
+b(0,0,204) 1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING=
+-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">=
+struct SwsContext *sws_ctx =3D NULL;=0Aint frameFinished;=0A<A hr=
+ef=3D"http://dranger.com/ffmpeg/data.html#AVPacket">AVPacket</A>=20=
+packet;=0A// initialize SWS context for software scaling=0Asws_ct=
+x =3D <A href=3D"http://dranger.com/ffmpeg/functions.html#sws_get=
+Context">sws_getContext</A>(pCodecCtx-&gt;width,=0A    pCodecCtx-=
+&gt;height,=0A    pCodecCtx-&gt;pix_fmt,=0A    pCodecCtx-&gt;widt=
+h,=0A    pCodecCtx-&gt;height,=0A    PIX_FMT_RGB24,=0A    SWS_BIL=
+INEAR,=0A    NULL,=0A    NULL,=0A    NULL=0A    );=0A=0Ai=3D0;=0A=
+while(<A href=3D"http://dranger.com/ffmpeg/functions.html#av_read=
+_frame">av_read_frame</A>(pFormatCtx, &amp;packet)&gt;=3D0) {=0A=20=
+ // Is this a packet from the video stream?=0A  if(packet.stream_=
+index=3D=3DvideoStream) {=0A	// Decode video frame=0A    <A href=3D=
+"http://dranger.com/ffmpeg/functions.html#avcodec_decode_video2">=
+avcodec_decode_video2</A>(pCodecCtx, pFrame, &amp;frameFinished,=20=
+&amp;packet);=0A    =0A    // Did we get a video frame?=0A    if(=
+frameFinished) {=0A    // Convert the image from its native forma=
+t to RGB=0A        <A href=3D"http://dranger.com/ffmpeg/functions=
+.html#sws_scale">sws_scale</A>(sws_ctx, (uint8_t const * const *)=
+pFrame-&gt;data,=0A		  pFrame-&gt;linesize, 0, pCodecCtx-&gt;heig=
+ht,=0A		  pFrameRGB-&gt;data, pFrameRGB-&gt;linesize);=0A	=0A   =20=
+    // Save the frame to disk=0A        if(++i&lt;=3D5)=0A      =20=
+   SaveFrame(pFrameRGB, pCodecCtx-&gt;width, =0A                =20=
+   pCodecCtx-&gt;height, i);=0A    }=0A  }=0A    =0A  // Free the=
+ packet that was allocated by <A href=3D"http://dranger.com/ffmpe=
+g/functions.html#av_read_frame">av_read_frame</A>=0A  <A href=3D"=
+http://dranger.com/ffmpeg/functions.html#av_free_packet">av_free_=
+packet</A>(&amp;packet);=0A}=0A</PRE><SPAN class=3Dsidenote style=
+=3D"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,20=
+4) 1px dotted; WHITE-SPACE: normal; WORD-SPACING: 0px; BORDER-BOT=
+TOM: rgb(0,0,204) 1px dotted; POSITION: absolute; TEXT-TRANSFORM:=
+ none; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5=
+em; FONT: 12px/19px arial, sans-serif; PADDING-LEFT: 0.5em; LEFT:=
+ 951px; MARGIN: 1em 2em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WI=
+DOWS: 1; LETTER-SPACING: normal; PADDING-RIGHT: 0.5em; TEXT-INDEN=
+T: 0px; -webkit-text-stroke-width: 0px"><B style=3D"COLOR: rgb(0,=
+0,85)">A note on packets</B>=0A<P>Technically a packet can contai=
+n partial frames or other bits of data, but ffmpeg's parser ensur=
+es that the packets we get contain either complete or multiple fr=
+ames.</P></SPAN><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING:=
+ 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT:=
+ 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: inline !importa=
+nt; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke=
+-width: 0px">The process, again, is simple:<SPAN class=3DApple-co=
+nverted-space>&nbsp;</SPAN></SPAN><TT style=3D"WHITE-SPACE: norma=
+l; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FO=
+NT: 12px/19px 'Courier New', courier, monospace; WIDOWS: 1; LETTE=
+R-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0=
+px"><A href=3D"http://dranger.com/ffmpeg/functions.html#av_read_f=
+rame">av_read_frame</A>()</TT><SPAN style=3D"WHITE-SPACE: normal;=
+ WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb=
+(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: i=
+nline !important; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webk=
+it-text-stroke-width: 0px"><SPAN class=3DApple-converted-space>&n=
+bsp;</SPAN>reads in a packet and stores it in the<SPAN class=3DAp=
+ple-converted-space>&nbsp;</SPAN></SPAN><TT style=3D"WHITE-SPACE:=
+ normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,=
+0); FONT: 12px/19px 'Courier New', courier, monospace; WIDOWS: 1;=
+ LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-wi=
+dth: 0px"><A href=3D"http://dranger.com/ffmpeg/data.html#AVPacket=
+">AVPacket</A></TT><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACI=
+NG: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FO=
+NT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: inline !impo=
+rtant; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-str=
+oke-width: 0px">struct. Note that we've only allocated the packet=
+ structure - ffmpeg allocates the internal data for us, which is=20=
+pointed to by<SPAN class=3DApple-converted-space>&nbsp;</SPAN></S=
+PAN><TT style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRA=
+NSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px 'Courier New', c=
+ourier, monospace; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT=
+: 0px; -webkit-text-stroke-width: 0px">packet.data</TT><SPAN styl=
+e=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none=
+; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-ser=
+if; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal=
+; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">. This is fre=
+ed by the<SPAN class=3DApple-converted-space>&nbsp;</SPAN></SPAN>=
+<TT style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFO=
+RM: none; COLOR: rgb(0,0,0); FONT: 12px/19px 'Courier New', couri=
+er, monospace; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0p=
+x; -webkit-text-stroke-width: 0px"><A href=3D"http://dranger.com/=
+ffmpeg/functions.html#av_free_packet">av_free_packet</A>()</TT><S=
+PAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFO=
+RM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial,=20=
+sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING=
+: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"><SPAN=
+ class=3DApple-converted-space>&nbsp;</SPAN>later.</SPAN><TT styl=
+e=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none=
+; COLOR: rgb(0,0,0); FONT: 12px/19px 'Courier New', courier, mono=
+space; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webk=
+it-text-stroke-width: 0px"><A href=3D"http://dranger.com/ffmpeg/f=
+unctions.html#avcodec_decode_video">avcodec_decode_video</A>()</T=
+T><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRA=
+NSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px ari=
+al, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPA=
+CING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"><=
+SPAN class=3DApple-converted-space>&nbsp;</SPAN>converts the pack=
+et to a frame for us. However, we might not have all the informat=
+ion we need for a frame after decoding a packet, so<SPAN class=3D=
+Apple-converted-space>&nbsp;</SPAN></SPAN><TT style=3D"WHITE-SPAC=
+E: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,=
+0,0); FONT: 12px/19px 'Courier New', courier, monospace; WIDOWS:=20=
+1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-=
+width: 0px">avcodec_decode_video()</TT><SPAN style=3D"WHITE-SPACE=
+: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; C=
+OLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; D=
+ISPLAY: inline !important; LETTER-SPACING: normal; TEXT-INDENT: 0=
+px; -webkit-text-stroke-width: 0px"><SPAN class=3DApple-converted=
+-space>&nbsp;</SPAN>sets frameFinished for us when we have the ne=
+xt frame. Finally, we use<SPAN class=3DApple-converted-space>&nbs=
+p;</SPAN></SPAN><TT style=3D"WHITE-SPACE: normal; WORD-SPACING: 0=
+px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px 'Cou=
+rier New', courier, monospace; WIDOWS: 1; LETTER-SPACING: normal;=
+ TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"><A href=3D"htt=
+p://dranger.com/ffmpeg/functions.html#sws_scale">sws_scale</A>()<=
+/TT><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-T=
+RANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px a=
+rial, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-S=
+PACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"=
+><SPAN class=3DApple-converted-space>&nbsp;</SPAN>to convert from=
+ the native format (</SPAN><TT style=3D"WHITE-SPACE: normal; WORD=
+-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12p=
+x/19px 'Courier New', courier, monospace; WIDOWS: 1; LETTER-SPACI=
+NG: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">pCo=
+decCtx-&gt;pix_fmt</TT><SPAN style=3D"WHITE-SPACE: normal; WORD-S=
+PACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0)=
+; FONT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: inline !=
+important; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text=
+-stroke-width: 0px">) to RGB. Remember that you can cast an<SPAN=20=
+class=3DApple-converted-space>&nbsp;</SPAN></SPAN><A style=3D"WHI=
+TE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FONT:=20=
+12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; T=
+EXT-INDENT: 0px; -webkit-text-stroke-width: 0px" href=3D"http://d=
+ranger.com/ffmpeg/data.html#AVFrame">AVFrame</A><SPAN style=3D"WH=
+ITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT=
+: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WID=
+OWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-=
+INDENT: 0px; -webkit-text-stroke-width: 0px">pointer to an<SPAN c=
+lass=3DApple-converted-space>&nbsp;</SPAN></SPAN><A style=3D"WHIT=
+E-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FONT: 1=
+2px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TE=
+XT-INDENT: 0px; -webkit-text-stroke-width: 0px" href=3D"http://dr=
+anger.com/ffmpeg/data.html#AVPicture">AVPicture</A><SPAN style=3D=
+"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FL=
+OAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif;=20=
+WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TE=
+XT-INDENT: 0px; -webkit-text-stroke-width: 0px"><SPAN class=3DApp=
+le-converted-space>&nbsp;</SPAN>pointer. Finally, we pass the fra=
+me and height and width information to our SaveFrame function.</S=
+PAN>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-T=
+RANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-se=
+rif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit=
+-text-stroke-width: 0px"></P>=0A<P style=3D"WHITE-SPACE: normal;=20=
+WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT:=
+ 12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal;=20=
+TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">Now all we need=
+ to do is make the SaveFrame function to write the RGB informatio=
+n to a file in PPM format. We're going to be kind of sketchy on t=
+he PPM format itself; trust us, it works.</P><PRE style=3D"BORDER=
+-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,204) 1px dot=
+ted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: rgb(0,0,204)=20=
+1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); PADDING-BOTT=
+OM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Courier New', cou=
+rier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rgb(0,0,204) 1=
+px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING-RIGHT: 0.5e=
+m; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">void SaveFra=
+me(<A href=3D"http://dranger.com/ffmpeg/data.html#AVFrame">AVFram=
+e</A> *pFrame, int width, int height, int iFrame) {=0A  FILE *pFi=
+le;=0A  char szFilename[32];=0A  int  y;=0A  =0A  // Open file=0A=
+  sprintf(szFilename, "frame%d.ppm", iFrame);=0A  pFile=3Dfopen(s=
+zFilename, "wb");=0A  if(pFile=3D=3DNULL)=0A    return;=0A  =0A =20=
+// Write header=0A  fprintf(pFile, "P6\n%d %d\n255\n", width, hei=
+ght);=0A  =0A  // Write pixel data=0A  for(y=3D0; y&lt;height; y+=
++)=0A    fwrite(pFrame-&gt;data[0]+y*pFrame-&gt;linesize[0], 1, w=
+idth*3, pFile);=0A  =0A  // Close file=0A  fclose(pFile);=0A}=0A<=
+/PRE><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-=
+TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px=20=
+arial, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-=
+SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px=
+">We do a bit of standard file opening, etc., and then write the=20=
+RGB data. We write the file one line at a time. A PPM file is sim=
+ply a file that has RGB information laid out in a long string. If=
+ you know HTML colors, it would be like laying out the color of e=
+ach pixel end to end like<SPAN class=3DApple-converted-space>&nbs=
+p;</SPAN></SPAN><TT style=3D"WHITE-SPACE: normal; WORD-SPACING: 0=
+px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px 'Cou=
+rier New', courier, monospace; WIDOWS: 1; LETTER-SPACING: normal;=
+ TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">#ff0000#ff0000=
+</TT><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-=
+TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px=20=
+arial, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-=
+SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px=
+">.... would be a red screen. (It's stored in binary and without=20=
+the separator, but you get the idea.) The header indicated how wi=
+de and tall the image is, and the max size of the RGB values.</SP=
+AN>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TR=
+ANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-ser=
+if; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webkit-=
+text-stroke-width: 0px"></P>=0A<P style=3D"WHITE-SPACE: normal; W=
+ORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT:=20=
+12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; T=
+EXT-INDENT: 0px; -webkit-text-stroke-width: 0px">Now, going back=20=
+to our main() function. Once we're done reading from the video st=
+ream, we just have to clean everything up:</P><PRE style=3D"BORDE=
+R-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,204) 1px do=
+tted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: rgb(0,0,204)=
+ 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); PADDING-BOT=
+TOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Courier New', co=
+urier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rgb(0,0,204)=20=
+1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING-RIGHT: 0.5=
+em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">// Free the=
+ RGB image=0A<A href=3D"http://dranger.com/ffmpeg/functions.html#=
+av_free">av_free</A>(buffer);=0A<A href=3D"http://dranger.com/ffm=
+peg/functions.html#av_free">av_free</A>(pFrameRGB);=0A=0A// Free=20=
+the YUV frame=0A<A href=3D"http://dranger.com/ffmpeg/functions.ht=
+ml#av_free">av_free</A>(pFrame);=0A=0A// Close the codecs=0Aavcod=
+ec_close(pCodecCtx);=0Aavcodec_close(pCodecCtxOrig);=0A=0A// Clos=
+e the video file=0A<A href=3D"http://dranger.com/ffmpeg/functions=
+.html#avformat_close_input">avformat_close_input</A>(&amp;pFormat=
+Ctx);=0A=0Areturn 0;=0A</PRE><SPAN style=3D"WHITE-SPACE: normal;=20=
+WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(=
+0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; DISPLAY: in=
+line !important; LETTER-SPACING: normal; TEXT-INDENT: 0px; -webki=
+t-text-stroke-width: 0px">You'll notice we use<SPAN class=3DApple=
+-converted-space>&nbsp;</SPAN></SPAN><A style=3D"WHITE-SPACE: nor=
+mal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FONT: 12px/19px ari=
+al, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0=
+px; -webkit-text-stroke-width: 0px" href=3D"http://dranger.com/ff=
+mpeg/functions.html#av_free">av_free</A><SPAN style=3D"WHITE-SPAC=
+E: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: none;=20=
+COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1;=20=
+DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-INDENT:=20=
+0px; -webkit-text-stroke-width: 0px"><SPAN class=3DApple-converte=
+d-space>&nbsp;</SPAN>for the memory we allocated with avcode_allo=
+c_frame and<SPAN class=3DApple-converted-space>&nbsp;</SPAN></SPA=
+N><A style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSF=
+ORM: none; FONT: 12px/19px arial, sans-serif; WIDOWS: 1; LETTER-S=
+PACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px"=
+ href=3D"http://dranger.com/ffmpeg/functions.html#av_malloc">av_m=
+alloc</A><SPAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; T=
+EXT-TRANSFORM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/1=
+9px arial, sans-serif; WIDOWS: 1; DISPLAY: inline !important; LET=
+TER-SPACING: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width:=
+ 0px">.</SPAN>=0A<P style=3D"WHITE-SPACE: normal; WORD-SPACING: 0=
+px; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); FONT: 12px/19px aria=
+l, sans-serif; WIDOWS: 1; LETTER-SPACING: normal; TEXT-INDENT: 0p=
+x; -webkit-text-stroke-width: 0px"></P>=0A<P style=3D"WHITE-SPACE=
+: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; COLOR: rgb(0,0=
+,0); FONT: 12px/19px arial, sans-serif; WIDOWS: 1; LETTER-SPACING=
+: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">That'=
+s it for the code! Now, if you're on Linux or a similar platform,=
+ you'll run:</P><PRE style=3D"BORDER-TOP: rgb(0,0,204) 1px dotted=
+; BORDER-RIGHT: rgb(0,0,204) 1px dotted; WIDTH: 50em; WORD-SPACIN=
+G: 0px; BORDER-BOTTOM: rgb(0,0,204) 1px dotted; TEXT-TRANSFORM: n=
+one; COLOR: rgb(0,0,0); PADDING-BOTTOM: 0.5em; PADDING-TOP: 0.5em=
+; FONT: 12px/19px 'Courier New', courier, monospace; PADDING-LEFT=
+: 0.5em; BORDER-LEFT: rgb(0,0,204) 1px dotted; WIDOWS: 1; LETTER-=
+SPACING: normal; PADDING-RIGHT: 0.5em; TEXT-INDENT: 0px; -webkit-=
+text-stroke-width: 0px">gcc -o tutorial01 tutorial01.c -lavutil -=
+lavformat -lavcodec -lz -lavutil -lm=0A</PRE><SPAN style=3D"WHITE=
+-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFORM: none; FLOAT: n=
+one; COLOR: rgb(0,0,0); FONT: 12px/19px arial, sans-serif; WIDOWS=
+: 1; DISPLAY: inline !important; LETTER-SPACING: normal; TEXT-IND=
+ENT: 0px; -webkit-text-stroke-width: 0px">If you have an older ve=
+rsion of ffmpeg, you may need to drop -lavutil:</SPAN><PRE style=3D=
+"BORDER-TOP: rgb(0,0,204) 1px dotted; BORDER-RIGHT: rgb(0,0,204)=20=
+1px dotted; WIDTH: 50em; WORD-SPACING: 0px; BORDER-BOTTOM: rgb(0,=
+0,204) 1px dotted; TEXT-TRANSFORM: none; COLOR: rgb(0,0,0); PADDI=
+NG-BOTTOM: 0.5em; PADDING-TOP: 0.5em; FONT: 12px/19px 'Courier Ne=
+w', courier, monospace; PADDING-LEFT: 0.5em; BORDER-LEFT: rgb(0,0=
+,204) 1px dotted; WIDOWS: 1; LETTER-SPACING: normal; PADDING-RIGH=
+T: 0.5em; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">gcc -=
+o tutorial01 tutorial01.c -lavformat -lavcodec -lz -lm=0A</PRE><S=
+PAN style=3D"WHITE-SPACE: normal; WORD-SPACING: 0px; TEXT-TRANSFO=
+RM: none; FLOAT: none; COLOR: rgb(0,0,0); FONT: 12px/19px arial,=20=
+sans-serif; WIDOWS: 1; DISPLAY: inline !important; LETTER-SPACING=
+: normal; TEXT-INDENT: 0px; -webkit-text-stroke-width: 0px">Most=20=
+image programs should be able to open PPM files. Test it on some=20=
+movie files.</SPAN><BR>&nbsp;</BODY>=0A</HTML>=0A
+
+------=_Next_Part_0029980006.467--
+
+------=_Next_Part_0089940018.041--
+
