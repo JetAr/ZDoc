@@ -16,9 +16,35 @@
     分离VA后decode v，得到每一个frame。
     
 2016/05/05
+    znote stream 一些资源    
     1. 杨成立 (winlin)
     CTO at 北京观止云
     https://cn.linkedin.com/in/winlinvip
     http://blog.csdn.net/win_lin
     ffmpeg 例子
     http://dranger.com/ffmpeg/
+    较多流媒体方面的资料（librtmp）
+    http://blog.csdn.net/leixiaohua1020
+    
+2016/05/06
+    1. av_read_frame
+    int av_read_frame	(	AVFormatContext * 	s,
+AVPacket * 	pkt 
+)		
+Return the next frame of a stream.
+
+This function returns what is stored in the file, and does not validate that what is there are valid frames for the decoder. It will split what is stored in the file into frames and return one for each call. It will not omit invalid data between valid frames so as to give the decoder the maximum information possible for decoding.
+
+If pkt->buf is NULL, then the packet is valid until the next av_read_frame() or until avformat_close_input(). Otherwise the packet is valid indefinitely. In both cases the packet must be freed with av_free_packet when it is no longer needed. For video, the packet contains exactly one frame. For audio, it contains an integer number of frames if each frame has a known fixed size (e.g. PCM or ADPCM data). If the audio frames have a variable size (e.g. MPEG audio), then it contains one frame.
+
+pkt->pts, pkt->dts and pkt->duration are always set to correct values in AVStream.time_base units (and guessed if the format cannot provide them). pkt->pts can be AV_NOPTS_VALUE if the video format has B-frames, so it is better to rely on pkt->dts if you do not decompress the payload.
+
+Returns
+0 if OK, < 0 on error or end of file
+Examples:
+demuxing_decoding.c, filtering_audio.c, filtering_video.c, qsvdec.c, remuxing.c, transcode_aac.c, and transcoding.c.
+
+    2. todo rtmp 握手、建立连接、建立网络流，开始播放；寻找具体code验证下。
+    3. todo 接收 v/a 部分的数据；具体如何解析出v/a数据的，也需了解。
+    4. todo rtmpdump 中对数据的download部分。
+    
