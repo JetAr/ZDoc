@@ -1,0 +1,3 @@
+usr/sbin
+etc/crtmpserver
+var/log/crtmpserver
