@@ -250,6 +250,7 @@ RTMP_Init(RTMP *r)
         RTMP_TLS_Init();
 #endif
 
+	//z 初始化 RTMP 结构
     memset(r, 0, sizeof(RTMP));
     r->m_sb.sb_socket = -1;
     r->m_inChunkSize = RTMP_DEFAULT_CHUNKSIZE;
@@ -261,6 +262,7 @@ RTMP_Init(RTMP *r)
     r->m_fAudioCodecs = 3191.0;
     r->m_fVideoCodecs = 252.0;
     r->Link.timeout = 30;
+	//z swf 保存在cache中的天数，30天
     r->Link.swfAge = 30;
 }
 
@@ -279,6 +281,7 @@ RTMP_GetDuration(RTMP *r)
 int
 RTMP_IsConnected(RTMP *r)
 {
+	//z 查看是否已经成功连接上。
     return r->m_sb.sb_socket != -1;
 }
 
@@ -830,6 +833,7 @@ add_addr_info(struct sockaddr_in *service, AVal *host, int port)
 {
     char *hostname;
     int ret = TRUE;
+	//z host 的 av_val 值
     if (host->av_val[host->av_len])
     {
         hostname = (char *)malloc(host->av_len+1);
@@ -868,10 +872,12 @@ RTMP_Connect0(RTMP *r, struct sockaddr * service)
     r->m_sb.sb_timedout = FALSE;
     r->m_pausing = 0;
     r->m_fDuration = 0.0;
-
+	
+	//z 创建一个 tcp socket
     r->m_sb.sb_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (r->m_sb.sb_socket != -1)
     {
+		//z 连接到 rtmp server
         if (connect(r->m_sb.sb_socket, service, sizeof(struct sockaddr)) < 0)
         {
             int err = GetSockError();
@@ -901,8 +907,10 @@ RTMP_Connect0(RTMP *r, struct sockaddr * service)
 
     /* set timeout */
     {
+		//z 超时设置
         SET_RCVTIMEO(tv, r->Link.timeout);
-        if (setsockopt
+        //z 设置套接字超时信息
+		if (setsockopt
                 (r->m_sb.sb_socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv)))
         {
             RTMP_Log(RTMP_LOGERROR, "%s, Setting socket timeout to %ds failed!",
@@ -1761,6 +1769,7 @@ static int
 SendFCUnpublish(RTMP *r)
 {
     RTMPPacket packet;
+	//z buf 以及首尾
     char pbuf[1024], *pend = pbuf + sizeof(pbuf);
     char *enc;
 
@@ -1770,6 +1779,7 @@ SendFCUnpublish(RTMP *r)
     packet.m_nTimeStamp = 0;
     packet.m_nInfoField2 = 0;
     packet.m_hasAbsTimestamp = 0;
+	//z header size 为 18
     packet.m_body = pbuf + RTMP_MAX_HEADER_SIZE;
 
     enc = packet.m_body;
@@ -3474,8 +3484,10 @@ RTMP_Close(RTMP *r)
 {
     int i;
 
+	//z 是否连接上
     if (RTMP_IsConnected(r))
     {
+		//z stream id 是否大于0
         if (r->m_stream_id > 0)
         {
             if ((r->Link.protocol & RTMP_FEATURE_WRITE))

@@ -53,6 +53,7 @@
 #define DEF_BUFTIME	(10 * 60 * 60 * 1000)	/* 10 hours default */
 #define DEF_SKIPFRM	0
 
+//z 初始化 winsocket 
 // starts sockets
 int
 InitSockets()
@@ -442,11 +443,29 @@ skipkeyframe:
     return RD_SUCCESS;
 }
 
+//z 连接 RTMP OBJECT
 int
 Download(RTMP * rtmp,		// connected RTMP object
-         FILE * file, uint32_t dSeek, uint32_t dStopOffset, double duration, int bResume, char *metaHeader, uint32_t nMetaHeaderSize, char *initialFrame, int initialFrameType, uint32_t nInitialFrameSize, int nSkipKeyFrames, int bStdoutMode, int bLiveStream, int bHashes, int bOverrideBufferTime, uint32_t bufferTime, double *percent)	// percentage downloaded [out]
+         FILE * file, 
+		 uint32_t dSeek, 
+		 uint32_t dStopOffset, 
+		 double duration, 
+		 int bResume, 
+		 char *metaHeader, 
+		 uint32_t nMetaHeaderSize, 
+		 char *initialFrame, 
+		 int initialFrameType, 
+		 uint32_t nInitialFrameSize, 
+		 int nSkipKeyFrames, 
+		 int bStdoutMode, 
+		 int bLiveStream, 
+		 int bHashes, 
+		 int bOverrideBufferTime, 
+		 uint32_t bufferTime, 
+		 double *percent)	// percentage downloaded [out]
 {
     int32_t now, lastUpdate;
+	//z 分配了一个 64k 大小的 buffer
     int bufferSize = 64 * 1024;
     char *buffer = (char *) malloc(bufferSize);
     int nRead = 0;
@@ -540,9 +559,13 @@ Download(RTMP * rtmp,		// connected RTMP object
                     RTMP_Log(RTMP_LOGDEBUG,
                              "Detected that buffer time is less than duration, resetting to: %dms",
                              bufferTime);
+					//z 重设 buffer 长度
                     RTMP_SetBufferMS(rtmp, bufferTime);
+					//z 向服务器发送 UserControl 消息通知Buffer改变
                     RTMP_UpdateBufferMS(rtmp);
                 }
+
+				//z 计算百分比
                 *percent = ((double) rtmp->m_read.timestamp) / (duration * 1000.0) * 100.0;
                 *percent = ((double) (int) (*percent * 10.0)) / 10.0;
                 if (bHashes)
@@ -555,6 +578,7 @@ Download(RTMP * rtmp,		// connected RTMP object
                 }
                 else
                 {
+					//z 设置显示数据的更新时间间隔200ms。
                     now = RTMP_GetTime();
                     if (abs(now - lastUpdate) > 200)
                     {
@@ -567,7 +591,9 @@ Download(RTMP * rtmp,		// connected RTMP object
             }
             else
             {
+				//z 现在距离开机的毫秒数
                 now = RTMP_GetTime();
+				//z 每间隔200ms刷新一次数据
                 if (abs(now - lastUpdate) > 200)
                 {
                     if (bHashes)
@@ -585,11 +611,11 @@ Download(RTMP * rtmp,		// connected RTMP object
             RTMP_Log(RTMP_LOGDEBUG, "zero read!");
         }
 #endif
-
-    }
-    while (!RTMP_ctrlC && nRead > -1 && RTMP_IsConnected(rtmp) && !RTMP_IsTimedout(rtmp));
+    }while (!RTMP_ctrlC && nRead > -1 && RTMP_IsConnected(rtmp) && !RTMP_IsTimedout(rtmp));
     free(buffer);
-    if (nRead < 0)
+
+	//z nRead 是读取情况
+	if (nRead < 0)
         nRead = rtmp->m_read.status;
 
     /* Final status update */
@@ -611,17 +637,18 @@ Download(RTMP * rtmp,		// connected RTMP object
     }
 
     RTMP_Log(RTMP_LOGDEBUG, "RTMP_Read returned: %d", nRead);
-
+	//z 读取错误
     if (bResume && nRead == -2)
     {
         RTMP_LogPrintf("Couldn't resume FLV file, try --skip %d\n\n",
                        nSkipKeyFrames + 1);
         return RD_FAILED;
     }
-
+	//z 读取正确
     if (nRead == -3)
         return RD_SUCCESS;
 
+	//z 没读完
     if ((duration > 0 && *percent < 99.9) || RTMP_ctrlC || nRead < 0
             || RTMP_IsTimedout(rtmp))
     {
@@ -795,6 +822,7 @@ main(int argc, char **argv)
     RTMP_LogPrintf
     ("(c) 2010 Andrej Stepanchuk, Howard Chu, The Flvstreamer Team; license: GPL\n");
 
+	//z 初始化 win sockets
     if (!InitSockets())
     {
         RTMP_Log(RTMP_LOGERROR,
@@ -1366,6 +1394,7 @@ main(int argc, char **argv)
          percent);
     }
 
+//z 后续清理工作
 clean:
     RTMP_Log(RTMP_LOGDEBUG, "Closing connection.\n");
     RTMP_Close(&rtmp);
@@ -1381,5 +1410,6 @@ clean:
     if (netstackdump_read != 0)
         fclose(netstackdump_read);
 #endif
+
     return nStatus;
 }

@@ -2,6 +2,24 @@
     1. obs 如何capture以及stream的。
     hVideoEvent
 
+    10. 气象
+    ANIM_OBJ_CUSTOM_TEXT 文本样式
+    ANIM_OBJ_CUSTOM_TEXT_CONTENT 文本内容
+    ANIM_OBJ_CUSTOM_LOGO 背景图片
+    
+    10.1 采用了渲染到纹理（render to texture ）的方式
+    通过报文获取天气情况，得到一幅图片，将图片内容拷贝到纹理
+    选择纹理作为 render target，将对应天气文字输出到纹理上。在后续渲染动画时使用该纹理
+    
+    10.2 动画编辑，添加了一个断点轨，用于设置动画断点
+    主要是为了支持多个断点。默认只有两个断点。
+    
+    10.3 将板子分为了九块，分为：
+    日期1-3
+    Logo1-3
+    温度1-3
+    根据App设置对应日期和温度，更新纹理。
+  
 2016/4/27
     znote astyle -A1 -R -Z -z1 -n *.cpp 
     1. rtmpdump 例子
@@ -47,4 +65,11 @@ demuxing_decoding.c, filtering_audio.c, filtering_video.c, qsvdec.c, remuxing.c,
     2. todo rtmp 握手、建立连接、建立网络流，开始播放；寻找具体code验证下。
     3. todo 接收 v/a 部分的数据；具体如何解析出v/a数据的，也需了解。
     4. todo rtmpdump 中对数据的download部分。
+
+2016/05/09
+    1. 熟读协议
+    2. 一些问题
+    BW 是什么意思？
+    2.1 使用 wiresharks 之类的抓包
+    2.2 rtmp 都是big-endian，但是streamid是little-endian。
     
