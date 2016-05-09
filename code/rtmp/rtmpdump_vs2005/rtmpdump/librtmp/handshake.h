@@ -388,9 +388,9 @@ HandShake(RTMP * r, int FP9HandShake)
     getoff *getdh = NULL, *getdig = NULL;
 
     if (encrypted || r->Link.SWFSize)
-        FP9HandShake = TRUE;
+        FP9HandShake = TRUE;//z s版本
     else
-        FP9HandShake = FALSE;
+        FP9HandShake = FALSE;//z 普通版本
 
     r->Link.rc4keyIn = r->Link.rc4keyOut = 0;
 
@@ -400,8 +400,17 @@ HandShake(RTMP * r, int FP9HandShake)
         offalg = 1;
     }
     else
-        clientsig[-1] = 0x03;
+	{
+		//0x03代表RTMP协议的版本（客户端要求的）  
+		//数组竟然能有“-1”下标  
+		//C0中的字段(1B)  
+        clientsig[-1] = 0x03;//z client ：rtmp协议版本
+	}
 
+	//void *memcpy(void *dest, const void *src, int n);  
+	//由src指向地址为起始地址的连续n个字节的数据复制到以dest指向地址为起始地址的空间内  
+	//把uptime的前4字节（其实一共就4字节）数据拷贝到clientsig指向的地址中  
+	//C1中的字段(4B)
     uptime = htonl(RTMP_GetTime());
     memcpy(clientsig, &uptime, 4);
 
@@ -427,16 +436,21 @@ HandShake(RTMP * r, int FP9HandShake)
     }
     else
     {
+		//将clientsig[4]开始的4个字节替换为0  
+		//这是C1的字段
         memset(&clientsig[4], 0, 4);
     }
 
     /* generate random data */
 #ifdef _DEBUG
+	//将clientsig+8开始的1528个字节替换为0（这是一种简单的方法）  
+	//这是C1中的random字段  
     memset(clientsig+8, 0, RTMP_SIG_SIZE-8);
 #else
+	//实际中使用rand()循环生成1528字节的伪随机数  
     ip = (int32_t *)(clientsig+8);
     for (i = 2; i < RTMP_SIG_SIZE/4; i++)
-        *ip++ = rand();
+        *ip++ = rand();//z　前面是否调用了 srand ？
 #endif
 
     /* set handshake digest */
@@ -487,23 +501,32 @@ HandShake(RTMP * r, int FP9HandShake)
     RTMP_LogHex(RTMP_LOGDEBUG, clientsig, RTMP_SIG_SIZE);
 #endif
 
+	//发送数据报C0+C1  
+	//从clientsig-1开始发，长度1536+1，两个包合并  
+	//握手----------------  
     if (!WriteN(r, (char *)clientsig-1, RTMP_SIG_SIZE + 1))
         return FALSE;
 
+	//读取数据报，长度1，存入type
+	//是服务器的S0，表示服务器使用的RTMP版本
     if (ReadN(r, (char *)&type, 1) != 1)	/* 0x03 or 0x06 */
         return FALSE;
 
     RTMP_Log(RTMP_LOGDEBUG, "%s: Type Answer   : %02X", __FUNCTION__, type);
-
+	//握手----------------  
+	//客户端要求的版本和服务器提供的版本不同
     if (type != clientsig[-1])
         RTMP_Log(RTMP_LOGWARNING, "%s: Type mismatch: client sent %d, server answered %d",
                  __FUNCTION__, clientsig[-1], type);
-
+	//客户端和服务端随机序列长度是否相同  
+	//握手----------------  
     if (ReadN(r, (char *)serversig, RTMP_SIG_SIZE) != RTMP_SIG_SIZE)
         return FALSE;
 
     /* decode server response */
+	//把serversig的前四个字节赋值给uptime  
     memcpy(&uptime, serversig, 4);
+	//大端转小端
     uptime = ntohl(uptime);
 
     RTMP_Log(RTMP_LOGDEBUG, "%s: Server Uptime : %d", __FUNCTION__, uptime);
@@ -631,6 +654,7 @@ HandShake(RTMP * r, int FP9HandShake)
     }
     else
     {
+		//直接赋值
         reply = serversig;
 #if 0
         uptime = htonl(RTMP_GetTime());
@@ -643,10 +667,15 @@ HandShake(RTMP * r, int FP9HandShake)
              __FUNCTION__);
     RTMP_LogHex(RTMP_LOGDEBUG, reply, RTMP_SIG_SIZE);
 #endif
+	//把reply中的1536字节数据发送出去  
+	//对应C2  
+	//握手----------------
     if (!WriteN(r, (char *)reply, RTMP_SIG_SIZE))
         return FALSE;
 
     /* 2nd part of handshake */
+	//读取1536字节数据到serversig  
+	//握手---------------- 
     if (ReadN(r, (char *)serversig, RTMP_SIG_SIZE) != RTMP_SIG_SIZE)
         return FALSE;
 
@@ -737,6 +766,8 @@ HandShake(RTMP * r, int FP9HandShake)
     }
     else
     {
+		//比较serversig和clientsig是否相等  
+		//握手----------------
         if (memcmp(serversig, clientsig, RTMP_SIG_SIZE) != 0)
         {
             RTMP_Log(RTMP_LOGWARNING, "%s: client signature does not match!",

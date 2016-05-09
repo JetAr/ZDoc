@@ -32,9 +32,52 @@
 #include "log.h"
 #include "bytes.h"
 
+/*  本文件主要包含了对AMF对象的操作 
+*------------------------------------- 
+*AMF数据类型： 
+*Type      Byte code 
+*Number    0x00 
+*Boolean   0x01 
+*String    0x02 
+*Object    0x03 
+*MovieClip 0x04 
+*Null      0x05 
+*Undefined 0x06 
+*Reference 0x07 
+*MixedArray    0x08 
+*EndOfObject   0x09 
+*Array         0x0a 
+*Date          0x0b 
+*LongString    0x0c 
+*Unsupported   0x0d 
+*Recordset     0x0e 
+*XML           0x0f 
+*TypedObject (Class instance)  0x10 
+*AMF3 data 0×11 
+*-------------------------------------- 
+*应用举例： 
+*0.Number这里指的是double类型，数据用8字节表示，比如十六进制00 40 10 00 00 00 00 00 00就表示的是一个double数4.0 
+*1.Boolean对应的是.net中的bool类型，数据使用1字节表示，和C语言差不多，使用00表示false，使用01表示true。比如十六进制01 01就表示true。 
+*2.String相当于.net中的string类型，String所占用的空间有1个类型标识字节和2个表示字符串UTF8长度的字节加上字符串UTF8格式的内容组成。 
+*  比如十六进制03 00 08 73 68 61 6E 67 67 75 61表示的就是字符串，该字符串长8字节，字符串内容为73 68 61 6E 67 67 75 61，对应的就是“shanggua”。 
+*3.Object在对应的就是Hashtable，内容由UTF8字符串作为Key，其他AMF类型作为Value，该对象由3个字节：00 00 09来表示结束。 
+*5.Null就是空对象，该对象只占用一个字节，那就是Null对象标识0x05。 
+*6.Undefined 也是只占用一个字节0x06。 
+*8.MixedArray相当于Hashtable，与3不同的是该对象定义了Hashtable的大小。 
+*/
+
 static const AMFObjectProperty AMFProp_Invalid = { {0, 0}, AMF_INVALID };
 static const AVal AV_empty = { 0, 0 };
 
+//大端Big-Endian  
+//低地址存放最高有效位（MSB），既高位字节排放在内存的低地址端，低位字节排放在内存的高地址端。  
+//符合人脑逻辑，与计算机逻辑不同  
+//网络字节序 Network Order:TCP/IP各层协议将字节序定义为Big-Endian，因此TCP/IP协议中使  
+//用的字节序通常称之为网络字节序。  
+//主机序 Host Orader:它遵循Little-Endian规则。所以当两台主机之间要通过TCP/IP协议进行通  
+//信的时候就需要调用相应的函数进行主机序（Little-Endian）和网络序（Big-Endian）的转换。  
+
+/*AMF数据采用 Big-Endian（大端模式），主机采用Little-Endian（小端模式）*/
 /* Data is Big-Endian */
 unsigned short
 AMF_DecodeInt16(const char *data)
@@ -144,15 +187,17 @@ AMF_EncodeInt16(char *output, char *outend, short nVal)
 	return output+2;
 }
 
+//z 3字节的int数据进行AMF编码，AMF采用大端模式
 char *
 AMF_EncodeInt24(char *output, char *outend, int nVal)
 {
 	if (output+3 > outend)
 		return NULL;
-
+	//z 倒过来
 	output[2] = nVal & 0xff;
 	output[1] = nVal >> 8;
 	output[0] = nVal >> 16;
+	//z 返回指针指向编码后数据的尾部
 	return output+3;
 }
 
@@ -374,10 +419,11 @@ AMFProp_Encode(AMFObjectProperty *prop, char *pBuffer, char *pBufEnd)
 
 	switch (prop->p_type)
 	{
+	//z Number数据类型
 	case AMF_NUMBER:
 		pBuffer = AMF_EncodeNumber(pBuffer, pBufEnd, prop->p_vu.p_number);
 		break;
-
+	//z Boolean数据类型
 	case AMF_BOOLEAN:
 		pBuffer = AMF_EncodeBoolean(pBuffer, pBufEnd, prop->p_vu.p_number != 0);
 		break;
@@ -1068,6 +1114,7 @@ AMF3_Decode(AMFObject *obj, const char *pBuffer, int nSize, int bAMFData)
 	return nOriginalSize - nSize;
 }
 
+//z 解AMF编码的Object数据类型
 int
 AMF_Decode(AMFObject *obj, const char *pBuffer, int nSize, int bDecodeName)
 {
@@ -1097,6 +1144,7 @@ AMF_Decode(AMFObject *obj, const char *pBuffer, int nSize, int bDecodeName)
 			continue;
 		}
 
+		//z 解Object里的Property
 		nRes = AMFProp_Decode(&prop, pBuffer, nSize, bDecodeName);
 		if (nRes == -1)
 			bError = TRUE;
