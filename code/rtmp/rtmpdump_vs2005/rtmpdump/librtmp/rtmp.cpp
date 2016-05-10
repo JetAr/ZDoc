@@ -179,6 +179,7 @@ RTMPPacket_Free(RTMPPacket *p)
 {
     if (p->m_body)
     {
+		//z m_body 之前还有一个 头
         free(p->m_body - RTMP_MAX_HEADER_SIZE);
         p->m_body = NULL;
     }
@@ -1165,6 +1166,7 @@ RTMP_GetNextMediaPacket(RTMP *r, RTMPPacket *packet)
     return bHasMediaPacket;
 }
 
+//z RTMP_ClientPacket 处理数据
 int
 RTMP_ClientPacket(RTMP *r, RTMPPacket *packet)
 {
@@ -1327,6 +1329,8 @@ extern FILE *netstackdump;
 extern FILE *netstackdump_read;
 #endif
 
+//z 在RTMP_ReadPacket()函数里完成从Socket中读取数据的函数是ReadN()
+//z 从HTTP或SOCKET中读取数据
 static int
 ReadN(RTMP *r, char *buffer, int n)
 {
@@ -1395,6 +1399,15 @@ ReadN(RTMP *r, char *buffer, int n)
         }
         /*RTMP_Log(RTMP_LOGDEBUG, "%s: %d bytes\n", __FUNCTION__, nBytes); */
 #ifdef _DEBUG
+		//z Writes data to a stream.
+		/*
+		size_t fwrite(
+			const void *buffer,
+			size_t size,
+			size_t count,
+			FILE *stream 
+			);
+		*/
         fwrite(ptr, 1, nBytes, netstackdump_read);
 #endif
 
@@ -2952,25 +2965,36 @@ EncodeInt32LE(char *output, int nVal)
     return 4;
 }
 
+//读取收下来的Chunk
+//z 从网络上读取数据
+//z 函数代码看似很多，但是并不是很复杂，可以理解为在从事“简单重复性劳动”（和搬砖差不多）。
+//z 基本上是一个字节一个字节的读取，然后按照RTMP协议规范进行解析。具体如何解析可以参考RTMP协议规范。
 int
 RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
 {
+	//packet 存读取完后的的数据
+	//Chunk Header最大值18
     uint8_t hbuf[RTMP_MAX_HEADER_SIZE] = { 0 };
+    //header 指向的是从Socket中收下来的数据
     char *header = (char *)hbuf;
     int nSize, hSize, nToRead, nChunk;
     int didAlloc = FALSE;
 
     RTMP_Log(RTMP_LOGDEBUG2, "%s: fd=%d", __FUNCTION__, r->m_sb.sb_socket);
 
+	//收下来的数据存入hbuf
     if (ReadN(r, (char *)hbuf, 1) == 0)
     {
         RTMP_Log(RTMP_LOGERROR, "%s, failed to read RTMP packet header", __FUNCTION__);
         return FALSE;
     }
-
+	
+	//块类型fmt
     packet->m_headerType = (hbuf[0] & 0xc0) >> 6;
+	//块流ID（2-63）
     packet->m_nChannel = (hbuf[0] & 0x3f);
     header++;
+	//块流ID第1字节为0时，块流ID占2个字节
     if (packet->m_nChannel == 0)
     {
         if (ReadN(r, (char *)&hbuf[1], 1) != 1)
@@ -2979,10 +3003,12 @@ RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
                      __FUNCTION__);
             return FALSE;
         }
+		//计算块流ID（64-319）
         packet->m_nChannel = hbuf[1];
         packet->m_nChannel += 64;
         header++;
     }
+	//块流ID第1字节为0时，块流ID占3个字节
     else if (packet->m_nChannel == 1)
     {
         int tmp;
@@ -2993,15 +3019,18 @@ RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
             return FALSE;
         }
         tmp = (hbuf[2] << 8) + hbuf[1];
+		//计算块流ID（64-65599）
         packet->m_nChannel = tmp + 64;
         RTMP_Log(RTMP_LOGDEBUG, "%s, m_nChannel: %0x", __FUNCTION__, packet->m_nChannel);
         header += 2;
     }
-
+	
+	//z 根据读取的 packet 的 header type 得到 chunk hdr 的大小
+	//ChunkHeader的大小（4种）
     nSize = packetSize[packet->m_headerType];
 
     if (nSize == RTMP_LARGE_HEADER_SIZE)	/* if we get a full header the timestamp is absolute */
-        packet->m_hasAbsTimestamp = TRUE;
+        packet->m_hasAbsTimestamp = TRUE;	//11字节的完整ChunkMsgHeader的TimeStamp是绝对值
 
     else if (nSize < RTMP_LARGE_HEADER_SIZE)
     {
@@ -3024,24 +3053,30 @@ RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
 
     if (nSize >= 3)
     {
+		//TimeStamp(注意 BigEndian to SmallEndian)(11，7，3字节首部都有)
         packet->m_nTimeStamp = AMF_DecodeInt24(header);
 
         /*RTMP_Log(RTMP_LOGDEBUG, "%s, reading RTMP packet chunk on channel %x, headersz %i, timestamp %i, abs timestamp %i", __FUNCTION__, packet.m_nChannel, nSize, packet.m_nTimeStamp, packet.m_hasAbsTimestamp); */
 
+		//消息长度(11，7字节首部都有)
         if (nSize >= 6)
         {
             packet->m_nBodySize = AMF_DecodeInt24(header + 3);
             packet->m_nBytesRead = 0;
             RTMPPacket_Free(packet);
 
+			//(11，7字节首部都有)
             if (nSize > 6)
             {
+				//Msg type ID
                 packet->m_packetType = header[6];
-
+				
+				//Msg Stream ID
                 if (nSize == 11)
                     packet->m_nInfoField2 = DecodeInt32LE(header + 7);
             }
         }
+		//Extend TimeStamp
         if (packet->m_nTimeStamp == 0xffffff)
         {
             if (ReadN(r, header + nSize, 4) != 4)
@@ -3098,6 +3133,7 @@ RTMP_ReadPacket(RTMP *r, RTMPPacket *packet)
         r->m_vecChannelsIn[packet->m_nChannel] = (RTMPPacket *) malloc(sizeof(RTMPPacket));
     memcpy(r->m_vecChannelsIn[packet->m_nChannel], packet, sizeof(RTMPPacket));
 
+	//读取完毕
     if (RTMPPacket_IsReady(packet))
     {
         /* make packet's timestamp absolute */
@@ -3582,6 +3618,9 @@ RTMP_Close(RTMP *r)
 #endif
 }
 
+//z ReadN()中实现从Socket中接收数据的函数是RTMPSockBuf_Fill()
+//z 调用了系统Socket的recv()函数接收RTMP连接传输过来的数据
+//调用Socket编程中的recv（）函数，接收数据
 int
 RTMPSockBuf_Fill(RTMPSockBuf *sb)
 {
@@ -3592,6 +3631,9 @@ RTMPSockBuf_Fill(RTMPSockBuf *sb)
 
     while (1)
     {
+		//缓冲区长度：总长-未处理字节-已处理字节
+		//|-----已处理--------|-----未处理--------|---------缓冲区----------|
+		//sb_buf        sb_start    sb_size
         nBytes = sizeof(sb->sb_buf) - sb->sb_size - (sb->sb_start - sb->sb_buf);
 #if defined(CRYPTO) && !defined(NO_SSL)
         if (sb->sb_ssl)
@@ -3601,10 +3643,17 @@ RTMPSockBuf_Fill(RTMPSockBuf *sb)
         else
 #endif
         {
+			//int recv( SOCKET s, char * buf, int len, int flags);
+			//s：一个标识已连接套接口的描述字。
+			//buf：用于接收数据的缓冲区。
+			//len：缓冲区长度。
+			//flags：指定调用方式。
+			//从sb_start（待处理的下一字节） + sb_size（）还未处理的字节开始buffer为空，可以存储
             nBytes = recv(sb->sb_socket, sb->sb_start + sb->sb_size, nBytes, 0);
         }
         if (nBytes != -1)
         {
+			//未处理的字节又多了
             sb->sb_size += nBytes;
         }
         else
@@ -3809,6 +3858,7 @@ HTTP_read(RTMP *r, int fill)
 
 #define MAX_IGNORED_FRAMES	50
 
+//z Read_1_Packet()里面实现从网络中读取视音频数据的函数是RTMP_GetNextMediaPacket()
 /* Read from the stream until we get a media packet.
  * Returns -3 if Play.Close/Stop, -2 if fatal error, -1 if no more media
  * packets, 0 if ignorable error, >0 if there is a media packet
@@ -3824,7 +3874,8 @@ Read_1_Packet(RTMP *r, char *buf, unsigned int buflen)
     char *ptr, *pend;
     uint32_t nTimeStamp = 0;
     unsigned int len;
-
+	
+	//获取下一个packet
     rtnGetNextMediaPacket = RTMP_GetNextMediaPacket(r, &packet);
     while (rtnGetNextMediaPacket)
     {
@@ -3843,9 +3894,12 @@ Read_1_Packet(RTMP *r, char *buf, unsigned int buflen)
             break;
         }
 
+		      //设置dataType
         r->m_read.dataType |= (((packet.m_packetType == 0x08) << 2) |
                                (packet.m_packetType == 0x09));
 
+		      //MessageID为9时，为视频数据，数据太小时。。。  
+		//z 忽略太小的video packet
         if (packet.m_packetType == 0x09 && nPacketLen <= 5)
         {
             RTMP_Log(RTMP_LOGDEBUG, "ignoring too small video packet: size: %d",
@@ -3853,6 +3907,8 @@ Read_1_Packet(RTMP *r, char *buf, unsigned int buflen)
             ret = RTMP_READ_IGNORE;
             break;
         }
+		      //MessageID为8时，为音频数据，数据太小时。。。  
+		//z 忽略过小的音频数据
         if (packet.m_packetType == 0x08 && nPacketLen <= 1)
         {
             RTMP_Log(RTMP_LOGDEBUG, "ignoring too small audio packet: size: %d",
@@ -3877,11 +3933,14 @@ Read_1_Packet(RTMP *r, char *buf, unsigned int buflen)
         if (r->m_read.flags & RTMP_READ_RESUME)
         {
             /* check the header if we get one */
+			        //此类packet的timestamp都是0
             if (packet.m_nTimeStamp == 0)
             {
+				        //messageID=18，数据消息（AMF0）
                 if (r->m_read.nMetaHeaderSize > 0
                         && packet.m_packetType == 0x12)
                 {
+					        //获取metadata  
                     AMFObject metaObj;
                     int nRes =
                         AMF_Decode(&metaObj, packetBody, nPacketLen, FALSE);
@@ -3941,6 +4000,7 @@ Read_1_Packet(RTMP *r, char *buf, unsigned int buflen)
                      * in the first FLV stream chunk and we have to compare
                      * it and filter it out !!
                      */
+					          //MessageID=22，聚合消息  
                     if (packet.m_packetType == 0x16)
                     {
                         /* basically we have to find the keyframe with the
@@ -4283,6 +4343,11 @@ stopKeyframeSearch:
     return ret;
 }
 
+/*
+RTMP传送的视音频数据的格式和FLV（FLash Video）格式是一样的，把接收下来的数据直接存入文件就可以了。
+但是这些视音频数据没有文件头，是纯视音频数据，因此需要在其前面加上FLV格式的文件头，
+这样得到的数据存成文件后才能被一般的视频播放器所播放。FLV格式的文件头是13个字节，如代码中所示。
+*/
 static const char flvHeader[] = { 'F', 'L', 'V', 0x01,
                                   0x00,				/* 0x04 == audio, 0x01 == video */
                                   0x00, 0x00, 0x00, 0x09,
@@ -4314,18 +4379,27 @@ fail:
     {
         if (!(r->m_read.flags & RTMP_READ_RESUME))
         {
+			//z 分配 buffer ，指针指向头尾；buf大小128k
             char *mybuf = (char *) malloc(HEADERBUF), *end = mybuf + HEADERBUF;
             int cnt = 0;
+			//z 指向上述分配的buffer
             r->m_read.buf = mybuf;
             r->m_read.buflen = HEADERBUF;
 
+			//把Flv的首部复制到mybuf指向的内存  
+			//RTMP传递的多媒体数据是“砍头”的FLV文件
             memcpy(mybuf, flvHeader, sizeof(flvHeader));
+			//buf长度增加flvheader长度
             r->m_read.buf += sizeof(flvHeader);
+			//m_read.buf指针后移flvheader个单位
             r->m_read.buflen -= sizeof(flvHeader);
-
+			//timestamp=0，不是多媒体数据
             while (r->m_read.timestamp == 0)
             {
+				//读取一个Packet，到r->m_read.buf  
+				//nRead为读取结果标记
                 nRead = Read_1_Packet(r, r->m_read.buf, r->m_read.buflen);
+				//读取有错误
                 if (nRead < 0)
                 {
                     free(mybuf);
@@ -4342,17 +4416,27 @@ fail:
                     r->m_read.buf = mybuf+cnt+nRead;
                     break;
                 }
+				//记录读取的字节数
                 cnt += nRead;
+				//m_read.buf指针后移nRead个单位
                 r->m_read.buf += nRead;
                 r->m_read.buflen -= nRead;
+				//当dataType=00000101时，即有视频和音频时
+				//说明有多媒体数据了
                 if (r->m_read.dataType == 5)
                     break;
             }
+			//读入数据类型
+			//注意：mybuf指针位置一直没动
+			//mybuf[4]中第 6 位表示是否存在音频Tag。第 8 位表示是否存在视频Tag。
             mybuf[4] = r->m_read.dataType;
+			//两个指针之间的差
             r->m_read.buflen = r->m_read.buf - mybuf;
             r->m_read.buf = mybuf;
+			//这句很重要！后面memcopy
             r->m_read.bufpos = mybuf;
         }
+		//flags标明已经读完了文件头
         r->m_read.flags |= RTMP_READ_HEADER;
     }
 
@@ -4371,6 +4455,7 @@ fail:
         nRead = r->m_read.buflen;
         if (nRead > size)
             nRead = size;
+		//m_read.bufpos指向mybuf
         memcpy(buf, r->m_read.bufpos, nRead);
         r->m_read.buflen -= nRead;
         if (!r->m_read.buflen)
@@ -4388,6 +4473,7 @@ fail:
         size -= nRead;
     }
 
+	//接着读
     while (size > 0 && (nRead = Read_1_Packet(r, buf, size)) >= 0)
     {
         if (!nRead) continue;

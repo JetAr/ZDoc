@@ -73,3 +73,7 @@ demuxing_decoding.c, filtering_audio.c, filtering_video.c, qsvdec.c, remuxing.c,
     2.1 使用 wiresharks 之类的抓包
     2.2 rtmp 都是big-endian，但是streamid是little-endian。
     
+2016/05/10
+    1. rtmpdump 调试
+    -z -r "rtmp://127.0.0.1:1935/live" -y demo -o e:\a.mp4
+    
