@@ -443,7 +443,6 @@ skipkeyframe:
     return RD_SUCCESS;
 }
 
-//z 连接 RTMP OBJECT
 int
 Download(RTMP * rtmp,		// connected RTMP object
          FILE * file, 
