@@ -76,4 +76,213 @@ demuxing_decoding.c, filtering_audio.c, filtering_video.c, qsvdec.c, remuxing.c,
 2016/05/10
     1. rtmpdump 调试
     -z -r "rtmp://127.0.0.1:1935/live" -y demo -o e:\a.mp4
+
+2016/05/11
+    1. 添加 axis 
+	if (nModel == PRESET_QUAD) {
+		if (fLength <= 0.0f) {
+			return (HF3DRESULT)F3DError;
+		}
+		if (fWidth <= 0.0f) {
+			return (HF3DRESULT)F3DError;
+		}
+		CString strObject;
+
+		strObject.Format(_T("%s_Quad"), m_strName);
+		CRenderObject *pObj = new CRenderObject(strObject);
+		ASSERT(pObj != NULL);
+		TCHAR szDesc[256];
+		ZeroMemory(szDesc, sizeof(szDesc));
+		::LoadString(theApp.m_hInstance, IDS_DESC_TEXTURE_OBJ, szDesc, 256);
+		CTextureDescObj * pTexDescObj =  NULL;//new CTextureDescObj(strObject, szDesc);
+		/*pTexDescObj->CreateTexture(1, 1);*/
+		PVertex pData = new Vertex[4];
+		pObj->m_vMinObjBoundary.x = pObj->m_vMinObjBoundary.y = pObj->m_vMinObjBoundary.z = FLT_MAX;
+		pObj->m_vMaxObjBoundary.x = pObj->m_vMaxObjBoundary.y = pObj->m_vMaxObjBoundary.z = -FLT_MAX;
+
+		pObj->m_dwFVF = VERTEXT_FVF;
+
+		pObj->m_pScene = m_p3DScene;
+		pObj->m_pd3dDevice = m_pd3dDevice;
+
+		pObj->m_nFaces = 2;
+		pObj->m_nVertices = 4;
+		pObj->m_nIndexCount = 6;
+		pObj->m_nVertexStart = 0;
+		pObj->m_nIndexStart = 0;
+
+		CString strID;
+		strID.Format(_T("%s%d"), m_strName, m_nRenderObjs);
+		pObj->m_nID = _wtoi(strID);
+		pObj->m_pVB = NULL;
+
+		pData[0].x = -fLength / 2.0f;
+		pData[0].y = 0;
+		pData[0].z = -fWidth / 2.0f;
+		pData[0].nx = 0.0f;
+		pData[0].ny = 1.0f;
+		pData[0].nz = 0.0f;
+		pData[0].Tex0X = 0.0f;
+		pData[0].Tex0Y = 1.0f;
+
+		pData[1].x = -fLength / 2.0f;
+		pData[1].y = 0;
+		pData[1].z = fWidth / 2.0f;
+		pData[1].nx = 0.0f;
+		pData[1].ny = 1.0f;
+		pData[1].nz = 0.0f;
+		pData[1].Tex0X = 0.0f;
+		pData[1].Tex0Y = 0.0f;
+
+
+		pData[2].x = fLength / 2.0f;
+		pData[2].y = 0;
+		pData[2].z = fWidth / 2.0f;
+		pData[2].nx = 0.0f;
+		pData[2].ny = 1.0f;
+		pData[2].nz = 0.0f;
+		pData[2].Tex0X = 1.0f;
+		pData[2].Tex0Y = 0.0f;
+
+		pData[3].x = fLength / 2.0f;
+		pData[3].y = 0;
+		pData[3].z = -fWidth / 2.0f;
+		pData[3].nx = 0.0f;
+		pData[3].ny = 1.0f;
+		pData[3].nz = 0.0f;
+		pData[3].Tex0X = 1.0f;
+		pData[3].Tex0Y = 1.0f;
+
+		for (int j = 0; j < pObj->m_nVertices; ++j) {
+			
+			if (pData[j].x < pObj->m_vMinObjBoundary.x) {
+				pObj->m_vMinObjBoundary.x = pData[j].x;
+			}
+			if (pData[j].x > pObj->m_vMaxObjBoundary.x) {
+				pObj->m_vMaxObjBoundary.x = pData[j].x;
+			}
+
+			if (pData[j].y < pObj->m_vMinObjBoundary.y) {
+				pObj->m_vMinObjBoundary.y = pData[j].y;
+			} 
+			if (pData[j].y > pObj->m_vMaxObjBoundary.y) {
+				pObj->m_vMaxObjBoundary.y = pData[j].y;
+			}
+			if (pData[j].z < pObj->m_vMinObjBoundary.z) {
+				pObj->m_vMinObjBoundary.z = pData[j].z;
+			} 
+			if (pData[j].z > pObj->m_vMaxObjBoundary.z) {
+				pObj->m_vMaxObjBoundary.z = pData[j].z;
+			}
+		}
+
+		pObj->m_vCenter.x = (pObj->m_vMaxObjBoundary.x + pObj->m_vMinObjBoundary.x) / 2;
+		pObj->m_vCenter.y = (pObj->m_vMaxObjBoundary.y + pObj->m_vMinObjBoundary.y) / 2;
+		pObj->m_vCenter.z = (pObj->m_vMaxObjBoundary.z + pObj->m_vMinObjBoundary.z) / 2;
+		m_vCenter = pObj->m_vCenter;
+		m_vMaxObjBoundary = pObj->m_vMaxObjBoundary;
+		m_vMinObjBoundary = pObj->m_vMinObjBoundary;
+
+		D3D10_BUFFER_DESC cbDesc;
+		cbDesc.ByteWidth = sizeof(Vertex) * pObj->m_nVertices;
+		cbDesc.Usage = D3D10_USAGE_IMMUTABLE;
+		cbDesc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
+		cbDesc.CPUAccessFlags = 0;
+		cbDesc.MiscFlags = 0;
+
+		D3D10_SUBRESOURCE_DATA vbInitData;
+		ZeroMemory( &vbInitData, sizeof( D3D10_SUBRESOURCE_DATA ) );
+		vbInitData.pSysMem = pData;
+		vbInitData.SysMemPitch = 0;
+		vbInitData.SysMemSlicePitch = 0;
+
+		HRESULT hr = ( m_pd3dDevice->CreateBuffer( &cbDesc, &vbInitData, &pObj->m_pVB ) );
+
+		ASSERT(hr == D3D_OK);
+
+		pObj->m_pIB = NULL;
+
+		DWORD wIndices[] =
+		{
+			0,1,2,
+			0,2,3,
+		};
+		
+		cbDesc.ByteWidth = (pObj->m_nFaces)* sizeof(DWORD) * 3;
+		cbDesc.Usage = D3D10_USAGE_IMMUTABLE;
+		cbDesc.BindFlags = D3D10_BIND_INDEX_BUFFER;
+		cbDesc.CPUAccessFlags = 0;
+		cbDesc.MiscFlags = 0;
+        
+		ZeroMemory( &vbInitData, sizeof( D3D10_SUBRESOURCE_DATA ) );
+		vbInitData.pSysMem = wIndices;
+		vbInitData.SysMemPitch = 0;
+		vbInitData.SysMemSlicePitch = 0;
+
+		hr = ( m_pd3dDevice->CreateBuffer( &cbDesc, &vbInitData, &pObj->m_pIB ) );
+
+		ASSERT(hr == D3D_OK);
+
+		ZeroMemory(szDesc, sizeof(szDesc));
+		::LoadString(theApp.m_hInstance, IDS_DESC_RENDEROBJ, szDesc, 256);
+		pObj->m_uStride = sizeof(Vertex);
+		pObj->m_strDesc = szDesc;
+
+		ZeroMemory(&pObj->m_vMaterails, sizeof(pObj->m_vMaterails));
+	
+		pObj->m_vMaterails.Diffuse.r = 0.5f;
+		pObj->m_vMaterails.Diffuse.g = 0.5f;
+		pObj->m_vMaterails.Diffuse.b = 0.5f;
+		pObj->m_vMaterails.Diffuse.a = 1.0f;
+
+		pObj->m_vMaterails.Ambient = pObj->m_vMaterails.Diffuse;
+		pObj->m_vMaterails.Specular = pObj->m_vMaterails.Diffuse;
+
+		pObj->m_vRawMaterails = pObj->m_vMaterails;
+		pObj->m_pTextureDesc = pTexDescObj;
+		pObj->InitDeviceObjects();
+
+		pObj->RestoreDeviceObjects();
+		D3DXMatrixIdentity(&pObj->m_matWorldDefault);
+	
+		pObj->m_fAlphaMap = false;
+
+		pTexDescObj != NULL &&	pTexDescObj->m_pHostObjects.AddTail(pObj);
+
+		int nTmp = -1;
+		//m_p3DScene->AddTextureDescObj(pTexDescObj, nTmp);
+		
+		AddRenderObj(pObj, nTmp);
+	
+		delete [] pData;
+		pData = NULL;
+
+		return F3DSuccess;
+	}
+
+    Drawing a Line List
+    The example in this section uses the sample vertex list created by following step 1 in the Creating Vertices procedure.
+    To draw a line list
+    Create an index array that indexes into the vertex buffer.
+    This identifies a series of lines.
+    C#
+    // Initialize an array of indices of type short.
+    lineListIndices = new short[(points * 2) - 2];
     
+    // Populate the array with references to indices in the vertex buffer
+    for (int i = 0; i < points - 1; i++)
+    {
+        lineListIndices[i * 2] = (short)(i);
+        lineListIndices[(i * 2) + 1] = (short)(i + 1);
+    }
+    Render the lines by calling DrawUserIndexedPrimitives, which specifies PrimitiveType.LineList to determine how to interpret the data in the vertex array.
+    C#
+    GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(
+        PrimitiveType.LineList,
+        primitiveList,
+        0,  // vertex buffer offset to add to each element of the index buffer
+        8,  // number of vertices in pointList
+        lineListIndices,  // the index buffer
+        0,  // first index element to read
+        7   // number of primitives to draw
+    );

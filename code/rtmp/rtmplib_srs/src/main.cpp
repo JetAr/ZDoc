@@ -66,6 +66,8 @@ int main(int argc, char** argv)
         srs_human_trace("got packet: type=%s, dts=%d, pts=%d, size=%d", 
             srs_human_flv_tag_type2string(type), timestamp, pts, size);
         
+		srs_human_print_rtmp_packet(type,timestamp,data,size);
+
         free(data);
     }
     

@@ -4190,10 +4190,14 @@ stopKeyframeSearch:
 
         /* use to return timestamp of last processed packet */
 
+		//z 音频数据、视频数据以及metadata
         /* audio (0x08), video (0x09) or metadata (0x12) packets :
          * construct 11 byte header then add rtmp packet's data */
-        if (packet.m_packetType == 0x08 || packet.m_packetType == 0x09
+        /*
+		if (packet.m_packetType == 0x08 || packet.m_packetType == 0x09
                 || packet.m_packetType == 0x12)
+				*/
+		if (packet.m_packetType == 0x08 || packet.m_packetType == 0x09 || packet.m_packetType == 0x12)
         {
             nTimeStamp = r->m_read.nResumeTS + packet.m_nTimeStamp;
             prevTagSize = 11 + nPacketLen;

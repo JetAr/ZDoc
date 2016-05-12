@@ -33508,12 +33508,17 @@ const char* srs_human_flv_tag_type2string(char type)
     static const char* video = "Video";
     static const char* data = "Data";
     static const char* unknown = "Unknown";
+	static char cType[64] = {0};
     
     switch (type) {
         case SRS_RTMP_TYPE_AUDIO: return audio;
         case SRS_RTMP_TYPE_VIDEO: return video;
         case SRS_RTMP_TYPE_SCRIPT: return data;
-        default: return unknown;
+		default: 
+			{
+				sprintf(cType,"type:0x%0x",type);
+				return cType;
+			}
     }
     
     return unknown;

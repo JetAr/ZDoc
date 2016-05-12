@@ -120,6 +120,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="0"
+				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="&quot;..\OpenSSL-Win32\include&quot;;..\stdint;..\zlib\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
