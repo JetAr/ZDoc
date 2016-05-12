@@ -23,28 +23,29 @@
 #include "streaming/basestream.h"
 
 class MonitorStream
-: public BaseStream {
+    : public BaseStream
+{
 public:
-	MonitorStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name);
-	virtual ~MonitorStream();
+    MonitorStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                  string name);
+    virtual ~MonitorStream();
 
-	virtual StreamCapabilities * GetCapabilities();
-	virtual bool Play(double absoluteTimestamp, double length);
-	virtual bool Pause();
-	virtual bool Resume();
-	virtual bool Seek(double absoluteTimestamp);
-	virtual bool Stop();
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
-	virtual void ReadyForSend();
-	virtual bool IsCompatibleWithType(uint64_t type);
+    virtual StreamCapabilities * GetCapabilities();
+    virtual bool Play(double absoluteTimestamp, double length);
+    virtual bool Pause();
+    virtual bool Resume();
+    virtual bool Seek(double absoluteTimestamp);
+    virtual bool Stop();
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
+    virtual void ReadyForSend();
+    virtual bool IsCompatibleWithType(uint64_t type);
 };
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,12 +22,13 @@
 #include "varianttestssuite.h"
 #include "thelibtestssuite.h"
 
-int main(int argc, char **argv) {
-	TS_PRINT("Begin tests...\n");
-	EXECUTE_SUITE(CommonTestsSuite);
-	EXECUTE_SUITE(VariantTestsSuite);
-	EXECUTE_SUITE(TheLibTestsSuite);
-	TS_PRINT("A total of %u tests completed successfuly\n", BaseTestsSuite::_testsCount);
-	return 0;
+int main(int argc, char **argv)
+{
+    TS_PRINT("Begin tests...\n");
+    EXECUTE_SUITE(CommonTestsSuite);
+    EXECUTE_SUITE(VariantTestsSuite);
+    EXECUTE_SUITE(TheLibTestsSuite);
+    TS_PRINT("A total of %u tests completed successfuly\n", BaseTestsSuite::_testsCount);
+    return 0;
 }
 

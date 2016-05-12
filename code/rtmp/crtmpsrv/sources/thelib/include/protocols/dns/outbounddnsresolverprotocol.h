@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,30 +24,31 @@
 #include "protocols/baseprotocol.h"
 
 class DLLEXP OutboundDNSResolverProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	IOBuffer _outputBuffer;
-	static uint32_t _requestIdGenerator;
-	static uint32_t _dnsProtocolResolverId;
-	static map<uint32_t, Variant> _requests;
+    IOBuffer _outputBuffer;
+    static uint32_t _requestIdGenerator;
+    static uint32_t _dnsProtocolResolverId;
+    static map<uint32_t, Variant> _requests;
 public:
-	OutboundDNSResolverProtocol();
-	virtual ~OutboundDNSResolverProtocol();
+    OutboundDNSResolverProtocol();
+    virtual ~OutboundDNSResolverProtocol();
 
-	static bool Connect(string ip, uint16_t port, Variant customParameters);
-	static bool SignalProtocolCreated(BaseProtocol *pProtocol, Variant customParameters);
+    static bool Connect(string ip, uint16_t port, Variant customParameters);
+    static bool SignalProtocolCreated(BaseProtocol *pProtocol, Variant customParameters);
 
-	static bool Resolve(string host, uint32_t consumerProtocolId, Variant customData);
+    static bool Resolve(string host, uint32_t consumerProtocolId, Variant customData);
 
-	virtual bool Initialize(Variant &parameters);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual IOBuffer * GetOutputBuffer();
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SignalInputData(IOBuffer &buffer);
+    virtual bool Initialize(Variant &parameters);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual IOBuffer * GetOutputBuffer();
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
 private:
-	bool SendRequest(Variant &request);
-	bool HandleResponse(Variant &response);
+    bool SendRequest(Variant &request);
+    bool HandleResponse(Variant &response);
 };
 
 

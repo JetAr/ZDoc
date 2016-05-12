@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -106,26 +106,27 @@ class AtomAVCC;
 class AtomESDS;
 
 class MP4Document
-: public BaseMediaDocument {
+    : public BaseMediaDocument
+{
 private:
-	vector<BaseAtom *> _allAtoms;
-	vector<BaseAtom *> _topAtoms;
-	AtomFTYP *_pFTYP;
-	AtomMOOV *_pMOOV;
+    vector<BaseAtom *> _allAtoms;
+    vector<BaseAtom *> _topAtoms;
+    AtomFTYP *_pFTYP;
+    AtomMOOV *_pMOOV;
 public:
-	MP4Document(Variant &metadata);
-	virtual ~MP4Document();
+    MP4Document(Variant &metadata);
+    virtual ~MP4Document();
 
-	void AddAtom(BaseAtom *pAtom);
-	BaseAtom * ReadAtom(BaseAtom *pParentAtom);
+    void AddAtom(BaseAtom *pAtom);
+    BaseAtom * ReadAtom(BaseAtom *pParentAtom);
 protected:
-	virtual bool ParseDocument();
-	virtual bool BuildFrames();
-	virtual Variant GetRTMPMeta();
+    virtual bool ParseDocument();
+    virtual bool BuildFrames();
+    virtual Variant GetRTMPMeta();
 private:
-	string Hierarchy();
-	AtomTRAK * GetTRAK(bool audio);
-	bool BuildFrames(bool audio);
+    string Hierarchy();
+    AtomTRAK * GetTRAK(bool audio);
+    bool BuildFrames(bool audio);
 };
 
 #endif	/* _MP4DOCUMENT_H */

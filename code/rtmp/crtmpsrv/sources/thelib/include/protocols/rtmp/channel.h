@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,22 +27,23 @@
 #define CS_HEADER 0
 #define CS_PAYLOAD 1
 
-typedef struct _Channel {
-	uint32_t id;
-	uint32_t state;
-	IOBuffer inputData;
+typedef struct _Channel
+{
+    uint32_t id;
+    uint32_t state;
+    IOBuffer inputData;
 
-	Header lastInHeader;
-	int8_t lastInHeaderType;
-	uint32_t lastInProcBytes;
-	double lastInAbsTs;
-	uint32_t lastInStreamId;
+    Header lastInHeader;
+    int8_t lastInHeaderType;
+    uint32_t lastInProcBytes;
+    double lastInAbsTs;
+    uint32_t lastInStreamId;
 
-	Header lastOutHeader;
-	int8_t lastOutHeaderType;
-	uint32_t lastOutProcBytes;
-	double lastOutAbsTs;
-	uint32_t lastOutStreamId;
+    Header lastOutHeader;
+    int8_t lastOutHeaderType;
+    uint32_t lastOutProcBytes;
+    double lastOutAbsTs;
+    uint32_t lastOutStreamId;
 
 } Channel;
 

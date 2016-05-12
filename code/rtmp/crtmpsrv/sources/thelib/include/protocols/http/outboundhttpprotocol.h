@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,28 +25,29 @@
 #include "protocols/http/basehttpprotocol.h"
 
 class DLLEXP OutboundHTTPProtocol
-: public BaseHTTPProtocol {
+    : public BaseHTTPProtocol
+{
 private:
-	string _method;
-	string _host;
-	string _document;
+    string _method;
+    string _host;
+    string _document;
 public:
-	OutboundHTTPProtocol();
-	virtual ~OutboundHTTPProtocol();
+    OutboundHTTPProtocol();
+    virtual ~OutboundHTTPProtocol();
 
-	string Method();
-	void Method(string method);
-	string Document();
-	void Document(string document);
-	string Host();
-	void Host(string host);
-	virtual bool EnqueueForOutbound();
+    string Method();
+    void Method(string method);
+    string Document();
+    void Document(string document);
+    string Host();
+    void Host(string host);
+    virtual bool EnqueueForOutbound();
 
-	virtual bool Is200OK();
+    virtual bool Is200OK();
 protected:
-	virtual string GetOutputFirstLine();
-	virtual bool ParseFirstLine(string &line, Variant &firstLineHeader);
-	virtual bool Authenticate();
+    virtual string GetOutputFirstLine();
+    virtual bool ParseFirstLine(string &line, Variant &firstLineHeader);
+    virtual bool Authenticate();
 };
 
 

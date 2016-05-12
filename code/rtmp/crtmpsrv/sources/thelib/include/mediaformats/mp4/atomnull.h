@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,15 +24,16 @@
 #include "mediaformats/mp4/baseatom.h"
 
 class AtomNULL
-: public BaseAtom {
+    : public BaseAtom
+{
 public:
-	AtomNULL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomNULL();
+    AtomNULL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomNULL();
 
-	virtual bool IsIgnored();
+    virtual bool IsIgnored();
 
-	virtual bool Read();
-	string Hierarchy(uint32_t indent);
+    virtual bool Read();
+    string Hierarchy(uint32_t indent);
 };
 
 #endif	/* _ATOMNULL_H */

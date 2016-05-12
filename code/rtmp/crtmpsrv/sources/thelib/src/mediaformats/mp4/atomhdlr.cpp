@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,58 +21,69 @@
 #include "mediaformats/mp4/atomhdlr.h"
 
 AtomHDLR::AtomHDLR(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
-	_componentType = 0;
-	_componentSubType = 0;
-	_componentManufacturer = 0;
-	_componentFlags = 0;
-	_componentFlagsMask = 0;
-	_componentName = "";
+    : VersionedAtom(pDocument, type, size, start)
+{
+    _componentType = 0;
+    _componentSubType = 0;
+    _componentManufacturer = 0;
+    _componentFlags = 0;
+    _componentFlagsMask = 0;
+    _componentName = "";
 }
 
-AtomHDLR::~AtomHDLR() {
+AtomHDLR::~AtomHDLR()
+{
 }
 
-uint32_t AtomHDLR::GetComponentSubType() {
-	return _componentSubType;
+uint32_t AtomHDLR::GetComponentSubType()
+{
+    return _componentSubType;
 }
 
-bool AtomHDLR::ReadData() {
-	if (!ReadUInt32(_componentType)) {
-		FATAL("Unable to read component type");
-		return false;
-	}
+bool AtomHDLR::ReadData()
+{
+    if (!ReadUInt32(_componentType))
+    {
+        FATAL("Unable to read component type");
+        return false;
+    }
 
-	if (!ReadUInt32(_componentSubType)) {
-		FATAL("Unable to read component sub type");
-		return false;
-	}
+    if (!ReadUInt32(_componentSubType))
+    {
+        FATAL("Unable to read component sub type");
+        return false;
+    }
 
-	if (!ReadUInt32(_componentManufacturer)) {
-		FATAL("Unable to read component manufacturer");
-		return false;
-	}
+    if (!ReadUInt32(_componentManufacturer))
+    {
+        FATAL("Unable to read component manufacturer");
+        return false;
+    }
 
-	if (!ReadUInt32(_componentFlags)) {
-		FATAL("Unable to read component flags");
-		return false;
-	}
+    if (!ReadUInt32(_componentFlags))
+    {
+        FATAL("Unable to read component flags");
+        return false;
+    }
 
-	if (!ReadUInt32(_componentFlagsMask)) {
-		FATAL("Unable to read component flags mask");
-		return false;
-	}
+    if (!ReadUInt32(_componentFlagsMask))
+    {
+        FATAL("Unable to read component flags mask");
+        return false;
+    }
 
-	if (!ReadString(_componentName, _size - 32)) {
-		FATAL("Unable to read component name");
-		return false;
-	}
+    if (!ReadString(_componentName, _size - 32))
+    {
+        FATAL("Unable to read component name");
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
-string AtomHDLR::Hierarchy(uint32_t indent) {
-	return string(4 * indent, ' ') + GetTypeString() + "(" + U32TOS(_componentSubType) + ")";
+string AtomHDLR::Hierarchy(uint32_t indent)
+{
+    return string(4 * indent, ' ') + GetTypeString() + "(" + U32TOS(_componentSubType) + ")";
 }
 
 

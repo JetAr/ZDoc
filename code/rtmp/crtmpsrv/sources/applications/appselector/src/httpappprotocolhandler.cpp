@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,11 +24,13 @@
 using namespace app_appselector;
 
 HTTPAppProtocolHandler::HTTPAppProtocolHandler(Variant &configuration)
-: BaseHTTPAppProtocolHandler(configuration) {
+    : BaseHTTPAppProtocolHandler(configuration)
+{
 
 }
 
-HTTPAppProtocolHandler::~HTTPAppProtocolHandler() {
+HTTPAppProtocolHandler::~HTTPAppProtocolHandler()
+{
 }
 #endif	/* HAS_PROTOCOL_HTTP */
 

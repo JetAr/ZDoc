@@ -1,18 +1,18 @@
-/* 
+/*
 *  Copyright (c) 2010,
 *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
-*  
+*
 *  This file is part of crtmpserver.
 *  crtmpserver is free software: you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation, either version 3 of the License, or
 *  (at your option) any later version.
-*  
+*
 *  crtmpserver is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *  GNU General Public License for more details.
-*  
+*
 *  You should have received a copy of the GNU General Public License
 *  along with crtmpserver.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -41,13 +41,16 @@ struct _Channel;
 #define H_SI(x) ((x).hf.s.si)
 #define H_IA(x) ((x).isAbsolute)
 
-typedef struct DLLEXP _Header {
+typedef struct DLLEXP _Header
+{
     uint32_t ci;
     uint8_t ht;
 
-    union _hf {
+    union _hf
+    {
 
-        struct _s {
+        struct _s
+        {
             uint32_t ts : 32;
             uint32_t ml : 24;
             uint32_t mt : 8;
@@ -58,10 +61,10 @@ typedef struct DLLEXP _Header {
     } hf;
     bool readCompleted;
     bool isAbsolute;
-	bool skip4bytes;
+    bool skip4bytes;
 
     bool Read(uint32_t channelId, uint8_t type, IOBuffer &buffer,
-            uint32_t availableBytes);
+              uint32_t availableBytes);
 
     Variant GetVariant();
     static bool GetFromVariant(struct _Header &header, Variant & variant);

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,24 +23,26 @@
 
 #include "mediaformats/mp4/versionedatom.h"
 
-typedef struct _STSCEntry {
-	uint32_t firstChunk;
-	uint32_t samplesPerChunk;
-	uint32_t sampleDescriptionIndex;
+typedef struct _STSCEntry
+{
+    uint32_t firstChunk;
+    uint32_t samplesPerChunk;
+    uint32_t sampleDescriptionIndex;
 } STSCEntry;
 
 class AtomSTSC
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	vector<STSCEntry> _stscEntries;
-	vector<uint32_t> _normalizedEntries;
+    vector<STSCEntry> _stscEntries;
+    vector<uint32_t> _normalizedEntries;
 public:
-	AtomSTSC(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomSTSC();
+    AtomSTSC(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomSTSC();
 
-	vector<uint32_t> GetEntries(uint32_t totalChunksCount);
+    vector<uint32_t> GetEntries(uint32_t totalChunksCount);
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMSTSC_H */

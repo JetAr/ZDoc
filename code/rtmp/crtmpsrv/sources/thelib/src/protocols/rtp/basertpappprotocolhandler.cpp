@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,17 +22,21 @@
 #include "protocols/rtp/basertpappprotocolhandler.h"
 
 BaseRTPAppProtocolHandler::BaseRTPAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-BaseRTPAppProtocolHandler::~BaseRTPAppProtocolHandler() {
+BaseRTPAppProtocolHandler::~BaseRTPAppProtocolHandler()
+{
 }
 
-void BaseRTPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
+void BaseRTPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
 }
 
-void BaseRTPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
+void BaseRTPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
 }
 
 #endif /* HAS_PROTOCOL_RTP */

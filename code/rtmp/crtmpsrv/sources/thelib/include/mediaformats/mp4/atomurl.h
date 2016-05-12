@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,14 +24,15 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomURL
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	string _location;
+    string _location;
 public:
-	AtomURL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomURL();
+    AtomURL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomURL();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMURL_H */

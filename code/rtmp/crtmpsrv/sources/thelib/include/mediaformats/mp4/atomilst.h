@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,17 +26,18 @@
 class AtomMetaField;
 
 class AtomILST
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	vector<AtomMetaField *> _metaFields;
+    vector<AtomMetaField *> _metaFields;
 public:
-	AtomILST(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomILST();
+    AtomILST(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomILST();
 
-	Variant GetVariant();
+    Variant GetVariant();
 
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMILST_H */

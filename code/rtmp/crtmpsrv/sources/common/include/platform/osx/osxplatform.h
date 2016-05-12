@@ -124,16 +124,18 @@ do { \
 }while (0);
 
 class OSXPlatform
-: public BasePlatform {
+    : public BasePlatform
+{
 public:
-	OSXPlatform();
-	virtual ~OSXPlatform();
+    OSXPlatform();
+    virtual ~OSXPlatform();
 };
 
 typedef void (*SignalFnc)(void);
 
-typedef struct _select_event {
-	uint8_t type;
+typedef struct _select_event
+{
+    uint8_t type;
 } select_event;
 
 string format(string fmt, ...);

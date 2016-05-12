@@ -21,10 +21,12 @@
 #include "protocols/rtmfp/inboundrtmfpprotocol.h"
 
 InboundRTMFPProtocol::InboundRTMFPProtocol()
-: BaseRTMFPProtocol(PT_INBOUND_RTMFP) {
+    : BaseRTMFPProtocol(PT_INBOUND_RTMFP)
+{
 
 }
 
-InboundRTMFPProtocol::~InboundRTMFPProtocol() {
+InboundRTMFPProtocol::~InboundRTMFPProtocol()
+{
 }
 #endif /* HAS_PROTOCOL_RTMFP */

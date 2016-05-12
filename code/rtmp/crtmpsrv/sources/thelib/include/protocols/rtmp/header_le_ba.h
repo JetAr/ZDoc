@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -41,35 +41,38 @@ struct _Channel;
 #define H_SI(x) ((x).hf.s.si)
 #define H_IA(x) ((x).isAbsolute)
 
-typedef struct DLLEXP _Header {
-	uint32_t ci;
-	uint8_t ht;
+typedef struct DLLEXP _Header
+{
+    uint32_t ci;
+    uint8_t ht;
 
-	union _hf {
+    union _hf
+    {
 
-		struct _s {
-			uint32_t ts : 32;
-			uint32_t ml : 24;
-			uint32_t mt : 8;
-			uint32_t si : 32;
-		} s;
-		uint8_t datac[12];
-		uint32_t dataw[3];
-	} hf;
-	bool readCompleted;
-	bool isAbsolute;
-	bool skip4bytes;
+        struct _s
+        {
+            uint32_t ts : 32;
+            uint32_t ml : 24;
+            uint32_t mt : 8;
+            uint32_t si : 32;
+        } s;
+        uint8_t datac[12];
+        uint32_t dataw[3];
+    } hf;
+    bool readCompleted;
+    bool isAbsolute;
+    bool skip4bytes;
 
-	bool Read(uint32_t channelId, uint8_t type, IOBuffer &buffer,
-			uint32_t availableBytes);
+    bool Read(uint32_t channelId, uint8_t type, IOBuffer &buffer,
+              uint32_t availableBytes);
 
-	Variant GetVariant();
-	static bool GetFromVariant(struct _Header &header, Variant & variant);
+    Variant GetVariant();
+    static bool GetFromVariant(struct _Header &header, Variant & variant);
 
-	bool Write(struct _Channel &channel, IOBuffer & buffer);
-	bool Write(IOBuffer & buffer);
+    bool Write(struct _Channel &channel, IOBuffer & buffer);
+    bool Write(IOBuffer & buffer);
 
-	operator string();
+    operator string();
 } Header;
 
 #endif	/* _HEADER_LE_BA_H */

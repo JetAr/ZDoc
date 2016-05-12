@@ -25,18 +25,19 @@
 #include "protocols/cli/inboundbasecliprotocol.h"
 
 class InboundJSONCLIProtocol
-: public InboundBaseCLIProtocol {
+    : public InboundBaseCLIProtocol
+{
 private:
-	bool _useLengthPadding;
+    bool _useLengthPadding;
 public:
-	InboundJSONCLIProtocol();
-	virtual ~InboundJSONCLIProtocol();
+    InboundJSONCLIProtocol();
+    virtual ~InboundJSONCLIProtocol();
 
-	virtual bool Initialize(Variant &parameters);
-	virtual bool SignalInputData(IOBuffer &buffer);
-	virtual bool SendMessage(Variant &message);
+    virtual bool Initialize(Variant &parameters);
+    virtual bool SignalInputData(IOBuffer &buffer);
+    virtual bool SendMessage(Variant &message);
 private:
-	bool ParseCommand(string &command);
+    bool ParseCommand(string &command);
 };
 
 

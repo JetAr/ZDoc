@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,52 +24,57 @@
 using namespace app_vptests;
 
 VPTestsApplication::VPTestsApplication(Variant &configuration)
-: BaseClientApplication(configuration) {
+    : BaseClientApplication(configuration)
+{
 #ifdef HAS_PROTOCOL_RTMP
-	_pRTMPHandler = NULL;
+    _pRTMPHandler = NULL;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_VAR
-	_pVariantHandler = NULL;
+    _pVariantHandler = NULL;
 #endif /* HAS_PROTOCOL_RTMP */
 }
 
-VPTestsApplication::~VPTestsApplication() {
+VPTestsApplication::~VPTestsApplication()
+{
 #ifdef HAS_PROTOCOL_RTMP
-	UnRegisterAppProtocolHandler(PT_INBOUND_RTMP);
-	UnRegisterAppProtocolHandler(PT_OUTBOUND_RTMP);
-	if (_pRTMPHandler != NULL) {
-		delete _pRTMPHandler;
-		_pRTMPHandler = NULL;
-	}
+    UnRegisterAppProtocolHandler(PT_INBOUND_RTMP);
+    UnRegisterAppProtocolHandler(PT_OUTBOUND_RTMP);
+    if (_pRTMPHandler != NULL)
+    {
+        delete _pRTMPHandler;
+        _pRTMPHandler = NULL;
+    }
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_VAR
-	UnRegisterAppProtocolHandler(PT_BIN_VAR);
-	UnRegisterAppProtocolHandler(PT_XML_VAR);
-	if (_pVariantHandler != NULL) {
-		delete _pVariantHandler;
-		_pVariantHandler = NULL;
-	}
+    UnRegisterAppProtocolHandler(PT_BIN_VAR);
+    UnRegisterAppProtocolHandler(PT_XML_VAR);
+    if (_pVariantHandler != NULL)
+    {
+        delete _pVariantHandler;
+        _pVariantHandler = NULL;
+    }
 #endif /* HAS_PROTOCOL_VAR */
 }
 
-bool VPTestsApplication::Initialize() {
-	//TODO: Add your app init code here
-	//Things like parsing custom sections inside _configuration for example,
-	//initialize the protocol handler(s)
+bool VPTestsApplication::Initialize()
+{
+    //TODO: Add your app init code here
+    //Things like parsing custom sections inside _configuration for example,
+    //initialize the protocol handler(s)
 
-	//1. Initialize the protocol handler(s)
+    //1. Initialize the protocol handler(s)
 #ifdef HAS_PROTOCOL_RTMP
-	_pRTMPHandler = new RTMPAppProtocolHandler(_configuration);
-	RegisterAppProtocolHandler(PT_INBOUND_RTMP, _pRTMPHandler);
-	RegisterAppProtocolHandler(PT_OUTBOUND_RTMP, _pRTMPHandler);
+    _pRTMPHandler = new RTMPAppProtocolHandler(_configuration);
+    RegisterAppProtocolHandler(PT_INBOUND_RTMP, _pRTMPHandler);
+    RegisterAppProtocolHandler(PT_OUTBOUND_RTMP, _pRTMPHandler);
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_VAR
-	_pVariantHandler = new VariantAppProtocolHandler(_configuration);
-	RegisterAppProtocolHandler(PT_BIN_VAR, _pVariantHandler);
-	RegisterAppProtocolHandler(PT_XML_VAR, _pVariantHandler);
+    _pVariantHandler = new VariantAppProtocolHandler(_configuration);
+    RegisterAppProtocolHandler(PT_BIN_VAR, _pVariantHandler);
+    RegisterAppProtocolHandler(PT_XML_VAR, _pVariantHandler);
 #endif /* HAS_PROTOCOL_VAR */
 
-	return true;
+    return true;
 }
 
 

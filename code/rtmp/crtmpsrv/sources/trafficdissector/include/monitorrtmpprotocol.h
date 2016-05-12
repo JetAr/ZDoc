@@ -23,22 +23,23 @@
 #include "protocols/rtmp/basertmpprotocol.h"
 
 class DLLEXP MonitorRTMPProtocol
-: public BaseRTMPProtocol {
+    : public BaseRTMPProtocol
+{
 private:
-	uint8_t _handshakeStage;
-	bool _isClient;
+    uint8_t _handshakeStage;
+    bool _isClient;
 public:
-	MonitorRTMPProtocol(bool isClient);
-	virtual ~MonitorRTMPProtocol();
+    MonitorRTMPProtocol(bool isClient);
+    virtual ~MonitorRTMPProtocol();
 
-	uint8_t GetLogLevel();
-	virtual bool Initialize(Variant &parameters);
-	virtual bool PerformHandshake(IOBuffer &buffer);
-	bool SetInboundChunkSize(uint32_t chunkSize);
-	bool SetOutboundChunkSize(uint32_t chunkSize);
+    uint8_t GetLogLevel();
+    virtual bool Initialize(Variant &parameters);
+    virtual bool PerformHandshake(IOBuffer &buffer);
+    bool SetInboundChunkSize(uint32_t chunkSize);
+    bool SetOutboundChunkSize(uint32_t chunkSize);
 private:
-	bool PerformHandshakeClient(IOBuffer &buffer);
-	bool PerformHandshakeServer(IOBuffer &buffer);
+    bool PerformHandshakeClient(IOBuffer &buffer);
+    bool PerformHandshakeServer(IOBuffer &buffer);
 };
 
 

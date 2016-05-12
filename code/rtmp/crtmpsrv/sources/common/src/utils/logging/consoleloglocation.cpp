@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,53 +23,65 @@
 vector<COLOR_TYPE> ConsoleLogLocation::_colors;
 
 ConsoleLogLocation::ConsoleLogLocation(bool allowColors)
-: BaseLogLocation() {
-	_allowColors = allowColors;
-	if (allowColors) {
-		if (_colors.size() <= 0) {
-			ADD_VECTOR_END(_colors, FATAL_COLOR);
-			ADD_VECTOR_END(_colors, ERROR_COLOR);
-			ADD_VECTOR_END(_colors, WARNING_COLOR);
-			ADD_VECTOR_END(_colors, INFO_COLOR);
-			ADD_VECTOR_END(_colors, DEBUG_COLOR);
-			ADD_VECTOR_END(_colors, FINE_COLOR);
-			ADD_VECTOR_END(_colors, FINEST_COLOR);
-		}
-	}
+    : BaseLogLocation()
+{
+    _allowColors = allowColors;
+    if (allowColors)
+    {
+        if (_colors.size() <= 0)
+        {
+            ADD_VECTOR_END(_colors, FATAL_COLOR);
+            ADD_VECTOR_END(_colors, ERROR_COLOR);
+            ADD_VECTOR_END(_colors, WARNING_COLOR);
+            ADD_VECTOR_END(_colors, INFO_COLOR);
+            ADD_VECTOR_END(_colors, DEBUG_COLOR);
+            ADD_VECTOR_END(_colors, FINE_COLOR);
+            ADD_VECTOR_END(_colors, FINEST_COLOR);
+        }
+    }
 }
 
-ConsoleLogLocation::~ConsoleLogLocation() {
-	SET_CONSOLE_TEXT_COLOR(NORMAL_COLOR);
+ConsoleLogLocation::~ConsoleLogLocation()
+{
+    SET_CONSOLE_TEXT_COLOR(NORMAL_COLOR);
 }
 
 void ConsoleLogLocation::Log(int32_t level, string fileName,
-		uint32_t lineNumber, string functionName, string message) {
-	if (_level < 0 || level > _level) {
-		return;
-	}
+                             uint32_t lineNumber, string functionName, string message)
+{
+    if (_level < 0 || level > _level)
+    {
+        return;
+    }
 #ifdef ANDROID
-	if (_allowColors) {
-		printf("%s%s:%u %s%s\n",
-				STR(_colors[level]),
-				STR(fileName),
-				lineNumber,
-				STR(message),
-				STR(_colors[6]));
-	} else {
-		printf("%s:%u %s\n",
-				STR(fileName),
-				lineNumber,
-				STR(message));
-	}
+    if (_allowColors)
+    {
+        printf("%s%s:%u %s%s\n",
+               STR(_colors[level]),
+               STR(fileName),
+               lineNumber,
+               STR(message),
+               STR(_colors[6]));
+    }
+    else
+    {
+        printf("%s:%u %s\n",
+               STR(fileName),
+               lineNumber,
+               STR(message));
+    }
 #else
-	if (_allowColors) {
-		SET_CONSOLE_TEXT_COLOR(_colors[level]);
-		cout << fileName << ":" << lineNumber << " " << message;
-		SET_CONSOLE_TEXT_COLOR(_colors[6]);
-		cout << endl;
-	} else {
-		cout << fileName << ":" << lineNumber << " " << message << endl;
-	}
+    if (_allowColors)
+    {
+        SET_CONSOLE_TEXT_COLOR(_colors[level]);
+        cout << fileName << ":" << lineNumber << " " << message;
+        SET_CONSOLE_TEXT_COLOR(_colors[6]);
+        cout << endl;
+    }
+    else
+    {
+        cout << fileName << ":" << lineNumber << " " << message << endl;
+    }
 #endif /* ANDROID */
 }
 

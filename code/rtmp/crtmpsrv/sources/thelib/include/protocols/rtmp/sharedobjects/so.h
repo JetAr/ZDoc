@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,48 +24,50 @@
 
 #include "common.h"
 
-typedef struct _DirtyInfo {
-	string propertyName;
-	uint8_t type;
+typedef struct _DirtyInfo
+{
+    string propertyName;
+    uint8_t type;
 } DirtyInfo;
 
 typedef vector<DirtyInfo> Dirtyness;
 
-class DLLEXP SO {
+class DLLEXP SO
+{
 private:
-	string _name;
-	uint32_t _version;
-	bool _persistent;
-	Variant _payload;
-	map<uint32_t, uint32_t> _registeredProtocols;
-	map<uint32_t, Dirtyness> _dirtyPropsByProtocol;
-	bool _versionIncremented;
+    string _name;
+    uint32_t _version;
+    bool _persistent;
+    Variant _payload;
+    map<uint32_t, uint32_t> _registeredProtocols;
+    map<uint32_t, Dirtyness> _dirtyPropsByProtocol;
+    bool _versionIncremented;
 public:
-	SO(string name, bool persistent);
-	virtual ~SO();
+    SO(string name, bool persistent);
+    virtual ~SO();
 public:
-	string GetName();
-	uint32_t GetVersion();
-	bool IsPersistent();
-	Variant & GetPayload();
+    string GetName();
+    uint32_t GetVersion();
+    bool IsPersistent();
+    Variant & GetPayload();
 
-	void RegisterProtocol(uint32_t protocolId);
-	void UnRegisterProtocol(uint32_t protocolId);
-	uint32_t GetSubscribersCount();
-	vector<string> GetPropertyNames();
-	uint32_t PropertiesCount();
+    void RegisterProtocol(uint32_t protocolId);
+    void UnRegisterProtocol(uint32_t protocolId);
+    uint32_t GetSubscribersCount();
+    vector<string> GetPropertyNames();
+    uint32_t PropertiesCount();
 
-	bool HasProperties();
-	bool HasProperty(string propertyName);
+    bool HasProperties();
+    bool HasProperty(string propertyName);
 
-	string DumpTrack();
-	void Track();
+    string DumpTrack();
+    void Track();
 
-	operator string();
+    operator string();
 
-	Variant & Get(string key);
-	Variant & Set(string key, Variant value, uint32_t protocolId = 0);
-	void UnSet(string key);
+    Variant & Get(string key);
+    Variant & Set(string key, Variant value, uint32_t protocolId = 0);
+    void UnSet(string key);
 };
 
 

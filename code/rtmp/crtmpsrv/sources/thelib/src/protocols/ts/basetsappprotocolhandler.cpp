@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,27 +24,33 @@
 #include "protocols/ts/innettsstream.h"
 
 BaseTSAppProtocolHandler::BaseTSAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-BaseTSAppProtocolHandler::~BaseTSAppProtocolHandler() {
+BaseTSAppProtocolHandler::~BaseTSAppProtocolHandler()
+{
 }
 
-void BaseTSAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	if (MAP_HAS1(_connections, pProtocol->GetId())) {
-		ASSERT("Protocol already registered");
-	}
-	_connections[pProtocol->GetId()] = (InboundTSProtocol *) pProtocol;
+void BaseTSAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    if (MAP_HAS1(_connections, pProtocol->GetId()))
+    {
+        ASSERT("Protocol already registered");
+    }
+    _connections[pProtocol->GetId()] = (InboundTSProtocol *) pProtocol;
 }
 
-void BaseTSAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
-	_connections.erase(pProtocol->GetId());
+void BaseTSAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
+    _connections.erase(pProtocol->GetId());
 }
 
-void BaseTSAppProtocolHandler::ProgramSetupCompleted(InNetTSStream *pInNetTSStream) {
-	INFO("Stream available (%u): %s", pInNetTSStream->GetUniqueId(),
-			STR(pInNetTSStream->GetName()));
+void BaseTSAppProtocolHandler::ProgramSetupCompleted(InNetTSStream *pInNetTSStream)
+{
+    INFO("Stream available (%u): %s", pInNetTSStream->GetUniqueId(),
+         STR(pInNetTSStream->GetName()));
 }
 #endif	/* HAS_PROTOCOL_TS */
 

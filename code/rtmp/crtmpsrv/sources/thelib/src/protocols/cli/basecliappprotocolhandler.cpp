@@ -23,45 +23,53 @@
 
 
 BaseCLIAppProtocolHandler::BaseCLIAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-BaseCLIAppProtocolHandler::~BaseCLIAppProtocolHandler() {
+BaseCLIAppProtocolHandler::~BaseCLIAppProtocolHandler()
+{
 }
 
-void BaseCLIAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
+void BaseCLIAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }
 
-void BaseCLIAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
+void BaseCLIAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }
 
-bool BaseCLIAppProtocolHandler::Send(BaseProtocol *pTo, string status, string description, Variant &data) {
-	//1. Prepare the final message
-	Variant message;
-	message["status"] = status;
-	message["description"] = description;
-	message["data"] = data;
+bool BaseCLIAppProtocolHandler::Send(BaseProtocol *pTo, string status, string description, Variant &data)
+{
+    //1. Prepare the final message
+    Variant message;
+    message["status"] = status;
+    message["description"] = description;
+    message["data"] = data;
 
-	//2. Send it
-	switch (pTo->GetType()) {
-		case PT_INBOUND_JSONCLI:
-			return ((InboundBaseCLIProtocol *) pTo)->SendMessage(message);
-		default:
-			WARN("Protocol %s not supported yet", STR(tagToString(pTo->GetType())));
-			return false;
-	}
+    //2. Send it
+    switch (pTo->GetType())
+    {
+    case PT_INBOUND_JSONCLI:
+        return ((InboundBaseCLIProtocol *) pTo)->SendMessage(message);
+    default:
+        WARN("Protocol %s not supported yet", STR(tagToString(pTo->GetType())));
+        return false;
+    }
 }
 
-bool BaseCLIAppProtocolHandler::SendFail(BaseProtocol *pTo, string description) {
-	Variant dummy;
-	return Send(pTo, "FAIL", description, dummy);
+bool BaseCLIAppProtocolHandler::SendFail(BaseProtocol *pTo, string description)
+{
+    Variant dummy;
+    return Send(pTo, "FAIL", description, dummy);
 }
 
-bool BaseCLIAppProtocolHandler::SendSuccess(BaseProtocol *pTo, string description, Variant &data) {
-	return Send(pTo, "SUCCESS", description, data);
+bool BaseCLIAppProtocolHandler::SendSuccess(BaseProtocol *pTo, string description, Variant &data)
+{
+    return Send(pTo, "SUCCESS", description, data);
 }
 
 #endif /* HAS_PROTOCOL_CLI */

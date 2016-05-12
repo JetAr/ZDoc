@@ -48,7 +48,7 @@ int RTMP_ParseURL(const char *url, int *protocol, AVal *host, unsigned int *port
     /* Old School Parsing */
 
     /* look for usual :// pattern */
-	//z 找出 :// 第一次出现的位置
+    //z 找出 :// 第一次出现的位置
     p = strstr((char *)url, "://");
     if(!p)
     {
@@ -56,10 +56,10 @@ int RTMP_ParseURL(const char *url, int *protocol, AVal *host, unsigned int *port
         return FALSE;
     }
     {
-		//z 长度
+        //z 长度
         int len = (int)(p-url);
 
-		//z 根据长度，比较协议名称，得到具体协议。
+        //z 根据长度，比较协议名称，得到具体协议。
         if(len == 4 && strncasecmp(url, "rtmp", 4)==0)
             *protocol = RTMP_PROTOCOL_RTMP;
         else if(len == 5 && strncasecmp(url, "rtmpt", 5)==0)
@@ -85,24 +85,24 @@ int RTMP_ParseURL(const char *url, int *protocol, AVal *host, unsigned int *port
 
 parsehost:
     /* let's get the hostname */
-	//z 越过 ://
+    //z 越过 ://
     p+=3;
 
     /* check for sudden death */
-	//z 已到结尾
+    //z 已到结尾
     if(*p==0)
     {
         RTMP_Log(RTMP_LOGWARNING, "No hostname in URL!");
         return FALSE;
     }
-	
-	//z 标记字符串结尾
+
+    //z 标记字符串结尾
     end   = p + strlen(p);
-	//z 找到 : 所在的位置
+    //z 找到 : 所在的位置
     col   = strchr(p, ':');
-	//z 找到？所在的位置
+    //z 找到？所在的位置
     ques  = strchr(p, '?');
-	//z 找到 / 所在的位置
+    //z 找到 / 所在的位置
     slash = strchr(p, '/');
 
     {
@@ -116,7 +116,7 @@ parsehost:
 
         if(hostlen < 256)
         {
-			//z 这里没有复制内容，只是拿指针指向了一下
+            //z 这里没有复制内容，只是拿指针指向了一下
             host->av_val = p;
             host->av_len = hostlen;
             RTMP_Log(RTMP_LOGDEBUG, "Parsed host    : %.*s", hostlen, host->av_val);
@@ -130,7 +130,7 @@ parsehost:
     }
 
     /* get the port number if available */
-	//z 获取 port number
+    //z 获取 port number
     if(*p == ':')
     {
         unsigned int p2;
@@ -154,7 +154,7 @@ parsehost:
     p = slash+1;
 
     {
-		//z 解析 application 
+        //z 解析 application
         /* parse application
          *
          * rtmp://host[:port]/app[/appinstance][/...]

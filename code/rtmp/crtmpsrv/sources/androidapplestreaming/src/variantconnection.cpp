@@ -20,79 +20,95 @@
 
 #include "variantconnection.h"
 
-VariantConnection::VariantConnection() {
-	_fd = -1;
+VariantConnection::VariantConnection()
+{
+    _fd = -1;
 }
 
-VariantConnection::~VariantConnection() {
-	Close();
+VariantConnection::~VariantConnection()
+{
+    Close();
 }
 
-bool VariantConnection::Connect(sockaddr_in &address) {
-	Close();
-	_fd = socket(PF_INET, SOCK_STREAM, 0);
-	if (_fd < 0) {
-		FATAL("Unable to create fd: (%d)%s", errno, strerror(errno));
-		return false;
-	}
+bool VariantConnection::Connect(sockaddr_in &address)
+{
+    Close();
+    _fd = socket(PF_INET, SOCK_STREAM, 0);
+    if (_fd < 0)
+    {
+        FATAL("Unable to create fd: (%d)%s", errno, strerror(errno));
+        return false;
+    }
 
-	if (connect(_fd, (sockaddr *) & address, sizeof (address)) != 0) {
-		FATAL("Unable to connect: (%d)%s", errno, strerror(errno));
-		return false;
-	}
-	return true;
+    if (connect(_fd, (sockaddr *) & address, sizeof (address)) != 0)
+    {
+        FATAL("Unable to connect: (%d)%s", errno, strerror(errno));
+        return false;
+    }
+    return true;
 }
 
-bool VariantConnection::SendMessage(Variant &message, Variant &response) {
-	string rawContent = "    ";
-	if (!message.SerializeToBin(rawContent)) {
-		FATAL("Unable to serialize message");
-		return false;
-	}
-	uint8_t *pBuffer = (uint8_t *) rawContent.c_str();
-	uint32_t size = rawContent.size();
-	EHTONLP(pBuffer, size - 4);
+bool VariantConnection::SendMessage(Variant &message, Variant &response)
+{
+    string rawContent = "    ";
+    if (!message.SerializeToBin(rawContent))
+    {
+        FATAL("Unable to serialize message");
+        return false;
+    }
+    uint8_t *pBuffer = (uint8_t *) rawContent.c_str();
+    uint32_t size = rawContent.size();
+    EHTONLP(pBuffer, size - 4);
 
-	int32_t totalSentAmount = 0;
-	int32_t sentAmount = 0;
+    int32_t totalSentAmount = 0;
+    int32_t sentAmount = 0;
 
-	while (totalSentAmount < (int32_t) size) {
-		sentAmount = send(_fd, pBuffer + totalSentAmount, size - totalSentAmount, 0);
-		if (sentAmount <= 0) {
-			return false;
-		}
-		totalSentAmount += sentAmount;
-	}
+    while (totalSentAmount < (int32_t) size)
+    {
+        sentAmount = send(_fd, pBuffer + totalSentAmount, size - totalSentAmount, 0);
+        if (sentAmount <= 0)
+        {
+            return false;
+        }
+        totalSentAmount += sentAmount;
+    }
 
-	_buffer.IgnoreAll();
-	int32_t recvAmount = 0;
-	for (;;) {
-		if (!_buffer.ReadFromTCPFd(_fd, 1024 * 1024, recvAmount)) {
-			FATAL("Unable to read from socket");
-			return false;
-		}
-		size = GETAVAILABLEBYTESCOUNT(_buffer);
-		pBuffer = GETIBPOINTER(_buffer);
-		if (size < 4) {
-			WARN("not enough data. Wait for more...");
-			continue;
-		}
-		uint32_t variantSize = ENTOHLP(pBuffer);
-		if (variantSize + 4 > size) {
-			WARN("not enough data. Wait for more...");
-			continue;
-		}
-		if (!Variant::DeserializeFromBin(pBuffer + 4, variantSize, response)) {
-			FATAL("Unable to deserialize buffer");
-			return false;
-		}
-		return true;
-	}
+    _buffer.IgnoreAll();
+    int32_t recvAmount = 0;
+    for (;;)
+    {
+        if (!_buffer.ReadFromTCPFd(_fd, 1024 * 1024, recvAmount))
+        {
+            FATAL("Unable to read from socket");
+            return false;
+        }
+        size = GETAVAILABLEBYTESCOUNT(_buffer);
+        pBuffer = GETIBPOINTER(_buffer);
+        if (size < 4)
+        {
+            WARN("not enough data. Wait for more...");
+            continue;
+        }
+        uint32_t variantSize = ENTOHLP(pBuffer);
+        if (variantSize + 4 > size)
+        {
+            WARN("not enough data. Wait for more...");
+            continue;
+        }
+        if (!Variant::DeserializeFromBin(pBuffer + 4, variantSize, response))
+        {
+            FATAL("Unable to deserialize buffer");
+            return false;
+        }
+        return true;
+    }
 }
 
-void VariantConnection::Close() {
-	if (_fd > 0) {
-		close(_fd);
-		_fd = 0;
-	}
+void VariantConnection::Close()
+{
+    if (_fd > 0)
+    {
+        close(_fd);
+        _fd = 0;
+    }
 }

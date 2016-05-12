@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,29 +24,30 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomTKHD
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	uint32_t _creationTime;
-	uint32_t _modificationTime;
-	uint32_t _trackId;
-	uint8_t _reserved1[4];
-	uint32_t _duration;
-	uint8_t _reserved2[8];
-	uint16_t _layer;
-	uint16_t _alternateGroup;
-	uint16_t _volume;
-	uint8_t _reserved3[2];
-	uint8_t _matrixStructure[36];
-	uint32_t _trackWidth;
-	uint32_t _trackHeight;
+    uint32_t _creationTime;
+    uint32_t _modificationTime;
+    uint32_t _trackId;
+    uint8_t _reserved1[4];
+    uint32_t _duration;
+    uint8_t _reserved2[8];
+    uint16_t _layer;
+    uint16_t _alternateGroup;
+    uint16_t _volume;
+    uint8_t _reserved3[2];
+    uint8_t _matrixStructure[36];
+    uint32_t _trackWidth;
+    uint32_t _trackHeight;
 public:
-	AtomTKHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomTKHD();
+    AtomTKHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomTKHD();
 
-	uint32_t GetWidth();
-	uint32_t GetHeight();
+    uint32_t GetWidth();
+    uint32_t GetHeight();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMTKHD_H */

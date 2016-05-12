@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,53 +27,54 @@ string U32TOS(uint32_t type);
 
 class MP4Document;
 
-class BaseAtom {
+class BaseAtom
+{
 protected:
-	uint64_t _start;
-	uint64_t _size;
+    uint64_t _start;
+    uint64_t _size;
 
-	uint32_t _type;
+    uint32_t _type;
 
-	MP4Document *_pDoc;
-	BaseAtom *_pParent;
+    MP4Document *_pDoc;
+    BaseAtom *_pParent;
 public:
-	BaseAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~BaseAtom();
+    BaseAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~BaseAtom();
 
-	uint64_t GetStart();
-	uint64_t GetSize();
-	string GetTypeString();
-	uint32_t GetTypeNumeric();
+    uint64_t GetStart();
+    uint64_t GetSize();
+    string GetTypeString();
+    uint32_t GetTypeNumeric();
 
-	MP4Document * GetDoc();
+    MP4Document * GetDoc();
 
-	virtual bool Read() = 0;
+    virtual bool Read() = 0;
 
-	virtual operator string();
-	virtual bool IsIgnored();
+    virtual operator string();
+    virtual bool IsIgnored();
 
-	virtual BaseAtom * GetPath(vector<uint32_t> path);
+    virtual BaseAtom * GetPath(vector<uint32_t> path);
 
-	virtual string Hierarchy(uint32_t indent) = 0;
+    virtual string Hierarchy(uint32_t indent) = 0;
 
-	BaseAtom *GetParentAtom();
-	void SetParentAtom(BaseAtom *pParent);
+    BaseAtom *GetParentAtom();
+    void SetParentAtom(BaseAtom *pParent);
 
 protected:
-	bool SkipRead(bool issueWarn = true);
-	uint64_t CurrentPosition();
-	bool CheckBounds(uint64_t size);
-	bool ReadArray(uint8_t *pBuffer, uint64_t length);
-	bool ReadUInt8(uint8_t &val);
-	bool ReadUInt16(uint16_t &val, bool networkOrder = true);
-	bool ReadInt16(int16_t &val, bool networkOrder = true);
-	bool ReadUInt24(uint32_t &val, bool networkOrder = true);
-	bool ReadUInt32(uint32_t &val, bool networkOrder = true);
-	bool ReadInt32(int32_t &val, bool networkOrder = true);
-	bool ReadUInt64(uint64_t &val, bool networkOrder = true);
-	bool ReadInt64(int64_t &val, bool networkOrder = true);
-	bool SkipBytes(uint64_t count);
-	bool ReadString(string &val, uint64_t size);
+    bool SkipRead(bool issueWarn = true);
+    uint64_t CurrentPosition();
+    bool CheckBounds(uint64_t size);
+    bool ReadArray(uint8_t *pBuffer, uint64_t length);
+    bool ReadUInt8(uint8_t &val);
+    bool ReadUInt16(uint16_t &val, bool networkOrder = true);
+    bool ReadInt16(int16_t &val, bool networkOrder = true);
+    bool ReadUInt24(uint32_t &val, bool networkOrder = true);
+    bool ReadUInt32(uint32_t &val, bool networkOrder = true);
+    bool ReadInt32(int32_t &val, bool networkOrder = true);
+    bool ReadUInt64(uint64_t &val, bool networkOrder = true);
+    bool ReadInt64(int64_t &val, bool networkOrder = true);
+    bool SkipBytes(uint64_t count);
+    bool ReadString(string &val, uint64_t size);
 };
 
 #endif	/* _BASEATOM_H */

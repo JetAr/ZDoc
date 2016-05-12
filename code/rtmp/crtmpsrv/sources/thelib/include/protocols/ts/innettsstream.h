@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -30,70 +30,71 @@
 struct _PIDDescriptor;
 
 class DLLEXP InNetTSStream
-: public BaseInNetStream {
+    : public BaseInNetStream
+{
 private:
-	//audio section
-	_PIDDescriptor *_pAudioPidDescriptor;
-	double _ptsTimeAudio;
+    //audio section
+    _PIDDescriptor *_pAudioPidDescriptor;
+    double _ptsTimeAudio;
 #ifdef COMPUTE_DTS_TIME
-	double _dtsTimeAudio;
+    double _dtsTimeAudio;
 #endif
-	double _deltaTimeAudio;
-	IOBuffer _audioBuffer;
-	double _lastGotAudioTimestamp;
-	double _lastSentAudioTimestamp;
-	uint32_t _audioPacketsCount;
+    double _deltaTimeAudio;
+    IOBuffer _audioBuffer;
+    double _lastGotAudioTimestamp;
+    double _lastSentAudioTimestamp;
+    uint32_t _audioPacketsCount;
 
-	//video section
-	_PIDDescriptor *_pVideoPidDescriptor;
-	double _ptsTimeVideo;
+    //video section
+    _PIDDescriptor *_pVideoPidDescriptor;
+    double _ptsTimeVideo;
 #ifdef COMPUTE_DTS_TIME
-	double _dtsTimeVideo;
+    double _dtsTimeVideo;
 #endif
-	double _deltaTimeVideo;
-	IOBuffer _currentNal;
+    double _deltaTimeVideo;
+    IOBuffer _currentNal;
 
-	double _feedTime;
+    double _feedTime;
 
-	uint32_t _cursor;
-	StreamCapabilities _streamCapabilities;
-	bool _firstNAL;
+    uint32_t _cursor;
+    StreamCapabilities _streamCapabilities;
+    bool _firstNAL;
 
-	IOBuffer _SPS;
-	IOBuffer _PPS;
+    IOBuffer _SPS;
+    IOBuffer _PPS;
 public:
-	InNetTSStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name);
-	virtual ~InNetTSStream();
-	virtual StreamCapabilities * GetCapabilities();
+    InNetTSStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                  string name);
+    virtual ~InNetTSStream();
+    virtual StreamCapabilities * GetCapabilities();
 
-	void SetAudioVideoPidDescriptors(_PIDDescriptor *pAudioPidDescriptor,
-			_PIDDescriptor *pVideoPidDescriptor);
+    void SetAudioVideoPidDescriptors(_PIDDescriptor *pAudioPidDescriptor,
+                                     _PIDDescriptor *pVideoPidDescriptor);
 
-	double GetFeedTime();
+    double GetFeedTime();
 
-	bool FeedData(uint8_t *pData, uint32_t length, bool packetStart,
-			bool isAudio);
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
-	virtual void ReadyForSend();
-	virtual bool IsCompatibleWithType(uint64_t type);
-	virtual void SignalOutStreamAttached(BaseOutStream *pOutStream);
-	virtual void SignalOutStreamDetached(BaseOutStream *pOutStream);
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
+    bool FeedData(uint8_t *pData, uint32_t length, bool packetStart,
+                  bool isAudio);
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
+    virtual void ReadyForSend();
+    virtual bool IsCompatibleWithType(uint64_t type);
+    virtual void SignalOutStreamAttached(BaseOutStream *pOutStream);
+    virtual void SignalOutStreamDetached(BaseOutStream *pOutStream);
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
 private:
-	bool HandleAudioData(uint8_t *pRawBuffer, uint32_t rawBufferLength,
-			double timestamp, bool packetStart);
-	bool HandleVideoData(uint8_t *pRawBuffer, uint32_t rawBufferLength,
-			double timestamp, bool packetStart);
-	bool ProcessNal(double timestamp);
-	void InitializeVideoCapabilities(uint8_t *pData, uint32_t length);
-	void InitializeAudioCapabilities(uint8_t *pData, uint32_t length);
+    bool HandleAudioData(uint8_t *pRawBuffer, uint32_t rawBufferLength,
+                         double timestamp, bool packetStart);
+    bool HandleVideoData(uint8_t *pRawBuffer, uint32_t rawBufferLength,
+                         double timestamp, bool packetStart);
+    bool ProcessNal(double timestamp);
+    void InitializeVideoCapabilities(uint8_t *pData, uint32_t length);
+    void InitializeAudioCapabilities(uint8_t *pData, uint32_t length);
 };
 
 

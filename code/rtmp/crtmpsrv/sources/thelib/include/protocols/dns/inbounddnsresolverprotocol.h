@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,22 +24,23 @@
 #include "protocols/baseprotocol.h"
 
 class InboundDNSResolverProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	IOBuffer _outputBuffer;
+    IOBuffer _outputBuffer;
 public:
-	InboundDNSResolverProtocol();
-	virtual ~InboundDNSResolverProtocol();
+    InboundDNSResolverProtocol();
+    virtual ~InboundDNSResolverProtocol();
 
-	virtual bool Initialize(Variant &parameters);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual IOBuffer * GetOutputBuffer();
-	virtual bool SignalInputData(int32_t transferredBytes);
-	virtual bool SignalInputData(IOBuffer &buffer);
+    virtual bool Initialize(Variant &parameters);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual IOBuffer * GetOutputBuffer();
+    virtual bool SignalInputData(int32_t transferredBytes);
+    virtual bool SignalInputData(IOBuffer &buffer);
 private:
-	bool HandleRequest(Variant &request);
-	bool SendResponse(Variant &response);
+    bool HandleRequest(Variant &request);
+    bool SendResponse(Variant &response);
 };
 
 

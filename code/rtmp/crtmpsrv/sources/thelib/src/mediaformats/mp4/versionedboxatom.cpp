@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,32 +21,38 @@
 #include "mediaformats/mp4/versionedboxatom.h"
 
 VersionedBoxAtom::VersionedBoxAtom(MP4Document *pDocument, uint32_t type,
-		uint64_t size, uint64_t start)
-: BoxAtom(pDocument, type, size, start) {
-	_version = 0;
-	memset(_flags, 0, 3);
+                                   uint64_t size, uint64_t start)
+    : BoxAtom(pDocument, type, size, start)
+{
+    _version = 0;
+    memset(_flags, 0, 3);
 }
 
-VersionedBoxAtom::~VersionedBoxAtom() {
+VersionedBoxAtom::~VersionedBoxAtom()
+{
 }
 
-bool VersionedBoxAtom::Read() {
-	if (!ReadUInt8(_version)) {
-		FATAL("Unable to read version");
-		return false;
-	}
+bool VersionedBoxAtom::Read()
+{
+    if (!ReadUInt8(_version))
+    {
+        FATAL("Unable to read version");
+        return false;
+    }
 
-	if (!ReadArray(_flags, 3)) {
-		FATAL("Unable to read flags");
-		return false;
-	}
+    if (!ReadArray(_flags, 3))
+    {
+        FATAL("Unable to read flags");
+        return false;
+    }
 
-	if (!ReadData()) {
-		FATAL("Unable to read data");
-		return false;
-	}
+    if (!ReadData())
+    {
+        FATAL("Unable to read data");
+        return false;
+    }
 
-	return BoxAtom::Read();
+    return BoxAtom::Read();
 }
 
 

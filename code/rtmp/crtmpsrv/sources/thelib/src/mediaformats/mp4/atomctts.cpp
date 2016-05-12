@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,47 +21,57 @@
 #include "mediaformats/mp4/atomctts.h"
 
 AtomCTTS::AtomCTTS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
+    : VersionedAtom(pDocument, type, size, start)
+{
 
 }
 
-AtomCTTS::~AtomCTTS() {
+AtomCTTS::~AtomCTTS()
+{
 }
 
-vector<int32_t> AtomCTTS::GetEntries() {
-	if (_normalizedEntries.size() != 0)
-		return _normalizedEntries;
+vector<int32_t> AtomCTTS::GetEntries()
+{
+    if (_normalizedEntries.size() != 0)
+        return _normalizedEntries;
 
-	FOR_VECTOR_ITERATOR(CTTSEntry, _entries, i) {
-		for (uint32_t j = 0; j < VECTOR_VAL(i).sampleCount; j++) {
-			ADD_VECTOR_END(_normalizedEntries, VECTOR_VAL(i).sampleOffset);
-		}
-	}
-	return _normalizedEntries;
+    FOR_VECTOR_ITERATOR(CTTSEntry, _entries, i)
+    {
+        for (uint32_t j = 0; j < VECTOR_VAL(i).sampleCount; j++)
+        {
+            ADD_VECTOR_END(_normalizedEntries, VECTOR_VAL(i).sampleOffset);
+        }
+    }
+    return _normalizedEntries;
 }
 
-bool AtomCTTS::ReadData() {
-	uint32_t count;
-	if (!ReadUInt32(count)) {
-		FATAL("Unable to read count");
-		return false;
-	}
+bool AtomCTTS::ReadData()
+{
+    uint32_t count;
+    if (!ReadUInt32(count))
+    {
+        FATAL("Unable to read count");
+        return false;
+    }
 
-	for (uint32_t i = 0; i < count; i++) {
-		CTTSEntry entry;
-		if (!ReadUInt32(entry.sampleCount)) {
-			FATAL("Unable to read sample count");
-			return false;
-		}
+    for (uint32_t i = 0; i < count; i++)
+    {
+        CTTSEntry entry;
+        if (!ReadUInt32(entry.sampleCount))
+        {
+            FATAL("Unable to read sample count");
+            return false;
+        }
 
-		if (!ReadInt32(entry.sampleOffset)) {
-			FATAL("Unable to read sample offset");
-			return false;
-		}
-		
-		ADD_VECTOR_END(_entries, entry);
-	}
-	return true;
+        if (!ReadInt32(entry.sampleOffset))
+        {
+            FATAL("Unable to read sample offset");
+            return false;
+        }
+
+        ADD_VECTOR_END(_entries, entry);
+    }
+    return true;
 }
 
 #endif /* HAS_MEDIA_MP4 */

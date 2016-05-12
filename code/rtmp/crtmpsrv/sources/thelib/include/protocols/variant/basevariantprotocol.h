@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -28,29 +28,30 @@ class BaseClientApplication;
 class BaseVariantAppProtocolHandler;
 
 class DLLEXP BaseVariantProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	IOBuffer _outputBuffer;
-	BaseVariantAppProtocolHandler *_pProtocolHandler;
+    IOBuffer _outputBuffer;
+    BaseVariantAppProtocolHandler *_pProtocolHandler;
 protected:
-	Variant _lastSent;
-	Variant _lastReceived;
+    Variant _lastSent;
+    Variant _lastReceived;
 public:
-	BaseVariantProtocol(uint64_t type);
-	virtual ~BaseVariantProtocol();
+    BaseVariantProtocol(uint64_t type);
+    virtual ~BaseVariantProtocol();
 
-	virtual bool Initialize(Variant &parameters);
-	virtual void SetApplication(BaseClientApplication *pApplication);
-	virtual IOBuffer * GetOutputBuffer();
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SignalInputData(IOBuffer &buffer);
-	bool Send(Variant &variant);
+    virtual bool Initialize(Variant &parameters);
+    virtual void SetApplication(BaseClientApplication *pApplication);
+    virtual IOBuffer * GetOutputBuffer();
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
+    bool Send(Variant &variant);
 protected:
-	virtual bool Serialize(string &rawData, Variant &variant) = 0;
-	virtual bool Deserialize(uint8_t *pBuffer, uint32_t bufferLength,
-			Variant &result) = 0;
+    virtual bool Serialize(string &rawData, Variant &variant) = 0;
+    virtual bool Deserialize(uint8_t *pBuffer, uint32_t bufferLength,
+                             Variant &result) = 0;
 };
 
 

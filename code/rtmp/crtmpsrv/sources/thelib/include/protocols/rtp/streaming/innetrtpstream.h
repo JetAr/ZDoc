@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,56 +26,57 @@
 #include "protocols/rtp/rtpheader.h"
 
 class DLLEXP InNetRTPStream
-: public BaseInNetStream {
+    : public BaseInNetStream
+{
 private:
-	StreamCapabilities _capabilities;
+    StreamCapabilities _capabilities;
 
-	bool _hasAudio;
-	uint16_t _audioSequence;
-	uint32_t _audioPacketsCount;
-	uint32_t _audioDroppedPacketsCount;
-	uint32_t _audioBytesCount;
-	double _audioNTP;
-	double _audioRTP;
-	double _lastAudioTs;
+    bool _hasAudio;
+    uint16_t _audioSequence;
+    uint32_t _audioPacketsCount;
+    uint32_t _audioDroppedPacketsCount;
+    uint32_t _audioBytesCount;
+    double _audioNTP;
+    double _audioRTP;
+    double _lastAudioTs;
 
-	bool _hasVideo;
-	IOBuffer _currentNalu;
-	uint16_t _videoSequence;
-	uint32_t _videoPacketsCount;
-	uint32_t _videoDroppedPacketsCount;
-	uint32_t _videoBytesCount;
-	double _videoNTP;
-	double _videoRTP;
-	double _lastVideoTs;
+    bool _hasVideo;
+    IOBuffer _currentNalu;
+    uint16_t _videoSequence;
+    uint32_t _videoPacketsCount;
+    uint32_t _videoDroppedPacketsCount;
+    uint32_t _videoBytesCount;
+    double _videoNTP;
+    double _videoRTP;
+    double _lastVideoTs;
 public:
-	InNetRTPStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name, string SPS, string PPS, string AAC);
-	virtual ~InNetRTPStream();
+    InNetRTPStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                   string name, string SPS, string PPS, string AAC);
+    virtual ~InNetRTPStream();
 
-	virtual StreamCapabilities * GetCapabilities();
-	virtual void ReadyForSend();
-	virtual bool IsCompatibleWithType(uint64_t type);
-	virtual void SignalOutStreamAttached(BaseOutStream *pOutStream);
-	virtual void SignalOutStreamDetached(BaseOutStream *pOutStream);
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
-	virtual bool FeedVideoData(uint8_t *pData, uint32_t dataLength,
-			RTPHeader &rtpHeader);
-	virtual bool FeedAudioData(uint8_t *pData, uint32_t dataLength,
-			RTPHeader &rtpHeader);
-	virtual void GetStats(Variant &info);
+    virtual StreamCapabilities * GetCapabilities();
+    virtual void ReadyForSend();
+    virtual bool IsCompatibleWithType(uint64_t type);
+    virtual void SignalOutStreamAttached(BaseOutStream *pOutStream);
+    virtual void SignalOutStreamDetached(BaseOutStream *pOutStream);
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
+    virtual bool FeedVideoData(uint8_t *pData, uint32_t dataLength,
+                               RTPHeader &rtpHeader);
+    virtual bool FeedAudioData(uint8_t *pData, uint32_t dataLength,
+                               RTPHeader &rtpHeader);
+    virtual void GetStats(Variant &info);
 
-	void ReportSR(uint64_t ntpMicroseconds, uint32_t rtpTimestamp, bool isAudio);
+    void ReportSR(uint64_t ntpMicroseconds, uint32_t rtpTimestamp, bool isAudio);
 private:
-	void FeedVideoCodecSetup(BaseOutStream *pOutStream);
-	void FeedAudioCodecSetup(BaseOutStream *pOutStream);
+    void FeedVideoCodecSetup(BaseOutStream *pOutStream);
+    void FeedAudioCodecSetup(BaseOutStream *pOutStream);
 };
 
 #endif	/* _INNETRTPSTREAM_H */

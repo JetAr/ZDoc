@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,20 +22,24 @@
 #include "protocols/variant/xmlvariantprotocol.h"
 
 XmlVariantProtocol::XmlVariantProtocol()
-: BaseVariantProtocol(PT_XML_VAR) {
+    : BaseVariantProtocol(PT_XML_VAR)
+{
 
 }
 
-XmlVariantProtocol::~XmlVariantProtocol() {
+XmlVariantProtocol::~XmlVariantProtocol()
+{
 }
 
-bool XmlVariantProtocol::Serialize(string &rawData, Variant &variant) {
-	return variant.SerializeToXml(rawData, false);
+bool XmlVariantProtocol::Serialize(string &rawData, Variant &variant)
+{
+    return variant.SerializeToXml(rawData, false);
 }
 
 bool XmlVariantProtocol::Deserialize(uint8_t *pBuffer, uint32_t bufferLength,
-		Variant &result) {
-	return Variant::DeserializeFromXml(pBuffer, bufferLength, result);
+                                     Variant &result)
+{
+    return Variant::DeserializeFromXml(pBuffer, bufferLength, result);
 }
 #endif	/* HAS_PROTOCOL_VAR */
 

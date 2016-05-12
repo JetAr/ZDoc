@@ -37,43 +37,52 @@ void parse_amf0_object(char* p, srs_amf0_t args)
     char opvt = 0; // object property value type.
     const char* opnp = NULL; // object property name ptr.
     const char* opvp = NULL; // object property value ptr.
-    
-    while (*p) {
-        switch (*p++) {
-            case 'O':
-                while (*p && *p++ != ':') {
-                }
-                if (*p++ == '1') {
-                    printf("amf0 object start\n");
-                } else {
-                    printf("amf0 object end\n");
-                }
-                break;
-            case 'N':
-                opvt = *p++;
-                if (*p++ != ':') {
-                    printf("object property must split by :.\n");
-                    exit(-1);
-                }
-                opnp = p++;
-                while (*p && *p++ != ':') {
-                }
-                p[-1] = 0;
-                opvp = p;
-                printf("amf0 %c property[%s]=%s\n", opvt, opnp, opvp);
-                switch(opvt) {
-                    case 'S':
-                        srs_amf0_object_property_set(args, opnp, srs_amf0_create_string(opvp));
-                        break;
-                    default:
-                        printf("unsupported object property.\n");
-                        exit(-1);
-                }
-                *p=0;
+
+    while (*p)
+    {
+        switch (*p++)
+        {
+        case 'O':
+            while (*p && *p++ != ':')
+            {
+            }
+            if (*p++ == '1')
+            {
+                printf("amf0 object start\n");
+            }
+            else
+            {
+                printf("amf0 object end\n");
+            }
+            break;
+        case 'N':
+            opvt = *p++;
+            if (*p++ != ':')
+            {
+                printf("object property must split by :.\n");
+                exit(-1);
+            }
+            opnp = p++;
+            while (*p && *p++ != ':')
+            {
+            }
+            p[-1] = 0;
+            opvp = p;
+            printf("amf0 %c property[%s]=%s\n", opvt, opnp, opvp);
+            switch(opvt)
+            {
+            case 'S':
+                srs_amf0_object_property_set(args, opnp, srs_amf0_create_string(opvp));
                 break;
             default:
-                printf("only supports an object arg.\n");
+                printf("unsupported object property.\n");
                 exit(-1);
+            }
+            *p=0;
+            break;
+        default:
+            printf("only supports an object arg.\n");
+            exit(-1);
         }
     }
 }
@@ -82,13 +91,14 @@ int main(int argc, char** argv)
 {
     srs_flv_t flv = NULL;
     srs_rtmp_t rtmp = NULL;
-    
+
     printf("dump rtmp stream to flv file\n");
     printf("srs(ossrs) client librtmp library.\n");
     printf("version: %d.%d.%d\n", srs_version_major(), srs_version_minor(), srs_version_revision());
     printf("@refer to http://rtmpdump.mplayerhq.hu/rtmpdump.1.html\n");
-    
-    struct option long_options[] = {
+
+    struct option long_options[] =
+    {
         {"rtmp", required_argument, 0, 'r'},
         {"flv", required_argument, 0, 'o'},
         {"swfUrl", required_argument, 0, 's'},
@@ -99,7 +109,7 @@ int main(int argc, char** argv)
         {"help", no_argument, 0, 'h'},
         {0, 0, 0, 0}
     };
-    
+
     int show_help = 0;
     int complex_handshake = 0;
     const char* rtmp_url = NULL;
@@ -108,133 +118,152 @@ int main(int argc, char** argv)
     const char* tcUrl = NULL;
     const char* pageUrl = NULL;
     srs_amf0_t args = NULL;
-    
+
     int opt = 0;
     int option_index = 0;
-    while((opt = getopt_long(argc, argv, "hxr:o:s:t:p:C:", long_options, &option_index)) != -1){
-        switch(opt){
-            case 'r':
-                rtmp_url = optarg;
-                break;
-            case 'o':
-                output_flv = optarg;
-                break;
-            case 's':
-                swfUrl = optarg;
-                break;
-            case 't':
-                tcUrl = optarg;
-                break;
-            case 'p':
-                pageUrl = optarg;
-                break;
-            case 'C':
-                if (!args) {
-                    args = srs_amf0_create_object();
-                }
-                char* p = (char*)optarg;
-                parse_amf0_object(p, args);
-                break;
-            case 'x':
-                complex_handshake = 1;
-                break;
-            case 'h':
-                show_help = 1;
-                break;
-            default:
-                printf("unsupported opt.\n");
-                exit(-1);
+    while((opt = getopt_long(argc, argv, "hxr:o:s:t:p:C:", long_options, &option_index)) != -1)
+    {
+        switch(opt)
+        {
+        case 'r':
+            rtmp_url = optarg;
+            break;
+        case 'o':
+            output_flv = optarg;
+            break;
+        case 's':
+            swfUrl = optarg;
+            break;
+        case 't':
+            tcUrl = optarg;
+            break;
+        case 'p':
+            pageUrl = optarg;
+            break;
+        case 'C':
+            if (!args)
+            {
+                args = srs_amf0_create_object();
+            }
+            char* p = (char*)optarg;
+            parse_amf0_object(p, args);
+            break;
+        case 'x':
+            complex_handshake = 1;
+            break;
+        case 'h':
+            show_help = 1;
+            break;
+        default:
+            printf("unsupported opt.\n");
+            exit(-1);
         }
     }
-    
-    if (!rtmp_url || show_help) {
+
+    if (!rtmp_url || show_help)
+    {
         printf("Usage: %s -r url [-o output] [-s swfUrl] [-t tcUrl] [-p pageUrl] [-C conndata] [--complex] [-h]\n"
-            "Options:\n"
-            "   --rtmp -r url\n"
-            "       URL of the server and media content.\n"
-            "   --flv -o output\n"
-            "       Specify the output file name. If the name is − or is omitted, the stream is written to stdout.\n"
-            "   --complex\n"
-            "       Whether use complex handshake(srs-librtmp with ssl required).\n"
-            "   --swfUrl -s url\n"
-            "       URL of the SWF player for the media. By default no value will be sent.\n"
-            "   --tcUrl -t url\n"
-            "       URL of the target stream. Defaults to rtmp[e]://host[:port]/app/playpath.\n"
-            "   --pageUrl -p url\n"
-            "       URL of the web page in which the media was embedded. By default no value will be sent.\n"
-            "   −−conn −C type:data\n"
-            "       Append arbitrary AMF data to the Connect message. The type must be B for Boolean, N for number, S for string, O for object, or Z for null. For Booleans the data must be either 0 or 1 for FALSE or TRUE, respectively. Likewise for Objects the data must be 0 or 1 to end or begin an object, respectively. Data items in subobjects may be named, by prefixing the type with 'N' and specifying the name before the value, e.g. NB:myFlag:1. This option may be used multiple times to construct arbitrary AMF sequences. E.g.\n"
-            "       −C B:1 −C S:authMe −C O:1 −C NN:code:1.23 −C NS:flag:ok −C O:0\n"
-            "       -C O:1 -C NS:CONN:\" -C B:4Rg9vr0\" -C O:0\n"
-            "       @remark, support a object args only.\n"
-            "   --help -h\n"
-            "       Print a summary of command options.\n"
-            "For example:\n"
-            "   %s -r rtmp://127.0.0.1:1935/live/livestream -o output.flv\n"
-            "   %s -h\n",
-            argv[0], argv[0], argv[0]);
+               "Options:\n"
+               "   --rtmp -r url\n"
+               "       URL of the server and media content.\n"
+               "   --flv -o output\n"
+               "       Specify the output file name. If the name is − or is omitted, the stream is written to stdout.\n"
+               "   --complex\n"
+               "       Whether use complex handshake(srs-librtmp with ssl required).\n"
+               "   --swfUrl -s url\n"
+               "       URL of the SWF player for the media. By default no value will be sent.\n"
+               "   --tcUrl -t url\n"
+               "       URL of the target stream. Defaults to rtmp[e]://host[:port]/app/playpath.\n"
+               "   --pageUrl -p url\n"
+               "       URL of the web page in which the media was embedded. By default no value will be sent.\n"
+               "   −−conn −C type:data\n"
+               "       Append arbitrary AMF data to the Connect message. The type must be B for Boolean, N for number, S for string, O for object, or Z for null. For Booleans the data must be either 0 or 1 for FALSE or TRUE, respectively. Likewise for Objects the data must be 0 or 1 to end or begin an object, respectively. Data items in subobjects may be named, by prefixing the type with 'N' and specifying the name before the value, e.g. NB:myFlag:1. This option may be used multiple times to construct arbitrary AMF sequences. E.g.\n"
+               "       −C B:1 −C S:authMe −C O:1 −C NN:code:1.23 −C NS:flag:ok −C O:0\n"
+               "       -C O:1 -C NS:CONN:\" -C B:4Rg9vr0\" -C O:0\n"
+               "       @remark, support a object args only.\n"
+               "   --help -h\n"
+               "       Print a summary of command options.\n"
+               "For example:\n"
+               "   %s -r rtmp://127.0.0.1:1935/live/livestream -o output.flv\n"
+               "   %s -h\n",
+               argv[0], argv[0], argv[0]);
         exit(-1);
     }
-    
+
     srs_human_trace("rtmp url: %s", rtmp_url);
     srs_human_trace("handshake: %s", (complex_handshake? "complex" : "simple"));
     srs_human_trace("swfUrl: %s", swfUrl);
     srs_human_trace("pageUrl: %s", pageUrl);
     srs_human_trace("tcUrl: %s", tcUrl);
-    if (output_flv) {
+    if (output_flv)
+    {
         srs_human_trace("flv output path: %s", output_flv);
-    } else {
+    }
+    else
+    {
         srs_human_trace("output to console");
     }
-    
+
     rtmp = srs_rtmp_create(rtmp_url);
-    
-    if (srs_rtmp_dns_resolve(rtmp) != 0) {
+
+    if (srs_rtmp_dns_resolve(rtmp) != 0)
+    {
         srs_human_trace("dns resolve failed.");
         goto rtmp_destroy;
     }
-    
-    if (srs_rtmp_connect_server(rtmp) != 0) {
+
+    if (srs_rtmp_connect_server(rtmp) != 0)
+    {
         srs_human_trace("connect to server failed.");
         goto rtmp_destroy;
     }
-    
-    if (complex_handshake) {
-        if (srs_rtmp_do_complex_handshake(rtmp) != 0) {
+
+    if (complex_handshake)
+    {
+        if (srs_rtmp_do_complex_handshake(rtmp) != 0)
+        {
             srs_human_trace("complex handshake failed.");
             goto rtmp_destroy;
         }
         srs_human_trace("do complex handshake success");
-    } else {
-        if (srs_rtmp_do_simple_handshake(rtmp) != 0) {
+    }
+    else
+    {
+        if (srs_rtmp_do_simple_handshake(rtmp) != 0)
+        {
             srs_human_trace("simple handshake failed.");
             goto rtmp_destroy;
         }
         srs_human_trace("do simple handshake success");
     }
-    
-    if (srs_rtmp_set_connect_args(rtmp, tcUrl, swfUrl, pageUrl, args) != 0) {
+
+    if (srs_rtmp_set_connect_args(rtmp, tcUrl, swfUrl, pageUrl, args) != 0)
+    {
         srs_human_trace("set connect args failed.");
         goto rtmp_destroy;
     }
-    
-    if (srs_rtmp_connect_app(rtmp) != 0) {
+
+    if (srs_rtmp_connect_app(rtmp) != 0)
+    {
         srs_human_trace("connect vhost/app failed.");
         goto rtmp_destroy;
     }
     srs_human_trace("connect vhost/app success");
-    
-    if (srs_rtmp_play_stream(rtmp) != 0) {
+
+    if (srs_rtmp_play_stream(rtmp) != 0)
+    {
         srs_human_trace("play stream failed.");
         goto rtmp_destroy;
     }
     srs_human_trace("play stream success");
-    
-    if (output_flv) {
+
+    if (output_flv)
+    {
         flv = srs_flv_open_write(output_flv);
     }
-    
-    if (flv) {
+
+    if (flv)
+    {
         // flv header
         char header[9];
         // 3bytes, signature, "FLV",
@@ -250,70 +279,83 @@ int main(int argc, char** argv)
         header[6] = 0x00;
         header[7] = 0x00;
         header[8] = 0x09;
-        if (srs_flv_write_header(flv, header) != 0) {
+        if (srs_flv_write_header(flv, header) != 0)
+        {
             srs_human_trace("write flv header failed.");
             goto rtmp_destroy;
         }
     }
-    
+
     int64_t nb_packets = 0;
     u_int32_t pre_timestamp = 0;
     int64_t pre_now = -1;
     int64_t start_time = -1;
-    for (;;) {
+    for (;;)
+    {
         int size;
         char type;
         char* data;
         u_int32_t timestamp;
-        
-        if (srs_rtmp_read_packet(rtmp, &type, &timestamp, &data, &size) != 0) {
+
+        if (srs_rtmp_read_packet(rtmp, &type, &timestamp, &data, &size) != 0)
+        {
             srs_human_trace("read rtmp packet failed.");
             goto rtmp_destroy;
         }
-        
-        if (pre_now == -1) {
+
+        if (pre_now == -1)
+        {
             pre_now = srs_utils_time_ms();
         }
-        if (start_time == -1) {
+        if (start_time == -1)
+        {
             start_time = srs_utils_time_ms();
         }
-        
-        if (srs_human_print_rtmp_packet4(type, timestamp, data, size, pre_timestamp, pre_now, start_time, nb_packets++) != 0) {
+
+        if (srs_human_print_rtmp_packet4(type, timestamp, data, size, pre_timestamp, pre_now, start_time, nb_packets++) != 0)
+        {
             srs_human_trace("print rtmp packet failed.");
             goto rtmp_destroy;
         }
         pre_timestamp = timestamp;
         pre_now = srs_utils_time_ms();
-        
+
         // we only write some types of messages to flv file.
         int is_flv_msg = type == SRS_RTMP_TYPE_AUDIO
-            || type == SRS_RTMP_TYPE_VIDEO || type == SRS_RTMP_TYPE_SCRIPT;
-            
+                         || type == SRS_RTMP_TYPE_VIDEO || type == SRS_RTMP_TYPE_SCRIPT;
+
         // for script data, ignore except onMetaData
-        if (type == SRS_RTMP_TYPE_SCRIPT) {
-            if (!srs_rtmp_is_onMetaData(type, data, size)) {
+        if (type == SRS_RTMP_TYPE_SCRIPT)
+        {
+            if (!srs_rtmp_is_onMetaData(type, data, size))
+            {
                 is_flv_msg = 0;
             }
         }
 
-        if (flv) {
-            if (is_flv_msg) {
-                if (srs_flv_write_tag(flv, type, timestamp, data, size) != 0) {
+        if (flv)
+        {
+            if (is_flv_msg)
+            {
+                if (srs_flv_write_tag(flv, type, timestamp, data, size) != 0)
+                {
                     srs_human_trace("dump rtmp packet failed.");
                     goto rtmp_destroy;
                 }
-            } else {
+            }
+            else
+            {
                 srs_human_trace("drop message type=%#x, size=%dB", type, size);
             }
         }
-        
+
         free(data);
     }
-    
+
 rtmp_destroy:
     srs_rtmp_destroy(rtmp);
     srs_flv_close(flv);
     srs_human_trace("completed");
-    
+
     return 0;
 }

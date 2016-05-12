@@ -20,9 +20,11 @@
 
 #include "platform/baseplatform.h"
 
-BasePlatform::BasePlatform() {
+BasePlatform::BasePlatform()
+{
 
 }
 
-BasePlatform::~BasePlatform() {
+BasePlatform::~BasePlatform()
+{
 }

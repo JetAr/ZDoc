@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,18 +22,22 @@
 #include "protocols/http/basehttpprotocolhandler.h"
 
 BaseHTTPAppProtocolHandler::BaseHTTPAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-BaseHTTPAppProtocolHandler::~BaseHTTPAppProtocolHandler() {
+BaseHTTPAppProtocolHandler::~BaseHTTPAppProtocolHandler()
+{
 }
 
-void BaseHTTPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
+void BaseHTTPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }
 
-void BaseHTTPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
+void BaseHTTPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }
 #endif	/* HAS_PROTOCOL_HTTP */

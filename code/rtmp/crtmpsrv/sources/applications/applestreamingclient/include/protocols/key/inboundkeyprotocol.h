@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,19 +23,21 @@
 
 #include "protocols/genericprotocol.h"
 
-namespace app_applestreamingclient {
+namespace app_applestreamingclient
+{
 
-	class InboundKeyProtocol
-	: public GenericProtocol {
-	public:
-		InboundKeyProtocol();
-		virtual ~InboundKeyProtocol();
+class InboundKeyProtocol
+    : public GenericProtocol
+{
+public:
+    InboundKeyProtocol();
+    virtual ~InboundKeyProtocol();
 
-		virtual bool AllowFarProtocol(uint64_t type);
-		virtual bool AllowNearProtocol(uint64_t type);
-		virtual bool SignalInputData(int32_t recvAmount);
-		virtual bool SignalInputData(IOBuffer &buffer);
-	};
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
+};
 }
 
 #endif	/* _INBOUNDKEYPROTOCOL_H */

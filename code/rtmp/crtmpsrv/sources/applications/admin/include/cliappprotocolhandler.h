@@ -23,16 +23,18 @@
 
 #include "protocols/cli/basecliappprotocolhandler.h"
 
-namespace app_admin {
+namespace app_admin
+{
 
-	class CLIAppProtocolHandler
-	: public BaseCLIAppProtocolHandler {
-	public:
-		CLIAppProtocolHandler(Variant &configuration);
-		virtual ~CLIAppProtocolHandler();
+class CLIAppProtocolHandler
+    : public BaseCLIAppProtocolHandler
+{
+public:
+    CLIAppProtocolHandler(Variant &configuration);
+    virtual ~CLIAppProtocolHandler();
 
-		virtual bool ProcessMessage(BaseProtocol *pFrom, Variant &message);
-	};
+    virtual bool ProcessMessage(BaseProtocol *pFrom, Variant &message);
+};
 }
 
 #endif	/* _CLIAPPPROTOCOLHANDLER_H */

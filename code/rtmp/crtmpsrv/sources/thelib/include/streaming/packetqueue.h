@@ -22,41 +22,45 @@
 
 #include "common.h"
 
-struct Packet {
-	IOBuffer buffer;
-	double ts;
-	bool isAudio;
+struct Packet
+{
+    IOBuffer buffer;
+    double ts;
+    bool isAudio;
 
-	Packet() {
-		ts = 0;
-		isAudio = false;
-	}
+    Packet()
+    {
+        ts = 0;
+        isAudio = false;
+    }
 
-	virtual ~Packet() {
-	}
+    virtual ~Packet()
+    {
+    }
 };
 
-class PacketQueue {
+class PacketQueue
+{
 private:
-	vector<Packet *> _allPackets;
-	vector<Packet *> _free;
-	map<double, vector<Packet *> > _queue;
-	uint32_t _initialBuffer;
+    vector<Packet *> _allPackets;
+    vector<Packet *> _free;
+    map<double, vector<Packet *> > _queue;
+    uint32_t _initialBuffer;
 
-	bool _hasAudio;
-	double _startAudio;
+    bool _hasAudio;
+    double _startAudio;
 
-	bool _hasVideo;
-	double _startVideo;
+    bool _hasVideo;
+    double _startVideo;
 public:
-	PacketQueue();
-	virtual ~PacketQueue();
-	void HasAudioVideo(bool hasAudio, bool hasVideo);
-	vector<Packet *> PushPacket(uint8_t *pData, uint32_t dataLength,
-			double absoluteTimestamp, bool isAudio);
+    PacketQueue();
+    virtual ~PacketQueue();
+    void HasAudioVideo(bool hasAudio, bool hasVideo);
+    vector<Packet *> PushPacket(uint8_t *pData, uint32_t dataLength,
+                                double absoluteTimestamp, bool isAudio);
 private:
-	Packet *GetPacket(uint8_t *pData, uint32_t dataLength,
-			double absoluteTimestamp, bool isAudio);
+    Packet *GetPacket(uint8_t *pData, uint32_t dataLength,
+                      double absoluteTimestamp, bool isAudio);
 };
 
 

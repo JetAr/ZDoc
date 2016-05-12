@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,18 +27,19 @@ class AtomMETA;
 class AtomMetaField;
 
 class AtomUDTA
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomMETA *_pMETA;
-	vector<AtomMetaField *> _metaFields;
+    AtomMETA *_pMETA;
+    vector<AtomMetaField *> _metaFields;
 public:
-	AtomUDTA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomUDTA();
+    AtomUDTA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomUDTA();
 
-	virtual bool Read();
+    virtual bool Read();
 
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMUDTA_H */

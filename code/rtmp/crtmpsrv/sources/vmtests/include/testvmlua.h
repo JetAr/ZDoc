@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,10 +26,11 @@
 #include "vmlua/basevmlua.h"
 
 class TestVMLua
-: public BaseVMLua {
+    : public BaseVMLua
+{
 public:
-	TestVMLua();
-	virtual ~TestVMLua();
+    TestVMLua();
+    virtual ~TestVMLua();
 private:
 
 };

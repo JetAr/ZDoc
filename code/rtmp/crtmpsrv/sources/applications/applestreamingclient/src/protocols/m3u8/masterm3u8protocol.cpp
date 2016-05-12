@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,54 +23,65 @@
 using namespace app_applestreamingclient;
 
 MasterM3U8Protocol::MasterM3U8Protocol()
-: BaseM3U8Protocol(PT_INBOUND_MASTER_M3U8) {
+    : BaseM3U8Protocol(PT_INBOUND_MASTER_M3U8)
+{
 }
 
-MasterM3U8Protocol::~MasterM3U8Protocol() {
+MasterM3U8Protocol::~MasterM3U8Protocol()
+{
 }
 
-Playlist *MasterM3U8Protocol::GetPlaylist() {
-	ClientContext *pContext = GetContext();
-	if (pContext == NULL) {
-		FATAL("Unable to get the context");
-		return NULL;
-	}
-	return pContext->MasterPlaylist();
+Playlist *MasterM3U8Protocol::GetPlaylist()
+{
+    ClientContext *pContext = GetContext();
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get the context");
+        return NULL;
+    }
+    return pContext->MasterPlaylist();
 }
 
-bool MasterM3U8Protocol::SignalPlaylistAvailable() {
-	//1. Get the context
-	ClientContext *pContext = GetContext();
-	if (pContext == NULL) {
-		FATAL("Unable to get the context");
-		return false;
-	}
+bool MasterM3U8Protocol::SignalPlaylistAvailable()
+{
+    //1. Get the context
+    ClientContext *pContext = GetContext();
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get the context");
+        return false;
+    }
 
-	//2. Validate the playlist
-	if (!GetPlaylist()->ParseBandwidthInfo()) {
-		WARN("Unable to parse bandwidth info inside master playlist");
-		string content = "#EXT-X-STREAM-INF:PROGRAM-ID=1, BANDWIDTH=500000\r\n";
-		content += (string) GetCustomParameters()["fullUri"];
-		if (!ParsePlaylist(GetCustomParameters()["fullUri"], (const uint8_t *) STR(content), content.size())) {
-			ASSERT("Unable to parse master playlist");
-			return false;
-		}
-		if (!GetPlaylist()->ParseBandwidthInfo()) {
-			FATAL("Unable to parse bandwidth info inside master playlist");
-			return false;
-		}
-	}
+    //2. Validate the playlist
+    if (!GetPlaylist()->ParseBandwidthInfo())
+    {
+        WARN("Unable to parse bandwidth info inside master playlist");
+        string content = "#EXT-X-STREAM-INF:PROGRAM-ID=1, BANDWIDTH=500000\r\n";
+        content += (string) GetCustomParameters()["fullUri"];
+        if (!ParsePlaylist(GetCustomParameters()["fullUri"], (const uint8_t *) STR(content), content.size()))
+        {
+            ASSERT("Unable to parse master playlist");
+            return false;
+        }
+        if (!GetPlaylist()->ParseBandwidthInfo())
+        {
+            FATAL("Unable to parse bandwidth info inside master playlist");
+            return false;
+        }
+    }
 
-	//3. Signal the context about the new playlist
-	if (!pContext->SignalMasterPlaylistAvailable()) {
-		FATAL("Unable to signal master M3U8 playlist available");
-		return false;
-	}
+    //3. Signal the context about the new playlist
+    if (!pContext->SignalMasterPlaylistAvailable())
+    {
+        FATAL("Unable to signal master M3U8 playlist available");
+        return false;
+    }
 
-	//4. Done
-	return true;
+    //4. Done
+    return true;
 }
 
-bool MasterM3U8Protocol::SignalPlaylistFailed() {
-	NYIR;
+bool MasterM3U8Protocol::SignalPlaylistFailed()
+{
+    NYIR;
 }

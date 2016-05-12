@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,99 +26,117 @@ Logger *Logger::_pLogger = NULL;
 #ifdef HAS_SAFE_LOGGER
 pthread_mutex_t *Logger::_pMutex = NULL;
 
-class LogLocker {
+class LogLocker
+{
 private:
-	pthread_mutex_t *_pMutex;
+    pthread_mutex_t *_pMutex;
 public:
 
-	LogLocker(pthread_mutex_t *pMutex) {
-		if (pMutex == NULL) {
-			printf("Logger not initialized\n");
-			assert(false);
-		}
-		_pMutex = pMutex;
-		if (pthread_mutex_lock(_pMutex) != 0) {
-			printf("Unable to lock the logger");
-			assert(false);
-		}
-	};
+    LogLocker(pthread_mutex_t *pMutex)
+    {
+        if (pMutex == NULL)
+        {
+            printf("Logger not initialized\n");
+            assert(false);
+        }
+        _pMutex = pMutex;
+        if (pthread_mutex_lock(_pMutex) != 0)
+        {
+            printf("Unable to lock the logger");
+            assert(false);
+        }
+    };
 
-	virtual ~LogLocker() {
-		if (pthread_mutex_unlock(_pMutex) != 0) {
-			printf("Unable to unlock the logger");
-			assert(false);
-		}
-	}
+    virtual ~LogLocker()
+    {
+        if (pthread_mutex_unlock(_pMutex) != 0)
+        {
+            printf("Unable to unlock the logger");
+            assert(false);
+        }
+    }
 };
 #define LOCK LogLocker __LogLocker__(Logger::_pMutex);
 #else
 #define LOCK
 #endif /* HAS_SAFE_LOGGER */
 
-Logger::Logger() {
-	LOCK;
-	_freeAppenders = false;
+Logger::Logger()
+{
+    LOCK;
+    _freeAppenders = false;
 }
 
-Logger::~Logger() {
-	LOCK;
-	if (_freeAppenders) {
+Logger::~Logger()
+{
+    LOCK;
+    if (_freeAppenders)
+    {
 
-		FOR_VECTOR(_logLocations, i) {
-			delete _logLocations[i];
-		}
-		_logLocations.clear();
-	}
+        FOR_VECTOR(_logLocations, i)
+        {
+            delete _logLocations[i];
+        }
+        _logLocations.clear();
+    }
 }
 
-void Logger::Init() {
+void Logger::Init()
+{
 #ifdef HAS_SAFE_LOGGER
-	if (_pMutex != NULL) {
-		printf("logger already initialized");
-		assert(false);
-	}
-	_pMutex = new pthread_mutex_t;
-	if (pthread_mutex_init(_pMutex, NULL)) {
-		printf("Unable to init the logger mutex");
-		assert(false);
-	}
+    if (_pMutex != NULL)
+    {
+        printf("logger already initialized");
+        assert(false);
+    }
+    _pMutex = new pthread_mutex_t;
+    if (pthread_mutex_init(_pMutex, NULL))
+    {
+        printf("Unable to init the logger mutex");
+        assert(false);
+    }
 #else
-	if (_pLogger != NULL)
-		return;
+    if (_pLogger != NULL)
+        return;
 #endif /* HAS_SAFE_LOGGER */
-	_pLogger = new Logger();
+    _pLogger = new Logger();
 }
 
-void Logger::Free(bool freeAppenders) {
-	LOCK;
-	if (_pLogger != NULL) {
-		_pLogger->_freeAppenders = freeAppenders;
-		delete _pLogger;
-		_pLogger = NULL;
-	}
+void Logger::Free(bool freeAppenders)
+{
+    LOCK;
+    if (_pLogger != NULL)
+    {
+        _pLogger->_freeAppenders = freeAppenders;
+        delete _pLogger;
+        _pLogger = NULL;
+    }
 }
 
 void Logger::Log(int32_t level, string fileName, uint32_t lineNumber,
-		string functionName, string formatString, ...) {
-	LOCK;
-	if (_pLogger == NULL)
-		return;
+                 string functionName, string formatString, ...)
+{
+    LOCK;
+    if (_pLogger == NULL)
+        return;
 
-	va_list arguments;
-	va_start(arguments, formatString);
-	string message = vformat(formatString, arguments);
-	va_end(arguments);
+    va_list arguments;
+    va_start(arguments, formatString);
+    string message = vformat(formatString, arguments);
+    va_end(arguments);
 
-	FOR_VECTOR(_pLogger->_logLocations, i) {
-		_pLogger->_logLocations[i]->Log(level, fileName,
-				lineNumber, functionName, message);
-	}
+    FOR_VECTOR(_pLogger->_logLocations, i)
+    {
+        _pLogger->_logLocations[i]->Log(level, fileName,
+                                        lineNumber, functionName, message);
+    }
 }
 
-bool Logger::AddLogLocation(BaseLogLocation *pLogLocation) {
-	LOCK;
-	if (_pLogger == NULL)
-		return false;
-	ADD_VECTOR_END(_pLogger->_logLocations, pLogLocation);
-	return true;
+bool Logger::AddLogLocation(BaseLogLocation *pLogLocation)
+{
+    LOCK;
+    if (_pLogger == NULL)
+        return false;
+    ADD_VECTOR_END(_pLogger->_logLocations, pLogLocation);
+    return true;
 }

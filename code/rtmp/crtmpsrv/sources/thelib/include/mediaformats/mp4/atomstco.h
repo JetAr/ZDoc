@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,16 +24,17 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomSTCO
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	vector<uint64_t> _entries;
+    vector<uint64_t> _entries;
 public:
-	AtomSTCO(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomSTCO();
+    AtomSTCO(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomSTCO();
 
-	vector<uint64_t> GetEntries();
+    vector<uint64_t> GetEntries();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMSTCO_H */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -59,14 +59,15 @@ do { \
         TS_PRINT("%u tests completed successfuly\n", testsCount); \
 } while(0)
 
-class BaseTestsSuite {
+class BaseTestsSuite
+{
 public:
-	static int _testsCount;
+    static int _testsCount;
 public:
-	BaseTestsSuite();
-	virtual ~BaseTestsSuite();
+    BaseTestsSuite();
+    virtual ~BaseTestsSuite();
 
-	virtual void Run() = 0;
+    virtual void Run() = 0;
 };
 
 

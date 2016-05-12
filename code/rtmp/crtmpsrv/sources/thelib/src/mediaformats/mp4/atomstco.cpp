@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,34 +21,41 @@
 #include "mediaformats/mp4/atomstco.h"
 
 AtomSTCO::AtomSTCO(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
+    : VersionedAtom(pDocument, type, size, start)
+{
 
 }
 
-AtomSTCO::~AtomSTCO() {
+AtomSTCO::~AtomSTCO()
+{
 }
 
-vector<uint64_t> AtomSTCO::GetEntries() {
-	return _entries;
+vector<uint64_t> AtomSTCO::GetEntries()
+{
+    return _entries;
 }
 
-bool AtomSTCO::ReadData() {
-	uint32_t count;
+bool AtomSTCO::ReadData()
+{
+    uint32_t count;
 
-	if (!ReadUInt32(count)) {
-		FATAL("Unable to read count");
-		return false;
-	}
+    if (!ReadUInt32(count))
+    {
+        FATAL("Unable to read count");
+        return false;
+    }
 
-	for (uint32_t i = 0; i < count; i++) {
-		uint32_t offset;
-		if (!ReadUInt32(offset)) {
-			FATAL("Unable to read offset");
-			return false;
-		}
-		ADD_VECTOR_END(_entries, offset);
-	}
-	return true;
+    for (uint32_t i = 0; i < count; i++)
+    {
+        uint32_t offset;
+        if (!ReadUInt32(offset))
+        {
+            FATAL("Unable to read offset");
+            return false;
+        }
+        ADD_VECTOR_END(_entries, offset);
+    }
+    return true;
 }
 
 #endif /* HAS_MEDIA_MP4 */

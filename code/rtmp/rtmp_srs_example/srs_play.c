@@ -34,56 +34,63 @@ int main(int argc, char** argv)
     printf("suck rtmp stream like rtmpdump\n");
     printf("srs(ossrs) client librtmp library.\n");
     printf("version: %d.%d.%d\n", srs_version_major(), srs_version_minor(), srs_version_revision());
-    
-    if (argc <= 1) {
+
+    if (argc <= 1)
+    {
         printf("Usage: %s <rtmp_url>\n"
-            "   rtmp_url     RTMP stream url to play\n"
-            "For example:\n"
-            "   %s rtmp://127.0.0.1:1935/live/livestream\n",
-            argv[0], argv[0]);
+               "   rtmp_url     RTMP stream url to play\n"
+               "For example:\n"
+               "   %s rtmp://127.0.0.1:1935/live/livestream\n",
+               argv[0], argv[0]);
         exit(-1);
     }
-    
+
     srs_human_trace("rtmp url: %s", argv[1]);
     srs_rtmp_t rtmp = srs_rtmp_create(argv[1]);
-    
-    if (srs_rtmp_handshake(rtmp) != 0) {
+
+    if (srs_rtmp_handshake(rtmp) != 0)
+    {
         srs_human_trace("simple handshake failed.");
         goto rtmp_destroy;
     }
     srs_human_trace("simple handshake success");
-    
-    if (srs_rtmp_connect_app(rtmp) != 0) {
+
+    if (srs_rtmp_connect_app(rtmp) != 0)
+    {
         srs_human_trace("connect vhost/app failed.");
         goto rtmp_destroy;
     }
     srs_human_trace("connect vhost/app success");
-    
-    if (srs_rtmp_play_stream(rtmp) != 0) {
+
+    if (srs_rtmp_play_stream(rtmp) != 0)
+    {
         srs_human_trace("play stream failed.");
         goto rtmp_destroy;
     }
     srs_human_trace("play stream success");
-    
-    for (;;) {
+
+    for (;;)
+    {
         int size;
         char type;
         char* data;
         u_int32_t timestamp;
-        
-        if (srs_rtmp_read_packet(rtmp, &type, &timestamp, &data, &size) != 0) {
+
+        if (srs_rtmp_read_packet(rtmp, &type, &timestamp, &data, &size) != 0)
+        {
             goto rtmp_destroy;
         }
-        
-        if (srs_human_print_rtmp_packet(type, timestamp, data, size) != 0) {
+
+        if (srs_human_print_rtmp_packet(type, timestamp, data, size) != 0)
+        {
             goto rtmp_destroy;
         }
-        
+
         free(data);
     }
-    
+
 rtmp_destroy:
     srs_rtmp_destroy(rtmp);
-    
+
     return 0;
 }

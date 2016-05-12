@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,15 +27,16 @@ class AtomMP4A;
 class AtomESDS;
 
 class AtomWAVE
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomMP4A *_pMP4A;
-	AtomESDS *_pESDS;
+    AtomMP4A *_pMP4A;
+    AtomESDS *_pESDS;
 public:
-	AtomWAVE(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomWAVE();
+    AtomWAVE(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomWAVE();
 
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMWAVE_H */

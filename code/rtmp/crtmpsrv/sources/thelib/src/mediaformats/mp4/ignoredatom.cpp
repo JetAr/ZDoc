@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,23 +21,28 @@
 #include "mediaformats/mp4/ignoredatom.h"
 
 IgnoredAtom::IgnoredAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BaseAtom(pDocument, type, size, start) {
+    : BaseAtom(pDocument, type, size, start)
+{
 
 }
 
-IgnoredAtom::~IgnoredAtom() {
+IgnoredAtom::~IgnoredAtom()
+{
 }
 
-bool IgnoredAtom::IsIgnored() {
-	return true;
+bool IgnoredAtom::IsIgnored()
+{
+    return true;
 }
 
-bool IgnoredAtom::Read() {
-	return SkipRead();
+bool IgnoredAtom::Read()
+{
+    return SkipRead();
 }
 
-string IgnoredAtom::Hierarchy(uint32_t indent) {
-	return string(4 * indent, ' ') + GetTypeString();
+string IgnoredAtom::Hierarchy(uint32_t indent)
+{
+    return string(4 * indent, ' ') + GetTypeString();
 }
 
 #endif /* HAS_MEDIA_MP4 */

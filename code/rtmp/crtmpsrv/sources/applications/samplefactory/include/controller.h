@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,16 +24,18 @@
 #include "common.h"
 
 class BaseProtocol;
-namespace app_samplefactory {
+namespace app_samplefactory
+{
 
-	class DLLEXP Controller {
-	public:
-		Controller();
-		virtual ~Controller();
+class DLLEXP Controller
+{
+public:
+    Controller();
+    virtual ~Controller();
 
-		static bool EnqueueDBRequest(string uriString, Variant &payload, string applicationName);
-		static bool SignalProtocolCreated(BaseProtocol *pProtocol, Variant &parameters);
-	};
+    static bool EnqueueDBRequest(string uriString, Variant &payload, string applicationName);
+    static bool SignalProtocolCreated(BaseProtocol *pProtocol, Variant &parameters);
+};
 }
 
 #endif	/* _CONTROLLER_H */

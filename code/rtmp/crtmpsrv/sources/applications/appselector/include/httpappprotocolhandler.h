@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,14 +23,16 @@
 
 #include "protocols/http/basehttpprotocolhandler.h"
 
-namespace app_appselector {
+namespace app_appselector
+{
 
-	class HTTPAppProtocolHandler
-	: public BaseHTTPAppProtocolHandler {
-	public:
-		HTTPAppProtocolHandler(Variant &configuration);
-		virtual ~HTTPAppProtocolHandler();
-	};
+class HTTPAppProtocolHandler
+    : public BaseHTTPAppProtocolHandler
+{
+public:
+    HTTPAppProtocolHandler(Variant &configuration);
+    virtual ~HTTPAppProtocolHandler();
+};
 }
 
 #endif	/* _HTTPAPPPROTOCOLHANDLER_H */

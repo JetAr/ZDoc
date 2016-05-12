@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,29 +25,30 @@
 #include "protocols/rtmp/streaming/baseoutnetrtmpstream.h"
 
 class DLLEXP OutNetRTMP4TSStream
-: public BaseOutNetRTMPStream {
+    : public BaseOutNetRTMPStream
+{
 private:
-	bool _audioCodecSent;
-	bool _videoCodecSent;
-	bool _spsAvailable;
-	uint8_t *_pSPSPPS;
-	uint8_t _SPSPPSLength;
-	uint32_t _PPSStart;
-	IOBuffer _videoBuffer;
-	bool _inboundStreamIsRTP;
+    bool _audioCodecSent;
+    bool _videoCodecSent;
+    bool _spsAvailable;
+    uint8_t *_pSPSPPS;
+    uint8_t _SPSPPSLength;
+    uint32_t _PPSStart;
+    IOBuffer _videoBuffer;
+    bool _inboundStreamIsRTP;
 public:
-	OutNetRTMP4TSStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name, uint32_t rtmpStreamId, uint32_t chunkSize);
-	virtual ~OutNetRTMP4TSStream();
+    OutNetRTMP4TSStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                        string name, uint32_t rtmpStreamId, uint32_t chunkSize);
+    virtual ~OutNetRTMP4TSStream();
 
-	virtual bool IsCompatibleWithType(uint64_t type);
+    virtual bool IsCompatibleWithType(uint64_t type);
 
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
 private:
-	bool FeedAudioData(uint8_t *pData, uint32_t dataLength, double absoluteTimestamp);
-	bool FeedVideoData(uint8_t *pData, uint32_t dataLength, double absoluteTimestamp);
+    bool FeedAudioData(uint8_t *pData, uint32_t dataLength, double absoluteTimestamp);
+    bool FeedVideoData(uint8_t *pData, uint32_t dataLength, double absoluteTimestamp);
 };
 
 

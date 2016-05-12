@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,40 +24,41 @@
 #include "protocols/rtp/streaming/baseoutnetrtpudpstream.h"
 
 class DLLEXP OutNetRTPUDPH264Stream
-: public BaseOutNetRTPUDPStream {
+    : public BaseOutNetRTPUDPStream
+{
 private:
-	IOBuffer _videoBuffer;
-	msghdr _videoData;
-	uint8_t *_pSPS;
-	uint32_t _SPSLen;
-	uint8_t *_pPPS;
-	uint32_t _PPSLen;
+    IOBuffer _videoBuffer;
+    msghdr _videoData;
+    uint8_t *_pSPS;
+    uint32_t _SPSLen;
+    uint8_t *_pPPS;
+    uint32_t _PPSLen;
 
-	uint8_t _audioPacketsCount;
-	IOBuffer _audioBuffer;
-	msghdr _audioData;
+    uint8_t _audioPacketsCount;
+    IOBuffer _audioBuffer;
+    msghdr _audioData;
 public:
-	OutNetRTPUDPH264Stream(BaseProtocol *pProtocol,
-			StreamsManager *pStreamsManager, string name);
-	virtual ~OutNetRTPUDPH264Stream();
+    OutNetRTPUDPH264Stream(BaseProtocol *pProtocol,
+                           StreamsManager *pStreamsManager, string name);
+    virtual ~OutNetRTPUDPH264Stream();
 
-	virtual bool FeedDataVideo(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
-	virtual bool FeedDataAudio(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
+    virtual bool FeedDataVideo(uint8_t *pData, uint32_t dataLength,
+                               uint32_t processedLength, uint32_t totalLength,
+                               double absoluteTimestamp, bool isAudio);
+    virtual bool FeedDataAudio(uint8_t *pData, uint32_t dataLength,
+                               uint32_t processedLength, uint32_t totalLength,
+                               double absoluteTimestamp, bool isAudio);
 private:
-	virtual void SignalAttachedToInStream();
-	bool FeedDataVideoFUA(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp);
-	bool FeedDataAudioMPEG4Generic_aggregate(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp);
-	bool FeedDataAudioMPEG4Generic_one_by_one(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp);
+    virtual void SignalAttachedToInStream();
+    bool FeedDataVideoFUA(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp);
+    bool FeedDataAudioMPEG4Generic_aggregate(uint8_t *pData, uint32_t dataLength,
+            uint32_t processedLength, uint32_t totalLength,
+            double absoluteTimestamp);
+    bool FeedDataAudioMPEG4Generic_one_by_one(uint8_t *pData, uint32_t dataLength,
+            uint32_t processedLength, uint32_t totalLength,
+            double absoluteTimestamp);
 };
 
 

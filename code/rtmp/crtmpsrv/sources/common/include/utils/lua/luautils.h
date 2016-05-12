@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -33,7 +33,7 @@ DLLEXP void DestroyLuaState(lua_State *pLuaState);
 
 DLLEXP bool PopVariant(lua_State *pLuaState, Variant &variant);
 DLLEXP bool PushVariant(lua_State *pLuaState, Variant &variant,
-		bool substituteNullables = false);
+                        bool substituteNullables = false);
 DLLEXP bool EvalLuaExpression(lua_State *pLuaState, string expression);
 DLLEXP bool LoadLuaScriptFromFile(string file, lua_State *pLuaState, bool pCall = true);
 DLLEXP bool LoadLuaScriptFromString(string luaScript, lua_State *pLuaState, bool pCall = true);

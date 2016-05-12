@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,172 +23,212 @@
 #include "streaming/streamstypes.h"
 
 BaseInStream::BaseInStream(BaseProtocol *pProtocol,
-		StreamsManager *pStreamsManager, uint64_t type, string name)
-: BaseStream(pProtocol, pStreamsManager, type, name) {
-	if (!TAG_KIND_OF(type, ST_IN)) {
-		ASSERT("Incorrect stream type. Wanted a stream type in class %s and got %s",
-				STR(tagToString(ST_IN)), STR(tagToString(type)));
-	}
-	_pOutStreams = NULL;
-	_canCallOutStreamDetached = true;
+                           StreamsManager *pStreamsManager, uint64_t type, string name)
+    : BaseStream(pProtocol, pStreamsManager, type, name)
+{
+    if (!TAG_KIND_OF(type, ST_IN))
+    {
+        ASSERT("Incorrect stream type. Wanted a stream type in class %s and got %s",
+               STR(tagToString(ST_IN)), STR(tagToString(type)));
+    }
+    _pOutStreams = NULL;
+    _canCallOutStreamDetached = true;
 }
 
-BaseInStream::~BaseInStream() {
-	_canCallOutStreamDetached = false;
-	while (_linkedStreams.size() > 0) {
-		UnLink(MAP_VAL(_linkedStreams.begin()), true);
-	}
+BaseInStream::~BaseInStream()
+{
+    _canCallOutStreamDetached = false;
+    while (_linkedStreams.size() > 0)
+    {
+        UnLink(MAP_VAL(_linkedStreams.begin()), true);
+    }
 }
 
-vector<BaseOutStream *> BaseInStream::GetOutStreams() {
-	vector<BaseOutStream *> result;
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		ADD_VECTOR_END(result, pTemp->info);
-		pTemp = pTemp->pPrev;
-	}
-	return result;
+vector<BaseOutStream *> BaseInStream::GetOutStreams()
+{
+    vector<BaseOutStream *> result;
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        ADD_VECTOR_END(result, pTemp->info);
+        pTemp = pTemp->pPrev;
+    }
+    return result;
 }
 
-void BaseInStream::GetStats(Variant &info) {
-	BaseStream::GetStats(info);
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	info["outStreamsUniqueIds"] = Variant();
-	while (pTemp != NULL) {
-		info["outStreamsUniqueIds"].PushToArray(pTemp->info->GetUniqueId());
-		pTemp = pTemp->pPrev;
-	}
+void BaseInStream::GetStats(Variant &info)
+{
+    BaseStream::GetStats(info);
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    info["outStreamsUniqueIds"] = Variant();
+    while (pTemp != NULL)
+    {
+        info["outStreamsUniqueIds"].PushToArray(pTemp->info->GetUniqueId());
+        pTemp = pTemp->pPrev;
+    }
 }
 
-bool BaseInStream::Link(BaseOutStream *pOutStream, bool reverseLink) {
-	if ((!pOutStream->IsCompatibleWithType(GetType()))
-			|| (!IsCompatibleWithType(pOutStream->GetType()))) {
-		FATAL("stream type %s not compatible with stream type %s",
-				STR(tagToString(GetType())),
-				STR(tagToString(pOutStream->GetType())));
-		return false;
-	}
-	if (MAP_HAS1(_linkedStreams, pOutStream->GetUniqueId())) {
-		WARN("BaseInStream::Link: This stream is already linked");
-		return true;
-	}
-	_pOutStreams = AddLinkedList(_pOutStreams, pOutStream, true);
-	_linkedStreams[pOutStream->GetUniqueId()] = pOutStream;
+bool BaseInStream::Link(BaseOutStream *pOutStream, bool reverseLink)
+{
+    if ((!pOutStream->IsCompatibleWithType(GetType()))
+            || (!IsCompatibleWithType(pOutStream->GetType())))
+    {
+        FATAL("stream type %s not compatible with stream type %s",
+              STR(tagToString(GetType())),
+              STR(tagToString(pOutStream->GetType())));
+        return false;
+    }
+    if (MAP_HAS1(_linkedStreams, pOutStream->GetUniqueId()))
+    {
+        WARN("BaseInStream::Link: This stream is already linked");
+        return true;
+    }
+    _pOutStreams = AddLinkedList(_pOutStreams, pOutStream, true);
+    _linkedStreams[pOutStream->GetUniqueId()] = pOutStream;
 
-	if (reverseLink) {
-		if (!pOutStream->Link(this, false)) {
-			FATAL("BaseInStream::Link: Unable to reverse link");
-			//TODO: here we must remove the link from _pOutStreams and _linkedStreams
-			NYIA;
-		}
-	}
-	SignalOutStreamAttached(pOutStream);
-	return true;
+    if (reverseLink)
+    {
+        if (!pOutStream->Link(this, false))
+        {
+            FATAL("BaseInStream::Link: Unable to reverse link");
+            //TODO: here we must remove the link from _pOutStreams and _linkedStreams
+            NYIA;
+        }
+    }
+    SignalOutStreamAttached(pOutStream);
+    return true;
 }
 
-bool BaseInStream::UnLink(BaseOutStream *pOutStream, bool reverseUnLink) {
-	if (!MAP_HAS1(_linkedStreams, pOutStream->GetUniqueId())) {
-		WARN("BaseInStream::UnLink: This stream is not linked");
-		return true;
-	}
+bool BaseInStream::UnLink(BaseOutStream *pOutStream, bool reverseUnLink)
+{
+    if (!MAP_HAS1(_linkedStreams, pOutStream->GetUniqueId()))
+    {
+        WARN("BaseInStream::UnLink: This stream is not linked");
+        return true;
+    }
 
-	_linkedStreams.erase(pOutStream->GetUniqueId());
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		if (pTemp->info->GetUniqueId() == pOutStream->GetUniqueId()) {
-			_pOutStreams = RemoveLinkedList<BaseOutStream *>(pTemp);
-			break;
-		}
-		pTemp = pTemp->pPrev;
-	}
+    _linkedStreams.erase(pOutStream->GetUniqueId());
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        if (pTemp->info->GetUniqueId() == pOutStream->GetUniqueId())
+        {
+            _pOutStreams = RemoveLinkedList<BaseOutStream *>(pTemp);
+            break;
+        }
+        pTemp = pTemp->pPrev;
+    }
 
-	if (reverseUnLink) {
-		if (!pOutStream->UnLink(false)) {
-			FATAL("BaseInStream::UnLink: Unable to reverse unLink");
-			//TODO: what are we going to do here???
-			NYIA;
-		}
-	}
-	if (_canCallOutStreamDetached) {
-		SignalOutStreamDetached(pOutStream);
-	}
-	return true;
+    if (reverseUnLink)
+    {
+        if (!pOutStream->UnLink(false))
+        {
+            FATAL("BaseInStream::UnLink: Unable to reverse unLink");
+            //TODO: what are we going to do here???
+            NYIA;
+        }
+    }
+    if (_canCallOutStreamDetached)
+    {
+        SignalOutStreamDetached(pOutStream);
+    }
+    return true;
 }
 
-bool BaseInStream::Play(double absoluteTimestamp, double length) {
-	if (!SignalPlay(absoluteTimestamp, length)) {
-		FATAL("Unable to signal play");
-		return false;
-	}
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		if (!pTemp->info->SignalPlay(absoluteTimestamp, length)) {
-			WARN("Unable to signal play on an outbound stream");
-		}
-		pTemp = pTemp->pPrev;
-	}
-	return true;
+bool BaseInStream::Play(double absoluteTimestamp, double length)
+{
+    if (!SignalPlay(absoluteTimestamp, length))
+    {
+        FATAL("Unable to signal play");
+        return false;
+    }
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        if (!pTemp->info->SignalPlay(absoluteTimestamp, length))
+        {
+            WARN("Unable to signal play on an outbound stream");
+        }
+        pTemp = pTemp->pPrev;
+    }
+    return true;
 }
 
-bool BaseInStream::Pause() {
-	if (!SignalPause()) {
-		FATAL("Unable to signal pause");
-		return false;
-	}
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		if (!pTemp->info->SignalPause()) {
-			WARN("Unable to signal pause on an outbound stream");
-		}
-		pTemp = pTemp->pPrev;
-	}
-	return true;
+bool BaseInStream::Pause()
+{
+    if (!SignalPause())
+    {
+        FATAL("Unable to signal pause");
+        return false;
+    }
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        if (!pTemp->info->SignalPause())
+        {
+            WARN("Unable to signal pause on an outbound stream");
+        }
+        pTemp = pTemp->pPrev;
+    }
+    return true;
 }
 
-bool BaseInStream::Resume() {
-	if (!SignalResume()) {
-		FATAL("Unable to signal resume");
-		return false;
-	}
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		if (!pTemp->info->SignalResume()) {
-			WARN("Unable to signal resume on an outbound stream");
-		}
-		pTemp = pTemp->pPrev;
-	}
-	return true;
+bool BaseInStream::Resume()
+{
+    if (!SignalResume())
+    {
+        FATAL("Unable to signal resume");
+        return false;
+    }
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        if (!pTemp->info->SignalResume())
+        {
+            WARN("Unable to signal resume on an outbound stream");
+        }
+        pTemp = pTemp->pPrev;
+    }
+    return true;
 }
 
-bool BaseInStream::Seek(double absoluteTimestamp) {
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		if (!pTemp->info->SignalSeek(absoluteTimestamp)) {
-			WARN("Unable to signal seek on an outbound stream");
-		}
-		pTemp = pTemp->pPrev;
-	}
+bool BaseInStream::Seek(double absoluteTimestamp)
+{
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        if (!pTemp->info->SignalSeek(absoluteTimestamp))
+        {
+            WARN("Unable to signal seek on an outbound stream");
+        }
+        pTemp = pTemp->pPrev;
+    }
 
-	if (!SignalSeek(absoluteTimestamp)) {
-		FATAL("Unable to signal seek");
-		return false;
-	}
+    if (!SignalSeek(absoluteTimestamp))
+    {
+        FATAL("Unable to signal seek");
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
-bool BaseInStream::Stop() {
-	if (!SignalStop()) {
-		FATAL("Unable to signal stop");
-		return false;
-	}
-	LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
-	while (pTemp != NULL) {
-		if (!pTemp->info->SignalStop()) {
-			WARN("Unable to signal stop on an outbound stream");
-		}
-		pTemp = pTemp->pPrev;
-	}
-	return true;
+bool BaseInStream::Stop()
+{
+    if (!SignalStop())
+    {
+        FATAL("Unable to signal stop");
+        return false;
+    }
+    LinkedListNode<BaseOutStream *> *pTemp = _pOutStreams;
+    while (pTemp != NULL)
+    {
+        if (!pTemp->info->SignalStop())
+        {
+            WARN("Unable to signal stop on an outbound stream");
+        }
+        pTemp = pTemp->pPrev;
+    }
+    return true;
 }
 

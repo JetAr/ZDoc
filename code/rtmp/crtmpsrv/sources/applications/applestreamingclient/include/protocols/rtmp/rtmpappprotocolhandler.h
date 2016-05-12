@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,27 +23,29 @@
 
 #include "protocols/rtmp/basertmpappprotocolhandler.h"
 
-namespace app_applestreamingclient {
-	class ClientContext;
+namespace app_applestreamingclient
+{
+class ClientContext;
 
-	class RTMPAppProtocolHandler
-	: public BaseRTMPAppProtocolHandler {
-	public:
-		RTMPAppProtocolHandler(Variant &configuration);
-		virtual ~RTMPAppProtocolHandler();
+class RTMPAppProtocolHandler
+    : public BaseRTMPAppProtocolHandler
+{
+public:
+    RTMPAppProtocolHandler(Variant &configuration);
+    virtual ~RTMPAppProtocolHandler();
 
-		virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
+    virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
 
-		virtual bool ProcessInvokeGeneric(BaseRTMPProtocol *pFrom,
-				Variant &request);
-	private:
-		ClientContext * GetContext(BaseProtocol *pFrom);
-		void ReleaseContext(BaseProtocol *pFrom);
-		bool ProcessSetupStream(BaseRTMPProtocol *pFrom,
-				Variant &request);
-		bool ProcessGetBWInfo(BaseRTMPProtocol *pFrom,
-				Variant &request);
-	};
+    virtual bool ProcessInvokeGeneric(BaseRTMPProtocol *pFrom,
+                                      Variant &request);
+private:
+    ClientContext * GetContext(BaseProtocol *pFrom);
+    void ReleaseContext(BaseProtocol *pFrom);
+    bool ProcessSetupStream(BaseRTMPProtocol *pFrom,
+                            Variant &request);
+    bool ProcessGetBWInfo(BaseRTMPProtocol *pFrom,
+                          Variant &request);
+};
 }
 
 #endif	/* _RTMPAPPPROTOCOLHANDLER_H */

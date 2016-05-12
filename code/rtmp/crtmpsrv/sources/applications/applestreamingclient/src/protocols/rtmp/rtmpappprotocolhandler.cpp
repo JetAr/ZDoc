@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -30,98 +30,115 @@
 using namespace app_applestreamingclient;
 
 RTMPAppProtocolHandler::RTMPAppProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
+    : BaseRTMPAppProtocolHandler(configuration)
+{
 
 }
 
-RTMPAppProtocolHandler::~RTMPAppProtocolHandler() {
+RTMPAppProtocolHandler::~RTMPAppProtocolHandler()
+{
 }
 
-void RTMPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
-	BaseRTMPAppProtocolHandler::UnRegisterProtocol(pProtocol);
-	ReleaseContext(pProtocol);
+void RTMPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
+    BaseRTMPAppProtocolHandler::UnRegisterProtocol(pProtocol);
+    ReleaseContext(pProtocol);
 }
 
 bool RTMPAppProtocolHandler::ProcessInvokeGeneric(BaseRTMPProtocol *pFrom,
-		Variant &request) {
-	string functionName = M_INVOKE_FUNCTION(request);
-	if (functionName == "setupStream") {
-		return ProcessSetupStream(pFrom, request);
-	} else if (functionName == "getBWInfo") {
-		return ProcessGetBWInfo(pFrom, request);
-	} else {
-		WARN("Invalid function name");
-		return BaseRTMPAppProtocolHandler::ProcessInvokeGeneric(pFrom, request);
-	}
+        Variant &request)
+{
+    string functionName = M_INVOKE_FUNCTION(request);
+    if (functionName == "setupStream")
+    {
+        return ProcessSetupStream(pFrom, request);
+    }
+    else if (functionName == "getBWInfo")
+    {
+        return ProcessGetBWInfo(pFrom, request);
+    }
+    else
+    {
+        WARN("Invalid function name");
+        return BaseRTMPAppProtocolHandler::ProcessInvokeGeneric(pFrom, request);
+    }
 }
 
-ClientContext * RTMPAppProtocolHandler::GetContext(BaseProtocol *pFrom) {
-	uint32_t contextId = pFrom->GetCustomParameters()["contextId"];
-	ClientContext *pContext = ClientContext::GetContext(contextId,
-			GetApplication()->GetId(), pFrom->GetType());
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return NULL;
-	}
-	((RTMPEventSink *) pContext->EventSink())->SetProtocolId(pFrom->GetId());
-	pFrom->GetCustomParameters()["contextId"] = pContext->Id();
-	return pContext;
+ClientContext * RTMPAppProtocolHandler::GetContext(BaseProtocol *pFrom)
+{
+    uint32_t contextId = pFrom->GetCustomParameters()["contextId"];
+    ClientContext *pContext = ClientContext::GetContext(contextId,
+                              GetApplication()->GetId(), pFrom->GetType());
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return NULL;
+    }
+    ((RTMPEventSink *) pContext->EventSink())->SetProtocolId(pFrom->GetId());
+    pFrom->GetCustomParameters()["contextId"] = pContext->Id();
+    return pContext;
 }
 
-void RTMPAppProtocolHandler::ReleaseContext(BaseProtocol *pFrom) {
-	uint32_t contextId = pFrom->GetCustomParameters()["contextId"];
-	ClientContext::ReleaseContext(contextId);
-	pFrom->GetCustomParameters()["contextId"] = (uint32_t) 0;
+void RTMPAppProtocolHandler::ReleaseContext(BaseProtocol *pFrom)
+{
+    uint32_t contextId = pFrom->GetCustomParameters()["contextId"];
+    ClientContext::ReleaseContext(contextId);
+    pFrom->GetCustomParameters()["contextId"] = (uint32_t) 0;
 }
 
 bool RTMPAppProtocolHandler::ProcessSetupStream(BaseRTMPProtocol *pFrom,
-		Variant &request) {
-	//1. Delete the old context
-	ReleaseContext(pFrom);
+        Variant &request)
+{
+    //1. Delete the old context
+    ReleaseContext(pFrom);
 
-	//2. get the context
-	ClientContext *pContext = GetContext(pFrom);
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return false;
-	}
+    //2. get the context
+    ClientContext *pContext = GetContext(pFrom);
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return false;
+    }
 
-	//3. Setup the new connecting string
-	pContext->RawConnectingString(M_INVOKE_PARAM(request, 1));
+    //3. Setup the new connecting string
+    pContext->RawConnectingString(M_INVOKE_PARAM(request, 1));
 
-	//4. StartProcessing
-	return pContext->StartProcessing();
+    //4. StartProcessing
+    return pContext->StartProcessing();
 }
 
 bool RTMPAppProtocolHandler::ProcessGetBWInfo(BaseRTMPProtocol *pFrom,
-		Variant &request) {
-	uint32_t contextId = pFrom->GetCustomParameters()["contextId"];
-	Variant response;
-	Variant parameters;
-	parameters.PushToArray(Variant());
-	parameters.PushToArray(Variant());
-	if (contextId == 0) {
-		WARN("No context available yet");
-		response = GenericMessageFactory::GetInvokeResult(request, parameters);
-		return SendRTMPMessage(pFrom, response);
-	}
-	ClientContext *pContext = ClientContext::GetContext(contextId,
-			GetApplication()->GetId(), pFrom->GetType());
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return false;
-	}
+        Variant &request)
+{
+    uint32_t contextId = pFrom->GetCustomParameters()["contextId"];
+    Variant response;
+    Variant parameters;
+    parameters.PushToArray(Variant());
+    parameters.PushToArray(Variant());
+    if (contextId == 0)
+    {
+        WARN("No context available yet");
+        response = GenericMessageFactory::GetInvokeResult(request, parameters);
+        return SendRTMPMessage(pFrom, response);
+    }
+    ClientContext *pContext = ClientContext::GetContext(contextId,
+                              GetApplication()->GetId(), pFrom->GetType());
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return false;
+    }
 
 
-	ASC_RES_BUILD_OK_INFO_BANDWIDTH(parameters[(uint32_t) 1],
-			pContext->GetAvailableBandwidths(),
-			pContext->GetDetectedBandwidth(),
-			pContext->GetSelectedBandwidth(),
-			pContext->GetBufferLevel(),
-			pContext->GetMaxBufferLevel(),
-			pContext->GetBufferLevelPercent());
-	response = GenericMessageFactory::GetInvokeResult(request, parameters);
-	return SendRTMPMessage(pFrom, response);
+    ASC_RES_BUILD_OK_INFO_BANDWIDTH(parameters[(uint32_t) 1],
+                                    pContext->GetAvailableBandwidths(),
+                                    pContext->GetDetectedBandwidth(),
+                                    pContext->GetSelectedBandwidth(),
+                                    pContext->GetBufferLevel(),
+                                    pContext->GetMaxBufferLevel(),
+                                    pContext->GetBufferLevelPercent());
+    response = GenericMessageFactory::GetInvokeResult(request, parameters);
+    return SendRTMPMessage(pFrom, response);
 }
 
 #endif /* HAS_PROTOCOL_RTMP */

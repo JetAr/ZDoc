@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,39 +25,40 @@
 #include "streaming/baseinnetstream.h"
 
 class InNetLiveFLVStream
-: public BaseInNetStream {
+    : public BaseInNetStream
+{
 private:
-	IOBuffer _videoCodecInit;
-	double _lastVideoTime;
-	IOBuffer _audioCodecInit;
-	double _lastAudioTime;
-	Variant _lastStreamMessage;
-	StreamCapabilities _streamCapabilities;
+    IOBuffer _videoCodecInit;
+    double _lastVideoTime;
+    IOBuffer _audioCodecInit;
+    double _lastAudioTime;
+    Variant _lastStreamMessage;
+    StreamCapabilities _streamCapabilities;
 public:
-	InNetLiveFLVStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name);
-	virtual ~InNetLiveFLVStream();
+    InNetLiveFLVStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                       string name);
+    virtual ~InNetLiveFLVStream();
 
-	virtual StreamCapabilities * GetCapabilities();
+    virtual StreamCapabilities * GetCapabilities();
 
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
-	virtual void ReadyForSend();
-	virtual bool IsCompatibleWithType(uint64_t type);
-	virtual void SignalOutStreamAttached(BaseOutStream *pOutStream);
-	virtual void SignalOutStreamDetached(BaseOutStream *pOutStream);
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
-	bool SendStreamMessage(Variant &completeMessage, bool persistent);
-	bool SendStreamMessage(string functionName, Variant &parameters,
-			bool persistent);
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
+    virtual void ReadyForSend();
+    virtual bool IsCompatibleWithType(uint64_t type);
+    virtual void SignalOutStreamAttached(BaseOutStream *pOutStream);
+    virtual void SignalOutStreamDetached(BaseOutStream *pOutStream);
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
+    bool SendStreamMessage(Variant &completeMessage, bool persistent);
+    bool SendStreamMessage(string functionName, Variant &parameters,
+                           bool persistent);
 private:
-	bool InitializeAudioCapabilities(uint8_t *pData, uint32_t length);
-	bool InitializeVideoCapabilities(uint8_t *pData, uint32_t length);
+    bool InitializeAudioCapabilities(uint8_t *pData, uint32_t length);
+    bool InitializeVideoCapabilities(uint8_t *pData, uint32_t length);
 };
 
 

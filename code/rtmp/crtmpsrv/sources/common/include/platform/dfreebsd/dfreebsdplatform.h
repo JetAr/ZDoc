@@ -126,16 +126,18 @@ do { \
 }while (0);
 
 class DFreeBSDPlatform
-: public BasePlatform {
+    : public BasePlatform
+{
 public:
-	DFreeBSDPlatform();
-	virtual ~DFreeBSDPlatform();
+    DFreeBSDPlatform();
+    virtual ~DFreeBSDPlatform();
 };
 
 typedef void (*SignalFnc)(void);
 
-typedef struct _select_event {
-	uint8_t type;
+typedef struct _select_event
+{
+    uint8_t type;
 } select_event;
 
 

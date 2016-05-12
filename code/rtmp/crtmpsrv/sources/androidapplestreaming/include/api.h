@@ -39,13 +39,13 @@ Variant ContextCloseAll();
 Variant CommandSetBitrates(uint32_t contextId, string bitRates);
 Variant CommandPlay(uint32_t contextId, string connectingString);
 Variant CommandPlay(uint32_t contextId, string m3u8Uri, string httpSessionId,
-		string keyPassword);
+                    string keyPassword);
 Variant CommandPause(uint32_t contextId);
 Variant CommandResume(uint32_t contextId);
 Variant CommandSelectBandwidth(uint32_t contextId, uint32_t bandwidth);
 Variant CommandSeek(uint32_t contextId, double value);
 Variant CommandSelectAVChannels(uint32_t contextId, uint32_t audioChannel,
-		uint32_t videoChannel);
+                                uint32_t videoChannel);
 
 Variant InfoListStreams(uint32_t contextId);
 Variant InfoListAllStreams();

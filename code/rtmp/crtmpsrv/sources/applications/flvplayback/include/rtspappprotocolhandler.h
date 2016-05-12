@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,14 +24,16 @@
 
 #include "protocols/rtp/basertspappprotocolhandler.h"
 
-namespace app_flvplayback {
+namespace app_flvplayback
+{
 
-	class RTSPAppProtocolHandler
-	: public BaseRTSPAppProtocolHandler {
-	public:
-		RTSPAppProtocolHandler(Variant &configuration);
-		virtual ~RTSPAppProtocolHandler();
-	};
+class RTSPAppProtocolHandler
+    : public BaseRTSPAppProtocolHandler
+{
+public:
+    RTSPAppProtocolHandler(Variant &configuration);
+    virtual ~RTSPAppProtocolHandler();
+};
 }
 
 #endif	/* _RTSPAPPPROTOCOLHANDLER_H */

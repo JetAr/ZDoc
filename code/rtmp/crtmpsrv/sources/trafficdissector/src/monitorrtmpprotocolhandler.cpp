@@ -24,9 +24,11 @@
 #include "protocols/rtmp/messagefactories/messagefactories.h"
 
 MonitorRTMPProtocolHandler::MonitorRTMPProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
+    : BaseRTMPAppProtocolHandler(configuration)
+{
 
 }
 
-MonitorRTMPProtocolHandler::~MonitorRTMPProtocolHandler() {
+MonitorRTMPProtocolHandler::~MonitorRTMPProtocolHandler()
+{
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,36 +26,37 @@
 class BaseProtocol;
 
 class DLLEXP TCPCarrier
-: public IOHandler {
+    : public IOHandler
+{
 private:
-	bool _writeDataEnabled;
-	bool _enableWriteDataCalled;
-	sockaddr_in _farAddress;
-	string _farIp;
-	uint16_t _farPort;
-	sockaddr_in _nearAddress;
-	string _nearIp;
-	uint16_t _nearPort;
-	int32_t _sendBufferSize;
-	int32_t _recvBufferSize;
-	uint64_t _rx;
-	uint64_t _tx;
+    bool _writeDataEnabled;
+    bool _enableWriteDataCalled;
+    sockaddr_in _farAddress;
+    string _farIp;
+    uint16_t _farPort;
+    sockaddr_in _nearAddress;
+    string _nearIp;
+    uint16_t _nearPort;
+    int32_t _sendBufferSize;
+    int32_t _recvBufferSize;
+    uint64_t _rx;
+    uint64_t _tx;
 public:
-	TCPCarrier(int32_t fd);
-	virtual ~TCPCarrier();
-	virtual bool OnEvent(select_event &event);
-	virtual bool SignalOutputData();
-	virtual operator string();
-	virtual void GetStats(Variant &info);
+    TCPCarrier(int32_t fd);
+    virtual ~TCPCarrier();
+    virtual bool OnEvent(select_event &event);
+    virtual bool SignalOutputData();
+    virtual operator string();
+    virtual void GetStats(Variant &info);
 
-	sockaddr_in &GetFarEndpointAddress();
-	string GetFarEndpointAddressIp();
-	uint16_t GetFarEndpointPort();
-	sockaddr_in &GetNearEndpointAddress();
-	string GetNearEndpointAddressIp();
-	uint16_t GetNearEndpointPort();
+    sockaddr_in &GetFarEndpointAddress();
+    string GetFarEndpointAddressIp();
+    uint16_t GetFarEndpointPort();
+    sockaddr_in &GetNearEndpointAddress();
+    string GetNearEndpointAddressIp();
+    uint16_t GetNearEndpointPort();
 private:
-	bool GetEndpointsInfo();
+    bool GetEndpointsInfo();
 };
 
 

@@ -26,24 +26,25 @@
 class BaseCLIAppProtocolHandler;
 
 class InboundBaseCLIProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	BaseCLIAppProtocolHandler *_pProtocolHandler;
+    BaseCLIAppProtocolHandler *_pProtocolHandler;
 protected:
-	IOBuffer _outputBuffer;
+    IOBuffer _outputBuffer;
 public:
-	InboundBaseCLIProtocol(uint64_t type);
-	virtual ~InboundBaseCLIProtocol();
+    InboundBaseCLIProtocol(uint64_t type);
+    virtual ~InboundBaseCLIProtocol();
 
-	virtual bool Initialize(Variant &parameters);
-	virtual void SetApplication(BaseClientApplication *pApplication);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual IOBuffer * GetOutputBuffer();
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SendMessage(Variant &message) = 0;
+    virtual bool Initialize(Variant &parameters);
+    virtual void SetApplication(BaseClientApplication *pApplication);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual IOBuffer * GetOutputBuffer();
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SendMessage(Variant &message) = 0;
 protected:
-	bool ProcessMessage(Variant &message);
+    bool ProcessMessage(Variant &message);
 };
 
 

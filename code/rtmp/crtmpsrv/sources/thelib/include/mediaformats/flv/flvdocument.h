@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,19 +25,20 @@
 #include "mediaformats/basemediadocument.h"
 
 class FLVDocument
-: public BaseMediaDocument {
+    : public BaseMediaDocument
+{
 private:
-	uint32_t _audioSamplesCount;
-	uint32_t _videoSamplesCount;
-	Variant _metadata;
+    uint32_t _audioSamplesCount;
+    uint32_t _videoSamplesCount;
+    Variant _metadata;
 public:
-	FLVDocument(Variant &metadata);
-	virtual ~FLVDocument();
+    FLVDocument(Variant &metadata);
+    virtual ~FLVDocument();
 
 protected:
-	virtual bool ParseDocument();
-	virtual bool BuildFrames();
-	virtual Variant GetRTMPMeta();
+    virtual bool ParseDocument();
+    virtual bool BuildFrames();
+    virtual Variant GetRTMPMeta();
 };
 
 #endif /* _FLVDOCUMENT */

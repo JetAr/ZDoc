@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -20,28 +20,34 @@
 
 #include "utils/logging/baseloglocation.h"
 
-BaseLogLocation::BaseLogLocation() {
-	_level = -1;
-	_name = "";
+BaseLogLocation::BaseLogLocation()
+{
+    _level = -1;
+    _name = "";
 }
 
-BaseLogLocation::~BaseLogLocation() {
+BaseLogLocation::~BaseLogLocation()
+{
 }
 
-int32_t BaseLogLocation::GetLevel() {
-	return _level;
+int32_t BaseLogLocation::GetLevel()
+{
+    return _level;
 }
 
-void BaseLogLocation::SetLevel(int32_t level) {
-	_level = level;
+void BaseLogLocation::SetLevel(int32_t level)
+{
+    _level = level;
 }
 
-string BaseLogLocation::GetName() {
-	return _name;
+string BaseLogLocation::GetName()
+{
+    return _name;
 }
 
-void BaseLogLocation::SetName(string name) {
-	_name = name;
+void BaseLogLocation::SetName(string name)
+{
+    _name = name;
 }
 
 

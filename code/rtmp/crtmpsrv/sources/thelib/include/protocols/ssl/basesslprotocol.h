@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,36 +24,37 @@
 #include "protocols/baseprotocol.h"
 
 class BaseSSLProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	IOBuffer _inputBuffer;
-	IOBuffer _outputBuffer;
+    IOBuffer _inputBuffer;
+    IOBuffer _outputBuffer;
 protected:
-	static map<string, SSL_CTX *> _pGlobalContexts;
-	static bool _libraryInitialized;
-	SSL_CTX *_pGlobalSSLContext;
-	SSL *_pSSL;
-	bool _sslHandshakeCompleted;
-	uint8_t *_pReadBuffer;
+    static map<string, SSL_CTX *> _pGlobalContexts;
+    static bool _libraryInitialized;
+    SSL_CTX *_pGlobalSSLContext;
+    SSL *_pSSL;
+    bool _sslHandshakeCompleted;
+    uint8_t *_pReadBuffer;
 public:
-	BaseSSLProtocol(uint64_t type);
-	virtual ~BaseSSLProtocol();
-	virtual bool Initialize(Variant &parameters);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual bool EnqueueForOutbound();
-	virtual IOBuffer * GetOutputBuffer();
-	virtual IOBuffer * GetInputBuffer();
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SignalInputData(IOBuffer &buffer);
+    BaseSSLProtocol(uint64_t type);
+    virtual ~BaseSSLProtocol();
+    virtual bool Initialize(Variant &parameters);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual bool EnqueueForOutbound();
+    virtual IOBuffer * GetOutputBuffer();
+    virtual IOBuffer * GetInputBuffer();
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
 protected:
-	virtual bool DoHandshake() = 0;
-	virtual bool InitGlobalContext(Variant &parameters) = 0;
-	bool PerformIO();
-	string GetSSLErrors();
+    virtual bool DoHandshake() = 0;
+    virtual bool InitGlobalContext(Variant &parameters) = 0;
+    bool PerformIO();
+    string GetSSLErrors();
 private:
-	string DumpBIO(BIO *pBIO);
-	void InitRandGenerator();
+    string DumpBIO(BIO *pBIO);
+    void InitRandGenerator();
 };
 
 

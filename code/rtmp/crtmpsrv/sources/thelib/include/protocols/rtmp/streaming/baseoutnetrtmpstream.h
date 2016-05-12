@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -29,90 +29,91 @@
 class BaseRTMPProtocol;
 
 class DLLEXP BaseOutNetRTMPStream
-: public BaseOutNetStream {
+    : public BaseOutNetStream
+{
 private:
-	uint32_t _rtmpStreamId;
-	uint32_t _chunkSize;
-	BaseRTMPProtocol *_pRTMPProtocol;
+    uint32_t _rtmpStreamId;
+    uint32_t _chunkSize;
+    BaseRTMPProtocol *_pRTMPProtocol;
 
-	double _deltaVideoTime;
-	double _deltaAudioTime;
-	double *_pDeltaVideoTime;
-	double *_pDeltaAudioTime;
-	double _seekTime;
+    double _deltaVideoTime;
+    double _deltaAudioTime;
+    double *_pDeltaVideoTime;
+    double *_pDeltaAudioTime;
+    double _seekTime;
 
-	uint32_t _isFirstVideoFrame;
-	Header _videoHeader;
-	IOBuffer _videoBucket;
+    uint32_t _isFirstVideoFrame;
+    Header _videoHeader;
+    IOBuffer _videoBucket;
 
-	uint32_t _isFirstAudioFrame;
-	Header _audioHeader;
-	IOBuffer _audioBucket;
+    uint32_t _isFirstAudioFrame;
+    Header _audioHeader;
+    IOBuffer _audioBucket;
 
-	Channel *_pChannelAudio;
-	Channel *_pChannelVideo;
-	Channel *_pChannelCommands;
-	uint32_t _feederChunkSize;
-	bool _canDropFrames;
-	bool _currentFrameDropped;
-	uint32_t _maxBufferSize;
-	uint64_t _attachedStreamType;
-	Variant _completeMetadata;
-	string _clientId;
-	bool _paused;
+    Channel *_pChannelAudio;
+    Channel *_pChannelVideo;
+    Channel *_pChannelCommands;
+    uint32_t _feederChunkSize;
+    bool _canDropFrames;
+    bool _currentFrameDropped;
+    uint32_t _maxBufferSize;
+    uint64_t _attachedStreamType;
+    Variant _completeMetadata;
+    string _clientId;
+    bool _paused;
 
-	bool _sendOnStatusPlayMessages;
+    bool _sendOnStatusPlayMessages;
 
-	uint64_t _audioPacketsCount;
-	uint64_t _audioDroppedPacketsCount;
-	uint64_t _audioBytesCount;
-	uint64_t _audioDroppedBytesCount;
-	uint64_t _videoPacketsCount;
-	uint64_t _videoDroppedPacketsCount;
-	uint64_t _videoBytesCount;
-	uint64_t _videoDroppedBytesCount;
+    uint64_t _audioPacketsCount;
+    uint64_t _audioDroppedPacketsCount;
+    uint64_t _audioBytesCount;
+    uint64_t _audioDroppedBytesCount;
+    uint64_t _videoPacketsCount;
+    uint64_t _videoDroppedPacketsCount;
+    uint64_t _videoBytesCount;
+    uint64_t _videoDroppedBytesCount;
 protected:
-	BaseOutNetRTMPStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			uint64_t type, string name, uint32_t rtmpStreamId, uint32_t chunkSize);
+    BaseOutNetRTMPStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                         uint64_t type, string name, uint32_t rtmpStreamId, uint32_t chunkSize);
 public:
-	static BaseOutNetRTMPStream *GetInstance(BaseProtocol *pProtocol,
-			StreamsManager *pStreamsManager,
-			string name, uint32_t rtmpStreamId,
-			uint32_t chunkSize,
-			uint64_t inStreamType);
-	virtual ~BaseOutNetRTMPStream();
+    static BaseOutNetRTMPStream *GetInstance(BaseProtocol *pProtocol,
+            StreamsManager *pStreamsManager,
+            string name, uint32_t rtmpStreamId,
+            uint32_t chunkSize,
+            uint64_t inStreamType);
+    virtual ~BaseOutNetRTMPStream();
 
-	uint32_t GetRTMPStreamId();
-	uint32_t GetCommandsChannelId();
-	void SetChunkSize(uint32_t chunkSize);
-	uint32_t GetChunkSize();
-	void SetFeederChunkSize(uint32_t feederChunkSize);
-	bool CanDropFrames();
-	void CanDropFrames(bool canDropFrames);
-	void SetSendOnStatusPlayMessages(bool value);
-	virtual void GetStats(Variant &info);
+    uint32_t GetRTMPStreamId();
+    uint32_t GetCommandsChannelId();
+    void SetChunkSize(uint32_t chunkSize);
+    uint32_t GetChunkSize();
+    void SetFeederChunkSize(uint32_t feederChunkSize);
+    bool CanDropFrames();
+    void CanDropFrames(bool canDropFrames);
+    void SetSendOnStatusPlayMessages(bool value);
+    virtual void GetStats(Variant &info);
 
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
 
-	virtual bool SendStreamMessage(Variant &message);
-	virtual void SignalAttachedToInStream();
-	virtual void SignalDetachedFromInStream();
+    virtual bool SendStreamMessage(Variant &message);
+    virtual void SignalAttachedToInStream();
+    virtual void SignalDetachedFromInStream();
 
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
 
-	virtual void SignalStreamCompleted();
+    virtual void SignalStreamCompleted();
 private:
-	bool ChunkAndSend(uint8_t *pData, uint32_t length, IOBuffer &bucket,
-			Header &header, Channel &channel);
-	bool AllowExecution(uint32_t totalProcessed, uint32_t dataLength, bool isAudio);
-	void InternalReset();
-	void FixTimeBase();
+    bool ChunkAndSend(uint8_t *pData, uint32_t length, IOBuffer &bucket,
+                      Header &header, Channel &channel);
+    bool AllowExecution(uint32_t totalProcessed, uint32_t dataLength, bool isAudio);
+    void InternalReset();
+    void FixTimeBase();
 };
 
 

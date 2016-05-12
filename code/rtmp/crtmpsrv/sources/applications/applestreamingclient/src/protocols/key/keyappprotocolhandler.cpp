@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,23 +22,28 @@
 using namespace app_applestreamingclient;
 
 KeyAppProtocolHandler::KeyAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-KeyAppProtocolHandler::~KeyAppProtocolHandler() {
+KeyAppProtocolHandler::~KeyAppProtocolHandler()
+{
 }
 
-void KeyAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	//1. Get the proper protocol type
-	InboundKeyProtocol *pKeyProtocol = (InboundKeyProtocol *) pProtocol;
+void KeyAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    //1. Get the proper protocol type
+    InboundKeyProtocol *pKeyProtocol = (InboundKeyProtocol *) pProtocol;
 
-	//2. Do the HTTP request
-	if (!pKeyProtocol->DoHTTPRequest()) {
-		FATAL("Unable to do the HTTP request");
-		pProtocol->EnqueueForDelete();
-	}
+    //2. Do the HTTP request
+    if (!pKeyProtocol->DoHTTPRequest())
+    {
+        FATAL("Unable to do the HTTP request");
+        pProtocol->EnqueueForDelete();
+    }
 }
 
-void KeyAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
+void KeyAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
 }

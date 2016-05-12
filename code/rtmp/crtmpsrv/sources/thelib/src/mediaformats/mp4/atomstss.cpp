@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,34 +21,41 @@
 #include "mediaformats/mp4/atomstss.h"
 
 AtomSTSS::AtomSTSS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
+    : VersionedAtom(pDocument, type, size, start)
+{
 
 }
 
-AtomSTSS::~AtomSTSS() {
+AtomSTSS::~AtomSTSS()
+{
 }
 
-vector<uint32_t> AtomSTSS::GetEntries() {
-	return _entries;
+vector<uint32_t> AtomSTSS::GetEntries()
+{
+    return _entries;
 }
 
-bool AtomSTSS::ReadData() {
-	uint32_t count;
-	if (!ReadUInt32(count)) {
-		FATAL("Unable to read count");
-		return false;
-	}
+bool AtomSTSS::ReadData()
+{
+    uint32_t count;
+    if (!ReadUInt32(count))
+    {
+        FATAL("Unable to read count");
+        return false;
+    }
 
-	for (uint32_t i = 0; i < count; i++) {
-		uint32_t sampleNumber;
-		if (!ReadUInt32(sampleNumber)) {
-			FATAL("Unable to read sample number");
-			return false;
-		}
+    for (uint32_t i = 0; i < count; i++)
+    {
+        uint32_t sampleNumber;
+        if (!ReadUInt32(sampleNumber))
+        {
+            FATAL("Unable to read sample number");
+            return false;
+        }
 
-		ADD_VECTOR_END(_entries, sampleNumber);
-	}
-	return true;
+        ADD_VECTOR_END(_entries, sampleNumber);
+    }
+    return true;
 }
 
 #endif /* HAS_MEDIA_MP4 */

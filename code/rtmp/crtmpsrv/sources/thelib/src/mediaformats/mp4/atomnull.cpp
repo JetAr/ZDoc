@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,23 +21,28 @@
 #include "mediaformats/mp4/atomnull.h"
 
 AtomNULL::AtomNULL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BaseAtom(pDocument, type, size, start) {
+    : BaseAtom(pDocument, type, size, start)
+{
 
 }
 
-AtomNULL::~AtomNULL() {
+AtomNULL::~AtomNULL()
+{
 }
 
-bool AtomNULL::IsIgnored() {
-	return true;
+bool AtomNULL::IsIgnored()
+{
+    return true;
 }
 
-bool AtomNULL::Read() {
-	return SkipRead(false);
+bool AtomNULL::Read()
+{
+    return SkipRead(false);
 }
 
-string AtomNULL::Hierarchy(uint32_t indent) {
-	return string(4 * indent, ' ') + "null";
+string AtomNULL::Hierarchy(uint32_t indent)
+{
+    return string(4 * indent, ' ') + "null";
 }
 
 

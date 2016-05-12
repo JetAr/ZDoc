@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,16 +25,17 @@
 #include "mediaformats/mp4/boxatom.h"
 
 class VersionedBoxAtom
-: public BoxAtom {
+    : public BoxAtom
+{
 protected:
-	uint8_t _version;
-	uint8_t _flags[3];
+    uint8_t _version;
+    uint8_t _flags[3];
 public:
-	VersionedBoxAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~VersionedBoxAtom();
+    VersionedBoxAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~VersionedBoxAtom();
 protected:
-	virtual bool Read();
-	virtual bool ReadData() = 0;
+    virtual bool Read();
+    virtual bool ReadData() = 0;
 };
 
 

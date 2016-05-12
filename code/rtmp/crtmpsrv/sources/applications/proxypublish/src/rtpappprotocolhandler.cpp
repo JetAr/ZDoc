@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,11 +23,13 @@
 using namespace app_proxypublish;
 
 RTPAppProtocolHandler::RTPAppProtocolHandler(Variant& configuration)
-: BaseRTPAppProtocolHandler(configuration) {
+    : BaseRTPAppProtocolHandler(configuration)
+{
 
 }
 
-RTPAppProtocolHandler::~RTPAppProtocolHandler() {
+RTPAppProtocolHandler::~RTPAppProtocolHandler()
+{
 
 }
 #endif /* HAS_PROTOCOL_RTP */

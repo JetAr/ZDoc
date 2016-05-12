@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,61 +26,72 @@
 using namespace app_stresstest;
 
 RTMPAppProtocolHandler::RTMPAppProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
-	_activeConnections = 0;
+    : BaseRTMPAppProtocolHandler(configuration)
+{
+    _activeConnections = 0;
 }
 
-RTMPAppProtocolHandler::~RTMPAppProtocolHandler() {
+RTMPAppProtocolHandler::~RTMPAppProtocolHandler()
+{
 }
 
-void RTMPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	BaseRTMPAppProtocolHandler::RegisterProtocol(pProtocol);
-	_activeConnections++;
-	SpawnConnections();
+void RTMPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    BaseRTMPAppProtocolHandler::RegisterProtocol(pProtocol);
+    _activeConnections++;
+    SpawnConnections();
 }
 
-void RTMPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
-	BaseRTMPAppProtocolHandler::UnRegisterProtocol(pProtocol);
-	_activeConnections--;
-	SpawnConnections();
+void RTMPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
+    BaseRTMPAppProtocolHandler::UnRegisterProtocol(pProtocol);
+    _activeConnections--;
+    SpawnConnections();
 }
 
-void RTMPAppProtocolHandler::SpawnConnections() {
-	string targetServer = _configuration["targetServer"];
-	string targetApp = _configuration["targetApp"];
-	uint32_t numberOfConnections = (uint32_t) _configuration["numberOfConnections"];
-	if (_activeConnections >= numberOfConnections)
-		return;
-	bool randomAccessStreams = (bool)_configuration["randomAccessStreams"];
-	string streamName = GetStreamName(_activeConnections, randomAccessStreams);
+void RTMPAppProtocolHandler::SpawnConnections()
+{
+    string targetServer = _configuration["targetServer"];
+    string targetApp = _configuration["targetApp"];
+    uint32_t numberOfConnections = (uint32_t) _configuration["numberOfConnections"];
+    if (_activeConnections >= numberOfConnections)
+        return;
+    bool randomAccessStreams = (bool)_configuration["randomAccessStreams"];
+    string streamName = GetStreamName(_activeConnections, randomAccessStreams);
 
-	string fullUri = format("rtmp://%s/%s/%s",
-			STR(targetServer),
-			STR(targetApp),
-			STR(streamName));
+    string fullUri = format("rtmp://%s/%s/%s",
+                            STR(targetServer),
+                            STR(targetApp),
+                            STR(streamName));
 
-	URI uri;
-	if (!URI::FromString(fullUri, true, uri)) {
-		FATAL("Unable to parse uri: %s", STR(fullUri));
-		return;
-	}
+    URI uri;
+    if (!URI::FromString(fullUri, true, uri))
+    {
+        FATAL("Unable to parse uri: %s", STR(fullUri));
+        return;
+    }
 
-	Variant streamConfig;
-	streamConfig["uri"] = uri.ToVariant();
-	streamConfig["localStreamName"] = generateRandomString(8);
+    Variant streamConfig;
+    streamConfig["uri"] = uri.ToVariant();
+    streamConfig["localStreamName"] = generateRandomString(8);
 
-	if (!PullExternalStream(uri, streamConfig)) {
-		FATAL("Unable to pull external stream %s", STR(fullUri));
-		return;
-	}
+    if (!PullExternalStream(uri, streamConfig))
+    {
+        FATAL("Unable to pull external stream %s", STR(fullUri));
+        return;
+    }
 }
 
-string RTMPAppProtocolHandler::GetStreamName(uint32_t index, bool randomAccessStreams) {
-	if (randomAccessStreams) {
-		return _configuration["streams"][rand() % _configuration["streams"].MapSize()];
-	} else {
-		return _configuration["streams"][index % _configuration["streams"].MapSize()];
-	}
+string RTMPAppProtocolHandler::GetStreamName(uint32_t index, bool randomAccessStreams)
+{
+    if (randomAccessStreams)
+    {
+        return _configuration["streams"][rand() % _configuration["streams"].MapSize()];
+    }
+    else
+    {
+        return _configuration["streams"][index % _configuration["streams"].MapSize()];
+    }
 }
 #endif /* HAS_PROTOCOL_RTMP */
 

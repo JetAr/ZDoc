@@ -26,19 +26,20 @@
 class BaseProtocol;
 
 class DLLEXP BaseCLIAppProtocolHandler
-: public BaseAppProtocolHandler {
+    : public BaseAppProtocolHandler
+{
 public:
-	BaseCLIAppProtocolHandler(Variant &configuration);
-	virtual ~BaseCLIAppProtocolHandler();
+    BaseCLIAppProtocolHandler(Variant &configuration);
+    virtual ~BaseCLIAppProtocolHandler();
 
-	void RegisterProtocol(BaseProtocol *pProtocol);
-	void UnRegisterProtocol(BaseProtocol *pProtocol);
+    void RegisterProtocol(BaseProtocol *pProtocol);
+    void UnRegisterProtocol(BaseProtocol *pProtocol);
 
-	virtual bool ProcessMessage(BaseProtocol *pFrom, Variant &message) = 0;
+    virtual bool ProcessMessage(BaseProtocol *pFrom, Variant &message) = 0;
 protected:
-	bool Send(BaseProtocol *pTo, string status, string description, Variant &data);
-	bool SendFail(BaseProtocol *pTo, string description);
-	bool SendSuccess(BaseProtocol *pTo, string description, Variant &data);
+    bool Send(BaseProtocol *pTo, string status, string description, Variant &data);
+    bool SendFail(BaseProtocol *pTo, string description);
+    bool SendSuccess(BaseProtocol *pTo, string description, Variant &data);
 };
 
 #endif	/* _BASECLIAPPPROTOCOLHANDLER_H */

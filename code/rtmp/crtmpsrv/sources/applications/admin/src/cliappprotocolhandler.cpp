@@ -23,14 +23,17 @@
 using namespace app_admin;
 
 CLIAppProtocolHandler::CLIAppProtocolHandler(Variant &configuration)
-: BaseCLIAppProtocolHandler(configuration) {
+    : BaseCLIAppProtocolHandler(configuration)
+{
 
 }
 
-CLIAppProtocolHandler::~CLIAppProtocolHandler() {
+CLIAppProtocolHandler::~CLIAppProtocolHandler()
+{
 }
 
-bool CLIAppProtocolHandler::ProcessMessage(BaseProtocol *pFrom, Variant &message) {
-	return SendFail(pFrom, "Not yet implemented");
+bool CLIAppProtocolHandler::ProcessMessage(BaseProtocol *pFrom, Variant &message)
+{
+    return SendFail(pFrom, "Not yet implemented");
 }
 #endif	/* HAS_PROTOCOL_CLI */

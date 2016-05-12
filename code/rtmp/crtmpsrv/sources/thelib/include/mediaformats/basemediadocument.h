@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,44 +25,45 @@
 #include "mediaformats/mediaframe.h"
 #include "mediaformats/mediafile.h"
 
-class BaseMediaDocument {
+class BaseMediaDocument
+{
 protected:
-	MediaFile _mediaFile;
-	vector<MediaFrame> _frames;
-	uint32_t _audioSamplesCount;
-	uint32_t _videoSamplesCount;
-	Variant _metadata;
-	string _mediaFilePath;
-	string _seekFilePath;
-	string _metaFilePath;
-	bool _keyframeSeek;
-	uint32_t _seekGranularity;
+    MediaFile _mediaFile;
+    vector<MediaFrame> _frames;
+    uint32_t _audioSamplesCount;
+    uint32_t _videoSamplesCount;
+    Variant _metadata;
+    string _mediaFilePath;
+    string _seekFilePath;
+    string _metaFilePath;
+    bool _keyframeSeek;
+    uint32_t _seekGranularity;
 public:
-	BaseMediaDocument(Variant &metadata);
-	virtual ~BaseMediaDocument();
+    BaseMediaDocument(Variant &metadata);
+    virtual ~BaseMediaDocument();
 
-	/*!
-		@brief This functions do things like opening the media file, building frames, saving the meta, etc.
-	*/
-	bool Process();
+    /*!
+    	@brief This functions do things like opening the media file, building frames, saving the meta, etc.
+    */
+    bool Process();
 
-	/*!
-		@brief Returns the meta data
-	*/
-	Variant GetMetadata();
+    /*!
+    	@brief Returns the meta data
+    */
+    Variant GetMetadata();
 
-	/*!
-		@brief Returns the media file
-	*/
-	MediaFile &GetMediaFile();
+    /*!
+    	@brief Returns the media file
+    */
+    MediaFile &GetMediaFile();
 protected:
-	static bool CompareFrames(const MediaFrame &frame1, const MediaFrame &frame2);
-	virtual bool ParseDocument() = 0;
-	virtual bool BuildFrames() = 0;
-	virtual Variant GetRTMPMeta() = 0;
+    static bool CompareFrames(const MediaFrame &frame1, const MediaFrame &frame2);
+    virtual bool ParseDocument() = 0;
+    virtual bool BuildFrames() = 0;
+    virtual Variant GetRTMPMeta() = 0;
 private:
-	bool SaveSeekFile();
-	bool SaveMetaFile();
+    bool SaveSeekFile();
+    bool SaveMetaFile();
 };
 
 

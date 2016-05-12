@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,25 +22,27 @@
 #define	_RTMPAPPPROTOCOLHANDLER_H
 
 #include "protocols/rtmp/basertmpappprotocolhandler.h"
-namespace app_admin {
+namespace app_admin
+{
 
-	class RTMPAppProtocolHandler
-	: public BaseRTMPAppProtocolHandler {
-	public:
-		RTMPAppProtocolHandler(Variant &configuration);
-		virtual ~RTMPAppProtocolHandler();
+class RTMPAppProtocolHandler
+    : public BaseRTMPAppProtocolHandler
+{
+public:
+    RTMPAppProtocolHandler(Variant &configuration);
+    virtual ~RTMPAppProtocolHandler();
 
-		virtual bool ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request);
-		virtual bool ProcessInvokeGeneric(BaseRTMPProtocol *pFrom,
-				Variant &request);
-	private:
-		bool ProcessListApplications(BaseRTMPProtocol *pFrom,
-				Variant &request);
-		bool ProcessListServices(BaseRTMPProtocol *pFrom,
-				Variant &request);
-		bool ProcessStartTests(BaseRTMPProtocol *pFrom,
-				Variant &request);
-	};
+    virtual bool ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request);
+    virtual bool ProcessInvokeGeneric(BaseRTMPProtocol *pFrom,
+                                      Variant &request);
+private:
+    bool ProcessListApplications(BaseRTMPProtocol *pFrom,
+                                 Variant &request);
+    bool ProcessListServices(BaseRTMPProtocol *pFrom,
+                             Variant &request);
+    bool ProcessStartTests(BaseRTMPProtocol *pFrom,
+                           Variant &request);
+};
 }
 #endif	/* _RTMPAPPPROTOCOLHANDLER_H */
 #endif /* HAS_PROTOCOL_RTMP */

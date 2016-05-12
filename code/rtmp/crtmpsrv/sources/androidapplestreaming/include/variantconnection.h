@@ -22,18 +22,19 @@
 
 #include "common.h"
 
-class VariantConnection {
+class VariantConnection
+{
 private:
-	int _fd;
-	IOBuffer _buffer;
+    int _fd;
+    IOBuffer _buffer;
 public:
-	VariantConnection();
-	virtual ~VariantConnection();
+    VariantConnection();
+    virtual ~VariantConnection();
 
-	bool Connect(sockaddr_in &address);
-	bool SendMessage(Variant &message, Variant &response);
+    bool Connect(sockaddr_in &address);
+    bool SendMessage(Variant &message, Variant &response);
 private:
-	void Close();
+    void Close();
 };
 
 #endif	/* _VARIANTCONNECTION_H */

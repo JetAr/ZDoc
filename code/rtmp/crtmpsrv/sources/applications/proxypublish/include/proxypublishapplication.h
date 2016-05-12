@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,46 +25,48 @@
 
 class BaseInStream;
 
-namespace app_proxypublish {
+namespace app_proxypublish
+{
 #ifdef HAS_PROTOCOL_RTMP
-	class RTMPAppProtocolHandler;
+class RTMPAppProtocolHandler;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_LIVEFLV
-	class LiveFLVAppProtocolHandler;
+class LiveFLVAppProtocolHandler;
 #endif /* HAS_PROTOCOL_LIVEFLV */
 #ifdef HAS_PROTOCOL_RTP
-	class RTPAppProtocolHandler;
-	class RTSPAppProtocolHandler;
+class RTPAppProtocolHandler;
+class RTSPAppProtocolHandler;
 #endif /* HAS_PROTOCOL_RTP */
 
-	class ProxyPublishApplication
-	: public BaseClientApplication {
-	private:
+class ProxyPublishApplication
+    : public BaseClientApplication
+{
+private:
 #ifdef HAS_PROTOCOL_RTMP
-		RTMPAppProtocolHandler *_pRTMPHandler;
+    RTMPAppProtocolHandler *_pRTMPHandler;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_LIVEFLV
-		LiveFLVAppProtocolHandler *_pLiveFLV;
+    LiveFLVAppProtocolHandler *_pLiveFLV;
 #endif /* HAS_PROTOCOL_LIVEFLV */
 #ifdef HAS_PROTOCOL_RTP
-		RTPAppProtocolHandler *_pRTP;
-		RTSPAppProtocolHandler *_pRTSP;
+    RTPAppProtocolHandler *_pRTP;
+    RTSPAppProtocolHandler *_pRTSP;
 #endif /* HAS_PROTOCOL_RTP */
-		map<uint32_t, uint32_t> _protocolsToStream;
-		map<uint32_t, map<uint32_t, uint32_t> >_streamToProtocols;
-		Variant _targetServers;
-		bool _abortOnConnectError;
-	public:
-		ProxyPublishApplication(Variant &configuration);
-		virtual ~ProxyPublishApplication();
+    map<uint32_t, uint32_t> _protocolsToStream;
+    map<uint32_t, map<uint32_t, uint32_t> >_streamToProtocols;
+    Variant _targetServers;
+    bool _abortOnConnectError;
+public:
+    ProxyPublishApplication(Variant &configuration);
+    virtual ~ProxyPublishApplication();
 
-		virtual bool Initialize();
+    virtual bool Initialize();
 
-		virtual void SignalStreamRegistered(BaseStream *pStream);
-	private:
-		bool InitiateForwardingStream(BaseInStream *pStream);
-		bool InitiateForwardingStream(BaseInStream *pStream, Variant &target);
-	};
+    virtual void SignalStreamRegistered(BaseStream *pStream);
+private:
+    bool InitiateForwardingStream(BaseInStream *pStream);
+    bool InitiateForwardingStream(BaseInStream *pStream, Variant &target);
+};
 }
 
 #endif	/* _PROXYPUBLISHAPPLICATION_H */

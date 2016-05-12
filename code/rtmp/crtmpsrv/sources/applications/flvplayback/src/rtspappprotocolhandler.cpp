@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -29,11 +29,13 @@
 using namespace app_flvplayback;
 
 RTSPAppProtocolHandler::RTSPAppProtocolHandler(Variant& configuration)
-: BaseRTSPAppProtocolHandler(configuration) {
+    : BaseRTSPAppProtocolHandler(configuration)
+{
 
 }
 
-RTSPAppProtocolHandler::~RTSPAppProtocolHandler() {
+RTSPAppProtocolHandler::~RTSPAppProtocolHandler()
+{
 }
 
 #endif /* HAS_PROTOCOL_RTP */

@@ -24,23 +24,24 @@
 #include "common.h"
 #include "mediaformats/mediaframe.h"
 
-class MP3Media {
+class MP3Media
+{
 private:
-	//ver/layer/bitRateIndex
-	static int32_t _bitRates[4][4][16];
-	static int32_t _samplingRates[4][4];
-	static string _versionNames[4];
-	static string _layerNames[4];
-	static map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, uint64_t > > > > > _frameSizes;
-	Variant _tags;
+    //ver/layer/bitRateIndex
+    static int32_t _bitRates[4][4][16];
+    static int32_t _samplingRates[4][4];
+    static string _versionNames[4];
+    static string _layerNames[4];
+    static map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, uint64_t > > > > > _frameSizes;
+    Variant _tags;
 
 public:
-	MP3Media();
-	virtual ~MP3Media();
-	bool GetAudioFrames(uint8_t *pBuffer, uint32_t &audioSamplesCount, MediaFrame &mediaFrame);
+    MP3Media();
+    virtual ~MP3Media();
+    bool GetAudioFrames(uint8_t *pBuffer, uint32_t &audioSamplesCount, MediaFrame &mediaFrame);
 
 private:
-	void InitFrameSizes();
+    void InitFrameSizes();
 };
 
 #endif	/* _MP3MEDIATYPE_H */

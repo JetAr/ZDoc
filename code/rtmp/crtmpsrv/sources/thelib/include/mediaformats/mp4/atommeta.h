@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,19 +27,20 @@ class AtomHDLR;
 class AtomILST;
 
 class AtomMETA
-: public VersionedBoxAtom {
+    : public VersionedBoxAtom
+{
 private:
-	AtomHDLR *_pHDLR;
-	AtomILST *_pILST;
+    AtomHDLR *_pHDLR;
+    AtomILST *_pILST;
 public:
-	AtomMETA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMETA();
+    AtomMETA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMETA();
 
-	virtual bool Read();
+    virtual bool Read();
 
 protected:
-	virtual bool ReadData();
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool ReadData();
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMMETA_H */

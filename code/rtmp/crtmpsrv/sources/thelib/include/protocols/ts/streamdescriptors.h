@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -64,17 +64,19 @@
 #define DESCRIPTOR_TYPE_IOD_DESCRIPTOR 29
 #define DESCRIPTOR_TYPE_FMC_DESCRIPTOR 31
 
-typedef struct _StreamDescriptor {
-	uint8_t type;
-	uint8_t length;
+typedef struct _StreamDescriptor
+{
+    uint8_t type;
+    uint8_t length;
 
-	operator string() {
-		return format("type: %hhu; length: %hhu", type, length);
-	};
+    operator string()
+    {
+        return format("type: %hhu; length: %hhu", type, length);
+    };
 } StreamDescriptor;
 
 bool ReadStreamDescriptor(StreamDescriptor &descriptor,
-		uint8_t *pBuffer, uint32_t &cursor, uint32_t maxCursor);
+                          uint8_t *pBuffer, uint32_t &cursor, uint32_t maxCursor);
 
 
 #endif	/* _STREAMDESCRIPTORS_H */

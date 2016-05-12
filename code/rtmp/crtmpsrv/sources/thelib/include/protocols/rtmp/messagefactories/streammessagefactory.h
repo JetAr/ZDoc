@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,86 +24,87 @@
 
 #include "protocols/rtmp/messagefactories/genericmessagefactory.h"
 
-class DLLEXP StreamMessageFactory {
+class DLLEXP StreamMessageFactory
+{
 public:
-	//stream control
-	static Variant GetUserControlStream(uint16_t operation, uint32_t streamId);
-	static Variant GetUserControlStreamBegin(uint32_t streamId);
-	static Variant GetUserControlStreamEof(uint32_t streamId);
-	static Variant GetUserControlStreamDry(uint32_t streamId);
-	static Variant GetUserControlStreamIsRecorded(uint32_t streamId);
+    //stream control
+    static Variant GetUserControlStream(uint16_t operation, uint32_t streamId);
+    static Variant GetUserControlStreamBegin(uint32_t streamId);
+    static Variant GetUserControlStreamEof(uint32_t streamId);
+    static Variant GetUserControlStreamDry(uint32_t streamId);
+    static Variant GetUserControlStreamIsRecorded(uint32_t streamId);
 
-	//management requests
-	static Variant GetInvokeCreateStream();
-	static Variant GetInvokeCloseStream(uint32_t channelId, uint32_t streamId);
-	static Variant GetInvokeDeleteStream(uint32_t channelId, uint32_t streamId);
-	static Variant GetInvokePublish(uint32_t channelId, uint32_t streamId,
-			string streamName, string mode = "live");
-	static Variant GetInvokePlay(uint32_t channelId, uint32_t streamId,
-			string streamName, double start, double length);
-	static Variant GetInvokeFCSubscribe(string streamName);
+    //management requests
+    static Variant GetInvokeCreateStream();
+    static Variant GetInvokeCloseStream(uint32_t channelId, uint32_t streamId);
+    static Variant GetInvokeDeleteStream(uint32_t channelId, uint32_t streamId);
+    static Variant GetInvokePublish(uint32_t channelId, uint32_t streamId,
+                                    string streamName, string mode = "live");
+    static Variant GetInvokePlay(uint32_t channelId, uint32_t streamId,
+                                 string streamName, double start, double length);
+    static Variant GetInvokeFCSubscribe(string streamName);
 
-	//management responses
-	static Variant GetInvokeCreateStreamResult(Variant &request,
-			double createdStreamId);
-	static Variant GetInvokeCreateStreamResult(uint32_t channelId,
-			uint32_t streamId, uint32_t requestId, double createdStreamId);
-	static Variant GetInvokeReleaseStreamResult(uint32_t channelId,
-			uint32_t streamId, uint32_t requestId, double releasedStreamId);
-	static Variant GetInvokeOnFCPublish(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string code, string description);
+    //management responses
+    static Variant GetInvokeCreateStreamResult(Variant &request,
+            double createdStreamId);
+    static Variant GetInvokeCreateStreamResult(uint32_t channelId,
+            uint32_t streamId, uint32_t requestId, double createdStreamId);
+    static Variant GetInvokeReleaseStreamResult(uint32_t channelId,
+            uint32_t streamId, uint32_t requestId, double releasedStreamId);
+    static Variant GetInvokeOnFCPublish(uint32_t channelId,
+                                        uint32_t streamId, double timeStamp, bool isAbsolute,
+                                        double requestId, string code, string description);
 
-	//event notifications
-	static Variant GetInvokeOnStatusStreamPublishBadName(Variant &request,
-			string streamName);
-	static Variant GetInvokeOnStatusStreamPublishBadName(uint32_t channelId,
-			uint32_t streamId, double requestId, string streamName);
-	static Variant GetInvokeOnStatusStreamPublished(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string level, string code, string description,
-			string details, string clientId);
-	static Variant GetInvokeOnStatusStreamPlayFailed(Variant &request,
-			string streamName);
-	static Variant GetInvokeOnStatusStreamPlayFailed(uint32_t channelId,
-			uint32_t streamId, double requestId, string streamName);
-	static Variant GetInvokeOnStatusStreamPlayReset(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string details, string clientId);
-	static Variant GetInvokeOnStatusStreamPlayStart(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string details, string clientId);
-	static Variant GetInvokeOnStatusStreamPlayStop(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string details, string clientId);
-	static Variant GetInvokeOnStatusStreamPlayUnpublishNotify(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string clientId);
-	static Variant GetInvokeOnStatusStreamSeekNotify(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string details, string clientId);
-	static Variant GetInvokeOnStatusStreamPauseNotify(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string details, string clientId);
-	static Variant GetInvokeOnStatusStreamUnpauseNotify(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double requestId, string description, string details, string clientId);
-	static Variant GetNotifyRtmpSampleAccess(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			bool unknown1, bool unknown2);
-	static Variant GetNotifyOnMetaData(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			Variant metadata);
-	static Variant GetNotifyOnPlayStatusPlayComplete(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute,
-			double bytes, double duration);
-	static Variant GetNotifyOnStatusDataStart(uint32_t channelId,
-			uint32_t streamId, double timeStamp, bool isAbsolute);
+    //event notifications
+    static Variant GetInvokeOnStatusStreamPublishBadName(Variant &request,
+            string streamName);
+    static Variant GetInvokeOnStatusStreamPublishBadName(uint32_t channelId,
+            uint32_t streamId, double requestId, string streamName);
+    static Variant GetInvokeOnStatusStreamPublished(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string level, string code, string description,
+            string details, string clientId);
+    static Variant GetInvokeOnStatusStreamPlayFailed(Variant &request,
+            string streamName);
+    static Variant GetInvokeOnStatusStreamPlayFailed(uint32_t channelId,
+            uint32_t streamId, double requestId, string streamName);
+    static Variant GetInvokeOnStatusStreamPlayReset(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string details, string clientId);
+    static Variant GetInvokeOnStatusStreamPlayStart(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string details, string clientId);
+    static Variant GetInvokeOnStatusStreamPlayStop(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string details, string clientId);
+    static Variant GetInvokeOnStatusStreamPlayUnpublishNotify(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string clientId);
+    static Variant GetInvokeOnStatusStreamSeekNotify(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string details, string clientId);
+    static Variant GetInvokeOnStatusStreamPauseNotify(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string details, string clientId);
+    static Variant GetInvokeOnStatusStreamUnpauseNotify(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double requestId, string description, string details, string clientId);
+    static Variant GetNotifyRtmpSampleAccess(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            bool unknown1, bool unknown2);
+    static Variant GetNotifyOnMetaData(uint32_t channelId,
+                                       uint32_t streamId, double timeStamp, bool isAbsolute,
+                                       Variant metadata);
+    static Variant GetNotifyOnPlayStatusPlayComplete(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute,
+            double bytes, double duration);
+    static Variant GetNotifyOnStatusDataStart(uint32_t channelId,
+            uint32_t streamId, double timeStamp, bool isAbsolute);
 
-	//generic stream send
-	static Variant GetFlexStreamSend(uint32_t channelId, uint32_t streamId,
-			double timeStamp, bool isAbsolute, string function,
-			Variant &parameters);
+    //generic stream send
+    static Variant GetFlexStreamSend(uint32_t channelId, uint32_t streamId,
+                                     double timeStamp, bool isAbsolute, string function,
+                                     Variant &parameters);
 };
 
 #endif	/* _STREAMMESSAGEFACTORY_H */

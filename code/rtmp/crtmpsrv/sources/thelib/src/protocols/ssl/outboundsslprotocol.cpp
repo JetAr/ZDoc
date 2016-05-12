@@ -20,55 +20,64 @@
 #include "protocols/ssl/outboundsslprotocol.h"
 
 OutboundSSLProtocol::OutboundSSLProtocol()
-: BaseSSLProtocol(PT_OUTBOUND_SSL) {
+    : BaseSSLProtocol(PT_OUTBOUND_SSL)
+{
 
 }
 
-OutboundSSLProtocol::~OutboundSSLProtocol() {
+OutboundSSLProtocol::~OutboundSSLProtocol()
+{
 }
 
-bool OutboundSSLProtocol::InitGlobalContext(Variant &parameters) {
-	//1. get the hash which is always the same for client connetions
-	string hash = "clientConnection";
-	_pGlobalSSLContext = _pGlobalContexts[hash];
-	if (_pGlobalSSLContext == NULL) {
-		//2. prepare the global ssl context
-		_pGlobalSSLContext = SSL_CTX_new(SSLv23_method());
-		if (_pGlobalSSLContext == NULL) {
-			FATAL("Unable to create global SSL context");
-			return false;
-		}
+bool OutboundSSLProtocol::InitGlobalContext(Variant &parameters)
+{
+    //1. get the hash which is always the same for client connetions
+    string hash = "clientConnection";
+    _pGlobalSSLContext = _pGlobalContexts[hash];
+    if (_pGlobalSSLContext == NULL)
+    {
+        //2. prepare the global ssl context
+        _pGlobalSSLContext = SSL_CTX_new(SSLv23_method());
+        if (_pGlobalSSLContext == NULL)
+        {
+            FATAL("Unable to create global SSL context");
+            return false;
+        }
 
-		//3. Store the global context for later usage
-		_pGlobalContexts[hash] = _pGlobalSSLContext;
-	}
+        //3. Store the global context for later usage
+        _pGlobalContexts[hash] = _pGlobalSSLContext;
+    }
 
-	return true;
+    return true;
 }
 
-bool OutboundSSLProtocol::DoHandshake() {
-	if (_sslHandshakeCompleted)
-		return true;
-	int32_t errorCode = SSL_ERROR_NONE;
-	errorCode = SSL_connect(_pSSL);
-	if (errorCode < 0) {
-		int32_t error = SSL_get_error(_pSSL, errorCode);
-		if (error != SSL_ERROR_WANT_READ &&
-				error != SSL_ERROR_WANT_WRITE) {
-			FATAL("Unable to connect SSL: %d; %s", error, STR(GetSSLErrors()));
-			return false;
-		}
-	}
+bool OutboundSSLProtocol::DoHandshake()
+{
+    if (_sslHandshakeCompleted)
+        return true;
+    int32_t errorCode = SSL_ERROR_NONE;
+    errorCode = SSL_connect(_pSSL);
+    if (errorCode < 0)
+    {
+        int32_t error = SSL_get_error(_pSSL, errorCode);
+        if (error != SSL_ERROR_WANT_READ &&
+                error != SSL_ERROR_WANT_WRITE)
+        {
+            FATAL("Unable to connect SSL: %d; %s", error, STR(GetSSLErrors()));
+            return false;
+        }
+    }
 
-	_sslHandshakeCompleted = SSL_is_init_finished(_pSSL);
+    _sslHandshakeCompleted = SSL_is_init_finished(_pSSL);
 
-	if (!PerformIO()) {
-		FATAL("Unable to perform I/O");
-		return false;
-	}
+    if (!PerformIO())
+    {
+        FATAL("Unable to perform I/O");
+        return false;
+    }
 
-	if (_sslHandshakeCompleted)
-		return EnqueueForOutbound();
+    if (_sslHandshakeCompleted)
+        return EnqueueForOutbound();
 
-	return true;
+    return true;
 }

@@ -139,23 +139,26 @@ do { \
 
 typedef void (*SignalFnc)(void);
 
-typedef struct _select_event {
-	uint8_t type;
+typedef struct _select_event
+{
+    uint8_t type;
 } select_event;
 
-struct iovec {
-	void *iov_base; /* Base address. */
-	size_t iov_len; /* Length. */
+struct iovec
+{
+    void *iov_base; /* Base address. */
+    size_t iov_len; /* Length. */
 };
 
-struct msghdr {
-	void *msg_name; /* optional address */
-	int msg_namelen; /* size of address */
-	struct iovec *msg_iov; /* scatter/gather array */
-	int msg_iovlen; /* # elements in msg_iov */
-	void *msg_control; /* ancillary data, see below */
-	int msg_controllen; /* ancillary data buffer len */
-	int msg_flags; /* flags on received message */
+struct msghdr
+{
+    void *msg_name; /* optional address */
+    int msg_namelen; /* size of address */
+    struct iovec *msg_iov; /* scatter/gather array */
+    int msg_iovlen; /* # elements in msg_iov */
+    void *msg_control; /* ancillary data, see below */
+    int msg_controllen; /* ancillary data buffer len */
+    int msg_flags; /* flags on received message */
 };
 
 #define FD_COPY(f, t)   (void)(*(t) = *(f))

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -29,11 +29,13 @@
 using namespace app_flvplayback;
 
 TSAppProtocolHandler::TSAppProtocolHandler(Variant &configuration)
-: BaseTSAppProtocolHandler(configuration) {
+    : BaseTSAppProtocolHandler(configuration)
+{
 
 }
 
-TSAppProtocolHandler::~TSAppProtocolHandler() {
+TSAppProtocolHandler::~TSAppProtocolHandler()
+{
 }
 #endif	/* HAS_PROTOCOL_TS */
 

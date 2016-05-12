@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,13 +23,14 @@
 #include "protocols/ts/tsboundscheck.h"
 
 bool ReadStreamDescriptor(StreamDescriptor &descriptor,
-		uint8_t *pBuffer, uint32_t &cursor, uint32_t maxCursor) {
-	CHECK_BOUNDS(2);
-	descriptor.type = pBuffer[cursor++];
-	descriptor.length = pBuffer[cursor++];
-	CHECK_BOUNDS(descriptor.length);
-	cursor += descriptor.length;
-	return true;
+                          uint8_t *pBuffer, uint32_t &cursor, uint32_t maxCursor)
+{
+    CHECK_BOUNDS(2);
+    descriptor.type = pBuffer[cursor++];
+    descriptor.length = pBuffer[cursor++];
+    CHECK_BOUNDS(descriptor.length);
+    cursor += descriptor.length;
+    return true;
 }
 #endif	/* HAS_PROTOCOL_TS */
 

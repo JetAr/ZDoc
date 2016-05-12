@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,72 +25,76 @@
 #endif /* HAS_PROTOCOL_RTMP */
 
 TheLibTestsSuite::TheLibTestsSuite()
-: BaseTestsSuite() {
+    : BaseTestsSuite()
+{
 
 }
 
-TheLibTestsSuite::~TheLibTestsSuite() {
+TheLibTestsSuite::~TheLibTestsSuite()
+{
 
 }
 
-void TheLibTestsSuite::Run() {
+void TheLibTestsSuite::Run()
+{
 #ifdef HAS_PROTOCOL_RTMP
-	test_Header();
+    test_Header();
 #endif /* HAS_PROTOCOL_RTMP */
 }
 
 #ifdef HAS_PROTOCOL_RTMP
 
-void TheLibTestsSuite::test_Header() {
-	/*
-	 * Formats
-	 * 1. Full
-	 * 2. same stream
-	 * 3. same stream, type and length
-	 * 4. same stream, type, length and timestamp
-	 */
+void TheLibTestsSuite::test_Header()
+{
+    /*
+     * Formats
+     * 1. Full
+     * 2. same stream
+     * 3. same stream, type and length
+     * 4. same stream, type, length and timestamp
+     */
 
-	/*
-	 * Channel types
-	 * 1. small
-	 * 2. medium
-	 * 3. big
-	 */
+    /*
+     * Channel types
+     * 1. small
+     * 2. medium
+     * 3. big
+     */
 
-	/*
-	 * timestamp types
-	 * 1. short
-	 * 2. extended
-	 */
-	IOBuffer buffer;
-	string wanted = "";
-	string got = "";
-	uint8_t full_small_short[] = {0x02, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
-	uint8_t ss_small_short[] = {0x42, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-	uint8_t sstl_small_short[] = {0x82, 0x01, 0x02, 0x03};
-	uint8_t sstlt_small_short[] = {0xc2};
-	uint8_t full_medium_short[] = {0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
-	uint8_t ss_medium_short[] = {0x40, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-	uint8_t sstl_medium_short[] = {0x80, 0x00, 0x01, 0x02, 0x03};
-	uint8_t sstlt_medium_short[] = {0xc0, 0x00};
-	uint8_t full_big_short[] = {0x01, 0x01, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
-	uint8_t ss_big_short[] = {0x41, 0x01, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
-	uint8_t sstl_big_short[] = {0x81, 0x01, 0x00, 0x01, 0x02, 0x03};
-	uint8_t sstlt_big_short[] = {0xc1, 0x01, 0x00};
+    /*
+     * timestamp types
+     * 1. short
+     * 2. extended
+     */
+    IOBuffer buffer;
+    string wanted = "";
+    string got = "";
+    uint8_t full_small_short[] = {0x02, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
+    uint8_t ss_small_short[] = {0x42, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+    uint8_t sstl_small_short[] = {0x82, 0x01, 0x02, 0x03};
+    uint8_t sstlt_small_short[] = {0xc2};
+    uint8_t full_medium_short[] = {0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
+    uint8_t ss_medium_short[] = {0x40, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+    uint8_t sstl_medium_short[] = {0x80, 0x00, 0x01, 0x02, 0x03};
+    uint8_t sstlt_medium_short[] = {0xc0, 0x00};
+    uint8_t full_big_short[] = {0x01, 0x01, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b};
+    uint8_t ss_big_short[] = {0x41, 0x01, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+    uint8_t sstl_big_short[] = {0x81, 0x01, 0x00, 0x01, 0x02, 0x03};
+    uint8_t sstlt_big_short[] = {0xc1, 0x01, 0x00};
 
 
-	uint8_t full_small_extended[] = {0x02, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x51, 0x52, 0x53, 0x54};
-	uint8_t ss_small_extended[] = {0x42, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x51, 0x52, 0x53, 0x54};
-	uint8_t sstl_small_extended[] = {0x82, 0xff, 0xff, 0xff, 0x51, 0x52, 0x53, 0x54};
-	uint8_t full_medium_extended[] = {0x00, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x51, 0x52, 0x53, 0x54};
-	uint8_t ss_medium_extended[] = {0x40, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x51, 0x52, 0x53, 0x54};
-	uint8_t sstl_medium_extended[] = {0x80, 0x00, 0xff, 0xff, 0xff, 0x51, 0x52, 0x53, 0x54};
-	uint8_t full_big_extended[] = {0x01, 0x01, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x51, 0x52, 0x53, 0x54};
-	uint8_t ss_big_extended[] = {0x41, 0x01, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x51, 0x52, 0x53, 0x54};
-	uint8_t sstl_big_extended[] = {0x81, 0x01, 0x00, 0xff, 0xff, 0xff, 0x51, 0x52, 0x53, 0x54};
+    uint8_t full_small_extended[] = {0x02, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x51, 0x52, 0x53, 0x54};
+    uint8_t ss_small_extended[] = {0x42, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x51, 0x52, 0x53, 0x54};
+    uint8_t sstl_small_extended[] = {0x82, 0xff, 0xff, 0xff, 0x51, 0x52, 0x53, 0x54};
+    uint8_t full_medium_extended[] = {0x00, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x51, 0x52, 0x53, 0x54};
+    uint8_t ss_medium_extended[] = {0x40, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x51, 0x52, 0x53, 0x54};
+    uint8_t sstl_medium_extended[] = {0x80, 0x00, 0xff, 0xff, 0xff, 0x51, 0x52, 0x53, 0x54};
+    uint8_t full_big_extended[] = {0x01, 0x01, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x51, 0x52, 0x53, 0x54};
+    uint8_t ss_big_extended[] = {0x41, 0x01, 0x00, 0xff, 0xff, 0xff, 0x04, 0x05, 0x06, 0x07, 0x51, 0x52, 0x53, 0x54};
+    uint8_t sstl_big_extended[] = {0x81, 0x01, 0x00, 0xff, 0xff, 0xff, 0x51, 0x52, 0x53, 0x54};
 
-	Header header;
-	memset(&header, 0, sizeof (header));
+    Header header;
+    memset(&header, 0, sizeof (header));
 
 #define HEADER_READ_TEST(h,ciSize, ci, buff, type, ia, ts) \
 do { \
@@ -140,60 +144,60 @@ do { \
     TS_ASSERT(wanted == got); \
 } while (0)
 
-	HEADER_READ_TEST(header, 1, 2, full_small_short, HT_FULL, true, 0x010203);
-	HEADER_READ_TEST(header, 1, 2, ss_small_short, HT_SAME_STREAM, false, 0x010203);
-	HEADER_READ_TEST(header, 1, 2, sstl_small_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
-	HEADER_READ_TEST(header, 1, 2, sstlt_small_short, HT_CONTINUATION, false, 0x010203);
+    HEADER_READ_TEST(header, 1, 2, full_small_short, HT_FULL, true, 0x010203);
+    HEADER_READ_TEST(header, 1, 2, ss_small_short, HT_SAME_STREAM, false, 0x010203);
+    HEADER_READ_TEST(header, 1, 2, sstl_small_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
+    HEADER_READ_TEST(header, 1, 2, sstlt_small_short, HT_CONTINUATION, false, 0x010203);
 
-	HEADER_READ_TEST(header, 2, 64, full_medium_short, HT_FULL, true, 0x010203);
-	HEADER_READ_TEST(header, 2, 64, ss_medium_short, HT_SAME_STREAM, false, 0x010203);
-	HEADER_READ_TEST(header, 2, 64, sstl_medium_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
-	HEADER_READ_TEST(header, 2, 64, sstlt_medium_short, HT_CONTINUATION, false, 0x010203);
+    HEADER_READ_TEST(header, 2, 64, full_medium_short, HT_FULL, true, 0x010203);
+    HEADER_READ_TEST(header, 2, 64, ss_medium_short, HT_SAME_STREAM, false, 0x010203);
+    HEADER_READ_TEST(header, 2, 64, sstl_medium_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
+    HEADER_READ_TEST(header, 2, 64, sstlt_medium_short, HT_CONTINUATION, false, 0x010203);
 
-	HEADER_READ_TEST(header, 3, 320, full_big_short, HT_FULL, true, 0x010203);
-	HEADER_READ_TEST(header, 3, 320, ss_big_short, HT_SAME_STREAM, false, 0x010203);
-	HEADER_READ_TEST(header, 3, 320, sstl_big_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
-	HEADER_READ_TEST(header, 3, 320, sstlt_big_short, HT_CONTINUATION, false, 0x010203);
+    HEADER_READ_TEST(header, 3, 320, full_big_short, HT_FULL, true, 0x010203);
+    HEADER_READ_TEST(header, 3, 320, ss_big_short, HT_SAME_STREAM, false, 0x010203);
+    HEADER_READ_TEST(header, 3, 320, sstl_big_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
+    HEADER_READ_TEST(header, 3, 320, sstlt_big_short, HT_CONTINUATION, false, 0x010203);
 
-	HEADER_READ_TEST(header, 1, 2, full_small_extended, HT_FULL, true, 0x51525354);
-	HEADER_READ_TEST(header, 1, 2, ss_small_extended, HT_SAME_STREAM, false, 0x51525354);
-	HEADER_READ_TEST(header, 1, 2, sstl_small_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
+    HEADER_READ_TEST(header, 1, 2, full_small_extended, HT_FULL, true, 0x51525354);
+    HEADER_READ_TEST(header, 1, 2, ss_small_extended, HT_SAME_STREAM, false, 0x51525354);
+    HEADER_READ_TEST(header, 1, 2, sstl_small_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
 
-	HEADER_READ_TEST(header, 2, 64, full_medium_extended, HT_FULL, true, 0x51525354);
-	HEADER_READ_TEST(header, 2, 64, ss_medium_extended, HT_SAME_STREAM, false, 0x51525354);
-	HEADER_READ_TEST(header, 2, 64, sstl_medium_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
+    HEADER_READ_TEST(header, 2, 64, full_medium_extended, HT_FULL, true, 0x51525354);
+    HEADER_READ_TEST(header, 2, 64, ss_medium_extended, HT_SAME_STREAM, false, 0x51525354);
+    HEADER_READ_TEST(header, 2, 64, sstl_medium_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
 
-	HEADER_READ_TEST(header, 3, 320, full_big_extended, HT_FULL, true, 0x51525354);
-	HEADER_READ_TEST(header, 3, 320, ss_big_extended, HT_SAME_STREAM, false, 0x51525354);
-	HEADER_READ_TEST(header, 3, 320, sstl_big_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
+    HEADER_READ_TEST(header, 3, 320, full_big_extended, HT_FULL, true, 0x51525354);
+    HEADER_READ_TEST(header, 3, 320, ss_big_extended, HT_SAME_STREAM, false, 0x51525354);
+    HEADER_READ_TEST(header, 3, 320, sstl_big_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
 
 
 
-	HEADER_WRITE_TEST(header, 1, 2, full_small_short, HT_FULL, true, 0x010203);
-	HEADER_WRITE_TEST(header, 1, 2, ss_small_short, HT_SAME_STREAM, false, 0x010203);
-	HEADER_WRITE_TEST(header, 1, 2, sstl_small_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
-	HEADER_WRITE_TEST(header, 1, 2, sstlt_small_short, HT_CONTINUATION, false, 0x010203);
+    HEADER_WRITE_TEST(header, 1, 2, full_small_short, HT_FULL, true, 0x010203);
+    HEADER_WRITE_TEST(header, 1, 2, ss_small_short, HT_SAME_STREAM, false, 0x010203);
+    HEADER_WRITE_TEST(header, 1, 2, sstl_small_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
+    HEADER_WRITE_TEST(header, 1, 2, sstlt_small_short, HT_CONTINUATION, false, 0x010203);
 
-	HEADER_WRITE_TEST(header, 2, 64, full_medium_short, HT_FULL, true, 0x010203);
-	HEADER_WRITE_TEST(header, 2, 64, ss_medium_short, HT_SAME_STREAM, false, 0x010203);
-	HEADER_WRITE_TEST(header, 2, 64, sstl_medium_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
-	HEADER_WRITE_TEST(header, 2, 64, sstlt_medium_short, HT_CONTINUATION, false, 0x010203);
+    HEADER_WRITE_TEST(header, 2, 64, full_medium_short, HT_FULL, true, 0x010203);
+    HEADER_WRITE_TEST(header, 2, 64, ss_medium_short, HT_SAME_STREAM, false, 0x010203);
+    HEADER_WRITE_TEST(header, 2, 64, sstl_medium_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
+    HEADER_WRITE_TEST(header, 2, 64, sstlt_medium_short, HT_CONTINUATION, false, 0x010203);
 
-	HEADER_WRITE_TEST(header, 3, 320, full_big_short, HT_FULL, true, 0x010203);
-	HEADER_WRITE_TEST(header, 3, 320, ss_big_short, HT_SAME_STREAM, false, 0x010203);
-	HEADER_WRITE_TEST(header, 3, 320, sstl_big_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
-	HEADER_WRITE_TEST(header, 3, 320, sstlt_big_short, HT_CONTINUATION, false, 0x010203);
+    HEADER_WRITE_TEST(header, 3, 320, full_big_short, HT_FULL, true, 0x010203);
+    HEADER_WRITE_TEST(header, 3, 320, ss_big_short, HT_SAME_STREAM, false, 0x010203);
+    HEADER_WRITE_TEST(header, 3, 320, sstl_big_short, HT_SAME_LENGTH_AND_STREAM, false, 0x010203);
+    HEADER_WRITE_TEST(header, 3, 320, sstlt_big_short, HT_CONTINUATION, false, 0x010203);
 
-	HEADER_WRITE_TEST(header, 1, 2, full_small_extended, HT_FULL, true, 0x51525354);
-	HEADER_WRITE_TEST(header, 1, 2, ss_small_extended, HT_SAME_STREAM, false, 0x51525354);
-	HEADER_WRITE_TEST(header, 1, 2, sstl_small_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
+    HEADER_WRITE_TEST(header, 1, 2, full_small_extended, HT_FULL, true, 0x51525354);
+    HEADER_WRITE_TEST(header, 1, 2, ss_small_extended, HT_SAME_STREAM, false, 0x51525354);
+    HEADER_WRITE_TEST(header, 1, 2, sstl_small_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
 
-	HEADER_WRITE_TEST(header, 2, 64, full_medium_extended, HT_FULL, true, 0x51525354);
-	HEADER_WRITE_TEST(header, 2, 64, ss_medium_extended, HT_SAME_STREAM, false, 0x51525354);
-	HEADER_WRITE_TEST(header, 2, 64, sstl_medium_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
+    HEADER_WRITE_TEST(header, 2, 64, full_medium_extended, HT_FULL, true, 0x51525354);
+    HEADER_WRITE_TEST(header, 2, 64, ss_medium_extended, HT_SAME_STREAM, false, 0x51525354);
+    HEADER_WRITE_TEST(header, 2, 64, sstl_medium_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
 
-	HEADER_WRITE_TEST(header, 3, 320, full_big_extended, HT_FULL, true, 0x51525354);
-	HEADER_WRITE_TEST(header, 3, 320, ss_big_extended, HT_SAME_STREAM, false, 0x51525354);
-	HEADER_WRITE_TEST(header, 3, 320, sstl_big_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
+    HEADER_WRITE_TEST(header, 3, 320, full_big_extended, HT_FULL, true, 0x51525354);
+    HEADER_WRITE_TEST(header, 3, 320, ss_big_extended, HT_SAME_STREAM, false, 0x51525354);
+    HEADER_WRITE_TEST(header, 3, 320, sstl_big_extended, HT_SAME_LENGTH_AND_STREAM, false, 0x51525354);
 }
 #endif /* HAS_PROTOCOL_RTMP */

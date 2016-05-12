@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,30 +27,32 @@
 using namespace app_appselector;
 
 AppSelectorApplication::AppSelectorApplication(Variant &configuration)
-: BaseClientApplication(configuration) {
+    : BaseClientApplication(configuration)
+{
 #ifdef HAS_PROTOCOL_RTMP
-	_pRTMPHandler = new RTMPAppProtocolHandler(configuration);
-	RegisterAppProtocolHandler(PT_INBOUND_RTMP, _pRTMPHandler);
-	RegisterAppProtocolHandler(PT_INBOUND_RTMPS_DISC, _pRTMPHandler);
-	RegisterAppProtocolHandler(PT_OUTBOUND_RTMP, _pRTMPHandler);
+    _pRTMPHandler = new RTMPAppProtocolHandler(configuration);
+    RegisterAppProtocolHandler(PT_INBOUND_RTMP, _pRTMPHandler);
+    RegisterAppProtocolHandler(PT_INBOUND_RTMPS_DISC, _pRTMPHandler);
+    RegisterAppProtocolHandler(PT_OUTBOUND_RTMP, _pRTMPHandler);
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_HTTP
-	_pHTTPHandler = new HTTPAppProtocolHandler(configuration);
-	RegisterAppProtocolHandler(PT_INBOUND_HTTP_FOR_RTMP, _pHTTPHandler);
-	RegisterAppProtocolHandler(PT_OUTBOUND_HTTP_FOR_RTMP, _pHTTPHandler);
+    _pHTTPHandler = new HTTPAppProtocolHandler(configuration);
+    RegisterAppProtocolHandler(PT_INBOUND_HTTP_FOR_RTMP, _pHTTPHandler);
+    RegisterAppProtocolHandler(PT_OUTBOUND_HTTP_FOR_RTMP, _pHTTPHandler);
 #endif /* HAS_PROTOCOL_HTTP */
 }
 
-AppSelectorApplication::~AppSelectorApplication() {
+AppSelectorApplication::~AppSelectorApplication()
+{
 #ifdef HAS_PROTOCOL_RTMP
-	UnRegisterAppProtocolHandler(PT_INBOUND_RTMP);
-	UnRegisterAppProtocolHandler(PT_OUTBOUND_RTMP);
-	delete _pRTMPHandler;
+    UnRegisterAppProtocolHandler(PT_INBOUND_RTMP);
+    UnRegisterAppProtocolHandler(PT_OUTBOUND_RTMP);
+    delete _pRTMPHandler;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_HTTP
-	UnRegisterAppProtocolHandler(PT_INBOUND_HTTP);
-	UnRegisterAppProtocolHandler(PT_OUTBOUND_HTTP);
-	delete _pHTTPHandler;
+    UnRegisterAppProtocolHandler(PT_INBOUND_HTTP);
+    UnRegisterAppProtocolHandler(PT_OUTBOUND_HTTP);
+    delete _pHTTPHandler;
 #endif /* HAS_PROTOCOL_HTTP */
 }
 

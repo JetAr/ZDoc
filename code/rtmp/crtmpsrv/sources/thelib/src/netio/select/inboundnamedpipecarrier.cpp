@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,76 +25,88 @@
 #include "protocols/baseprotocol.h"
 
 InboundNamedPipeCarrier::InboundNamedPipeCarrier(int32_t fd, string path)
-: IOHandler(fd, fd, IOHT_INBOUNDNAMEDPIPE_CARRIER) {
-	_path = path;
+    : IOHandler(fd, fd, IOHT_INBOUNDNAMEDPIPE_CARRIER)
+{
+    _path = path;
 }
 
-InboundNamedPipeCarrier::~InboundNamedPipeCarrier() {
-	DeleteFile(_path);
+InboundNamedPipeCarrier::~InboundNamedPipeCarrier()
+{
+    DeleteFile(_path);
 }
 
 InboundNamedPipeCarrier *InboundNamedPipeCarrier::Create(string path,
-		uint16_t mode) {
-	int32_t fd = open(STR(path), O_RDONLY/* | O_NONBLOCK*/);
-	if (fd < 0) {
-		int err = errno;
-		FATAL("Unable to open named pipe %s:%s (%d)",
-				STR(path), strerror(err), err);
-		DeleteFile(path);
-		return NULL;
-	}
+        uint16_t mode)
+{
+    int32_t fd = open(STR(path), O_RDONLY/* | O_NONBLOCK*/);
+    if (fd < 0)
+    {
+        int err = errno;
+        FATAL("Unable to open named pipe %s:%s (%d)",
+              STR(path), strerror(err), err);
+        DeleteFile(path);
+        return NULL;
+    }
 
-	InboundNamedPipeCarrier *pResult = new InboundNamedPipeCarrier(fd, path);
+    InboundNamedPipeCarrier *pResult = new InboundNamedPipeCarrier(fd, path);
 
-	if (!IOHandlerManager::EnableReadData(pResult)) {
-		FATAL("Unable to enable read event on the named pipe");
-		delete pResult;
-		return NULL;
-	}
+    if (!IOHandlerManager::EnableReadData(pResult))
+    {
+        FATAL("Unable to enable read event on the named pipe");
+        delete pResult;
+        return NULL;
+    }
 
-	return pResult;
+    return pResult;
 }
 
-bool InboundNamedPipeCarrier::SignalOutputData() {
-	NYIR;
+bool InboundNamedPipeCarrier::SignalOutputData()
+{
+    NYIR;
 }
 
-bool InboundNamedPipeCarrier::OnEvent(select_event &event) {
-	if (_pProtocol == NULL) {
-		ASSERT("This pipe has no upper protocols");
-		return false;
-	}
+bool InboundNamedPipeCarrier::OnEvent(select_event &event)
+{
+    if (_pProtocol == NULL)
+    {
+        ASSERT("This pipe has no upper protocols");
+        return false;
+    }
 
-	int32_t recvAmount = 0;
+    int32_t recvAmount = 0;
 
-	switch (event.type) {
-		case SET_READ:
-		{
-			IOBuffer *pInputBuffer = _pProtocol->GetInputBuffer();
-			assert(pInputBuffer != NULL);
-			if (!pInputBuffer->ReadFromPipe(_inboundFd,
-					FD_READ_CHUNK, recvAmount)) {
-				FATAL("Unable to read data");
-				return false;
-			}
+    switch (event.type)
+    {
+    case SET_READ:
+    {
+        IOBuffer *pInputBuffer = _pProtocol->GetInputBuffer();
+        assert(pInputBuffer != NULL);
+        if (!pInputBuffer->ReadFromPipe(_inboundFd,
+                                        FD_READ_CHUNK, recvAmount))
+        {
+            FATAL("Unable to read data");
+            return false;
+        }
 
-			return _pProtocol->SignalInputData(recvAmount);
-		}
-		default:
-		{
-			ASSERT("Invalid state: %hhu", event.type);
-			return false;
-		}
-	}
+        return _pProtocol->SignalInputData(recvAmount);
+    }
+    default:
+    {
+        ASSERT("Invalid state: %hhu", event.type);
+        return false;
+    }
+    }
 }
 
-InboundNamedPipeCarrier::operator string() {
-	if (_pProtocol != NULL)
-		return STR(*_pProtocol);
-	return format("INP(%d)", _inboundFd);
+InboundNamedPipeCarrier::operator string()
+{
+    if (_pProtocol != NULL)
+        return STR(*_pProtocol);
+    return format("INP(%d)", _inboundFd);
 }
 
-void InboundNamedPipeCarrier::GetStats(Variant &info) {
+void InboundNamedPipeCarrier::GetStats(Variant &info)
+{
 
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,22 +25,23 @@
 #include "protocols/rtmp/basertmpprotocol.h"
 
 class DLLEXP InboundRTMPProtocol
-: public BaseRTMPProtocol {
+    : public BaseRTMPProtocol
+{
 private:
-	RC4_KEY*_pKeyIn;
-	RC4_KEY*_pKeyOut;
-	uint8_t *_pOutputBuffer;
-	uint32_t _currentFPVersion;
-	uint8_t _validationScheme;
+    RC4_KEY*_pKeyIn;
+    RC4_KEY*_pKeyOut;
+    uint8_t *_pOutputBuffer;
+    uint32_t _currentFPVersion;
+    uint8_t _validationScheme;
 public:
-	InboundRTMPProtocol();
-	virtual ~InboundRTMPProtocol();
+    InboundRTMPProtocol();
+    virtual ~InboundRTMPProtocol();
 protected:
-	virtual bool PerformHandshake(IOBuffer &buffer);
+    virtual bool PerformHandshake(IOBuffer &buffer);
 private:
-	bool ValidateClient(IOBuffer &inputBuffer);
-	bool ValidateClientScheme(IOBuffer &inputBuffer, uint8_t scheme);
-	bool PerformHandshake(IOBuffer &inputBuffer, bool encrypted);
+    bool ValidateClient(IOBuffer &inputBuffer);
+    bool ValidateClientScheme(IOBuffer &inputBuffer, uint8_t scheme);
+    bool PerformHandshake(IOBuffer &inputBuffer, bool encrypted);
 };
 
 #endif	/* _INBOUNDRTMPPROTOCOL_H */

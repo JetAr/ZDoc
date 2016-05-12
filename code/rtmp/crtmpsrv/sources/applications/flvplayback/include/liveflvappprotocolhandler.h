@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,14 +23,16 @@
 #define	_LIVEFLVAPPPROTOCOLHANDLER_H
 
 #include "protocols/liveflv/baseliveflvappprotocolhandler.h"
-namespace app_flvplayback {
+namespace app_flvplayback
+{
 
-	class LiveFLVAppProtocolHandler
-	: public BaseLiveFLVAppProtocolHandler {
-	public:
-		LiveFLVAppProtocolHandler(Variant &configuration);
-		virtual ~LiveFLVAppProtocolHandler();
-	};
+class LiveFLVAppProtocolHandler
+    : public BaseLiveFLVAppProtocolHandler
+{
+public:
+    LiveFLVAppProtocolHandler(Variant &configuration);
+    virtual ~LiveFLVAppProtocolHandler();
+};
 }
 
 #endif	/* _LIVEFLVAPPPROTOCOLHANDLER_H */

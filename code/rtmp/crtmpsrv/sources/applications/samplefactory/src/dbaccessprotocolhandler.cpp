@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,18 +21,22 @@
 using namespace app_samplefactory;
 
 DBAccessProtocolHandler::DBAccessProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-DBAccessProtocolHandler::~DBAccessProtocolHandler() {
+DBAccessProtocolHandler::~DBAccessProtocolHandler()
+{
 }
 
-void DBAccessProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	FINEST("Hello!!! A new DBAccessProtocol came to life");
+void DBAccessProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    FINEST("Hello!!! A new DBAccessProtocol came to life");
 }
 
-void DBAccessProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
-	FINEST("Hello!!! A DBAccessProtocol died");
+void DBAccessProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
+    FINEST("Hello!!! A DBAccessProtocol died");
 }
 

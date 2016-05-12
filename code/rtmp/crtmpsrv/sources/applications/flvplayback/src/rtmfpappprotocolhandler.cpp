@@ -23,10 +23,12 @@
 using namespace app_flvplayback;
 
 RTMFPAppProtocolHandler::RTMFPAppProtocolHandler(Variant &configuration)
-: BaseRTMFPAppProtocolHandler(configuration) {
+    : BaseRTMFPAppProtocolHandler(configuration)
+{
 
 }
 
-RTMFPAppProtocolHandler::~RTMFPAppProtocolHandler() {
+RTMFPAppProtocolHandler::~RTMFPAppProtocolHandler()
+{
 }
 #endif /* HAS_PROTOCOL_RTMFP */

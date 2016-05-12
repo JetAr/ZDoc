@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,20 +22,24 @@
 #include "protocols/variant/binvariantprotocol.h"
 
 BinVariantProtocol::BinVariantProtocol()
-: BaseVariantProtocol(PT_BIN_VAR) {
+    : BaseVariantProtocol(PT_BIN_VAR)
+{
 
 }
 
-BinVariantProtocol::~BinVariantProtocol() {
+BinVariantProtocol::~BinVariantProtocol()
+{
 }
 
-bool BinVariantProtocol::Serialize(string &rawData, Variant &variant) {
-	return variant.SerializeToBin(rawData);
+bool BinVariantProtocol::Serialize(string &rawData, Variant &variant)
+{
+    return variant.SerializeToBin(rawData);
 }
 
 bool BinVariantProtocol::Deserialize(uint8_t *pBuffer, uint32_t bufferLength,
-		Variant &result) {
-	return Variant::DeserializeFromBin(pBuffer, bufferLength, result);
+                                     Variant &result)
+{
+    return Variant::DeserializeFromBin(pBuffer, bufferLength, result);
 }
 #endif	/* HAS_PROTOCOL_VAR */
 

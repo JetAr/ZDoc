@@ -155,19 +155,19 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /**
 * the core provides the common defined macros, utilities,
-* user must include the srs_core.hpp before any header, or maybe 
+* user must include the srs_core.hpp before any header, or maybe
 * build failed.
 */
 
-// for 32bit os, 2G big file limit for unistd io, 
+// for 32bit os, 2G big file limit for unistd io,
 // ie. read/write/lseek to use 64bits size for huge file.
 #ifndef _FILE_OFFSET_BITS
-    #define _FILE_OFFSET_BITS 64
+#define _FILE_OFFSET_BITS 64
 #endif
 
 // for int64_t print using PRId64 format.
 #ifndef __STDC_FORMAT_MACROS
-    #define __STDC_FORMAT_MACROS
+#define __STDC_FORMAT_MACROS
 #endif
 
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
@@ -266,17 +266,20 @@ public:
     /**
     * auto delete the ptr.
     */
-    impl__SrsAutoFree(T** p) {
+    impl__SrsAutoFree(T** p)
+    {
         ptr = p;
     }
-    
-    virtual ~impl__SrsAutoFree() {
-        if (ptr == NULL || *ptr == NULL) {
+
+    virtual ~impl__SrsAutoFree()
+    {
+        if (ptr == NULL || *ptr == NULL)
+        {
             return;
         }
-        
+
         delete *ptr;
-        
+
         *ptr = NULL;
     }
 };
@@ -412,7 +415,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #define SRS_PERF_QUEUE_COND_WAIT
 #ifdef SRS_PERF_QUEUE_COND_WAIT
-    #define SRS_PERF_MW_MIN_MSGS 8
+#define SRS_PERF_MW_MIN_MSGS 8
 #endif
 /**
 * the default value of vhost for
@@ -462,8 +465,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 * @remark only apply it when SRS_PERF_MW_SO_SNDBUF is defined.
 */
 #ifdef SRS_PERF_MW_SO_SNDBUF
-    //#define SRS_PERF_SO_SNDBUF_SIZE 1024
-    #undef SRS_PERF_SO_SNDBUF_SIZE
+//#define SRS_PERF_SO_SNDBUF_SIZE 1024
+#undef SRS_PERF_SO_SNDBUF_SIZE
 #endif
 
 /**
@@ -678,8 +681,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define ERROR_RTP_TYPE97_CORRUPT            2046
 #define ERROR_RTSP_AUDIO_CONFIG             2047
 #define ERROR_RTMP_STREAM_NOT_FOUND         2048
-//                                           
-// system control message, 
+//
+// system control message,
 // not an error, but special control logic.
 // sys ctl: rtmp close stream, support replay.
 #define ERROR_CONTROL_RTMP_CLOSE            2998
@@ -869,7 +872,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 class SrsLogLevel
 {
 public:
-    // only used for very verbose debug, generally, 
+    // only used for very verbose debug, generally,
     // we compile without this level for high performance.
     static const int Verbose = 0x01;
     static const int Info = 0x02;
@@ -884,7 +887,7 @@ public:
 * the log interface provides method to write log.
 * but we provides some macro, which enable us to disable the log when compile.
 * @see also SmtDebug/SmtTrace/SmtWarn/SmtError which is corresponding to Debug/Trace/Warn/Fatal.
-*/ 
+*/
 class ISrsLog
 {
 public:
@@ -938,39 +941,39 @@ extern ISrsThreadContext* _srs_context;
 
 // donot print method
 #if 1
-    #define srs_verbose(msg, ...) _srs_log->verbose(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_info(msg, ...)    _srs_log->info(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_trace(msg, ...)   _srs_log->trace(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_warn(msg, ...)    _srs_log->warn(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_error(msg, ...)   _srs_log->error(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_verbose(msg, ...) _srs_log->verbose(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_info(msg, ...)    _srs_log->info(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_trace(msg, ...)   _srs_log->trace(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_warn(msg, ...)    _srs_log->warn(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_error(msg, ...)   _srs_log->error(NULL, _srs_context->get_id(), msg, ##__VA_ARGS__)
 // use __FUNCTION__ to print c method
 #elif 0
-    #define srs_verbose(msg, ...) _srs_log->verbose(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_info(msg, ...)    _srs_log->info(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_trace(msg, ...)   _srs_log->trace(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_warn(msg, ...)    _srs_log->warn(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_error(msg, ...)   _srs_log->error(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_verbose(msg, ...) _srs_log->verbose(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_info(msg, ...)    _srs_log->info(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_trace(msg, ...)   _srs_log->trace(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_warn(msg, ...)    _srs_log->warn(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_error(msg, ...)   _srs_log->error(__FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
 // use __PRETTY_FUNCTION__ to print c++ class:method
 #else
-    #define srs_verbose(msg, ...) _srs_log->verbose(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_info(msg, ...)    _srs_log->info(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_trace(msg, ...)   _srs_log->trace(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_warn(msg, ...)    _srs_log->warn(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
-    #define srs_error(msg, ...)   _srs_log->error(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_verbose(msg, ...) _srs_log->verbose(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_info(msg, ...)    _srs_log->info(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_trace(msg, ...)   _srs_log->trace(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_warn(msg, ...)    _srs_log->warn(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
+#define srs_error(msg, ...)   _srs_log->error(__PRETTY_FUNCTION__, _srs_context->get_id(), msg, ##__VA_ARGS__)
 #endif
 
 // TODO: FIXME: add more verbose and info logs.
 #ifndef SRS_AUTO_VERBOSE
-    #undef srs_verbose
-    #define srs_verbose(msg, ...) (void)0
+#undef srs_verbose
+#define srs_verbose(msg, ...) (void)0
 #endif
 #ifndef SRS_AUTO_INFO
-    #undef srs_info
-    #define srs_info(msg, ...) (void)0
+#undef srs_info
+#define srs_info(msg, ...) (void)0
 #endif
 #ifndef SRS_AUTO_TRACE
-    #undef srs_trace
-    #define srs_trace(msg, ...) (void)0
+#undef srs_trace
+#define srs_trace(msg, ...) (void)0
 #endif
 
 #endif
@@ -1237,16 +1240,16 @@ extern std::string srs_path_dirname(std::string path);
 extern std::string srs_path_basename(std::string path);
 
 /**
-* whether stream starts with the avc NALU in "AnnexB" 
+* whether stream starts with the avc NALU in "AnnexB"
 * from H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
 * start code must be "N[00] 00 00 01" where N>=0
-* @param pnb_start_code output the size of start code, must >=3. 
+* @param pnb_start_code output the size of start code, must >=3.
 *       NULL to ignore.
 */
 extern bool srs_avc_startswith_annexb(SrsStream* stream, int* pnb_start_code = NULL);
 
 /**
-* whether stream starts with the aac ADTS 
+* whether stream starts with the aac ADTS
 * from aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 75, 1.A.2.2 ADTS.
 * start code must be '1111 1111 1111'B, that is 0xFFF
 */
@@ -1304,7 +1307,7 @@ extern int srs_chunk_header_c0(
     int perfer_cid, u_int32_t timestamp, int32_t payload_length,
     int8_t message_type, int32_t stream_id,
     char* cache, int nb_cache
-    );
+);
 
 /**
  * generate the c3 chunk header for msg.
@@ -1315,7 +1318,7 @@ extern int srs_chunk_header_c0(
 extern int srs_chunk_header_c3(
     int perfer_cid, u_int32_t timestamp,
     char* cache, int nb_cache
-    );
+);
 
 #endif
 
@@ -1531,7 +1534,7 @@ public:
      * bytes are set in little-endian format.
      */
     int32_t stream_id;
-    
+
     /**
      * Four-byte field that contains a timestamp of the message.
      * The 4 bytes are packed in the big-endian order.
@@ -1781,7 +1784,7 @@ public:
     virtual int write_header();
     virtual int write_header(char flv_header[9]);
     /**
-    * write flv metadata. 
+    * write flv metadata.
     * @param type, the type of data, or other message type.
     *       @see SrsCodecFlvTag
     * @param data, the amf0 metadata which serialize from:
@@ -1872,7 +1875,7 @@ public:
 
 /**
 * decode flv fast by only decoding the header and tag.
-* used for vod flv stream to read the header and sequence header, 
+* used for vod flv stream to read the header and sequence header,
 * then seek to specified offset.
 */
 class SrsFlvVodStreamDecoder
@@ -1960,7 +1963,7 @@ enum SrsCodecAudioType
 {
     // set to the max value to reserved, for array map.
     SrsCodecAudioTypeReserved                        = 2,
-    
+
     SrsCodecAudioTypeSequenceHeader                 = 0,
     SrsCodecAudioTypeRawData                         = 1,
 };
@@ -1978,7 +1981,7 @@ enum SrsCodecVideoAVCFrame
     // set to the zero to reserved, for array map.
     SrsCodecVideoAVCFrameReserved                    = 0,
     SrsCodecVideoAVCFrameReserved1                    = 6,
-    
+
     SrsCodecVideoAVCFrameKeyFrame                     = 1,
     SrsCodecVideoAVCFrameInterFrame                 = 2,
     SrsCodecVideoAVCFrameDisposableInterFrame         = 3,
@@ -1996,7 +1999,7 @@ enum SrsCodecVideoAVCType
 {
     // set to the max value to reserved, for array map.
     SrsCodecVideoAVCTypeReserved                    = 3,
-    
+
     SrsCodecVideoAVCTypeSequenceHeader                 = 0,
     SrsCodecVideoAVCTypeNALU                         = 1,
     SrsCodecVideoAVCTypeSequenceHeaderEOF             = 2,
@@ -2017,10 +2020,10 @@ enum SrsCodecVideo
     SrsCodecVideoReserved                = 0,
     SrsCodecVideoReserved1                = 1,
     SrsCodecVideoReserved2                = 9,
-    
+
     // for user to disable video, for example, use pure audio hls.
     SrsCodecVideoDisabled                = 8,
-    
+
     SrsCodecVideoSorensonH263             = 2,
     SrsCodecVideoScreenVideo             = 3,
     SrsCodecVideoOn2VP6                 = 4,
@@ -2030,7 +2033,7 @@ enum SrsCodecVideo
 };
 std::string srs_codec_video2str(SrsCodecVideo codec);
 
-// SoundFormat UB [4] 
+// SoundFormat UB [4]
 // Format of SoundData. The following values are defined:
 //     0 = Linear PCM, platform endian
 //     1 = ADPCM
@@ -2053,10 +2056,10 @@ enum SrsCodecAudio
 {
     // set to the max value to reserved, for array map.
     SrsCodecAudioReserved1                = 16,
-    
+
     // for user to disable audio, for example, use pure video hls.
     SrsCodecAudioDisabled                   = 17,
-    
+
     SrsCodecAudioLinearPCMPlatformEndian             = 0,
     SrsCodecAudioADPCM                                 = 1,
     SrsCodecAudioMP3                                 = 2,
@@ -2086,7 +2089,7 @@ enum SrsCodecAudioSampleRate
 {
     // set to the max value to reserved, for array map.
     SrsCodecAudioSampleRateReserved                 = 4,
-    
+
     SrsCodecAudioSampleRate5512                     = 0,
     SrsCodecAudioSampleRate11025                    = 1,
     SrsCodecAudioSampleRate22050                    = 2,
@@ -2182,7 +2185,7 @@ enum SrsCodecAudioSampleSize
 {
     // set to the max value to reserved, for array map.
     SrsCodecAudioSampleSizeReserved                 = 2,
-    
+
     SrsCodecAudioSampleSize8bit                     = 0,
     SrsCodecAudioSampleSize16bit                    = 1,
 };
@@ -2196,8 +2199,8 @@ enum SrsCodecAudioSampleSize
 enum SrsCodecAudioSoundType
 {
     // set to the max value to reserved, for array map.
-    SrsCodecAudioSoundTypeReserved                  = 2, 
-    
+    SrsCodecAudioSoundTypeReserved                  = 2,
+
     SrsCodecAudioSoundTypeMono                      = 0,
     SrsCodecAudioSoundTypeStereo                    = 1,
 };
@@ -2210,7 +2213,7 @@ enum SrsAvcNaluType
 {
     // Unspecified
     SrsAvcNaluTypeReserved = 0,
-    
+
     // Coded slice of a non-IDR picture slice_layer_without_partitioning_rbsp( )
     SrsAvcNaluTypeNonIDR = 1,
     // Coded slice data partition A slice_data_partition_a_layer_rbsp( )
@@ -2273,12 +2276,12 @@ public:
 * the sample used to analysis a video/audio packet,
 * split the h.264 NALUs to buffers, or aac raw data to a buffer,
 * and decode the video/audio specified infos.
-* 
+*
 * the sample unit:
 *       a video packet codec in h.264 contains many NALUs, each is a sample unit.
 *       a audio packet codec in aac is a sample unit.
 * @remark, the video/audio sequence header is not sample unit,
-*       all sequence header stores as extra data, 
+*       all sequence header stores as extra data,
 *       @see SrsAvcAacCodec.avc_extra_data and SrsAvcAacCodec.aac_extra_data
 * @remark, user must clear all samples before decode a new video/audio packet.
 */
@@ -2358,7 +2361,7 @@ enum SrsAvcPayloadFormat
 enum SrsAacProfile
 {
     SrsAacProfileReserved = 3,
-    
+
     // @see 7.1 Profiles, aac-iso-13818-7.pdf, page 40
     SrsAacProfileMain = 0,
     SrsAacProfileLC = 1,
@@ -2374,13 +2377,13 @@ std::string srs_codec_aac_profile2str(SrsAacProfile aac_profile);
 enum SrsAacObjectType
 {
     SrsAacObjectTypeReserved = 0,
-    
+
     // Table 1.1 - Audio Object Type definition
     // @see @see aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 23
     SrsAacObjectTypeAacMain = 1,
     SrsAacObjectTypeAacLC = 2,
     SrsAacObjectTypeAacSSR = 3,
-    
+
     // AAC HE = LC+SBR
     SrsAacObjectTypeAacHE = 5,
     // AAC HEv2 = LC+SBR+PS
@@ -2399,7 +2402,7 @@ SrsAacProfile srs_codec_aac_rtmp2ts(SrsAacObjectType object_type);
 enum SrsAvcProfile
 {
     SrsAvcProfileReserved = 0,
-    
+
     // @see ffmpeg, libavcodec/avcodec.h:2713
     SrsAvcProfileBaseline = 66,
     // FF_PROFILE_H264_CONSTRAINED  (1<<9)  // 8+1; constraint_set1_flag
@@ -2425,7 +2428,7 @@ std::string srs_codec_avc_profile2str(SrsAvcProfile profile);
 enum SrsAvcLevel
 {
     SrsAvcLevelReserved = 0,
-    
+
     SrsAvcLevel_1 = 10,
     SrsAvcLevel_11 = 11,
     SrsAvcLevel_12 = 12,
@@ -2452,9 +2455,9 @@ std::string srs_codec_avc_level2str(SrsAvcLevel level);
 *
 * for sequence header,
 * demux it and save it in the avc_extra_data and aac_extra_data,
-* 
+*
 * for the codec info, such as audio sample rate,
-* decode from FLV/RTMP header, then use codec info in sequence 
+* decode from FLV/RTMP header, then use codec info in sequence
 * header to override it.
 */
 class SrsAvcAacCodec
@@ -2480,9 +2483,9 @@ public:
     * video specified
     */
     // profile_idc, H.264-AVC-ISO_IEC_14496-10.pdf, page 45.
-    SrsAvcProfile   avc_profile; 
+    SrsAvcProfile   avc_profile;
     // level_idc, H.264-AVC-ISO_IEC_14496-10.pdf, page 45.
-    SrsAvcLevel     avc_level; 
+    SrsAvcLevel     avc_level;
     // lengthSizeMinusOne, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
     int8_t          NAL_unit_length;
     u_int16_t       sequenceParameterSetLength;
@@ -2566,12 +2569,12 @@ private:
     virtual int avc_demux_sps();
     virtual int avc_demux_sps_rbsp(char* rbsp, int nb_rbsp);
     /**
-    * demux the avc NALU in "AnnexB" 
+    * demux the avc NALU in "AnnexB"
     * from H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
     */
     virtual int avc_demux_annexb_format(SrsStream* stream, SrsCodecSample* sample);
     /**
-    * demux the avc NALU in "ISO Base Media File Format" 
+    * demux the avc NALU in "ISO Base Media File Format"
     * from H.264-AVC-ISO_IEC_14496-15.pdf, page 20
     */
     virtual int avc_demux_ibmf_format(SrsStream* stream, SrsCodecSample* sample);
@@ -2650,7 +2653,7 @@ public:
     virtual int64_t tellg();
 public:
     /**
-    * write to file. 
+    * write to file.
     * @param pnwrite the output nb_write, NULL to ignore.
     */
     virtual int write(void* buf, size_t count, ssize_t* pnwrite);
@@ -2692,7 +2695,7 @@ public:
     virtual int64_t filesize();
 public:
     /**
-    * read from file. 
+    * read from file.
     * @param pnread the output nb_read, NULL to ignore.
     */
     virtual int read(void* buf, size_t count, ssize_t* pnread);
@@ -2766,8 +2769,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define SRS_CONSTS_RTMP_MIN_CHUNK_SIZE 128
 #define SRS_CONSTS_RTMP_MAX_CHUNK_SIZE 65536
 
- 
-// the following is the timeout for rtmp protocol, 
+
+// the following is the timeout for rtmp protocol,
 // to avoid death connection.
 
 // the timeout to send data to client,
@@ -2802,7 +2805,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define SRS_CONSTS_RTMP_MAX_FMT3_HEADER_SIZE 5
 
 /**
-* for performance issue, 
+* for performance issue,
 * the iovs cache, @see https://github.com/simple-rtmp-server/srs/issues/194
 * iovs cache for multiple messages for each connections.
 * suppose the chunk size is 64k, each message send in a chunk which needs only 2 iovec,
@@ -2812,7 +2815,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #define SRS_CONSTS_IOVS_MAX (SRS_PERF_MW_MSGS * 2)
 /**
-* for performance issue, 
+* for performance issue,
 * the c0c3 cache, @see https://github.com/simple-rtmp-server/srs/issues/194
 * c0c3 cache for multiple messages for each connections.
 * each c0 <= 16byes, suppose the chunk size is 64k,
@@ -3348,10 +3351,10 @@ enum SrsTsAdaptationFieldType
 enum SrsTsPidApply
 {
     SrsTsPidApplyReserved = 0, // TSPidTypeReserved, nothing parsed, used reserved.
-    
+
     SrsTsPidApplyPAT, // Program associtate table
     SrsTsPidApplyPMT, // Program map table.
-    
+
     SrsTsPidApplyVideo, // for video
     SrsTsPidApplyAudio, // vor audio
 };
@@ -3435,7 +3438,7 @@ enum SrsTsPESStreamId
     // ((sid >> 5) & 0x07) == SrsTsPESStreamIdAudio
     // @remark, use SrsTsPESStreamIdAudioCommon as actually audio, SrsTsPESStreamIdAudio to check whether audio.
     SrsTsPESStreamIdAudioChecker                = 0x06, // 0b110
-        SrsTsPESStreamIdAudioCommon             = 0xc0,
+    SrsTsPESStreamIdAudioCommon             = 0xc0,
 
     // 1110 xxxx
     // ITU-T Rec. H.262 | ISO/IEC 13818-2 or ISO/IEC 11172-2 or ISO/IEC
@@ -3443,7 +3446,7 @@ enum SrsTsPESStreamId
     // ((stream_id >> 4) & 0x0f) == SrsTsPESStreamIdVideo
     // @remark, use SrsTsPESStreamIdVideoCommon as actually video, SrsTsPESStreamIdVideo to check whether video.
     SrsTsPESStreamIdVideoChecker                = 0x0e, // 0b1110
-        SrsTsPESStreamIdVideoCommon             = 0xe0,
+    SrsTsPESStreamIdVideoCommon             = 0xe0,
 
     // ECM_stream
     SrsTsPESStreamIdEcmStream                   = 0xf0, // 0b11110000
@@ -3482,7 +3485,7 @@ class SrsTsMessage
 {
 public:
     // decoder only,
-    // the ts messgae does not use them, 
+    // the ts messgae does not use them,
     // for user to get the channel and packet.
     SrsTsChannel* channel;
     SrsTsPacket* packet;
@@ -3658,7 +3661,7 @@ public:
     /**
     * The payload_unit_start_indicator is a 1-bit flag which has normative meaning for
     * Transport Stream packets that carry PES packets (refer to 2.4.3.6) or PSI data (refer to 2.4.4).
-    * 
+    *
     * When the payload of the Transport Stream packet contains PES packet data, the payload_unit_start_indicator has the
     * following significance: a '1' indicates that the payload of this Transport Stream packet will commence(start) with the first byte
     * of a PES packet and a '0' indicates no PES packet shall start in this Transport Stream packet. If the
@@ -3671,9 +3674,9 @@ public:
     * Transport Stream packet does not carry the first byte of a PSI section, the payload_unit_start_indicator value shall be '0',
     * indicating that there is no pointer_field in the payload. Refer to 2.4.4.1 and 2.4.4.2. This also applies to private streams of
     * stream_type 5 (refer to Table 2-29).
-    * 
+    *
     * For null packets the payload_unit_start_indicator shall be set to '0'.
-    * 
+    *
     * The meaning of this bit for Transport Stream packets carrying only private data is not defined in this Specification.
     */
     int8_t payload_unit_start_indicator; //1bit
@@ -3713,7 +3716,7 @@ public:
     * The continuity_counter is a 4-bit field incrementing with each Transport Stream packet with the
     * same PID. The continuity_counter wraps around to 0 after its maximum value. The continuity_counter shall not be
     * incremented when the adaptation_field_control of the packet equals '00'(reseverd) or '10'(adaptation field only).
-    * 
+    *
     * In Transport Streams, duplicate packets may be sent as two, and only two, consecutive Transport Stream packets of the
     * same PID. The duplicate packets shall have the same continuity_counter value as the original packet and the
     * adaptation_field_control field shall be equal to '01'(payload only) or '11'(both). In duplicate packets each byte of the original packet shall be
@@ -3741,20 +3744,20 @@ public:
     virtual int encode(SrsStream* stream);
     virtual void padding(int nb_stuffings);
 public:
-    static SrsTsPacket* create_pat(SrsTsContext* context, 
-        int16_t pmt_number, int16_t pmt_pid
-    );
-    static SrsTsPacket* create_pmt(SrsTsContext* context, 
-        int16_t pmt_number, int16_t pmt_pid, int16_t vpid, SrsTsStream vs, 
-        int16_t apid, SrsTsStream as
-    );
-    static SrsTsPacket* create_pes_first(SrsTsContext* context, 
-        int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter, bool discontinuity, 
-        int64_t pcr, int64_t dts, int64_t pts, int size
-    );
-    static SrsTsPacket* create_pes_continue(SrsTsContext* context, 
-        int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter
-    );
+    static SrsTsPacket* create_pat(SrsTsContext* context,
+                                   int16_t pmt_number, int16_t pmt_pid
+                                  );
+    static SrsTsPacket* create_pmt(SrsTsContext* context,
+                                   int16_t pmt_number, int16_t pmt_pid, int16_t vpid, SrsTsStream vs,
+                                   int16_t apid, SrsTsStream as
+                                  );
+    static SrsTsPacket* create_pes_first(SrsTsContext* context,
+                                         int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter, bool discontinuity,
+                                         int64_t pcr, int64_t dts, int64_t pts, int size
+                                        );
+    static SrsTsPacket* create_pes_continue(SrsTsContext* context,
+                                            int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter
+                                           );
 };
 
 /**
@@ -3786,7 +3789,7 @@ public:
     * current Transport Stream packet. When the discontinuity_indicator is set to '0' or is not present, the discontinuity state is
     * false. The discontinuity indicator is used to indicate two types of discontinuities, system time-base discontinuities and
     * continuity_counter discontinuities.
-    * 
+    *
     * A system time-base discontinuity is indicated by the use of the discontinuity_indicator in Transport Stream packets of a
     * PID designated as a PCR_PID (refer to 2.4.4.9). When the discontinuity state is true for a Transport Stream packet of a
     * PID designated as a PCR_PID, the next PCR in a Transport Stream packet with that same PID represents a sample of a
@@ -3891,7 +3894,7 @@ public:
     * the adaptation field.
     */
     int8_t adaptation_field_extension_flag; //1bit
-    
+
     // if PCR_flag, 6B
     /**
     * The program_clock_reference (PCR) is a
@@ -3906,7 +3909,7 @@ public:
     */
     int8_t const1_value0; // 6bits
     int16_t program_clock_reference_extension; //9bits
-    
+
     // if OPCR_flag, 6B
     /**
     * The optional original
@@ -3928,7 +3931,7 @@ public:
     */
     int8_t const1_value2; // 6bits
     int16_t original_program_clock_reference_extension; //9bits
-    
+
     // if splicing_point_flag, 1B
     /**
     * The splice_countdown is an 8-bit field, representing a value which may be positive or negative. A
@@ -3949,13 +3952,13 @@ public:
     * be present. When the splice_countdown is a negative number whose value is minus n(-n), it indicates that the associated
     * Transport Stream packet is the n-th packet following the splicing point (duplicate packets and packets without payload
     * being excluded).
-    * 
+    *
     * For the purposes of this subclause, an access point is defined as follows:
     *       Video - The first byte of a video_sequence_header.
     *       Audio - The first byte of an audio frame.
     */
     int8_t splice_countdown; //8bits
-    
+
     // if transport_private_data_flag, 1+p[0] B
     /**
     * The transport_private_data_length is an 8-bit field specifying the number of
@@ -3964,7 +3967,7 @@ public:
     */
     u_int8_t transport_private_data_length; //8bits
     char* transport_private_data; //[transport_private_data_length]bytes
-    
+
     // if adaptation_field_extension_flag, 2+x B
     /**
     * The adaptation_field_extension_length is an 8-bit field. It indicates the number of
@@ -4051,7 +4054,7 @@ public:
     * decoder.
     */
     int nb_af_ext_reserved;
-    
+
     // left bytes.
     /**
     * This is a fixed 8-bit value equal to '1111 1111' that can be inserted by the encoder. It is discarded by the
@@ -4496,7 +4499,7 @@ public:
     * This is an 8-bit field, which shall be set to 0x00 as shown in Table 2-26.
     */
     SrsTsPsiId table_id; //8bits
-    
+
     // 2B
     /**
     * The section_syntax_indicator is a 1-bit field which shall be set to '1'.
@@ -4592,7 +4595,7 @@ public:
     * multiplex within a network. Its value is defined by the user.
     */
     u_int16_t transport_stream_id; //16bits
-    
+
     // 1B
     /**
     * reverved value, must be '1'
@@ -4612,7 +4615,7 @@ public:
     * table to become valid.
     */
     int8_t current_next_indicator; //1bit
-    
+
     // 1B
     /**
     * This 8-bit field gives the number of this section. The section_number of the first section in the
@@ -4620,14 +4623,14 @@ public:
     * Association Table.
     */
     u_int8_t section_number; //8bits
-    
+
     // 1B
     /**
     * This 8-bit field specifies the number of the last section (that is, the section with the highest
     * section_number) of the complete Program Association Table.
     */
     u_int8_t last_section_number; //8bits
-    
+
     // multiple 4B program data.
     std::vector<SrsTsPayloadPATProgram*> programs;
 public:
@@ -4652,7 +4655,7 @@ public:
     * whose value is specified by the elementary_PID. The values of stream_type are specified in Table 2-29.
     */
     SrsTsStream stream_type; //8bits
-    
+
     // 2B
     /**
     * reverved value, must be '1'
@@ -4663,7 +4666,7 @@ public:
     * program element.
     */
     int16_t elementary_PID; //13bits
-    
+
     // (2+x)B
     /**
     * reverved value, must be '1'
@@ -4709,7 +4712,7 @@ public:
     * refer to Annex C.
     */
     u_int16_t program_number; //16bits
-    
+
     // 1B
     /**
     * reverved value, must be '1'
@@ -4729,19 +4732,19 @@ public:
     * and shall be the next TS_program_map_section to become valid.
     */
     int8_t current_next_indicator; //1bit
-    
+
     // 1B
     /**
     * The value of this 8-bit field shall be 0x00.
     */
     u_int8_t section_number; //8bits
-    
+
     // 1B
     /**
     * The value of this 8-bit field shall be 0x00.
     */
     u_int8_t last_section_number; //8bits
-    
+
     // 2B
     /**
     * reverved value, must be '1'
@@ -4754,7 +4757,7 @@ public:
     * for restrictions on the choice of PCR_PID value.
     */
     int16_t PCR_PID; //13bits
-    
+
     // 2B
     int8_t const1_value2; //4bits
     /**
@@ -4763,7 +4766,7 @@ public:
     */
     u_int16_t program_info_length; //12bits
     char* program_info_desc; //[program_info_length]bytes
-    
+
     // array of TSPMTESInfo.
     std::vector<SrsTsPayloadPMTESInfo*> infos;
 public:
@@ -4807,11 +4810,11 @@ public:
     */
     virtual int update_acodec(SrsCodecAudio ac);
     /**
-    * write an audio frame to ts, 
+    * write an audio frame to ts,
     */
     virtual int write_audio(SrsTsMessage* audio);
     /**
-    * write a video frame to ts, 
+    * write a video frame to ts,
     */
     virtual int write_video(SrsTsMessage* video);
     /**
@@ -4821,9 +4824,9 @@ public:
 };
 
 /**
-* ts stream cache, 
+* ts stream cache,
 * use to cache ts stream.
-* 
+*
 * about the flv tbn problem:
 *   flv tbn is 1/1000, ts tbn is 1/90000,
 *   when timestamp convert to flv tbn, it will loose precise,
@@ -4949,7 +4952,7 @@ public:
     virtual char* bytes();
     /**
     * erase size of bytes from begin.
-    * @param size to erase size of bytes. 
+    * @param size to erase size of bytes.
     *       clear if size greater than or equals to length()
     * @remark ignore size is not positive.
     */
@@ -5007,9 +5010,9 @@ class SrsAmf0StrictArray;
 // internal objects, user should never use it.
 namespace _srs_internal
 {
-    class SrsUnSortedHashtable;
-    class SrsAmf0ObjectEOF;
-    class SrsAmf0Date;
+class SrsUnSortedHashtable;
+class SrsAmf0ObjectEOF;
+class SrsAmf0Date;
 }
 
 /*
@@ -5021,14 +5024,14 @@ Usages:
 1. the bytes proxy: SrsStream
     // when we got some bytes from file or network,
     // use SrsStream proxy to read/write bytes
-    
+
     // for example, read bytes from file or network.
-    char* bytes = ...; 
-    
+    char* bytes = ...;
+
     // initialize the stream, proxy for bytes.
     SrsStream stream;
     stream.initialize(bytes);
-    
+
     // use stream instead.
 
 2. directly read AMF0 any instance from stream:
@@ -5042,7 +5045,7 @@ Usages:
 4. directly read specified AMF0 instance value from stream:
     string value;
     srs_amf0_read_string(&stream, value);
-    
+
 5. directly read specified AMF0 instance from stream:
     SrsAmf0Any* str = SrsAmf0Any::str();
     str->read(&stream);
@@ -5050,7 +5053,7 @@ Usages:
 6. get value from AMF0 instance:
     // parse or set by other user
     SrsAmf0Any* any = ...;
-    
+
     if (any->is_string()) {
         string str = any->to_string();
     }
@@ -5058,7 +5061,7 @@ Usages:
 7. get complex object from AMF0 insance:
     // parse or set by other user
     SrsAmf0Any* any = ...;
-    
+
     if (any->is_object()) {
         SrsAmf0Object* obj = any->to_object();
         obj->set("width", SrsAmf0Any::number(1024));
@@ -5068,12 +5071,12 @@ Usages:
 8. serialize AMF0 instance to bytes:
     // parse or set by other user
     SrsAmf0Any* any = ...;
-    
+
     char* bytes = new char[any->total_size()];
-    
+
     SrsStream stream;
     stream.initialize(bytes);
-    
+
     any->write(&stream);
 
 @remark: for detail usage, see interfaces of each object.
@@ -5086,9 +5089,9 @@ Usages:
 /**
 * any amf0 value.
 * 2.1 Types Overview
-* value-type = number-type | boolean-type | string-type | object-type 
-*         | null-marker | undefined-marker | reference-type | ecma-array-type 
-*         | strict-array-type | date-type | long-string-type | xml-document-type 
+* value-type = number-type | boolean-type | string-type | object-type
+*         | null-marker | undefined-marker | reference-type | ecma-array-type
+*         | strict-array-type | date-type | long-string-type | xml-document-type
 *         | typed-object-type
 */
 class SrsAmf0Any
@@ -5232,7 +5235,7 @@ public:
     */
     virtual SrsAmf0Any* copy() = 0;
     /**
-    * human readable print 
+    * human readable print
     * @param pdata, output the heap data, NULL to ignore.
     * @return return the *pdata for print. NULL to ignore.
     * @remark user must free the data returned or output by pdata.
@@ -5243,7 +5246,7 @@ public:
     /**
     * create an AMF0 string instance, set string content by value.
     */
-    static SrsAmf0Any* str(const char* value = NULL); 
+    static SrsAmf0Any* str(const char* value = NULL);
     /**
     * create an AMF0 boolean instance, set boolean content by value.
     */
@@ -5458,7 +5461,7 @@ public:
 
 /**
 * 2.12 Strict Array Type
-* array-count = U32 
+* array-count = U32
 * strict-array-type = array-count *(value-type)
 */
 class SrsAmf0StrictArray : public SrsAmf0Any
@@ -5577,234 +5580,234 @@ extern int srs_amf0_write_undefined(SrsStream* stream);
 // internal objects, user should never use it.
 namespace _srs_internal
 {
+/**
+* read amf0 string from stream.
+* 2.4 String Type
+* string-type = string-marker UTF-8
+* @return default value is empty string.
+* @remark: use SrsAmf0Any::str() to create it.
+*/
+class SrsAmf0String : public SrsAmf0Any
+{
+public:
+    std::string value;
+private:
+    friend class SrsAmf0Any;
     /**
-    * read amf0 string from stream.
-    * 2.4 String Type
-    * string-type = string-marker UTF-8
-    * @return default value is empty string.
-    * @remark: use SrsAmf0Any::str() to create it.
+    * make amf0 string to private,
+    * use should never declare it, use SrsAmf0Any::str() to create it.
     */
-    class SrsAmf0String : public SrsAmf0Any
-    {
-    public:
-        std::string value;
-    private:
-        friend class SrsAmf0Any;
-        /**
-        * make amf0 string to private,
-        * use should never declare it, use SrsAmf0Any::str() to create it.
-        */
-        SrsAmf0String(const char* _value);
-    public:
-        virtual ~SrsAmf0String();
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    };
-    
-    /**
-    * read amf0 boolean from stream.
-    * 2.4 String Type
-    * boolean-type = boolean-marker U8
-    *         0 is false, <> 0 is true
-    * @return default value is false.
-    */
-    class SrsAmf0Boolean : public SrsAmf0Any
-    {
-    public:
-        bool value;
-    private:
-        friend class SrsAmf0Any;
-        /**
-        * make amf0 boolean to private,
-        * use should never declare it, use SrsAmf0Any::boolean() to create it.
-        */
-        SrsAmf0Boolean(bool _value);
-    public:
-        virtual ~SrsAmf0Boolean();
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    };
-    
-    /**
-    * read amf0 number from stream.
-    * 2.2 Number Type
-    * number-type = number-marker DOUBLE
-    * @return default value is 0.
-    */
-    class SrsAmf0Number : public SrsAmf0Any
-    {
-    public:
-        double value;
-    private:
-        friend class SrsAmf0Any;
-        /**
-        * make amf0 number to private,
-        * use should never declare it, use SrsAmf0Any::number() to create it.
-        */
-        SrsAmf0Number(double _value);
-    public:
-        virtual ~SrsAmf0Number();
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    };
-    
-    /**
-    * 2.13 Date Type
-    * time-zone = S16 ; reserved, not supported should be set to 0x0000
-    * date-type = date-marker DOUBLE time-zone
-    * @see: https://github.com/simple-rtmp-server/srs/issues/185
-    */
-    class SrsAmf0Date : public SrsAmf0Any
-    {
-    private:
-        int64_t _date_value;
-        int16_t _time_zone;
-    private:
-        friend class SrsAmf0Any;
-        /**
-        * make amf0 date to private,
-        * use should never declare it, use SrsAmf0Any::date() to create it.
-        */
-        SrsAmf0Date(int64_t value);
-    public:
-        virtual ~SrsAmf0Date();
-    // serialize/deserialize to/from stream.
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    public:
-        /**
-        * get the date value.
-        */
-        virtual int64_t date();
-        /**
-        * get the time_zone.
-        */
-        virtual int16_t time_zone();
-    };
-    
-    /**
-    * read amf0 null from stream.
-    * 2.7 null Type
-    * null-type = null-marker
-    */
-    class SrsAmf0Null : public SrsAmf0Any
-    {
-    private:
-        friend class SrsAmf0Any;
-        /**
-        * make amf0 null to private,
-        * use should never declare it, use SrsAmf0Any::null() to create it.
-        */
-        SrsAmf0Null();
-    public:
-        virtual ~SrsAmf0Null();
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    };
-    
-    /**
-    * read amf0 undefined from stream.
-    * 2.8 undefined Type
-    * undefined-type = undefined-marker
-    */
-    class SrsAmf0Undefined : public SrsAmf0Any
-    {
-    private:
-        friend class SrsAmf0Any;
-        /**
-        * make amf0 undefined to private,
-        * use should never declare it, use SrsAmf0Any::undefined() to create it.
-        */
-        SrsAmf0Undefined();
-    public:
-        virtual ~SrsAmf0Undefined();
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    };
-    
-    /**
-    * to ensure in inserted order.
-    * for the FMLE will crash when AMF0Object is not ordered by inserted,
-    * if ordered in map, the string compare order, the FMLE will creash when
-    * get the response of connect app.
-    */
-    class SrsUnSortedHashtable
-    {
-    private:
-        typedef std::pair<std::string, SrsAmf0Any*> SrsAmf0ObjectPropertyType;
-        std::vector<SrsAmf0ObjectPropertyType> properties;
-    public:
-        SrsUnSortedHashtable();
-        virtual ~SrsUnSortedHashtable();
-    public:
-        virtual int count();
-        virtual void clear();
-        virtual std::string key_at(int index);
-        virtual const char* key_raw_at(int index);
-        virtual SrsAmf0Any* value_at(int index);
-        /**
-        * set the value of hashtable.
-        * @param value, the value to set. NULL to delete the property.
-        */
-        virtual void set(std::string key, SrsAmf0Any* value);
-    public:
-        virtual SrsAmf0Any* get_property(std::string name);
-        virtual SrsAmf0Any* ensure_property_string(std::string name);
-        virtual SrsAmf0Any* ensure_property_number(std::string name);
-    public:
-        virtual void copy(SrsUnSortedHashtable* src);
-    };
-    
-    /**
-    * 2.11 Object End Type
-    * object-end-type = UTF-8-empty object-end-marker
-    * 0x00 0x00 0x09
-    */
-    class SrsAmf0ObjectEOF : public SrsAmf0Any
-    {
-    public:
-        SrsAmf0ObjectEOF();
-        virtual ~SrsAmf0ObjectEOF();
-    public:
-        virtual int total_size();
-        virtual int read(SrsStream* stream);
-        virtual int write(SrsStream* stream);
-        virtual SrsAmf0Any* copy();
-    };
+    SrsAmf0String(const char* _value);
+public:
+    virtual ~SrsAmf0String();
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+};
 
+/**
+* read amf0 boolean from stream.
+* 2.4 String Type
+* boolean-type = boolean-marker U8
+*         0 is false, <> 0 is true
+* @return default value is false.
+*/
+class SrsAmf0Boolean : public SrsAmf0Any
+{
+public:
+    bool value;
+private:
+    friend class SrsAmf0Any;
     /**
-    * read amf0 utf8 string from stream.
-    * 1.3.1 Strings and UTF-8
-    * UTF-8 = U16 *(UTF8-char)
-    * UTF8-char = UTF8-1 | UTF8-2 | UTF8-3 | UTF8-4
-    * UTF8-1 = %x00-7F
-    * @remark only support UTF8-1 char.
+    * make amf0 boolean to private,
+    * use should never declare it, use SrsAmf0Any::boolean() to create it.
     */
-    extern int srs_amf0_read_utf8(SrsStream* stream, std::string& value);
-    extern int srs_amf0_write_utf8(SrsStream* stream, std::string value);
-    
-    extern bool srs_amf0_is_object_eof(SrsStream* stream);
-    extern int srs_amf0_write_object_eof(SrsStream* stream, SrsAmf0ObjectEOF* value);
-    
-    extern int srs_amf0_write_any(SrsStream* stream, SrsAmf0Any* value);
+    SrsAmf0Boolean(bool _value);
+public:
+    virtual ~SrsAmf0Boolean();
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+};
+
+/**
+* read amf0 number from stream.
+* 2.2 Number Type
+* number-type = number-marker DOUBLE
+* @return default value is 0.
+*/
+class SrsAmf0Number : public SrsAmf0Any
+{
+public:
+    double value;
+private:
+    friend class SrsAmf0Any;
+    /**
+    * make amf0 number to private,
+    * use should never declare it, use SrsAmf0Any::number() to create it.
+    */
+    SrsAmf0Number(double _value);
+public:
+    virtual ~SrsAmf0Number();
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+};
+
+/**
+* 2.13 Date Type
+* time-zone = S16 ; reserved, not supported should be set to 0x0000
+* date-type = date-marker DOUBLE time-zone
+* @see: https://github.com/simple-rtmp-server/srs/issues/185
+*/
+class SrsAmf0Date : public SrsAmf0Any
+{
+private:
+    int64_t _date_value;
+    int16_t _time_zone;
+private:
+    friend class SrsAmf0Any;
+    /**
+    * make amf0 date to private,
+    * use should never declare it, use SrsAmf0Any::date() to create it.
+    */
+    SrsAmf0Date(int64_t value);
+public:
+    virtual ~SrsAmf0Date();
+    // serialize/deserialize to/from stream.
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+public:
+    /**
+    * get the date value.
+    */
+    virtual int64_t date();
+    /**
+    * get the time_zone.
+    */
+    virtual int16_t time_zone();
+};
+
+/**
+* read amf0 null from stream.
+* 2.7 null Type
+* null-type = null-marker
+*/
+class SrsAmf0Null : public SrsAmf0Any
+{
+private:
+    friend class SrsAmf0Any;
+    /**
+    * make amf0 null to private,
+    * use should never declare it, use SrsAmf0Any::null() to create it.
+    */
+    SrsAmf0Null();
+public:
+    virtual ~SrsAmf0Null();
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+};
+
+/**
+* read amf0 undefined from stream.
+* 2.8 undefined Type
+* undefined-type = undefined-marker
+*/
+class SrsAmf0Undefined : public SrsAmf0Any
+{
+private:
+    friend class SrsAmf0Any;
+    /**
+    * make amf0 undefined to private,
+    * use should never declare it, use SrsAmf0Any::undefined() to create it.
+    */
+    SrsAmf0Undefined();
+public:
+    virtual ~SrsAmf0Undefined();
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+};
+
+/**
+* to ensure in inserted order.
+* for the FMLE will crash when AMF0Object is not ordered by inserted,
+* if ordered in map, the string compare order, the FMLE will creash when
+* get the response of connect app.
+*/
+class SrsUnSortedHashtable
+{
+private:
+    typedef std::pair<std::string, SrsAmf0Any*> SrsAmf0ObjectPropertyType;
+    std::vector<SrsAmf0ObjectPropertyType> properties;
+public:
+    SrsUnSortedHashtable();
+    virtual ~SrsUnSortedHashtable();
+public:
+    virtual int count();
+    virtual void clear();
+    virtual std::string key_at(int index);
+    virtual const char* key_raw_at(int index);
+    virtual SrsAmf0Any* value_at(int index);
+    /**
+    * set the value of hashtable.
+    * @param value, the value to set. NULL to delete the property.
+    */
+    virtual void set(std::string key, SrsAmf0Any* value);
+public:
+    virtual SrsAmf0Any* get_property(std::string name);
+    virtual SrsAmf0Any* ensure_property_string(std::string name);
+    virtual SrsAmf0Any* ensure_property_number(std::string name);
+public:
+    virtual void copy(SrsUnSortedHashtable* src);
+};
+
+/**
+* 2.11 Object End Type
+* object-end-type = UTF-8-empty object-end-marker
+* 0x00 0x00 0x09
+*/
+class SrsAmf0ObjectEOF : public SrsAmf0Any
+{
+public:
+    SrsAmf0ObjectEOF();
+    virtual ~SrsAmf0ObjectEOF();
+public:
+    virtual int total_size();
+    virtual int read(SrsStream* stream);
+    virtual int write(SrsStream* stream);
+    virtual SrsAmf0Any* copy();
+};
+
+/**
+* read amf0 utf8 string from stream.
+* 1.3.1 Strings and UTF-8
+* UTF-8 = U16 *(UTF8-char)
+* UTF8-char = UTF8-1 | UTF8-2 | UTF8-3 | UTF8-4
+* UTF8-1 = %x00-7F
+* @remark only support UTF8-1 char.
+*/
+extern int srs_amf0_read_utf8(SrsStream* stream, std::string& value);
+extern int srs_amf0_write_utf8(SrsStream* stream, std::string value);
+
+extern bool srs_amf0_is_object_eof(SrsStream* stream);
+extern int srs_amf0_write_object_eof(SrsStream* stream, SrsAmf0ObjectEOF* value);
+
+extern int srs_amf0_write_any(SrsStream* stream, SrsAmf0Any* value);
 };
 
 #endif
@@ -5861,9 +5864,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 +---------------------------+      +-------------------------+
 | + readfully()             |      | + set_send_timeout()    |
 | + set_recv_timeout()      |      +-------+-----------------+
-+------------+--------------+             / \     
-            / \                            |   
-             |                             | 
++------------+--------------+             / \
+            / \                            |
+             |                             |
           +--+-----------------------------+-+
           |       IProtocolReaderWriter      |
           +----------------------------------+
@@ -6188,7 +6191,7 @@ private:
     public:
         int ack_window_size;
         int64_t acked_size;
-        
+
         AckWindowSize();
     };
 // peer in/out
@@ -6251,7 +6254,7 @@ private:
     * used for type0, 11bytes(or 15bytes with extended timestamp) header.
     * or for type3, 1bytes(or 5bytes with extended timestamp) header.
     * the c0c3 caches must use unit SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE bytes.
-    * 
+    *
     * @remark, the c0c3 cache cannot be realloc.
     */
     char out_c0c3_caches[SRS_CONSTS_C0C3_HEADERS_MAX];
@@ -6320,8 +6323,8 @@ public:
     /**
     * recv a RTMP message, which is bytes oriented.
     * user can use decode_message to get the decoded RTMP packet.
-    * @param pmsg, set the received message, 
-    *       always NULL if error, 
+    * @param pmsg, set the received message,
+    *       always NULL if error,
     *       NULL for unknown packet but return success.
     *       never NULL if decode success.
     * @remark, drop message when msg is empty or payload length is empty.
@@ -6329,7 +6332,7 @@ public:
     virtual int recv_message(SrsCommonMessage** pmsg);
     /**
     * decode bytes oriented RTMP message to RTMP packet,
-    * @param ppacket, output decoded packet, 
+    * @param ppacket, output decoded packet,
     *       always NULL if error, never NULL if success.
     * @return error when unknown packet, error when decode failed.
     */
@@ -6382,47 +6385,52 @@ public:
     {
         *pmsg = NULL;
         *ppacket = NULL;
-        
+
         int ret = ERROR_SUCCESS;
-        
-        while (true) {
+
+        while (true)
+        {
             SrsCommonMessage* msg = NULL;
-            if ((ret = recv_message(&msg)) != ERROR_SUCCESS) {
-                if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+            if ((ret = recv_message(&msg)) != ERROR_SUCCESS)
+            {
+                if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+                {
                     srs_error("recv message failed. ret=%d", ret);
                 }
                 return ret;
             }
             srs_verbose("recv message success.");
-            
+
             SrsPacket* packet = NULL;
-            if ((ret = decode_message(msg, &packet)) != ERROR_SUCCESS) {
+            if ((ret = decode_message(msg, &packet)) != ERROR_SUCCESS)
+            {
                 srs_error("decode message failed. ret=%d", ret);
                 srs_freep(msg);
                 srs_freep(packet);
                 return ret;
             }
-            
+
             T* pkt = dynamic_cast<T*>(packet);
-            if (!pkt) {
-                srs_info("drop message(type=%d, size=%d, time=%"PRId64", sid=%d).", 
-                    msg->header.message_type, msg->header.payload_length,
-                    msg->header.timestamp, msg->header.stream_id);
+            if (!pkt)
+            {
+                srs_info("drop message(type=%d, size=%d, time=%"PRId64", sid=%d).",
+                         msg->header.message_type, msg->header.payload_length,
+                         msg->header.timestamp, msg->header.stream_id);
                 srs_freep(msg);
                 srs_freep(packet);
                 continue;
             }
-            
+
             *pmsg = msg;
             *ppacket = pkt;
             break;
         }
-        
+
         return ret;
     }
 private:
     /**
-    * send out the messages, donot free it, 
+    * send out the messages, donot free it,
     * the caller must free the param msgs.
     */
     virtual int do_send_messages(SrsSharedPtrMessage** msgs, int nb_msgs);
@@ -6456,7 +6464,7 @@ private:
     */
     virtual int read_basic_header(char& fmt, int& cid);
     /**
-    * read the chunk message header(timestamp, payload_length, message_type, stream_id) 
+    * read the chunk message header(timestamp, payload_length, message_type, stream_id)
     * from chunk stream and save to SrsChunkStream.
     */
     virtual int read_message_header(SrsChunkStream* chunk, char fmt);
@@ -7032,7 +7040,7 @@ public:
     double transaction_id;
     /**
     * Command information object which has the name-value pairs.
-    * @remark: alloc in packet constructor, user can directly use it, 
+    * @remark: alloc in packet constructor, user can directly use it,
     *       user should never alloc it again which will cause memory leak.
     * @remark, never be NULL.
     */
@@ -7145,7 +7153,7 @@ class SrsCallResPacket : public SrsPacket
 {
 public:
     /**
-    * Name of the command. 
+    * Name of the command.
     */
     std::string command_name;
     /**
@@ -7387,7 +7395,7 @@ public:
     * Type of publishing. Set to "live", "record", or "append".
     *   record: The stream is published and the data is recorded to a new file.The file
     *           is stored on the server in a subdirectory within the directory that
-    *           contains the server application. If the file already exists, it is 
+    *           contains the server application. If the file already exists, it is
     *           overwritten.
     *   append: The stream is published and the data is appended to a file. If no file
     *           is found, it is created.
@@ -7478,19 +7486,19 @@ public:
     * To play back MP3 or ID3 tags, you must precede the stream name with mp3:
     *       (for example, "mp3:sample".)
     * To play H.264/AAC files, you must precede the stream name with mp4: and specify the
-    *       file extension. For example, to play the file sample.m4v, specify 
+    *       file extension. For example, to play the file sample.m4v, specify
     *       "mp4:sample.m4v"
     */
     std::string stream_name;
     /**
     * An optional parameter that specifies the start time in seconds.
-    * The default value is -2, which means the subscriber first tries to play the live 
-    *       stream specified in the Stream Name field. If a live stream of that name is 
+    * The default value is -2, which means the subscriber first tries to play the live
+    *       stream specified in the Stream Name field. If a live stream of that name is
     *       not found, it plays the recorded stream specified in the Stream Name field.
-    * If you pass -1 in the Start field, only the live stream specified in the Stream 
+    * If you pass -1 in the Start field, only the live stream specified in the Stream
     *       Name field is played.
-    * If you pass 0 or a positive number in the Start field, a recorded stream specified 
-    *       in the Stream Name field is played beginning from the time specified in the 
+    * If you pass 0 or a positive number in the Start field, a recorded stream specified
+    *       in the Stream Name field is played beginning from the time specified in the
     *       Start field.
     * If no recorded stream is found, the next item in the playlist is played.
     */
@@ -7499,14 +7507,14 @@ public:
     * An optional parameter that specifies the duration of playback in seconds.
     * The default value is -1. The -1 value means a live stream is played until it is no
     *       longer available or a recorded stream is played until it ends.
-    * If u pass 0, it plays the single frame since the time specified in the Start field 
-    *       from the beginning of a recorded stream. It is assumed that the value specified 
+    * If u pass 0, it plays the single frame since the time specified in the Start field
+    *       from the beginning of a recorded stream. It is assumed that the value specified
     *       in the Start field is equal to or greater than 0.
-    * If you pass a positive number, it plays a live stream for the time period specified 
-    *       in the Duration field. After that it becomes available or plays a recorded 
+    * If you pass a positive number, it plays a live stream for the time period specified
+    *       in the Duration field. After that it becomes available or plays a recorded
     *       stream for the time specified in the Duration field. (If a stream ends before the
     *       time specified in the Duration field, playback ends when the stream ends.)
-    * If you pass a negative number other than -1 in the Duration field, it interprets the 
+    * If you pass a negative number other than -1 in the Duration field, it interprets the
     *       value as if it were -1.
     */
     double duration;
@@ -7622,7 +7630,7 @@ public:
     */
     SrsAmf0Any* args; // null
     /**
-    * Name-value pairs that describe the response from the server. 
+    * Name-value pairs that describe the response from the server.
     * 'code','level', 'description' are names of few among such information.
     * @remark, never be NULL, an AMF0 object instance.
     */
@@ -7651,7 +7659,7 @@ private:
     disable_default_copy(SrsBandwidthPacket);
 public:
     /**
-    * Name of command. 
+    * Name of command.
     */
     std::string command_name;
     /**
@@ -7916,7 +7924,7 @@ protected:
 enum SrcPCUCEventType
 {
     // generally, 4bytes event-data
-    
+
     /**
     * The server sends this event to notify the client
     * that a stream has become functional and can be
@@ -7944,20 +7952,20 @@ enum SrcPCUCEventType
     * The server sends this event to notify the client
     * that there is no more data on the stream. If the
     * server does not detect any message for a time
-    * period, it can notify the subscribed clients 
-    * that the stream is dry. The 4 bytes of event 
-    * data represent the stream ID of the dry stream. 
+    * period, it can notify the subscribed clients
+    * that the stream is dry. The 4 bytes of event
+    * data represent the stream ID of the dry stream.
     */
     SrcPCUCStreamDry                = 0x02,
 
     /**
     * The client sends this event to inform the server
-    * of the buffer size (in milliseconds) that is 
+    * of the buffer size (in milliseconds) that is
     * used to buffer any data coming over a stream.
-    * This event is sent before the server starts  
+    * This event is sent before the server starts
     * processing the stream. The first 4 bytes of the
     * event data represent the stream ID and the next
-    * 4 bytes represent the buffer length, in 
+    * 4 bytes represent the buffer length, in
     * milliseconds.
     */
     SrcPCUCSetBufferLength          = 0x03, // 8bytes event-data
@@ -7976,7 +7984,7 @@ enum SrcPCUCEventType
     * timestamp, representing the local server time
     * when the server dispatched the command. The
     * client responds with kMsgPingResponse on
-    * receiving kMsgPingRequest.  
+    * receiving kMsgPingRequest.
     */
     SrcPCUCPingRequest              = 0x06,
 
@@ -7987,7 +7995,7 @@ enum SrcPCUCEventType
     * kMsgPingRequest request.
     */
     SrcPCUCPingResponse             = 0x07,
-    
+
     /**
      * for PCUC size=3, the payload is "00 1A 01",
      * where we think the event is 0x001a, fms defined msg,
@@ -7998,7 +8006,7 @@ enum SrcPCUCEventType
 
 /**
 * 5.4. User Control Message (4)
-* 
+*
 * for the EventData is 4bytes.
 * Stream Begin(=0)              4-bytes stream ID
 * Stream EOF(=1)                4-bytes stream ID
@@ -8007,7 +8015,7 @@ enum SrcPCUCEventType
 * StreamIsRecorded(=4)          4-bytes stream ID
 * PingRequest(=6)               4-bytes timestamp local server time
 * PingResponse(=7)              4-bytes timestamp received ping request.
-* 
+*
 * 3.7. User Control message
 * +------------------------------+-------------------------
 * | Event Type ( 2- bytes ) | Event Data
@@ -8094,470 +8102,470 @@ class SrsStream;
 
 namespace _srs_internal
 {
-    // the digest key generate size.
-    #define SRS_OpensslHashSize 512
-    extern u_int8_t SrsGenuineFMSKey[];
-    extern u_int8_t SrsGenuineFPKey[];
-    int openssl_HMACsha256(const void* key, int key_size, const void* data, int data_size, void* digest);
-    int openssl_generate_key(char* public_key, int32_t size);
-    
+// the digest key generate size.
+#define SRS_OpensslHashSize 512
+extern u_int8_t SrsGenuineFMSKey[];
+extern u_int8_t SrsGenuineFPKey[];
+int openssl_HMACsha256(const void* key, int key_size, const void* data, int data_size, void* digest);
+int openssl_generate_key(char* public_key, int32_t size);
+
+/**
+* the DH wrapper.
+*/
+class SrsDH
+{
+private:
+    DH* pdh;
+public:
+    SrsDH();
+    virtual ~SrsDH();
+public:
     /**
-    * the DH wrapper.
+    * initialize dh, generate the public and private key.
+    * @param ensure_128bytes_public_key whether ensure public key is 128bytes,
+    *       sometimes openssl generate 127bytes public key.
+    *       default to false to donot ensure.
     */
-    class SrsDH
-    {
-    private:
-        DH* pdh;
-    public:
-        SrsDH();
-        virtual ~SrsDH();
-    public:
-        /**
-        * initialize dh, generate the public and private key.
-        * @param ensure_128bytes_public_key whether ensure public key is 128bytes,
-        *       sometimes openssl generate 127bytes public key.
-        *       default to false to donot ensure.
-        */
-        virtual int initialize(bool ensure_128bytes_public_key = false);
-        /**
-        * copy the public key.
-        * @param pkey the bytes to copy the public key.
-        * @param pkey_size the max public key size, output the actual public key size.
-        *       user should never ignore this size.
-        * @remark, when ensure_128bytes_public_key, the size always 128.
-        */
-        virtual int copy_public_key(char* pkey, int32_t& pkey_size);
-        /**
-        * generate and copy the shared key.
-        * generate the shared key with peer public key.
-        * @param ppkey peer public key.
-        * @param ppkey_size the size of ppkey.
-        * @param skey the computed shared key.
-        * @param skey_size the max shared key size, output the actual shared key size.
-        *       user should never ignore this size.
-        */
-        virtual int copy_shared_key(const char* ppkey, int32_t ppkey_size, char* skey, int32_t& skey_size);
-    private:
-        virtual int do_initialize();
-    };
+    virtual int initialize(bool ensure_128bytes_public_key = false);
     /**
-    * the schema type.
+    * copy the public key.
+    * @param pkey the bytes to copy the public key.
+    * @param pkey_size the max public key size, output the actual public key size.
+    *       user should never ignore this size.
+    * @remark, when ensure_128bytes_public_key, the size always 128.
     */
-    enum srs_schema_type 
-    {
-        srs_schema_invalid = 2,
-        
-        /**
-        * key-digest sequence
-        */
-        srs_schema0 = 0,
-        
-        /**
-        * digest-key sequence
-        * @remark, FMS requires the schema1(digest-key), or connect failed.
-        */
-        // 
-        srs_schema1 = 1,
-    };
-    
+    virtual int copy_public_key(char* pkey, int32_t& pkey_size);
     /**
-    * 764bytes key structure
-    *     random-data: (offset)bytes
-    *     key-data: 128bytes
-    *     random-data: (764-offset-128-4)bytes
-    *     offset: 4bytes
-    * @see also: http://blog.csdn.net/win_lin/article/details/13006803
+    * generate and copy the shared key.
+    * generate the shared key with peer public key.
+    * @param ppkey peer public key.
+    * @param ppkey_size the size of ppkey.
+    * @param skey the computed shared key.
+    * @param skey_size the max shared key size, output the actual shared key size.
+    *       user should never ignore this size.
     */
-    class key_block
-    {
-    public:
-        // (offset)bytes
-        char* random0;
-        int random0_size;
-        
-        // 128bytes
-        char key[128];
-        
-        // (764-offset-128-4)bytes
-        char* random1;
-        int random1_size;
-        
-        // 4bytes
-        int32_t offset;
-    public:
-        key_block();
-        virtual ~key_block();
-    public:
-        // parse key block from c1s1.
-        // if created, user must free it by srs_key_block_free
-        // @stream contains c1s1_key_bytes the key start bytes
-        int parse(SrsStream* stream);
-    private:
-        // calc the offset of key,
-        // the key->offset cannot be used as the offset of key.
-        int calc_valid_offset();
-    };
-    
-    /**
-    * 764bytes digest structure
-    *     offset: 4bytes
-    *     random-data: (offset)bytes
-    *     digest-data: 32bytes
-    *     random-data: (764-4-offset-32)bytes
-    * @see also: http://blog.csdn.net/win_lin/article/details/13006803
-    */
-    class digest_block
-    {
-    public:
-        // 4bytes
-        int32_t offset;
-        
-        // (offset)bytes
-        char* random0;
-        int random0_size;
-        
-        // 32bytes
-        char digest[32];
-        
-        // (764-4-offset-32)bytes
-        char* random1;
-        int random1_size;
-    public:
-        digest_block();
-        virtual ~digest_block();
-    public:
-        // parse digest block from c1s1.
-        // if created, user must free it by srs_digest_block_free
-        // @stream contains c1s1_digest_bytes the digest start bytes
-        int parse(SrsStream* stream);
-    private:
-        // calc the offset of digest,
-        // the key->offset cannot be used as the offset of digest.
-        int calc_valid_offset();
-    };
-    
-    class c1s1;
-    
-    /**
-    * the c1s1 strategy, use schema0 or schema1.
-    * the template method class to defines common behaviors,
-    * while the concrete class to implements in schema0 or schema1.
-    */
-    class c1s1_strategy
-    {
-    protected:
-        key_block key;
-        digest_block digest;
-    public:
-        c1s1_strategy();
-        virtual ~c1s1_strategy();
-    public:
-        /**
-        * get the scema.
-        */
-        virtual srs_schema_type schema() = 0;
-        /**
-        * get the digest.
-        */
-        virtual char* get_digest();
-        /**
-        * get the key.
-        */
-        virtual char* get_key();
-        /**
-        * copy to bytes.
-        * @param size must be 1536.
-        */
-        virtual int dump(c1s1* owner, char* _c1s1, int size);
-        /**
-        * server: parse the c1s1, discovery the key and digest by schema.
-        * use the c1_validate_digest() to valid the digest of c1.
-        */
-        virtual int parse(char* _c1s1, int size) = 0;
-    public:
-        /**
-        * client: create and sign c1 by schema.
-        * sign the c1, generate the digest.
-        *         calc_c1_digest(c1, schema) {
-        *            get c1s1-joined from c1 by specified schema
-        *            digest-data = HMACsha256(c1s1-joined, FPKey, 30)
-        *            return digest-data;
-        *        }
-        *        random fill 1536bytes c1 // also fill the c1-128bytes-key
-        *        time = time() // c1[0-3]
-        *        version = [0x80, 0x00, 0x07, 0x02] // c1[4-7]
-        *        schema = choose schema0 or schema1
-        *        digest-data = calc_c1_digest(c1, schema)
-        *        copy digest-data to c1
-        */
-        virtual int c1_create(c1s1* owner);
-        /**
-        * server: validate the parsed c1 schema
-        */
-        virtual int c1_validate_digest(c1s1* owner, bool& is_valid);
-        /**
-        * server: create and sign the s1 from c1.
-        *       // decode c1 try schema0 then schema1
-        *       c1-digest-data = get-c1-digest-data(schema0)
-        *       if c1-digest-data equals to calc_c1_digest(c1, schema0) {  
-        *           c1-key-data = get-c1-key-data(schema0)  
-        *           schema = schema0
-        *       } else {  
-        *           c1-digest-data = get-c1-digest-data(schema1)  
-        *           if c1-digest-data not equals to calc_c1_digest(c1, schema1) {
-        *               switch to simple handshake.  
-        *               return  
-        *           }
-        *           c1-key-data = get-c1-key-data(schema1)  
-        *           schema = schema1
-        *       }
-        * 
-        *       // generate s1
-        *       random fill 1536bytes s1
-        *       time = time() // c1[0-3]
-        *       version = [0x04, 0x05, 0x00, 0x01] // s1[4-7]
-        *       s1-key-data=shared_key=DH_compute_key(peer_pub_key=c1-key-data)
-        *       get c1s1-joined by specified schema
-        *       s1-digest-data = HMACsha256(c1s1-joined, FMSKey, 36)
-        *       copy s1-digest-data and s1-key-data to s1.
-        * @param c1, to get the peer_pub_key of client.
-        */
-        virtual int s1_create(c1s1* owner, c1s1* c1);
-        /**
-        * server: validate the parsed s1 schema
-        */
-        virtual int s1_validate_digest(c1s1* owner, bool& is_valid);
-    public:
-        /**
-        * calc the digest for c1
-        */
-        virtual int calc_c1_digest(c1s1* owner, char*& c1_digest);
-        /**
-        * calc the digest for s1
-        */
-        virtual int calc_s1_digest(c1s1* owner, char*& s1_digest);
-        /**
-        * copy whole c1s1 to bytes.
-        * @param size must always be 1536 with digest, and 1504 without digest.
-        */
-        virtual int copy_to(c1s1* owner, char* bytes, int size, bool with_digest) = 0;
-        /**
-        * copy time and version to stream.
-        */
-        virtual void copy_time_version(SrsStream* stream, c1s1* owner);
-        /**
-        * copy key to stream.
-        */
-        virtual void copy_key(SrsStream* stream);
-        /**
-        * copy digest to stream.
-        */
-        virtual void copy_digest(SrsStream* stream, bool with_digest);
-    };
-    
-    /**
-    * c1s1 schema0
-    *     key: 764bytes
-    *     digest: 764bytes
-    */
-    class c1s1_strategy_schema0 : public c1s1_strategy
-    {
-    public:
-        c1s1_strategy_schema0();
-        virtual ~c1s1_strategy_schema0();
-    public:
-        virtual srs_schema_type schema();
-        virtual int parse(char* _c1s1, int size);
-    public:
-        virtual int copy_to(c1s1* owner, char* bytes, int size, bool with_digest);
-    };
-    
-    /**
-    * c1s1 schema1
-    *     digest: 764bytes
-    *     key: 764bytes
-    */
-    class c1s1_strategy_schema1 : public c1s1_strategy
-    {
-    public:
-        c1s1_strategy_schema1();
-        virtual ~c1s1_strategy_schema1();
-    public:
-        virtual srs_schema_type schema();
-        virtual int parse(char* _c1s1, int size);
-    public:
-        virtual int copy_to(c1s1* owner, char* bytes, int size, bool with_digest);
-    };
+    virtual int copy_shared_key(const char* ppkey, int32_t ppkey_size, char* skey, int32_t& skey_size);
+private:
+    virtual int do_initialize();
+};
+/**
+* the schema type.
+*/
+enum srs_schema_type
+{
+    srs_schema_invalid = 2,
 
     /**
-    * c1s1 schema0
-    *     time: 4bytes
-    *     version: 4bytes
-    *     key: 764bytes
-    *     digest: 764bytes
-    * c1s1 schema1
-    *     time: 4bytes
-    *     version: 4bytes
-    *     digest: 764bytes
-    *     key: 764bytes
-    * @see also: http://blog.csdn.net/win_lin/article/details/13006803
+    * key-digest sequence
     */
-    class c1s1
-    {
-    public:
-        // 4bytes
-        int32_t time;
-        // 4bytes
-        int32_t version;
-        // 764bytes+764bytes
-        c1s1_strategy* payload;
-    public:
-        c1s1();
-        virtual ~c1s1();
-    public:
-        /**
-        * get the scema.
-        */
-        virtual srs_schema_type schema();
-        /**
-        * get the digest key.
-        */
-        virtual char* get_digest();
-        /**
-        * get the key.
-        */
-        virtual char* get_key();
-    public:
-        /**
-        * copy to bytes.
-        * @param size, must always be 1536.
-        */
-        virtual int dump(char* _c1s1, int size);
-        /**
-        * server: parse the c1s1, discovery the key and digest by schema.
-        * @param size, must always be 1536.
-        * use the c1_validate_digest() to valid the digest of c1.
-        * use the s1_validate_digest() to valid the digest of s1.
-        */
-        virtual int parse(char* _c1s1, int size, srs_schema_type _schema);
-    public:
-        /**
-        * client: create and sign c1 by schema.
-        * sign the c1, generate the digest.
-        *         calc_c1_digest(c1, schema) {
-        *            get c1s1-joined from c1 by specified schema
-        *            digest-data = HMACsha256(c1s1-joined, FPKey, 30)
-        *            return digest-data;
-        *        }
-        *        random fill 1536bytes c1 // also fill the c1-128bytes-key
-        *        time = time() // c1[0-3]
-        *        version = [0x80, 0x00, 0x07, 0x02] // c1[4-7]
-        *        schema = choose schema0 or schema1
-        *        digest-data = calc_c1_digest(c1, schema)
-        *        copy digest-data to c1
-        */
-        virtual int c1_create(srs_schema_type _schema);
-        /**
-        * server: validate the parsed c1 schema
-        */
-        virtual int c1_validate_digest(bool& is_valid);
-    public:
-        /**
-        * server: create and sign the s1 from c1.
-        *       // decode c1 try schema0 then schema1
-        *       c1-digest-data = get-c1-digest-data(schema0)
-        *       if c1-digest-data equals to calc_c1_digest(c1, schema0) {  
-        *           c1-key-data = get-c1-key-data(schema0)  
-        *           schema = schema0
-        *       } else {  
-        *           c1-digest-data = get-c1-digest-data(schema1)  
-        *           if c1-digest-data not equals to calc_c1_digest(c1, schema1) {
-        *               switch to simple handshake.  
-        *               return  
-        *           }
-        *           c1-key-data = get-c1-key-data(schema1)  
-        *           schema = schema1
-        *       }
-        * 
-        *       // generate s1
-        *       random fill 1536bytes s1
-        *       time = time() // c1[0-3]
-        *       version = [0x04, 0x05, 0x00, 0x01] // s1[4-7]
-        *       s1-key-data=shared_key=DH_compute_key(peer_pub_key=c1-key-data)
-        *       get c1s1-joined by specified schema
-        *       s1-digest-data = HMACsha256(c1s1-joined, FMSKey, 36)
-        *       copy s1-digest-data and s1-key-data to s1.
-        */
-        virtual int s1_create(c1s1* c1);
-        /**
-        * server: validate the parsed s1 schema
-        */
-        virtual int s1_validate_digest(bool& is_valid);
-    };
-    
+    srs_schema0 = 0,
+
     /**
-    * the c2s2 complex handshake structure.
-    * random-data: 1504bytes
-    * digest-data: 32bytes
-    * @see also: http://blog.csdn.net/win_lin/article/details/13006803
+    * digest-key sequence
+    * @remark, FMS requires the schema1(digest-key), or connect failed.
     */
-    class c2s2
-    {
-    public:
-        char random[1504];
-        char digest[32];
-    public:
-        c2s2();
-        virtual ~c2s2();
-    public:
-        /**
-        * copy to bytes.
-        * @param size, must always be 1536.
-        */
-        virtual int dump(char* _c2s2, int size);
-        /**
-        * parse the c2s2
-        * @param size, must always be 1536.
-        */
-        virtual int parse(char* _c2s2, int size);
-    public:
-        /**
-        * create c2.
-        * random fill c2s2 1536 bytes
-        * 
-        * // client generate C2, or server valid C2
-        * temp-key = HMACsha256(s1-digest, FPKey, 62)
-        * c2-digest-data = HMACsha256(c2-random-data, temp-key, 32)
-        */
-        virtual int c2_create(c1s1* s1);
-        
-        /**
-        * validate the c2 from client.
-        */
-        virtual int c2_validate(c1s1* s1, bool& is_valid);
-    public:
-        /**
-        * create s2.
-        * random fill c2s2 1536 bytes
-        * 
-        * // server generate S2, or client valid S2
-        * temp-key = HMACsha256(c1-digest, FMSKey, 68)
-        * s2-digest-data = HMACsha256(s2-random-data, temp-key, 32)
-        */
-        virtual int s2_create(c1s1* c1);
-        
-        /**
-        * validate the s2 from server.
-        */
-        virtual int s2_validate(c1s1* c1, bool& is_valid);
-    };
+    //
+    srs_schema1 = 1,
+};
+
+/**
+* 764bytes key structure
+*     random-data: (offset)bytes
+*     key-data: 128bytes
+*     random-data: (764-offset-128-4)bytes
+*     offset: 4bytes
+* @see also: http://blog.csdn.net/win_lin/article/details/13006803
+*/
+class key_block
+{
+public:
+    // (offset)bytes
+    char* random0;
+    int random0_size;
+
+    // 128bytes
+    char key[128];
+
+    // (764-offset-128-4)bytes
+    char* random1;
+    int random1_size;
+
+    // 4bytes
+    int32_t offset;
+public:
+    key_block();
+    virtual ~key_block();
+public:
+    // parse key block from c1s1.
+    // if created, user must free it by srs_key_block_free
+    // @stream contains c1s1_key_bytes the key start bytes
+    int parse(SrsStream* stream);
+private:
+    // calc the offset of key,
+    // the key->offset cannot be used as the offset of key.
+    int calc_valid_offset();
+};
+
+/**
+* 764bytes digest structure
+*     offset: 4bytes
+*     random-data: (offset)bytes
+*     digest-data: 32bytes
+*     random-data: (764-4-offset-32)bytes
+* @see also: http://blog.csdn.net/win_lin/article/details/13006803
+*/
+class digest_block
+{
+public:
+    // 4bytes
+    int32_t offset;
+
+    // (offset)bytes
+    char* random0;
+    int random0_size;
+
+    // 32bytes
+    char digest[32];
+
+    // (764-4-offset-32)bytes
+    char* random1;
+    int random1_size;
+public:
+    digest_block();
+    virtual ~digest_block();
+public:
+    // parse digest block from c1s1.
+    // if created, user must free it by srs_digest_block_free
+    // @stream contains c1s1_digest_bytes the digest start bytes
+    int parse(SrsStream* stream);
+private:
+    // calc the offset of digest,
+    // the key->offset cannot be used as the offset of digest.
+    int calc_valid_offset();
+};
+
+class c1s1;
+
+/**
+* the c1s1 strategy, use schema0 or schema1.
+* the template method class to defines common behaviors,
+* while the concrete class to implements in schema0 or schema1.
+*/
+class c1s1_strategy
+{
+protected:
+    key_block key;
+    digest_block digest;
+public:
+    c1s1_strategy();
+    virtual ~c1s1_strategy();
+public:
+    /**
+    * get the scema.
+    */
+    virtual srs_schema_type schema() = 0;
+    /**
+    * get the digest.
+    */
+    virtual char* get_digest();
+    /**
+    * get the key.
+    */
+    virtual char* get_key();
+    /**
+    * copy to bytes.
+    * @param size must be 1536.
+    */
+    virtual int dump(c1s1* owner, char* _c1s1, int size);
+    /**
+    * server: parse the c1s1, discovery the key and digest by schema.
+    * use the c1_validate_digest() to valid the digest of c1.
+    */
+    virtual int parse(char* _c1s1, int size) = 0;
+public:
+    /**
+    * client: create and sign c1 by schema.
+    * sign the c1, generate the digest.
+    *         calc_c1_digest(c1, schema) {
+    *            get c1s1-joined from c1 by specified schema
+    *            digest-data = HMACsha256(c1s1-joined, FPKey, 30)
+    *            return digest-data;
+    *        }
+    *        random fill 1536bytes c1 // also fill the c1-128bytes-key
+    *        time = time() // c1[0-3]
+    *        version = [0x80, 0x00, 0x07, 0x02] // c1[4-7]
+    *        schema = choose schema0 or schema1
+    *        digest-data = calc_c1_digest(c1, schema)
+    *        copy digest-data to c1
+    */
+    virtual int c1_create(c1s1* owner);
+    /**
+    * server: validate the parsed c1 schema
+    */
+    virtual int c1_validate_digest(c1s1* owner, bool& is_valid);
+    /**
+    * server: create and sign the s1 from c1.
+    *       // decode c1 try schema0 then schema1
+    *       c1-digest-data = get-c1-digest-data(schema0)
+    *       if c1-digest-data equals to calc_c1_digest(c1, schema0) {
+    *           c1-key-data = get-c1-key-data(schema0)
+    *           schema = schema0
+    *       } else {
+    *           c1-digest-data = get-c1-digest-data(schema1)
+    *           if c1-digest-data not equals to calc_c1_digest(c1, schema1) {
+    *               switch to simple handshake.
+    *               return
+    *           }
+    *           c1-key-data = get-c1-key-data(schema1)
+    *           schema = schema1
+    *       }
+    *
+    *       // generate s1
+    *       random fill 1536bytes s1
+    *       time = time() // c1[0-3]
+    *       version = [0x04, 0x05, 0x00, 0x01] // s1[4-7]
+    *       s1-key-data=shared_key=DH_compute_key(peer_pub_key=c1-key-data)
+    *       get c1s1-joined by specified schema
+    *       s1-digest-data = HMACsha256(c1s1-joined, FMSKey, 36)
+    *       copy s1-digest-data and s1-key-data to s1.
+    * @param c1, to get the peer_pub_key of client.
+    */
+    virtual int s1_create(c1s1* owner, c1s1* c1);
+    /**
+    * server: validate the parsed s1 schema
+    */
+    virtual int s1_validate_digest(c1s1* owner, bool& is_valid);
+public:
+    /**
+    * calc the digest for c1
+    */
+    virtual int calc_c1_digest(c1s1* owner, char*& c1_digest);
+    /**
+    * calc the digest for s1
+    */
+    virtual int calc_s1_digest(c1s1* owner, char*& s1_digest);
+    /**
+    * copy whole c1s1 to bytes.
+    * @param size must always be 1536 with digest, and 1504 without digest.
+    */
+    virtual int copy_to(c1s1* owner, char* bytes, int size, bool with_digest) = 0;
+    /**
+    * copy time and version to stream.
+    */
+    virtual void copy_time_version(SrsStream* stream, c1s1* owner);
+    /**
+    * copy key to stream.
+    */
+    virtual void copy_key(SrsStream* stream);
+    /**
+    * copy digest to stream.
+    */
+    virtual void copy_digest(SrsStream* stream, bool with_digest);
+};
+
+/**
+* c1s1 schema0
+*     key: 764bytes
+*     digest: 764bytes
+*/
+class c1s1_strategy_schema0 : public c1s1_strategy
+{
+public:
+    c1s1_strategy_schema0();
+    virtual ~c1s1_strategy_schema0();
+public:
+    virtual srs_schema_type schema();
+    virtual int parse(char* _c1s1, int size);
+public:
+    virtual int copy_to(c1s1* owner, char* bytes, int size, bool with_digest);
+};
+
+/**
+* c1s1 schema1
+*     digest: 764bytes
+*     key: 764bytes
+*/
+class c1s1_strategy_schema1 : public c1s1_strategy
+{
+public:
+    c1s1_strategy_schema1();
+    virtual ~c1s1_strategy_schema1();
+public:
+    virtual srs_schema_type schema();
+    virtual int parse(char* _c1s1, int size);
+public:
+    virtual int copy_to(c1s1* owner, char* bytes, int size, bool with_digest);
+};
+
+/**
+* c1s1 schema0
+*     time: 4bytes
+*     version: 4bytes
+*     key: 764bytes
+*     digest: 764bytes
+* c1s1 schema1
+*     time: 4bytes
+*     version: 4bytes
+*     digest: 764bytes
+*     key: 764bytes
+* @see also: http://blog.csdn.net/win_lin/article/details/13006803
+*/
+class c1s1
+{
+public:
+    // 4bytes
+    int32_t time;
+    // 4bytes
+    int32_t version;
+    // 764bytes+764bytes
+    c1s1_strategy* payload;
+public:
+    c1s1();
+    virtual ~c1s1();
+public:
+    /**
+    * get the scema.
+    */
+    virtual srs_schema_type schema();
+    /**
+    * get the digest key.
+    */
+    virtual char* get_digest();
+    /**
+    * get the key.
+    */
+    virtual char* get_key();
+public:
+    /**
+    * copy to bytes.
+    * @param size, must always be 1536.
+    */
+    virtual int dump(char* _c1s1, int size);
+    /**
+    * server: parse the c1s1, discovery the key and digest by schema.
+    * @param size, must always be 1536.
+    * use the c1_validate_digest() to valid the digest of c1.
+    * use the s1_validate_digest() to valid the digest of s1.
+    */
+    virtual int parse(char* _c1s1, int size, srs_schema_type _schema);
+public:
+    /**
+    * client: create and sign c1 by schema.
+    * sign the c1, generate the digest.
+    *         calc_c1_digest(c1, schema) {
+    *            get c1s1-joined from c1 by specified schema
+    *            digest-data = HMACsha256(c1s1-joined, FPKey, 30)
+    *            return digest-data;
+    *        }
+    *        random fill 1536bytes c1 // also fill the c1-128bytes-key
+    *        time = time() // c1[0-3]
+    *        version = [0x80, 0x00, 0x07, 0x02] // c1[4-7]
+    *        schema = choose schema0 or schema1
+    *        digest-data = calc_c1_digest(c1, schema)
+    *        copy digest-data to c1
+    */
+    virtual int c1_create(srs_schema_type _schema);
+    /**
+    * server: validate the parsed c1 schema
+    */
+    virtual int c1_validate_digest(bool& is_valid);
+public:
+    /**
+    * server: create and sign the s1 from c1.
+    *       // decode c1 try schema0 then schema1
+    *       c1-digest-data = get-c1-digest-data(schema0)
+    *       if c1-digest-data equals to calc_c1_digest(c1, schema0) {
+    *           c1-key-data = get-c1-key-data(schema0)
+    *           schema = schema0
+    *       } else {
+    *           c1-digest-data = get-c1-digest-data(schema1)
+    *           if c1-digest-data not equals to calc_c1_digest(c1, schema1) {
+    *               switch to simple handshake.
+    *               return
+    *           }
+    *           c1-key-data = get-c1-key-data(schema1)
+    *           schema = schema1
+    *       }
+    *
+    *       // generate s1
+    *       random fill 1536bytes s1
+    *       time = time() // c1[0-3]
+    *       version = [0x04, 0x05, 0x00, 0x01] // s1[4-7]
+    *       s1-key-data=shared_key=DH_compute_key(peer_pub_key=c1-key-data)
+    *       get c1s1-joined by specified schema
+    *       s1-digest-data = HMACsha256(c1s1-joined, FMSKey, 36)
+    *       copy s1-digest-data and s1-key-data to s1.
+    */
+    virtual int s1_create(c1s1* c1);
+    /**
+    * server: validate the parsed s1 schema
+    */
+    virtual int s1_validate_digest(bool& is_valid);
+};
+
+/**
+* the c2s2 complex handshake structure.
+* random-data: 1504bytes
+* digest-data: 32bytes
+* @see also: http://blog.csdn.net/win_lin/article/details/13006803
+*/
+class c2s2
+{
+public:
+    char random[1504];
+    char digest[32];
+public:
+    c2s2();
+    virtual ~c2s2();
+public:
+    /**
+    * copy to bytes.
+    * @param size, must always be 1536.
+    */
+    virtual int dump(char* _c2s2, int size);
+    /**
+    * parse the c2s2
+    * @param size, must always be 1536.
+    */
+    virtual int parse(char* _c2s2, int size);
+public:
+    /**
+    * create c2.
+    * random fill c2s2 1536 bytes
+    *
+    * // client generate C2, or server valid C2
+    * temp-key = HMACsha256(s1-digest, FPKey, 62)
+    * c2-digest-data = HMACsha256(c2-random-data, temp-key, 32)
+    */
+    virtual int c2_create(c1s1* s1);
+
+    /**
+    * validate the c2 from client.
+    */
+    virtual int c2_validate(c1s1* s1, bool& is_valid);
+public:
+    /**
+    * create s2.
+    * random fill c2s2 1536 bytes
+    *
+    * // server generate S2, or client valid S2
+    * temp-key = HMACsha256(c1-digest, FMSKey, 68)
+    * s2-digest-data = HMACsha256(s2-random-data, temp-key, 32)
+    */
+    virtual int s2_create(c1s1* c1);
+
+    /**
+    * validate the s2 from server.
+    */
+    virtual int s2_validate(c1s1* c1, bool& is_valid);
+};
 }
 
 #endif
 
 /**
 * simple handshake.
-* user can try complex handshake first, 
+* user can try complex handshake first,
 * rollback to simple handshake if error ERROR_RTMP_TRY_SIMPLE_HS
 */
 class SrsSimpleHandshake
@@ -8643,7 +8651,7 @@ class ISrsProtocolReaderWriter;
 
 /**
 * parse the tcUrl, output the schema, host, vhost, app and port.
-* @param tcUrl, the input tcUrl, for example, 
+* @param tcUrl, the input tcUrl, for example,
 *       rtmp://192.168.1.10:19350/live?vhost=vhost.ossrs.net
 * @param schema, for example, rtmp
 * @param host, for example, 192.168.1.10
@@ -8655,8 +8663,8 @@ class ISrsProtocolReaderWriter;
 * param param, for example, vhost=vhost.ossrs.net
 */
 extern void srs_discovery_tc_url(
-    std::string tcUrl, 
-    std::string& schema, std::string& host, std::string& vhost, 
+    std::string tcUrl,
+    std::string& schema, std::string& host, std::string& vhost,
     std::string& app, std::string& port, std::string& param
 );
 
@@ -8667,7 +8675,7 @@ extern void srs_discovery_tc_url(
 *   app?vhost=request_vhost
 *   app...vhost...request_vhost
 * @param param, the query, for example, ?vhost=xxx
-*/ 
+*/
 extern void srs_vhost_resolve(
     std::string& vhost, std::string& app, std::string& param
 );
@@ -8847,7 +8855,7 @@ public:
 #endif
 
 /**
-* the buffer provices bytes cache for protocol. generally, 
+* the buffer provices bytes cache for protocol. generally,
 * protocol recv data from socket, put into buffer, decode to RTMP message.
 * Usage:
 *       ISrsBufferReader* r = ......;
@@ -8887,7 +8895,7 @@ public:
     virtual int size();
     /**
     * get the current bytes in buffer.
-    * @remark user should use read_slice() if possible, 
+    * @remark user should use read_slice() if possible,
     *       the bytes() is used to test bytes, for example, to detect the bytes schema.
     */
     virtual char* bytes();
@@ -8924,7 +8932,7 @@ public:
     /**
     * grow buffer to the required size, loop to read from skt to fill.
     * @param reader, read more bytes from reader to fill the buffer to required size.
-    * @param required_size, loop to fill to ensure buffer size to required. 
+    * @param required_size, loop to fill to ensure buffer size to required.
     * @return an int error code, error if required_size negative.
     * @remark, we actually maybe read more than required_size, maybe 4k for example.
     */
@@ -9327,7 +9335,7 @@ public:
     * are not monotonic if the data is not transmitted in the order it was sampled, as in the case
     * of MPEG interpolated video frames. (The sequence numbers of the packets as transmitted
     * will still be monotonic.)
-    * 
+    *
     * RTP timestamps from dierent media streams may advance at dierent rates and usually
     * have independent, random osets. Therefore, although these timestamps are sucient to
     * reconstruct the timing of a single stream, directly comparing RTP timestamps from dierent
@@ -9337,12 +9345,12 @@ public:
     * sampled. The reference clock is shared by all media to be synchronized. The timestamp
     * pairs are not transmitted in every data packet, but at a lower rate in RTCP SR packets as
     * described in Section 6.4.
-    * 
+    *
     * The sampling instant is chosen as the point of reference for the RTP timestamp because it is
     * known to the transmitting endpoint and has a common denition for all media, independent
     * of encoding delays or other processing. The purpose is to allow synchronized presentation of
     * all media sampled at the same time.
-    * 
+    *
     * Applications transmitting stored data rather than data sampled in real time typically use a
     * virtual presentation timeline derived from wallclock time to determine when the next frame
     * or other unit of each medium in the stored data should be presented. In this case, the RTP
@@ -9350,7 +9358,7 @@ public:
     * each unit would be related to the wallclock time at which the unit becomes current on the
     * virtual presentation timeline. Actual presentation occurs some time later as determined by
     * the receiver.
-    * 
+    *
     * An example describing live audio narration of prerecorded video illustrates the signicance
     * of choosing the sampling instant as the reference point. In this scenario, the video would
     * be presented locally for the narrator to view and would be simultaneously transmitted using
@@ -9762,7 +9770,7 @@ public:
     /**
     * recv rtsp message from underlayer io.
     * @param preq the output rtsp request message, which user must free it.
-    * @return an int error code. 
+    * @return an int error code.
     *       ERROR_RTSP_REQUEST_HEADER_EOF indicates request header EOF.
     */
     virtual int recv_message(SrsRtspRequest** preq);
@@ -9795,7 +9803,7 @@ private:
     *       token1 SP token2 SP ... tokenN CRLF
     * @param token, output the read token.
     * @param state, output the token parse state.
-    * @param normal_ch, the char to indicates the normal token. 
+    * @param normal_ch, the char to indicates the normal token.
     *       the SP use to indicates the normal token, @see SRS_RTSP_SP
     *       the 0x00 use to ignore normal token flag. @see recv_token_util_eof
     * @param pconsumed, output the token parsed length. NULL to ignore.
@@ -9810,19 +9818,19 @@ private:
 // following is generated by src/protocol/srs_http_stack.hpp
 /*
  The MIT License (MIT)
- 
+
  Copyright (c) 2013-2015 SRS(simple-rtmp-server)
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy of
  this software and associated documentation files (the "Software"), to deal in
  the Software without restriction, including without limitation the rights to
  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  the Software, and to permit persons to whom the Software is furnished to do so,
  subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -9905,7 +9913,8 @@ extern bool srs_go_http_body_allowd(int status);
 extern std::string srs_go_http_detect(char* data, int size);
 
 // state of message
-enum SrsHttpParseState {
+enum SrsHttpParseState
+{
     SrsHttpParseStateInit = 0,
     SrsHttpParseStateStart,
     SrsHttpParseStateHeaderComplete,
@@ -9990,12 +9999,12 @@ public:
     // for no-chunked mode,
     // final to send request, for example, content-length is 0.
     virtual int final_request() = 0;
-    
+
     // Header returns the header map that will be sent by WriteHeader.
     // Changing the header after a call to WriteHeader (or Write) has
     // no effect.
     virtual SrsHttpHeader* header() = 0;
-    
+
     // Write writes the data to the connection as part of an HTTP reply.
     // If WriteHeader has not yet been called, Write calls WriteHeader(http.StatusOK)
     // before writing the data.  If the Header does not contain a
@@ -10008,7 +10017,7 @@ public:
      * @see https://github.com/simple-rtmp-server/srs/issues/405
      */
     virtual int writev(iovec* iov, int iovcnt, ssize_t* pnwrite) = 0;
-    
+
     // WriteHeader sends an HTTP response header with status code.
     // If WriteHeader is not called explicitly, the first call to Write
     // will trigger an implicit WriteHeader(http.StatusOK).
@@ -10365,7 +10374,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //#include <srs_rtmp_io.hpp>
 
 /**
-* a kbps sample, for example, 1minute kbps, 
+* a kbps sample, for example, 1minute kbps,
 * 10minute kbps sample.
 */
 class SrsKbpsSample
@@ -10396,7 +10405,8 @@ public:
 class SrsKbpsSlice
 {
 private:
-    union slice_io {
+    union slice_io
+    {
         ISrsProtocolStatistic* in;
         ISrsProtocolStatistic* out;
     };
@@ -10551,7 +10561,7 @@ public:
 public:
     /**
     * add delta to kbps clac mechenism.
-    * we donot know the total bytes, but know the delta, for instance, 
+    * we donot know the total bytes, but know the delta, for instance,
     * for rtmp server to calc total bytes and kbps.
     * @remark user must invoke sample() to calc result after invoke this method.
     * @param delta, assert should never be NULL.
@@ -10613,29 +10623,30 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *************************************************************/
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifdef _WIN32
-    // include windows first.
-    #include <windows.h>
-    // the type used by this header for windows.
-    typedef unsigned long long u_int64_t;
-    typedef long long int64_t;
-    typedef unsigned int u_int32_t;
-    typedef u_int32_t uint32_t;
-    typedef int int32_t;
-    typedef unsigned char u_int8_t;
-    typedef char int8_t;
-    typedef unsigned short u_int16_t;
-    typedef short int16_t;
-    typedef int64_t ssize_t;
-    struct iovec {
-        void  *iov_base;    /* Starting address */
-        size_t iov_len;     /* Number of bytes to transfer */
-    };
+// include windows first.
+#include <windows.h>
+// the type used by this header for windows.
+typedef unsigned long long u_int64_t;
+typedef long long int64_t;
+typedef unsigned int u_int32_t;
+typedef u_int32_t uint32_t;
+typedef int int32_t;
+typedef unsigned char u_int8_t;
+typedef char int8_t;
+typedef unsigned short u_int16_t;
+typedef short int16_t;
+typedef int64_t ssize_t;
+struct iovec
+{
+    void  *iov_base;    /* Starting address */
+    size_t iov_len;     /* Number of bytes to transfer */
+};
 #endif
 
 #include <sys/types.h>
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 // typedefs
@@ -10661,7 +10672,7 @@ typedef void* srs_amf0_t;
 
 /**
 * create/destroy a rtmp protocol stack.
-* @url rtmp url, for example: 
+* @url rtmp url, for example:
 *         rtmp://localhost/live/livestream
 *
 * @return a rtmp handler, or NULL if error occured.
@@ -10723,9 +10734,9 @@ extern int srs_rtmp_do_complex_handshake(srs_rtmp_t rtmp);
 * @remark, all params can be NULL to ignore.
 * @remark, user should never free the args for we directly use it.
 */
-extern int srs_rtmp_set_connect_args(srs_rtmp_t rtmp, 
-    const char* tcUrl, const char* swfUrl, const char* pageUrl, srs_amf0_t args
-);
+extern int srs_rtmp_set_connect_args(srs_rtmp_t rtmp,
+                                     const char* tcUrl, const char* swfUrl, const char* pageUrl, srs_amf0_t args
+                                    );
 
 /**
 * connect to rtmp vhost/app
@@ -10739,7 +10750,7 @@ extern int srs_rtmp_connect_app(srs_rtmp_t rtmp);
 
 /**
 * connect to server, get the debug srs info.
-* 
+*
 * SRS debug info:
 * @param srs_server_ip, 128bytes, debug info, server ip client connected at.
 * @param srs_server, 128bytes, server info.
@@ -10752,10 +10763,10 @@ extern int srs_rtmp_connect_app(srs_rtmp_t rtmp);
 * @return 0, success; otherswise, failed.
 */
 extern int srs_rtmp_connect_app2(srs_rtmp_t rtmp,
-    char srs_server_ip[128], char srs_server[128], 
-    char srs_primary[128], char srs_authors[128], 
-    char srs_version[32], int* srs_id, int* srs_pid
-);
+                                 char srs_server_ip[128], char srs_server[128],
+                                 char srs_primary[128], char srs_authors[128],
+                                 char srs_version[32], int* srs_id, int* srs_pid
+                                );
 
 /**
 * play a live/vod stream.
@@ -10777,7 +10788,7 @@ extern int srs_rtmp_publish_stream(srs_rtmp_t rtmp);
 
 /**
 * do bandwidth check with srs server.
-* 
+*
 * bandwidth info:
 * @param start_time, output the start time, in ms.
 * @param end_time, output the end time, in ms.
@@ -10790,12 +10801,12 @@ extern int srs_rtmp_publish_stream(srs_rtmp_t rtmp);
 *
 * @return 0, success; otherswise, failed.
 */
-extern int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp, 
-    int64_t* start_time, int64_t* end_time, 
-    int* play_kbps, int* publish_kbps,
-    int* play_bytes, int* publish_bytes,
-    int* play_duration, int* publish_duration
-);
+extern int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp,
+                                    int64_t* start_time, int64_t* end_time,
+                                    int* play_kbps, int* publish_kbps,
+                                    int* play_bytes, int* publish_bytes,
+                                    int* play_duration, int* publish_duration
+                                   );
 
 /**
 * E.4.1 FLV Tag, page 75
@@ -10828,12 +10839,12 @@ extern int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp,
 *
 * @return 0, success; otherswise, failed.
 */
-extern int srs_rtmp_read_packet(srs_rtmp_t rtmp, 
-    char* type, u_int32_t* timestamp, char** data, int* size
-);
-extern int srs_rtmp_write_packet(srs_rtmp_t rtmp, 
-    char type, u_int32_t timestamp, char* data, int size
-);
+extern int srs_rtmp_read_packet(srs_rtmp_t rtmp,
+                                char* type, u_int32_t* timestamp, char** data, int* size
+                               );
+extern int srs_rtmp_write_packet(srs_rtmp_t rtmp,
+                                 char type, u_int32_t timestamp, char* data, int size
+                                );
 
 /**
 * whether type is script data and the data is onMetaData.
@@ -10886,20 +10897,20 @@ extern srs_bool srs_rtmp_is_onMetaData(char type, char* data, int size);
 * @example /trunk/research/librtmp/srs_aac_raw_publish.c
 * @example /trunk/research/librtmp/srs_audio_raw_publish.c
 *
-* @remark for aac, the frame must be in ADTS format. 
+* @remark for aac, the frame must be in ADTS format.
 *       @see aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 75, 1.A.2.2 ADTS
 * @remark for aac, only support profile 1-4, AAC main/LC/SSR/LTP,
 *       @see aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 23, 1.5.1.1 Audio object type
 *
 * @see https://github.com/simple-rtmp-server/srs/issues/212
 * @see E.4.2.1 AUDIODATA of video_file_format_spec_v10_1.pdf
-* 
+*
 * @return 0, success; otherswise, failed.
 */
-extern int srs_audio_write_raw_frame(srs_rtmp_t rtmp, 
-    char sound_format, char sound_rate, char sound_size, char sound_type,
-    char* frame, int frame_size, u_int32_t timestamp
-);
+extern int srs_audio_write_raw_frame(srs_rtmp_t rtmp,
+                                     char sound_format, char sound_rate, char sound_size, char sound_type,
+                                     char* frame, int frame_size, u_int32_t timestamp
+                                    );
 
 /**
 * whether aac raw data is in adts format,
@@ -10934,28 +10945,28 @@ extern int srs_aac_adts_frame_size(char* aac_raw_data, int ac_raw_size);
 * write h.264 raw frame over RTMP to rtmp server.
 * @param frames the input h264 raw data, encoded h.264 I/P/B frames data.
 *       frames can be one or more than one frame,
-*       each frame prefixed h.264 annexb header, by N[00] 00 00 01, where N>=0, 
+*       each frame prefixed h.264 annexb header, by N[00] 00 00 01, where N>=0,
 *       for instance, frame = header(00 00 00 01) + payload(67 42 80 29 95 A0 14 01 6E 40)
 *       about annexb, @see H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
-* @param frames_size the size of h264 raw data. 
+* @param frames_size the size of h264 raw data.
 *       assert frames_size > 0, at least has 1 bytes header.
 * @param dts the dts of h.264 raw data.
 * @param pts the pts of h.264 raw data.
-* 
+*
 * @remark, user should free the frames.
 * @remark, the tbn of dts/pts is 1/1000 for RTMP, that is, in ms.
 * @remark, cts = pts - dts
 * @remark, use srs_h264_startswith_annexb to check whether frame is annexb format.
 * @example /trunk/research/librtmp/srs_h264_raw_publish.c
 * @see https://github.com/simple-rtmp-server/srs/issues/66
-* 
+*
 * @return 0, success; otherswise, failed.
 *       for dvbsp error, @see srs_h264_is_dvbsp_error().
 *       for duplictated sps error, @see srs_h264_is_duplicated_sps_error().
 *       for duplictated pps error, @see srs_h264_is_duplicated_pps_error().
 */
 /**
-For the example file: 
+For the example file:
     http://winlinvip.github.io/srs.release/3rdparty/720p.h264.raw
 The data sequence is:
     // SPS
@@ -10981,11 +10992,11 @@ User also can send one by one:
     // IFrame
     srs_h264_write_raw_frames('0000000165B8041014C038008B0D0D3A071......', size, dts, pts)
     // PFrame
-    srs_h264_write_raw_frames('0000000141E02041F8CDDC562BBDEFAD2F......', size, dts, pts) 
+    srs_h264_write_raw_frames('0000000141E02041F8CDDC562BBDEFAD2F......', size, dts, pts)
 */
-extern int srs_h264_write_raw_frames(srs_rtmp_t rtmp, 
-    char* frames, int frames_size, u_int32_t dts, u_int32_t pts
-);
+extern int srs_h264_write_raw_frames(srs_rtmp_t rtmp,
+                                     char* frames, int frames_size, u_int32_t dts, u_int32_t pts
+                                    );
 /**
 * whether error_code is dvbsp(drop video before sps/pps/sequence-header) error.
 *
@@ -10999,14 +11010,14 @@ extern int srs_h264_write_raw_frames(srs_rtmp_t rtmp,
 extern srs_bool srs_h264_is_dvbsp_error(int error_code);
 /**
 * whether error_code is duplicated sps error.
-* 
+*
 * @see https://github.com/simple-rtmp-server/srs/issues/204
 * @example /trunk/research/librtmp/srs_h264_raw_publish.c
 */
 extern srs_bool srs_h264_is_duplicated_sps_error(int error_code);
 /**
 * whether error_code is duplicated pps error.
-* 
+*
 * @see https://github.com/simple-rtmp-server/srs/issues/204
 * @example /trunk/research/librtmp/srs_h264_raw_publish.c
 */
@@ -11016,7 +11027,7 @@ extern srs_bool srs_h264_is_duplicated_pps_error(int error_code);
 * which bytes sequence matches N[00] 00 00 01, where N>=0.
 * @param h264_raw_data the input h264 raw data, a encoded h.264 I/P/B frame data.
 * @paam h264_raw_size the size of h264 raw data.
-* @param pnb_start_code output the size of start code, must >=3. 
+* @param pnb_start_code output the size of start code, must >=3.
 *       NULL to ignore.
 *
 * @reamrk used to check whether current frame is in annexb format.
@@ -11025,7 +11036,7 @@ extern srs_bool srs_h264_is_duplicated_pps_error(int error_code);
 * @return 0 false; otherwise, true.
 */
 extern srs_bool srs_h264_startswith_annexb(
-    char* h264_raw_data, int h264_raw_size, 
+    char* h264_raw_data, int h264_raw_size,
     int* pnb_start_code
 );
 
@@ -11044,7 +11055,7 @@ extern srs_flv_t srs_flv_open_read(const char* file);
 extern srs_flv_t srs_flv_open_write(const char* file);
 extern void srs_flv_close(srs_flv_t flv);
 /**
-* read the flv header. 9bytes header. 
+* read the flv header. 9bytes header.
 * @param header, @see E.2 The FLV header, flv_v10_1.pdf in SRS doc.
 *   3bytes, signature, "FLV",
 *   1bytes, version, 0x01,
@@ -11056,8 +11067,8 @@ extern void srs_flv_close(srs_flv_t flv);
 */
 extern int srs_flv_read_header(srs_flv_t flv, char header[9]);
 /**
-* read the flv tag header, 1bytes tag, 3bytes data_size, 
-* 4bytes time, 3bytes stream id. 
+* read the flv tag header, 1bytes tag, 3bytes data_size,
+* 4bytes time, 3bytes stream id.
 * @param ptype, output the type of tag, macros:
 *            SRS_RTMP_TYPE_AUDIO, FlvTagAudio
 *            SRS_RTMP_TYPE_VIDEO, FlvTagVideo
@@ -11068,18 +11079,18 @@ extern int srs_flv_read_header(srs_flv_t flv, char header[9]);
 * @return 0, success; otherswise, failed.
 * @remark, user must ensure the next is a tag, srs never check it.
 */
-extern int srs_flv_read_tag_header(srs_flv_t flv, 
-    char* ptype, int32_t* pdata_size, u_int32_t* ptime
-);
+extern int srs_flv_read_tag_header(srs_flv_t flv,
+                                   char* ptype, int32_t* pdata_size, u_int32_t* ptime
+                                  );
 /**
-* read the tag data. drop the 4bytes previous tag size 
+* read the tag data. drop the 4bytes previous tag size
 * @param data, the data to read, user alloc and free it.
 * @param size, the size of data to read, get by srs_flv_read_tag_header().
 * @remark, srs will ignore and drop the 4bytes previous tag size.
 */
 extern int srs_flv_read_tag_data(srs_flv_t flv, char* data, int32_t size);
 /**
-* write the flv header. 9bytes header. 
+* write the flv header. 9bytes header.
 * @param header, @see E.2 The FLV header, flv_v10_1.pdf in SRS doc.
 *   3bytes, signature, "FLV",
 *   1bytes, version, 0x01,
@@ -11097,11 +11108,11 @@ extern int srs_flv_write_header(srs_flv_t flv, char header[9]);
 * @remark, auto write the 4bytes zero previous tag size.
 */
 /* write flv tag to file, auto write the 4bytes previous tag size */
-extern int srs_flv_write_tag(srs_flv_t flv, 
-    char type, int32_t time, char* data, int size
-);
+extern int srs_flv_write_tag(srs_flv_t flv,
+                             char type, int32_t time, char* data, int size
+                            );
 /**
-* get the tag size, for flv injecter to adjust offset, 
+* get the tag size, for flv injecter to adjust offset,
 *       size = tag_header(11B) + data_size + previous_tag(4B)
 * @return the size of tag.
 */
@@ -11116,13 +11127,13 @@ extern void srs_flv_lseek(srs_flv_t flv, int64_t offset);
 extern srs_bool srs_flv_is_eof(int error_code);
 /* media codec */
 /**
-* whether the video body is sequence header 
+* whether the video body is sequence header
 * @param data, the data of tag, read by srs_flv_read_tag_data().
 * @param size, the size of tag, read by srs_flv_read_tag_data().
 */
 extern srs_bool srs_flv_is_sequence_header(char* data, int32_t size);
 /**
-* whether the video body is keyframe 
+* whether the video body is keyframe
 * @param data, the data of tag, read by srs_flv_read_tag_data().
 * @param size, the size of tag, read by srs_flv_read_tag_data().
 */
@@ -11226,7 +11237,7 @@ extern int srs_utils_parse_timestamp(
     u_int32_t time, char type, char* data, int size,
     u_int32_t* ppts
 );
-    
+
 /**
  * whether the flv tag specified by param type is ok.
  * @return true when tag is video/audio/script-data; otherwise, false.
@@ -11342,7 +11353,7 @@ extern char srs_utils_flv_audio_aac_packet_type(char* data, int size);
 **************************************************************
 *************************************************************/
 /**
-* human readable print 
+* human readable print
 * @param pdata, output the heap data, NULL to ignore.
 *       user must use srs_amf0_free_bytes to free it.
 * @return return the *pdata for print. NULL to ignore.
@@ -11354,7 +11365,7 @@ extern char* srs_human_amf0_print(srs_amf0_t amf0, char** pdata, int* psize);
 *     SRS_RTMP_TYPE_VIDEO to "Video"
 *     SRS_RTMP_TYPE_SCRIPT to "Data"
 *     otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_tag_type2string(char type);
@@ -11368,7 +11379,7 @@ extern const char* srs_human_flv_tag_type2string(char type);
 *           Screen2 = Screen video version 2
 *           H.264 = AVC
 *           otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_video_codec_id2string(char codec_id);
@@ -11379,7 +11390,7 @@ extern const char* srs_human_flv_video_codec_id2string(char codec_id);
 *           Nalu = AVC NALU
 *           SpsPpsEnd = AVC end of sequence
 *           otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_video_avc_packet_type2string(char avc_packet_type);
@@ -11392,7 +11403,7 @@ extern const char* srs_human_flv_video_avc_packet_type2string(char avc_packet_ty
 *           GI = generated key frame (reserved for server use only)
 *           VI = video info/command frame
 *           otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_video_frame_type2string(char frame_type);
@@ -11415,7 +11426,7 @@ extern const char* srs_human_flv_video_frame_type2string(char frame_type);
 *               MP3KHz8 = MP3 8 kHz
 *               DeviceSpecific = Device-specific sound
 *               otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_audio_sound_format2string(char sound_format);
@@ -11428,7 +11439,7 @@ extern const char* srs_human_flv_audio_sound_format2string(char sound_format);
 *               22KHz = 22 kHz
 *               44KHz = 44 kHz
 *               otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_audio_sound_rate2string(char sound_rate);
@@ -11441,7 +11452,7 @@ extern const char* srs_human_flv_audio_sound_rate2string(char sound_rate);
 *               8bit = 8-bit samples
 *               16bit = 16-bit samples
 *               otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_audio_sound_size2string(char sound_size);
@@ -11452,7 +11463,7 @@ extern const char* srs_human_flv_audio_sound_size2string(char sound_size);
 *               Mono = Mono sound
 *               Stereo = Stereo sound
 *               otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_audio_sound_type2string(char sound_type);
@@ -11463,7 +11474,7 @@ extern const char* srs_human_flv_audio_sound_type2string(char sound_type);
 *               SH = AAC sequence header
 *               Raw = AAC raw
 *               otherwise, "Unknown"
-* @remark user never free the return char*, 
+* @remark user never free the return char*,
 *   it's static shared const string.
 */
 extern const char* srs_human_flv_audio_aac_packet_type2string(char aac_packet_type);
@@ -11493,13 +11504,13 @@ extern const char* srs_human_format_time();
 
 // when disabled log, donot compile it.
 #ifdef SRS_DISABLE_LOG
-    #define srs_human_trace(msg, ...) (void)0
-    #define srs_human_verbose(msg, ...) (void)0
-    #define srs_human_raw(msg, ...) (void)0
+#define srs_human_trace(msg, ...) (void)0
+#define srs_human_verbose(msg, ...) (void)0
+#define srs_human_raw(msg, ...) (void)0
 #else
-    #define srs_human_trace(msg, ...) printf("[%s] ", srs_human_format_time());printf(msg, ##__VA_ARGS__);printf("\n")
-    #define srs_human_verbose(msg, ...) printf("[%s] ", srs_human_format_time());printf(msg, ##__VA_ARGS__);printf("\n")
-    #define srs_human_raw(msg, ...) printf(msg, ##__VA_ARGS__)
+#define srs_human_trace(msg, ...) printf("[%s] ", srs_human_format_time());printf(msg, ##__VA_ARGS__);printf("\n")
+#define srs_human_verbose(msg, ...) printf("[%s] ", srs_human_format_time());printf(msg, ##__VA_ARGS__);printf("\n")
+#define srs_human_raw(msg, ...) printf(msg, ##__VA_ARGS__)
 #endif
 
 /*************************************************************
@@ -11510,94 +11521,94 @@ extern const char* srs_human_format_time();
 // the void* will convert to your handler for io hijack.
 typedef void* srs_hijack_io_t;
 #ifdef SRS_HIJACK_IO
-    #ifndef _WIN32
-        // for iovec.
-        #include <sys/uio.h>
-    #endif
-    /**
-    * get the hijack io object in rtmp protocol sdk.
-    * @remark, user should never provides this method, srs-librtmp provides it.
-    */
-    extern srs_hijack_io_t srs_hijack_io_get(srs_rtmp_t rtmp);
+#ifndef _WIN32
+// for iovec.
+#include <sys/uio.h>
+#endif
+/**
+* get the hijack io object in rtmp protocol sdk.
+* @remark, user should never provides this method, srs-librtmp provides it.
+*/
+extern srs_hijack_io_t srs_hijack_io_get(srs_rtmp_t rtmp);
 #endif
 // define the following macro and functions in your module to hijack the io.
 // the example @see https://github.com/winlinvip/st-load
 // which use librtmp but use its own io(use st also).
 #ifdef SRS_HIJACK_IO
-    /**
-    * create hijack.
-    * @return NULL for error; otherwise, ok.
-    */
-    extern srs_hijack_io_t srs_hijack_io_create();
-    /**
-    * destroy the context, user must close the socket.
-    */
-    extern void srs_hijack_io_destroy(srs_hijack_io_t ctx);
-    /**
-    * create socket, not connect yet.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int srs_hijack_io_create_socket(srs_hijack_io_t ctx);
-    /**
-    * connect socket at server_ip:port.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int srs_hijack_io_connect(srs_hijack_io_t ctx, const char* server_ip, int port);
-    /**
-    * read from socket.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int srs_hijack_io_read(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread);
-    /**
-    * set the socket recv timeout.
-    * @return 0, success; otherswise, failed.
-    */
-    extern void srs_hijack_io_set_recv_timeout(srs_hijack_io_t ctx, int64_t timeout_us);
-    /**
-    * get the socket recv timeout.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int64_t srs_hijack_io_get_recv_timeout(srs_hijack_io_t ctx);
-    /**
-    * get the socket recv bytes.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int64_t srs_hijack_io_get_recv_bytes(srs_hijack_io_t ctx);
-    /**
-    * set the socket send timeout.
-    * @return 0, success; otherswise, failed.
-    */
-    extern void srs_hijack_io_set_send_timeout(srs_hijack_io_t ctx, int64_t timeout_us);
-    /**
-    * get the socket send timeout.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int64_t srs_hijack_io_get_send_timeout(srs_hijack_io_t ctx);
-    /**
-    * get the socket send bytes.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int64_t srs_hijack_io_get_send_bytes(srs_hijack_io_t ctx);
-    /**
-    * writev of socket.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int srs_hijack_io_writev(srs_hijack_io_t ctx, const iovec *iov, int iov_size, ssize_t* nwrite);
-    /**
-    * whether the timeout is never timeout.
-    * @return 0, success; otherswise, failed.
-    */
-    extern bool srs_hijack_io_is_never_timeout(srs_hijack_io_t ctx, int64_t timeout_us);
-    /**
-    * read fully, fill the buf exactly size bytes.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int srs_hijack_io_read_fully(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread);
-    /**
-    * write bytes to socket.
-    * @return 0, success; otherswise, failed.
-    */
-    extern int srs_hijack_io_write(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nwrite);
+/**
+* create hijack.
+* @return NULL for error; otherwise, ok.
+*/
+extern srs_hijack_io_t srs_hijack_io_create();
+/**
+* destroy the context, user must close the socket.
+*/
+extern void srs_hijack_io_destroy(srs_hijack_io_t ctx);
+/**
+* create socket, not connect yet.
+* @return 0, success; otherswise, failed.
+*/
+extern int srs_hijack_io_create_socket(srs_hijack_io_t ctx);
+/**
+* connect socket at server_ip:port.
+* @return 0, success; otherswise, failed.
+*/
+extern int srs_hijack_io_connect(srs_hijack_io_t ctx, const char* server_ip, int port);
+/**
+* read from socket.
+* @return 0, success; otherswise, failed.
+*/
+extern int srs_hijack_io_read(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread);
+/**
+* set the socket recv timeout.
+* @return 0, success; otherswise, failed.
+*/
+extern void srs_hijack_io_set_recv_timeout(srs_hijack_io_t ctx, int64_t timeout_us);
+/**
+* get the socket recv timeout.
+* @return 0, success; otherswise, failed.
+*/
+extern int64_t srs_hijack_io_get_recv_timeout(srs_hijack_io_t ctx);
+/**
+* get the socket recv bytes.
+* @return 0, success; otherswise, failed.
+*/
+extern int64_t srs_hijack_io_get_recv_bytes(srs_hijack_io_t ctx);
+/**
+* set the socket send timeout.
+* @return 0, success; otherswise, failed.
+*/
+extern void srs_hijack_io_set_send_timeout(srs_hijack_io_t ctx, int64_t timeout_us);
+/**
+* get the socket send timeout.
+* @return 0, success; otherswise, failed.
+*/
+extern int64_t srs_hijack_io_get_send_timeout(srs_hijack_io_t ctx);
+/**
+* get the socket send bytes.
+* @return 0, success; otherswise, failed.
+*/
+extern int64_t srs_hijack_io_get_send_bytes(srs_hijack_io_t ctx);
+/**
+* writev of socket.
+* @return 0, success; otherswise, failed.
+*/
+extern int srs_hijack_io_writev(srs_hijack_io_t ctx, const iovec *iov, int iov_size, ssize_t* nwrite);
+/**
+* whether the timeout is never timeout.
+* @return 0, success; otherswise, failed.
+*/
+extern bool srs_hijack_io_is_never_timeout(srs_hijack_io_t ctx, int64_t timeout_us);
+/**
+* read fully, fill the buf exactly size bytes.
+* @return 0, success; otherswise, failed.
+*/
+extern int srs_hijack_io_read_fully(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread);
+/**
+* write bytes to socket.
+* @return 0, success; otherswise, failed.
+*/
+extern int srs_hijack_io_write(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nwrite);
 #endif
 
 /*************************************************************
@@ -11607,52 +11618,52 @@ typedef void* srs_hijack_io_t;
 *************************************************************/
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifdef _WIN32
-    // for time.
-    #define _CRT_SECURE_NO_WARNINGS
-    #include <time.h>
-    int gettimeofday(struct timeval* tv, struct timezone* tz);
-    #define PRId64 "lld"
-    
-    // for inet helpers.
-    typedef int socklen_t;
-    const char *inet_ntop(int af, const void *src, char *dst, socklen_t size);
-    
-    // for mkdir().
-    #include<direct.h>
-    
-    // for open().
-    typedef int mode_t;
-    #define S_IRUSR 0
-    #define S_IWUSR 0
-    #define S_IXUSR 0
-    #define S_IRGRP 0
-    #define S_IWGRP 0
-    #define S_IXGRP 0
-    #define S_IROTH 0
-    #define S_IXOTH 0
-    
-    // for file seek.
-    #include <io.h>
-    #include <fcntl.h>
-    #define open _open
-    #define close _close
-    #define lseek _lseek
-    #define write _write
-    #define read _read
-    
-    // for pid.
-    typedef int pid_t;
-    pid_t getpid(void);
-    
-    // for socket.
-    ssize_t writev(int fd, const struct iovec *iov, int iovcnt);
-    typedef int64_t useconds_t;
-    int usleep(useconds_t usec);
-    int socket_setup();
-    int socket_cleanup();
-    
-    // others.
-    #define snprintf _snprintf
+// for time.
+#define _CRT_SECURE_NO_WARNINGS
+#include <time.h>
+int gettimeofday(struct timeval* tv, struct timezone* tz);
+#define PRId64 "lld"
+
+// for inet helpers.
+typedef int socklen_t;
+const char *inet_ntop(int af, const void *src, char *dst, socklen_t size);
+
+// for mkdir().
+#include<direct.h>
+
+// for open().
+typedef int mode_t;
+#define S_IRUSR 0
+#define S_IWUSR 0
+#define S_IXUSR 0
+#define S_IRGRP 0
+#define S_IWGRP 0
+#define S_IXGRP 0
+#define S_IROTH 0
+#define S_IXOTH 0
+
+// for file seek.
+#include <io.h>
+#include <fcntl.h>
+#define open _open
+#define close _close
+#define lseek _lseek
+#define write _write
+#define read _read
+
+// for pid.
+typedef int pid_t;
+pid_t getpid(void);
+
+// for socket.
+ssize_t writev(int fd, const struct iovec *iov, int iovcnt);
+typedef int64_t useconds_t;
+int usleep(useconds_t usec);
+int socket_setup();
+int socket_cleanup();
+
+// others.
+#define snprintf _snprintf
 #endif
 
 #ifdef __cplusplus
@@ -11699,7 +11710,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifndef _WIN32
-    #define SOCKET int
+#define SOCKET int
 #endif
 
 /**
@@ -11793,7 +11804,7 @@ public:
     virtual int initialize(SrsRtmpClient* rtmp);
     /**
     * do bandwidth check.
-    * 
+    *
     * bandwidth info:
     * @param start_time, output the start time, in ms.
     * @param end_time, output the end time, in ms.
@@ -11805,7 +11816,7 @@ public:
     * @param publish_duration, output the publish/upload test duration, in ms.
     */
     virtual int bandwidth_check(
-        int64_t* start_time, int64_t* end_time, 
+        int64_t* start_time, int64_t* end_time,
         int* play_kbps, int* publish_kbps,
         int* play_bytes, int* publish_bytes,
         int* play_duration, int* publish_duration
@@ -11954,15 +11965,18 @@ std::map<void*, SrsMemoryObject*> _srs_ptrs;
 void srs_memory_watch(void* ptr, string category, int size)
 {
     SrsMemoryObject* obj = NULL;
-    
+
     std::map<void*, SrsMemoryObject*>::iterator it;
-    if ((it = _srs_ptrs.find(ptr)) != _srs_ptrs.end()) {
+    if ((it = _srs_ptrs.find(ptr)) != _srs_ptrs.end())
+    {
         obj = it->second;
-    } else {
+    }
+    else
+    {
         obj = new SrsMemoryObject();
         _srs_ptrs[ptr] = obj;
     }
-    
+
     obj->ptr = ptr;
     obj->category = category;
     obj->size = size;
@@ -11971,10 +11985,11 @@ void srs_memory_watch(void* ptr, string category, int size)
 void srs_memory_unwatch(void* ptr)
 {
     std::map<void*, SrsMemoryObject*>::iterator it;
-    if ((it = _srs_ptrs.find(ptr)) != _srs_ptrs.end()) {
+    if ((it = _srs_ptrs.find(ptr)) != _srs_ptrs.end())
+    {
         SrsMemoryObject* obj = it->second;
         srs_freep(obj);
-        
+
         _srs_ptrs.erase(it);
     }
 }
@@ -11982,15 +11997,16 @@ void srs_memory_unwatch(void* ptr)
 void srs_memory_report()
 {
     printf("srs memory watch leak report:\n");
-    
+
     int total = 0;
     std::map<void*, SrsMemoryObject*>::iterator it;
-    for (it = _srs_ptrs.begin(); it != _srs_ptrs.end(); ++it) {
+    for (it = _srs_ptrs.begin(); it != _srs_ptrs.end(); ++it)
+    {
         SrsMemoryObject* obj = it->second;
         printf("    %s: %#"PRIx64", %dB\n", obj->category.c_str(), (int64_t)obj->ptr, obj->size);
         total += obj->size;
     }
-    
+
     printf("%d objects leak %dKB.\n", (int)_srs_ptrs.size(), total / 1024);
     printf("@remark use script to cleanup for memory watch: ./etc/init.d/srs stop\n");
 }
@@ -12026,15 +12042,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 bool srs_is_system_control_error(int error_code)
 {
     return error_code == ERROR_CONTROL_RTMP_CLOSE
-        || error_code == ERROR_CONTROL_REPUBLISH;
+           || error_code == ERROR_CONTROL_REPUBLISH;
 }
 
 bool srs_is_client_gracefully_close(int error_code)
 {
     return error_code == ERROR_SOCKET_READ
-        || error_code == ERROR_SOCKET_READ_FULLY
-        || error_code == ERROR_SOCKET_WRITE
-        || error_code == ERROR_SOCKET_TIMEOUT;
+           || error_code == ERROR_SOCKET_READ_FULLY
+           || error_code == ERROR_SOCKET_WRITE
+           || error_code == ERROR_SOCKET_TIMEOUT;
 }
 
 // following is generated by src/kernel/srs_kernel_log.cpp
@@ -12069,7 +12085,7 @@ ISrsLog::ISrsLog()
 {
 }
 
-ISrsLog::~ISrsLog() 
+ISrsLog::~ISrsLog()
 {
 }
 
@@ -12153,7 +12169,7 @@ SrsStream::SrsStream()
 {
     p = bytes = NULL;
     nb_bytes = 0;
-    
+
     // TODO: support both little and big endian.
     srs_assert(srs_is_little_endian());
 }
@@ -12165,14 +12181,16 @@ SrsStream::~SrsStream()
 int SrsStream::initialize(char* b, int nb)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!b) {
+
+    if (!b)
+    {
         ret = ERROR_KERNEL_STREAM_INIT;
         srs_error("stream param bytes must not be NULL. ret=%d", ret);
         return ret;
     }
-    
-    if (nb <= 0) {
+
+    if (nb <= 0)
+    {
         ret = ERROR_KERNEL_STREAM_INIT;
         srs_error("stream param size must be positive. ret=%d", ret);
         return ret;
@@ -12208,67 +12226,67 @@ bool SrsStream::empty()
 bool SrsStream::require(int required_size)
 {
     srs_assert(required_size > 0);
-    
+
     return required_size <= nb_bytes - (p - bytes);
 }
 
 void SrsStream::skip(int size)
 {
     srs_assert(p);
-    
+
     p += size;
 }
 
 int8_t SrsStream::read_1bytes()
 {
     srs_assert(require(1));
-    
+
     return (int8_t)*p++;
 }
 
 int16_t SrsStream::read_2bytes()
 {
     srs_assert(require(2));
-    
+
     int16_t value;
     char* pp = (char*)&value;
     pp[1] = *p++;
     pp[0] = *p++;
-    
+
     return value;
 }
 
 int32_t SrsStream::read_3bytes()
 {
     srs_assert(require(3));
-    
+
     int32_t value = 0x00;
     char* pp = (char*)&value;
     pp[2] = *p++;
     pp[1] = *p++;
     pp[0] = *p++;
-    
+
     return value;
 }
 
 int32_t SrsStream::read_4bytes()
 {
     srs_assert(require(4));
-    
+
     int32_t value;
     char* pp = (char*)&value;
     pp[3] = *p++;
     pp[2] = *p++;
     pp[1] = *p++;
     pp[0] = *p++;
-    
+
     return value;
 }
 
 int64_t SrsStream::read_8bytes()
 {
     srs_assert(require(8));
-    
+
     int64_t value;
     char* pp = (char*)&value;
     pp[7] = *p++;
@@ -12279,42 +12297,42 @@ int64_t SrsStream::read_8bytes()
     pp[2] = *p++;
     pp[1] = *p++;
     pp[0] = *p++;
-    
+
     return value;
 }
 
 string SrsStream::read_string(int len)
 {
     srs_assert(require(len));
-    
+
     std::string value;
     value.append(p, len);
-    
+
     p += len;
-    
+
     return value;
 }
 
 void SrsStream::read_bytes(char* data, int size)
 {
     srs_assert(require(size));
-    
+
     memcpy(data, p, size);
-    
+
     p += size;
 }
 
 void SrsStream::write_1bytes(int8_t value)
 {
     srs_assert(require(1));
-    
+
     *p++ = value;
 }
 
 void SrsStream::write_2bytes(int16_t value)
 {
     srs_assert(require(2));
-    
+
     char* pp = (char*)&value;
     *p++ = pp[1];
     *p++ = pp[0];
@@ -12323,7 +12341,7 @@ void SrsStream::write_2bytes(int16_t value)
 void SrsStream::write_4bytes(int32_t value)
 {
     srs_assert(require(4));
-    
+
     char* pp = (char*)&value;
     *p++ = pp[3];
     *p++ = pp[2];
@@ -12334,7 +12352,7 @@ void SrsStream::write_4bytes(int32_t value)
 void SrsStream::write_3bytes(int32_t value)
 {
     srs_assert(require(3));
-    
+
     char* pp = (char*)&value;
     *p++ = pp[2];
     *p++ = pp[1];
@@ -12344,7 +12362,7 @@ void SrsStream::write_3bytes(int32_t value)
 void SrsStream::write_8bytes(int64_t value)
 {
     srs_assert(require(8));
-    
+
     char* pp = (char*)&value;
     *p++ = pp[7];
     *p++ = pp[6];
@@ -12359,7 +12377,7 @@ void SrsStream::write_8bytes(int64_t value)
 void SrsStream::write_string(string value)
 {
     srs_assert(require((int)value.length()));
-    
+
     memcpy(p, value.data(), value.length());
     p += value.length();
 }
@@ -12367,7 +12385,7 @@ void SrsStream::write_string(string value)
 void SrsStream::write_bytes(char* data, int size)
 {
     srs_assert(require(size));
-    
+
     memcpy(p, data, size);
     p += size;
 }
@@ -12383,25 +12401,30 @@ SrsBitStream::~SrsBitStream()
 {
 }
 
-int SrsBitStream::initialize(SrsStream* s) {
+int SrsBitStream::initialize(SrsStream* s)
+{
     stream = s;
     return ERROR_SUCCESS;
 }
 
-bool SrsBitStream::empty() {
-    if (cb_left) {
+bool SrsBitStream::empty()
+{
+    if (cb_left)
+    {
         return false;
     }
     return stream->empty();
 }
 
-int8_t SrsBitStream::read_bit() {
-    if (!cb_left) {
+int8_t SrsBitStream::read_bit()
+{
+    if (!cb_left)
+    {
         srs_assert(!stream->empty());
         cb = stream->read_1bytes();
         cb_left = 8;
     }
-    
+
     int8_t v = (cb >> (cb_left - 1)) & 0x01;
     cb_left--;
     return v;
@@ -12460,11 +12483,12 @@ using namespace std;
 int srs_avc_nalu_read_uev(SrsBitStream* stream, int32_t& v)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (stream->empty()) {
+
+    if (stream->empty())
+    {
         return ERROR_AVC_NALU_UEV;
     }
-    
+
     // ue(v) in 9.1 Parsing process for Exp-Golomb codes
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 227.
     // Syntax elements coded as ue(v), me(v), or se(v) are Exp-Golomb-coded.
@@ -12474,33 +12498,37 @@ int srs_avc_nalu_read_uev(SrsBitStream* stream, int32_t& v)
     // The variable codeNum is then assigned as follows:
     //      codeNum = (2<<leadingZeroBits) - 1 + read_bits( leadingZeroBits )
     int leadingZeroBits = -1;
-    for (int8_t b = 0; !b && !stream->empty(); leadingZeroBits++) {
+    for (int8_t b = 0; !b && !stream->empty(); leadingZeroBits++)
+    {
         b = stream->read_bit();
     }
-    
-    if (leadingZeroBits >= 31) {
+
+    if (leadingZeroBits >= 31)
+    {
         return ERROR_AVC_NALU_UEV;
     }
-    
+
     v = (1 << leadingZeroBits) - 1;
-    for (int i = 0; i < leadingZeroBits; i++) {
+    for (int i = 0; i < leadingZeroBits; i++)
+    {
         int32_t b = stream->read_bit();
         v += b << (leadingZeroBits - 1);
     }
-    
+
     return ret;
 }
 
 int srs_avc_nalu_read_bit(SrsBitStream* stream, int8_t& v)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (stream->empty()) {
+
+    if (stream->empty())
+    {
         return ERROR_AVC_NALU_UEV;
     }
-    
+
     v = stream->read_bit();
-    
+
     return ret;
 }
 
@@ -12509,25 +12537,28 @@ static int64_t _srs_system_time_startup_time = 0;
 
 int64_t srs_get_system_time_ms()
 {
-    if (_srs_system_time_us_cache <= 0) {
+    if (_srs_system_time_us_cache <= 0)
+    {
         srs_update_system_time_ms();
     }
-    
+
     return _srs_system_time_us_cache / 1000;
 }
 int64_t srs_get_system_startup_time_ms()
 {
-    if (_srs_system_time_startup_time <= 0) {
+    if (_srs_system_time_startup_time <= 0)
+    {
         srs_update_system_time_ms();
     }
-    
+
     return _srs_system_time_startup_time / 1000;
 }
 int64_t srs_update_system_time_ms()
 {
     timeval now;
-    
-    if (gettimeofday(&now, NULL) < 0) {
+
+    if (gettimeofday(&now, NULL) < 0)
+    {
         srs_warn("gettimeofday failed, ignore");
         return -1;
     }
@@ -12535,147 +12566,165 @@ int64_t srs_update_system_time_ms()
     // @see: https://github.com/simple-rtmp-server/srs/issues/35
     // we must convert the tv_sec/tv_usec to int64_t.
     int64_t now_us = ((int64_t)now.tv_sec) * 1000 * 1000 + (int64_t)now.tv_usec;
-    
+
     // for some ARM os, the starttime maybe invalid,
     // for example, on the cubieboard2, the srs_startup_time is 1262304014640,
     // while now is 1403842979210 in ms, diff is 141538964570 ms, 1638 days
     // it's impossible, and maybe the problem of startup time is invalid.
     // use date +%s to get system time is 1403844851.
     // so we use relative time.
-    if (_srs_system_time_us_cache <= 0) {
+    if (_srs_system_time_us_cache <= 0)
+    {
         _srs_system_time_us_cache = now_us;
         _srs_system_time_startup_time = now_us;
         return _srs_system_time_us_cache / 1000;
     }
-    
+
     // use relative time.
     int64_t diff = now_us - _srs_system_time_us_cache;
     diff = srs_max(0, diff);
-    if (diff < 0 || diff > 1000 * SYS_TIME_RESOLUTION_US) {
-        srs_warn("system time jump, history=%"PRId64"us, now=%"PRId64"us, diff=%"PRId64"us", 
-            _srs_system_time_us_cache, now_us, diff);
+    if (diff < 0 || diff > 1000 * SYS_TIME_RESOLUTION_US)
+    {
+        srs_warn("system time jump, history=%"PRId64"us, now=%"PRId64"us, diff=%"PRId64"us",
+                 _srs_system_time_us_cache, now_us, diff);
         // @see: https://github.com/simple-rtmp-server/srs/issues/109
         _srs_system_time_startup_time += diff;
     }
-    
+
     _srs_system_time_us_cache = now_us;
-    srs_info("system time updated, startup=%"PRId64"us, now=%"PRId64"us", 
-        _srs_system_time_startup_time, _srs_system_time_us_cache);
-    
+    srs_info("system time updated, startup=%"PRId64"us, now=%"PRId64"us",
+             _srs_system_time_startup_time, _srs_system_time_us_cache);
+
     return _srs_system_time_us_cache / 1000;
 }
 
 string srs_dns_resolve(string host)
 {
-    if (inet_addr(host.c_str()) != INADDR_NONE) {
+    if (inet_addr(host.c_str()) != INADDR_NONE)
+    {
         return host;
     }
-    
+
     hostent* answer = gethostbyname(host.c_str());
-    if (answer == NULL) {
+    if (answer == NULL)
+    {
         return "";
     }
-    
+
     char ipv4[16];
     memset(ipv4, 0, sizeof(ipv4));
-    for (int i = 0; i < answer->h_length; i++) {
+    for (int i = 0; i < answer->h_length; i++)
+    {
         inet_ntop(AF_INET, answer->h_addr_list[i], ipv4, sizeof(ipv4));
         break;
     }
-    
+
     return ipv4;
 }
 
 bool srs_is_little_endian()
 {
-    // convert to network(big-endian) order, if not equals, 
+    // convert to network(big-endian) order, if not equals,
     // the system is little-endian, so need to convert the int64
     static int little_endian_check = -1;
-    
-    if(little_endian_check == -1) {
-        union {
+
+    if(little_endian_check == -1)
+    {
+        union
+        {
             int32_t i;
             int8_t c;
         } little_check_union;
-        
+
         little_check_union.i = 0x01;
         little_endian_check = little_check_union.c;
     }
-    
+
     return (little_endian_check == 1);
 }
 
 string srs_string_replace(string str, string old_str, string new_str)
 {
     std::string ret = str;
-    
-    if (old_str == new_str) {
+
+    if (old_str == new_str)
+    {
         return ret;
     }
-    
+
     size_t pos = 0;
-    while ((pos = ret.find(old_str, pos)) != std::string::npos) {
+    while ((pos = ret.find(old_str, pos)) != std::string::npos)
+    {
         ret = ret.replace(pos, old_str.length(), new_str);
     }
-    
+
     return ret;
 }
 
 string srs_string_trim_end(string str, string trim_chars)
 {
     std::string ret = str;
-    
-    for (int i = 0; i < (int)trim_chars.length(); i++) {
+
+    for (int i = 0; i < (int)trim_chars.length(); i++)
+    {
         char ch = trim_chars.at(i);
-        
-        while (!ret.empty() && ret.at(ret.length() - 1) == ch) {
+
+        while (!ret.empty() && ret.at(ret.length() - 1) == ch)
+        {
             ret.erase(ret.end() - 1);
-            
+
             // ok, matched, should reset the search
             i = 0;
         }
     }
-    
+
     return ret;
 }
 
 string srs_string_trim_start(string str, string trim_chars)
 {
     std::string ret = str;
-    
-    for (int i = 0; i < (int)trim_chars.length(); i++) {
+
+    for (int i = 0; i < (int)trim_chars.length(); i++)
+    {
         char ch = trim_chars.at(i);
-        
-        while (!ret.empty() && ret.at(0) == ch) {
+
+        while (!ret.empty() && ret.at(0) == ch)
+        {
             ret.erase(ret.begin());
-            
+
             // ok, matched, should reset the search
             i = 0;
         }
     }
-    
+
     return ret;
 }
 
 string srs_string_remove(string str, string remove_chars)
 {
     std::string ret = str;
-    
-    for (int i = 0; i < (int)remove_chars.length(); i++) {
+
+    for (int i = 0; i < (int)remove_chars.length(); i++)
+    {
         char ch = remove_chars.at(i);
-        
-        for (std::string::iterator it = ret.begin(); it != ret.end();) {
-            if (ch == *it) {
+
+        for (std::string::iterator it = ret.begin(); it != ret.end();)
+        {
+            if (ch == *it)
+            {
                 it = ret.erase(it);
-                
+
                 // ok, matched, should reset the search
                 i = 0;
-            } else {
+            }
+            else
+            {
                 ++it;
             }
         }
     }
-    
+
     return ret;
 }
 
@@ -12697,65 +12746,73 @@ bool srs_string_contains(string str, string flag)
 int srs_do_create_dir_recursively(string dir)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // stat current dir, if exists, return error.
-    if (srs_path_exists(dir)) {
+    if (srs_path_exists(dir))
+    {
         return ERROR_SYSTEM_DIR_EXISTS;
     }
-    
+
     // create parent first.
     size_t pos;
-    if ((pos = dir.rfind("/")) != std::string::npos) {
+    if ((pos = dir.rfind("/")) != std::string::npos)
+    {
         std::string parent = dir.substr(0, pos);
         ret = srs_do_create_dir_recursively(parent);
         // return for error.
-        if (ret != ERROR_SUCCESS && ret != ERROR_SYSTEM_DIR_EXISTS) {
+        if (ret != ERROR_SUCCESS && ret != ERROR_SYSTEM_DIR_EXISTS)
+        {
             return ret;
         }
         // parent exists, set to ok.
         ret = ERROR_SUCCESS;
     }
-    
+
     // create curren dir.
     // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifndef _WIN32
     mode_t mode = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IWGRP|S_IXGRP|S_IROTH|S_IXOTH;
-    if (::mkdir(dir.c_str(), mode) < 0) {
+    if (::mkdir(dir.c_str(), mode) < 0)
+    {
 #else
-    if (::mkdir(dir.c_str()) < 0) {
+    if (::mkdir(dir.c_str()) < 0)
+    {
 #endif
-        if (errno == EEXIST) {
+        if (errno == EEXIST)
+        {
             return ERROR_SYSTEM_DIR_EXISTS;
         }
-        
+
         ret = ERROR_SYSTEM_CREATE_DIR;
         srs_error("create dir %s failed. ret=%d", dir.c_str(), ret);
         return ret;
     }
     srs_info("create dir %s success.", dir.c_str());
-    
+
     return ret;
 }
 
 int srs_create_dir_recursively(string dir)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ret = srs_do_create_dir_recursively(dir);
-    
-    if (ret == ERROR_SYSTEM_DIR_EXISTS) {
+
+    if (ret == ERROR_SYSTEM_DIR_EXISTS)
+    {
         return ERROR_SUCCESS;
     }
-    
+
     return ret;
 }
 
 bool srs_path_exists(std::string path)
 {
     struct stat st;
-    
+
     // stat current dir, if exists, return error.
-    if (stat(path.c_str(), &st) == 0) {
+    if (stat(path.c_str(), &st) == 0)
+    {
         return true;
     }
 
@@ -12766,14 +12823,16 @@ string srs_path_dirname(string path)
 {
     std::string dirname = path;
     size_t pos = string::npos;
-    
-    if ((pos = dirname.rfind("/")) != string::npos) {
-        if (pos == 0) {
+
+    if ((pos = dirname.rfind("/")) != string::npos)
+    {
+        if (pos == 0)
+        {
             return "/";
         }
         dirname = dirname.substr(0, pos);
     }
-    
+
     return dirname;
 }
 
@@ -12781,15 +12840,17 @@ string srs_path_basename(string path)
 {
     std::string dirname = path;
     size_t pos = string::npos;
-    
-    if ((pos = dirname.rfind("/")) != string::npos) {
+
+    if ((pos = dirname.rfind("/")) != string::npos)
+    {
         // the basename("/") is "/"
-        if (dirname.length() == 1) {
+        if (dirname.length() == 1)
+        {
             return dirname;
         }
         dirname = dirname.substr(pos + 1);
     }
-    
+
     return dirname;
 }
 
@@ -12797,28 +12858,33 @@ bool srs_avc_startswith_annexb(SrsStream* stream, int* pnb_start_code)
 {
     char* bytes = stream->data() + stream->pos();
     char* p = bytes;
-    
-    for (;;) {
-        if (!stream->require(p - bytes + 3)) {
+
+    for (;;)
+    {
+        if (!stream->require(p - bytes + 3))
+        {
             return false;
         }
-        
+
         // not match
-        if (p[0] != (char)0x00 || p[1] != (char)0x00) {
+        if (p[0] != (char)0x00 || p[1] != (char)0x00)
+        {
             return false;
         }
-        
+
         // match N[00] 00 00 01, where N>=0
-        if (p[2] == (char)0x01) {
-            if (pnb_start_code) {
+        if (p[2] == (char)0x01)
+        {
+            if (pnb_start_code)
+            {
                 *pnb_start_code = (int)(p - bytes) + 3;
             }
             return true;
         }
-        
+
         p++;
     }
-    
+
     return false;
 }
 
@@ -12826,17 +12892,19 @@ bool srs_aac_startswith_adts(SrsStream* stream)
 {
     char* bytes = stream->data() + stream->pos();
     char* p = bytes;
-    
-    if (!stream->require((int)(p - bytes) + 2)) {
+
+    if (!stream->require((int)(p - bytes) + 2))
+    {
         return false;
     }
-    
+
     // matched 12bits 0xFFF,
     // @remark, we must cast the 0xff to char to compare.
-    if (p[0] != (char)0xff || (char)(p[1] & 0xf0) != (char)0xf0) {
+    if (p[0] != (char)0xff || (char)(p[1] & 0xf0) != (char)0xf0)
+    {
         return false;
     }
-    
+
     return true;
 }
 
@@ -12858,50 +12926,51 @@ bool srs_aac_startswith_adts(SrsStream* stream)
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-static const u_int32_t crc_table[256] = {
-	0x00000000, 0x04c11db7, 0x09823b6e, 0x0d4326d9, 0x130476dc, 0x17c56b6b,
-	0x1a864db2, 0x1e475005, 0x2608edb8, 0x22c9f00f, 0x2f8ad6d6, 0x2b4bcb61,
-	0x350c9b64, 0x31cd86d3, 0x3c8ea00a, 0x384fbdbd, 0x4c11db70, 0x48d0c6c7,
-	0x4593e01e, 0x4152fda9, 0x5f15adac, 0x5bd4b01b, 0x569796c2, 0x52568b75,
-	0x6a1936c8, 0x6ed82b7f, 0x639b0da6, 0x675a1011, 0x791d4014, 0x7ddc5da3,
-	0x709f7b7a, 0x745e66cd, 0x9823b6e0, 0x9ce2ab57, 0x91a18d8e, 0x95609039,
-	0x8b27c03c, 0x8fe6dd8b, 0x82a5fb52, 0x8664e6e5, 0xbe2b5b58, 0xbaea46ef,
-	0xb7a96036, 0xb3687d81, 0xad2f2d84, 0xa9ee3033, 0xa4ad16ea, 0xa06c0b5d,
-	0xd4326d90, 0xd0f37027, 0xddb056fe, 0xd9714b49, 0xc7361b4c, 0xc3f706fb,
-	0xceb42022, 0xca753d95, 0xf23a8028, 0xf6fb9d9f, 0xfbb8bb46, 0xff79a6f1,
-	0xe13ef6f4, 0xe5ffeb43, 0xe8bccd9a, 0xec7dd02d, 0x34867077, 0x30476dc0,
-	0x3d044b19, 0x39c556ae, 0x278206ab, 0x23431b1c, 0x2e003dc5, 0x2ac12072,
-	0x128e9dcf, 0x164f8078, 0x1b0ca6a1, 0x1fcdbb16, 0x018aeb13, 0x054bf6a4,
-	0x0808d07d, 0x0cc9cdca, 0x7897ab07, 0x7c56b6b0, 0x71159069, 0x75d48dde,
-	0x6b93dddb, 0x6f52c06c, 0x6211e6b5, 0x66d0fb02, 0x5e9f46bf, 0x5a5e5b08,
-	0x571d7dd1, 0x53dc6066, 0x4d9b3063, 0x495a2dd4, 0x44190b0d, 0x40d816ba,
-	0xaca5c697, 0xa864db20, 0xa527fdf9, 0xa1e6e04e, 0xbfa1b04b, 0xbb60adfc,
-	0xb6238b25, 0xb2e29692, 0x8aad2b2f, 0x8e6c3698, 0x832f1041, 0x87ee0df6,
-	0x99a95df3, 0x9d684044, 0x902b669d, 0x94ea7b2a, 0xe0b41de7, 0xe4750050,
-	0xe9362689, 0xedf73b3e, 0xf3b06b3b, 0xf771768c, 0xfa325055, 0xfef34de2,
-	0xc6bcf05f, 0xc27dede8, 0xcf3ecb31, 0xcbffd686, 0xd5b88683, 0xd1799b34,
-	0xdc3abded, 0xd8fba05a, 0x690ce0ee, 0x6dcdfd59, 0x608edb80, 0x644fc637,
-	0x7a089632, 0x7ec98b85, 0x738aad5c, 0x774bb0eb, 0x4f040d56, 0x4bc510e1,
-	0x46863638, 0x42472b8f, 0x5c007b8a, 0x58c1663d, 0x558240e4, 0x51435d53,
-	0x251d3b9e, 0x21dc2629, 0x2c9f00f0, 0x285e1d47, 0x36194d42, 0x32d850f5,
-	0x3f9b762c, 0x3b5a6b9b, 0x0315d626, 0x07d4cb91, 0x0a97ed48, 0x0e56f0ff,
-	0x1011a0fa, 0x14d0bd4d, 0x19939b94, 0x1d528623, 0xf12f560e, 0xf5ee4bb9,
-	0xf8ad6d60, 0xfc6c70d7, 0xe22b20d2, 0xe6ea3d65, 0xeba91bbc, 0xef68060b,
-	0xd727bbb6, 0xd3e6a601, 0xdea580d8, 0xda649d6f, 0xc423cd6a, 0xc0e2d0dd,
-	0xcda1f604, 0xc960ebb3, 0xbd3e8d7e, 0xb9ff90c9, 0xb4bcb610, 0xb07daba7,
-	0xae3afba2, 0xaafbe615, 0xa7b8c0cc, 0xa379dd7b, 0x9b3660c6, 0x9ff77d71,
-	0x92b45ba8, 0x9675461f, 0x8832161a, 0x8cf30bad, 0x81b02d74, 0x857130c3,
-	0x5d8a9099, 0x594b8d2e, 0x5408abf7, 0x50c9b640, 0x4e8ee645, 0x4a4ffbf2,
-	0x470cdd2b, 0x43cdc09c, 0x7b827d21, 0x7f436096, 0x7200464f, 0x76c15bf8,
-	0x68860bfd, 0x6c47164a, 0x61043093, 0x65c52d24, 0x119b4be9, 0x155a565e,
-	0x18197087, 0x1cd86d30, 0x029f3d35, 0x065e2082, 0x0b1d065b, 0x0fdc1bec,
-	0x3793a651, 0x3352bbe6, 0x3e119d3f, 0x3ad08088, 0x2497d08d, 0x2056cd3a,
-	0x2d15ebe3, 0x29d4f654, 0xc5a92679, 0xc1683bce, 0xcc2b1d17, 0xc8ea00a0,
-	0xd6ad50a5, 0xd26c4d12, 0xdf2f6bcb, 0xdbee767c, 0xe3a1cbc1, 0xe760d676,
-	0xea23f0af, 0xeee2ed18, 0xf0a5bd1d, 0xf464a0aa, 0xf9278673, 0xfde69bc4,
-	0x89b8fd09, 0x8d79e0be, 0x803ac667, 0x84fbdbd0, 0x9abc8bd5, 0x9e7d9662,
-	0x933eb0bb, 0x97ffad0c, 0xafb010b1, 0xab710d06, 0xa6322bdf, 0xa2f33668,
-	0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
+static const u_int32_t crc_table[256] =
+{
+    0x00000000, 0x04c11db7, 0x09823b6e, 0x0d4326d9, 0x130476dc, 0x17c56b6b,
+    0x1a864db2, 0x1e475005, 0x2608edb8, 0x22c9f00f, 0x2f8ad6d6, 0x2b4bcb61,
+    0x350c9b64, 0x31cd86d3, 0x3c8ea00a, 0x384fbdbd, 0x4c11db70, 0x48d0c6c7,
+    0x4593e01e, 0x4152fda9, 0x5f15adac, 0x5bd4b01b, 0x569796c2, 0x52568b75,
+    0x6a1936c8, 0x6ed82b7f, 0x639b0da6, 0x675a1011, 0x791d4014, 0x7ddc5da3,
+    0x709f7b7a, 0x745e66cd, 0x9823b6e0, 0x9ce2ab57, 0x91a18d8e, 0x95609039,
+    0x8b27c03c, 0x8fe6dd8b, 0x82a5fb52, 0x8664e6e5, 0xbe2b5b58, 0xbaea46ef,
+    0xb7a96036, 0xb3687d81, 0xad2f2d84, 0xa9ee3033, 0xa4ad16ea, 0xa06c0b5d,
+    0xd4326d90, 0xd0f37027, 0xddb056fe, 0xd9714b49, 0xc7361b4c, 0xc3f706fb,
+    0xceb42022, 0xca753d95, 0xf23a8028, 0xf6fb9d9f, 0xfbb8bb46, 0xff79a6f1,
+    0xe13ef6f4, 0xe5ffeb43, 0xe8bccd9a, 0xec7dd02d, 0x34867077, 0x30476dc0,
+    0x3d044b19, 0x39c556ae, 0x278206ab, 0x23431b1c, 0x2e003dc5, 0x2ac12072,
+    0x128e9dcf, 0x164f8078, 0x1b0ca6a1, 0x1fcdbb16, 0x018aeb13, 0x054bf6a4,
+    0x0808d07d, 0x0cc9cdca, 0x7897ab07, 0x7c56b6b0, 0x71159069, 0x75d48dde,
+    0x6b93dddb, 0x6f52c06c, 0x6211e6b5, 0x66d0fb02, 0x5e9f46bf, 0x5a5e5b08,
+    0x571d7dd1, 0x53dc6066, 0x4d9b3063, 0x495a2dd4, 0x44190b0d, 0x40d816ba,
+    0xaca5c697, 0xa864db20, 0xa527fdf9, 0xa1e6e04e, 0xbfa1b04b, 0xbb60adfc,
+    0xb6238b25, 0xb2e29692, 0x8aad2b2f, 0x8e6c3698, 0x832f1041, 0x87ee0df6,
+    0x99a95df3, 0x9d684044, 0x902b669d, 0x94ea7b2a, 0xe0b41de7, 0xe4750050,
+    0xe9362689, 0xedf73b3e, 0xf3b06b3b, 0xf771768c, 0xfa325055, 0xfef34de2,
+    0xc6bcf05f, 0xc27dede8, 0xcf3ecb31, 0xcbffd686, 0xd5b88683, 0xd1799b34,
+    0xdc3abded, 0xd8fba05a, 0x690ce0ee, 0x6dcdfd59, 0x608edb80, 0x644fc637,
+    0x7a089632, 0x7ec98b85, 0x738aad5c, 0x774bb0eb, 0x4f040d56, 0x4bc510e1,
+    0x46863638, 0x42472b8f, 0x5c007b8a, 0x58c1663d, 0x558240e4, 0x51435d53,
+    0x251d3b9e, 0x21dc2629, 0x2c9f00f0, 0x285e1d47, 0x36194d42, 0x32d850f5,
+    0x3f9b762c, 0x3b5a6b9b, 0x0315d626, 0x07d4cb91, 0x0a97ed48, 0x0e56f0ff,
+    0x1011a0fa, 0x14d0bd4d, 0x19939b94, 0x1d528623, 0xf12f560e, 0xf5ee4bb9,
+    0xf8ad6d60, 0xfc6c70d7, 0xe22b20d2, 0xe6ea3d65, 0xeba91bbc, 0xef68060b,
+    0xd727bbb6, 0xd3e6a601, 0xdea580d8, 0xda649d6f, 0xc423cd6a, 0xc0e2d0dd,
+    0xcda1f604, 0xc960ebb3, 0xbd3e8d7e, 0xb9ff90c9, 0xb4bcb610, 0xb07daba7,
+    0xae3afba2, 0xaafbe615, 0xa7b8c0cc, 0xa379dd7b, 0x9b3660c6, 0x9ff77d71,
+    0x92b45ba8, 0x9675461f, 0x8832161a, 0x8cf30bad, 0x81b02d74, 0x857130c3,
+    0x5d8a9099, 0x594b8d2e, 0x5408abf7, 0x50c9b640, 0x4e8ee645, 0x4a4ffbf2,
+    0x470cdd2b, 0x43cdc09c, 0x7b827d21, 0x7f436096, 0x7200464f, 0x76c15bf8,
+    0x68860bfd, 0x6c47164a, 0x61043093, 0x65c52d24, 0x119b4be9, 0x155a565e,
+    0x18197087, 0x1cd86d30, 0x029f3d35, 0x065e2082, 0x0b1d065b, 0x0fdc1bec,
+    0x3793a651, 0x3352bbe6, 0x3e119d3f, 0x3ad08088, 0x2497d08d, 0x2056cd3a,
+    0x2d15ebe3, 0x29d4f654, 0xc5a92679, 0xc1683bce, 0xcc2b1d17, 0xc8ea00a0,
+    0xd6ad50a5, 0xd26c4d12, 0xdf2f6bcb, 0xdbee767c, 0xe3a1cbc1, 0xe760d676,
+    0xea23f0af, 0xeee2ed18, 0xf0a5bd1d, 0xf464a0aa, 0xf9278673, 0xfde69bc4,
+    0x89b8fd09, 0x8d79e0be, 0x803ac667, 0x84fbdbd0, 0x9abc8bd5, 0x9e7d9662,
+    0x933eb0bb, 0x97ffad0c, 0xafb010b1, 0xab710d06, 0xa6322bdf, 0xa2f33668,
+    0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
 };
 
 // @see http://www.stmc.edu.hk/~vincent/ffmpeg_0.4.9-pre1/libavformat/mpegtsenc.c
@@ -12909,10 +12978,10 @@ unsigned int mpegts_crc32(const u_int8_t *data, int len)
 {
     register int i;
     unsigned int crc = 0xffffffff;
-    
+
     for (i=0; i<len; i++)
         crc = (crc << 8) ^ crc_table[((crc >> 24) ^ *data++) & 0xff];
-    
+
     return crc;
 }
 
@@ -13014,7 +13083,7 @@ static const u_int8_t map2[256] =
     0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b,
     0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33,
 
-                      0xff, 0xff, 0xff, 0xff, 0xff,
+    0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -13049,7 +13118,8 @@ int srs_av_base64_decode(u_int8_t* out, const char* in_str, int out_size)
     unsigned bits = 0xff;
     unsigned v;
 
-    while (end - dst > 3) {
+    while (end - dst > 3)
+    {
         BASE64_DEC_STEP(0);
         BASE64_DEC_STEP(1);
         BASE64_DEC_STEP(2);
@@ -13060,7 +13130,8 @@ int srs_av_base64_decode(u_int8_t* out, const char* in_str, int out_size)
         dst += 3;
         in += 4;
     }
-    if (end - dst) {
+    if (end - dst)
+    {
         BASE64_DEC_STEP(0);
         BASE64_DEC_STEP(1);
         BASE64_DEC_STEP(2);
@@ -13072,7 +13143,8 @@ int srs_av_base64_decode(u_int8_t* out, const char* in_str, int out_size)
             *dst++ = v;
         in += 4;
     }
-    while (1) {
+    while (1)
+    {
         BASE64_DEC_STEP(0);
         in++;
         BASE64_DEC_STEP(0);
@@ -13109,24 +13181,28 @@ char* srs_av_base64_encode(char* out, int out_size, const u_int8_t* in, int in_s
     int bytes_remaining = in_size;
 
     if (in_size >= (int)(UINT_MAX / 4) ||
-        out_size < SRS_AV_BASE64_SIZE(in_size))
+            out_size < SRS_AV_BASE64_SIZE(in_size))
         return NULL;
     ret = dst = out;
-    while (bytes_remaining > 3) {
+    while (bytes_remaining > 3)
+    {
         i_bits = AV_RB32(in);
-        in += 3; bytes_remaining -= 3;
+        in += 3;
+        bytes_remaining -= 3;
         *dst++ = b64[ i_bits>>26        ];
         *dst++ = b64[(i_bits>>20) & 0x3F];
         *dst++ = b64[(i_bits>>14) & 0x3F];
         *dst++ = b64[(i_bits>>8 ) & 0x3F];
     }
     i_bits = 0;
-    while (bytes_remaining) {
+    while (bytes_remaining)
+    {
         i_bits = (i_bits << 8) + *in++;
         bytes_remaining--;
         i_shift += 8;
     }
-    while (i_shift > 0) {
+    while (i_shift > 0)
+    {
         *dst++ = b64[(i_bits << 6 >> i_shift) & 0x3f];
         i_shift -= 6;
     }
@@ -13141,7 +13217,8 @@ char* srs_av_base64_encode(char* out, int out_size, const u_int8_t* in, int in_s
 
 int av_toupper(int c)
 {
-    if (c >= 'a' && c <= 'z') {
+    if (c >= 'a' && c <= 'z')
+    {
         c ^= 0x20;
     }
     return c;
@@ -13153,7 +13230,8 @@ int ff_hex_to_data(u_int8_t* data, const char* p)
 
     len = 0;
     v = 1;
-    for (;;) {
+    for (;;)
+    {
         p += strspn(p, SPACE_CHARS);
         if (*p == '\0')
             break;
@@ -13165,7 +13243,8 @@ int ff_hex_to_data(u_int8_t* data, const char* p)
         else
             break;
         v = (v << 4) | c;
-        if (v & 0x100) {
+        if (v & 0x100)
+        {
             if (data)
                 data[len] = v;
             len++;
@@ -13179,50 +13258,55 @@ int srs_chunk_header_c0(
     int perfer_cid, u_int32_t timestamp, int32_t payload_length,
     int8_t message_type, int32_t stream_id,
     char* cache, int nb_cache
-) {
+)
+{
     // to directly set the field.
     char* pp = NULL;
-    
+
     // generate the header.
     char* p = cache;
-    
+
     // no header.
-    if (nb_cache < SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE) {
+    if (nb_cache < SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE)
+    {
         return 0;
     }
-    
+
     // write new chunk stream header, fmt is 0
     *p++ = 0x00 | (perfer_cid & 0x3F);
-    
+
     // chunk message header, 11 bytes
     // timestamp, 3bytes, big-endian
-    if (timestamp < RTMP_EXTENDED_TIMESTAMP) {
+    if (timestamp < RTMP_EXTENDED_TIMESTAMP)
+    {
         pp = (char*)&timestamp;
         *p++ = pp[2];
         *p++ = pp[1];
         *p++ = pp[0];
-    } else {
+    }
+    else
+    {
         *p++ = 0xFF;
         *p++ = 0xFF;
         *p++ = 0xFF;
     }
-    
+
     // message_length, 3bytes, big-endian
     pp = (char*)&payload_length;
     *p++ = pp[2];
     *p++ = pp[1];
     *p++ = pp[0];
-    
+
     // message_type, 1bytes
     *p++ = message_type;
-    
+
     // stream_id, 4bytes, little-endian
     pp = (char*)&stream_id;
     *p++ = pp[0];
     *p++ = pp[1];
     *p++ = pp[2];
     *p++ = pp[3];
-    
+
     // for c0
     // chunk extended timestamp header, 0 or 4 bytes, big-endian
     //
@@ -13241,14 +13325,15 @@ int srs_chunk_header_c0(
     // @see: ngx_rtmp_prepare_message
     // @see: http://blog.csdn.net/win_lin/article/details/13363699
     // TODO: FIXME: extract to outer.
-    if (timestamp >= RTMP_EXTENDED_TIMESTAMP) {
+    if (timestamp >= RTMP_EXTENDED_TIMESTAMP)
+    {
         pp = (char*)&timestamp;
         *p++ = pp[3];
         *p++ = pp[2];
         *p++ = pp[1];
         *p++ = pp[0];
     }
-    
+
     // always has header
     return p - cache;
 }
@@ -13256,23 +13341,25 @@ int srs_chunk_header_c0(
 int srs_chunk_header_c3(
     int perfer_cid, u_int32_t timestamp,
     char* cache, int nb_cache
-) {
+)
+{
     // to directly set the field.
     char* pp = NULL;
-    
+
     // generate the header.
     char* p = cache;
-    
+
     // no header.
-    if (nb_cache < SRS_CONSTS_RTMP_MAX_FMT3_HEADER_SIZE) {
+    if (nb_cache < SRS_CONSTS_RTMP_MAX_FMT3_HEADER_SIZE)
+    {
         return 0;
     }
-    
+
     // write no message header chunk stream, fmt is 3
     // @remark, if perfer_cid > 0x3F, that is, use 2B/3B chunk header,
     // SRS will rollback to 1B chunk header.
     *p++ = 0xC0 | (perfer_cid & 0x3F);
-    
+
     // for c0
     // chunk extended timestamp header, 0 or 4 bytes, big-endian
     //
@@ -13291,14 +13378,15 @@ int srs_chunk_header_c3(
     // @see: ngx_rtmp_prepare_message
     // @see: http://blog.csdn.net/win_lin/article/details/13363699
     // TODO: FIXME: extract to outer.
-    if (timestamp >= RTMP_EXTENDED_TIMESTAMP) {
+    if (timestamp >= RTMP_EXTENDED_TIMESTAMP)
+    {
         pp = (char*)&timestamp;
         *p++ = pp[3];
         *p++ = pp[2];
         *p++ = pp[1];
         *p++ = pp[0];
     }
-    
+
     // always has header
     return p - cache;
 }
@@ -13352,7 +13440,7 @@ SrsMessageHeader::SrsMessageHeader()
     payload_length = 0;
     timestamp_delta = 0;
     stream_id = 0;
-    
+
     timestamp = 0;
     // we always use the connection chunk-id
     perfer_cid = RTMP_CID_OverConnection;
@@ -13429,7 +13517,7 @@ void SrsMessageHeader::initialize_amf0_script(int size, int stream)
     timestamp_delta = (int32_t)0;
     timestamp = (int64_t)0;
     stream_id = (int32_t)stream;
-    
+
     // amf0 script use connection2 chunk-id
     perfer_cid = RTMP_CID_OverConnection2;
 }
@@ -13441,7 +13529,7 @@ void SrsMessageHeader::initialize_audio(int size, u_int32_t time, int stream)
     timestamp_delta = (int32_t)time;
     timestamp = (int64_t)time;
     stream_id = (int32_t)stream;
-    
+
     // audio chunk-id
     perfer_cid = RTMP_CID_Audio;
 }
@@ -13453,7 +13541,7 @@ void SrsMessageHeader::initialize_video(int size, u_int32_t time, int stream)
     timestamp_delta = (int32_t)time;
     timestamp = (int64_t)time;
     stream_id = (int32_t)stream;
-    
+
     // video chunk-id
     perfer_cid = RTMP_CID_Video;
 }
@@ -13475,10 +13563,10 @@ SrsCommonMessage::~SrsCommonMessage()
 void SrsCommonMessage::create_payload(int size)
 {
     srs_freep(payload);
-    
+
     payload = new char[size];
     srs_verbose("create payload for RTMP message. size=%d", size);
-    
+
 #ifdef SRS_AUTO_MEM_WATCH
     srs_memory_watch(payload, "RTMP.msg.payload", size);
 #endif
@@ -13506,10 +13594,14 @@ SrsSharedPtrMessage::SrsSharedPtrMessage()
 
 SrsSharedPtrMessage::~SrsSharedPtrMessage()
 {
-    if (ptr) {
-        if (ptr->shared_count == 0) {
+    if (ptr)
+    {
+        if (ptr->shared_count == 0)
+        {
             srs_freep(ptr);
-        } else {
+        }
+        else
+        {
             ptr->shared_count--;
         }
     }
@@ -13518,36 +13610,39 @@ SrsSharedPtrMessage::~SrsSharedPtrMessage()
 int SrsSharedPtrMessage::create(SrsCommonMessage* msg)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = create(&msg->header, msg->payload, msg->size)) != ERROR_SUCCESS) {
+
+    if ((ret = create(&msg->header, msg->payload, msg->size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // to prevent double free of payload:
     // initialize already attach the payload of msg,
     // detach the payload to transfer the owner to shared ptr.
     msg->payload = NULL;
     msg->size = 0;
-    
+
     return ret;
 }
 
 int SrsSharedPtrMessage::create(SrsMessageHeader* pheader, char* payload, int size)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (ptr) {
+
+    if (ptr)
+    {
         ret = ERROR_SYSTEM_ASSERT_FAILED;
         srs_error("should not set the payload twice. ret=%d", ret);
         srs_assert(false);
-        
+
         return ret;
     }
-    
+
     ptr = new SrsSharedPtrPayload();
-    
+
     // direct attach the data.
-    if (pheader) {
+    if (pheader)
+    {
         ptr->header.message_type = pheader->message_type;
         ptr->header.payload_length = size;
         ptr->header.perfer_cid = pheader->perfer_cid;
@@ -13556,11 +13651,11 @@ int SrsSharedPtrMessage::create(SrsMessageHeader* pheader, char* payload, int si
     }
     ptr->payload = payload;
     ptr->size = size;
-    
+
     // message can access it.
     this->payload = ptr->payload;
     this->size = ptr->size;
-    
+
     return ret;
 }
 
@@ -13574,25 +13669,27 @@ bool SrsSharedPtrMessage::check(int stream_id)
 {
     // we donot use the complex basic header,
     // ensure the basic header is 1bytes.
-    if (ptr->header.perfer_cid < 2) {
+    if (ptr->header.perfer_cid < 2)
+    {
         srs_info("change the chunk_id=%d to default=%d",
-            ptr->header.perfer_cid, RTMP_CID_ProtocolControl);
+                 ptr->header.perfer_cid, RTMP_CID_ProtocolControl);
         ptr->header.perfer_cid = RTMP_CID_ProtocolControl;
     }
-    
+
     // we assume that the stream_id in a group must be the same.
-    if (this->stream_id == stream_id) {
+    if (this->stream_id == stream_id)
+    {
         return true;
     }
     this->stream_id = stream_id;
-    
+
     return false;
 }
 
 bool SrsSharedPtrMessage::is_av()
 {
     return ptr->header.message_type == RTMP_MSG_AudioMessage
-        || ptr->header.message_type == RTMP_MSG_VideoMessage;
+           || ptr->header.message_type == RTMP_MSG_VideoMessage;
 }
 
 bool SrsSharedPtrMessage::is_audio()
@@ -13607,32 +13704,35 @@ bool SrsSharedPtrMessage::is_video()
 
 int SrsSharedPtrMessage::chunk_header(char* cache, int nb_cache, bool c0)
 {
-    if (c0) {
+    if (c0)
+    {
         return srs_chunk_header_c0(
-            ptr->header.perfer_cid, timestamp, ptr->header.payload_length,
-            ptr->header.message_type, stream_id,
-            cache, nb_cache);
-    } else {
+                   ptr->header.perfer_cid, timestamp, ptr->header.payload_length,
+                   ptr->header.message_type, stream_id,
+                   cache, nb_cache);
+    }
+    else
+    {
         return srs_chunk_header_c3(
-            ptr->header.perfer_cid, timestamp,
-            cache, nb_cache);
+                   ptr->header.perfer_cid, timestamp,
+                   cache, nb_cache);
     }
 }
 
 SrsSharedPtrMessage* SrsSharedPtrMessage::copy()
 {
     srs_assert(ptr);
-    
+
     SrsSharedPtrMessage* copy = new SrsSharedPtrMessage();
-    
+
     copy->ptr = ptr;
     ptr->shared_count++;
-    
+
     copy->timestamp = timestamp;
     copy->stream_id = stream_id;
     copy->payload = ptr->payload;
     copy->size = ptr->size;
-    
+
     return copy;
 }
 
@@ -13640,7 +13740,7 @@ SrsFlvEncoder::SrsFlvEncoder()
 {
     reader = NULL;
     tag_stream = new SrsStream();
-    
+
 #ifdef SRS_PERF_FAST_FLV_ENCODER
     nb_tag_headers = 0;
     tag_headers = NULL;
@@ -13654,7 +13754,7 @@ SrsFlvEncoder::SrsFlvEncoder()
 SrsFlvEncoder::~SrsFlvEncoder()
 {
     srs_freep(tag_stream);
-    
+
 #ifdef SRS_PERF_FAST_FLV_ENCODER
     srs_freep(tag_headers);
     srs_freep(iovss_cache);
@@ -13665,118 +13765,131 @@ SrsFlvEncoder::~SrsFlvEncoder()
 int SrsFlvEncoder::initialize(SrsFileWriter* fr)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(fr);
-    
-    if (!fr->is_open()) {
+
+    if (!fr->is_open())
+    {
         ret = ERROR_KERNEL_FLV_STREAM_CLOSED;
         srs_warn("stream is not open for encoder. ret=%d", ret);
         return ret;
     }
-    
+
     reader = fr;
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_header()
 {
     int ret = ERROR_SUCCESS;
-    
+
     // 9bytes header and 4bytes first previous-tag-size
-    char flv_header[] = {
+    char flv_header[] =
+    {
         'F', 'L', 'V', // Signatures "FLV"
         (char)0x01, // File version (for example, 0x01 for FLV version 1)
         (char)0x00, // 4, audio; 1, video; 5 audio+video.
         (char)0x00, (char)0x00, (char)0x00, (char)0x09 // DataOffset UI32 The length of this header in bytes
     };
-    
+
     // flv specification should set the audio and video flag,
     // actually in practise, application generally ignore this flag,
     // so we generally set the audio/video to 0.
-    
+
     // write 9bytes header.
-    if ((ret = write_header(flv_header)) != ERROR_SUCCESS) {
+    if ((ret = write_header(flv_header)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_header(char flv_header[9])
 {
     int ret = ERROR_SUCCESS;
-    
+
     // write data.
-    if ((ret = reader->write(flv_header, 9, NULL)) != ERROR_SUCCESS) {
+    if ((ret = reader->write(flv_header, 9, NULL)) != ERROR_SUCCESS)
+    {
         srs_error("write flv header failed. ret=%d", ret);
         return ret;
     }
-    
+
     // previous tag size.
     char pts[] = { (char)0x00, (char)0x00, (char)0x00, (char)0x00 };
-    if ((ret = reader->write(pts, 4, NULL)) != ERROR_SUCCESS) {
+    if ((ret = reader->write(pts, 4, NULL)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_metadata(char type, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
-    if ((ret = write_metadata_to_cache(type, data, size, tag_header)) != ERROR_SUCCESS) {
+
+    if ((ret = write_metadata_to_cache(type, data, size, tag_header)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = write_tag(tag_header, sizeof(tag_header), data, size)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+
+    if ((ret = write_tag(tag_header, sizeof(tag_header), data, size)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("write flv data tag failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_audio(int64_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
-    if ((ret = write_audio_to_cache(timestamp, data, size, tag_header)) != ERROR_SUCCESS) {
+
+    if ((ret = write_audio_to_cache(timestamp, data, size, tag_header)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = write_tag(tag_header, sizeof(tag_header), data, size)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+
+    if ((ret = write_tag(tag_header, sizeof(tag_header), data, size)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("write flv audio tag failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_video(int64_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
-    if ((ret = write_video_to_cache(timestamp, data, size, tag_header)) != ERROR_SUCCESS) {
+
+    if ((ret = write_video_to_cache(timestamp, data, size, tag_header)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = write_tag(tag_header, sizeof(tag_header), data, size)) != ERROR_SUCCESS) {
+
+    if ((ret = write_tag(tag_header, sizeof(tag_header), data, size)) != ERROR_SUCCESS)
+    {
         srs_error("write flv video tag failed. ret=%d", ret);
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -13790,60 +13903,73 @@ int SrsFlvEncoder::size_tag(int data_size)
 int SrsFlvEncoder::write_tags(SrsSharedPtrMessage** msgs, int count)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // realloc the iovss.
     int nb_iovss = 3 * count;
     iovec* iovss = iovss_cache;
-    if (nb_iovss_cache < nb_iovss) {
+    if (nb_iovss_cache < nb_iovss)
+    {
         srs_freep(iovss_cache);
-        
+
         nb_iovss_cache = nb_iovss;
         iovss = iovss_cache = new iovec[nb_iovss];
     }
-    
+
     // realloc the tag headers.
     char* cache = tag_headers;
-    if (nb_tag_headers < count) {
+    if (nb_tag_headers < count)
+    {
         srs_freep(tag_headers);
-        
+
         nb_tag_headers = count;
         cache = tag_headers = new char[SRS_FLV_TAG_HEADER_SIZE * count];
     }
-    
+
     // realloc the pts.
     char* pts = ppts;
-    if (nb_ppts < count) {
+    if (nb_ppts < count)
+    {
         srs_freep(ppts);
-        
+
         nb_ppts = count;
         pts = ppts = new char[SRS_FLV_PREVIOUS_TAG_SIZE * count];
     }
-    
+
     // the cache is ok, write each messages.
     iovec* iovs = iovss;
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++)
+    {
         SrsSharedPtrMessage* msg = msgs[i];
-        
+
         // cache all flv header.
-        if (msg->is_audio()) {
-            if ((ret = write_audio_to_cache(msg->timestamp, msg->payload, msg->size, cache)) != ERROR_SUCCESS) {
-                return ret;
-            }
-        } else if (msg->is_video()) {
-            if ((ret = write_video_to_cache(msg->timestamp, msg->payload, msg->size, cache)) != ERROR_SUCCESS) {
-                return ret;
-            }
-        } else {
-            if ((ret = write_metadata_to_cache(SrsCodecFlvTagScript, msg->payload, msg->size, cache)) != ERROR_SUCCESS) {
+        if (msg->is_audio())
+        {
+            if ((ret = write_audio_to_cache(msg->timestamp, msg->payload, msg->size, cache)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
         }
-        
+        else if (msg->is_video())
+        {
+            if ((ret = write_video_to_cache(msg->timestamp, msg->payload, msg->size, cache)) != ERROR_SUCCESS)
+            {
+                return ret;
+            }
+        }
+        else
+        {
+            if ((ret = write_metadata_to_cache(SrsCodecFlvTagScript, msg->payload, msg->size, cache)) != ERROR_SUCCESS)
+            {
+                return ret;
+            }
+        }
+
         // cache all pts.
-        if ((ret = write_pts_to_cache(SRS_FLV_TAG_HEADER_SIZE + msg->size, pts)) != ERROR_SUCCESS) {
+        if ((ret = write_pts_to_cache(SRS_FLV_TAG_HEADER_SIZE + msg->size, pts)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         // all ioves.
         iovs[0].iov_base = cache;
         iovs[0].iov_len = SRS_FLV_TAG_HEADER_SIZE;
@@ -13851,20 +13977,22 @@ int SrsFlvEncoder::write_tags(SrsSharedPtrMessage** msgs, int count)
         iovs[1].iov_len = msg->size;
         iovs[2].iov_base = pts;
         iovs[2].iov_len = SRS_FLV_PREVIOUS_TAG_SIZE;
-        
+
         // move next.
         cache += SRS_FLV_TAG_HEADER_SIZE;
         pts += SRS_FLV_PREVIOUS_TAG_SIZE;
         iovs += 3;
     }
-    
-    if ((ret = reader->writev(iovss, nb_iovss, NULL)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+
+    if ((ret = reader->writev(iovss, nb_iovss, NULL)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("write flv tags failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 }
 #endif
@@ -13872,9 +14000,9 @@ int SrsFlvEncoder::write_tags(SrsSharedPtrMessage** msgs, int count)
 int SrsFlvEncoder::write_metadata_to_cache(char type, char* data, int size, char* cache)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
+
     // 11 bytes tag header
     /*char tag_header[] = {
      (char)type, // TagType UB [5], 18 = script data
@@ -13883,9 +14011,10 @@ int SrsFlvEncoder::write_metadata_to_cache(char type, char* data, int size, char
      (char)0x00, // TimestampExtended UI8
      (char)0x00, (char)0x00, (char)0x00, // StreamID UI24 Always 0.
      };*/
-    
+
     // write data size.
-    if ((ret = tag_stream->initialize(cache, 11)) != ERROR_SUCCESS) {
+    if ((ret = tag_stream->initialize(cache, 11)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     tag_stream->write_1bytes(type);
@@ -13893,18 +14022,18 @@ int SrsFlvEncoder::write_metadata_to_cache(char type, char* data, int size, char
     tag_stream->write_3bytes(0x00);
     tag_stream->write_1bytes(0x00);
     tag_stream->write_3bytes(0x00);
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_audio_to_cache(int64_t timestamp, char* data, int size, char* cache)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
+
     timestamp &= 0x7fffffff;
-    
+
     // 11bytes tag header
     /*char tag_header[] = {
      (char)SrsCodecFlvTagAudio, // TagType UB [5], 8 = audio
@@ -13913,9 +14042,10 @@ int SrsFlvEncoder::write_audio_to_cache(int64_t timestamp, char* data, int size,
      (char)0x00, // TimestampExtended UI8
      (char)0x00, (char)0x00, (char)0x00, // StreamID UI24 Always 0.
      };*/
-    
+
     // write data size.
-    if ((ret = tag_stream->initialize(cache, 11)) != ERROR_SUCCESS) {
+    if ((ret = tag_stream->initialize(cache, 11)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     tag_stream->write_1bytes(SrsCodecFlvTagAudio);
@@ -13924,18 +14054,18 @@ int SrsFlvEncoder::write_audio_to_cache(int64_t timestamp, char* data, int size,
     // default to little-endian
     tag_stream->write_1bytes((timestamp >> 24) & 0xFF);
     tag_stream->write_3bytes(0x00);
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_video_to_cache(int64_t timestamp, char* data, int size, char* cache)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
+
     timestamp &= 0x7fffffff;
-    
+
     // 11bytes tag header
     /*char tag_header[] = {
      (char)SrsCodecFlvTagVideo, // TagType UB [5], 9 = video
@@ -13944,9 +14074,10 @@ int SrsFlvEncoder::write_video_to_cache(int64_t timestamp, char* data, int size,
      (char)0x00, // TimestampExtended UI8
      (char)0x00, (char)0x00, (char)0x00, // StreamID UI24 Always 0.
      };*/
-    
+
     // write data size.
-    if ((ret = tag_stream->initialize(cache, 11)) != ERROR_SUCCESS) {
+    if ((ret = tag_stream->initialize(cache, 11)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     tag_stream->write_1bytes(SrsCodecFlvTagVideo);
@@ -13955,32 +14086,34 @@ int SrsFlvEncoder::write_video_to_cache(int64_t timestamp, char* data, int size,
     // default to little-endian
     tag_stream->write_1bytes((timestamp >> 24) & 0xFF);
     tag_stream->write_3bytes(0x00);
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_pts_to_cache(int size, char* cache)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = tag_stream->initialize(cache, SRS_FLV_PREVIOUS_TAG_SIZE)) != ERROR_SUCCESS) {
+
+    if ((ret = tag_stream->initialize(cache, SRS_FLV_PREVIOUS_TAG_SIZE)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     tag_stream->write_4bytes(size);
-    
+
     return ret;
 }
 
 int SrsFlvEncoder::write_tag(char* header, int header_size, char* tag, int tag_size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // PreviousTagSizeN UI32 Size of last tag, including its header, in bytes.
     char pre_size[SRS_FLV_PREVIOUS_TAG_SIZE];
-    if ((ret = write_pts_to_cache(tag_size + header_size, pre_size)) != ERROR_SUCCESS) {
+    if ((ret = write_pts_to_cache(tag_size + header_size, pre_size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     iovec iovs[3];
     iovs[0].iov_base = header;
     iovs[0].iov_len = header_size;
@@ -13988,14 +14121,16 @@ int SrsFlvEncoder::write_tag(char* header, int header_size, char* tag, int tag_s
     iovs[1].iov_len = tag_size;
     iovs[2].iov_base = pre_size;
     iovs[2].iov_len = SRS_FLV_PREVIOUS_TAG_SIZE;
-    
-    if ((ret = reader->writev(iovs, 3, NULL)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+
+    if ((ret = reader->writev(iovs, 3, NULL)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("write flv tag failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -14013,17 +14148,18 @@ SrsFlvDecoder::~SrsFlvDecoder()
 int SrsFlvDecoder::initialize(SrsFileReader* fr)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(fr);
-    
-    if (!fr->is_open()) {
+
+    if (!fr->is_open())
+    {
         ret = ERROR_KERNEL_FLV_STREAM_CLOSED;
         srs_warn("stream is not open for decoder. ret=%d", ret);
         return ret;
     }
-    
+
     reader = fr;
-    
+
     return ret;
 }
 
@@ -14032,18 +14168,20 @@ int SrsFlvDecoder::read_header(char header[9])
     int ret = ERROR_SUCCESS;
 
     srs_assert(header);
-    
-    if ((ret = reader->read(header, 9, NULL)) != ERROR_SUCCESS) {
+
+    if ((ret = reader->read(header, 9, NULL)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     char* h = header;
-    if (h[0] != 'F' || h[1] != 'L' || h[2] != 'V') {
+    if (h[0] != 'F' || h[1] != 'L' || h[2] != 'V')
+    {
         ret = ERROR_KERNEL_FLV_HEADER;
         srs_warn("flv header must start with FLV. ret=%d", ret);
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -14056,33 +14194,35 @@ int SrsFlvDecoder::read_tag_header(char* ptype, int32_t* pdata_size, u_int32_t* 
     srs_assert(ptime);
 
     char th[11]; // tag header
-    
+
     // read tag header
-    if ((ret = reader->read(th, 11, NULL)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SYSTEM_FILE_EOF) {
+    if ((ret = reader->read(th, 11, NULL)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SYSTEM_FILE_EOF)
+        {
             srs_error("read flv tag header failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     // Reserved UB [2]
     // Filter UB [1]
     // TagType UB [5]
     *ptype = (th[0] & 0x1F);
-    
+
     // DataSize UI24
     char* pp = (char*)pdata_size;
     pp[3] = 0;
     pp[2] = th[1];
     pp[1] = th[2];
     pp[0] = th[3];
-    
+
     // Timestamp UI24
     pp = (char*)ptime;
     pp[2] = th[4];
     pp[1] = th[5];
     pp[0] = th[6];
-    
+
     // TimestampExtended UI8
     pp[3] = th[7];
 
@@ -14094,14 +14234,16 @@ int SrsFlvDecoder::read_tag_data(char* data, int32_t size)
     int ret = ERROR_SUCCESS;
 
     srs_assert(data);
-    
-    if ((ret = reader->read(data, size, NULL)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SYSTEM_FILE_EOF) {
+
+    if ((ret = reader->read(data, size, NULL)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SYSTEM_FILE_EOF)
+        {
             srs_error("read flv tag header failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 
 }
@@ -14111,15 +14253,17 @@ int SrsFlvDecoder::read_previous_tag_size(char previous_tag_size[4])
     int ret = ERROR_SUCCESS;
 
     srs_assert(previous_tag_size);
-    
+
     // ignore 4bytes tag size.
-    if ((ret = reader->read(previous_tag_size, 4, NULL)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SYSTEM_FILE_EOF) {
+    if ((ret = reader->read(previous_tag_size, 4, NULL)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SYSTEM_FILE_EOF)
+        {
             srs_error("read flv previous tag size failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -14137,17 +14281,18 @@ SrsFlvVodStreamDecoder::~SrsFlvVodStreamDecoder()
 int SrsFlvVodStreamDecoder::initialize(SrsFileReader* fr)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(fr);
-    
-    if (!fr->is_open()) {
+
+    if (!fr->is_open())
+    {
         ret = ERROR_KERNEL_FLV_STREAM_CLOSED;
         srs_warn("stream is not open for decoder. ret=%d", ret);
         return ret;
     }
-    
+
     reader = fr;
-    
+
     return ret;
 }
 
@@ -14156,17 +14301,18 @@ int SrsFlvVodStreamDecoder::read_header_ext(char header[13])
     int ret = ERROR_SUCCESS;
 
     srs_assert(header);
-    
+
     // @remark, always false, for sizeof(char[13]) equals to sizeof(char*)
     //srs_assert(13 == sizeof(header));
-    
+
     // 9bytes header and 4bytes first previous-tag-size
     int size = 13;
-    
-    if ((ret = reader->read(header, size, NULL)) != ERROR_SUCCESS) {
+
+    if ((ret = reader->read(header, size, NULL)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -14176,19 +14322,20 @@ int SrsFlvVodStreamDecoder::read_sequence_header_summary(int64_t* pstart, int* p
 
     srs_assert(pstart);
     srs_assert(psize);
-    
+
     // simply, the first video/audio must be the sequence header.
     // and must be a sequence video and audio.
-    
+
     // 11bytes tag header
-    char tag_header[] = {
+    char tag_header[] =
+    {
         (char)0x00, // TagType UB [5], 9 = video, 8 = audio, 18 = script data
         (char)0x00, (char)0x00, (char)0x00, // DataSize UI24 Length of the message.
         (char)0x00, (char)0x00, (char)0x00, // Timestamp UI24 Time in milliseconds at which the data in this tag applies.
         (char)0x00, // TimestampExtended UI8
         (char)0x00, (char)0x00, (char)0x00, // StreamID UI24 Always 0.
     };
-    
+
     // discovery the sequence header video and audio.
     // @remark, maybe no video or no audio.
     bool got_video = false;
@@ -14196,91 +14343,104 @@ int SrsFlvVodStreamDecoder::read_sequence_header_summary(int64_t* pstart, int* p
     // audio/video sequence and data offset.
     int64_t av_sequence_offset_start = -1;
     int64_t av_sequence_offset_end = -1;
-    for (;;) {
-        if ((ret = reader->read(tag_header, SRS_FLV_TAG_HEADER_SIZE, NULL)) != ERROR_SUCCESS) {
+    for (;;)
+    {
+        if ((ret = reader->read(tag_header, SRS_FLV_TAG_HEADER_SIZE, NULL)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
-        if ((ret = tag_stream->initialize(tag_header, SRS_FLV_TAG_HEADER_SIZE)) != ERROR_SUCCESS) {
+
+        if ((ret = tag_stream->initialize(tag_header, SRS_FLV_TAG_HEADER_SIZE)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int8_t tag_type = tag_stream->read_1bytes();
         int32_t data_size = tag_stream->read_3bytes();
-        
+
         bool is_video = tag_type == 0x09;
         bool is_audio = tag_type == 0x08;
         bool is_not_av = !is_video && !is_audio;
-        if (is_not_av) {
+        if (is_not_av)
+        {
             // skip body and tag size.
             reader->skip(data_size + SRS_FLV_PREVIOUS_TAG_SIZE);
             continue;
         }
-        
+
         // if video duplicated, no audio
-        if (is_video && got_video) {
+        if (is_video && got_video)
+        {
             break;
         }
         // if audio duplicated, no video
-        if (is_audio && got_audio) {
+        if (is_audio && got_audio)
+        {
             break;
         }
-        
+
         // video
-        if (is_video) {
+        if (is_video)
+        {
             srs_assert(!got_video);
             got_video = true;
-            
-            if (av_sequence_offset_start < 0) {
+
+            if (av_sequence_offset_start < 0)
+            {
                 av_sequence_offset_start = reader->tellg() - SRS_FLV_TAG_HEADER_SIZE;
             }
             av_sequence_offset_end = reader->tellg() + data_size + SRS_FLV_PREVIOUS_TAG_SIZE;
             reader->skip(data_size + SRS_FLV_PREVIOUS_TAG_SIZE);
         }
-        
+
         // audio
-        if (is_audio) {
+        if (is_audio)
+        {
             srs_assert(!got_audio);
             got_audio = true;
-            
-            if (av_sequence_offset_start < 0) {
+
+            if (av_sequence_offset_start < 0)
+            {
                 av_sequence_offset_start = reader->tellg() - SRS_FLV_TAG_HEADER_SIZE;
             }
             av_sequence_offset_end = reader->tellg() + data_size + SRS_FLV_PREVIOUS_TAG_SIZE;
             reader->skip(data_size + SRS_FLV_PREVIOUS_TAG_SIZE);
         }
     }
-    
+
     // seek to the sequence header start offset.
-    if (av_sequence_offset_start > 0) {
+    if (av_sequence_offset_start > 0)
+    {
         reader->lseek(av_sequence_offset_start);
         *pstart = av_sequence_offset_start;
         *psize = (int)(av_sequence_offset_end - av_sequence_offset_start);
     }
-    
+
     return ret;
 }
 
 int SrsFlvVodStreamDecoder::lseek(int64_t offset)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (offset >= reader->filesize()) {
+
+    if (offset >= reader->filesize())
+    {
         ret = ERROR_SYSTEM_FILE_EOF;
         srs_warn("flv fast decoder seek overflow file, "
-            "size=%"PRId64", offset=%"PRId64", ret=%d", 
-            reader->filesize(), offset, ret);
+                 "size=%"PRId64", offset=%"PRId64", ret=%d",
+                 reader->filesize(), offset, ret);
         return ret;
     }
-    
-    if (reader->lseek(offset) < 0) {
+
+    if (reader->lseek(offset) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_SEEK;
         srs_warn("flv fast decoder seek error, "
-            "size=%"PRId64", offset=%"PRId64", ret=%d", 
-            reader->filesize(), offset, ret);
+                 "size=%"PRId64", offset=%"PRId64", ret=%d",
+                 reader->filesize(), offset, ret);
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -14323,130 +14483,184 @@ using namespace std;
 
 string srs_codec_video2str(SrsCodecVideo codec)
 {
-    switch (codec) {
-        case SrsCodecVideoAVC: 
-            return "H264";
-        case SrsCodecVideoOn2VP6:
-        case SrsCodecVideoOn2VP6WithAlphaChannel:
-            return "VP6";
-        case SrsCodecVideoReserved:
-        case SrsCodecVideoReserved1:
-        case SrsCodecVideoReserved2:
-        case SrsCodecVideoDisabled:
-        case SrsCodecVideoSorensonH263:
-        case SrsCodecVideoScreenVideo:
-        case SrsCodecVideoScreenVideoVersion2:
-        default:
-            return "Other";
+    switch (codec)
+    {
+    case SrsCodecVideoAVC:
+        return "H264";
+    case SrsCodecVideoOn2VP6:
+    case SrsCodecVideoOn2VP6WithAlphaChannel:
+        return "VP6";
+    case SrsCodecVideoReserved:
+    case SrsCodecVideoReserved1:
+    case SrsCodecVideoReserved2:
+    case SrsCodecVideoDisabled:
+    case SrsCodecVideoSorensonH263:
+    case SrsCodecVideoScreenVideo:
+    case SrsCodecVideoScreenVideoVersion2:
+    default:
+        return "Other";
     }
 }
 
 string srs_codec_audio2str(SrsCodecAudio codec)
 {
-    switch (codec) {
-        case SrsCodecAudioAAC:
-            return "AAC";
-        case SrsCodecAudioMP3:
-            return "MP3";
-        case SrsCodecAudioReserved1:
-        case SrsCodecAudioLinearPCMPlatformEndian:
-        case SrsCodecAudioADPCM:
-        case SrsCodecAudioLinearPCMLittleEndian:
-        case SrsCodecAudioNellymoser16kHzMono:
-        case SrsCodecAudioNellymoser8kHzMono:
-        case SrsCodecAudioNellymoser:
-        case SrsCodecAudioReservedG711AlawLogarithmicPCM:
-        case SrsCodecAudioReservedG711MuLawLogarithmicPCM:
-        case SrsCodecAudioReserved:
-        case SrsCodecAudioSpeex:
-        case SrsCodecAudioReservedMP3_8kHz:
-        case SrsCodecAudioReservedDeviceSpecificSound:
-        default:
-            return "Other";
+    switch (codec)
+    {
+    case SrsCodecAudioAAC:
+        return "AAC";
+    case SrsCodecAudioMP3:
+        return "MP3";
+    case SrsCodecAudioReserved1:
+    case SrsCodecAudioLinearPCMPlatformEndian:
+    case SrsCodecAudioADPCM:
+    case SrsCodecAudioLinearPCMLittleEndian:
+    case SrsCodecAudioNellymoser16kHzMono:
+    case SrsCodecAudioNellymoser8kHzMono:
+    case SrsCodecAudioNellymoser:
+    case SrsCodecAudioReservedG711AlawLogarithmicPCM:
+    case SrsCodecAudioReservedG711MuLawLogarithmicPCM:
+    case SrsCodecAudioReserved:
+    case SrsCodecAudioSpeex:
+    case SrsCodecAudioReservedMP3_8kHz:
+    case SrsCodecAudioReservedDeviceSpecificSound:
+    default:
+        return "Other";
     }
 }
 
 string srs_codec_aac_profile2str(SrsAacProfile aac_profile)
 {
-    switch (aac_profile) {
-        case SrsAacProfileMain: return "Main";
-        case SrsAacProfileLC: return "LC";
-        case SrsAacProfileSSR: return "SSR";
-        default: return "Other";
+    switch (aac_profile)
+    {
+    case SrsAacProfileMain:
+        return "Main";
+    case SrsAacProfileLC:
+        return "LC";
+    case SrsAacProfileSSR:
+        return "SSR";
+    default:
+        return "Other";
     }
 }
 
 string srs_codec_aac_object2str(SrsAacObjectType aac_object)
 {
-    switch (aac_object) {
-        case SrsAacObjectTypeAacMain: return "Main";
-        case SrsAacObjectTypeAacHE: return "HE";
-        case SrsAacObjectTypeAacHEV2: return "HEv2";
-        case SrsAacObjectTypeAacLC: return "LC";
-        case SrsAacObjectTypeAacSSR: return "SSR";
-        default: return "Other";
+    switch (aac_object)
+    {
+    case SrsAacObjectTypeAacMain:
+        return "Main";
+    case SrsAacObjectTypeAacHE:
+        return "HE";
+    case SrsAacObjectTypeAacHEV2:
+        return "HEv2";
+    case SrsAacObjectTypeAacLC:
+        return "LC";
+    case SrsAacObjectTypeAacSSR:
+        return "SSR";
+    default:
+        return "Other";
     }
 }
 
 SrsAacObjectType srs_codec_aac_ts2rtmp(SrsAacProfile profile)
 {
-    switch (profile) {
-        case SrsAacProfileMain: return SrsAacObjectTypeAacMain;
-        case SrsAacProfileLC: return SrsAacObjectTypeAacLC;
-        case SrsAacProfileSSR: return SrsAacObjectTypeAacSSR;
-        default: return SrsAacObjectTypeReserved;
+    switch (profile)
+    {
+    case SrsAacProfileMain:
+        return SrsAacObjectTypeAacMain;
+    case SrsAacProfileLC:
+        return SrsAacObjectTypeAacLC;
+    case SrsAacProfileSSR:
+        return SrsAacObjectTypeAacSSR;
+    default:
+        return SrsAacObjectTypeReserved;
     }
 }
 
 SrsAacProfile srs_codec_aac_rtmp2ts(SrsAacObjectType object_type)
 {
-    switch (object_type) {
-        case SrsAacObjectTypeAacMain: return SrsAacProfileMain;
-        case SrsAacObjectTypeAacHE:
-        case SrsAacObjectTypeAacHEV2:
-        case SrsAacObjectTypeAacLC: return SrsAacProfileLC;
-        case SrsAacObjectTypeAacSSR: return SrsAacProfileSSR;
-        default: return SrsAacProfileReserved;
+    switch (object_type)
+    {
+    case SrsAacObjectTypeAacMain:
+        return SrsAacProfileMain;
+    case SrsAacObjectTypeAacHE:
+    case SrsAacObjectTypeAacHEV2:
+    case SrsAacObjectTypeAacLC:
+        return SrsAacProfileLC;
+    case SrsAacObjectTypeAacSSR:
+        return SrsAacProfileSSR;
+    default:
+        return SrsAacProfileReserved;
     }
 }
 
 string srs_codec_avc_profile2str(SrsAvcProfile profile)
 {
-    switch (profile) {
-        case SrsAvcProfileBaseline: return "Baseline";
-        case SrsAvcProfileConstrainedBaseline: return "Baseline(Constrained)";
-        case SrsAvcProfileMain: return "Main";
-        case SrsAvcProfileExtended: return "Extended";
-        case SrsAvcProfileHigh: return "High";
-        case SrsAvcProfileHigh10: return "High(10)";
-        case SrsAvcProfileHigh10Intra: return "High(10+Intra)";
-        case SrsAvcProfileHigh422: return "High(422)";
-        case SrsAvcProfileHigh422Intra: return "High(422+Intra)";
-        case SrsAvcProfileHigh444: return "High(444)";
-        case SrsAvcProfileHigh444Predictive: return "High(444+Predictive)";
-        case SrsAvcProfileHigh444Intra: return "High(444+Intra)";
-        default: return "Other";
+    switch (profile)
+    {
+    case SrsAvcProfileBaseline:
+        return "Baseline";
+    case SrsAvcProfileConstrainedBaseline:
+        return "Baseline(Constrained)";
+    case SrsAvcProfileMain:
+        return "Main";
+    case SrsAvcProfileExtended:
+        return "Extended";
+    case SrsAvcProfileHigh:
+        return "High";
+    case SrsAvcProfileHigh10:
+        return "High(10)";
+    case SrsAvcProfileHigh10Intra:
+        return "High(10+Intra)";
+    case SrsAvcProfileHigh422:
+        return "High(422)";
+    case SrsAvcProfileHigh422Intra:
+        return "High(422+Intra)";
+    case SrsAvcProfileHigh444:
+        return "High(444)";
+    case SrsAvcProfileHigh444Predictive:
+        return "High(444+Predictive)";
+    case SrsAvcProfileHigh444Intra:
+        return "High(444+Intra)";
+    default:
+        return "Other";
     }
 }
 
 string srs_codec_avc_level2str(SrsAvcLevel level)
 {
-    switch (level) {
-        case SrsAvcLevel_1: return "1";
-        case SrsAvcLevel_11: return "1.1";
-        case SrsAvcLevel_12: return "1.2";
-        case SrsAvcLevel_13: return "1.3";
-        case SrsAvcLevel_2: return "2";
-        case SrsAvcLevel_21: return "2.1";
-        case SrsAvcLevel_22: return "2.2";
-        case SrsAvcLevel_3: return "3";
-        case SrsAvcLevel_31: return "3.1";
-        case SrsAvcLevel_32: return "3.2";
-        case SrsAvcLevel_4: return "4";
-        case SrsAvcLevel_41: return "4.1";
-        case SrsAvcLevel_5: return "5";
-        case SrsAvcLevel_51: return "5.1";
-        default: return "Other";
+    switch (level)
+    {
+    case SrsAvcLevel_1:
+        return "1";
+    case SrsAvcLevel_11:
+        return "1.1";
+    case SrsAvcLevel_12:
+        return "1.2";
+    case SrsAvcLevel_13:
+        return "1.3";
+    case SrsAvcLevel_2:
+        return "2";
+    case SrsAvcLevel_21:
+        return "2.1";
+    case SrsAvcLevel_22:
+        return "2.2";
+    case SrsAvcLevel_3:
+        return "3";
+    case SrsAvcLevel_31:
+        return "3.1";
+    case SrsAvcLevel_32:
+        return "3.2";
+    case SrsAvcLevel_4:
+        return "4";
+    case SrsAvcLevel_41:
+        return "4.1";
+    case SrsAvcLevel_5:
+        return "5";
+    case SrsAvcLevel_51:
+        return "5.1";
+    default:
+        return "Other";
     }
 }
 
@@ -14461,7 +14675,7 @@ int flv_sample_rates[] = {5512, 11025, 22050, 44100};
 
 // the sample rates in the codec,
 // in the sequence header.
-int aac_sample_rates[] = 
+int aac_sample_rates[] =
 {
     96000, 88200, 64000, 48000,
     44100, 32000, 24000, 22050,
@@ -14480,25 +14694,28 @@ SrsFlvCodec::~SrsFlvCodec()
 bool SrsFlvCodec::video_is_keyframe(char* data, int size)
 {
     // 2bytes required.
-    if (size < 1) {
+    if (size < 1)
+    {
         return false;
     }
 
     char frame_type = data[0];
     frame_type = (frame_type >> 4) & 0x0F;
-    
+
     return frame_type == SrsCodecVideoAVCFrameKeyFrame;
 }
 
 bool SrsFlvCodec::video_is_sequence_header(char* data, int size)
 {
     // sequence header only for h264
-    if (!video_is_h264(data, size)) {
+    if (!video_is_h264(data, size))
+    {
         return false;
     }
-    
+
     // 2bytes required.
-    if (size < 2) {
+    if (size < 2)
+    {
         return false;
     }
 
@@ -14506,97 +14723,124 @@ bool SrsFlvCodec::video_is_sequence_header(char* data, int size)
     frame_type = (frame_type >> 4) & 0x0F;
 
     char avc_packet_type = data[1];
-    
-    return frame_type == SrsCodecVideoAVCFrameKeyFrame 
-        && avc_packet_type == SrsCodecVideoAVCTypeSequenceHeader;
+
+    return frame_type == SrsCodecVideoAVCFrameKeyFrame
+           && avc_packet_type == SrsCodecVideoAVCTypeSequenceHeader;
 }
 
 bool SrsFlvCodec::audio_is_sequence_header(char* data, int size)
 {
     // sequence header only for aac
-    if (!audio_is_aac(data, size)) {
+    if (!audio_is_aac(data, size))
+    {
         return false;
     }
-    
+
     // 2bytes required.
-    if (size < 2) {
+    if (size < 2)
+    {
         return false;
     }
-    
+
     char aac_packet_type = data[1];
-    
+
     return aac_packet_type == SrsCodecAudioTypeSequenceHeader;
 }
 
 bool SrsFlvCodec::video_is_h264(char* data, int size)
 {
     // 1bytes required.
-    if (size < 1) {
+    if (size < 1)
+    {
         return false;
     }
 
     char codec_id = data[0];
     codec_id = codec_id & 0x0F;
-    
+
     return codec_id == SrsCodecVideoAVC;
 }
 
 bool SrsFlvCodec::audio_is_aac(char* data, int size)
 {
     // 1bytes required.
-    if (size < 1) {
+    if (size < 1)
+    {
         return false;
     }
-    
+
     char sound_format = data[0];
     sound_format = (sound_format >> 4) & 0x0F;
-    
+
     return sound_format == SrsCodecAudioAAC;
 }
 
 bool SrsFlvCodec::video_is_acceptable(char* data, int size)
 {
     // 1bytes required.
-    if (size < 1) {
+    if (size < 1)
+    {
         return false;
     }
-    
+
     char frame_type = data[0];
     char codec_id = frame_type & 0x0f;
     frame_type = (frame_type >> 4) & 0x0f;
-    
-    if (frame_type < 1 || frame_type > 5) {
+
+    if (frame_type < 1 || frame_type > 5)
+    {
         return false;
     }
-    
-    if (codec_id < 2 || codec_id > 7) {
+
+    if (codec_id < 2 || codec_id > 7)
+    {
         return false;
     }
-    
+
     return true;
 }
 
 string srs_codec_avc_nalu2str(SrsAvcNaluType nalu_type)
 {
-    switch (nalu_type) {
-        case SrsAvcNaluTypeNonIDR: return "NonIDR";
-        case SrsAvcNaluTypeDataPartitionA: return "DataPartitionA";
-        case SrsAvcNaluTypeDataPartitionB: return "DataPartitionB";
-        case SrsAvcNaluTypeDataPartitionC: return "DataPartitionC";
-        case SrsAvcNaluTypeIDR: return "IDR";
-        case SrsAvcNaluTypeSEI: return "SEI";
-        case SrsAvcNaluTypeSPS: return "SPS";
-        case SrsAvcNaluTypePPS: return "PPS";
-        case SrsAvcNaluTypeAccessUnitDelimiter: return "AccessUnitDelimiter";
-        case SrsAvcNaluTypeEOSequence: return "EOSequence";
-        case SrsAvcNaluTypeEOStream: return "EOStream";
-        case SrsAvcNaluTypeFilterData: return "FilterData";
-        case SrsAvcNaluTypeSPSExt: return "SPSExt";
-        case SrsAvcNaluTypePrefixNALU: return "PrefixNALU";
-        case SrsAvcNaluTypeSubsetSPS: return "SubsetSPS";
-        case SrsAvcNaluTypeLayerWithoutPartition: return "LayerWithoutPartition";
-        case SrsAvcNaluTypeCodedSliceExt: return "CodedSliceExt";
-        case SrsAvcNaluTypeReserved: default: return "Other";
+    switch (nalu_type)
+    {
+    case SrsAvcNaluTypeNonIDR:
+        return "NonIDR";
+    case SrsAvcNaluTypeDataPartitionA:
+        return "DataPartitionA";
+    case SrsAvcNaluTypeDataPartitionB:
+        return "DataPartitionB";
+    case SrsAvcNaluTypeDataPartitionC:
+        return "DataPartitionC";
+    case SrsAvcNaluTypeIDR:
+        return "IDR";
+    case SrsAvcNaluTypeSEI:
+        return "SEI";
+    case SrsAvcNaluTypeSPS:
+        return "SPS";
+    case SrsAvcNaluTypePPS:
+        return "PPS";
+    case SrsAvcNaluTypeAccessUnitDelimiter:
+        return "AccessUnitDelimiter";
+    case SrsAvcNaluTypeEOSequence:
+        return "EOSequence";
+    case SrsAvcNaluTypeEOStream:
+        return "EOStream";
+    case SrsAvcNaluTypeFilterData:
+        return "FilterData";
+    case SrsAvcNaluTypeSPSExt:
+        return "SPSExt";
+    case SrsAvcNaluTypePrefixNALU:
+        return "PrefixNALU";
+    case SrsAvcNaluTypeSubsetSPS:
+        return "SubsetSPS";
+    case SrsAvcNaluTypeLayerWithoutPartition:
+        return "LayerWithoutPartition";
+    case SrsAvcNaluTypeCodedSliceExt:
+        return "CodedSliceExt";
+    case SrsAvcNaluTypeReserved:
+    default:
+        return "Other";
     }
 }
 
@@ -14629,7 +14873,7 @@ void SrsCodecSample::clear()
     avc_packet_type = SrsCodecVideoAVCTypeReserved;
     has_idr = false;
     first_nalu_type = SrsAvcNaluTypeReserved;
-    
+
     acodec = SrsCodecAudioReserved1;
     sound_rate = SrsCodecAudioSampleRateReserved;
     sound_size = SrsCodecAudioSampleSizeReserved;
@@ -14640,31 +14884,35 @@ void SrsCodecSample::clear()
 int SrsCodecSample::add_sample_unit(char* bytes, int size)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (nb_sample_units >= SRS_SRS_MAX_CODEC_SAMPLE) {
+
+    if (nb_sample_units >= SRS_SRS_MAX_CODEC_SAMPLE)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("hls decode samples error, "
-            "exceed the max count: %d, ret=%d", SRS_SRS_MAX_CODEC_SAMPLE, ret);
+                  "exceed the max count: %d, ret=%d", SRS_SRS_MAX_CODEC_SAMPLE, ret);
         return ret;
     }
-    
+
     SrsCodecSampleUnit* sample_unit = &sample_units[nb_sample_units++];
     sample_unit->bytes = bytes;
     sample_unit->size = size;
-    
+
     // for video, parse the nalu type, set the IDR flag.
-    if (is_video) {
+    if (is_video)
+    {
         SrsAvcNaluType nal_unit_type = (SrsAvcNaluType)(bytes[0] & 0x1f);
-        
-        if (nal_unit_type == SrsAvcNaluTypeIDR) {
+
+        if (nal_unit_type == SrsAvcNaluTypeIDR)
+        {
             has_idr = true;
         }
-    
-        if (first_nalu_type == SrsAvcNaluTypeReserved) {
+
+        if (first_nalu_type == SrsAvcNaluTypeReserved)
+        {
             first_nalu_type = nal_unit_type;
         }
     }
-    
+
     return ret;
 }
 
@@ -14724,33 +14972,36 @@ bool SrsAvcAacCodec::is_aac_codec_ok()
 int SrsAvcAacCodec::audio_aac_demux(char* data, int size, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
+
     sample->is_video = false;
-    
-    if (!data || size <= 0) {
+
+    if (!data || size <= 0)
+    {
         srs_trace("no audio present, ignore it.");
         return ret;
     }
-    
-    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS) {
+
+    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // audio decode
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("aac decode sound_format failed. ret=%d", ret);
         return ret;
     }
-    
+
     // @see: E.4.2 Audio Tags, video_file_format_spec_v10_1.pdf, page 76
     int8_t sound_format = stream->read_1bytes();
-    
+
     int8_t sound_type = sound_format & 0x01;
     int8_t sound_size = (sound_format >> 1) & 0x01;
     int8_t sound_rate = (sound_format >> 2) & 0x03;
     sound_format = (sound_format >> 4) & 0x0f;
-    
+
     audio_codec_id = sound_format;
     sample->acodec = (SrsCodecAudio)audio_codec_id;
 
@@ -14759,83 +15010,98 @@ int SrsAvcAacCodec::audio_aac_demux(char* data, int size, SrsCodecSample* sample
     sample->sound_size = (SrsCodecAudioSampleSize)sound_size;
 
     // we support h.264+mp3 for hls.
-    if (audio_codec_id == SrsCodecAudioMP3) {
+    if (audio_codec_id == SrsCodecAudioMP3)
+    {
         return ERROR_HLS_TRY_MP3;
     }
-    
+
     // only support aac
-    if (audio_codec_id != SrsCodecAudioAAC) {
+    if (audio_codec_id != SrsCodecAudioAAC)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("aac only support mp3/aac codec. actual=%d, ret=%d", audio_codec_id, ret);
         return ret;
     }
 
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("aac decode aac_packet_type failed. ret=%d", ret);
         return ret;
     }
-    
+
     int8_t aac_packet_type = stream->read_1bytes();
     sample->aac_packet_type = (SrsCodecAudioType)aac_packet_type;
-    
-    if (aac_packet_type == SrsCodecAudioTypeSequenceHeader) {
+
+    if (aac_packet_type == SrsCodecAudioTypeSequenceHeader)
+    {
         // AudioSpecificConfig
         // 1.6.2.1 AudioSpecificConfig, in aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 33.
         aac_extra_size = stream->size() - stream->pos();
-        if (aac_extra_size > 0) {
+        if (aac_extra_size > 0)
+        {
             srs_freep(aac_extra_data);
             aac_extra_data = new char[aac_extra_size];
             memcpy(aac_extra_data, stream->data() + stream->pos(), aac_extra_size);
 
             // demux the sequence header.
-            if ((ret = audio_aac_sequence_header_demux(aac_extra_data, aac_extra_size)) != ERROR_SUCCESS) {
+            if ((ret = audio_aac_sequence_header_demux(aac_extra_data, aac_extra_size)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
         }
-    } else if (aac_packet_type == SrsCodecAudioTypeRawData) {
+    }
+    else if (aac_packet_type == SrsCodecAudioTypeRawData)
+    {
         // ensure the sequence header demuxed
-        if (!is_aac_codec_ok()) {
+        if (!is_aac_codec_ok())
+        {
             srs_warn("aac ignore type=%d for no sequence header. ret=%d", aac_packet_type, ret);
             return ret;
         }
-        
+
         // Raw AAC frame data in UI8 []
         // 6.3 Raw Data, aac-iso-13818-7.pdf, page 28
-        if ((ret = sample->add_sample_unit(stream->data() + stream->pos(), stream->size() - stream->pos())) != ERROR_SUCCESS) {
+        if ((ret = sample->add_sample_unit(stream->data() + stream->pos(), stream->size() - stream->pos())) != ERROR_SUCCESS)
+        {
             srs_error("aac add sample failed. ret=%d", ret);
             return ret;
         }
-    } else {
+    }
+    else
+    {
         // ignored.
     }
-    
+
     // reset the sample rate by sequence header
-    if (aac_sample_rate != SRS_AAC_SAMPLE_RATE_UNSET) {
-        static int aac_sample_rates[] = {
+    if (aac_sample_rate != SRS_AAC_SAMPLE_RATE_UNSET)
+    {
+        static int aac_sample_rates[] =
+        {
             96000, 88200, 64000, 48000,
             44100, 32000, 24000, 22050,
             16000, 12000, 11025,  8000,
             7350,     0,     0,    0
         };
-        switch (aac_sample_rates[aac_sample_rate]) {
-            case 11025:
-                sample->sound_rate = SrsCodecAudioSampleRate11025;
-                break;
-            case 22050:
-                sample->sound_rate = SrsCodecAudioSampleRate22050;
-                break;
-            case 44100:
-                sample->sound_rate = SrsCodecAudioSampleRate44100;
-                break;
-            default:
-                break;
+        switch (aac_sample_rates[aac_sample_rate])
+        {
+        case 11025:
+            sample->sound_rate = SrsCodecAudioSampleRate11025;
+            break;
+        case 22050:
+            sample->sound_rate = SrsCodecAudioSampleRate22050;
+            break;
+        case 44100:
+            sample->sound_rate = SrsCodecAudioSampleRate44100;
+            break;
+        default:
+            break;
         };
     }
-    
+
     srs_info("aac decoded, type=%d, codec=%d, asize=%d, rate=%d, format=%d, size=%d",
-        sound_type, audio_codec_id, sound_size, sound_rate, sound_format, size);
-    
+             sound_type, audio_codec_id, sound_size, sound_rate, sound_format, size);
+
     return ret;
 }
 
@@ -14845,45 +15111,49 @@ int SrsAvcAacCodec::audio_mp3_demux(char* data, int size, SrsCodecSample* sample
 
     // we always decode aac then mp3.
     srs_assert(sample->acodec == SrsCodecAudioMP3);
-    
+
     // @see: E.4.2 Audio Tags, video_file_format_spec_v10_1.pdf, page 76
-    if (!data || size <= 1) {
+    if (!data || size <= 1)
+    {
         srs_trace("no mp3 audio present, ignore it.");
         return ret;
     }
 
     // mp3 payload.
-    if ((ret = sample->add_sample_unit(data + 1, size - 1)) != ERROR_SUCCESS) {
+    if ((ret = sample->add_sample_unit(data + 1, size - 1)) != ERROR_SUCCESS)
+    {
         srs_error("audio codec add mp3 sample failed. ret=%d", ret);
         return ret;
     }
-    
-    srs_info("audio decoded, type=%d, codec=%d, asize=%d, rate=%d, format=%d, size=%d", 
-        sample->sound_type, audio_codec_id, sample->sound_size, sample->sound_rate, sample->acodec, size);
-    
+
+    srs_info("audio decoded, type=%d, codec=%d, asize=%d, rate=%d, format=%d, size=%d",
+             sample->sound_type, audio_codec_id, sample->sound_size, sample->sound_rate, sample->acodec, size);
+
     return ret;
 }
 
 int SrsAvcAacCodec::audio_aac_sequence_header_demux(char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS) {
+
+    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-        
+
     // only need to decode the first 2bytes:
     //      audioObjectType, aac_profile, 5bits.
     //      samplingFrequencyIndex, aac_sample_rate, 4bits.
     //      channelConfiguration, aac_channels, 4bits
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("audio codec decode aac sequence header failed. ret=%d", ret);
         return ret;
     }
     u_int8_t profile_ObjectType = stream->read_1bytes();
     u_int8_t samplingFrequencyIndex = stream->read_1bytes();
-        
+
     aac_channels = (samplingFrequencyIndex >> 3) & 0x0f;
     samplingFrequencyIndex = ((profile_ObjectType << 1) & 0x0e) | ((samplingFrequencyIndex >> 7) & 0x01);
     profile_ObjectType = (profile_ObjectType >> 3) & 0x1f;
@@ -14893,23 +15163,24 @@ int SrsAvcAacCodec::audio_aac_sequence_header_demux(char* data, int size)
 
     // convert the object type in sequence header to aac profile of ADTS.
     aac_object = (SrsAacObjectType)profile_ObjectType;
-    if (aac_object == SrsAacObjectTypeReserved) {
+    if (aac_object == SrsAacObjectTypeReserved)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("audio codec decode aac sequence header failed, "
-            "adts object=%d invalid. ret=%d", profile_ObjectType, ret);
+                  "adts object=%d invalid. ret=%d", profile_ObjectType, ret);
         return ret;
     }
-        
+
     // TODO: FIXME: to support aac he/he-v2, see: ngx_rtmp_codec_parse_aac_header
     // @see: https://github.com/winlinvip/nginx-rtmp-module/commit/3a5f9eea78fc8d11e8be922aea9ac349b9dcbfc2
-    // 
+    //
     // donot force to LC, @see: https://github.com/simple-rtmp-server/srs/issues/81
     // the source will print the sequence header info.
     //if (aac_profile > 3) {
-        // Mark all extended profiles as LC
-        // to make Android as happy as possible.
-        // @see: ngx_rtmp_hls_parse_aac_header
-        //aac_profile = 1;
+    // Mark all extended profiles as LC
+    // to make Android as happy as possible.
+    // @see: ngx_rtmp_hls_parse_aac_header
+    //aac_profile = 1;
     //}
 
     return ret;
@@ -14918,142 +15189,175 @@ int SrsAvcAacCodec::audio_aac_sequence_header_demux(char* data, int size)
 int SrsAvcAacCodec::video_avc_demux(char* data, int size, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
+
     sample->is_video = true;
-    
-    if (!data || size <= 0) {
+
+    if (!data || size <= 0)
+    {
         srs_trace("no video present, ignore it.");
         return ret;
     }
-    
-    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS) {
+
+    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // video decode
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode frame_type failed. ret=%d", ret);
         return ret;
     }
-    
+
     // @see: E.4.3 Video Tags, video_file_format_spec_v10_1.pdf, page 78
     int8_t frame_type = stream->read_1bytes();
     int8_t codec_id = frame_type & 0x0f;
     frame_type = (frame_type >> 4) & 0x0f;
-    
+
     sample->frame_type = (SrsCodecVideoAVCFrame)frame_type;
-    
+
     // ignore info frame without error,
     // @see https://github.com/simple-rtmp-server/srs/issues/288#issuecomment-69863909
-    if (sample->frame_type == SrsCodecVideoAVCFrameVideoInfoFrame) {
+    if (sample->frame_type == SrsCodecVideoAVCFrameVideoInfoFrame)
+    {
         srs_warn("avc igone the info frame, ret=%d", ret);
         return ret;
     }
-    
+
     // only support h.264/avc
-    if (codec_id != SrsCodecVideoAVC) {
+    if (codec_id != SrsCodecVideoAVC)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc only support video h.264/avc codec. actual=%d, ret=%d", codec_id, ret);
         return ret;
     }
     video_codec_id = codec_id;
-    
-    if (!stream->require(4)) {
+
+    if (!stream->require(4))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode avc_packet_type failed. ret=%d", ret);
         return ret;
     }
     int8_t avc_packet_type = stream->read_1bytes();
     int32_t composition_time = stream->read_3bytes();
-    
+
     // pts = dts + cts.
     sample->cts = composition_time;
     sample->avc_packet_type = (SrsCodecVideoAVCType)avc_packet_type;
-    
-    if (avc_packet_type == SrsCodecVideoAVCTypeSequenceHeader) {
-        if ((ret = avc_demux_sps_pps(stream)) != ERROR_SUCCESS) {
+
+    if (avc_packet_type == SrsCodecVideoAVCTypeSequenceHeader)
+    {
+        if ((ret = avc_demux_sps_pps(stream)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-    } else if (avc_packet_type == SrsCodecVideoAVCTypeNALU){
+    }
+    else if (avc_packet_type == SrsCodecVideoAVCTypeNALU)
+    {
         // ensure the sequence header demuxed
-        if (!is_avc_codec_ok()) {
+        if (!is_avc_codec_ok())
+        {
             srs_warn("avc ignore type=%d for no sequence header. ret=%d", avc_packet_type, ret);
             return ret;
         }
 
         // guess for the first time.
-        if (payload_format == SrsAvcPayloadFormatGuess) {
+        if (payload_format == SrsAvcPayloadFormatGuess)
+        {
             // One or more NALUs (Full frames are required)
             // try  "AnnexB" from H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
-            if ((ret = avc_demux_annexb_format(stream, sample)) != ERROR_SUCCESS) {
+            if ((ret = avc_demux_annexb_format(stream, sample)) != ERROR_SUCCESS)
+            {
                 // stop try when system error.
-                if (ret != ERROR_HLS_AVC_TRY_OTHERS) {
+                if (ret != ERROR_HLS_AVC_TRY_OTHERS)
+                {
                     srs_error("avc demux for annexb failed. ret=%d", ret);
                     return ret;
                 }
-                
+
                 // try "ISO Base Media File Format" from H.264-AVC-ISO_IEC_14496-15.pdf, page 20
-                if ((ret = avc_demux_ibmf_format(stream, sample)) != ERROR_SUCCESS) {
+                if ((ret = avc_demux_ibmf_format(stream, sample)) != ERROR_SUCCESS)
+                {
                     return ret;
-                } else {
+                }
+                else
+                {
                     payload_format = SrsAvcPayloadFormatIbmf;
                     srs_info("hls guess avc payload is ibmf format.");
                 }
-            } else {
+            }
+            else
+            {
                 payload_format = SrsAvcPayloadFormatAnnexb;
                 srs_info("hls guess avc payload is annexb format.");
             }
-        } else if (payload_format == SrsAvcPayloadFormatIbmf) {
+        }
+        else if (payload_format == SrsAvcPayloadFormatIbmf)
+        {
             // try "ISO Base Media File Format" from H.264-AVC-ISO_IEC_14496-15.pdf, page 20
-            if ((ret = avc_demux_ibmf_format(stream, sample)) != ERROR_SUCCESS) {
+            if ((ret = avc_demux_ibmf_format(stream, sample)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
             srs_info("hls decode avc payload in ibmf format.");
-        } else {
+        }
+        else
+        {
             // One or more NALUs (Full frames are required)
             // try  "AnnexB" from H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
-            if ((ret = avc_demux_annexb_format(stream, sample)) != ERROR_SUCCESS) {
+            if ((ret = avc_demux_annexb_format(stream, sample)) != ERROR_SUCCESS)
+            {
                 // ok, we guess out the payload is annexb, but maybe changed to ibmf.
-                if (ret != ERROR_HLS_AVC_TRY_OTHERS) {
+                if (ret != ERROR_HLS_AVC_TRY_OTHERS)
+                {
                     srs_error("avc demux for annexb failed. ret=%d", ret);
                     return ret;
                 }
-                
+
                 // try "ISO Base Media File Format" from H.264-AVC-ISO_IEC_14496-15.pdf, page 20
-                if ((ret = avc_demux_ibmf_format(stream, sample)) != ERROR_SUCCESS) {
+                if ((ret = avc_demux_ibmf_format(stream, sample)) != ERROR_SUCCESS)
+                {
                     return ret;
-                } else {
+                }
+                else
+                {
                     payload_format = SrsAvcPayloadFormatIbmf;
                     srs_warn("hls avc payload change from annexb to ibmf format.");
                 }
             }
             srs_info("hls decode avc payload in annexb format.");
         }
-    } else {
+    }
+    else
+    {
         // ignored.
     }
-    
+
     srs_info("avc decoded, type=%d, codec=%d, avc=%d, cts=%d, size=%d",
-        frame_type, video_codec_id, avc_packet_type, composition_time, size);
-    
+             frame_type, video_codec_id, avc_packet_type, composition_time, size);
+
     return ret;
 }
 
 int SrsAvcAacCodec::avc_demux_sps_pps(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // AVCDecoderConfigurationRecord
     // 5.2.4.1.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
     avc_extra_size = stream->size() - stream->pos();
-    if (avc_extra_size > 0) {
+    if (avc_extra_size > 0)
+    {
         srs_freep(avc_extra_data);
         avc_extra_data = new char[avc_extra_size];
         memcpy(avc_extra_data, stream->data() + stream->pos(), avc_extra_size);
     }
-    
-    if (!stream->require(6)) {
+
+    if (!stream->require(6))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header failed. ret=%d", ret);
         return ret;
@@ -15066,159 +15370,179 @@ int SrsAvcAacCodec::avc_demux_sps_pps(SrsStream* stream)
     stream->read_1bytes();
     //int8_t AVCLevelIndication = stream->read_1bytes();
     avc_level = (SrsAvcLevel)stream->read_1bytes();
-    
+
     // parse the NALU size.
     int8_t lengthSizeMinusOne = stream->read_1bytes();
     lengthSizeMinusOne &= 0x03;
     NAL_unit_length = lengthSizeMinusOne;
-    
+
     // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
     // 5.2.4.1 AVC decoder configuration record
     // 5.2.4.1.2 Semantics
     // The value of this field shall be one of 0, 1, or 3 corresponding to a
     // length encoded with 1, 2, or 4 bytes, respectively.
-    if (NAL_unit_length == 2) {
+    if (NAL_unit_length == 2)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("sps lengthSizeMinusOne should never be 2. ret=%d", ret);
         return ret;
     }
-    
+
     // 1 sps, 7.3.2.1 Sequence parameter set RBSP syntax
     // H.264-AVC-ISO_IEC_14496-10.pdf, page 45.
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header sps failed. ret=%d", ret);
         return ret;
     }
     int8_t numOfSequenceParameterSets = stream->read_1bytes();
     numOfSequenceParameterSets &= 0x1f;
-    if (numOfSequenceParameterSets != 1) {
+    if (numOfSequenceParameterSets != 1)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header sps failed. ret=%d", ret);
         return ret;
     }
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header sps size failed. ret=%d", ret);
         return ret;
     }
     sequenceParameterSetLength = stream->read_2bytes();
-    if (!stream->require(sequenceParameterSetLength)) {
+    if (!stream->require(sequenceParameterSetLength))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header sps data failed. ret=%d", ret);
         return ret;
     }
-    if (sequenceParameterSetLength > 0) {
+    if (sequenceParameterSetLength > 0)
+    {
         srs_freep(sequenceParameterSetNALUnit);
         sequenceParameterSetNALUnit = new char[sequenceParameterSetLength];
         stream->read_bytes(sequenceParameterSetNALUnit, sequenceParameterSetLength);
     }
     // 1 pps
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header pps failed. ret=%d", ret);
         return ret;
     }
     int8_t numOfPictureParameterSets = stream->read_1bytes();
     numOfPictureParameterSets &= 0x1f;
-    if (numOfPictureParameterSets != 1) {
+    if (numOfPictureParameterSets != 1)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header pps failed. ret=%d", ret);
         return ret;
     }
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header pps size failed. ret=%d", ret);
         return ret;
     }
     pictureParameterSetLength = stream->read_2bytes();
-    if (!stream->require(pictureParameterSetLength)) {
+    if (!stream->require(pictureParameterSetLength))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sequenc header pps data failed. ret=%d", ret);
         return ret;
     }
-    if (pictureParameterSetLength > 0) {
+    if (pictureParameterSetLength > 0)
+    {
         srs_freep(pictureParameterSetNALUnit);
         pictureParameterSetNALUnit = new char[pictureParameterSetLength];
         stream->read_bytes(pictureParameterSetNALUnit, pictureParameterSetLength);
     }
-    
+
     return avc_demux_sps();
 }
 
 int SrsAvcAacCodec::avc_demux_sps()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!sequenceParameterSetLength) {
+
+    if (!sequenceParameterSetLength)
+    {
         return ret;
     }
-    
+
     SrsStream stream;
-    if ((ret = stream.initialize(sequenceParameterSetNALUnit, sequenceParameterSetLength)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(sequenceParameterSetNALUnit, sequenceParameterSetLength)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // for NALU, 7.3.1 NAL unit syntax
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 61.
-    if (!stream.require(1)) {
+    if (!stream.require(1))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("avc decode sps failed. ret=%d", ret);
         return ret;
     }
     int8_t nutv = stream.read_1bytes();
-    
+
     // forbidden_zero_bit shall be equal to 0.
     int8_t forbidden_zero_bit = (nutv >> 7) & 0x01;
-    if (forbidden_zero_bit) {
+    if (forbidden_zero_bit)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("forbidden_zero_bit shall be equal to 0. ret=%d", ret);
         return ret;
     }
-    
+
     // nal_ref_idc not equal to 0 specifies that the content of the NAL unit contains a sequence parameter set or a picture
     // parameter set or a slice of a reference picture or a slice data partition of a reference picture.
     int8_t nal_ref_idc = (nutv >> 5) & 0x03;
-    if (!nal_ref_idc) {
+    if (!nal_ref_idc)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("for sps, nal_ref_idc shall be not be equal to 0. ret=%d", ret);
         return ret;
     }
-    
+
     // 7.4.1 NAL unit semantics
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 61.
     // nal_unit_type specifies the type of RBSP data structure contained in the NAL unit as specified in Table 7-1.
     SrsAvcNaluType nal_unit_type = (SrsAvcNaluType)(nutv & 0x1f);
-    if (nal_unit_type != 7) {
+    if (nal_unit_type != 7)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("for sps, nal_unit_type shall be equal to 7. ret=%d", ret);
         return ret;
     }
-    
+
     // decode the rbsp from sps.
     // rbsp[ i ] a raw byte sequence payload is specified as an ordered sequence of bytes.
     int8_t* rbsp = new int8_t[sequenceParameterSetLength];
     SrsAutoFree(int8_t, rbsp);
-    
+
     int nb_rbsp = 0;
-    while (!stream.empty()) {
+    while (!stream.empty())
+    {
         rbsp[nb_rbsp] = stream.read_1bytes();
-        
+
         // XX 00 00 03 XX, the 03 byte should be drop.
-        if (nb_rbsp > 2 && rbsp[nb_rbsp - 2] == 0 && rbsp[nb_rbsp - 1] == 0 && rbsp[nb_rbsp] == 3) {
+        if (nb_rbsp > 2 && rbsp[nb_rbsp - 2] == 0 && rbsp[nb_rbsp - 1] == 0 && rbsp[nb_rbsp] == 3)
+        {
             // read 1byte more.
-            if (stream.empty()) {
+            if (stream.empty())
+            {
                 break;
             }
             rbsp[nb_rbsp] = stream.read_1bytes();
             nb_rbsp++;
-            
+
             continue;
         }
-        
+
         nb_rbsp++;
     }
-    
+
     return avc_demux_sps_rbsp((char*)rbsp, nb_rbsp);
 }
 
@@ -15226,99 +15550,119 @@ int SrsAvcAacCodec::avc_demux_sps()
 int SrsAvcAacCodec::avc_demux_sps_rbsp(char* rbsp, int nb_rbsp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // reparse the rbsp.
     SrsStream stream;
-    if ((ret = stream.initialize(rbsp, nb_rbsp)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(rbsp, nb_rbsp)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // for SPS, 7.3.2.1.1 Sequence parameter set data syntax
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 62.
-    if (!stream.require(3)) {
+    if (!stream.require(3))
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("sps shall atleast 3bytes. ret=%d", ret);
         return ret;
     }
     u_int8_t profile_idc = stream.read_1bytes();
-    if (!profile_idc) {
+    if (!profile_idc)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("sps the profile_idc invalid. ret=%d", ret);
         return ret;
     }
-    
+
     int8_t flags = stream.read_1bytes();
-    if (flags & 0x03) {
+    if (flags & 0x03)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("sps the flags invalid. ret=%d", ret);
         return ret;
     }
-    
+
     u_int8_t level_idc = stream.read_1bytes();
-    if (!level_idc) {
+    if (!level_idc)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("sps the level_idc invalid. ret=%d", ret);
         return ret;
     }
-    
+
     SrsBitStream bs;
-    if ((ret = bs.initialize(&stream)) != ERROR_SUCCESS) {
+    if ((ret = bs.initialize(&stream)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     int32_t seq_parameter_set_id = -1;
-    if ((ret = srs_avc_nalu_read_uev(&bs, seq_parameter_set_id)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_uev(&bs, seq_parameter_set_id)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if (seq_parameter_set_id < 0) {
+    if (seq_parameter_set_id < 0)
+    {
         ret = ERROR_HLS_DECODE_ERROR;
         srs_error("sps the seq_parameter_set_id invalid. ret=%d", ret);
         return ret;
     }
     srs_info("sps parse profile=%d, level=%d, sps_id=%d", profile_idc, level_idc, seq_parameter_set_id);
-    
+
     int32_t chroma_format_idc = -1;
     if (profile_idc == 100 || profile_idc == 110 || profile_idc == 122 || profile_idc == 244
-        || profile_idc == 44 || profile_idc == 83 || profile_idc == 86 || profile_idc == 118
-        || profile_idc == 128
-    ) {
-        if ((ret = srs_avc_nalu_read_uev(&bs, chroma_format_idc)) != ERROR_SUCCESS) {
+            || profile_idc == 44 || profile_idc == 83 || profile_idc == 86 || profile_idc == 118
+            || profile_idc == 128
+       )
+    {
+        if ((ret = srs_avc_nalu_read_uev(&bs, chroma_format_idc)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if (chroma_format_idc == 3) {
+        if (chroma_format_idc == 3)
+        {
             int8_t separate_colour_plane_flag = -1;
-            if ((ret = srs_avc_nalu_read_bit(&bs, separate_colour_plane_flag)) != ERROR_SUCCESS) {
+            if ((ret = srs_avc_nalu_read_bit(&bs, separate_colour_plane_flag)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
         }
-        
+
         int32_t bit_depth_luma_minus8 = -1;
-        if ((ret = srs_avc_nalu_read_uev(&bs, bit_depth_luma_minus8)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_uev(&bs, bit_depth_luma_minus8)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int32_t bit_depth_chroma_minus8 = -1;
-        if ((ret = srs_avc_nalu_read_uev(&bs, bit_depth_chroma_minus8)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_uev(&bs, bit_depth_chroma_minus8)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int8_t qpprime_y_zero_transform_bypass_flag = -1;
-        if ((ret = srs_avc_nalu_read_bit(&bs, qpprime_y_zero_transform_bypass_flag)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_bit(&bs, qpprime_y_zero_transform_bypass_flag)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int8_t seq_scaling_matrix_present_flag = -1;
-        if ((ret = srs_avc_nalu_read_bit(&bs, seq_scaling_matrix_present_flag)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_bit(&bs, seq_scaling_matrix_present_flag)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if (seq_scaling_matrix_present_flag) {
+        if (seq_scaling_matrix_present_flag)
+        {
             int nb_scmpfs = ((chroma_format_idc != 3)? 8:12);
-            for (int i = 0; i < nb_scmpfs; i++) {
+            for (int i = 0; i < nb_scmpfs; i++)
+            {
                 int8_t seq_scaling_matrix_present_flag_i = -1;
-                if ((ret = srs_avc_nalu_read_bit(&bs, seq_scaling_matrix_present_flag_i)) != ERROR_SUCCESS) {
+                if ((ret = srs_avc_nalu_read_bit(&bs, seq_scaling_matrix_present_flag_i)) != ERROR_SUCCESS)
+                {
                     return ret;
                 }
-                if (seq_scaling_matrix_present_flag_i) {
+                if (seq_scaling_matrix_present_flag_i)
+                {
                     ret = ERROR_HLS_DECODE_ERROR;
                     srs_error("sps the seq_scaling_matrix_present_flag invalid, i=%d, nb_scmpfs=%d. ret=%d", i, nb_scmpfs, ret);
                     return ret;
@@ -15326,182 +15670,215 @@ int SrsAvcAacCodec::avc_demux_sps_rbsp(char* rbsp, int nb_rbsp)
             }
         }
     }
-    
+
     int32_t log2_max_frame_num_minus4 = -1;
-    if ((ret = srs_avc_nalu_read_uev(&bs, log2_max_frame_num_minus4)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_uev(&bs, log2_max_frame_num_minus4)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     int32_t pic_order_cnt_type = -1;
-    if ((ret = srs_avc_nalu_read_uev(&bs, pic_order_cnt_type)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_uev(&bs, pic_order_cnt_type)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if (pic_order_cnt_type == 0) {
+
+    if (pic_order_cnt_type == 0)
+    {
         int32_t log2_max_pic_order_cnt_lsb_minus4 = -1;
-        if ((ret = srs_avc_nalu_read_uev(&bs, log2_max_pic_order_cnt_lsb_minus4)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_uev(&bs, log2_max_pic_order_cnt_lsb_minus4)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-    } else if (pic_order_cnt_type == 1) {
+    }
+    else if (pic_order_cnt_type == 1)
+    {
         int8_t delta_pic_order_always_zero_flag = -1;
-        if ((ret = srs_avc_nalu_read_bit(&bs, delta_pic_order_always_zero_flag)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_bit(&bs, delta_pic_order_always_zero_flag)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int32_t offset_for_non_ref_pic = -1;
-        if ((ret = srs_avc_nalu_read_uev(&bs, offset_for_non_ref_pic)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_uev(&bs, offset_for_non_ref_pic)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int32_t offset_for_top_to_bottom_field = -1;
-        if ((ret = srs_avc_nalu_read_uev(&bs, offset_for_top_to_bottom_field)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_uev(&bs, offset_for_top_to_bottom_field)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         int32_t num_ref_frames_in_pic_order_cnt_cycle = -1;
-        if ((ret = srs_avc_nalu_read_uev(&bs, num_ref_frames_in_pic_order_cnt_cycle)) != ERROR_SUCCESS) {
+        if ((ret = srs_avc_nalu_read_uev(&bs, num_ref_frames_in_pic_order_cnt_cycle)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if (num_ref_frames_in_pic_order_cnt_cycle) {
+        if (num_ref_frames_in_pic_order_cnt_cycle)
+        {
             ret = ERROR_HLS_DECODE_ERROR;
             srs_error("sps the num_ref_frames_in_pic_order_cnt_cycle invalid. ret=%d", ret);
             return ret;
         }
     }
-    
+
     int32_t max_num_ref_frames = -1;
-    if ((ret = srs_avc_nalu_read_uev(&bs, max_num_ref_frames)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_uev(&bs, max_num_ref_frames)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     int8_t gaps_in_frame_num_value_allowed_flag = -1;
-    if ((ret = srs_avc_nalu_read_bit(&bs, gaps_in_frame_num_value_allowed_flag)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_bit(&bs, gaps_in_frame_num_value_allowed_flag)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     int32_t pic_width_in_mbs_minus1 = -1;
-    if ((ret = srs_avc_nalu_read_uev(&bs, pic_width_in_mbs_minus1)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_uev(&bs, pic_width_in_mbs_minus1)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     int32_t pic_height_in_map_units_minus1 = -1;
-    if ((ret = srs_avc_nalu_read_uev(&bs, pic_height_in_map_units_minus1)) != ERROR_SUCCESS) {
+    if ((ret = srs_avc_nalu_read_uev(&bs, pic_height_in_map_units_minus1)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     width = (int)(pic_width_in_mbs_minus1 + 1) * 16;
     height = (int)(pic_height_in_map_units_minus1 + 1) * 16;
-    
+
     return ret;
 }
 
 int SrsAvcAacCodec::avc_demux_annexb_format(SrsStream* stream, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // not annexb, try others
-    if (!srs_avc_startswith_annexb(stream, NULL)) {
+    if (!srs_avc_startswith_annexb(stream, NULL))
+    {
         return ERROR_HLS_AVC_TRY_OTHERS;
     }
-    
+
     // AnnexB
     // B.1.1 Byte stream NAL unit syntax,
     // H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
-    while (!stream->empty()) {
+    while (!stream->empty())
+    {
         // find start code
         int nb_start_code = 0;
-        if (!srs_avc_startswith_annexb(stream, &nb_start_code)) {
+        if (!srs_avc_startswith_annexb(stream, &nb_start_code))
+        {
             return ret;
         }
 
         // skip the start code.
-        if (nb_start_code > 0) {
+        if (nb_start_code > 0)
+        {
             stream->skip(nb_start_code);
         }
-        
+
         // the NALU start bytes.
         char* p = stream->data() + stream->pos();
-        
+
         // get the last matched NALU
-        while (!stream->empty()) {
-            if (srs_avc_startswith_annexb(stream, NULL)) {
+        while (!stream->empty())
+        {
+            if (srs_avc_startswith_annexb(stream, NULL))
+            {
                 break;
             }
-            
+
             stream->skip(1);
         }
-        
+
         char* pp = stream->data() + stream->pos();
-        
+
         // skip the empty.
-        if (pp - p <= 0) {
+        if (pp - p <= 0)
+        {
             continue;
         }
-        
+
         // got the NALU.
-        if ((ret = sample->add_sample_unit(p, pp - p)) != ERROR_SUCCESS) {
+        if ((ret = sample->add_sample_unit(p, pp - p)) != ERROR_SUCCESS)
+        {
             srs_error("annexb add video sample failed. ret=%d", ret);
             return ret;
         }
     }
-    
+
     return ret;
 }
 
 int SrsAvcAacCodec::avc_demux_ibmf_format(SrsStream* stream, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
+
     int PictureLength = stream->size() - stream->pos();
-    
+
     // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
     // 5.2.4.1 AVC decoder configuration record
     // 5.2.4.1.2 Semantics
     // The value of this field shall be one of 0, 1, or 3 corresponding to a
     // length encoded with 1, 2, or 4 bytes, respectively.
     srs_assert(NAL_unit_length != 2);
-    
+
     // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 20
-    for (int i = 0; i < PictureLength;) {
+    for (int i = 0; i < PictureLength;)
+    {
         // unsigned int((NAL_unit_length+1)*8) NALUnitLength;
-        if (!stream->require(NAL_unit_length + 1)) {
+        if (!stream->require(NAL_unit_length + 1))
+        {
             ret = ERROR_HLS_DECODE_ERROR;
             srs_error("avc decode NALU size failed. ret=%d", ret);
             return ret;
         }
         int32_t NALUnitLength = 0;
-        if (NAL_unit_length == 3) {
+        if (NAL_unit_length == 3)
+        {
             NALUnitLength = stream->read_4bytes();
-        } else if (NAL_unit_length == 1) {
+        }
+        else if (NAL_unit_length == 1)
+        {
             NALUnitLength = stream->read_2bytes();
-        } else {
+        }
+        else
+        {
             NALUnitLength = stream->read_1bytes();
         }
-        
+
         // maybe stream is invalid format.
         // see: https://github.com/simple-rtmp-server/srs/issues/183
-        if (NALUnitLength < 0) {
+        if (NALUnitLength < 0)
+        {
             ret = ERROR_HLS_DECODE_ERROR;
             srs_error("maybe stream is AnnexB format. ret=%d", ret);
             return ret;
         }
-        
+
         // NALUnit
-        if (!stream->require(NALUnitLength)) {
+        if (!stream->require(NALUnitLength))
+        {
             ret = ERROR_HLS_DECODE_ERROR;
             srs_error("avc decode NALU data failed. ret=%d", ret);
             return ret;
         }
         // 7.3.1 NAL unit syntax, H.264-AVC-ISO_IEC_14496-10.pdf, page 44.
-        if ((ret = sample->add_sample_unit(stream->data() + stream->pos(), NALUnitLength)) != ERROR_SUCCESS) {
+        if ((ret = sample->add_sample_unit(stream->data() + stream->pos(), NALUnitLength)) != ERROR_SUCCESS)
+        {
             srs_error("avc add video sample failed. ret=%d", ret);
             return ret;
         }
         stream->skip(NALUnitLength);
-        
+
         i += NAL_unit_length + 1 + NALUnitLength;
     }
-    
+
     return ret;
 }
 
@@ -15557,66 +15934,72 @@ SrsFileWriter::~SrsFileWriter()
 int SrsFileWriter::open(string p)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (fd > 0) {
+
+    if (fd > 0)
+    {
         ret = ERROR_SYSTEM_FILE_ALREADY_OPENED;
         srs_error("file %s already opened. ret=%d", path.c_str(), ret);
         return ret;
     }
-    
+
     int flags = O_CREAT|O_WRONLY|O_TRUNC;
     mode_t mode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH;
 
-    if ((fd = ::open(p.c_str(), flags, mode)) < 0) {
+    if ((fd = ::open(p.c_str(), flags, mode)) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_OPENE;
         srs_error("open file %s failed. ret=%d", p.c_str(), ret);
         return ret;
     }
-    
+
     path = p;
-    
+
     return ret;
 }
 
 int SrsFileWriter::open_append(string p)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (fd > 0) {
+
+    if (fd > 0)
+    {
         ret = ERROR_SYSTEM_FILE_ALREADY_OPENED;
         srs_error("file %s already opened. ret=%d", path.c_str(), ret);
         return ret;
     }
-    
+
     int flags = O_APPEND|O_WRONLY;
     mode_t mode = S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH;
 
-    if ((fd = ::open(p.c_str(), flags, mode)) < 0) {
+    if ((fd = ::open(p.c_str(), flags, mode)) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_OPENE;
         srs_error("open file %s failed. ret=%d", p.c_str(), ret);
         return ret;
     }
-    
+
     path = p;
-    
+
     return ret;
 }
 
 void SrsFileWriter::close()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (fd < 0) {
+
+    if (fd < 0)
+    {
         return;
     }
-    
-    if (::close(fd) < 0) {
+
+    if (::close(fd) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_CLOSE;
         srs_error("close file %s failed. ret=%d", path.c_str(), ret);
         return;
     }
     fd = -1;
-    
+
     return;
 }
 
@@ -15638,40 +16021,45 @@ int64_t SrsFileWriter::tellg()
 int SrsFileWriter::write(void* buf, size_t count, ssize_t* pnwrite)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ssize_t nwrite;
     // TODO: FIXME: use st_write.
-    if ((nwrite = ::write(fd, buf, count)) < 0) {
+    if ((nwrite = ::write(fd, buf, count)) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_WRITE;
         srs_error("write to file %s failed. ret=%d", path.c_str(), ret);
         return ret;
     }
-    
-    if (pnwrite != NULL) {
+
+    if (pnwrite != NULL)
+    {
         *pnwrite = nwrite;
     }
-    
+
     return ret;
 }
 
 int SrsFileWriter::writev(iovec* iov, int iovcnt, ssize_t* pnwrite)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ssize_t nwrite = 0;
-    for (int i = 0; i < iovcnt; i++) {
+    for (int i = 0; i < iovcnt; i++)
+    {
         iovec* piov = iov + i;
         ssize_t this_nwrite = 0;
-        if ((ret = write(piov->iov_base, piov->iov_len, &this_nwrite)) != ERROR_SUCCESS) {
+        if ((ret = write(piov->iov_base, piov->iov_len, &this_nwrite)) != ERROR_SUCCESS)
+        {
             return ret;
         }
         nwrite += this_nwrite;
     }
-    
-    if (pnwrite) {
+
+    if (pnwrite)
+    {
         *pnwrite = nwrite;
     }
-    
+
     return ret;
 }
 
@@ -15688,39 +16076,43 @@ SrsFileReader::~SrsFileReader()
 int SrsFileReader::open(string p)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (fd > 0) {
+
+    if (fd > 0)
+    {
         ret = ERROR_SYSTEM_FILE_ALREADY_OPENED;
         srs_error("file %s already opened. ret=%d", path.c_str(), ret);
         return ret;
     }
 
-    if ((fd = ::open(p.c_str(), O_RDONLY)) < 0) {
+    if ((fd = ::open(p.c_str(), O_RDONLY)) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_OPENE;
         srs_error("open file %s failed. ret=%d", p.c_str(), ret);
         return ret;
     }
-    
+
     path = p;
-    
+
     return ret;
 }
 
 void SrsFileReader::close()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (fd < 0) {
+
+    if (fd < 0)
+    {
         return;
     }
-    
-    if (::close(fd) < 0) {
+
+    if (::close(fd) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_CLOSE;
         srs_error("close file %s failed. ret=%d", path.c_str(), ret);
         return;
     }
     fd = -1;
-    
+
     return;
 }
 
@@ -15755,24 +16147,27 @@ int64_t SrsFileReader::filesize()
 int SrsFileReader::read(void* buf, size_t count, ssize_t* pnread)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ssize_t nread;
     // TODO: FIXME: use st_read.
-    if ((nread = ::read(fd, buf, count)) < 0) {
+    if ((nread = ::read(fd, buf, count)) < 0)
+    {
         ret = ERROR_SYSTEM_FILE_READ;
         srs_error("read from file %s failed. ret=%d", path.c_str(), ret);
         return ret;
     }
-    
-    if (nread == 0) {
+
+    if (nread == 0)
+    {
         ret = ERROR_SYSTEM_FILE_EOF;
         return ret;
     }
-    
-    if (pnread != NULL) {
+
+    if (pnread != NULL)
+    {
         *pnread = nread;
     }
-    
+
     return ret;
 }
 
@@ -15860,63 +16255,69 @@ SrsAacEncoder::~SrsAacEncoder()
 int SrsAacEncoder::initialize(SrsFileWriter* fs)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(fs);
-    
-    if (!fs->is_open()) {
+
+    if (!fs->is_open())
+    {
         ret = ERROR_KERNEL_AAC_STREAM_CLOSED;
         srs_warn("stream is not open for encoder. ret=%d", ret);
         return ret;
     }
-    
+
     _fs = fs;
-    
+
     return ret;
 }
 
 int SrsAacEncoder::write_audio(int64_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
+
     timestamp &= 0x7fffffff;
-    
+
     SrsStream* stream = tag_stream;
-    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS) {
+    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // audio decode
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_AAC_DECODE_ERROR;
         srs_error("aac decode audio sound_format failed. ret=%d", ret);
         return ret;
     }
-    
+
     // @see: E.4.2 Audio Tags, video_file_format_spec_v10_1.pdf, page 76
     int8_t sound_format = stream->read_1bytes();
-    
+
     // @see: SrsAvcAacCodec::audio_aac_demux
     //int8_t sound_type = sound_format & 0x01;
     //int8_t sound_size = (sound_format >> 1) & 0x01;
     //int8_t sound_rate = (sound_format >> 2) & 0x03;
     sound_format = (sound_format >> 4) & 0x0f;
-    
-    if ((SrsCodecAudio)sound_format != SrsCodecAudioAAC) {
+
+    if ((SrsCodecAudio)sound_format != SrsCodecAudioAAC)
+    {
         ret = ERROR_AAC_DECODE_ERROR;
         srs_error("aac required, format=%d. ret=%d", sound_format, ret);
         return ret;
     }
 
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_AAC_DECODE_ERROR;
         srs_error("aac decode aac_packet_type failed. ret=%d", ret);
         return ret;
     }
-    
+
     SrsCodecAudioType aac_packet_type = (SrsCodecAudioType)stream->read_1bytes();
-    if (aac_packet_type == SrsCodecAudioTypeSequenceHeader) {
+    if (aac_packet_type == SrsCodecAudioTypeSequenceHeader)
+    {
         // AudioSpecificConfig
         // 1.6.2.1 AudioSpecificConfig, in aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 33.
         //
@@ -15924,41 +16325,43 @@ int SrsAacEncoder::write_audio(int64_t timestamp, char* data, int size)
         // audioObjectType, 5bits.
         // samplingFrequencyIndex, aac_sample_rate, 4bits.
         // channelConfiguration, aac_channels, 4bits
-        if (!stream->require(2)) {
+        if (!stream->require(2))
+        {
             ret = ERROR_AAC_DECODE_ERROR;
             srs_error("aac decode sequence header failed. ret=%d", ret);
             return ret;
         }
-        
+
         int8_t audioObjectType = stream->read_1bytes();
         aac_sample_rate = stream->read_1bytes();
-        
+
         aac_channels = (aac_sample_rate >> 3) & 0x0f;
         aac_sample_rate = ((audioObjectType << 1) & 0x0e) | ((aac_sample_rate >> 7) & 0x01);
-        
+
         audioObjectType = (audioObjectType >> 3) & 0x1f;
         aac_object = (SrsAacObjectType)audioObjectType;
-        
+
         got_sequence_header = true;
-        
+
         return ret;
     }
-    
-    if (!got_sequence_header) {
+
+    if (!got_sequence_header)
+    {
         ret = ERROR_AAC_DECODE_ERROR;
         srs_error("aac no sequence header. ret=%d", ret);
         return ret;
     }
-    
+
     // the left is the aac raw frame data.
     int16_t aac_raw_length = stream->size() - stream->pos();
-    
+
     // write the ADTS header.
     // @see aac-mp4a-format-ISO_IEC_14496-3+2001.pdf, page 75,
     //      1.A.2.2 Audio_Data_Transport_Stream frame, ADTS
     // @see https://github.com/simple-rtmp-server/srs/issues/212#issuecomment-64145885
     // byte_alignment()
-    
+
     // adts_fixed_header:
     //      12bits syncword,
     //      16bits left.
@@ -15973,10 +16376,11 @@ int SrsAacEncoder::write_audio(int64_t timestamp, char* data, int size)
     // else
     //      require(9bytes)=72bits
     char aac_fixed_header[7];
-    if(true) {
+    if(true)
+    {
         char* pp = aac_fixed_header;
         int16_t aac_frame_length = aac_raw_length + 7;
-        
+
         // Syncword 12 bslbf
         *pp++ = 0xff;
         // 4bits left.
@@ -15985,7 +16389,7 @@ int SrsAacEncoder::write_audio(int64_t timestamp, char* data, int size)
         // Layer 2 uimsbf
         // protection_absent 1 bslbf
         *pp++ = 0xf1;
-        
+
         // profile 2 uimsbf
         // sampling_frequency_index 4 uimsbf
         // private_bit 1 bslbf
@@ -15999,28 +16403,30 @@ int SrsAacEncoder::write_audio(int64_t timestamp, char* data, int size)
         // copyright_identification_bit 1 bslbf
         // copyright_identification_start 1 bslbf
         *pp++ = ((aac_channels << 6) & 0xc0) | ((aac_frame_length >> 11) & 0x03);
-        
+
         // aac_frame_length 13 bslbf: Length of the frame including headers and error_check in bytes.
         // use the left 2bits as the 13 and 12 bit,
         // the aac_frame_length is 13bits, so we move 13-2=11.
         *pp++ = aac_frame_length >> 3;
         // adts_buffer_fullness 11 bslbf
         *pp++ = (aac_frame_length << 5) & 0xe0;
-        
+
         // no_raw_data_blocks_in_frame 2 uimsbf
         *pp++ = 0xfc;
     }
-    
+
     // write 7bytes fixed header.
-    if ((ret = _fs->write(aac_fixed_header, 7, NULL)) != ERROR_SUCCESS) {
+    if ((ret = _fs->write(aac_fixed_header, 7, NULL)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // write aac frame body.
-    if ((ret = _fs->write(data + stream->pos(), aac_raw_length, NULL)) != ERROR_SUCCESS) {
+    if ((ret = _fs->write(data + stream->pos(), aac_raw_length, NULL)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -16079,28 +16485,30 @@ SrsMp3Encoder::~SrsMp3Encoder()
 int SrsMp3Encoder::initialize(SrsFileWriter* fw)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(fw);
-    
-    if (!fw->is_open()) {
+
+    if (!fw->is_open())
+    {
         ret = ERROR_KERNEL_MP3_STREAM_CLOSED;
         srs_warn("stream is not open for encoder. ret=%d", ret);
         return ret;
     }
-    
+
     writer = fw;
-    
+
     return ret;
 }
 
 int SrsMp3Encoder::write_header()
 {
-    char id3[] = {
+    char id3[] =
+    {
         (char)0x49, (char)0x44, (char)0x33, // ID3
         (char)0x03, (char)0x00, // version
         (char)0x00, // flags
         (char)0x00, (char)0x00, (char)0x00, (char)0x0a, // size
-        
+
         (char)0x00, (char)0x00, (char)0x00, (char)0x00, // FrameID
         (char)0x00, (char)0x00, (char)0x00, (char)0x00, // FrameSize
         (char)0x00, (char)0x00 // Flags
@@ -16111,44 +16519,48 @@ int SrsMp3Encoder::write_header()
 int SrsMp3Encoder::write_audio(int64_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(data);
-    
+
     timestamp &= 0x7fffffff;
-    
+
     SrsStream* stream = tag_stream;
-    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS) {
+    if ((ret = stream->initialize(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // audio decode
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_MP3_DECODE_ERROR;
         srs_error("mp3 decode audio sound_format failed. ret=%d", ret);
         return ret;
     }
-    
+
     // @see: E.4.2 Audio Tags, video_file_format_spec_v10_1.pdf, page 76
     int8_t sound_format = stream->read_1bytes();
-    
+
     // @see: SrsAvcAacCodec::audio_aac_demux
     //int8_t sound_type = sound_format & 0x01;
     //int8_t sound_size = (sound_format >> 1) & 0x01;
     //int8_t sound_rate = (sound_format >> 2) & 0x03;
     sound_format = (sound_format >> 4) & 0x0f;
-    
-    if ((SrsCodecAudio)sound_format != SrsCodecAudioMP3) {
+
+    if ((SrsCodecAudio)sound_format != SrsCodecAudioMP3)
+    {
         ret = ERROR_MP3_DECODE_ERROR;
         srs_error("mp3 required, format=%d. ret=%d", sound_format, ret);
         return ret;
     }
 
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_MP3_DECODE_ERROR;
         srs_error("mp3 decode aac_packet_type failed. ret=%d", ret);
         return ret;
     }
-    
+
     return writer->write(data + stream->pos(), size - stream->pos(), NULL);
 }
 
@@ -16213,16 +16625,26 @@ using namespace std;
 
 string srs_ts_stream2string(SrsTsStream stream)
 {
-    switch (stream) {
-        case SrsTsStreamReserved: return "Reserved";
-        case SrsTsStreamAudioMp3: return "MP3";
-        case SrsTsStreamAudioAAC: return "AAC";
-        case SrsTsStreamAudioAC3: return "AC3";
-        case SrsTsStreamAudioDTS: return "AudioDTS";
-        case SrsTsStreamVideoH264: return "H.264";
-        case SrsTsStreamVideoMpeg4: return "MP4";
-        case SrsTsStreamAudioMpeg4: return "MP4A";
-        default: return "Other";
+    switch (stream)
+    {
+    case SrsTsStreamReserved:
+        return "Reserved";
+    case SrsTsStreamAudioMp3:
+        return "MP3";
+    case SrsTsStreamAudioAAC:
+        return "AAC";
+    case SrsTsStreamAudioAC3:
+        return "AC3";
+    case SrsTsStreamAudioDTS:
+        return "AudioDTS";
+    case SrsTsStreamVideoH264:
+        return "H.264";
+    case SrsTsStreamVideoMpeg4:
+        return "MP4";
+    case SrsTsStreamAudioMpeg4:
+        return "MP4A";
+    default:
+        return "Other";
     }
 }
 
@@ -16266,18 +16688,22 @@ int SrsTsMessage::dump(SrsStream* stream, int* pnb_bytes)
 {
     int ret = ERROR_SUCCESS;
 
-    if (stream->empty()) {
+    if (stream->empty())
+    {
         return ret;
     }
 
     // xB
     int nb_bytes = stream->size() - stream->pos();
-    if (PES_packet_length > 0) {
+    if (PES_packet_length > 0)
+    {
         nb_bytes = srs_min(nb_bytes, PES_packet_length - payload->length());
     }
 
-    if (nb_bytes > 0) {
-        if (!stream->require(nb_bytes)) {
+    if (nb_bytes > 0)
+    {
+        if (!stream->require(nb_bytes))
+        {
             ret = ERROR_STREAM_CASTER_TS_PSE;
             srs_error("ts: dump PSE bytes failed, requires=%dB. ret=%d", nb_bytes, ret);
             return ret;
@@ -16294,7 +16720,8 @@ int SrsTsMessage::dump(SrsStream* stream, int* pnb_bytes)
 
 bool SrsTsMessage::completed(int8_t payload_unit_start_indicator)
 {
-    if (PES_packet_length == 0) {
+    if (PES_packet_length == 0)
+    {
         return payload_unit_start_indicator;
     }
     return payload->length() >= PES_packet_length;
@@ -16317,9 +16744,12 @@ bool SrsTsMessage::is_video()
 
 int SrsTsMessage::stream_number()
 {
-    if (is_audio()) {
+    if (is_audio())
+    {
         return sid & 0x1f;
-    } else if (is_video()) {
+    }
+    else if (is_video())
+    {
         return sid & 0x0f;
     }
     return -1;
@@ -16360,7 +16790,8 @@ SrsTsContext::SrsTsContext()
 SrsTsContext::~SrsTsContext()
 {
     std::map<int, SrsTsChannel*>::iterator it;
-    for (it = pids.begin(); it != pids.end(); ++it) {
+    for (it = pids.begin(); it != pids.end(); ++it)
+    {
         SrsTsChannel* channel = it->second;
         srs_freep(channel);
     }
@@ -16375,11 +16806,13 @@ bool SrsTsContext::is_pure_audio()
 void SrsTsContext::on_pmt_parsed()
 {
     pure_audio = true;
-    
+
     std::map<int, SrsTsChannel*>::iterator it;
-    for (it = pids.begin(); it != pids.end(); ++it) {
+    for (it = pids.begin(); it != pids.end(); ++it)
+    {
         SrsTsChannel* channel = it->second;
-        if (channel->apply == SrsTsPidApplyVideo) {
+        if (channel->apply == SrsTsPidApplyVideo)
+        {
             pure_audio = false;
         }
     }
@@ -16393,7 +16826,8 @@ void SrsTsContext::reset()
 
 SrsTsChannel* SrsTsContext::get(int pid)
 {
-    if (pids.find(pid) == pids.end()) {
+    if (pids.find(pid) == pids.end())
+    {
         return NULL;
     }
     return pids[pid];
@@ -16403,11 +16837,14 @@ void SrsTsContext::set(int pid, SrsTsPidApply apply_pid, SrsTsStream stream)
 {
     SrsTsChannel* channel = NULL;
 
-    if (pids.find(pid) == pids.end()) {
+    if (pids.find(pid) == pids.end())
+    {
         channel = new SrsTsChannel();
         channel->context = this;
         pids[pid] = channel;
-    } else {
+    }
+    else
+    {
         channel = pids[pid];
     }
 
@@ -16422,22 +16859,26 @@ int SrsTsContext::decode(SrsStream* stream, ISrsTsHandler* handler)
 
     // parse util EOF of stream.
     // for example, parse multiple times for the PES_packet_length(0) packet.
-    while (!stream->empty()) {
+    while (!stream->empty())
+    {
         SrsTsPacket* packet = new SrsTsPacket(this);
         SrsAutoFree(SrsTsPacket, packet);
 
         SrsTsMessage* msg = NULL;
-        if ((ret = packet->decode(stream, &msg)) != ERROR_SUCCESS) {
+        if ((ret = packet->decode(stream, &msg)) != ERROR_SUCCESS)
+        {
             srs_error("mpegts: decode ts packet failed. ret=%d", ret);
             return ret;
         }
 
-        if (!msg) {
+        if (!msg)
+        {
             continue;
         }
         SrsAutoFree(SrsTsMessage, msg);
 
-        if ((ret = handler->on_ts_message(msg)) != ERROR_SUCCESS) {
+        if ((ret = handler->on_ts_message(msg)) != ERROR_SUCCESS)
+        {
             srs_error("mpegts: handler ts message failed. ret=%d", ret);
             return ret;
         }
@@ -16452,73 +16893,81 @@ int SrsTsContext::encode(SrsFileWriter* writer, SrsTsMessage* msg, SrsCodecVideo
 
     SrsTsStream vs, as;
     int16_t video_pid = 0, audio_pid = 0;
-    switch (vc) {
-        case SrsCodecVideoAVC: 
-            vs = SrsTsStreamVideoH264; 
-            video_pid = TS_VIDEO_AVC_PID;
-            break;
-        case SrsCodecVideoDisabled:
-            vs = SrsTsStreamReserved;
-            break;
-        case SrsCodecVideoReserved:
-        case SrsCodecVideoReserved1:
-        case SrsCodecVideoReserved2:
-        case SrsCodecVideoSorensonH263:
-        case SrsCodecVideoScreenVideo:
-        case SrsCodecVideoOn2VP6:
-        case SrsCodecVideoOn2VP6WithAlphaChannel:
-        case SrsCodecVideoScreenVideoVersion2:
-            vs = SrsTsStreamReserved;
-            break;
+    switch (vc)
+    {
+    case SrsCodecVideoAVC:
+        vs = SrsTsStreamVideoH264;
+        video_pid = TS_VIDEO_AVC_PID;
+        break;
+    case SrsCodecVideoDisabled:
+        vs = SrsTsStreamReserved;
+        break;
+    case SrsCodecVideoReserved:
+    case SrsCodecVideoReserved1:
+    case SrsCodecVideoReserved2:
+    case SrsCodecVideoSorensonH263:
+    case SrsCodecVideoScreenVideo:
+    case SrsCodecVideoOn2VP6:
+    case SrsCodecVideoOn2VP6WithAlphaChannel:
+    case SrsCodecVideoScreenVideoVersion2:
+        vs = SrsTsStreamReserved;
+        break;
     }
-    switch (ac) {
-        case SrsCodecAudioAAC:
-            as = SrsTsStreamAudioAAC; 
-            audio_pid = TS_AUDIO_AAC_PID;
-            break;
-        case SrsCodecAudioMP3:
-            as = SrsTsStreamAudioMp3; 
-            audio_pid = TS_AUDIO_MP3_PID;
-            break;
-        case SrsCodecAudioDisabled:
-            as = SrsTsStreamReserved;
-            break;
-        case SrsCodecAudioReserved1:
-        case SrsCodecAudioLinearPCMPlatformEndian:
-        case SrsCodecAudioADPCM:
-        case SrsCodecAudioLinearPCMLittleEndian:
-        case SrsCodecAudioNellymoser16kHzMono:
-        case SrsCodecAudioNellymoser8kHzMono:
-        case SrsCodecAudioNellymoser:
-        case SrsCodecAudioReservedG711AlawLogarithmicPCM:
-        case SrsCodecAudioReservedG711MuLawLogarithmicPCM:
-        case SrsCodecAudioReserved:
-        case SrsCodecAudioSpeex:
-        case SrsCodecAudioReservedMP3_8kHz:
-        case SrsCodecAudioReservedDeviceSpecificSound:
-            as = SrsTsStreamReserved;
-            break;
+    switch (ac)
+    {
+    case SrsCodecAudioAAC:
+        as = SrsTsStreamAudioAAC;
+        audio_pid = TS_AUDIO_AAC_PID;
+        break;
+    case SrsCodecAudioMP3:
+        as = SrsTsStreamAudioMp3;
+        audio_pid = TS_AUDIO_MP3_PID;
+        break;
+    case SrsCodecAudioDisabled:
+        as = SrsTsStreamReserved;
+        break;
+    case SrsCodecAudioReserved1:
+    case SrsCodecAudioLinearPCMPlatformEndian:
+    case SrsCodecAudioADPCM:
+    case SrsCodecAudioLinearPCMLittleEndian:
+    case SrsCodecAudioNellymoser16kHzMono:
+    case SrsCodecAudioNellymoser8kHzMono:
+    case SrsCodecAudioNellymoser:
+    case SrsCodecAudioReservedG711AlawLogarithmicPCM:
+    case SrsCodecAudioReservedG711MuLawLogarithmicPCM:
+    case SrsCodecAudioReserved:
+    case SrsCodecAudioSpeex:
+    case SrsCodecAudioReservedMP3_8kHz:
+    case SrsCodecAudioReservedDeviceSpecificSound:
+        as = SrsTsStreamReserved;
+        break;
     }
-    
-    if (as == SrsTsStreamReserved && vs == SrsTsStreamReserved) {
+
+    if (as == SrsTsStreamReserved && vs == SrsTsStreamReserved)
+    {
         ret = ERROR_HLS_NO_STREAM;
         srs_error("hls: no video or audio stream, vcodec=%d, acodec=%d. ret=%d", vc, ac, ret);
         return ret;
     }
-    
+
     // when any codec changed, write PAT/PMT table.
-    if (vcodec != vc || acodec != ac) {
+    if (vcodec != vc || acodec != ac)
+    {
         vcodec = vc;
         acodec = ac;
-        if ((ret = encode_pat_pmt(writer, video_pid, vs, audio_pid, as)) != ERROR_SUCCESS) {
+        if ((ret = encode_pat_pmt(writer, video_pid, vs, audio_pid, as)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
 
     // encode the media frame to PES packets over TS.
-    if (msg->is_audio()) {
+    if (msg->is_audio())
+    {
         return encode_pes(writer, msg, audio_pid, as, vs == SrsTsStreamReserved);
-    } else {
+    }
+    else
+    {
         return encode_pes(writer, msg, video_pid, vs, vs == SrsTsStreamReserved);
     }
 }
@@ -16526,8 +16975,9 @@ int SrsTsContext::encode(SrsFileWriter* writer, SrsTsMessage* msg, SrsCodecVideo
 int SrsTsContext::encode_pat_pmt(SrsFileWriter* writer, int16_t vpid, SrsTsStream vs, int16_t apid, SrsTsStream as)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (vs != SrsTsStreamVideoH264 && as != SrsTsStreamAudioAAC && as != SrsTsStreamAudioMp3) {
+
+    if (vs != SrsTsStreamVideoH264 && as != SrsTsStreamAudioAAC && as != SrsTsStreamAudioMp3)
+    {
         ret = ERROR_HLS_NO_STREAM;
         srs_error("hls: no pmt pcr pid, vs=%d, as=%d. ret=%d", vs, as, ret);
         return ret;
@@ -16535,7 +16985,8 @@ int SrsTsContext::encode_pat_pmt(SrsFileWriter* writer, int16_t vpid, SrsTsStrea
 
     int16_t pmt_number = TS_PMT_NUMBER;
     int16_t pmt_pid = TS_PMT_PID;
-    if (true) {
+    if (true)
+    {
         SrsTsPacket* pkt = SrsTsPacket::create_pat(this, pmt_number, pmt_pid);
         SrsAutoFree(SrsTsPacket, pkt);
 
@@ -16548,19 +16999,23 @@ int SrsTsContext::encode_pat_pmt(SrsFileWriter* writer, int16_t vpid, SrsTsStrea
         memset(buf + nb_buf, 0xFF, SRS_TS_PACKET_SIZE - nb_buf);
 
         SrsStream stream;
-        if ((ret = stream.initialize(buf, nb_buf)) != ERROR_SUCCESS) {
+        if ((ret = stream.initialize(buf, nb_buf)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if ((ret = pkt->encode(&stream)) != ERROR_SUCCESS) {
+        if ((ret = pkt->encode(&stream)) != ERROR_SUCCESS)
+        {
             srs_error("ts encode ts packet failed. ret=%d", ret);
             return ret;
         }
-        if ((ret = writer->write(buf, SRS_TS_PACKET_SIZE, NULL)) != ERROR_SUCCESS) {
+        if ((ret = writer->write(buf, SRS_TS_PACKET_SIZE, NULL)) != ERROR_SUCCESS)
+        {
             srs_error("ts write ts packet failed. ret=%d", ret);
             return ret;
         }
     }
-    if (true) {
+    if (true)
+    {
         SrsTsPacket* pkt = SrsTsPacket::create_pmt(this, pmt_number, pmt_pid, vpid, vs, apid, as);
         SrsAutoFree(SrsTsPacket, pkt);
 
@@ -16573,14 +17028,17 @@ int SrsTsContext::encode_pat_pmt(SrsFileWriter* writer, int16_t vpid, SrsTsStrea
         memset(buf + nb_buf, 0xFF, SRS_TS_PACKET_SIZE - nb_buf);
 
         SrsStream stream;
-        if ((ret = stream.initialize(buf, nb_buf)) != ERROR_SUCCESS) {
+        if ((ret = stream.initialize(buf, nb_buf)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if ((ret = pkt->encode(&stream)) != ERROR_SUCCESS) {
+        if ((ret = pkt->encode(&stream)) != ERROR_SUCCESS)
+        {
             srs_error("ts encode ts packet failed. ret=%d", ret);
             return ret;
         }
-        if ((ret = writer->write(buf, SRS_TS_PACKET_SIZE, NULL)) != ERROR_SUCCESS) {
+        if ((ret = writer->write(buf, SRS_TS_PACKET_SIZE, NULL)) != ERROR_SUCCESS)
+        {
             srs_error("ts write ts packet failed. ret=%d", ret);
             return ret;
         }
@@ -16593,11 +17051,13 @@ int SrsTsContext::encode_pes(SrsFileWriter* writer, SrsTsMessage* msg, int16_t p
 {
     int ret = ERROR_SUCCESS;
 
-    if (msg->payload->length() == 0) {
+    if (msg->payload->length() == 0)
+    {
         return ret;
     }
 
-    if (sid != SrsTsStreamVideoH264 && sid != SrsTsStreamAudioMp3 && sid != SrsTsStreamAudioAAC) {
+    if (sid != SrsTsStreamVideoH264 && sid != SrsTsStreamAudioMp3 && sid != SrsTsStreamAudioAAC)
+    {
         srs_info("ts: ignore the unknown stream, sid=%d", sid);
         return ret;
     }
@@ -16609,28 +17069,33 @@ int SrsTsContext::encode_pes(SrsFileWriter* writer, SrsTsMessage* msg, int16_t p
     char* end = start + msg->payload->length();
     char* p = start;
 
-    while (p < end) {
+    while (p < end)
+    {
         SrsTsPacket* pkt = NULL;
-        if (p == start) {
+        if (p == start)
+        {
             // for pure audio stream, always write pcr.
             bool write_pcr = msg->write_pcr;
-            if (pure_audio && msg->is_audio()) {
+            if (pure_audio && msg->is_audio())
+            {
                 write_pcr = true;
             }
 
             // it's ok to set pcr equals to dts,
             // @see https://github.com/simple-rtmp-server/srs/issues/311
             int64_t pcr = write_pcr? msg->dts : -1;
-            
+
             // TODO: FIXME: finger it why use discontinuity of msg.
-            pkt = SrsTsPacket::create_pes_first(this, 
-                pid, msg->sid, channel->continuity_counter++, msg->is_discontinuity,
-                pcr, msg->dts, msg->pts, msg->payload->length()
-            );
-        } else {
-            pkt = SrsTsPacket::create_pes_continue(this, 
-                pid, msg->sid, channel->continuity_counter++
-            );
+            pkt = SrsTsPacket::create_pes_first(this,
+                                                pid, msg->sid, channel->continuity_counter++, msg->is_discontinuity,
+                                                pcr, msg->dts, msg->pts, msg->payload->length()
+                                               );
+        }
+        else
+        {
+            pkt = SrsTsPacket::create_pes_continue(this,
+                                                   pid, msg->sid, channel->continuity_counter++
+                                                  );
         }
         SrsAutoFree(SrsTsPacket, pkt);
 
@@ -16643,7 +17108,8 @@ int SrsTsContext::encode_pes(SrsFileWriter* writer, SrsTsMessage* msg, int16_t p
 
         int left = (int)srs_min(end - p, SRS_TS_PACKET_SIZE - nb_buf);
         int nb_stuffings = SRS_TS_PACKET_SIZE - nb_buf - left;
-        if (nb_stuffings > 0) {
+        if (nb_stuffings > 0)
+        {
             // set all bytes to stuffings.
             memset(buf, 0xFF, SRS_TS_PACKET_SIZE);
 
@@ -16662,14 +17128,17 @@ int SrsTsContext::encode_pes(SrsFileWriter* writer, SrsTsMessage* msg, int16_t p
         p += left;
 
         SrsStream stream;
-        if ((ret = stream.initialize(buf, nb_buf)) != ERROR_SUCCESS) {
+        if ((ret = stream.initialize(buf, nb_buf)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if ((ret = pkt->encode(&stream)) != ERROR_SUCCESS) {
+        if ((ret = pkt->encode(&stream)) != ERROR_SUCCESS)
+        {
             srs_error("ts encode ts packet failed. ret=%d", ret);
             return ret;
         }
-        if ((ret = writer->write(buf, SRS_TS_PACKET_SIZE, NULL)) != ERROR_SUCCESS) {
+        if ((ret = writer->write(buf, SRS_TS_PACKET_SIZE, NULL)) != ERROR_SUCCESS)
+        {
             srs_error("ts write ts packet failed. ret=%d", ret);
             return ret;
         }
@@ -16707,19 +17176,21 @@ int SrsTsPacket::decode(SrsStream* stream, SrsTsMessage** ppmsg)
     int pos = stream->pos();
 
     // 4B ts packet header.
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_STREAM_CASTER_TS_HEADER;
         srs_error("ts: demux header failed. ret=%d", ret);
         return ret;
     }
 
     sync_byte = stream->read_1bytes();
-    if (sync_byte != 0x47) {
+    if (sync_byte != 0x47)
+    {
         ret = ERROR_STREAM_CASTER_TS_SYNC_BYTE;
         srs_error("ts: sync_bytes must be 0x47, actual=%#x. ret=%d", sync_byte, ret);
         return ret;
     }
-    
+
     int16_t pidv = stream->read_2bytes();
     transport_error_indicator = (pidv >> 15) & 0x01;
     payload_unit_start_indicator = (pidv >> 14) & 0x01;
@@ -16732,17 +17203,19 @@ int SrsTsPacket::decode(SrsStream* stream, SrsTsMessage** ppmsg)
     continuity_counter = ccv & 0x0F;
 
     // TODO: FIXME: create pids map when got new pid.
-    
+
     srs_info("ts: header sync=%#x error=%d unit_start=%d priotiry=%d pid=%d scrambling=%d adaption=%d counter=%d",
-        sync_byte, transport_error_indicator, payload_unit_start_indicator, transport_priority, pid,
-        transport_scrambling_control, adaption_field_control, continuity_counter);
+             sync_byte, transport_error_indicator, payload_unit_start_indicator, transport_priority, pid,
+             transport_scrambling_control, adaption_field_control, continuity_counter);
 
     // optional: adaptation field
-    if (adaption_field_control == SrsTsAdaptationFieldTypeAdaptionOnly || adaption_field_control == SrsTsAdaptationFieldTypeBoth) {
+    if (adaption_field_control == SrsTsAdaptationFieldTypeAdaptionOnly || adaption_field_control == SrsTsAdaptationFieldTypeBoth)
+    {
         srs_freep(adaptation_field);
         adaptation_field = new SrsTsAdaptationField(this);
 
-        if ((ret = adaptation_field->decode(stream)) != ERROR_SUCCESS) {
+        if ((ret = adaptation_field->decode(stream)) != ERROR_SUCCESS)
+        {
             srs_error("ts: demux af faield. ret=%d", ret);
             return ret;
         }
@@ -16753,28 +17226,38 @@ int SrsTsPacket::decode(SrsStream* stream, SrsTsMessage** ppmsg)
     int nb_payload = SRS_TS_PACKET_SIZE - (stream->pos() - pos);
 
     // optional: payload.
-    if (adaption_field_control == SrsTsAdaptationFieldTypePayloadOnly || adaption_field_control == SrsTsAdaptationFieldTypeBoth) {
-        if (pid == SrsTsPidPAT) {
+    if (adaption_field_control == SrsTsAdaptationFieldTypePayloadOnly || adaption_field_control == SrsTsAdaptationFieldTypeBoth)
+    {
+        if (pid == SrsTsPidPAT)
+        {
             // 2.4.4.3 Program association Table
             srs_freep(payload);
             payload = new SrsTsPayloadPAT(this);
-        } else {
+        }
+        else
+        {
             SrsTsChannel* channel = context->get(pid);
-            if (channel && channel->apply == SrsTsPidApplyPMT) {
+            if (channel && channel->apply == SrsTsPidApplyPMT)
+            {
                 // 2.4.4.8 Program Map Table
                 srs_freep(payload);
                 payload = new SrsTsPayloadPMT(this);
-            } else if (channel && (channel->apply == SrsTsPidApplyVideo || channel->apply == SrsTsPidApplyAudio)) {
+            }
+            else if (channel && (channel->apply == SrsTsPidApplyVideo || channel->apply == SrsTsPidApplyAudio))
+            {
                 // 2.4.3.6 PES packet
                 srs_freep(payload);
                 payload = new SrsTsPayloadPES(this);
-            } else {
+            }
+            else
+            {
                 // left bytes as reserved.
                 stream->skip(nb_payload);
             }
         }
 
-        if (payload && (ret = payload->decode(stream, ppmsg)) != ERROR_SUCCESS) {
+        if (payload && (ret = payload->decode(stream, ppmsg)) != ERROR_SUCCESS)
+        {
             srs_error("ts: demux payload failed. ret=%d", ret);
             return ret;
         }
@@ -16786,7 +17269,7 @@ int SrsTsPacket::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 int SrsTsPacket::size()
 {
     int sz = 4;
-    
+
     sz += adaptation_field? adaptation_field->size() : 0;
     sz += payload? payload->size() : 0;
 
@@ -16798,7 +17281,8 @@ int SrsTsPacket::encode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // 4B ts packet header.
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_STREAM_CASTER_TS_HEADER;
         srs_error("ts: mux header failed. ret=%d", ret);
         return ret;
@@ -16816,14 +17300,16 @@ int SrsTsPacket::encode(SrsStream* stream)
     ccv |= (transport_scrambling_control << 6) & 0xC0;
     ccv |= (adaption_field_control << 4) & 0x30;
     stream->write_1bytes(ccv);
-    
+
     srs_info("ts: header sync=%#x error=%d unit_start=%d priotiry=%d pid=%d scrambling=%d adaption=%d counter=%d",
-        sync_byte, transport_error_indicator, payload_unit_start_indicator, transport_priority, pid,
-        transport_scrambling_control, adaption_field_control, continuity_counter);
+             sync_byte, transport_error_indicator, payload_unit_start_indicator, transport_priority, pid,
+             transport_scrambling_control, adaption_field_control, continuity_counter);
 
     // optional: adaptation field
-    if (adaptation_field) {
-        if ((ret = adaptation_field->encode(stream)) != ERROR_SUCCESS) {
+    if (adaptation_field)
+    {
+        if ((ret = adaptation_field->encode(stream)) != ERROR_SUCCESS)
+        {
             srs_error("ts: mux af faield. ret=%d", ret);
             return ret;
         }
@@ -16831,8 +17317,10 @@ int SrsTsPacket::encode(SrsStream* stream)
     }
 
     // optional: payload.
-    if (payload) {
-        if ((ret = payload->encode(stream)) != ERROR_SUCCESS) {
+    if (payload)
+    {
+        if ((ret = payload->encode(stream)) != ERROR_SUCCESS)
+        {
             srs_error("ts: mux payload failed. ret=%d", ret);
             return ret;
         }
@@ -16844,7 +17332,8 @@ int SrsTsPacket::encode(SrsStream* stream)
 
 void SrsTsPacket::padding(int nb_stuffings)
 {
-    if (!adaptation_field) {
+    if (!adaptation_field)
+    {
         SrsTsAdaptationField* af = new SrsTsAdaptationField(this);
         adaptation_field = af;
 
@@ -16865,7 +17354,8 @@ void SrsTsPacket::padding(int nb_stuffings)
     adaptation_field->nb_af_reserved = nb_stuffings;
 
     // set payload with af.
-    if (adaption_field_control == SrsTsAdaptationFieldTypePayloadOnly) {
+    if (adaption_field_control == SrsTsAdaptationFieldTypePayloadOnly)
+    {
         adaption_field_control = SrsTsAdaptationFieldTypeBoth;
     }
 }
@@ -16925,32 +17415,35 @@ SrsTsPacket* SrsTsPacket::create_pmt(SrsTsContext* context, int16_t pmt_number, 
     pmt->section_number = 0;
     pmt->last_section_number = 0;
     pmt->program_info_length = 0;
-    
+
     // must got one valid codec.
     srs_assert(vs == SrsTsStreamVideoH264 || as == SrsTsStreamAudioAAC || as == SrsTsStreamAudioMp3);
-    
+
     // if mp3 or aac specified, use audio to carry pcr.
-    if (as == SrsTsStreamAudioAAC || as == SrsTsStreamAudioMp3) {
+    if (as == SrsTsStreamAudioAAC || as == SrsTsStreamAudioMp3)
+    {
         // use audio to carray pcr by default.
         // for hls, there must be atleast one audio channel.
         pmt->PCR_PID = apid;
         pmt->infos.push_back(new SrsTsPayloadPMTESInfo(as, apid));
     }
-    
+
     // if h.264 specified, use video to carry pcr.
-    if (vs == SrsTsStreamVideoH264) {
+    if (vs == SrsTsStreamVideoH264)
+    {
         pmt->PCR_PID = vpid;
         pmt->infos.push_back(new SrsTsPayloadPMTESInfo(vs, vpid));
     }
-    
+
     pmt->CRC_32 = 0; // calc in encode.
     return pkt;
 }
 
-SrsTsPacket* SrsTsPacket::create_pes_first(SrsTsContext* context, 
-    int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter, bool discontinuity, 
-    int64_t pcr, int64_t dts, int64_t pts, int size
-) {
+SrsTsPacket* SrsTsPacket::create_pes_first(SrsTsContext* context,
+        int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter, bool discontinuity,
+        int64_t pcr, int64_t dts, int64_t pts, int size
+                                          )
+{
     SrsTsPacket* pkt = new SrsTsPacket(context);
     pkt->sync_byte = 0x47;
     pkt->transport_error_indicator = 0;
@@ -16964,7 +17457,8 @@ SrsTsPacket* SrsTsPacket::create_pes_first(SrsTsContext* context,
     SrsTsPayloadPES* pes = new SrsTsPayloadPES(pkt);
     pkt->payload = pes;
 
-    if (pcr >= 0) {
+    if (pcr >= 0)
+    {
         SrsTsAdaptationField* af = new SrsTsAdaptationField(pkt);
         pkt->adaptation_field = af;
         pkt->adaption_field_control = SrsTsAdaptationFieldTypeBoth;
@@ -17003,9 +17497,10 @@ SrsTsPacket* SrsTsPacket::create_pes_first(SrsTsContext* context,
     return pkt;
 }
 
-SrsTsPacket* SrsTsPacket::create_pes_continue(SrsTsContext* context, 
-    int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter
-) {
+SrsTsPacket* SrsTsPacket::create_pes_continue(SrsTsContext* context,
+        int16_t pid, SrsTsPESStreamId sid, u_int8_t continuity_counter
+                                             )
+{
     SrsTsPacket* pkt = new SrsTsPacket(context);
     pkt->sync_byte = 0x47;
     pkt->transport_error_indicator = 0;
@@ -17072,7 +17567,8 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_STREAM_CASTER_TS_AF;
         srs_error("ts: demux af failed. ret=%d", ret);
         return ret;
@@ -17080,22 +17576,25 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
     adaption_field_length = stream->read_1bytes();
 
     // When the adaptation_field_control value is '11', the value of the adaptation_field_length shall
-    // be in the range 0 to 182. 
-    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeBoth && adaption_field_length > 182) {
+    // be in the range 0 to 182.
+    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeBoth && adaption_field_length > 182)
+    {
         ret = ERROR_STREAM_CASTER_TS_AF;
         srs_error("ts: demux af length failed, must in [0, 182], actual=%d. ret=%d", adaption_field_length, ret);
         return ret;
     }
     // When the adaptation_field_control value is '10', the value of the adaptation_field_length shall
     // be 183.
-    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeAdaptionOnly && adaption_field_length != 183) {
+    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeAdaptionOnly && adaption_field_length != 183)
+    {
         ret = ERROR_STREAM_CASTER_TS_AF;
         srs_error("ts: demux af length failed, must be 183, actual=%d. ret=%d", adaption_field_length, ret);
         return ret;
     }
-    
+
     // no adaptation field.
-    if (adaption_field_length == 0) {
+    if (adaption_field_length == 0)
+    {
         srs_info("ts: demux af empty.");
         return ret;
     }
@@ -17103,7 +17602,7 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
     // the adaptation field start at here.
     int pos_af = stream->pos();
     int8_t tmpv = stream->read_1bytes();
-    
+
     discontinuity_indicator              =   (tmpv >> 7) & 0x01;
     random_access_indicator              =   (tmpv >> 6) & 0x01;
     elementary_stream_priority_indicator =   (tmpv >> 5) & 0x01;
@@ -17112,9 +17611,11 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
     splicing_point_flag                  =   (tmpv >> 2) & 0x01;
     transport_private_data_flag          =   (tmpv >> 1) & 0x01;
     adaptation_field_extension_flag      =   tmpv & 0x01;
-    
-    if (PCR_flag) {
-        if (!stream->require(6)) {
+
+    if (PCR_flag)
+    {
+        if (!stream->require(6))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: demux af PCR_flag failed. ret=%d", ret);
             return ret;
@@ -17132,7 +17633,7 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
         pp[2] = *p++;
         pp[1] = *p++;
         pp[0] = *p++;
-        
+
         // @remark, use pcr base and ignore the extension
         // @see https://github.com/simple-rtmp-server/srs/issues/250#issuecomment-71349370
         program_clock_reference_extension = pcrv & 0x1ff;
@@ -17140,8 +17641,10 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
         program_clock_reference_base = (pcrv >> 15) & 0x1ffffffffLL;
     }
 
-    if (OPCR_flag) {
-        if (!stream->require(6)) {
+    if (OPCR_flag)
+    {
+        if (!stream->require(6))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: demux af OPCR_flag failed. ret=%d", ret);
             return ret;
@@ -17150,7 +17653,7 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
         char* pp = NULL;
         char* p = stream->data() + stream->pos();
         stream->skip(6);
-        
+
         int64_t opcrv = 0;
         pp = (char*)&opcrv;
         pp[5] = *p++;
@@ -17159,7 +17662,7 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
         pp[2] = *p++;
         pp[1] = *p++;
         pp[0] = *p++;
-        
+
         // @remark, use pcr base and ignore the extension
         // @see https://github.com/simple-rtmp-server/srs/issues/250#issuecomment-71349370
         original_program_clock_reference_extension = opcrv & 0x1ff;
@@ -17167,25 +17670,31 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
         original_program_clock_reference_base = (opcrv >> 15) & 0x1ffffffffLL;
     }
 
-    if (splicing_point_flag) {
-        if (!stream->require(1)) {
+    if (splicing_point_flag)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: demux af splicing_point_flag failed. ret=%d", ret);
             return ret;
         }
         splice_countdown = stream->read_1bytes();
     }
-    
-    if (transport_private_data_flag) {
-        if (!stream->require(1)) {
+
+    if (transport_private_data_flag)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: demux af transport_private_data_flag failed. ret=%d", ret);
             return ret;
         }
         transport_private_data_length = (u_int8_t)stream->read_1bytes();
 
-        if (transport_private_data_length> 0) {
-            if (!stream->require(transport_private_data_length)) {
+        if (transport_private_data_length> 0)
+        {
+            if (!stream->require(transport_private_data_length))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: demux af transport_private_data_flag failed. ret=%d", ret);
                 return ret;
@@ -17195,37 +17704,43 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
             stream->read_bytes(transport_private_data, transport_private_data_length);
         }
     }
-    
-    if (adaptation_field_extension_flag) {
+
+    if (adaptation_field_extension_flag)
+    {
         int pos_af_ext = stream->pos();
 
-        if (!stream->require(2)) {
+        if (!stream->require(2))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: demux af adaptation_field_extension_flag failed. ret=%d", ret);
             return ret;
         }
         adaptation_field_extension_length = (u_int8_t)stream->read_1bytes();
         int8_t ltwfv = stream->read_1bytes();
-        
+
         piecewise_rate_flag = (ltwfv >> 6) & 0x01;
         seamless_splice_flag = (ltwfv >> 5) & 0x01;
         ltw_flag = (ltwfv >> 7) & 0x01;
         const1_value1 = ltwfv & 0x1F;
 
-        if (ltw_flag) {
-            if (!stream->require(2)) {
+        if (ltw_flag)
+        {
+            if (!stream->require(2))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: demux af ltw_flag failed. ret=%d", ret);
                 return ret;
             }
             ltw_offset = stream->read_2bytes();
-            
+
             ltw_valid_flag = (ltw_offset >> 15) &0x01;
             ltw_offset &= 0x7FFF;
         }
 
-        if (piecewise_rate_flag) {
-            if (!stream->require(3)) {
+        if (piecewise_rate_flag)
+        {
+            if (!stream->require(3))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: demux af piecewise_rate_flag failed. ret=%d", ret);
                 return ret;
@@ -17235,8 +17750,10 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
             piecewise_rate &= 0x3FFFFF;
         }
 
-        if (seamless_splice_flag) {
-            if (!stream->require(5)) {
+        if (seamless_splice_flag)
+        {
+            if (!stream->require(5))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: demux af seamless_splice_flag failed. ret=%d", ret);
                 return ret;
@@ -17244,14 +17761,14 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
             marker_bit0 = stream->read_1bytes();
             DTS_next_AU1 = stream->read_2bytes();
             DTS_next_AU2 = stream->read_2bytes();
-            
+
             splice_type = (marker_bit0 >> 4) & 0x0F;
             DTS_next_AU0 = (marker_bit0 >> 1) & 0x07;
             marker_bit0 &= 0x01;
-            
+
             marker_bit1 = DTS_next_AU1 & 0x01;
             DTS_next_AU1 = (DTS_next_AU1 >> 1) & 0x7FFF;
-            
+
             marker_bit2 = DTS_next_AU2 & 0x01;
             DTS_next_AU2 = (DTS_next_AU2 >> 1) & 0x7FFF;
         }
@@ -17262,11 +17779,11 @@ int SrsTsAdaptationField::decode(SrsStream* stream)
 
     nb_af_reserved = adaption_field_length - (stream->pos() - pos_af);
     stream->skip(nb_af_reserved);
-    
+
     srs_info("ts: af parsed, discontinuity=%d random=%d priority=%d PCR=%d OPCR=%d slicing=%d private=%d extension=%d/%d pcr=%"PRId64"/%d opcr=%"PRId64"/%d",
-        discontinuity_indicator, random_access_indicator, elementary_stream_priority_indicator, PCR_flag, OPCR_flag, splicing_point_flag,
-        transport_private_data_flag, adaptation_field_extension_flag, adaptation_field_extension_length, program_clock_reference_base, 
-        program_clock_reference_extension, original_program_clock_reference_base, original_program_clock_reference_extension);
+             discontinuity_indicator, random_access_indicator, elementary_stream_priority_indicator, PCR_flag, OPCR_flag, splicing_point_flag,
+             transport_private_data_flag, adaptation_field_extension_flag, adaptation_field_extension_length, program_clock_reference_base,
+             program_clock_reference_extension, original_program_clock_reference_base, original_program_clock_reference_extension);
 
     return ret;
 }
@@ -17292,7 +17809,8 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_STREAM_CASTER_TS_AF;
         srs_error("ts: mux af failed. ret=%d", ret);
         return ret;
@@ -17300,22 +17818,25 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
     stream->write_1bytes(adaption_field_length);
 
     // When the adaptation_field_control value is '11', the value of the adaptation_field_length shall
-    // be in the range 0 to 182. 
-    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeBoth && adaption_field_length > 182) {
+    // be in the range 0 to 182.
+    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeBoth && adaption_field_length > 182)
+    {
         ret = ERROR_STREAM_CASTER_TS_AF;
         srs_error("ts: mux af length failed, must in [0, 182], actual=%d. ret=%d", adaption_field_length, ret);
         return ret;
     }
     // When the adaptation_field_control value is '10', the value of the adaptation_field_length shall
     // be 183.
-    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeAdaptionOnly && adaption_field_length != 183) {
+    if (packet->adaption_field_control == SrsTsAdaptationFieldTypeAdaptionOnly && adaption_field_length != 183)
+    {
         ret = ERROR_STREAM_CASTER_TS_AF;
         srs_error("ts: mux af length failed, must be 183, actual=%d. ret=%d", adaption_field_length, ret);
         return ret;
     }
-    
+
     // no adaptation field.
-    if (adaption_field_length == 0) {
+    if (adaption_field_length == 0)
+    {
         srs_info("ts: mux af empty.");
         return ret;
     }
@@ -17328,9 +17849,11 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
     tmpv |= (splicing_point_flag << 2) & 0x04;
     tmpv |= (transport_private_data_flag << 1) & 0x02;
     stream->write_1bytes(tmpv);
-    
-    if (PCR_flag) {
-        if (!stream->require(6)) {
+
+    if (PCR_flag)
+    {
+        if (!stream->require(6))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: mux af PCR_flag failed. ret=%d", ret);
             return ret;
@@ -17339,7 +17862,7 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
         char* pp = NULL;
         char* p = stream->data() + stream->pos();
         stream->skip(6);
-        
+
         // @remark, use pcr base and ignore the extension
         // @see https://github.com/simple-rtmp-server/srs/issues/250#issuecomment-71349370
         int64_t pcrv = program_clock_reference_extension & 0x1ff;
@@ -17355,8 +17878,10 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
         *p++ = pp[0];
     }
 
-    if (OPCR_flag) {
-        if (!stream->require(6)) {
+    if (OPCR_flag)
+    {
+        if (!stream->require(6))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: demux af OPCR_flag failed. ret=%d", ret);
             return ret;
@@ -17365,25 +17890,31 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
         srs_warn("ts: mux af ignore OPCR");
     }
 
-    if (splicing_point_flag) {
-        if (!stream->require(1)) {
+    if (splicing_point_flag)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: mux af splicing_point_flag failed. ret=%d", ret);
             return ret;
         }
         stream->write_1bytes(splice_countdown);
     }
-    
-    if (transport_private_data_flag) {
-        if (!stream->require(1)) {
+
+    if (transport_private_data_flag)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: mux af transport_private_data_flag failed. ret=%d", ret);
             return ret;
         }
         stream->write_1bytes(transport_private_data_length);
 
-        if (transport_private_data_length> 0) {
-            if (!stream->require(transport_private_data_length)) {
+        if (transport_private_data_length> 0)
+        {
+            if (!stream->require(transport_private_data_length))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: mux af transport_private_data_flag failed. ret=%d", ret);
                 return ret;
@@ -17391,9 +17922,11 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
             stream->write_bytes(transport_private_data, transport_private_data_length);
         }
     }
-    
-    if (adaptation_field_extension_flag) {
-        if (!stream->require(2)) {
+
+    if (adaptation_field_extension_flag)
+    {
+        if (!stream->require(2))
+        {
             ret = ERROR_STREAM_CASTER_TS_AF;
             srs_error("ts: mux af adaptation_field_extension_flag failed. ret=%d", ret);
             return ret;
@@ -17405,8 +17938,10 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
         ltwfv |= (seamless_splice_flag << 5) & 0x20;
         stream->write_1bytes(ltwfv);
 
-        if (ltw_flag) {
-            if (!stream->require(2)) {
+        if (ltw_flag)
+        {
+            if (!stream->require(2))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: mux af ltw_flag failed. ret=%d", ret);
                 return ret;
@@ -17415,8 +17950,10 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
             srs_warn("ts: mux af ignore ltw");
         }
 
-        if (piecewise_rate_flag) {
-            if (!stream->require(3)) {
+        if (piecewise_rate_flag)
+        {
+            if (!stream->require(3))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: mux af piecewise_rate_flag failed. ret=%d", ret);
                 return ret;
@@ -17425,8 +17962,10 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
             srs_warn("ts: mux af ignore piecewise_rate");
         }
 
-        if (seamless_splice_flag) {
-            if (!stream->require(5)) {
+        if (seamless_splice_flag)
+        {
+            if (!stream->require(5))
+            {
                 ret = ERROR_STREAM_CASTER_TS_AF;
                 srs_error("ts: mux af seamless_splice_flag failed. ret=%d", ret);
                 return ret;
@@ -17435,19 +17974,21 @@ int SrsTsAdaptationField::encode(SrsStream* stream)
             srs_warn("ts: mux af ignore seamless_splice");
         }
 
-        if (nb_af_ext_reserved) {
+        if (nb_af_ext_reserved)
+        {
             stream->skip(nb_af_ext_reserved);
         }
     }
 
-    if (nb_af_reserved) {
+    if (nb_af_reserved)
+    {
         stream->skip(nb_af_reserved);
     }
-    
+
     srs_info("ts: af parsed, discontinuity=%d random=%d priority=%d PCR=%d OPCR=%d slicing=%d private=%d extension=%d/%d pcr=%"PRId64"/%d opcr=%"PRId64"/%d",
-        discontinuity_indicator, random_access_indicator, elementary_stream_priority_indicator, PCR_flag, OPCR_flag, splicing_point_flag,
-        transport_private_data_flag, adaptation_field_extension_flag, adaptation_field_extension_length, program_clock_reference_base, 
-        program_clock_reference_extension, original_program_clock_reference_base, original_program_clock_reference_extension);
+             discontinuity_indicator, random_access_indicator, elementary_stream_priority_indicator, PCR_flag, OPCR_flag, splicing_point_flag,
+             transport_private_data_flag, adaptation_field_extension_flag, adaptation_field_extension_length, program_clock_reference_base,
+             program_clock_reference_extension, original_program_clock_reference_base, original_program_clock_reference_extension);
 
     return ret;
 }
@@ -17486,7 +18027,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 
     // find the channel from chunk.
     SrsTsChannel* channel = packet->context->get(packet->pid);
-    if (!channel) {
+    if (!channel)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: demux PES no channel for pid=%#x. ret=%d", packet->pid, ret);
         return ret;
@@ -17494,11 +18036,12 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 
     // init msg.
     SrsTsMessage* msg = channel->msg;
-    if (!msg) {
+    if (!msg)
+    {
         msg = new SrsTsMessage(channel, packet);
         channel->msg = msg;
     }
-    
+
     // we must cache the fresh state of msg,
     // for the PES_packet_length is 0, the first payload_unit_start_indicator always 1,
     // so should check for the fresh and not completed it.
@@ -17506,24 +18049,26 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 
     // check when fresh, the payload_unit_start_indicator
     // should be 1 for the fresh msg.
-    if (is_fresh_msg && !packet->payload_unit_start_indicator) {
+    if (is_fresh_msg && !packet->payload_unit_start_indicator)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: PES fresh packet length=%d, us=%d, cc=%d. ret=%d",
-            msg->PES_packet_length, packet->payload_unit_start_indicator, packet->continuity_counter,
-            ret);
+                  msg->PES_packet_length, packet->payload_unit_start_indicator, packet->continuity_counter,
+                  ret);
         return ret;
     }
 
     // check when not fresh and PES_packet_length>0,
     // the payload_unit_start_indicator should never be 1 when not completed.
     if (!is_fresh_msg && msg->PES_packet_length > 0
-        && !msg->completed(packet->payload_unit_start_indicator)
-        && packet->payload_unit_start_indicator
-    ) {
+            && !msg->completed(packet->payload_unit_start_indicator)
+            && packet->payload_unit_start_indicator
+       )
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: PES packet length=%d, payload=%d, us=%d, cc=%d. ret=%d",
-            msg->PES_packet_length, msg->payload->length(), packet->payload_unit_start_indicator, 
-            packet->continuity_counter, ret);
+                  msg->PES_packet_length, msg->payload->length(), packet->payload_unit_start_indicator,
+                  packet->continuity_counter, ret);
 
         // reparse current msg.
         stream->skip(stream->pos() * -1);
@@ -17533,22 +18078,25 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
     }
 
     // check the continuity counter
-    if (!is_fresh_msg) {
+    if (!is_fresh_msg)
+    {
         // late-incoming or duplicated continuity, drop message.
         // @remark check overflow, the counter plus 1 should greater when invalid.
         if (msg->continuity_counter >= packet->continuity_counter
-            && ((msg->continuity_counter + 1) & 0x0f) > packet->continuity_counter
-        ) {
+                && ((msg->continuity_counter + 1) & 0x0f) > packet->continuity_counter
+           )
+        {
             srs_warn("ts: drop PES %dB for duplicated cc=%#x", msg->continuity_counter);
             stream->skip(stream->size() - stream->pos());
             return ret;
         }
 
         // when got partially message, the continous count must be continuous, or drop it.
-        if (((msg->continuity_counter + 1) & 0x0f) != packet->continuity_counter) {
+        if (((msg->continuity_counter + 1) & 0x0f) != packet->continuity_counter)
+        {
             ret = ERROR_STREAM_CASTER_TS_PSE;
             srs_error("ts: continuity must be continous, msg=%#x, packet=%#x. ret=%d",
-                msg->continuity_counter, packet->continuity_counter, ret);
+                      msg->continuity_counter, packet->continuity_counter, ret);
 
             // reparse current msg.
             stream->skip(stream->pos() * -1);
@@ -17560,7 +18108,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
     msg->continuity_counter = packet->continuity_counter;
 
     // for the PES_packet_length(0), reap when completed.
-    if (!is_fresh_msg && msg->completed(packet->payload_unit_start_indicator)) {
+    if (!is_fresh_msg && msg->completed(packet->payload_unit_start_indicator))
+    {
         // reap previous PES packet.
         *ppmsg = msg;
         channel->msg = NULL;
@@ -17571,16 +18120,20 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
     }
 
     // contious packet, append bytes for unit start is 0
-    if (!packet->payload_unit_start_indicator) {
-        if ((ret = msg->dump(stream, &nb_bytes)) != ERROR_SUCCESS) {
+    if (!packet->payload_unit_start_indicator)
+    {
+        if ((ret = msg->dump(stream, &nb_bytes)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
 
     // when unit start, parse the fresh msg.
-    if (packet->payload_unit_start_indicator) {
+    if (packet->payload_unit_start_indicator)
+    {
         // 6B fixed header.
-        if (!stream->require(6)) {
+        if (!stream->require(6))
+        {
             ret = ERROR_STREAM_CASTER_TS_PSE;
             srs_error("ts: demux PSE failed. ret=%d", ret);
             return ret;
@@ -17594,7 +18147,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 
         // check the packet start prefix.
         packet_start_code_prefix &= 0xFFFFFF;
-        if (packet_start_code_prefix != 0x01) {
+        if (packet_start_code_prefix != 0x01)
+        {
             ret = ERROR_STREAM_CASTER_TS_PSE;
             srs_error("ts: demux PES start code failed, expect=0x01, actual=%#x. ret=%d", packet_start_code_prefix, ret);
             return ret;
@@ -17607,16 +18161,18 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
         msg->sid = sid;
 
         if (sid != SrsTsPESStreamIdProgramStreamMap
-            && sid != SrsTsPESStreamIdPaddingStream
-            && sid != SrsTsPESStreamIdPrivateStream2
-            && sid != SrsTsPESStreamIdEcmStream
-            && sid != SrsTsPESStreamIdEmmStream
-            && sid != SrsTsPESStreamIdProgramStreamDirectory
-            && sid != SrsTsPESStreamIdDsmccStream
-            && sid != SrsTsPESStreamIdH2221TypeE
-        ) {
+                && sid != SrsTsPESStreamIdPaddingStream
+                && sid != SrsTsPESStreamIdPrivateStream2
+                && sid != SrsTsPESStreamIdEcmStream
+                && sid != SrsTsPESStreamIdEmmStream
+                && sid != SrsTsPESStreamIdProgramStreamDirectory
+                && sid != SrsTsPESStreamIdDsmccStream
+                && sid != SrsTsPESStreamIdH2221TypeE
+           )
+        {
             // 3B flags.
-            if (!stream->require(3)) {
+            if (!stream->require(3))
+            {
                 ret = ERROR_STREAM_CASTER_TS_PSE;
                 srs_error("ts: demux PES flags failed. ret=%d", ret);
                 return ret;
@@ -17655,15 +18211,18 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             nb_required += additional_copy_info_flag? 1:0;
             nb_required += PES_CRC_flag? 2:0;
             nb_required += PES_extension_flag? 1:0;
-            if (!stream->require(nb_required)) {
+            if (!stream->require(nb_required))
+            {
                 ret = ERROR_STREAM_CASTER_TS_PSE;
                 srs_error("ts: demux PES payload failed. ret=%d", ret);
                 return ret;
             }
 
             // 5B
-            if (PTS_DTS_flags == 0x2) {
-                if ((ret = decode_33bits_dts_pts(stream, &pts)) != ERROR_SUCCESS) {
+            if (PTS_DTS_flags == 0x2)
+            {
+                if ((ret = decode_33bits_dts_pts(stream, &pts)) != ERROR_SUCCESS)
+                {
                     return ret;
                 }
                 dts = pts;
@@ -17674,16 +18233,20 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             }
 
             // 10B
-            if (PTS_DTS_flags == 0x3) {
-                if ((ret = decode_33bits_dts_pts(stream, &pts)) != ERROR_SUCCESS) {
+            if (PTS_DTS_flags == 0x3)
+            {
+                if ((ret = decode_33bits_dts_pts(stream, &pts)) != ERROR_SUCCESS)
+                {
                     return ret;
                 }
-                if ((ret = decode_33bits_dts_pts(stream, &dts)) != ERROR_SUCCESS) {
+                if ((ret = decode_33bits_dts_pts(stream, &dts)) != ERROR_SUCCESS)
+                {
                     return ret;
                 }
 
                 // check sync, the diff of dts and pts should never greater than 1s.
-                if (dts - pts > 90000 || pts - dts > 90000) {
+                if (dts - pts > 90000 || pts - dts > 90000)
+                {
                     srs_warn("ts: sync dts=%"PRId64", pts=%"PRId64, dts, pts);
                 }
 
@@ -17693,7 +18256,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             }
 
             // 6B
-            if (ESCR_flag) {
+            if (ESCR_flag)
+            {
                 ESCR_extension = 0;
                 ESCR_base = 0;
 
@@ -17702,7 +18266,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             }
 
             // 3B
-            if (ES_rate_flag) {
+            if (ES_rate_flag)
+            {
                 ES_rate = stream->read_3bytes();
 
                 ES_rate = ES_rate >> 1;
@@ -17710,7 +18275,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             }
 
             // 1B
-            if (DSM_trick_mode_flag) {
+            if (DSM_trick_mode_flag)
+            {
                 trick_mode_control = stream->read_1bytes();
 
                 trick_mode_value = trick_mode_control & 0x1f;
@@ -17718,19 +18284,22 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             }
 
             // 1B
-            if (additional_copy_info_flag) {
+            if (additional_copy_info_flag)
+            {
                 additional_copy_info = stream->read_1bytes();
 
                 additional_copy_info &= 0x7f;
             }
 
             // 2B
-            if (PES_CRC_flag) {
+            if (PES_CRC_flag)
+            {
                 previous_PES_packet_CRC = stream->read_2bytes();
             }
 
             // 1B
-            if (PES_extension_flag) {
+            if (PES_extension_flag)
+            {
                 int8_t efv = stream->read_1bytes();
 
                 PES_private_data_flag = (efv >> 7) & 0x01;
@@ -17746,26 +18315,31 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
                 nb_required += program_packet_sequence_counter_flag? 2:0;
                 nb_required += P_STD_buffer_flag? 2:0;
                 nb_required += PES_extension_flag_2? 1:0; // 1+x bytes.
-                if (!stream->require(nb_required)) {
+                if (!stream->require(nb_required))
+                {
                     ret = ERROR_STREAM_CASTER_TS_PSE;
                     srs_error("ts: demux PSE ext payload failed. ret=%d", ret);
                     return ret;
                 }
 
                 // 16B
-                if (PES_private_data_flag) {
+                if (PES_private_data_flag)
+                {
                     srs_freep(PES_private_data);
                     PES_private_data = new char[16];
                     stream->read_bytes(PES_private_data, 16);
                 }
 
                 // (1+x)B
-                if (pack_header_field_flag) {
+                if (pack_header_field_flag)
+                {
                     pack_field_length = stream->read_1bytes();
-                    if (pack_field_length > 0) {
+                    if (pack_field_length > 0)
+                    {
                         // the adjust required bytes.
                         nb_required = nb_required - 16 - 1 + pack_field_length;
-                        if (!stream->require(nb_required)) {
+                        if (!stream->require(nb_required))
+                        {
                             ret = ERROR_STREAM_CASTER_TS_PSE;
                             srs_error("ts: demux PSE ext pack failed. ret=%d", ret);
                             return ret;
@@ -17777,7 +18351,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
                 }
 
                 // 2B
-                if (program_packet_sequence_counter_flag) {
+                if (program_packet_sequence_counter_flag)
+                {
                     program_packet_sequence_counter = stream->read_1bytes();
                     program_packet_sequence_counter &= 0x7f;
 
@@ -17787,7 +18362,8 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
                 }
 
                 // 2B
-                if (P_STD_buffer_flag) {
+                if (P_STD_buffer_flag)
+                {
                     P_STD_buffer_size = stream->read_2bytes();
 
                     // '01'
@@ -17798,12 +18374,15 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
                 }
 
                 // (1+x)B
-                if (PES_extension_flag_2) {
+                if (PES_extension_flag_2)
+                {
                     PES_extension_field_length = stream->read_1bytes();
                     PES_extension_field_length &= 0x07;
 
-                    if (PES_extension_field_length > 0) {
-                        if (!stream->require(PES_extension_field_length)) {
+                    if (PES_extension_field_length > 0)
+                    {
+                        if (!stream->require(PES_extension_field_length))
+                        {
                             ret = ERROR_STREAM_CASTER_TS_PSE;
                             srs_error("ts: demux PSE ext field failed. ret=%d", ret);
                             return ret;
@@ -17817,8 +18396,10 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 
             // stuffing_byte
             nb_stuffings = PES_header_data_length - (stream->pos() - pos_header);
-            if (nb_stuffings > 0) {
-                if (!stream->require(nb_stuffings)) {
+            if (nb_stuffings > 0)
+            {
+                if (!stream->require(nb_stuffings))
+                {
                     ret = ERROR_STREAM_CASTER_TS_PSE;
                     srs_error("ts: demux PSE stuffings failed. ret=%d", ret);
                     return ret;
@@ -17838,54 +18419,65 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
             * which exceed the max u_int16_t packet length,
             * use 0 packet length, the next unit start indicates the end of packet.
             */
-            if (PES_packet_length > 0) {
+            if (PES_packet_length > 0)
+            {
                 int nb_packet = PES_packet_length - (stream->pos() - pos_packet);
                 msg->PES_packet_length = srs_max(0, nb_packet);
             }
 
             // xB
-            if ((ret = msg->dump(stream, &nb_bytes)) != ERROR_SUCCESS) {
+            if ((ret = msg->dump(stream, &nb_bytes)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
-        } else if (sid == SrsTsPESStreamIdProgramStreamMap
-            || sid == SrsTsPESStreamIdPrivateStream2
-            || sid == SrsTsPESStreamIdEcmStream
-            || sid == SrsTsPESStreamIdEmmStream
-            || sid == SrsTsPESStreamIdProgramStreamDirectory
-            || sid == SrsTsPESStreamIdDsmccStream
-            || sid == SrsTsPESStreamIdH2221TypeE
-        ) {
+        }
+        else if (sid == SrsTsPESStreamIdProgramStreamMap
+                 || sid == SrsTsPESStreamIdPrivateStream2
+                 || sid == SrsTsPESStreamIdEcmStream
+                 || sid == SrsTsPESStreamIdEmmStream
+                 || sid == SrsTsPESStreamIdProgramStreamDirectory
+                 || sid == SrsTsPESStreamIdDsmccStream
+                 || sid == SrsTsPESStreamIdH2221TypeE
+                )
+        {
             // for (i = 0; i < PES_packet_length; i++) {
             //         PES_packet_data_byte
             // }
 
             // xB
-            if ((ret = msg->dump(stream, &nb_bytes)) != ERROR_SUCCESS) {
+            if ((ret = msg->dump(stream, &nb_bytes)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
-        } else if (sid == SrsTsPESStreamIdPaddingStream) {
+        }
+        else if (sid == SrsTsPESStreamIdPaddingStream)
+        {
             // for (i = 0; i < PES_packet_length; i++) {
             //         padding_byte
             // }
             nb_paddings = stream->size() - stream->pos();
             stream->skip(nb_paddings);
             srs_info("ts: drop %dB padding bytes", nb_paddings);
-        } else {
+        }
+        else
+        {
             int nb_drop = stream->size() - stream->pos();
             stream->skip(nb_drop);
             srs_warn("ts: drop the pes packet %dB for stream_id=%#x", nb_drop, stream_id);
         }
     }
-    
+
     // when fresh and the PES_packet_length is 0,
     // the payload_unit_start_indicator always be 1,
     // the message should never EOF for the first packet.
-    if (is_fresh_msg && msg->PES_packet_length == 0) {
+    if (is_fresh_msg && msg->PES_packet_length == 0)
+    {
         return ret;
     }
 
     // check msg, reap when completed.
-    if (msg->completed(packet->payload_unit_start_indicator)) {
+    if (msg->completed(packet->payload_unit_start_indicator))
+    {
         *ppmsg = msg;
         channel->msg = NULL;
         srs_info("ts: reap msg for completed.");
@@ -17897,19 +18489,20 @@ int SrsTsPayloadPES::decode(SrsStream* stream, SrsTsMessage** ppmsg)
 int SrsTsPayloadPES::size()
 {
     int sz = 0;
-    
+
     PES_header_data_length = 0;
     SrsTsPESStreamId sid = (SrsTsPESStreamId)stream_id;
 
     if (sid != SrsTsPESStreamIdProgramStreamMap
-        && sid != SrsTsPESStreamIdPaddingStream
-        && sid != SrsTsPESStreamIdPrivateStream2
-        && sid != SrsTsPESStreamIdEcmStream
-        && sid != SrsTsPESStreamIdEmmStream
-        && sid != SrsTsPESStreamIdProgramStreamDirectory
-        && sid != SrsTsPESStreamIdDsmccStream
-        && sid != SrsTsPESStreamIdH2221TypeE
-    ) {
+            && sid != SrsTsPESStreamIdPaddingStream
+            && sid != SrsTsPESStreamIdPrivateStream2
+            && sid != SrsTsPESStreamIdEcmStream
+            && sid != SrsTsPESStreamIdEmmStream
+            && sid != SrsTsPESStreamIdProgramStreamDirectory
+            && sid != SrsTsPESStreamIdDsmccStream
+            && sid != SrsTsPESStreamIdH2221TypeE
+       )
+    {
         sz += 6;
         sz += 3;
         PES_header_data_length = sz;
@@ -17923,7 +18516,8 @@ int SrsTsPayloadPES::size()
         sz += PES_CRC_flag? 2:0;
         sz += PES_extension_flag? 1:0;
 
-        if (PES_extension_flag) {
+        if (PES_extension_flag)
+        {
             sz += PES_private_data_flag? 16:0;
             sz += pack_header_field_flag? 1 + pack_field_length:0; // 1+x bytes.
             sz += program_packet_sequence_counter_flag? 2:0;
@@ -17935,16 +18529,20 @@ int SrsTsPayloadPES::size()
         sz += nb_stuffings;
 
         // packet bytes
-    } else if (sid == SrsTsPESStreamIdProgramStreamMap
-        || sid == SrsTsPESStreamIdPrivateStream2
-        || sid == SrsTsPESStreamIdEcmStream
-        || sid == SrsTsPESStreamIdEmmStream
-        || sid == SrsTsPESStreamIdProgramStreamDirectory
-        || sid == SrsTsPESStreamIdDsmccStream
-        || sid == SrsTsPESStreamIdH2221TypeE
-    ) {
+    }
+    else if (sid == SrsTsPESStreamIdProgramStreamMap
+             || sid == SrsTsPESStreamIdPrivateStream2
+             || sid == SrsTsPESStreamIdEcmStream
+             || sid == SrsTsPESStreamIdEmmStream
+             || sid == SrsTsPESStreamIdProgramStreamDirectory
+             || sid == SrsTsPESStreamIdDsmccStream
+             || sid == SrsTsPESStreamIdH2221TypeE
+            )
+    {
         // packet bytes
-    } else {
+    }
+    else
+    {
         // nb_drop
     }
 
@@ -17956,7 +18554,8 @@ int SrsTsPayloadPES::encode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // 6B fixed header.
-    if (!stream->require(6)) {
+    if (!stream->require(6))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: mux PSE failed. ret=%d", ret);
         return ret;
@@ -17970,7 +18569,8 @@ int SrsTsPayloadPES::encode(SrsStream* stream)
     // the PES_packet_length is the actual bytes size, the pplv write to ts
     // is the actual bytes plus the header size.
     int32_t pplv = 0;
-    if (PES_packet_length > 0) {
+    if (PES_packet_length > 0)
+    {
         pplv = PES_packet_length + 3 + PES_header_data_length;
         pplv = (pplv > 0xFFFF)? 0 : pplv;
     }
@@ -17978,14 +18578,16 @@ int SrsTsPayloadPES::encode(SrsStream* stream)
 
     // check the packet start prefix.
     packet_start_code_prefix &= 0xFFFFFF;
-    if (packet_start_code_prefix != 0x01) {
+    if (packet_start_code_prefix != 0x01)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: mux PSE start code failed, expect=0x01, actual=%#x. ret=%d", packet_start_code_prefix, ret);
         return ret;
     }
 
     // 3B flags.
-    if (!stream->require(3)) {
+    if (!stream->require(3))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: mux PSE flags failed. ret=%d", ret);
         return ret;
@@ -18020,66 +18622,79 @@ int SrsTsPayloadPES::encode(SrsStream* stream)
     nb_required += additional_copy_info_flag? 1:0;
     nb_required += PES_CRC_flag? 2:0;
     nb_required += PES_extension_flag? 1:0;
-    if (!stream->require(nb_required)) {
+    if (!stream->require(nb_required))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: mux PSE payload failed. ret=%d", ret);
         return ret;
     }
 
     // 5B
-    if (PTS_DTS_flags == 0x2) {
-        if ((ret = encode_33bits_dts_pts(stream, 0x02, pts)) != ERROR_SUCCESS) {
+    if (PTS_DTS_flags == 0x2)
+    {
+        if ((ret = encode_33bits_dts_pts(stream, 0x02, pts)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
 
     // 10B
-    if (PTS_DTS_flags == 0x3) {
-        if ((ret = encode_33bits_dts_pts(stream, 0x03, pts)) != ERROR_SUCCESS) {
+    if (PTS_DTS_flags == 0x3)
+    {
+        if ((ret = encode_33bits_dts_pts(stream, 0x03, pts)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        if ((ret = encode_33bits_dts_pts(stream, 0x01, dts)) != ERROR_SUCCESS) {
+        if ((ret = encode_33bits_dts_pts(stream, 0x01, dts)) != ERROR_SUCCESS)
+        {
             return ret;
         }
 
         // check sync, the diff of dts and pts should never greater than 1s.
-        if (dts - pts > 90000 || pts - dts > 90000) {
+        if (dts - pts > 90000 || pts - dts > 90000)
+        {
             srs_warn("ts: sync dts=%"PRId64", pts=%"PRId64, dts, pts);
         }
     }
 
     // 6B
-    if (ESCR_flag) {
+    if (ESCR_flag)
+    {
         stream->skip(6);
         srs_warn("ts: demux PES, ignore the escr.");
     }
 
     // 3B
-    if (ES_rate_flag) {
+    if (ES_rate_flag)
+    {
         stream->skip(3);
         srs_warn("ts: demux PES, ignore the ES_rate.");
     }
 
     // 1B
-    if (DSM_trick_mode_flag) {
+    if (DSM_trick_mode_flag)
+    {
         stream->skip(1);
         srs_warn("ts: demux PES, ignore the DSM_trick_mode.");
     }
 
     // 1B
-    if (additional_copy_info_flag) {
+    if (additional_copy_info_flag)
+    {
         stream->skip(1);
         srs_warn("ts: demux PES, ignore the additional_copy_info.");
     }
 
     // 2B
-    if (PES_CRC_flag) {
+    if (PES_CRC_flag)
+    {
         stream->skip(2);
         srs_warn("ts: demux PES, ignore the PES_CRC.");
     }
 
     // 1B
-    if (PES_extension_flag) {
+    if (PES_extension_flag)
+    {
         int8_t efv = PES_extension_flag_2 & 0x01;
         efv |= (PES_private_data_flag << 7) & 0x80;
         efv |= (pack_header_field_flag << 6) & 0x40;
@@ -18094,7 +18709,8 @@ int SrsTsPayloadPES::encode(SrsStream* stream)
         nb_required += program_packet_sequence_counter_flag? 2:0;
         nb_required += P_STD_buffer_flag? 2:0;
         nb_required += PES_extension_flag_2? 1+PES_extension_field_length:0; // 1+x bytes.
-        if (!stream->require(nb_required)) {
+        if (!stream->require(nb_required))
+        {
             ret = ERROR_STREAM_CASTER_TS_PSE;
             srs_error("ts: mux PSE ext payload failed. ret=%d", ret);
             return ret;
@@ -18104,7 +18720,8 @@ int SrsTsPayloadPES::encode(SrsStream* stream)
     }
 
     // stuffing_byte
-    if (nb_stuffings) {
+    if (nb_stuffings)
+    {
         stream->skip(nb_stuffings);
         srs_warn("ts: demux PES, ignore the stuffings.");
     }
@@ -18116,7 +18733,8 @@ int SrsTsPayloadPES::decode_33bits_dts_pts(SrsStream* stream, int64_t* pv)
 {
     int ret = ERROR_SUCCESS;
 
-    if (!stream->require(5)) {
+    if (!stream->require(5))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: demux PSE dts/pts failed. ret=%d", ret);
         return ret;
@@ -18128,14 +18746,16 @@ int SrsTsPayloadPES::decode_33bits_dts_pts(SrsStream* stream, int64_t* pv)
     // 3bits DTS/PTS [32..30]
     // 1bit const '1'
     int64_t dts_pts_30_32 = stream->read_1bytes();
-    if ((dts_pts_30_32 & 0x01) != 0x01) {
+    if ((dts_pts_30_32 & 0x01) != 0x01)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: demux PSE dts/pts 30-32 failed. ret=%d", ret);
         return ret;
     }
     // @remark, we donot check the high 4bits, maybe '0001', '0010' or '0011'.
     //      so we just ensure the high 4bits is not 0x00.
-    if (((dts_pts_30_32 >> 4) & 0x0f) == 0x00) {
+    if (((dts_pts_30_32 >> 4) & 0x0f) == 0x00)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: demux PSE dts/pts 30-32 failed. ret=%d", ret);
         return ret;
@@ -18146,7 +18766,8 @@ int SrsTsPayloadPES::decode_33bits_dts_pts(SrsStream* stream, int64_t* pv)
     // 15bits DTS/PTS [29..15]
     // 1bit const '1'
     int64_t dts_pts_15_29 = stream->read_2bytes();
-    if ((dts_pts_15_29 & 0x01) != 0x01) {
+    if ((dts_pts_15_29 & 0x01) != 0x01)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: demux PSE dts/pts 15-29 failed. ret=%d", ret);
         return ret;
@@ -18157,7 +18778,8 @@ int SrsTsPayloadPES::decode_33bits_dts_pts(SrsStream* stream, int64_t* pv)
     // 15bits DTS/PTS [14..0]
     // 1bit const '1'
     int64_t dts_pts_0_14 = stream->read_2bytes();
-    if ((dts_pts_0_14 & 0x01) != 0x01) {
+    if ((dts_pts_0_14 & 0x01) != 0x01)
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: demux PSE dts/pts 0-14 failed. ret=%d", ret);
         return ret;
@@ -18177,7 +18799,8 @@ int SrsTsPayloadPES::encode_33bits_dts_pts(SrsStream* stream, u_int8_t fb, int64
 {
     int ret = ERROR_SUCCESS;
 
-    if (!stream->require(5)) {
+    if (!stream->require(5))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSE;
         srs_error("ts: mux PSE dts/pts failed. ret=%d", ret);
         return ret;
@@ -18187,14 +18810,14 @@ int SrsTsPayloadPES::encode_33bits_dts_pts(SrsStream* stream, u_int8_t fb, int64
     stream->skip(5);
 
     int32_t val = 0;
-    
+
     val = fb << 4 | (((v >> 30) & 0x07) << 1) | 1;
     *p++ = val;
-    
+
     val = (((v >> 15) & 0x7fff) << 1) | 1;
     *p++ = (val >> 8);
     *p++ = val;
-    
+
     val = (((v) & 0x7fff) << 1) | 1;
     *p++ = (val >> 8);
     *p++ = val;
@@ -18226,8 +18849,10 @@ int SrsTsPayloadPSI::decode(SrsStream* stream, SrsTsMessage** /*ppmsg*/)
     * indicating that there is no pointer_field in the payload. Refer to 2.4.4.1 and 2.4.4.2. This also applies to private streams of
     * stream_type 5 (refer to Table 2-29).
     */
-    if (packet->payload_unit_start_indicator) {
-        if (!stream->require(1)) {
+    if (packet->payload_unit_start_indicator)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_STREAM_CASTER_TS_PSI;
             srs_error("ts: demux PSI failed. ret=%d", ret);
             return ret;
@@ -18240,41 +18865,46 @@ int SrsTsPayloadPSI::decode(SrsStream* stream, SrsTsMessage** /*ppmsg*/)
     int pat_pos = stream->pos();
 
     // atleast 3B for all psi.
-    if (!stream->require(3)) {
+    if (!stream->require(3))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSI;
         srs_error("ts: demux PSI failed. ret=%d", ret);
         return ret;
     }
     // 1B
     table_id = (SrsTsPsiId)stream->read_1bytes();
-    
+
     // 2B
     int16_t slv = stream->read_2bytes();
-    
+
     section_syntax_indicator = (slv >> 15) & 0x01;
     const0_value = (slv >> 14) & 0x01;
     const1_value = (slv >> 12) & 0x03;
     section_length = slv & 0x0FFF;
 
     // no section, ignore.
-    if (section_length == 0) {
+    if (section_length == 0)
+    {
         srs_warn("ts: demux PAT ignore empty section");
         return ret;
     }
 
-    if (!stream->require(section_length)) {
+    if (!stream->require(section_length))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSI;
         srs_error("ts: demux PAT section failed. ret=%d", ret);
         return ret;
     }
 
     // call the virtual method of actual PSI.
-    if ((ret = psi_decode(stream)) != ERROR_SUCCESS) {
+    if ((ret = psi_decode(stream)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // 4B
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSI;
         srs_error("ts: demux PSI crc32 failed. ret=%d", ret);
         return ret;
@@ -18283,21 +18913,25 @@ int SrsTsPayloadPSI::decode(SrsStream* stream, SrsTsMessage** /*ppmsg*/)
 
     // verify crc32.
     int32_t crc32 = srs_crc32(ppat, stream->pos() - pat_pos - 4);
-    if (crc32 != CRC_32) {
+    if (crc32 != CRC_32)
+    {
         ret = ERROR_STREAM_CASTER_TS_CRC32;
         srs_error("ts: verify PSI crc32 failed. ret=%d", ret);
         return ret;
     }
 
     // consume left stuffings
-    if (!stream->empty()) {
+    if (!stream->empty())
+    {
         int nb_stuffings = stream->size() - stream->pos();
         char* stuffing = stream->data() + stream->pos();
 
         // all stuffing must be 0xff.
         // TODO: FIXME: maybe need to remove the following.
-        for (int i = 0; i < nb_stuffings; i++) {
-            if ((u_int8_t)stuffing[i] != 0xff) {
+        for (int i = 0; i < nb_stuffings; i++)
+        {
+            if ((u_int8_t)stuffing[i] != 0xff)
+            {
                 srs_warn("ts: stuff is not 0xff, actual=%#x", stuffing[i]);
                 break;
             }
@@ -18316,9 +18950,9 @@ int SrsTsPayloadPSI::size()
     // section size is the sl plus the crc32
     section_length = psi_size() + 4;
 
-     sz += packet->payload_unit_start_indicator? 1:0;
-     sz += 3;
-     sz += section_length;
+    sz += packet->payload_unit_start_indicator? 1:0;
+    sz += 3;
+    sz += section_length;
 
     return sz;
 }
@@ -18327,8 +18961,10 @@ int SrsTsPayloadPSI::encode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if (packet->payload_unit_start_indicator) {
-        if (!stream->require(1)) {
+    if (packet->payload_unit_start_indicator)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_STREAM_CASTER_TS_PSI;
             srs_error("ts: mux PSI failed. ret=%d", ret);
             return ret;
@@ -18341,14 +18977,15 @@ int SrsTsPayloadPSI::encode(SrsStream* stream)
     int pat_pos = stream->pos();
 
     // atleast 3B for all psi.
-    if (!stream->require(3)) {
+    if (!stream->require(3))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSI;
         srs_error("ts: mux PSI failed. ret=%d", ret);
         return ret;
     }
     // 1B
     stream->write_1bytes(table_id);
-    
+
     // 2B
     int16_t slv = section_length & 0x0FFF;
     slv |= (section_syntax_indicator << 15) & 0x8000;
@@ -18357,24 +18994,28 @@ int SrsTsPayloadPSI::encode(SrsStream* stream)
     stream->write_2bytes(slv);
 
     // no section, ignore.
-    if (section_length == 0) {
+    if (section_length == 0)
+    {
         srs_warn("ts: mux PAT ignore empty section");
         return ret;
     }
 
-    if (!stream->require(section_length)) {
+    if (!stream->require(section_length))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSI;
         srs_error("ts: mux PAT section failed. ret=%d", ret);
         return ret;
     }
 
     // call the virtual method of actual PSI.
-    if ((ret = psi_encode(stream)) != ERROR_SUCCESS) {
+    if ((ret = psi_encode(stream)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // 4B
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_STREAM_CASTER_TS_PSI;
         srs_error("ts: mux PSI crc32 failed. ret=%d", ret);
         return ret;
@@ -18401,7 +19042,8 @@ int SrsTsPayloadPATProgram::decode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 4B for PAT program specified
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_STREAM_CASTER_TS_PAT;
         srs_error("ts: demux PAT failed. ret=%d", ret);
         return ret;
@@ -18425,7 +19067,8 @@ int SrsTsPayloadPATProgram::encode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 4B for PAT program specified
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_STREAM_CASTER_TS_PAT;
         srs_error("ts: mux PAT failed. ret=%d", ret);
         return ret;
@@ -18447,7 +19090,8 @@ SrsTsPayloadPAT::SrsTsPayloadPAT(SrsTsPacket* p) : SrsTsPayloadPSI(p)
 SrsTsPayloadPAT::~SrsTsPayloadPAT()
 {
     std::vector<SrsTsPayloadPATProgram*>::iterator it;
-    for (it = programs.begin(); it != programs.end(); ++it) {
+    for (it = programs.begin(); it != programs.end(); ++it)
+    {
         SrsTsPayloadPATProgram* program = *it;
         srs_freep(program);
     }
@@ -18459,7 +19103,8 @@ int SrsTsPayloadPAT::psi_decode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 5B for PAT specified
-    if (!stream->require(5)) {
+    if (!stream->require(5))
+    {
         ret = ERROR_STREAM_CASTER_TS_PAT;
         srs_error("ts: demux PAT failed. ret=%d", ret);
         return ret;
@@ -18469,16 +19114,16 @@ int SrsTsPayloadPAT::psi_decode(SrsStream* stream)
 
     // 2B
     transport_stream_id = stream->read_2bytes();
-    
+
     // 1B
     int8_t cniv = stream->read_1bytes();
-    
+
     const3_value = (cniv >> 6) & 0x03;
     version_number = (cniv >> 1) & 0x1F;
     current_next_indicator = cniv & 0x01;
 
     // TODO: FIXME: check the indicator.
-    
+
     // 1B
     section_number = stream->read_1bytes();
     // 1B
@@ -18486,10 +19131,12 @@ int SrsTsPayloadPAT::psi_decode(SrsStream* stream)
 
     // multiple 4B program data.
     int program_bytes = section_length - 4 - (stream->pos() - pos);
-    for (int i = 0; i < program_bytes; i += 4) {
+    for (int i = 0; i < program_bytes; i += 4)
+    {
         SrsTsPayloadPATProgram* program = new SrsTsPayloadPATProgram();
 
-        if ((ret = program->decode(stream)) != ERROR_SUCCESS) {
+        if ((ret = program->decode(stream)) != ERROR_SUCCESS)
+        {
             return ret;
         }
 
@@ -18509,7 +19156,8 @@ int SrsTsPayloadPAT::psi_decode(SrsStream* stream)
 int SrsTsPayloadPAT::psi_size()
 {
     int sz = 5;
-    for (int i = 0; i < (int)programs.size(); i ++) {
+    for (int i = 0; i < (int)programs.size(); i ++)
+    {
         SrsTsPayloadPATProgram* program = programs.at(i);
         sz += program->size();
     }
@@ -18521,7 +19169,8 @@ int SrsTsPayloadPAT::psi_encode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 5B for PAT specified
-    if (!stream->require(5)) {
+    if (!stream->require(5))
+    {
         ret = ERROR_STREAM_CASTER_TS_PAT;
         srs_error("ts: mux PAT failed. ret=%d", ret);
         return ret;
@@ -18529,22 +19178,24 @@ int SrsTsPayloadPAT::psi_encode(SrsStream* stream)
 
     // 2B
     stream->write_2bytes(transport_stream_id);
-    
+
     // 1B
     int8_t cniv = current_next_indicator & 0x01;
     cniv |= (version_number << 1) & 0x3E;
     cniv |= (const1_value << 6) & 0xC0;
     stream->write_1bytes(cniv);
-    
+
     // 1B
     stream->write_1bytes(section_number);
     // 1B
     stream->write_1bytes(last_section_number);
 
     // multiple 4B program data.
-    for (int i = 0; i < (int)programs.size(); i ++) {
+    for (int i = 0; i < (int)programs.size(); i ++)
+    {
         SrsTsPayloadPATProgram* program = programs.at(i);
-        if ((ret = program->encode(stream)) != ERROR_SUCCESS) {
+        if ((ret = program->encode(stream)) != ERROR_SUCCESS)
+        {
             return ret;
         }
 
@@ -18579,7 +19230,8 @@ int SrsTsPayloadPMTESInfo::decode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // 5B
-    if (!stream->require(5)) {
+    if (!stream->require(5))
+    {
         ret = ERROR_STREAM_CASTER_TS_PMT;
         srs_error("ts: demux PMT es info failed. ret=%d", ret);
         return ret;
@@ -18590,13 +19242,15 @@ int SrsTsPayloadPMTESInfo::decode(SrsStream* stream)
     int16_t epv = stream->read_2bytes();
     const1_value0 = (epv >> 13) & 0x07;
     elementary_PID = epv & 0x1FFF;
-    
+
     int16_t eilv = stream->read_2bytes();
     const1_value1 = (epv >> 12) & 0x0f;
     ES_info_length = eilv & 0x0FFF;
 
-    if (ES_info_length > 0) {
-        if (!stream->require(ES_info_length)) {
+    if (ES_info_length > 0)
+    {
+        if (!stream->require(ES_info_length))
+        {
             ret = ERROR_STREAM_CASTER_TS_PMT;
             srs_error("ts: demux PMT es info data failed. ret=%d", ret);
             return ret;
@@ -18619,7 +19273,8 @@ int SrsTsPayloadPMTESInfo::encode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // 5B
-    if (!stream->require(5)) {
+    if (!stream->require(5))
+    {
         ret = ERROR_STREAM_CASTER_TS_PMT;
         srs_error("ts: mux PMT es info failed. ret=%d", ret);
         return ret;
@@ -18630,13 +19285,15 @@ int SrsTsPayloadPMTESInfo::encode(SrsStream* stream)
     int16_t epv = elementary_PID & 0x1FFF;
     epv |= (const1_value0 << 13) & 0xE000;
     stream->write_2bytes(epv);
-    
+
     int16_t eilv = ES_info_length & 0x0FFF;
     eilv |= (const1_value1 << 12) & 0xF000;
     stream->write_2bytes(eilv);
 
-    if (ES_info_length > 0) {
-        if (!stream->require(ES_info_length)) {
+    if (ES_info_length > 0)
+    {
+        if (!stream->require(ES_info_length))
+        {
             ret = ERROR_STREAM_CASTER_TS_PMT;
             srs_error("ts: mux PMT es info data failed. ret=%d", ret);
             return ret;
@@ -18661,7 +19318,8 @@ SrsTsPayloadPMT::~SrsTsPayloadPMT()
     srs_freep(program_info_desc);
 
     std::vector<SrsTsPayloadPMTESInfo*>::iterator it;
-    for (it = infos.begin(); it != infos.end(); ++it) {
+    for (it = infos.begin(); it != infos.end(); ++it)
+    {
         SrsTsPayloadPMTESInfo* info = *it;
         srs_freep(info);
     }
@@ -18673,7 +19331,8 @@ int SrsTsPayloadPMT::psi_decode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 9B for PMT specified
-    if (!stream->require(9)) {
+    if (!stream->require(9))
+    {
         ret = ERROR_STREAM_CASTER_TS_PMT;
         srs_error("ts: demux PMT failed. ret=%d", ret);
         return ret;
@@ -18681,17 +19340,17 @@ int SrsTsPayloadPMT::psi_decode(SrsStream* stream)
 
     // 2B
     program_number = stream->read_2bytes();
-    
+
     // 1B
     int8_t cniv = stream->read_1bytes();
-    
+
     const1_value0 = (cniv >> 6) & 0x03;
     version_number = (cniv >> 1) & 0x1F;
     current_next_indicator = cniv & 0x01;
-    
+
     // 1B
     section_number = stream->read_1bytes();
-    
+
     // 1B
     last_section_number = stream->read_1bytes();
 
@@ -18699,14 +19358,16 @@ int SrsTsPayloadPMT::psi_decode(SrsStream* stream)
     int16_t ppv = stream->read_2bytes();
     const1_value1 = (ppv >> 13) & 0x07;
     PCR_PID = ppv & 0x1FFF;
-    
+
     // 2B
     int16_t pilv = stream->read_2bytes();
     const1_value2 = (pilv >> 12) & 0x0F;
     program_info_length = pilv & 0xFFF;
 
-    if (program_info_length > 0) {
-        if (!stream->require(program_info_length)) {
+    if (program_info_length > 0)
+    {
+        if (!stream->require(program_info_length))
+        {
             ret = ERROR_STREAM_CASTER_TS_PMT;
             srs_error("ts: demux PMT program info failed. ret=%d", ret);
             return ret;
@@ -18719,29 +19380,32 @@ int SrsTsPayloadPMT::psi_decode(SrsStream* stream)
 
     // [section_length] - 4(CRC) - 9B - [program_info_length]
     int ES_EOF_pos = stream->pos() + section_length - 4 - 9 - program_info_length;
-    while (stream->pos() < ES_EOF_pos) {
+    while (stream->pos() < ES_EOF_pos)
+    {
         SrsTsPayloadPMTESInfo* info = new SrsTsPayloadPMTESInfo();
         infos.push_back(info);
 
-        if ((ret = info->decode(stream)) != ERROR_SUCCESS) {
+        if ((ret = info->decode(stream)) != ERROR_SUCCESS)
+        {
             return ret;
         }
 
         // update the apply pid table
-        switch (info->stream_type) {
-            case SrsTsStreamVideoH264:
-            case SrsTsStreamVideoMpeg4:
-                packet->context->set(info->elementary_PID, SrsTsPidApplyVideo, info->stream_type);
-                break;
-            case SrsTsStreamAudioAAC:
-            case SrsTsStreamAudioAC3:
-            case SrsTsStreamAudioDTS:
-            case SrsTsStreamAudioMp3:
-                packet->context->set(info->elementary_PID, SrsTsPidApplyAudio, info->stream_type);
-                break;
-            default:
-                srs_warn("ts: drop pid=%#x, stream=%#x", info->elementary_PID, info->stream_type);
-                break;
+        switch (info->stream_type)
+        {
+        case SrsTsStreamVideoH264:
+        case SrsTsStreamVideoMpeg4:
+            packet->context->set(info->elementary_PID, SrsTsPidApplyVideo, info->stream_type);
+            break;
+        case SrsTsStreamAudioAAC:
+        case SrsTsStreamAudioAC3:
+        case SrsTsStreamAudioDTS:
+        case SrsTsStreamAudioMp3:
+            packet->context->set(info->elementary_PID, SrsTsPidApplyAudio, info->stream_type);
+            break;
+        default:
+            srs_warn("ts: drop pid=%#x, stream=%#x", info->elementary_PID, info->stream_type);
+            break;
         }
     }
 
@@ -18755,7 +19419,8 @@ int SrsTsPayloadPMT::psi_size()
 {
     int sz = 9;
     sz += program_info_length;
-    for (int i = 0; i < (int)infos.size(); i ++) {
+    for (int i = 0; i < (int)infos.size(); i ++)
+    {
         SrsTsPayloadPMTESInfo* info = infos.at(i);
         sz += info->size();
     }
@@ -18767,7 +19432,8 @@ int SrsTsPayloadPMT::psi_encode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 9B for PMT specified
-    if (!stream->require(9)) {
+    if (!stream->require(9))
+    {
         ret = ERROR_STREAM_CASTER_TS_PMT;
         srs_error("ts: mux PMT failed. ret=%d", ret);
         return ret;
@@ -18775,16 +19441,16 @@ int SrsTsPayloadPMT::psi_encode(SrsStream* stream)
 
     // 2B
     stream->write_2bytes(program_number);
-    
+
     // 1B
     int8_t cniv = current_next_indicator & 0x01;
     cniv |= (const1_value0 << 6) & 0xC0;
     cniv |= (version_number << 1) & 0xFE;
     stream->write_1bytes(cniv);
-    
+
     // 1B
     stream->write_1bytes(section_number);
-    
+
     // 1B
     stream->write_1bytes(last_section_number);
 
@@ -18792,14 +19458,16 @@ int SrsTsPayloadPMT::psi_encode(SrsStream* stream)
     int16_t ppv = PCR_PID & 0x1FFF;
     ppv |= (const1_value1 << 13) & 0xE000;
     stream->write_2bytes(ppv);
-    
+
     // 2B
     int16_t pilv = program_info_length & 0xFFF;
     pilv |= (const1_value2 << 12) & 0xF000;
     stream->write_2bytes(pilv);
 
-    if (program_info_length > 0) {
-        if (!stream->require(program_info_length)) {
+    if (program_info_length > 0)
+    {
+        if (!stream->require(program_info_length))
+        {
             ret = ERROR_STREAM_CASTER_TS_PMT;
             srs_error("ts: mux PMT program info failed. ret=%d", ret);
             return ret;
@@ -18808,27 +19476,30 @@ int SrsTsPayloadPMT::psi_encode(SrsStream* stream)
         stream->write_bytes(program_info_desc, program_info_length);
     }
 
-    for (int i = 0; i < (int)infos.size(); i ++) {
+    for (int i = 0; i < (int)infos.size(); i ++)
+    {
         SrsTsPayloadPMTESInfo* info = infos.at(i);
-        if ((ret = info->encode(stream)) != ERROR_SUCCESS) {
+        if ((ret = info->encode(stream)) != ERROR_SUCCESS)
+        {
             return ret;
         }
 
         // update the apply pid table
-        switch (info->stream_type) {
-            case SrsTsStreamVideoH264:
-            case SrsTsStreamVideoMpeg4:
-                packet->context->set(info->elementary_PID, SrsTsPidApplyVideo, info->stream_type);
-                break;
-            case SrsTsStreamAudioAAC:
-            case SrsTsStreamAudioAC3:
-            case SrsTsStreamAudioDTS:
-            case SrsTsStreamAudioMp3:
-                packet->context->set(info->elementary_PID, SrsTsPidApplyAudio, info->stream_type);
-                break;
-            default:
-                srs_warn("ts: drop pid=%#x, stream=%#x", info->elementary_PID, info->stream_type);
-                break;
+        switch (info->stream_type)
+        {
+        case SrsTsStreamVideoH264:
+        case SrsTsStreamVideoMpeg4:
+            packet->context->set(info->elementary_PID, SrsTsPidApplyVideo, info->stream_type);
+            break;
+        case SrsTsStreamAudioAAC:
+        case SrsTsStreamAudioAC3:
+        case SrsTsStreamAudioDTS:
+        case SrsTsStreamAudioMp3:
+            packet->context->set(info->elementary_PID, SrsTsPidApplyAudio, info->stream_type);
+            break;
+        default:
+            srs_warn("ts: drop pid=%#x, stream=%#x", info->elementary_PID, info->stream_type);
+            break;
         }
     }
 
@@ -18855,18 +19526,19 @@ SrsTSMuxer::~SrsTSMuxer()
 int SrsTSMuxer::open(string p)
 {
     int ret = ERROR_SUCCESS;
-    
+
     path = p;
-    
+
     close();
-    
+
     // reset the context for a new ts start.
     context->reset();
-    
-    if ((ret = writer->open(path)) != ERROR_SUCCESS) {
+
+    if ((ret = writer->open(path)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -18880,15 +19552,16 @@ int SrsTSMuxer::write_audio(SrsTsMessage* audio)
 {
     int ret = ERROR_SUCCESS;
 
-    srs_info("hls: write audio pts=%"PRId64", dts=%"PRId64", size=%d", 
-        audio->pts, audio->dts, audio->PES_packet_length);
-    
-    if ((ret = context->encode(writer, audio, vcodec, acodec)) != ERROR_SUCCESS) {
+    srs_info("hls: write audio pts=%"PRId64", dts=%"PRId64", size=%d",
+             audio->pts, audio->dts, audio->PES_packet_length);
+
+    if ((ret = context->encode(writer, audio, vcodec, acodec)) != ERROR_SUCCESS)
+    {
         srs_error("hls encode audio failed. ret=%d", ret);
         return ret;
     }
     srs_info("hls encode audio ok");
-    
+
     return ret;
 }
 
@@ -18896,15 +19569,16 @@ int SrsTSMuxer::write_video(SrsTsMessage* video)
 {
     int ret = ERROR_SUCCESS;
 
-    srs_info("hls: write video pts=%"PRId64", dts=%"PRId64", size=%d", 
-        video->pts, video->dts, video->PES_packet_length);
-    
-    if ((ret = context->encode(writer, video, vcodec, acodec)) != ERROR_SUCCESS) {
+    srs_info("hls: write video pts=%"PRId64", dts=%"PRId64", size=%d",
+             video->pts, video->dts, video->PES_packet_length);
+
+    if ((ret = context->encode(writer, video, vcodec, acodec)) != ERROR_SUCCESS)
+    {
         srs_error("hls encode video failed. ret=%d", ret);
         return ret;
     }
     srs_info("hls encode video ok");
-    
+
     return ret;
 }
 
@@ -18924,13 +19598,14 @@ SrsTsCache::~SrsTsCache()
     srs_freep(audio);
     srs_freep(video);
 }
-    
+
 int SrsTsCache::cache_audio(SrsAvcAacCodec* codec, int64_t dts, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
 
     // create the ts audio message.
-    if (!audio) {
+    if (!audio)
+    {
         audio = new SrsTsMessage();
         audio->write_pcr = false;
         audio->start_pts = dts;
@@ -18939,31 +19614,37 @@ int SrsTsCache::cache_audio(SrsAvcAacCodec* codec, int64_t dts, SrsCodecSample* 
     audio->dts = dts;
     audio->pts = audio->dts;
     audio->sid = SrsTsPESStreamIdAudioCommon;
-    
+
     // must be aac or mp3
     SrsCodecAudio acodec = (SrsCodecAudio)codec->audio_codec_id;
     srs_assert(acodec == SrsCodecAudioAAC || acodec == SrsCodecAudioMP3);
-    
+
     // write video to cache.
-    if (codec->audio_codec_id == SrsCodecAudioAAC) {
-        if ((ret = do_cache_aac(codec, sample)) != ERROR_SUCCESS) {
-            return ret;
-        }
-    } else {
-        if ((ret = do_cache_mp3(codec, sample)) != ERROR_SUCCESS) {
+    if (codec->audio_codec_id == SrsCodecAudioAAC)
+    {
+        if ((ret = do_cache_aac(codec, sample)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+    else
+    {
+        if ((ret = do_cache_mp3(codec, sample)) != ERROR_SUCCESS)
+        {
+            return ret;
+        }
+    }
+
     return ret;
 }
-    
+
 int SrsTsCache::cache_video(SrsAvcAacCodec* codec, int64_t dts, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // create the ts video message.
-    if (!video) {
+    if (!video)
+    {
         video = new SrsTsMessage();
         video->write_pcr = sample->frame_type == SrsCodecVideoAVCFrameKeyFrame;
         video->start_pts = dts;
@@ -18972,9 +19653,10 @@ int SrsTsCache::cache_video(SrsAvcAacCodec* codec, int64_t dts, SrsCodecSample* 
     video->dts = dts;
     video->pts = video->dts + sample->cts * 90;
     video->sid = SrsTsPESStreamIdVideoCommon;
-    
+
     // write video to cache.
-    if ((ret = do_cache_avc(codec, sample)) != ERROR_SUCCESS) {
+    if ((ret = do_cache_avc(codec, sample)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
@@ -18984,34 +19666,37 @@ int SrsTsCache::cache_video(SrsAvcAacCodec* codec, int64_t dts, SrsCodecSample* 
 int SrsTsCache::do_cache_mp3(SrsAvcAacCodec* codec, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-        
+
     // for mp3, directly write to cache.
     // TODO: FIXME: implements the ts jitter.
-    for (int i = 0; i < sample->nb_sample_units; i++) {
+    for (int i = 0; i < sample->nb_sample_units; i++)
+    {
         SrsCodecSampleUnit* sample_unit = &sample->sample_units[i];
         audio->payload->append(sample_unit->bytes, sample_unit->size);
     }
-    
+
     return ret;
 }
 
 int SrsTsCache::do_cache_aac(SrsAvcAacCodec* codec, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
-    for (int i = 0; i < sample->nb_sample_units; i++) {
+
+    for (int i = 0; i < sample->nb_sample_units; i++)
+    {
         SrsCodecSampleUnit* sample_unit = &sample->sample_units[i];
         int32_t size = sample_unit->size;
-        
-        if (!sample_unit->bytes || size <= 0 || size > 0x1fff) {
+
+        if (!sample_unit->bytes || size <= 0 || size > 0x1fff)
+        {
             ret = ERROR_HLS_AAC_FRAME_LENGTH;
             srs_error("invalid aac frame length=%d, ret=%d", size, ret);
             return ret;
         }
-        
+
         // the frame length is the AAC raw data plus the adts header size.
         int32_t frame_length = size + 7;
-        
+
         // AAC-ADTS
         // 6.2 Audio Data Transport Stream, ADTS
         // in aac-iso-13818-7.pdf, page 26.
@@ -19031,7 +19716,7 @@ int SrsTsCache::do_cache_aac(SrsAvcAacCodec* codec, SrsCodecSample* sample)
         int8_t channel_configuration; //3bits, Table 8
         int8_t original_or_copy; //1bit, can be '0'
         int8_t home; //1bit, can be '0'
-        
+
         // adts_variable_header
         // 28bits
         int8_t copyright_identification_bit; //1bit, can be '0'
@@ -19059,14 +19744,14 @@ int SrsTsCache::do_cache_aac(SrsAvcAacCodec* codec, SrsCodecSample* sample)
         audio->payload->append((const char*)adts_header, sizeof(adts_header));
         audio->payload->append(sample_unit->bytes, sample_unit->size);
     }
-    
+
     return ret;
 }
 
 int SrsTsCache::do_cache_avc(SrsAvcAacCodec* codec, SrsCodecSample* sample)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // mux the samples in annexb format,
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 324.
     /**
@@ -19111,7 +19796,7 @@ int SrsTsCache::do_cache_avc(SrsAvcAacCodec* codec, SrsCodecSample* sample)
      */
     static u_int8_t fresh_nalu_header[] = { 0x00, 0x00, 0x00, 0x01 };
     static u_int8_t cont_nalu_header[] = { 0x00, 0x00, 0x01 };
-    
+
     // the aud(access unit delimiter) before each frame.
     // 7.3.2.4 Access unit delimiter RBSP syntax
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 66.
@@ -19143,61 +19828,67 @@ int SrsTsCache::do_cache_avc(SrsAvcAacCodec* codec, SrsCodecSample* sample)
     //      9, SI (SI slice)
     // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 105.
     static u_int8_t aud_nalu_7[] = { 0x09, 0xf0};
-    
+
     // always append a aud nalu for each frame.
     video->payload->append((const char*)fresh_nalu_header, 4);
     video->payload->append((const char*)aud_nalu_7, 2);
-    
+
     // when ts message(samples) contains IDR, insert sps+pps.
-    if (sample->has_idr) {
+    if (sample->has_idr)
+    {
         // fresh nalu header before sps.
-        if (codec->sequenceParameterSetLength > 0) {
+        if (codec->sequenceParameterSetLength > 0)
+        {
             // AnnexB prefix, for sps always 4 bytes header
             video->payload->append((const char*)fresh_nalu_header, 4);
             // sps
             video->payload->append(codec->sequenceParameterSetNALUnit, codec->sequenceParameterSetLength);
         }
         // cont nalu header before pps.
-        if (codec->pictureParameterSetLength > 0) {
+        if (codec->pictureParameterSetLength > 0)
+        {
             // AnnexB prefix, for pps always 3 bytes header
             video->payload->append((const char*)cont_nalu_header, 3);
             // pps
             video->payload->append(codec->pictureParameterSetNALUnit, codec->pictureParameterSetLength);
         }
     }
-    
+
     // all sample use cont nalu header, except the sps-pps before IDR frame.
-    for (int i = 0; i < sample->nb_sample_units; i++) {
+    for (int i = 0; i < sample->nb_sample_units; i++)
+    {
         SrsCodecSampleUnit* sample_unit = &sample->sample_units[i];
         int32_t size = sample_unit->size;
-        
-        if (!sample_unit->bytes || size <= 0) {
+
+        if (!sample_unit->bytes || size <= 0)
+        {
             ret = ERROR_HLS_AVC_SAMPLE_SIZE;
             srs_error("invalid avc sample length=%d, ret=%d", size, ret);
             return ret;
         }
-        
+
         // 5bits, 7.3.1 NAL unit syntax,
         // H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 83.
         SrsAvcNaluType nal_unit_type = (SrsAvcNaluType)(sample_unit->bytes[0] & 0x1f);
-        
+
         // ignore SPS/PPS/AUD
-        switch (nal_unit_type) {
-            case SrsAvcNaluTypeSPS:
-            case SrsAvcNaluTypePPS:
-            case SrsAvcNaluTypeAccessUnitDelimiter:
-                continue;
-            default:
-                break;
+        switch (nal_unit_type)
+        {
+        case SrsAvcNaluTypeSPS:
+        case SrsAvcNaluTypePPS:
+        case SrsAvcNaluTypeAccessUnitDelimiter:
+            continue;
+        default:
+            break;
         }
-        
+
         // insert cont nalu header before frame.
         video->payload->append((const char*)cont_nalu_header, 3);
-        
+
         // sample data
         video->payload->append(sample_unit->bytes, sample_unit->size);
     }
-    
+
     return ret;
 }
 
@@ -19223,57 +19914,65 @@ SrsTsEncoder::~SrsTsEncoder()
 int SrsTsEncoder::initialize(SrsFileWriter* fw)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(fw);
-    
-    if (!fw->is_open()) {
+
+    if (!fw->is_open())
+    {
         ret = ERROR_KERNEL_FLV_STREAM_CLOSED;
         srs_warn("stream is not open for encoder. ret=%d", ret);
         return ret;
     }
-    
+
     writer = fw;
 
     srs_freep(muxer);
     muxer = new SrsTSMuxer(fw, context, SrsCodecAudioAAC, SrsCodecVideoAVC);
 
-    if ((ret = muxer->open("")) != ERROR_SUCCESS) {
+    if ((ret = muxer->open("")) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsTsEncoder::write_audio(int64_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     sample->clear();
-    if ((ret = codec->audio_aac_demux(data, size, sample)) != ERROR_SUCCESS) {
-        if (ret != ERROR_HLS_TRY_MP3) {
+    if ((ret = codec->audio_aac_demux(data, size, sample)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_HLS_TRY_MP3)
+        {
             srs_error("http: ts aac demux audio failed. ret=%d", ret);
             return ret;
         }
-        if ((ret = codec->audio_mp3_demux(data, size, sample)) != ERROR_SUCCESS) {
+        if ((ret = codec->audio_mp3_demux(data, size, sample)) != ERROR_SUCCESS)
+        {
             srs_error("http: ts mp3 demux audio failed. ret=%d", ret);
             return ret;
         }
     }
     SrsCodecAudio acodec = (SrsCodecAudio)codec->audio_codec_id;
-    
+
     // ts support audio codec: aac/mp3
-    if (acodec != SrsCodecAudioAAC && acodec != SrsCodecAudioMP3) {
+    if (acodec != SrsCodecAudioAAC && acodec != SrsCodecAudioMP3)
+    {
         return ret;
     }
 
     // when codec changed, write new header.
-    if ((ret = muxer->update_acodec(acodec)) != ERROR_SUCCESS) {
+    if ((ret = muxer->update_acodec(acodec)) != ERROR_SUCCESS)
+    {
         srs_error("http: ts audio write header failed. ret=%d", ret);
         return ret;
     }
-    
+
     // for aac: ignore sequence header
-    if (acodec == SrsCodecAudioAAC && sample->aac_packet_type == SrsCodecAudioTypeSequenceHeader) {
+    if (acodec == SrsCodecAudioAAC && sample->aac_packet_type == SrsCodecAudioTypeSequenceHeader)
+    {
         return ret;
     }
 
@@ -19281,14 +19980,16 @@ int SrsTsEncoder::write_audio(int64_t timestamp, char* data, int size)
     // @remark for http ts stream, the timestamp is always monotonically increase,
     //      for the packet is filtered by consumer.
     int64_t dts = timestamp * 90;
-    
+
     // write audio to cache.
-    if ((ret = cache->cache_audio(codec, dts, sample)) != ERROR_SUCCESS) {
+    if ((ret = cache->cache_audio(codec, dts, sample)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // flush if buffer exceed max size.
-    if (cache->audio->payload->length() > SRS_AUTO_HLS_AUDIO_CACHE_SIZE) {
+    if (cache->audio->payload->length() > SRS_AUTO_HLS_AUDIO_CACHE_SIZE)
+    {
         return flush_video();
     }
 
@@ -19296,7 +19997,8 @@ int SrsTsEncoder::write_audio(int64_t timestamp, char* data, int size)
     // in ms, audio delay to flush the audios.
     int64_t audio_delay = SRS_CONF_DEFAULT_AAC_DELAY;
     // flush if audio delay exceed
-    if (dts - cache->audio->start_pts > audio_delay * 90) {
+    if (dts - cache->audio->start_pts > audio_delay * 90)
+    {
         return flush_audio();
     }
 
@@ -19306,33 +20008,38 @@ int SrsTsEncoder::write_audio(int64_t timestamp, char* data, int size)
 int SrsTsEncoder::write_video(int64_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     sample->clear();
-    if ((ret = codec->video_avc_demux(data, size, sample)) != ERROR_SUCCESS) {
+    if ((ret = codec->video_avc_demux(data, size, sample)) != ERROR_SUCCESS)
+    {
         srs_error("http: ts codec demux video failed. ret=%d", ret);
         return ret;
     }
-    
+
     // ignore info frame,
     // @see https://github.com/simple-rtmp-server/srs/issues/288#issuecomment-69863909
-    if (sample->frame_type == SrsCodecVideoAVCFrameVideoInfoFrame) {
+    if (sample->frame_type == SrsCodecVideoAVCFrameVideoInfoFrame)
+    {
         return ret;
     }
-    
-    if (codec->video_codec_id != SrsCodecVideoAVC) {
+
+    if (codec->video_codec_id != SrsCodecVideoAVC)
+    {
         return ret;
     }
-    
+
     // ignore sequence header
     if (sample->frame_type == SrsCodecVideoAVCFrameKeyFrame
-         && sample->avc_packet_type == SrsCodecVideoAVCTypeSequenceHeader) {
+            && sample->avc_packet_type == SrsCodecVideoAVCTypeSequenceHeader)
+    {
         return ret;
     }
-    
+
     int64_t dts = timestamp * 90;
-    
+
     // write video to cache.
-    if ((ret = cache->cache_video(codec, dts, sample)) != ERROR_SUCCESS) {
+    if ((ret = cache->cache_video(codec, dts, sample)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
@@ -19343,10 +20050,11 @@ int SrsTsEncoder::flush_audio()
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = muxer->write_audio(cache->audio)) != ERROR_SUCCESS) {
+    if ((ret = muxer->write_audio(cache->audio)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // write success, clear and free the ts message.
     srs_freep(cache->audio);
 
@@ -19356,11 +20064,12 @@ int SrsTsEncoder::flush_audio()
 int SrsTsEncoder::flush_video()
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = muxer->write_video(cache->video)) != ERROR_SUCCESS) {
+
+    if ((ret = muxer->write_video(cache->video)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // write success, clear and free the ts message.
     srs_freep(cache->video);
 
@@ -19421,15 +20130,17 @@ char* SrsSimpleBuffer::bytes()
 
 void SrsSimpleBuffer::erase(int size)
 {
-    if (size <= 0) {
+    if (size <= 0)
+    {
         return;
     }
-    
-    if (size >= length()) {
+
+    if (size >= length())
+    {
         data.clear();
         return;
     }
-    
+
     data.erase(data.begin(), data.begin() + size);
 }
 
@@ -19638,60 +20349,90 @@ bool SrsAmf0Any::is_object_eof()
 
 void srs_fill_level_spaces(stringstream& ss, int level)
 {
-    for (int i = 0; i < level; i++) {
+    for (int i = 0; i < level; i++)
+    {
         ss << "    ";
     }
 }
 void srs_amf0_do_print(SrsAmf0Any* any, stringstream& ss, int level)
 {
-    if (any->is_boolean()) {
+    if (any->is_boolean())
+    {
         ss << "Boolean " << (any->to_boolean()? "true":"false") << endl;
-    } else if (any->is_number()) {
+    }
+    else if (any->is_number())
+    {
         ss << "Number " << std::fixed << any->to_number() << endl;
-    } else if (any->is_string()) {
+    }
+    else if (any->is_string())
+    {
         ss << "String " << any->to_str() << endl;
-    } else if (any->is_date()) {
-        ss << "Date " << std::hex << any->to_date() 
-            << "/" << std::hex << any->to_date_time_zone() << endl;
-    } else if (any->is_null()) {
+    }
+    else if (any->is_date())
+    {
+        ss << "Date " << std::hex << any->to_date()
+           << "/" << std::hex << any->to_date_time_zone() << endl;
+    }
+    else if (any->is_null())
+    {
         ss << "Null" << endl;
-    } else if (any->is_ecma_array()) {
+    }
+    else if (any->is_ecma_array())
+    {
         SrsAmf0EcmaArray* obj = any->to_ecma_array();
         ss << "EcmaArray " << "(" << obj->count() << " items)" << endl;
-        for (int i = 0; i < obj->count(); i++) {
+        for (int i = 0; i < obj->count(); i++)
+        {
             srs_fill_level_spaces(ss, level + 1);
             ss << "Elem '" << obj->key_at(i) << "' ";
-            if (obj->value_at(i)->is_complex_object()) {
+            if (obj->value_at(i)->is_complex_object())
+            {
                 srs_amf0_do_print(obj->value_at(i), ss, level + 1);
-            } else {
+            }
+            else
+            {
                 srs_amf0_do_print(obj->value_at(i), ss, 0);
             }
         }
-    } else if (any->is_strict_array()) {
+    }
+    else if (any->is_strict_array())
+    {
         SrsAmf0StrictArray* obj = any->to_strict_array();
         ss << "StrictArray " << "(" << obj->count() << " items)" << endl;
-        for (int i = 0; i < obj->count(); i++) {
+        for (int i = 0; i < obj->count(); i++)
+        {
             srs_fill_level_spaces(ss, level + 1);
             ss << "Elem ";
-            if (obj->at(i)->is_complex_object()) {
+            if (obj->at(i)->is_complex_object())
+            {
                 srs_amf0_do_print(obj->at(i), ss, level + 1);
-            } else {
+            }
+            else
+            {
                 srs_amf0_do_print(obj->at(i), ss, 0);
             }
         }
-    } else if (any->is_object()) {
+    }
+    else if (any->is_object())
+    {
         SrsAmf0Object* obj = any->to_object();
         ss << "Object " << "(" << obj->count() << " items)" << endl;
-        for (int i = 0; i < obj->count(); i++) {
+        for (int i = 0; i < obj->count(); i++)
+        {
             srs_fill_level_spaces(ss, level + 1);
             ss << "Property '" << obj->key_at(i) << "' ";
-            if (obj->value_at(i)->is_complex_object()) {
+            if (obj->value_at(i)->is_complex_object())
+            {
                 srs_amf0_do_print(obj->value_at(i), ss, level + 1);
-            } else {
+            }
+            else
+            {
                 srs_amf0_do_print(obj->value_at(i), ss, 0);
             }
         }
-    } else {
+    }
+    else
+    {
         ss << "Unknown" << endl;
     }
 }
@@ -19699,27 +20440,30 @@ void srs_amf0_do_print(SrsAmf0Any* any, stringstream& ss, int level)
 char* SrsAmf0Any::human_print(char** pdata, int* psize)
 {
     stringstream ss;
-    
+
     ss.precision(1);
-    
+
     srs_amf0_do_print(this, ss, 0);
-    
+
     string str = ss.str();
-    if (str.empty()) {
+    if (str.empty())
+    {
         return NULL;
     }
-    
+
     char* data = new char[str.length() + 1];
     memcpy(data, str.data(), str.length());
     data[str.length()] = 0;
-    
-    if (pdata) {
+
+    if (pdata)
+    {
         *pdata = data;
     }
-    if (psize) {
+    if (psize)
+    {
         *psize = str.length();
     }
-    
+
     return data;
 }
 
@@ -19776,69 +20520,82 @@ SrsAmf0Any* SrsAmf0Any::date(int64_t value)
 int SrsAmf0Any::discovery(SrsStream* stream, SrsAmf0Any** ppvalue)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // detect the object-eof specially
-    if (srs_amf0_is_object_eof(stream)) {
+    if (srs_amf0_is_object_eof(stream))
+    {
         *ppvalue = new SrsAmf0ObjectEOF();
         return ret;
     }
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read any marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
     srs_verbose("amf0 any marker success");
-    
+
     // backward the 1byte marker.
     stream->skip(-1);
-    
-    switch (marker) {
-        case RTMP_AMF0_String: {
-            *ppvalue = SrsAmf0Any::str();
-            return ret;
-        }
-        case RTMP_AMF0_Boolean: {
-            *ppvalue = SrsAmf0Any::boolean();
-            return ret;
-        }
-        case RTMP_AMF0_Number: {
-            *ppvalue = SrsAmf0Any::number();
-            return ret;
-        }
-        case RTMP_AMF0_Null: {
-            *ppvalue = SrsAmf0Any::null();
-            return ret;
-        }
-        case RTMP_AMF0_Undefined: {
-            *ppvalue = SrsAmf0Any::undefined();
-            return ret;
-        }
-        case RTMP_AMF0_Object: {
-            *ppvalue = SrsAmf0Any::object();
-            return ret;
-        }
-        case RTMP_AMF0_EcmaArray: {
-            *ppvalue = SrsAmf0Any::ecma_array();
-            return ret;
-        }
-        case RTMP_AMF0_StrictArray: {
-            *ppvalue = SrsAmf0Any::strict_array();
-            return ret;
-        }
-        case RTMP_AMF0_Date: {
-            *ppvalue = SrsAmf0Any::date();
-            return ret;
-        }
-        case RTMP_AMF0_Invalid:
-        default: {
-            ret = ERROR_RTMP_AMF0_INVALID;
-            srs_error("invalid amf0 message type. marker=%#x, ret=%d", marker, ret);
-            return ret;
-        }
+
+    switch (marker)
+    {
+    case RTMP_AMF0_String:
+    {
+        *ppvalue = SrsAmf0Any::str();
+        return ret;
+    }
+    case RTMP_AMF0_Boolean:
+    {
+        *ppvalue = SrsAmf0Any::boolean();
+        return ret;
+    }
+    case RTMP_AMF0_Number:
+    {
+        *ppvalue = SrsAmf0Any::number();
+        return ret;
+    }
+    case RTMP_AMF0_Null:
+    {
+        *ppvalue = SrsAmf0Any::null();
+        return ret;
+    }
+    case RTMP_AMF0_Undefined:
+    {
+        *ppvalue = SrsAmf0Any::undefined();
+        return ret;
+    }
+    case RTMP_AMF0_Object:
+    {
+        *ppvalue = SrsAmf0Any::object();
+        return ret;
+    }
+    case RTMP_AMF0_EcmaArray:
+    {
+        *ppvalue = SrsAmf0Any::ecma_array();
+        return ret;
+    }
+    case RTMP_AMF0_StrictArray:
+    {
+        *ppvalue = SrsAmf0Any::strict_array();
+        return ret;
+    }
+    case RTMP_AMF0_Date:
+    {
+        *ppvalue = SrsAmf0Any::date();
+        return ret;
+    }
+    case RTMP_AMF0_Invalid:
+    default:
+    {
+        ret = ERROR_RTMP_AMF0_INVALID;
+        srs_error("invalid amf0 message type. marker=%#x, ret=%d", marker, ret);
+        return ret;
+    }
     }
 }
 
@@ -19859,7 +20616,8 @@ int SrsUnSortedHashtable::count()
 void SrsUnSortedHashtable::clear()
 {
     std::vector<SrsAmf0ObjectPropertyType>::iterator it;
-    for (it = properties.begin(); it != properties.end(); ++it) {
+    for (it = properties.begin(); it != properties.end(); ++it)
+    {
         SrsAmf0ObjectPropertyType& elem = *it;
         SrsAmf0Any* any = elem.second;
         srs_freep(any);
@@ -19891,20 +20649,23 @@ SrsAmf0Any* SrsUnSortedHashtable::value_at(int index)
 void SrsUnSortedHashtable::set(string key, SrsAmf0Any* value)
 {
     std::vector<SrsAmf0ObjectPropertyType>::iterator it;
-    
-    for (it = properties.begin(); it != properties.end(); ++it) {
+
+    for (it = properties.begin(); it != properties.end(); ++it)
+    {
         SrsAmf0ObjectPropertyType& elem = *it;
         std::string name = elem.first;
         SrsAmf0Any* any = elem.second;
-        
-        if (key == name) {
+
+        if (key == name)
+        {
             srs_freep(any);
             properties.erase(it);
             break;
         }
     }
-    
-    if (value) {
+
+    if (value)
+    {
         properties.push_back(std::make_pair(key, value));
     }
 }
@@ -19912,53 +20673,60 @@ void SrsUnSortedHashtable::set(string key, SrsAmf0Any* value)
 SrsAmf0Any* SrsUnSortedHashtable::get_property(string name)
 {
     std::vector<SrsAmf0ObjectPropertyType>::iterator it;
-    
-    for (it = properties.begin(); it != properties.end(); ++it) {
+
+    for (it = properties.begin(); it != properties.end(); ++it)
+    {
         SrsAmf0ObjectPropertyType& elem = *it;
         std::string key = elem.first;
         SrsAmf0Any* any = elem.second;
-        if (key == name) {
+        if (key == name)
+        {
             return any;
         }
     }
-    
+
     return NULL;
 }
 
 SrsAmf0Any* SrsUnSortedHashtable::ensure_property_string(string name)
 {
     SrsAmf0Any* prop = get_property(name);
-    
-    if (!prop) {
+
+    if (!prop)
+    {
         return NULL;
     }
-    
-    if (!prop->is_string()) {
+
+    if (!prop->is_string())
+    {
         return NULL;
     }
-    
+
     return prop;
 }
 
 SrsAmf0Any* SrsUnSortedHashtable::ensure_property_number(string name)
 {
     SrsAmf0Any* prop = get_property(name);
-    
-    if (!prop) {
+
+    if (!prop)
+    {
         return NULL;
     }
-    
-    if (!prop->is_number()) {
+
+    if (!prop->is_number())
+    {
         return NULL;
     }
-    
+
     return prop;
 }
 
 void SrsUnSortedHashtable::copy(SrsUnSortedHashtable* src)
 {
     std::vector<SrsAmf0ObjectPropertyType>::iterator it;
-    for (it = src->properties.begin(); it != src->properties.end(); ++it) {
+    for (it = src->properties.begin(); it != src->properties.end(); ++it)
+    {
         SrsAmf0ObjectPropertyType& elem = *it;
         std::string key = elem.first;
         SrsAmf0Any* any = elem.second;
@@ -19983,65 +20751,71 @@ int SrsAmf0ObjectEOF::total_size()
 int SrsAmf0ObjectEOF::read(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // value
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read object eof value failed. ret=%d", ret);
         return ret;
     }
     int16_t temp = stream->read_2bytes();
-    if (temp != 0x00) {
+    if (temp != 0x00)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read object eof value check failed. "
-            "must be 0x00, actual is %#x, ret=%d", temp, ret);
+                  "must be 0x00, actual is %#x, ret=%d", temp, ret);
         return ret;
     }
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read object eof marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_ObjectEnd) {
+    if (marker != RTMP_AMF0_ObjectEnd)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check object eof marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_ObjectEnd, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_ObjectEnd, ret);
         return ret;
     }
     srs_verbose("amf0 read object eof marker success");
-    
+
     srs_verbose("amf0 read object eof success");
-    
+
     return ret;
 }
 int SrsAmf0ObjectEOF::write(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // value
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write object eof value failed. ret=%d", ret);
         return ret;
     }
     stream->write_2bytes(0x00);
     srs_verbose("amf0 write object eof value success");
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write object eof marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_ObjectEnd);
-    
+
     srs_verbose("amf0 read object eof success");
-    
+
     return ret;
 }
 
@@ -20066,114 +20840,127 @@ SrsAmf0Object::~SrsAmf0Object()
 int SrsAmf0Object::total_size()
 {
     int size = 1;
-    
-    for (int i = 0; i < properties->count(); i++){
+
+    for (int i = 0; i < properties->count(); i++)
+    {
         std::string name = key_at(i);
         SrsAmf0Any* value = value_at(i);
-        
+
         size += SrsAmf0Size::utf8(name);
         size += SrsAmf0Size::any(value);
     }
-    
+
     size += SrsAmf0Size::object_eof();
-    
+
     return size;
 }
 
 int SrsAmf0Object::read(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read object marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_Object) {
+    if (marker != RTMP_AMF0_Object)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check object marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Object, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Object, ret);
         return ret;
     }
     srs_verbose("amf0 read object marker success");
-    
+
     // value
-    while (!stream->empty()) {
+    while (!stream->empty())
+    {
         // detect whether is eof.
-        if (srs_amf0_is_object_eof(stream)) {
+        if (srs_amf0_is_object_eof(stream))
+        {
             SrsAmf0ObjectEOF pbj_eof;
-            if ((ret = pbj_eof.read(stream)) != ERROR_SUCCESS) {
+            if ((ret = pbj_eof.read(stream)) != ERROR_SUCCESS)
+            {
                 srs_error("amf0 object read eof failed. ret=%d", ret);
                 return ret;
             }
             srs_info("amf0 read object EOF.");
             break;
         }
-        
+
         // property-name: utf8 string
         std::string property_name;
-        if ((ret = srs_amf0_read_utf8(stream, property_name)) != ERROR_SUCCESS) {
+        if ((ret = srs_amf0_read_utf8(stream, property_name)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 object read property name failed. ret=%d", ret);
             return ret;
         }
         // property-value: any
         SrsAmf0Any* property_value = NULL;
-        if ((ret = srs_amf0_read_any(stream, &property_value)) != ERROR_SUCCESS) {
+        if ((ret = srs_amf0_read_any(stream, &property_value)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 object read property_value failed. "
-                "name=%s, ret=%d", property_name.c_str(), ret);
+                      "name=%s, ret=%d", property_name.c_str(), ret);
             srs_freep(property_value);
             return ret;
         }
-        
+
         // add property
         this->set(property_name, property_value);
     }
-    
+
     return ret;
 }
 
 int SrsAmf0Object::write(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write object marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_Object);
     srs_verbose("amf0 write object marker success");
-    
+
     // value
-    for (int i = 0; i < properties->count(); i++) {
+    for (int i = 0; i < properties->count(); i++)
+    {
         std::string name = this->key_at(i);
         SrsAmf0Any* any = this->value_at(i);
-        
-        if ((ret = srs_amf0_write_utf8(stream, name)) != ERROR_SUCCESS) {
+
+        if ((ret = srs_amf0_write_utf8(stream, name)) != ERROR_SUCCESS)
+        {
             srs_error("write object property name failed. ret=%d", ret);
             return ret;
         }
-        
-        if ((ret = srs_amf0_write_any(stream, any)) != ERROR_SUCCESS) {
+
+        if ((ret = srs_amf0_write_any(stream, any)) != ERROR_SUCCESS)
+        {
             srs_error("write object property value failed. ret=%d", ret);
             return ret;
         }
-        
+
         srs_verbose("write amf0 property success. name=%s", name.c_str());
     }
-    
-    if ((ret = eof->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = eof->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("write object eof failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_verbose("write amf0 object success.");
-    
+
     return ret;
 }
 
@@ -20246,134 +21033,149 @@ SrsAmf0EcmaArray::~SrsAmf0EcmaArray()
 int SrsAmf0EcmaArray::total_size()
 {
     int size = 1 + 4;
-    
-    for (int i = 0; i < properties->count(); i++){
+
+    for (int i = 0; i < properties->count(); i++)
+    {
         std::string name = key_at(i);
         SrsAmf0Any* value = value_at(i);
-        
+
         size += SrsAmf0Size::utf8(name);
         size += SrsAmf0Size::any(value);
     }
-    
+
     size += SrsAmf0Size::object_eof();
-    
+
     return size;
 }
 
 int SrsAmf0EcmaArray::read(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read ecma_array marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_EcmaArray) {
+    if (marker != RTMP_AMF0_EcmaArray)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check ecma_array marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_EcmaArray, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_EcmaArray, ret);
         return ret;
     }
     srs_verbose("amf0 read ecma_array marker success");
 
     // count
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read ecma_array count failed. ret=%d", ret);
         return ret;
     }
-    
+
     int32_t count = stream->read_4bytes();
     srs_verbose("amf0 read ecma_array count success. count=%d", count);
-    
+
     // value
     this->_count = count;
 
-    while (!stream->empty()) {
+    while (!stream->empty())
+    {
         // detect whether is eof.
-        if (srs_amf0_is_object_eof(stream)) {
+        if (srs_amf0_is_object_eof(stream))
+        {
             SrsAmf0ObjectEOF pbj_eof;
-            if ((ret = pbj_eof.read(stream)) != ERROR_SUCCESS) {
+            if ((ret = pbj_eof.read(stream)) != ERROR_SUCCESS)
+            {
                 srs_error("amf0 ecma_array read eof failed. ret=%d", ret);
                 return ret;
             }
             srs_info("amf0 read ecma_array EOF.");
             break;
         }
-        
+
         // property-name: utf8 string
         std::string property_name;
-        if ((ret =srs_amf0_read_utf8(stream, property_name)) != ERROR_SUCCESS) {
+        if ((ret =srs_amf0_read_utf8(stream, property_name)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 ecma_array read property name failed. ret=%d", ret);
             return ret;
         }
         // property-value: any
         SrsAmf0Any* property_value = NULL;
-        if ((ret = srs_amf0_read_any(stream, &property_value)) != ERROR_SUCCESS) {
+        if ((ret = srs_amf0_read_any(stream, &property_value)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 ecma_array read property_value failed. "
-                "name=%s, ret=%d", property_name.c_str(), ret);
+                      "name=%s, ret=%d", property_name.c_str(), ret);
             return ret;
         }
-        
+
         // add property
         this->set(property_name, property_value);
     }
-    
+
     return ret;
 }
 int SrsAmf0EcmaArray::write(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write ecma_array marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_EcmaArray);
     srs_verbose("amf0 write ecma_array marker success");
 
     // count
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write ecma_array count failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_4bytes(this->_count);
     srs_verbose("amf0 write ecma_array count success. count=%d", _count);
-    
+
     // value
-    for (int i = 0; i < properties->count(); i++) {
+    for (int i = 0; i < properties->count(); i++)
+    {
         std::string name = this->key_at(i);
         SrsAmf0Any* any = this->value_at(i);
-        
-        if ((ret = srs_amf0_write_utf8(stream, name)) != ERROR_SUCCESS) {
+
+        if ((ret = srs_amf0_write_utf8(stream, name)) != ERROR_SUCCESS)
+        {
             srs_error("write ecma_array property name failed. ret=%d", ret);
             return ret;
         }
-        
-        if ((ret = srs_amf0_write_any(stream, any)) != ERROR_SUCCESS) {
+
+        if ((ret = srs_amf0_write_any(stream, any)) != ERROR_SUCCESS)
+        {
             srs_error("write ecma_array property value failed. ret=%d", ret);
             return ret;
         }
-        
+
         srs_verbose("write amf0 property success. name=%s", name.c_str());
     }
-    
-    if ((ret = eof->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = eof->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("write ecma_array eof failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_verbose("write ecma_array object success.");
-    
+
     return ret;
 }
 
@@ -20439,7 +21241,8 @@ SrsAmf0StrictArray::SrsAmf0StrictArray()
 SrsAmf0StrictArray::~SrsAmf0StrictArray()
 {
     std::vector<SrsAmf0Any*>::iterator it;
-    for (it = properties.begin(); it != properties.end(); ++it) {
+    for (it = properties.begin(); it != properties.end(); ++it)
+    {
         SrsAmf0Any* any = *it;
         srs_freep(any);
     }
@@ -20449,113 +21252,124 @@ SrsAmf0StrictArray::~SrsAmf0StrictArray()
 int SrsAmf0StrictArray::total_size()
 {
     int size = 1 + 4;
-    
-    for (int i = 0; i < (int)properties.size(); i++){
+
+    for (int i = 0; i < (int)properties.size(); i++)
+    {
         SrsAmf0Any* any = properties[i];
         size += any->total_size();
     }
-    
+
     return size;
 }
 
 int SrsAmf0StrictArray::read(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read strict_array marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_StrictArray) {
+    if (marker != RTMP_AMF0_StrictArray)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check strict_array marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_StrictArray, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_StrictArray, ret);
         return ret;
     }
     srs_verbose("amf0 read strict_array marker success");
 
     // count
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read strict_array count failed. ret=%d", ret);
         return ret;
     }
-    
+
     int32_t count = stream->read_4bytes();
     srs_verbose("amf0 read strict_array count success. count=%d", count);
-    
+
     // value
     this->_count = count;
 
-    for (int i = 0; i < count && !stream->empty(); i++) {
+    for (int i = 0; i < count && !stream->empty(); i++)
+    {
         // property-value: any
         SrsAmf0Any* elem = NULL;
-        if ((ret = srs_amf0_read_any(stream, &elem)) != ERROR_SUCCESS) {
+        if ((ret = srs_amf0_read_any(stream, &elem)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 strict_array read value failed. ret=%d", ret);
             return ret;
         }
-        
+
         // add property
         properties.push_back(elem);
     }
-    
+
     return ret;
 }
 int SrsAmf0StrictArray::write(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write strict_array marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_StrictArray);
     srs_verbose("amf0 write strict_array marker success");
 
     // count
-    if (!stream->require(4)) {
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write strict_array count failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_4bytes(this->_count);
     srs_verbose("amf0 write strict_array count success. count=%d", _count);
-    
+
     // value
-    for (int i = 0; i < (int)properties.size(); i++) {
+    for (int i = 0; i < (int)properties.size(); i++)
+    {
         SrsAmf0Any* any = properties[i];
-        
-        if ((ret = srs_amf0_write_any(stream, any)) != ERROR_SUCCESS) {
+
+        if ((ret = srs_amf0_write_any(stream, any)) != ERROR_SUCCESS)
+        {
             srs_error("write strict_array property value failed. ret=%d", ret);
             return ret;
         }
-        
+
         srs_verbose("write amf0 property success.");
     }
-    
+
     srs_verbose("write strict_array object success.");
-    
+
     return ret;
 }
 
 SrsAmf0Any* SrsAmf0StrictArray::copy()
 {
     SrsAmf0StrictArray* copy = new SrsAmf0StrictArray();
-    
+
     std::vector<SrsAmf0Any*>::iterator it;
-    for (it = properties.begin(); it != properties.end(); ++it) {
+    for (it = properties.begin(); it != properties.end(); ++it)
+    {
         SrsAmf0Any* any = *it;
         copy->append(any->copy());
     }
-    
+
     copy->_count = _count;
     return copy;
 }
@@ -20619,10 +21433,11 @@ int SrsAmf0Size::boolean()
 
 int SrsAmf0Size::object(SrsAmf0Object* obj)
 {
-    if (!obj) {
+    if (!obj)
+    {
         return 0;
     }
-    
+
     return obj->total_size();
 }
 
@@ -20633,35 +21448,39 @@ int SrsAmf0Size::object_eof()
 
 int SrsAmf0Size::ecma_array(SrsAmf0EcmaArray* arr)
 {
-    if (!arr) {
+    if (!arr)
+    {
         return 0;
     }
-    
+
     return arr->total_size();
 }
 
 int SrsAmf0Size::strict_array(SrsAmf0StrictArray* arr)
 {
-    if (!arr) {
+    if (!arr)
+    {
         return 0;
     }
-    
+
     return arr->total_size();
 }
 
 int SrsAmf0Size::any(SrsAmf0Any* o)
 {
-    if (!o) {
+    if (!o)
+    {
         return 0;
     }
-    
+
     return o->total_size();
 }
 
 SrsAmf0String::SrsAmf0String(const char* _value)
 {
     marker = RTMP_AMF0_String;
-    if (_value) {
+    if (_value)
+    {
         value = _value;
     }
 }
@@ -20772,98 +21591,105 @@ int SrsAmf0Date::total_size()
 int SrsAmf0Date::read(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read date marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_Date) {
+    if (marker != RTMP_AMF0_Date)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check date marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Date, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Date, ret);
         return ret;
     }
     srs_verbose("amf0 read date marker success");
 
     // date value
-    // An ActionScript Date is serialized as the number of milliseconds 
-    // elapsed since the epoch of midnight on 1st Jan 1970 in the UTC 
+    // An ActionScript Date is serialized as the number of milliseconds
+    // elapsed since the epoch of midnight on 1st Jan 1970 in the UTC
     // time zone.
-    if (!stream->require(8)) {
+    if (!stream->require(8))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read date failed. ret=%d", ret);
         return ret;
     }
-    
+
     _date_value = stream->read_8bytes();
     srs_verbose("amf0 read date success. date=%"PRId64, _date_value);
-    
+
     // time zone
-    // While the design of this type reserves room for time zone offset 
-    // information, it should not be filled in, nor used, as it is unconventional 
-    // to change time zones when serializing dates on a network. It is suggested 
+    // While the design of this type reserves room for time zone offset
+    // information, it should not be filled in, nor used, as it is unconventional
+    // to change time zones when serializing dates on a network. It is suggested
     // that the time zone be queried independently as needed.
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read time zone failed. ret=%d", ret);
         return ret;
     }
-    
+
     _time_zone = stream->read_2bytes();
     srs_verbose("amf0 read time zone success. zone=%d", _time_zone);
-    
+
     return ret;
 }
 int SrsAmf0Date::write(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write date marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_Date);
     srs_verbose("amf0 write date marker success");
 
     // date value
-    if (!stream->require(8)) {
+    if (!stream->require(8))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write date failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_8bytes(_date_value);
     srs_verbose("amf0 write date success. date=%"PRId64, _date_value);
 
     // time zone
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write time zone failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_2bytes(_time_zone);
     srs_verbose("amf0 write time zone success. date=%d", _time_zone);
-    
+
     srs_verbose("write date object success.");
-    
+
     return ret;
 }
 
 SrsAmf0Any* SrsAmf0Date::copy()
 {
     SrsAmf0Date* copy = new SrsAmf0Date(0);
-    
+
     copy->_date_value = _date_value;
     copy->_time_zone = _time_zone;
-    
+
     return copy;
 }
 
@@ -20940,102 +21766,111 @@ SrsAmf0Any* SrsAmf0Undefined::copy()
 int srs_amf0_read_any(SrsStream* stream, SrsAmf0Any** ppvalue)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = SrsAmf0Any::discovery(stream, ppvalue)) != ERROR_SUCCESS) {
+
+    if ((ret = SrsAmf0Any::discovery(stream, ppvalue)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 discovery any elem failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_assert(*ppvalue);
-    
-    if ((ret = (*ppvalue)->read(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = (*ppvalue)->read(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 parse elem failed. ret=%d", ret);
         srs_freep(*ppvalue);
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_amf0_read_string(SrsStream* stream, string& value)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read string marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_String) {
+    if (marker != RTMP_AMF0_String)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check string marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_String, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_String, ret);
         return ret;
     }
     srs_verbose("amf0 read string marker success");
-    
+
     return srs_amf0_read_utf8(stream, value);
 }
 
 int srs_amf0_write_string(SrsStream* stream, string value)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write string marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_String);
     srs_verbose("amf0 write string marker success");
-    
+
     return srs_amf0_write_utf8(stream, value);
 }
 
 int srs_amf0_read_boolean(SrsStream* stream, bool& value)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read bool marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_Boolean) {
+    if (marker != RTMP_AMF0_Boolean)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check bool marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Boolean, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Boolean, ret);
         return ret;
     }
     srs_verbose("amf0 read bool marker success");
 
     // value
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read bool value failed. ret=%d", ret);
         return ret;
     }
 
     value = (stream->read_1bytes() != 0);
-    
+
     srs_verbose("amf0 read bool value success. value=%d", value);
-    
+
     return ret;
 }
 int srs_amf0_write_boolean(SrsStream* stream, bool value)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write bool marker failed. ret=%d", ret);
         return ret;
@@ -21044,45 +21879,52 @@ int srs_amf0_write_boolean(SrsStream* stream, bool value)
     srs_verbose("amf0 write bool marker success");
 
     // value
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write bool value failed. ret=%d", ret);
         return ret;
     }
 
-    if (value) {
+    if (value)
+    {
         stream->write_1bytes(0x01);
-    } else {
+    }
+    else
+    {
         stream->write_1bytes(0x00);
     }
-    
+
     srs_verbose("amf0 write bool value success. value=%d", value);
-    
+
     return ret;
 }
 
 int srs_amf0_read_number(SrsStream* stream, double& value)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read number marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_Number) {
+    if (marker != RTMP_AMF0_Number)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check number marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Number, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Number, ret);
         return ret;
     }
     srs_verbose("amf0 read number marker success");
 
     // value
-    if (!stream->require(8)) {
+    if (!stream->require(8))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read number value failed. ret=%d", ret);
         return ret;
@@ -21090,27 +21932,29 @@ int srs_amf0_read_number(SrsStream* stream, double& value)
 
     int64_t temp = stream->read_8bytes();
     memcpy(&value, &temp, 8);
-    
+
     srs_verbose("amf0 read number value success. value=%.2f", value);
-    
+
     return ret;
 }
 int srs_amf0_write_number(SrsStream* stream, double value)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write number marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_Number);
     srs_verbose("amf0 write number marker success");
 
     // value
-    if (!stream->require(8)) {
+    if (!stream->require(8))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write number value failed. ret=%d", ret);
         return ret;
@@ -21119,216 +21963,231 @@ int srs_amf0_write_number(SrsStream* stream, double value)
     int64_t temp = 0x00;
     memcpy(&temp, &value, 8);
     stream->write_8bytes(temp);
-    
+
     srs_verbose("amf0 write number value success. value=%.2f", value);
-    
+
     return ret;
 }
 
 int srs_amf0_read_null(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read null marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_Null) {
+    if (marker != RTMP_AMF0_Null)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check null marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Null, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Null, ret);
         return ret;
     }
     srs_verbose("amf0 read null success");
-    
+
     return ret;
 }
 int srs_amf0_write_null(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write null marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_Null);
     srs_verbose("amf0 write null marker success");
-    
+
     return ret;
 }
 
 int srs_amf0_read_undefined(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read undefined marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     char marker = stream->read_1bytes();
-    if (marker != RTMP_AMF0_Undefined) {
+    if (marker != RTMP_AMF0_Undefined)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 check undefined marker failed. "
-            "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Undefined, ret);
+                  "marker=%#x, required=%#x, ret=%d", marker, RTMP_AMF0_Undefined, ret);
         return ret;
     }
     srs_verbose("amf0 read undefined success");
-    
+
     return ret;
 }
 int srs_amf0_write_undefined(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // marker
-    if (!stream->require(1)) {
+    if (!stream->require(1))
+    {
         ret = ERROR_RTMP_AMF0_ENCODE;
         srs_error("amf0 write undefined marker failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_1bytes(RTMP_AMF0_Undefined);
     srs_verbose("amf0 write undefined marker success");
-    
+
     return ret;
 }
 
 
 namespace _srs_internal
 {
-    int srs_amf0_read_utf8(SrsStream* stream, string& value)
+int srs_amf0_read_utf8(SrsStream* stream, string& value)
+{
+    int ret = ERROR_SUCCESS;
+
+    // len
+    if (!stream->require(2))
     {
-        int ret = ERROR_SUCCESS;
-        
-        // len
-        if (!stream->require(2)) {
-            ret = ERROR_RTMP_AMF0_DECODE;
-            srs_error("amf0 read string length failed. ret=%d", ret);
-            return ret;
-        }
-        int16_t len = stream->read_2bytes();
-        srs_verbose("amf0 read string length success. len=%d", len);
-        
-        // empty string
-        if (len <= 0) {
-            srs_verbose("amf0 read empty string. ret=%d", ret);
-            return ret;
-        }
-        
-        // data
-        if (!stream->require(len)) {
-            ret = ERROR_RTMP_AMF0_DECODE;
-            srs_error("amf0 read string data failed. ret=%d", ret);
-            return ret;
-        }
-        std::string str = stream->read_string(len);
-        
-        // support utf8-1 only
-        // 1.3.1 Strings and UTF-8
-        // UTF8-1 = %x00-7F
-        // TODO: support other utf-8 strings
-        /*for (int i = 0; i < len; i++) {
-            char ch = *(str.data() + i);
-            if ((ch & 0x80) != 0) {
-                ret = ERROR_RTMP_AMF0_DECODE;
-                srs_error("ignored. only support utf8-1, 0x00-0x7F, actual is %#x. ret=%d", (int)ch, ret);
-                ret = ERROR_SUCCESS;
-            }
-        }*/
-        
-        value = str;
-        srs_verbose("amf0 read string data success. str=%s", str.c_str());
-        
+        ret = ERROR_RTMP_AMF0_DECODE;
+        srs_error("amf0 read string length failed. ret=%d", ret);
         return ret;
     }
-    int srs_amf0_write_utf8(SrsStream* stream, string value)
+    int16_t len = stream->read_2bytes();
+    srs_verbose("amf0 read string length success. len=%d", len);
+
+    // empty string
+    if (len <= 0)
     {
-        int ret = ERROR_SUCCESS;
-        
-        // len
-        if (!stream->require(2)) {
-            ret = ERROR_RTMP_AMF0_ENCODE;
-            srs_error("amf0 write string length failed. ret=%d", ret);
-            return ret;
-        }
-        stream->write_2bytes(value.length());
-        srs_verbose("amf0 write string length success. len=%d", (int)value.length());
-        
-        // empty string
-        if (value.length() <= 0) {
-            srs_verbose("amf0 write empty string. ret=%d", ret);
-            return ret;
-        }
-        
-        // data
-        if (!stream->require(value.length())) {
-            ret = ERROR_RTMP_AMF0_ENCODE;
-            srs_error("amf0 write string data failed. ret=%d", ret);
-            return ret;
-        }
-        stream->write_string(value);
-        srs_verbose("amf0 write string data success. str=%s", value.c_str());
-        
-        return ret;
-    }
-    
-    bool srs_amf0_is_object_eof(SrsStream* stream) 
-    {
-        // detect the object-eof specially
-        if (stream->require(3)) {
-            int32_t flag = stream->read_3bytes();
-            stream->skip(-3);
-            
-            return 0x09 == flag;
-        }
-        
-        return false;
-    }
-    
-    int srs_amf0_write_object_eof(SrsStream* stream, SrsAmf0ObjectEOF* value)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        srs_assert(value != NULL);
-        
-        // value
-        if (!stream->require(2)) {
-            ret = ERROR_RTMP_AMF0_ENCODE;
-            srs_error("amf0 write object eof value failed. ret=%d", ret);
-            return ret;
-        }
-        stream->write_2bytes(0x00);
-        srs_verbose("amf0 write object eof value success");
-        
-        // marker
-        if (!stream->require(1)) {
-            ret = ERROR_RTMP_AMF0_ENCODE;
-            srs_error("amf0 write object eof marker failed. ret=%d", ret);
-            return ret;
-        }
-        
-        stream->write_1bytes(RTMP_AMF0_ObjectEnd);
-        
-        srs_verbose("amf0 read object eof success");
-        
+        srs_verbose("amf0 read empty string. ret=%d", ret);
         return ret;
     }
 
-    int srs_amf0_write_any(SrsStream* stream, SrsAmf0Any* value)
+    // data
+    if (!stream->require(len))
     {
-        srs_assert(value != NULL);
-        return value->write(stream);
+        ret = ERROR_RTMP_AMF0_DECODE;
+        srs_error("amf0 read string data failed. ret=%d", ret);
+        return ret;
     }
+    std::string str = stream->read_string(len);
+
+    // support utf8-1 only
+    // 1.3.1 Strings and UTF-8
+    // UTF8-1 = %x00-7F
+    // TODO: support other utf-8 strings
+    /*for (int i = 0; i < len; i++) {
+        char ch = *(str.data() + i);
+        if ((ch & 0x80) != 0) {
+            ret = ERROR_RTMP_AMF0_DECODE;
+            srs_error("ignored. only support utf8-1, 0x00-0x7F, actual is %#x. ret=%d", (int)ch, ret);
+            ret = ERROR_SUCCESS;
+        }
+    }*/
+
+    value = str;
+    srs_verbose("amf0 read string data success. str=%s", str.c_str());
+
+    return ret;
+}
+int srs_amf0_write_utf8(SrsStream* stream, string value)
+{
+    int ret = ERROR_SUCCESS;
+
+    // len
+    if (!stream->require(2))
+    {
+        ret = ERROR_RTMP_AMF0_ENCODE;
+        srs_error("amf0 write string length failed. ret=%d", ret);
+        return ret;
+    }
+    stream->write_2bytes(value.length());
+    srs_verbose("amf0 write string length success. len=%d", (int)value.length());
+
+    // empty string
+    if (value.length() <= 0)
+    {
+        srs_verbose("amf0 write empty string. ret=%d", ret);
+        return ret;
+    }
+
+    // data
+    if (!stream->require(value.length()))
+    {
+        ret = ERROR_RTMP_AMF0_ENCODE;
+        srs_error("amf0 write string data failed. ret=%d", ret);
+        return ret;
+    }
+    stream->write_string(value);
+    srs_verbose("amf0 write string data success. str=%s", value.c_str());
+
+    return ret;
+}
+
+bool srs_amf0_is_object_eof(SrsStream* stream)
+{
+    // detect the object-eof specially
+    if (stream->require(3))
+    {
+        int32_t flag = stream->read_3bytes();
+        stream->skip(-3);
+
+        return 0x09 == flag;
+    }
+
+    return false;
+}
+
+int srs_amf0_write_object_eof(SrsStream* stream, SrsAmf0ObjectEOF* value)
+{
+    int ret = ERROR_SUCCESS;
+
+    srs_assert(value != NULL);
+
+    // value
+    if (!stream->require(2))
+    {
+        ret = ERROR_RTMP_AMF0_ENCODE;
+        srs_error("amf0 write object eof value failed. ret=%d", ret);
+        return ret;
+    }
+    stream->write_2bytes(0x00);
+    srs_verbose("amf0 write object eof value success");
+
+    // marker
+    if (!stream->require(1))
+    {
+        ret = ERROR_RTMP_AMF0_ENCODE;
+        srs_error("amf0 write object eof marker failed. ret=%d", ret);
+        return ret;
+    }
+
+    stream->write_1bytes(RTMP_AMF0_ObjectEnd);
+
+    srs_verbose("amf0 read object eof success");
+
+    return ret;
+}
+
+int srs_amf0_write_any(SrsStream* stream, SrsAmf0Any* value)
+{
+    srs_assert(value != NULL);
+    return value->write(stream);
+}
 }
 
 // following is generated by src/protocol/srs_rtmp_io.cpp
@@ -21548,44 +22407,47 @@ SrsPacket::~SrsPacket()
 int SrsPacket::encode(int& psize, char*& ppayload)
 {
     int ret = ERROR_SUCCESS;
-    
+
     int size = get_size();
     char* payload = NULL;
-    
+
     SrsStream stream;
-    
-    if (size > 0) {
+
+    if (size > 0)
+    {
         payload = new char[size];
-        
-        if ((ret = stream.initialize(payload, size)) != ERROR_SUCCESS) {
+
+        if ((ret = stream.initialize(payload, size)) != ERROR_SUCCESS)
+        {
             srs_error("initialize the stream failed. ret=%d", ret);
             srs_freep(payload);
             return ret;
         }
     }
-    
-    if ((ret = encode_packet(&stream)) != ERROR_SUCCESS) {
+
+    if ((ret = encode_packet(&stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode the packet failed. ret=%d", ret);
         srs_freep(payload);
         return ret;
     }
-    
+
     psize = size;
     ppayload = payload;
     srs_verbose("encode the packet success. size=%d", size);
-    
+
     return ret;
 }
 
 int SrsPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(stream != NULL);
-    
+
     ret = ERROR_SYSTEM_PACKET_INVALID;
     srs_error("current packet is not support to decode. ret=%d", ret);
-    
+
     return ret;
 }
 
@@ -21607,12 +22469,12 @@ int SrsPacket::get_size()
 int SrsPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(stream != NULL);
-    
+
     ret = ERROR_SYSTEM_PACKET_INVALID;
     srs_error("current packet is not support to encode. ret=%d", ret);
-    
+
     return ret;
 }
 
@@ -21626,64 +22488,72 @@ SrsProtocol::SrsProtocol(ISrsProtocolReaderWriter* io)
 {
     in_buffer = new SrsFastBuffer();
     skt = io;
-    
+
     in_chunk_size = SRS_CONSTS_RTMP_PROTOCOL_CHUNK_SIZE;
     out_chunk_size = SRS_CONSTS_RTMP_PROTOCOL_CHUNK_SIZE;
-    
+
     nb_out_iovs = SRS_CONSTS_IOVS_MAX;
     out_iovs = (iovec*)malloc(sizeof(iovec) * nb_out_iovs);
     // each chunk consumers atleast 2 iovs
     srs_assert(nb_out_iovs >= 2);
-    
+
     warned_c0c3_cache_dry = false;
     auto_response_when_recv = true;
-    
+
     cs_cache = NULL;
-    if (SRS_PERF_CHUNK_STREAM_CACHE > 0) {
+    if (SRS_PERF_CHUNK_STREAM_CACHE > 0)
+    {
         cs_cache = new SrsChunkStream*[SRS_PERF_CHUNK_STREAM_CACHE];
     }
-    for (int cid = 0; cid < SRS_PERF_CHUNK_STREAM_CACHE; cid++) {
+    for (int cid = 0; cid < SRS_PERF_CHUNK_STREAM_CACHE; cid++)
+    {
         SrsChunkStream* cs = new SrsChunkStream(cid);
         // set the perfer cid of chunk,
         // which will copy to the message received.
         cs->header.perfer_cid = cid;
-        
+
         cs_cache[cid] = cs;
     }
 }
 
 SrsProtocol::~SrsProtocol()
 {
-    if (true) {
+    if (true)
+    {
         std::map<int, SrsChunkStream*>::iterator it;
-        
-        for (it = chunk_streams.begin(); it != chunk_streams.end(); ++it) {
+
+        for (it = chunk_streams.begin(); it != chunk_streams.end(); ++it)
+        {
             SrsChunkStream* stream = it->second;
             srs_freep(stream);
         }
-    
+
         chunk_streams.clear();
     }
-    
-    if (true) {
+
+    if (true)
+    {
         std::vector<SrsPacket*>::iterator it;
-        for (it = manual_response_queue.begin(); it != manual_response_queue.end(); ++it) {
+        for (it = manual_response_queue.begin(); it != manual_response_queue.end(); ++it)
+        {
             SrsPacket* pkt = *it;
             srs_freep(pkt);
         }
         manual_response_queue.clear();
     }
-    
+
     srs_freep(in_buffer);
-    
+
     // alloc by malloc, use free directly.
-    if (out_iovs) {
+    if (out_iovs)
+    {
         free(out_iovs);
         out_iovs = NULL;
     }
-    
+
     // free all chunk stream cache.
-    for (int i = 0; i < SRS_PERF_CHUNK_STREAM_CACHE; i++) {
+    for (int i = 0; i < SRS_PERF_CHUNK_STREAM_CACHE; i++)
+    {
         SrsChunkStream* cs = cs_cache[i];
         srs_freep(cs);
     }
@@ -21698,24 +22568,27 @@ void SrsProtocol::set_auto_response(bool v)
 int SrsProtocol::manual_response_flush()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (manual_response_queue.empty()) {
+
+    if (manual_response_queue.empty())
+    {
         return ret;
     }
-    
+
     std::vector<SrsPacket*>::iterator it;
-    for (it = manual_response_queue.begin(); it != manual_response_queue.end();) {
+    for (it = manual_response_queue.begin(); it != manual_response_queue.end();)
+    {
         SrsPacket* pkt = *it;
-        
+
         // erase this packet, the send api always free it.
         it = manual_response_queue.erase(it);
-        
+
         // use underlayer api to send, donot flush again.
-        if ((ret = do_send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = do_send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     return ret;
 }
 
@@ -21764,146 +22637,159 @@ int64_t SrsProtocol::get_send_bytes()
 int SrsProtocol::recv_message(SrsCommonMessage** pmsg)
 {
     *pmsg = NULL;
-    
+
     int ret = ERROR_SUCCESS;
-    
-    while (true) {
+
+    while (true)
+    {
         SrsCommonMessage* msg = NULL;
-        
-        if ((ret = recv_interlaced_message(&msg)) != ERROR_SUCCESS) {
-            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+
+        if ((ret = recv_interlaced_message(&msg)) != ERROR_SUCCESS)
+        {
+            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("recv interlaced message failed. ret=%d", ret);
             }
             srs_freep(msg);
             return ret;
         }
         srs_verbose("entire msg received");
-        
-        if (!msg) {
+
+        if (!msg)
+        {
             srs_info("got empty message without error.");
             continue;
         }
-        
-        if (msg->size <= 0 || msg->header.payload_length <= 0) {
+
+        if (msg->size <= 0 || msg->header.payload_length <= 0)
+        {
             srs_trace("ignore empty message(type=%d, size=%d, time=%"PRId64", sid=%d).",
-                msg->header.message_type, msg->header.payload_length,
-                msg->header.timestamp, msg->header.stream_id);
+                      msg->header.message_type, msg->header.payload_length,
+                      msg->header.timestamp, msg->header.stream_id);
             srs_freep(msg);
             continue;
         }
-        
-        if ((ret = on_recv_message(msg)) != ERROR_SUCCESS) {
+
+        if ((ret = on_recv_message(msg)) != ERROR_SUCCESS)
+        {
             srs_error("hook the received msg failed. ret=%d", ret);
             srs_freep(msg);
             return ret;
         }
-        
-        srs_verbose("got a msg, cid=%d, type=%d, size=%d, time=%"PRId64, 
-            msg->header.perfer_cid, msg->header.message_type, msg->header.payload_length, 
-            msg->header.timestamp);
+
+        srs_verbose("got a msg, cid=%d, type=%d, size=%d, time=%"PRId64,
+                    msg->header.perfer_cid, msg->header.message_type, msg->header.payload_length,
+                    msg->header.timestamp);
         *pmsg = msg;
         break;
     }
-    
+
     return ret;
 }
 
 int SrsProtocol::decode_message(SrsCommonMessage* msg, SrsPacket** ppacket)
 {
     *ppacket = NULL;
-    
+
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(msg != NULL);
     srs_assert(msg->payload != NULL);
     srs_assert(msg->size > 0);
-    
+
     SrsStream stream;
 
     // initialize the decode stream for all message,
     // it's ok for the initialize if fast and without memory copy.
-    if ((ret = stream.initialize(msg->payload, msg->size)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(msg->payload, msg->size)) != ERROR_SUCCESS)
+    {
         srs_error("initialize stream failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("decode stream initialized success");
-    
+
     // decode the packet.
     SrsPacket* packet = NULL;
-    if ((ret = do_decode_message(msg->header, &stream, &packet)) != ERROR_SUCCESS) {
+    if ((ret = do_decode_message(msg->header, &stream, &packet)) != ERROR_SUCCESS)
+    {
         srs_freep(packet);
         return ret;
     }
-    
+
     // set to output ppacket only when success.
     *ppacket = packet;
-    
+
     return ret;
 }
 
 int SrsProtocol::do_send_messages(SrsSharedPtrMessage** msgs, int nb_msgs)
 {
     int ret = ERROR_SUCCESS;
-    
+
 #ifdef SRS_PERF_COMPLEX_SEND
     int iov_index = 0;
     iovec* iovs = out_iovs + iov_index;
-    
+
     int c0c3_cache_index = 0;
     char* c0c3_cache = out_c0c3_caches + c0c3_cache_index;
 
     // try to send use the c0c3 header cache,
     // if cache is consumed, try another loop.
-    for (int i = 0; i < nb_msgs; i++) {
+    for (int i = 0; i < nb_msgs; i++)
+    {
         SrsSharedPtrMessage* msg = msgs[i];
-        
-        if (!msg) {
+
+        if (!msg)
+        {
             continue;
         }
-    
+
         // ignore empty message.
-        if (!msg->payload || msg->size <= 0) {
+        if (!msg->payload || msg->size <= 0)
+        {
             srs_info("ignore empty message.");
             continue;
         }
-    
+
         // p set to current write position,
         // it's ok when payload is NULL and size is 0.
         char* p = msg->payload;
         char* pend = msg->payload + msg->size;
-        
+
         // always write the header event payload is empty.
-        while (p < pend) {
+        while (p < pend)
+        {
             // always has header
             int nb_cache = SRS_CONSTS_C0C3_HEADERS_MAX - c0c3_cache_index;
             int nbh = msg->chunk_header(c0c3_cache, nb_cache, p == msg->payload);
             srs_assert(nbh > 0);
-            
+
             // header iov
             iovs[0].iov_base = c0c3_cache;
             iovs[0].iov_len = nbh;
-            
+
             // payload iov
             int payload_size = srs_min(out_chunk_size, (int)(pend - p));
             iovs[1].iov_base = p;
             iovs[1].iov_len = payload_size;
-            
+
             // consume sendout bytes.
             p += payload_size;
-            
+
             // realloc the iovs if exceed,
             // for we donot know how many messges maybe to send entirely,
             // we just alloc the iovs, it's ok.
-            if (iov_index >= nb_out_iovs - 2) {
-                srs_warn("resize iovs %d => %d, max_msgs=%d", 
-                    nb_out_iovs, nb_out_iovs + SRS_CONSTS_IOVS_MAX, 
-                    SRS_PERF_MW_MSGS);
-                    
+            if (iov_index >= nb_out_iovs - 2)
+            {
+                srs_warn("resize iovs %d => %d, max_msgs=%d",
+                         nb_out_iovs, nb_out_iovs + SRS_CONSTS_IOVS_MAX,
+                         SRS_PERF_MW_MSGS);
+
                 nb_out_iovs += SRS_CONSTS_IOVS_MAX;
                 int realloc_size = sizeof(iovec) * nb_out_iovs;
                 out_iovs = (iovec*)realloc(out_iovs, realloc_size);
             }
-            
+
             // to next pair of iovs
             iov_index += 2;
             iovs = out_iovs + iov_index;
@@ -21911,100 +22797,110 @@ int SrsProtocol::do_send_messages(SrsSharedPtrMessage** msgs, int nb_msgs)
             // to next c0c3 header cache
             c0c3_cache_index += nbh;
             c0c3_cache = out_c0c3_caches + c0c3_cache_index;
-            
+
             // the cache header should never be realloc again,
             // for the ptr is set to iovs, so we just warn user to set larger
             // and use another loop to send again.
             int c0c3_left = SRS_CONSTS_C0C3_HEADERS_MAX - c0c3_cache_index;
-            if (c0c3_left < SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE) {
+            if (c0c3_left < SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE)
+            {
                 // only warn once for a connection.
-                if (!warned_c0c3_cache_dry) {
-                    srs_warn("c0c3 cache header too small, recoment to %d", 
-                        SRS_CONSTS_C0C3_HEADERS_MAX + SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE);
+                if (!warned_c0c3_cache_dry)
+                {
+                    srs_warn("c0c3 cache header too small, recoment to %d",
+                             SRS_CONSTS_C0C3_HEADERS_MAX + SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE);
                     warned_c0c3_cache_dry = true;
                 }
-                
+
                 // when c0c3 cache dry,
                 // sendout all messages and reset the cache, then send again.
-                if ((ret = do_iovs_send(out_iovs, iov_index)) != ERROR_SUCCESS) {
+                if ((ret = do_iovs_send(out_iovs, iov_index)) != ERROR_SUCCESS)
+                {
                     return ret;
                 }
-    
-                // reset caches, while these cache ensure 
+
+                // reset caches, while these cache ensure
                 // atleast we can sendout a chunk.
                 iov_index = 0;
                 iovs = out_iovs + iov_index;
-                
+
                 c0c3_cache_index = 0;
                 c0c3_cache = out_c0c3_caches + c0c3_cache_index;
             }
         }
     }
-    
+
     // maybe the iovs already sendout when c0c3 cache dry,
     // so just ignore when no iovs to send.
-    if (iov_index <= 0) {
+    if (iov_index <= 0)
+    {
         return ret;
     }
     srs_info("mw %d msgs in %d iovs, max_msgs=%d, nb_out_iovs=%d",
-        nb_msgs, iov_index, SRS_PERF_MW_MSGS, nb_out_iovs);
+             nb_msgs, iov_index, SRS_PERF_MW_MSGS, nb_out_iovs);
 
     return do_iovs_send(out_iovs, iov_index);
 #else
     // try to send use the c0c3 header cache,
     // if cache is consumed, try another loop.
-    for (int i = 0; i < nb_msgs; i++) {
+    for (int i = 0; i < nb_msgs; i++)
+    {
         SrsSharedPtrMessage* msg = msgs[i];
-        
-        if (!msg) {
+
+        if (!msg)
+        {
             continue;
         }
-    
+
         // ignore empty message.
-        if (!msg->payload || msg->size <= 0) {
+        if (!msg->payload || msg->size <= 0)
+        {
             srs_info("ignore empty message.");
             continue;
         }
-    
+
         // p set to current write position,
         // it's ok when payload is NULL and size is 0.
         char* p = msg->payload;
         char* pend = msg->payload + msg->size;
-        
+
         // always write the header event payload is empty.
-        while (p < pend) {
+        while (p < pend)
+        {
             // for simple send, send each chunk one by one
             iovec* iovs = out_iovs;
             char* c0c3_cache = out_c0c3_caches;
             int nb_cache = SRS_CONSTS_C0C3_HEADERS_MAX;
-            
+
             // always has header
             int nbh = msg->chunk_header(c0c3_cache, nb_cache, p == msg->payload);
             srs_assert(nbh > 0);
-            
+
             // header iov
             iovs[0].iov_base = c0c3_cache;
             iovs[0].iov_len = nbh;
-            
+
             // payload iov
             int payload_size = srs_min(out_chunk_size, pend - p);
             iovs[1].iov_base = p;
             iovs[1].iov_len = payload_size;
-            
+
             // consume sendout bytes.
             p += payload_size;
 
-            if ((ret = skt->writev(iovs, 2, NULL)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+            if ((ret = skt->writev(iovs, 2, NULL)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("send packet with writev failed. ret=%d", ret);
                 }
                 return ret;
             }
         }
     }
-    
+
     return ret;
-#endif   
+#endif
 }
 
 int SrsProtocol::do_iovs_send(iovec* iovs, int size)
@@ -22015,247 +22911,302 @@ int SrsProtocol::do_iovs_send(iovec* iovs, int size)
 int SrsProtocol::do_send_and_free_packet(SrsPacket* packet, int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(packet);
     SrsAutoFree(SrsPacket, packet);
-    
+
     int size = 0;
     char* payload = NULL;
-    if ((ret = packet->encode(size, payload)) != ERROR_SUCCESS) {
+    if ((ret = packet->encode(size, payload)) != ERROR_SUCCESS)
+    {
         srs_error("encode RTMP packet to bytes oriented RTMP message failed. ret=%d", ret);
         return ret;
     }
-    
+
     // encode packet to payload and size.
-    if (size <= 0 || payload == NULL) {
+    if (size <= 0 || payload == NULL)
+    {
         srs_warn("packet is empty, ignore empty message.");
         return ret;
     }
-    
+
     // to message
     SrsMessageHeader header;
     header.payload_length = size;
     header.message_type = packet->get_message_type();
     header.stream_id = stream_id;
     header.perfer_cid = packet->get_prefer_cid();
-    
+
     ret = do_simple_send(&header, payload, size);
     srs_freep(payload);
-    if (ret == ERROR_SUCCESS) {
+    if (ret == ERROR_SUCCESS)
+    {
         ret = on_send_packet(&header, packet);
     }
-    
+
     return ret;
 }
 
 int SrsProtocol::do_simple_send(SrsMessageHeader* mh, char* payload, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // we directly send out the packet,
     // use very simple algorithm, not very fast,
     // but it's ok.
     char* p = payload;
     char* end = p + size;
     char c0c3[SRS_CONSTS_RTMP_MAX_FMT0_HEADER_SIZE];
-    while (p < end) {
+    while (p < end)
+    {
         int nbh = 0;
-        if (p == payload) {
+        if (p == payload)
+        {
             nbh = srs_chunk_header_c0(
-                mh->perfer_cid, mh->timestamp, mh->payload_length,
-                mh->message_type, mh->stream_id,
-                c0c3, sizeof(c0c3));
-        } else {
+                      mh->perfer_cid, mh->timestamp, mh->payload_length,
+                      mh->message_type, mh->stream_id,
+                      c0c3, sizeof(c0c3));
+        }
+        else
+        {
             nbh = srs_chunk_header_c3(
-                mh->perfer_cid, mh->timestamp,
-                c0c3, sizeof(c0c3));
+                      mh->perfer_cid, mh->timestamp,
+                      c0c3, sizeof(c0c3));
         }
         srs_assert(nbh > 0);;
-        
+
         iovec iovs[2];
         iovs[0].iov_base = c0c3;
         iovs[0].iov_len = nbh;
-        
+
         int payload_size = srs_min(end - p, out_chunk_size);
         iovs[1].iov_base = p;
         iovs[1].iov_len = payload_size;
         p += payload_size;
-        
-        if ((ret = skt->writev(iovs, 2, NULL)) != ERROR_SUCCESS) {
-            if (!srs_is_client_gracefully_close(ret)) {
+
+        if ((ret = skt->writev(iovs, 2, NULL)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("send packet with writev failed. ret=%d", ret);
             }
             return ret;
         }
     }
-    
+
     return ret;
 }
 
 int SrsProtocol::do_decode_message(SrsMessageHeader& header, SrsStream* stream, SrsPacket** ppacket)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsPacket* packet = NULL;
-    
+
     // decode specified packet type
-    if (header.is_amf0_command() || header.is_amf3_command() || header.is_amf0_data() || header.is_amf3_data()) {
+    if (header.is_amf0_command() || header.is_amf3_command() || header.is_amf0_data() || header.is_amf3_data())
+    {
         srs_verbose("start to decode AMF0/AMF3 command message.");
-        
+
         // skip 1bytes to decode the amf3 command.
-        if (header.is_amf3_command() && stream->require(1)) {
+        if (header.is_amf3_command() && stream->require(1))
+        {
             srs_verbose("skip 1bytes to decode AMF3 command");
             stream->skip(1);
         }
-        
+
         // amf0 command message.
         // need to read the command name.
         std::string command;
-        if ((ret = srs_amf0_read_string(stream, command)) != ERROR_SUCCESS) {
+        if ((ret = srs_amf0_read_string(stream, command)) != ERROR_SUCCESS)
+        {
             srs_error("decode AMF0/AMF3 command name failed. ret=%d", ret);
             return ret;
         }
         srs_verbose("AMF0/AMF3 command message, command_name=%s", command.c_str());
-        
+
         // result/error packet
-        if (command == RTMP_AMF0_COMMAND_RESULT || command == RTMP_AMF0_COMMAND_ERROR) {
+        if (command == RTMP_AMF0_COMMAND_RESULT || command == RTMP_AMF0_COMMAND_ERROR)
+        {
             double transactionId = 0.0;
-            if ((ret = srs_amf0_read_number(stream, transactionId)) != ERROR_SUCCESS) {
+            if ((ret = srs_amf0_read_number(stream, transactionId)) != ERROR_SUCCESS)
+            {
                 srs_error("decode AMF0/AMF3 transcationId failed. ret=%d", ret);
                 return ret;
             }
             srs_verbose("AMF0/AMF3 command id, transcationId=%.2f", transactionId);
-            
+
             // reset stream, for header read completed.
             stream->skip(-1 * stream->pos());
-            if (header.is_amf3_command()) {
+            if (header.is_amf3_command())
+            {
                 stream->skip(1);
             }
-            
+
             // find the call name
-            if (requests.find(transactionId) == requests.end()) {
+            if (requests.find(transactionId) == requests.end())
+            {
                 ret = ERROR_RTMP_NO_REQUEST;
                 srs_error("decode AMF0/AMF3 request failed. ret=%d", ret);
                 return ret;
             }
-            
+
             std::string request_name = requests[transactionId];
             srs_verbose("AMF0/AMF3 request parsed. request_name=%s", request_name.c_str());
 
-            if (request_name == RTMP_AMF0_COMMAND_CONNECT) {
+            if (request_name == RTMP_AMF0_COMMAND_CONNECT)
+            {
                 srs_info("decode the AMF0/AMF3 response command(%s message).", request_name.c_str());
                 *ppacket = packet = new SrsConnectAppResPacket();
                 return packet->decode(stream);
-            } else if (request_name == RTMP_AMF0_COMMAND_CREATE_STREAM) {
+            }
+            else if (request_name == RTMP_AMF0_COMMAND_CREATE_STREAM)
+            {
                 srs_info("decode the AMF0/AMF3 response command(%s message).", request_name.c_str());
                 *ppacket = packet = new SrsCreateStreamResPacket(0, 0);
                 return packet->decode(stream);
-            } else if (request_name == RTMP_AMF0_COMMAND_RELEASE_STREAM
-                || request_name == RTMP_AMF0_COMMAND_FC_PUBLISH
-                || request_name == RTMP_AMF0_COMMAND_UNPUBLISH) {
+            }
+            else if (request_name == RTMP_AMF0_COMMAND_RELEASE_STREAM
+                     || request_name == RTMP_AMF0_COMMAND_FC_PUBLISH
+                     || request_name == RTMP_AMF0_COMMAND_UNPUBLISH)
+            {
                 srs_info("decode the AMF0/AMF3 response command(%s message).", request_name.c_str());
                 *ppacket = packet = new SrsFMLEStartResPacket(0);
                 return packet->decode(stream);
-            } else {
+            }
+            else
+            {
                 ret = ERROR_RTMP_NO_REQUEST;
                 srs_error("decode AMF0/AMF3 request failed. "
-                    "request_name=%s, transactionId=%.2f, ret=%d", 
-                    request_name.c_str(), transactionId, ret);
+                          "request_name=%s, transactionId=%.2f, ret=%d",
+                          request_name.c_str(), transactionId, ret);
                 return ret;
             }
         }
-        
+
         // reset to zero(amf3 to 1) to restart decode.
         stream->skip(-1 * stream->pos());
-        if (header.is_amf3_command()) {
+        if (header.is_amf3_command())
+        {
             stream->skip(1);
         }
-        
+
         // decode command object.
-        if (command == RTMP_AMF0_COMMAND_CONNECT) {
+        if (command == RTMP_AMF0_COMMAND_CONNECT)
+        {
             srs_info("decode the AMF0/AMF3 command(connect vhost/app message).");
             *ppacket = packet = new SrsConnectAppPacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_CREATE_STREAM) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_CREATE_STREAM)
+        {
             srs_info("decode the AMF0/AMF3 command(createStream message).");
             *ppacket = packet = new SrsCreateStreamPacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_PLAY) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_PLAY)
+        {
             srs_info("decode the AMF0/AMF3 command(paly message).");
             *ppacket = packet = new SrsPlayPacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_PAUSE) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_PAUSE)
+        {
             srs_info("decode the AMF0/AMF3 command(pause message).");
             *ppacket = packet = new SrsPausePacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_RELEASE_STREAM) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_RELEASE_STREAM)
+        {
             srs_info("decode the AMF0/AMF3 command(FMLE releaseStream message).");
             *ppacket = packet = new SrsFMLEStartPacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_FC_PUBLISH) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_FC_PUBLISH)
+        {
             srs_info("decode the AMF0/AMF3 command(FMLE FCPublish message).");
             *ppacket = packet = new SrsFMLEStartPacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_PUBLISH) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_PUBLISH)
+        {
             srs_info("decode the AMF0/AMF3 command(publish message).");
             *ppacket = packet = new SrsPublishPacket();
             return packet->decode(stream);
-        } else if(command == RTMP_AMF0_COMMAND_UNPUBLISH) {
+        }
+        else if(command == RTMP_AMF0_COMMAND_UNPUBLISH)
+        {
             srs_info("decode the AMF0/AMF3 command(unpublish message).");
             *ppacket = packet = new SrsFMLEStartPacket();
             return packet->decode(stream);
-        } else if(command == SRS_CONSTS_RTMP_SET_DATAFRAME || command == SRS_CONSTS_RTMP_ON_METADATA) {
+        }
+        else if(command == SRS_CONSTS_RTMP_SET_DATAFRAME || command == SRS_CONSTS_RTMP_ON_METADATA)
+        {
             srs_info("decode the AMF0/AMF3 data(onMetaData message).");
             *ppacket = packet = new SrsOnMetaDataPacket();
             return packet->decode(stream);
-        } else if(command == SRS_BW_CHECK_FINISHED
-            || command == SRS_BW_CHECK_PLAYING
-            || command == SRS_BW_CHECK_PUBLISHING
-            || command == SRS_BW_CHECK_STARTING_PLAY
-            || command == SRS_BW_CHECK_STARTING_PUBLISH
-            || command == SRS_BW_CHECK_START_PLAY
-            || command == SRS_BW_CHECK_START_PUBLISH
-            || command == SRS_BW_CHECK_STOPPED_PLAY
-            || command == SRS_BW_CHECK_STOP_PLAY
-            || command == SRS_BW_CHECK_STOP_PUBLISH
-            || command == SRS_BW_CHECK_STOPPED_PUBLISH
-            || command == SRS_BW_CHECK_FINAL)
+        }
+        else if(command == SRS_BW_CHECK_FINISHED
+                || command == SRS_BW_CHECK_PLAYING
+                || command == SRS_BW_CHECK_PUBLISHING
+                || command == SRS_BW_CHECK_STARTING_PLAY
+                || command == SRS_BW_CHECK_STARTING_PUBLISH
+                || command == SRS_BW_CHECK_START_PLAY
+                || command == SRS_BW_CHECK_START_PUBLISH
+                || command == SRS_BW_CHECK_STOPPED_PLAY
+                || command == SRS_BW_CHECK_STOP_PLAY
+                || command == SRS_BW_CHECK_STOP_PUBLISH
+                || command == SRS_BW_CHECK_STOPPED_PUBLISH
+                || command == SRS_BW_CHECK_FINAL)
         {
             srs_info("decode the AMF0/AMF3 band width check message.");
             *ppacket = packet = new SrsBandwidthPacket();
             return packet->decode(stream);
-        } else if (command == RTMP_AMF0_COMMAND_CLOSE_STREAM) {
+        }
+        else if (command == RTMP_AMF0_COMMAND_CLOSE_STREAM)
+        {
             srs_info("decode the AMF0/AMF3 closeStream message.");
             *ppacket = packet = new SrsCloseStreamPacket();
             return packet->decode(stream);
-        } else if (header.is_amf0_command() || header.is_amf3_command()) {
+        }
+        else if (header.is_amf0_command() || header.is_amf3_command())
+        {
             srs_info("decode the AMF0/AMF3 call message.");
             *ppacket = packet = new SrsCallPacket();
             return packet->decode(stream);
         }
-        
+
         // default packet to drop message.
         srs_info("drop the AMF0/AMF3 command message, command_name=%s", command.c_str());
         *ppacket = packet = new SrsPacket();
         return ret;
-    } else if(header.is_user_control_message()) {
+    }
+    else if(header.is_user_control_message())
+    {
         srs_verbose("start to decode user control message.");
         *ppacket = packet = new SrsUserControlPacket();
         return packet->decode(stream);
-    } else if(header.is_window_ackledgement_size()) {
+    }
+    else if(header.is_window_ackledgement_size())
+    {
         srs_verbose("start to decode set ack window size message.");
         *ppacket = packet = new SrsSetWindowAckSizePacket();
         return packet->decode(stream);
-    } else if(header.is_set_chunk_size()) {
+    }
+    else if(header.is_set_chunk_size())
+    {
         srs_verbose("start to decode set chunk size message.");
         *ppacket = packet = new SrsSetChunkSizePacket();
         return packet->decode(stream);
-    } else {
-        if (!header.is_set_peer_bandwidth() && !header.is_ackledgement()) {
+    }
+    else
+    {
+        if (!header.is_set_peer_bandwidth() && !header.is_ackledgement())
+        {
             srs_trace("drop unknown message, type=%d", header.message_type);
         }
     }
-    
+
     return ret;
 }
 
@@ -22269,141 +23220,162 @@ int SrsProtocol::send_and_free_messages(SrsSharedPtrMessage** msgs, int nb_msgs,
     // always not NULL msg.
     srs_assert(msgs);
     srs_assert(nb_msgs > 0);
-    
+
     // update the stream id in header.
-    for (int i = 0; i < nb_msgs; i++) {
+    for (int i = 0; i < nb_msgs; i++)
+    {
         SrsSharedPtrMessage* msg = msgs[i];
-        
-        if (!msg) {
+
+        if (!msg)
+        {
             continue;
         }
-        
+
         // check perfer cid and stream,
         // when one msg stream id is ok, ignore left.
-        if (msg->check(stream_id)) {
+        if (msg->check(stream_id))
+        {
             break;
         }
     }
-    
+
     // donot use the auto free to free the msg,
     // for performance issue.
     int ret = do_send_messages(msgs, nb_msgs);
-    
-    for (int i = 0; i < nb_msgs; i++) {
+
+    for (int i = 0; i < nb_msgs; i++)
+    {
         SrsSharedPtrMessage* msg = msgs[i];
         srs_freep(msg);
     }
-    
+
     // donot flush when send failed
-    if (ret != ERROR_SUCCESS) {
+    if (ret != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // flush messages in manual queue
-    if ((ret = manual_response_flush()) != ERROR_SUCCESS) {
+    if ((ret = manual_response_flush()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsProtocol::send_and_free_packet(SrsPacket* packet, int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = do_send_and_free_packet(packet, stream_id)) != ERROR_SUCCESS) {
+
+    if ((ret = do_send_and_free_packet(packet, stream_id)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // flush messages in manual queue
-    if ((ret = manual_response_flush()) != ERROR_SUCCESS) {
+    if ((ret = manual_response_flush()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsProtocol::recv_interlaced_message(SrsCommonMessage** pmsg)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // chunk stream basic header.
     char fmt = 0;
     int cid = 0;
-    if ((ret = read_basic_header(fmt, cid)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+    if ((ret = read_basic_header(fmt, cid)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+        {
             srs_error("read basic header failed. ret=%d", ret);
         }
         return ret;
     }
     srs_verbose("read basic header success. fmt=%d, cid=%d", fmt, cid);
-    
+
     // the cid must not negative.
     srs_assert(cid >= 0);
-    
+
     // get the cached chunk stream.
     SrsChunkStream* chunk = NULL;
-    
+
     // use chunk stream cache to get the chunk info.
     // @see https://github.com/simple-rtmp-server/srs/issues/249
-    if (cid < SRS_PERF_CHUNK_STREAM_CACHE) {
+    if (cid < SRS_PERF_CHUNK_STREAM_CACHE)
+    {
         // chunk stream cache hit.
         srs_verbose("cs-cache hit, cid=%d", cid);
         // already init, use it direclty
         chunk = cs_cache[cid];
         srs_verbose("cached chunk stream: fmt=%d, cid=%d, size=%d, message(type=%d, size=%d, time=%"PRId64", sid=%d)",
-            chunk->fmt, chunk->cid, (chunk->msg? chunk->msg->size : 0), chunk->header.message_type, chunk->header.payload_length,
-            chunk->header.timestamp, chunk->header.stream_id);
-    } else {
+                    chunk->fmt, chunk->cid, (chunk->msg? chunk->msg->size : 0), chunk->header.message_type, chunk->header.payload_length,
+                    chunk->header.timestamp, chunk->header.stream_id);
+    }
+    else
+    {
         // chunk stream cache miss, use map.
-        if (chunk_streams.find(cid) == chunk_streams.end()) {
+        if (chunk_streams.find(cid) == chunk_streams.end())
+        {
             chunk = chunk_streams[cid] = new SrsChunkStream(cid);
             // set the perfer cid of chunk,
             // which will copy to the message received.
             chunk->header.perfer_cid = cid;
             srs_verbose("cache new chunk stream: fmt=%d, cid=%d", fmt, cid);
-        } else {
+        }
+        else
+        {
             chunk = chunk_streams[cid];
             srs_verbose("cached chunk stream: fmt=%d, cid=%d, size=%d, message(type=%d, size=%d, time=%"PRId64", sid=%d)",
-                chunk->fmt, chunk->cid, (chunk->msg? chunk->msg->size : 0), chunk->header.message_type, chunk->header.payload_length,
-                chunk->header.timestamp, chunk->header.stream_id);
+                        chunk->fmt, chunk->cid, (chunk->msg? chunk->msg->size : 0), chunk->header.message_type, chunk->header.payload_length,
+                        chunk->header.timestamp, chunk->header.stream_id);
         }
     }
 
     // chunk stream message header
-    if ((ret = read_message_header(chunk, fmt)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+    if ((ret = read_message_header(chunk, fmt)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+        {
             srs_error("read message header failed. ret=%d", ret);
         }
         return ret;
     }
     srs_verbose("read message header success. "
-            "fmt=%d, ext_time=%d, size=%d, message(type=%d, size=%d, time=%"PRId64", sid=%d)", 
-            fmt, chunk->extended_timestamp, (chunk->msg? chunk->msg->size : 0), chunk->header.message_type, 
-            chunk->header.payload_length, chunk->header.timestamp, chunk->header.stream_id);
-    
+                "fmt=%d, ext_time=%d, size=%d, message(type=%d, size=%d, time=%"PRId64", sid=%d)",
+                fmt, chunk->extended_timestamp, (chunk->msg? chunk->msg->size : 0), chunk->header.message_type,
+                chunk->header.payload_length, chunk->header.timestamp, chunk->header.stream_id);
+
     // read msg payload from chunk stream.
     SrsCommonMessage* msg = NULL;
-    if ((ret = read_message_payload(chunk, &msg)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+    if ((ret = read_message_payload(chunk, &msg)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+        {
             srs_error("read message payload failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     // not got an entire RTMP message, try next chunk.
-    if (!msg) {
+    if (!msg)
+    {
         srs_verbose("get partial message success. size=%d, message(type=%d, size=%d, time=%"PRId64", sid=%d)",
-                (msg? msg->size : (chunk->msg? chunk->msg->size : 0)), chunk->header.message_type, chunk->header.payload_length,
-                chunk->header.timestamp, chunk->header.stream_id);
+                    (msg? msg->size : (chunk->msg? chunk->msg->size : 0)), chunk->header.message_type, chunk->header.payload_length,
+                    chunk->header.timestamp, chunk->header.stream_id);
         return ret;
     }
-    
+
     *pmsg = msg;
     srs_info("get entire message success. size=%d, message(type=%d, size=%d, time=%"PRId64", sid=%d)",
-            (msg? msg->size : (chunk->msg? chunk->msg->size : 0)), chunk->header.message_type, chunk->header.payload_length,
-            chunk->header.timestamp, chunk->header.stream_id);
-            
+             (msg? msg->size : (chunk->msg? chunk->msg->size : 0)), chunk->header.message_type, chunk->header.payload_length,
+             chunk->header.timestamp, chunk->header.stream_id);
+
     return ret;
 }
 
@@ -22414,7 +23386,7 @@ int SrsProtocol::recv_interlaced_message(SrsCommonMessage** pmsg)
 * determines the format of the encoded message header. Chunk Basic
 * Header field may be 1, 2, or 3 bytes, depending on the chunk stream
 * ID.
-* 
+*
 * The bits 0-5 (least significant) in the chunk basic header represent
 * the chunk stream ID.
 *
@@ -22447,61 +23419,73 @@ int SrsProtocol::recv_interlaced_message(SrsCommonMessage** pmsg)
 * cs id: 6 bits
 * fmt: 2 bits
 * cs id - 64: 8 or 16 bits
-* 
+*
 * Chunk stream IDs with values 64-319 could be represented by both 2-
 * byte version and 3-byte version of this field.
 */
 int SrsProtocol::read_basic_header(char& fmt, int& cid)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = in_buffer->grow(skt, 1)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+
+    if ((ret = in_buffer->grow(skt, 1)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+        {
             srs_error("read 1bytes basic header failed. required_size=%d, ret=%d", 1, ret);
         }
         return ret;
     }
-    
+
     fmt = in_buffer->read_1byte();
     cid = fmt & 0x3f;
     fmt = (fmt >> 6) & 0x03;
-    
+
     // 2-63, 1B chunk header
-    if (cid > 1) {
+    if (cid > 1)
+    {
         srs_verbose("basic header parsed. fmt=%d, cid=%d", fmt, cid);
         return ret;
     }
 
     // 64-319, 2B chunk header
-    if (cid == 0) {
-        if ((ret = in_buffer->grow(skt, 1)) != ERROR_SUCCESS) {
-            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+    if (cid == 0)
+    {
+        if ((ret = in_buffer->grow(skt, 1)) != ERROR_SUCCESS)
+        {
+            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("read 2bytes basic header failed. required_size=%d, ret=%d", 1, ret);
             }
             return ret;
         }
-        
+
         cid = 64;
         cid += (u_int8_t)in_buffer->read_1byte();
         srs_verbose("2bytes basic header parsed. fmt=%d, cid=%d", fmt, cid);
-    // 64-65599, 3B chunk header
-    } else if (cid == 1) {
-        if ((ret = in_buffer->grow(skt, 2)) != ERROR_SUCCESS) {
-            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+        // 64-65599, 3B chunk header
+    }
+    else if (cid == 1)
+    {
+        if ((ret = in_buffer->grow(skt, 2)) != ERROR_SUCCESS)
+        {
+            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("read 3bytes basic header failed. required_size=%d, ret=%d", 2, ret);
             }
             return ret;
         }
-        
+
         cid = 64;
         cid += (u_int8_t)in_buffer->read_1byte();
         cid += ((u_int8_t)in_buffer->read_1byte()) * 256;
         srs_verbose("3bytes basic header parsed. fmt=%d, cid=%d", fmt, cid);
-    } else {
+    }
+    else
+    {
         srs_error("invalid path, impossible basic header.");
         srs_assert(false);
     }
-    
+
     return ret;
 }
 
@@ -22520,7 +23504,7 @@ int SrsProtocol::read_basic_header(char& fmt, int& cid)
 int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
 {
     int ret = ERROR_SUCCESS;
-    
+
     /**
     * we should not assert anything about fmt, for the first packet.
     * (when first packet, the chunk->msg is NULL).
@@ -22545,10 +23529,11 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
     // fresh packet used to update the timestamp even fmt=3 for first packet.
     // fresh packet always means the chunk is the first one of message.
     bool is_first_chunk_of_msg = !chunk->msg;
-    
-    // but, we can ensure that when a chunk stream is fresh, 
+
+    // but, we can ensure that when a chunk stream is fresh,
     // the fmt must be 0, a new stream.
-    if (chunk->msg_count == 0 && fmt != RTMP_FMT_TYPE0) {
+    if (chunk->msg_count == 0 && fmt != RTMP_FMT_TYPE0)
+    {
         // for librtmp, if ping, it will send a fresh stream with fmt=1,
         // 0x42             where: fmt=1, cid=2, protocol contorl user-control message
         // 0x00 0x00 0x00   where: timestamp=0
@@ -22557,28 +23542,33 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
         // 0x00 0x06            where: event Ping(0x06)
         // 0x00 0x00 0x0d 0x0f  where: event data 4bytes ping timestamp.
         // @see: https://github.com/simple-rtmp-server/srs/issues/98
-        if (chunk->cid == RTMP_CID_ProtocolControl && fmt == RTMP_FMT_TYPE1) {
+        if (chunk->cid == RTMP_CID_ProtocolControl && fmt == RTMP_FMT_TYPE1)
+        {
             srs_warn("accept cid=2, fmt=1 to make librtmp happy.");
-        } else {
+        }
+        else
+        {
             // must be a RTMP protocol level error.
             ret = ERROR_RTMP_CHUNK_START;
-            srs_error("chunk stream is fresh, fmt must be %d, actual is %d. cid=%d, ret=%d", 
-                RTMP_FMT_TYPE0, fmt, chunk->cid, ret);
+            srs_error("chunk stream is fresh, fmt must be %d, actual is %d. cid=%d, ret=%d",
+                      RTMP_FMT_TYPE0, fmt, chunk->cid, ret);
             return ret;
         }
     }
 
     // when exists cache msg, means got an partial message,
     // the fmt must not be type0 which means new message.
-    if (chunk->msg && fmt == RTMP_FMT_TYPE0) {
+    if (chunk->msg && fmt == RTMP_FMT_TYPE0)
+    {
         ret = ERROR_RTMP_CHUNK_START;
         srs_error("chunk stream exists, "
-            "fmt must not be %d, actual is %d. ret=%d", RTMP_FMT_TYPE0, fmt, ret);
+                  "fmt must not be %d, actual is %d. ret=%d", RTMP_FMT_TYPE0, fmt, ret);
         return ret;
     }
-    
+
     // create msg when new chunk stream start
-    if (!chunk->msg) {
+    if (!chunk->msg)
+    {
         chunk->msg = new SrsCommonMessage();
         srs_verbose("create message for new chunk, fmt=%d, cid=%d", fmt, chunk->cid);
     }
@@ -22587,14 +23577,16 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
     static char mh_sizes[] = {11, 7, 3, 0};
     int mh_size = mh_sizes[(int)fmt];
     srs_verbose("calc chunk message header size. fmt=%d, mh_size=%d", fmt, mh_size);
-    
-    if (mh_size > 0 && (ret = in_buffer->grow(skt, mh_size)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+
+    if (mh_size > 0 && (ret = in_buffer->grow(skt, mh_size)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+        {
             srs_error("read %dbytes message header failed. ret=%d", mh_size, ret);
         }
         return ret;
     }
-    
+
     /**
     * parse the message header.
     *   3bytes: timestamp delta,    fmt=0,1,2
@@ -22608,15 +23600,16 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
     *   fmt=3, 0xCX
     */
     // see also: ngx_rtmp_recv
-    if (fmt <= RTMP_FMT_TYPE2) {
+    if (fmt <= RTMP_FMT_TYPE2)
+    {
         char* p = in_buffer->read_slice(mh_size);
-    
+
         char* pp = (char*)&chunk->header.timestamp_delta;
         pp[2] = *p++;
         pp[1] = *p++;
         pp[0] = *p++;
         pp[3] = 0;
-        
+
         // fmt: 0
         // timestamp: 3 bytes
         // If the timestamp is greater than or equal to 16777215
@@ -22631,7 +23624,8 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
         // timestamp header' MUST be present. Otherwise, this value SHOULD be
         // the entire delta.
         chunk->extended_timestamp = (chunk->header.timestamp_delta >= RTMP_EXTENDED_TIMESTAMP);
-        if (!chunk->extended_timestamp) {
+        if (!chunk->extended_timestamp)
+        {
             // Extended timestamp: 0 or 4 bytes
             // This field MUST be sent when the normal timsestamp is set to
             // 0xffffff, it MUST NOT be sent if the normal timestamp is set to
@@ -22640,12 +23634,15 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
             // MUST NOT be present. For values greater than or equal to 0xffffff
             // the normal timestamp field MUST NOT be used and MUST be set to
             // 0xffffff and the extended timestamp MUST be sent.
-            if (fmt == RTMP_FMT_TYPE0) {
+            if (fmt == RTMP_FMT_TYPE0)
+            {
                 // 6.1.2.1. Type 0
                 // For a type-0 chunk, the absolute timestamp of the message is sent
                 // here.
                 chunk->header.timestamp = chunk->header.timestamp_delta;
-            } else {
+            }
+            else
+            {
                 // 6.1.2.2. Type 1
                 // 6.1.2.3. Type 2
                 // For a type-1 or type-2 chunk, the difference between the previous
@@ -22653,63 +23650,76 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
                 chunk->header.timestamp += chunk->header.timestamp_delta;
             }
         }
-        
-        if (fmt <= RTMP_FMT_TYPE1) {
+
+        if (fmt <= RTMP_FMT_TYPE1)
+        {
             int32_t payload_length = 0;
             pp = (char*)&payload_length;
             pp[2] = *p++;
             pp[1] = *p++;
             pp[0] = *p++;
             pp[3] = 0;
-            
+
             // for a message, if msg exists in cache, the size must not changed.
             // always use the actual msg size to compare, for the cache payload length can changed,
-            // for the fmt type1(stream_id not changed), user can change the payload 
+            // for the fmt type1(stream_id not changed), user can change the payload
             // length(it's not allowed in the continue chunks).
-            if (!is_first_chunk_of_msg && chunk->header.payload_length != payload_length) {
+            if (!is_first_chunk_of_msg && chunk->header.payload_length != payload_length)
+            {
                 ret = ERROR_RTMP_PACKET_SIZE;
                 srs_error("msg exists in chunk cache, "
-                    "size=%d cannot change to %d, ret=%d", 
-                    chunk->header.payload_length, payload_length, ret);
+                          "size=%d cannot change to %d, ret=%d",
+                          chunk->header.payload_length, payload_length, ret);
                 return ret;
             }
-            
+
             chunk->header.payload_length = payload_length;
             chunk->header.message_type = *p++;
-            
-            if (fmt == RTMP_FMT_TYPE0) {
+
+            if (fmt == RTMP_FMT_TYPE0)
+            {
                 pp = (char*)&chunk->header.stream_id;
                 pp[0] = *p++;
                 pp[1] = *p++;
                 pp[2] = *p++;
                 pp[3] = *p++;
-                srs_verbose("header read completed. fmt=%d, mh_size=%d, ext_time=%d, time=%"PRId64", payload=%d, type=%d, sid=%d", 
-                    fmt, mh_size, chunk->extended_timestamp, chunk->header.timestamp, chunk->header.payload_length, 
-                    chunk->header.message_type, chunk->header.stream_id);
-            } else {
-                srs_verbose("header read completed. fmt=%d, mh_size=%d, ext_time=%d, time=%"PRId64", payload=%d, type=%d", 
-                    fmt, mh_size, chunk->extended_timestamp, chunk->header.timestamp, chunk->header.payload_length, 
-                    chunk->header.message_type);
+                srs_verbose("header read completed. fmt=%d, mh_size=%d, ext_time=%d, time=%"PRId64", payload=%d, type=%d, sid=%d",
+                            fmt, mh_size, chunk->extended_timestamp, chunk->header.timestamp, chunk->header.payload_length,
+                            chunk->header.message_type, chunk->header.stream_id);
             }
-        } else {
-            srs_verbose("header read completed. fmt=%d, mh_size=%d, ext_time=%d, time=%"PRId64"", 
-                fmt, mh_size, chunk->extended_timestamp, chunk->header.timestamp);
+            else
+            {
+                srs_verbose("header read completed. fmt=%d, mh_size=%d, ext_time=%d, time=%"PRId64", payload=%d, type=%d",
+                            fmt, mh_size, chunk->extended_timestamp, chunk->header.timestamp, chunk->header.payload_length,
+                            chunk->header.message_type);
+            }
         }
-    } else {
+        else
+        {
+            srs_verbose("header read completed. fmt=%d, mh_size=%d, ext_time=%d, time=%"PRId64"",
+                        fmt, mh_size, chunk->extended_timestamp, chunk->header.timestamp);
+        }
+    }
+    else
+    {
         // update the timestamp even fmt=3 for first chunk packet
-        if (is_first_chunk_of_msg && !chunk->extended_timestamp) {
+        if (is_first_chunk_of_msg && !chunk->extended_timestamp)
+        {
             chunk->header.timestamp += chunk->header.timestamp_delta;
         }
-        srs_verbose("header read completed. fmt=%d, size=%d, ext_time=%d", 
-            fmt, mh_size, chunk->extended_timestamp);
+        srs_verbose("header read completed. fmt=%d, size=%d, ext_time=%d",
+                    fmt, mh_size, chunk->extended_timestamp);
     }
-    
+
     // read extended-timestamp
-    if (chunk->extended_timestamp) {
+    if (chunk->extended_timestamp)
+    {
         mh_size += 4;
         srs_verbose("read header ext time. fmt=%d, ext_time=%d, mh_size=%d", fmt, chunk->extended_timestamp, mh_size);
-        if ((ret = in_buffer->grow(skt, 4)) != ERROR_SUCCESS) {
-            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+        if ((ret = in_buffer->grow(skt, 4)) != ERROR_SUCCESS)
+        {
+            if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("read %dbytes message header failed. required_size=%d, ret=%d", mh_size, 4, ret);
             }
             return ret;
@@ -22728,12 +23738,12 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
         // always use 31bits timestamp, for some server may use 32bits extended timestamp.
         // @see https://github.com/simple-rtmp-server/srs/issues/111
         timestamp &= 0x7fffffff;
-        
+
         /**
         * RTMP specification and ffmpeg/librtmp is false,
         * but, adobe changed the specification, so flash/FMLE/FMS always true.
         * default to true to support flash/FMLE/FMS.
-        * 
+        *
         * ffmpeg/librtmp may donot send this filed, need to detect the value.
         * @see also: http://blog.csdn.net/win_lin/article/details/13363699
         * compare to the chunk timestamp, which is set by chunk message header
@@ -22747,7 +23757,7 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
         * and compatible with adobe products.
         */
         u_int32_t chunk_timestamp = (u_int32_t)chunk->header.timestamp;
-        
+
         /**
         * if chunk_timestamp<=0, the chunk previous packet has no extended-timestamp,
         * always use the extended timestamp.
@@ -22756,16 +23766,19 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
         * about the is_first_chunk_of_msg.
         * @remark, for the first chunk of message, always use the extended timestamp.
         */
-        if (!is_first_chunk_of_msg && chunk_timestamp > 0 && chunk_timestamp != timestamp) {
+        if (!is_first_chunk_of_msg && chunk_timestamp > 0 && chunk_timestamp != timestamp)
+        {
             mh_size -= 4;
             in_buffer->skip(-4);
             srs_info("no 4bytes extended timestamp in the continued chunk");
-        } else {
+        }
+        else
+        {
             chunk->header.timestamp = timestamp;
         }
         srs_verbose("header read ext_time completed. time=%"PRId64"", chunk->header.timestamp);
     }
-    
+
     // the extended-timestamp must be unsigned-int,
     //         24bits timestamp: 0xffffff = 16777215ms = 16777.215s = 4.66h
     //         32bits timestamp: 0xffffffff = 4294967295ms = 4294967.295s = 1193.046h = 49.71d
@@ -22773,9 +23786,9 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
     //         3. Byte Order, Alignment, and Time Format
     //                Because timestamps are generally only 32 bits long, they will roll
     //                over after fewer than 50 days.
-    // 
+    //
     // but, its sample says the timestamp is 31bits:
-    //         An application could assume, for example, that all 
+    //         An application could assume, for example, that all
     //        adjacent timestamps are within 2^31 milliseconds of each other, so
     //        10000 comes after 4000000000, while 3000000000 comes before
     //        4000000000.
@@ -22787,270 +23800,303 @@ int SrsProtocol::read_message_header(SrsChunkStream* chunk, char fmt)
     // in a word, 31bits timestamp is ok.
     // convert extended timestamp to 31bits.
     chunk->header.timestamp &= 0x7fffffff;
-    
+
     // valid message, the payload_length is 24bits,
     // so it should never be negative.
     srs_assert(chunk->header.payload_length >= 0);
-    
+
     // copy header to msg
     chunk->msg->header = chunk->header;
-    
+
     // increase the msg count, the chunk stream can accept fmt=1/2/3 message now.
     chunk->msg_count++;
-    
+
     return ret;
 }
 
 int SrsProtocol::read_message_payload(SrsChunkStream* chunk, SrsCommonMessage** pmsg)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // empty message
-    if (chunk->header.payload_length <= 0) {
+    if (chunk->header.payload_length <= 0)
+    {
         srs_trace("get an empty RTMP "
-                "message(type=%d, size=%d, time=%"PRId64", sid=%d)", chunk->header.message_type, 
-                chunk->header.payload_length, chunk->header.timestamp, chunk->header.stream_id);
-        
+                  "message(type=%d, size=%d, time=%"PRId64", sid=%d)", chunk->header.message_type,
+                  chunk->header.payload_length, chunk->header.timestamp, chunk->header.stream_id);
+
         *pmsg = chunk->msg;
         chunk->msg = NULL;
-                
+
         return ret;
     }
     srs_assert(chunk->header.payload_length > 0);
-    
+
     // the chunk payload size.
     int payload_size = chunk->header.payload_length - chunk->msg->size;
     payload_size = srs_min(payload_size, in_chunk_size);
-    srs_verbose("chunk payload size is %d, message_size=%d, received_size=%d, in_chunk_size=%d", 
-        payload_size, chunk->header.payload_length, chunk->msg->size, in_chunk_size);
+    srs_verbose("chunk payload size is %d, message_size=%d, received_size=%d, in_chunk_size=%d",
+                payload_size, chunk->header.payload_length, chunk->msg->size, in_chunk_size);
 
     // create msg payload if not initialized
-    if (!chunk->msg->payload) {
+    if (!chunk->msg->payload)
+    {
         chunk->msg->create_payload(chunk->header.payload_length);
     }
-    
+
     // read payload to buffer
-    if ((ret = in_buffer->grow(skt, payload_size)) != ERROR_SUCCESS) {
-        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret)) {
+    if ((ret = in_buffer->grow(skt, payload_size)) != ERROR_SUCCESS)
+    {
+        if (ret != ERROR_SOCKET_TIMEOUT && !srs_is_client_gracefully_close(ret))
+        {
             srs_error("read payload failed. required_size=%d, ret=%d", payload_size, ret);
         }
         return ret;
     }
     memcpy(chunk->msg->payload + chunk->msg->size, in_buffer->read_slice(payload_size), payload_size);
     chunk->msg->size += payload_size;
-    
+
     srs_verbose("chunk payload read completed. payload_size=%d", payload_size);
-    
+
     // got entire RTMP message?
-    if (chunk->header.payload_length == chunk->msg->size) {
+    if (chunk->header.payload_length == chunk->msg->size)
+    {
         *pmsg = chunk->msg;
         chunk->msg = NULL;
-        srs_verbose("get entire RTMP message(type=%d, size=%d, time=%"PRId64", sid=%d)", 
-                chunk->header.message_type, chunk->header.payload_length, 
-                chunk->header.timestamp, chunk->header.stream_id);
+        srs_verbose("get entire RTMP message(type=%d, size=%d, time=%"PRId64", sid=%d)",
+                    chunk->header.message_type, chunk->header.payload_length,
+                    chunk->header.timestamp, chunk->header.stream_id);
         return ret;
     }
-    
-    srs_verbose("get partial RTMP message(type=%d, size=%d, time=%"PRId64", sid=%d), partial size=%d", 
-            chunk->header.message_type, chunk->header.payload_length, 
-            chunk->header.timestamp, chunk->header.stream_id,
-            chunk->msg->size);
-            
+
+    srs_verbose("get partial RTMP message(type=%d, size=%d, time=%"PRId64", sid=%d), partial size=%d",
+                chunk->header.message_type, chunk->header.payload_length,
+                chunk->header.timestamp, chunk->header.stream_id,
+                chunk->msg->size);
+
     return ret;
 }
 
 int SrsProtocol::on_recv_message(SrsCommonMessage* msg)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(msg != NULL);
-        
+
     // acknowledgement
-    if (in_ack_size.ack_window_size > 0 
-        && skt->get_recv_bytes() - in_ack_size.acked_size > in_ack_size.ack_window_size
-    ) {
-        if ((ret = response_acknowledgement_message()) != ERROR_SUCCESS) {
+    if (in_ack_size.ack_window_size > 0
+            && skt->get_recv_bytes() - in_ack_size.acked_size > in_ack_size.ack_window_size
+       )
+    {
+        if ((ret = response_acknowledgement_message()) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     SrsPacket* packet = NULL;
-    switch (msg->header.message_type) {
-        case RTMP_MSG_SetChunkSize:
-        case RTMP_MSG_UserControlMessage:
-        case RTMP_MSG_WindowAcknowledgementSize:
-            if ((ret = decode_message(msg, &packet)) != ERROR_SUCCESS) {
-                srs_error("decode packet from message payload failed. ret=%d", ret);
-                return ret;
-            }
-            srs_verbose("decode packet from message payload success.");
-            break;
-        default:
+    switch (msg->header.message_type)
+    {
+    case RTMP_MSG_SetChunkSize:
+    case RTMP_MSG_UserControlMessage:
+    case RTMP_MSG_WindowAcknowledgementSize:
+        if ((ret = decode_message(msg, &packet)) != ERROR_SUCCESS)
+        {
+            srs_error("decode packet from message payload failed. ret=%d", ret);
             return ret;
+        }
+        srs_verbose("decode packet from message payload success.");
+        break;
+    default:
+        return ret;
     }
-    
+
     srs_assert(packet);
-    
+
     // always free the packet.
     SrsAutoFree(SrsPacket, packet);
-    
-    switch (msg->header.message_type) {
-        case RTMP_MSG_WindowAcknowledgementSize: {
-            SrsSetWindowAckSizePacket* pkt = dynamic_cast<SrsSetWindowAckSizePacket*>(packet);
-            srs_assert(pkt != NULL);
-            
-            if (pkt->ackowledgement_window_size > 0) {
-                in_ack_size.ack_window_size = pkt->ackowledgement_window_size;
-                // @remark, we ignore this message, for user noneed to care.
-                // but it's important for dev, for client/server will block if required 
-                // ack msg not arrived.
-                srs_info("set ack window size to %d", pkt->ackowledgement_window_size);
-            } else {
-                srs_warn("ignored. set ack window size is %d", pkt->ackowledgement_window_size);
-            }
-            break;
-        }
-        case RTMP_MSG_SetChunkSize: {
-            SrsSetChunkSizePacket* pkt = dynamic_cast<SrsSetChunkSizePacket*>(packet);
-            srs_assert(pkt != NULL);
 
-            // for some server, the actual chunk size can greater than the max value(65536),
-            // so we just warning the invalid chunk size, and actually use it is ok,
-            // @see: https://github.com/simple-rtmp-server/srs/issues/160
-            if (pkt->chunk_size < SRS_CONSTS_RTMP_MIN_CHUNK_SIZE 
-                || pkt->chunk_size > SRS_CONSTS_RTMP_MAX_CHUNK_SIZE) 
-            {
-                srs_warn("accept chunk size %d, but should in [%d, %d], "
-                    "@see: https://github.com/simple-rtmp-server/srs/issues/160",
-                    pkt->chunk_size, SRS_CONSTS_RTMP_MIN_CHUNK_SIZE, 
-                    SRS_CONSTS_RTMP_MAX_CHUNK_SIZE);
-            }
+    switch (msg->header.message_type)
+    {
+    case RTMP_MSG_WindowAcknowledgementSize:
+    {
+        SrsSetWindowAckSizePacket* pkt = dynamic_cast<SrsSetWindowAckSizePacket*>(packet);
+        srs_assert(pkt != NULL);
 
-            in_chunk_size = pkt->chunk_size;
-            srs_trace("input chunk size to %d", pkt->chunk_size);
-
-            break;
+        if (pkt->ackowledgement_window_size > 0)
+        {
+            in_ack_size.ack_window_size = pkt->ackowledgement_window_size;
+            // @remark, we ignore this message, for user noneed to care.
+            // but it's important for dev, for client/server will block if required
+            // ack msg not arrived.
+            srs_info("set ack window size to %d", pkt->ackowledgement_window_size);
         }
-        case RTMP_MSG_UserControlMessage: {
-            SrsUserControlPacket* pkt = dynamic_cast<SrsUserControlPacket*>(packet);
-            srs_assert(pkt != NULL);
-            
-            if (pkt->event_type == SrcPCUCSetBufferLength) {
-                srs_trace("ignored. set buffer length to %d", pkt->extra_data);
-            }
-            if (pkt->event_type == SrcPCUCPingRequest) {
-                if ((ret = response_ping_message(pkt->event_data)) != ERROR_SUCCESS) {
-                    return ret;
-                }
-            }
-            break;
+        else
+        {
+            srs_warn("ignored. set ack window size is %d", pkt->ackowledgement_window_size);
         }
-        default:
-            break;
+        break;
     }
-    
+    case RTMP_MSG_SetChunkSize:
+    {
+        SrsSetChunkSizePacket* pkt = dynamic_cast<SrsSetChunkSizePacket*>(packet);
+        srs_assert(pkt != NULL);
+
+        // for some server, the actual chunk size can greater than the max value(65536),
+        // so we just warning the invalid chunk size, and actually use it is ok,
+        // @see: https://github.com/simple-rtmp-server/srs/issues/160
+        if (pkt->chunk_size < SRS_CONSTS_RTMP_MIN_CHUNK_SIZE
+                || pkt->chunk_size > SRS_CONSTS_RTMP_MAX_CHUNK_SIZE)
+        {
+            srs_warn("accept chunk size %d, but should in [%d, %d], "
+                     "@see: https://github.com/simple-rtmp-server/srs/issues/160",
+                     pkt->chunk_size, SRS_CONSTS_RTMP_MIN_CHUNK_SIZE,
+                     SRS_CONSTS_RTMP_MAX_CHUNK_SIZE);
+        }
+
+        in_chunk_size = pkt->chunk_size;
+        srs_trace("input chunk size to %d", pkt->chunk_size);
+
+        break;
+    }
+    case RTMP_MSG_UserControlMessage:
+    {
+        SrsUserControlPacket* pkt = dynamic_cast<SrsUserControlPacket*>(packet);
+        srs_assert(pkt != NULL);
+
+        if (pkt->event_type == SrcPCUCSetBufferLength)
+        {
+            srs_trace("ignored. set buffer length to %d", pkt->extra_data);
+        }
+        if (pkt->event_type == SrcPCUCPingRequest)
+        {
+            if ((ret = response_ping_message(pkt->event_data)) != ERROR_SUCCESS)
+            {
+                return ret;
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
     return ret;
 }
 
 int SrsProtocol::on_send_packet(SrsMessageHeader* mh, SrsPacket* packet)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // ignore raw bytes oriented RTMP message.
-    if (packet == NULL) {
+    if (packet == NULL)
+    {
         return ret;
     }
-    
-    switch (mh->message_type) {
-        case RTMP_MSG_SetChunkSize: {
-            SrsSetChunkSizePacket* pkt = dynamic_cast<SrsSetChunkSizePacket*>(packet);
-            srs_assert(pkt != NULL);
-            
-            out_chunk_size = pkt->chunk_size;
-            
-            srs_trace("out chunk size to %d", pkt->chunk_size);
-            break;
-        }
-        case RTMP_MSG_AMF0CommandMessage:
-        case RTMP_MSG_AMF3CommandMessage: {
-            if (true) {
-                SrsConnectAppPacket* pkt = dynamic_cast<SrsConnectAppPacket*>(packet);
-                if (pkt) {
-                    requests[pkt->transaction_id] = pkt->command_name;
-                    break;
-                }
-            }
-            if (true) {
-                SrsCreateStreamPacket* pkt = dynamic_cast<SrsCreateStreamPacket*>(packet);
-                if (pkt) {
-                    requests[pkt->transaction_id] = pkt->command_name;
-                    break;
-                }
-            }
-            if (true) {
-                SrsFMLEStartPacket* pkt = dynamic_cast<SrsFMLEStartPacket*>(packet);
-                if (pkt) {
-                    requests[pkt->transaction_id] = pkt->command_name;
-                    break;
-                }
-            }
-            break;
-        }
-        default:
-            break;
+
+    switch (mh->message_type)
+    {
+    case RTMP_MSG_SetChunkSize:
+    {
+        SrsSetChunkSizePacket* pkt = dynamic_cast<SrsSetChunkSizePacket*>(packet);
+        srs_assert(pkt != NULL);
+
+        out_chunk_size = pkt->chunk_size;
+
+        srs_trace("out chunk size to %d", pkt->chunk_size);
+        break;
     }
-    
+    case RTMP_MSG_AMF0CommandMessage:
+    case RTMP_MSG_AMF3CommandMessage:
+    {
+        if (true)
+        {
+            SrsConnectAppPacket* pkt = dynamic_cast<SrsConnectAppPacket*>(packet);
+            if (pkt)
+            {
+                requests[pkt->transaction_id] = pkt->command_name;
+                break;
+            }
+        }
+        if (true)
+        {
+            SrsCreateStreamPacket* pkt = dynamic_cast<SrsCreateStreamPacket*>(packet);
+            if (pkt)
+            {
+                requests[pkt->transaction_id] = pkt->command_name;
+                break;
+            }
+        }
+        if (true)
+        {
+            SrsFMLEStartPacket* pkt = dynamic_cast<SrsFMLEStartPacket*>(packet);
+            if (pkt)
+            {
+                requests[pkt->transaction_id] = pkt->command_name;
+                break;
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
     return ret;
 }
 
 int SrsProtocol::response_acknowledgement_message()
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsAcknowledgementPacket* pkt = new SrsAcknowledgementPacket();
     in_ack_size.acked_size = skt->get_recv_bytes();
     pkt->sequence_number = (int32_t)in_ack_size.acked_size;
-    
+
     // cache the message and use flush to send.
-    if (!auto_response_when_recv) {
+    if (!auto_response_when_recv)
+    {
         manual_response_queue.push_back(pkt);
         return ret;
     }
-    
+
     // use underlayer api to send, donot flush again.
-    if ((ret = do_send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+    if ((ret = do_send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send acknowledgement failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("send acknowledgement success.");
-    
+
     return ret;
 }
 
 int SrsProtocol::response_ping_message(int32_t timestamp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_trace("get a ping request, response it. timestamp=%d", timestamp);
-    
+
     SrsUserControlPacket* pkt = new SrsUserControlPacket();
-    
+
     pkt->event_type = SrcPCUCPingResponse;
     pkt->event_data = timestamp;
-    
+
     // cache the message and use flush to send.
-    if (!auto_response_when_recv) {
+    if (!auto_response_when_recv)
+    {
         manual_response_queue.push_back(pkt);
         return ret;
     }
-    
+
     // use underlayer api to send, donot flush again.
-    if ((ret = do_send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+    if ((ret = do_send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send ping response failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("send ping response success.");
-    
+
     return ret;
 }
 
@@ -23083,7 +24129,7 @@ SrsRequest::~SrsRequest()
 SrsRequest* SrsRequest::copy()
 {
     SrsRequest* cp = new SrsRequest();
-    
+
     cp->ip = ip;
     cp->app = app;
     cp->objectEncoding = objectEncoding;
@@ -23097,10 +24143,11 @@ SrsRequest* SrsRequest::copy()
     cp->tcUrl = tcUrl;
     cp->vhost = vhost;
     cp->duration = duration;
-    if (args) {
+    if (args)
+    {
         cp->args = args->copy()->to_object();
     }
-    
+
     return cp;
 }
 
@@ -23109,14 +24156,16 @@ void SrsRequest::update_auth(SrsRequest* req)
     pageUrl = req->pageUrl;
     swfUrl = req->swfUrl;
     tcUrl = req->tcUrl;
-    
-    if (args) {
+
+    if (args)
+    {
         srs_freep(args);
     }
-    if (req->args) {
+    if (req->args)
+    {
         args = req->args->copy()->to_object();
     }
-    
+
     srs_info("update req of soruce for auth ok");
 }
 
@@ -23132,11 +24181,11 @@ void SrsRequest::strip()
     vhost = srs_string_remove(vhost, "/ \n\r\t");
     app = srs_string_remove(app, " \n\r\t");
     stream = srs_string_remove(stream, " \n\r\t");
-    
+
     // remove end slash of app/stream
     app = srs_string_trim_end(app, "/");
     stream = srs_string_trim_end(stream, "/");
-    
+
     // remove start slash of app/stream
     app = srs_string_trim_start(app, "/");
     stream = srs_string_trim_start(stream, "/");
@@ -23153,11 +24202,16 @@ SrsResponse::~SrsResponse()
 
 string srs_client_type_string(SrsRtmpConnType type)
 {
-    switch (type) {
-        case SrsRtmpConnPlay: return "Play";
-        case SrsRtmpConnFlashPublish: return "publish(FlashPublish)";
-        case SrsRtmpConnFMLEPublish: return "publish(FMLEPublish)";
-        default: return "Unknown";
+    switch (type)
+    {
+    case SrsRtmpConnPlay:
+        return "Play";
+    case SrsRtmpConnFlashPublish:
+        return "publish(FlashPublish)";
+    case SrsRtmpConnFMLEPublish:
+        return "publish(FMLEPublish)";
+    default:
+        return "Unknown";
     }
 }
 
@@ -23176,140 +24230,155 @@ SrsHandshakeBytes::~SrsHandshakeBytes()
 int SrsHandshakeBytes::read_c0c1(ISrsProtocolReaderWriter* io)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (c0c1) {
+
+    if (c0c1)
+    {
         return ret;
     }
-    
+
     ssize_t nsize;
-    
+
     c0c1 = new char[1537];
-    if ((ret = io->read_fully(c0c1, 1537, &nsize)) != ERROR_SUCCESS) {
+    if ((ret = io->read_fully(c0c1, 1537, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("read c0c1 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("read c0c1 success.");
-    
+
     return ret;
 }
 
 int SrsHandshakeBytes::read_s0s1s2(ISrsProtocolReaderWriter* io)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (s0s1s2) {
+
+    if (s0s1s2)
+    {
         return ret;
     }
-    
+
     ssize_t nsize;
-    
+
     s0s1s2 = new char[3073];
-    if ((ret = io->read_fully(s0s1s2, 3073, &nsize)) != ERROR_SUCCESS) {
+    if ((ret = io->read_fully(s0s1s2, 3073, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("read s0s1s2 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("read s0s1s2 success.");
-    
+
     return ret;
 }
 
 int SrsHandshakeBytes::read_c2(ISrsProtocolReaderWriter* io)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (c2) {
+
+    if (c2)
+    {
         return ret;
     }
-    
+
     ssize_t nsize;
-    
+
     c2 = new char[1536];
-    if ((ret = io->read_fully(c2, 1536, &nsize)) != ERROR_SUCCESS) {
+    if ((ret = io->read_fully(c2, 1536, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("read c2 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("read c2 success.");
-    
+
     return ret;
 }
 
 int SrsHandshakeBytes::create_c0c1()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (c0c1) {
+
+    if (c0c1)
+    {
         return ret;
     }
-    
+
     c0c1 = new char[1537];
     srs_random_generate(c0c1, 1537);
-    
+
     // plain text required.
     SrsStream stream;
-    if ((ret = stream.initialize(c0c1, 9)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(c0c1, 9)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     stream.write_1bytes(0x03);
     stream.write_4bytes((int32_t)::time(NULL));
     stream.write_4bytes(0x00);
-    
+
     return ret;
 }
 
 int SrsHandshakeBytes::create_s0s1s2(const char* c1)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (s0s1s2) {
+
+    if (s0s1s2)
+    {
         return ret;
     }
-    
+
     s0s1s2 = new char[3073];
     srs_random_generate(s0s1s2, 3073);
-    
+
     // plain text required.
     SrsStream stream;
-    if ((ret = stream.initialize(s0s1s2, 9)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(s0s1s2, 9)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     stream.write_1bytes(0x03);
     stream.write_4bytes((int32_t)::time(NULL));
     // s1 time2 copy from c1
-    if (c0c1) {
+    if (c0c1)
+    {
         stream.write_bytes(c0c1 + 1, 4);
     }
-    
+
     // if c1 specified, copy c1 to s2.
     // @see: https://github.com/simple-rtmp-server/srs/issues/46
-    if (c1) {
+    if (c1)
+    {
         memcpy(s0s1s2 + 1537, c1, 1536);
     }
-    
+
     return ret;
 }
 
 int SrsHandshakeBytes::create_c2()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (c2) {
+
+    if (c2)
+    {
         return ret;
     }
-    
+
     c2 = new char[1536];
     srs_random_generate(c2, 1536);
-    
+
     // time
     SrsStream stream;
-    if ((ret = stream.initialize(c2, 8)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(c2, 8)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     stream.write_4bytes((int32_t)::time(NULL));
     // c2 time2 copy from s1
-    if (s0s1s2) {
+    if (s0s1s2)
+    {
         stream.write_bytes(s0s1s2 + 1, 4);
     }
-    
+
     return ret;
 }
 
@@ -23374,54 +24443,59 @@ int SrsRtmpClient::send_and_free_packet(SrsPacket* packet, int stream_id)
 int SrsRtmpClient::handshake()
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(hs_bytes);
-    
+
     SrsComplexHandshake complex_hs;
-    if ((ret = complex_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS) {
-        if (ret == ERROR_RTMP_TRY_SIMPLE_HS) {
+    if ((ret = complex_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS)
+    {
+        if (ret == ERROR_RTMP_TRY_SIMPLE_HS)
+        {
             SrsSimpleHandshake simple_hs;
-            if ((ret = simple_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS) {
+            if ((ret = simple_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
         }
         return ret;
     }
-    
+
     srs_freep(hs_bytes);
-    
+
     return ret;
 }
 
 int SrsRtmpClient::simple_handshake()
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(hs_bytes);
-    
+
     SrsSimpleHandshake simple_hs;
-    if ((ret = simple_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS) {
+    if ((ret = simple_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     srs_freep(hs_bytes);
-    
+
     return ret;
 }
 
 int SrsRtmpClient::complex_handshake()
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(hs_bytes);
-    
+
     SrsComplexHandshake complex_hs;
-    if ((ret = complex_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS) {
+    if ((ret = complex_hs.handshake_with_server(hs_bytes, io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     srs_freep(hs_bytes);
-    
+
     return ret;
 }
 
@@ -23434,10 +24508,10 @@ int SrsRtmpClient::connect_app(string app, string tc_url, SrsRequest* req, bool 
     std::string srs_version;
     int srs_id = 0;
     int srs_pid = 0;
-    
+
     return connect_app2(app, tc_url, req, debug_srs_upnode,
-        srs_server_ip, srs_server, srs_primary, srs_authors,
-        srs_version, srs_id, srs_pid);
+                        srs_server_ip, srs_server, srs_primary, srs_authors,
+                        srs_version, srs_id, srs_pid);
 }
 
 int SrsRtmpClient::connect_app2(
@@ -23445,23 +24519,31 @@ int SrsRtmpClient::connect_app2(
     string& srs_server_ip, string& srs_server, string& srs_primary,
     string& srs_authors, string& srs_version, int& srs_id,
     int& srs_pid
-){
+)
+{
     int ret = ERROR_SUCCESS;
-    
+
     // Connect(vhost, app)
-    if (true) {
+    if (true)
+    {
         SrsConnectAppPacket* pkt = new SrsConnectAppPacket();
-        
+
         pkt->command_object->set("app", SrsAmf0Any::str(app.c_str()));
         pkt->command_object->set("flashVer", SrsAmf0Any::str("WIN 15,0,0,239"));
-        if (req) {
+        if (req)
+        {
             pkt->command_object->set("swfUrl", SrsAmf0Any::str(req->swfUrl.c_str()));
-        } else {
+        }
+        else
+        {
             pkt->command_object->set("swfUrl", SrsAmf0Any::str());
         }
-        if (req && req->tcUrl != "") {
+        if (req && req->tcUrl != "")
+        {
             pkt->command_object->set("tcUrl", SrsAmf0Any::str(req->tcUrl.c_str()));
-        } else {
+        }
+        else
+        {
             pkt->command_object->set("tcUrl", SrsAmf0Any::str(tc_url.c_str()));
         }
         pkt->command_object->set("fpad", SrsAmf0Any::boolean(false));
@@ -23469,229 +24551,267 @@ int SrsRtmpClient::connect_app2(
         pkt->command_object->set("audioCodecs", SrsAmf0Any::number(3575));
         pkt->command_object->set("videoCodecs", SrsAmf0Any::number(252));
         pkt->command_object->set("videoFunction", SrsAmf0Any::number(1));
-        if (req) {
+        if (req)
+        {
             pkt->command_object->set("pageUrl", SrsAmf0Any::str(req->pageUrl.c_str()));
-        } else {
+        }
+        else
+        {
             pkt->command_object->set("pageUrl", SrsAmf0Any::str());
         }
         pkt->command_object->set("objectEncoding", SrsAmf0Any::number(0));
-        
+
         // @see https://github.com/simple-rtmp-server/srs/issues/160
         // the debug_srs_upnode is config in vhost and default to true.
-        if (debug_srs_upnode && req && req->args) {
+        if (debug_srs_upnode && req && req->args)
+        {
             srs_freep(pkt->args);
             pkt->args = req->args->copy()->to_object();
         }
-        
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     // Set Window Acknowledgement size(2500000)
-    if (true) {
+    if (true)
+    {
         SrsSetWindowAckSizePacket* pkt = new SrsSetWindowAckSizePacket();
         pkt->ackowledgement_window_size = 2500000;
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     // expect connect _result
     SrsCommonMessage* msg = NULL;
     SrsConnectAppResPacket* pkt = NULL;
-    if ((ret = expect_message<SrsConnectAppResPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+    if ((ret = expect_message<SrsConnectAppResPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+    {
         srs_error("expect connect app response message failed. ret=%d", ret);
         return ret;
     }
     SrsAutoFree(SrsCommonMessage, msg);
     SrsAutoFree(SrsConnectAppResPacket, pkt);
-    
+
     // server info
     SrsAmf0Any* data = pkt->info->get_property("data");
-    if (data && data->is_ecma_array()) {
+    if (data && data->is_ecma_array())
+    {
         SrsAmf0EcmaArray* arr = data->to_ecma_array();
-        
+
         SrsAmf0Any* prop = NULL;
-        if ((prop = arr->ensure_property_string("srs_primary")) != NULL) {
+        if ((prop = arr->ensure_property_string("srs_primary")) != NULL)
+        {
             srs_primary = prop->to_str();
         }
-        if ((prop = arr->ensure_property_string("srs_authors")) != NULL) {
+        if ((prop = arr->ensure_property_string("srs_authors")) != NULL)
+        {
             srs_authors = prop->to_str();
         }
-        if ((prop = arr->ensure_property_string("srs_version")) != NULL) {
+        if ((prop = arr->ensure_property_string("srs_version")) != NULL)
+        {
             srs_version = prop->to_str();
         }
-        if ((prop = arr->ensure_property_string("srs_server_ip")) != NULL) {
+        if ((prop = arr->ensure_property_string("srs_server_ip")) != NULL)
+        {
             srs_server_ip = prop->to_str();
         }
-        if ((prop = arr->ensure_property_string("srs_server")) != NULL) {
+        if ((prop = arr->ensure_property_string("srs_server")) != NULL)
+        {
             srs_server = prop->to_str();
         }
-        if ((prop = arr->ensure_property_number("srs_id")) != NULL) {
+        if ((prop = arr->ensure_property_number("srs_id")) != NULL)
+        {
             srs_id = (int)prop->to_number();
         }
-        if ((prop = arr->ensure_property_number("srs_pid")) != NULL) {
+        if ((prop = arr->ensure_property_number("srs_pid")) != NULL)
+        {
             srs_pid = (int)prop->to_number();
         }
     }
     srs_trace("connected, version=%s, ip=%s, pid=%d, id=%d, dsu=%d",
               srs_version.c_str(), srs_server_ip.c_str(), srs_pid, srs_id, debug_srs_upnode);
-    
+
     return ret;
 }
 
 int SrsRtmpClient::create_stream(int& stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // CreateStream
-    if (true) {
+    if (true)
+    {
         SrsCreateStreamPacket* pkt = new SrsCreateStreamPacket();
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     // CreateStream _result.
-    if (true) {
+    if (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsCreateStreamResPacket* pkt = NULL;
-        if ((ret = expect_message<SrsCreateStreamResPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = expect_message<SrsCreateStreamResPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("expect create stream response message failed. ret=%d", ret);
             return ret;
         }
         SrsAutoFree(SrsCommonMessage, msg);
         SrsAutoFree(SrsCreateStreamResPacket, pkt);
         srs_info("get create stream response message");
-        
+
         stream_id = (int)pkt->stream_id;
     }
-    
+
     return ret;
 }
 
 int SrsRtmpClient::play(string stream, int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // Play(stream)
-    if (true) {
+    if (true)
+    {
         SrsPlayPacket* pkt = new SrsPlayPacket();
         pkt->stream_name = stream;
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send play stream failed. "
-                "stream=%s, stream_id=%d, ret=%d", 
-                stream.c_str(), stream_id, ret);
+                      "stream=%s, stream_id=%d, ret=%d",
+                      stream.c_str(), stream_id, ret);
             return ret;
         }
     }
-    
+
     // SetBufferLength(1000ms)
     int buffer_length_ms = 1000;
-    if (true) {
+    if (true)
+    {
         SrsUserControlPacket* pkt = new SrsUserControlPacket();
-        
+
         pkt->event_type = SrcPCUCSetBufferLength;
         pkt->event_data = stream_id;
         pkt->extra_data = buffer_length_ms;
-        
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send set buffer length failed. "
-                "stream=%s, stream_id=%d, bufferLength=%d, ret=%d", 
-                stream.c_str(), stream_id, buffer_length_ms, ret);
+                      "stream=%s, stream_id=%d, bufferLength=%d, ret=%d",
+                      stream.c_str(), stream_id, buffer_length_ms, ret);
             return ret;
         }
     }
-    
+
     // SetChunkSize
-    if (true) {
+    if (true)
+    {
         SrsSetChunkSizePacket* pkt = new SrsSetChunkSizePacket();
         pkt->chunk_size = SRS_CONSTS_RTMP_SRS_CHUNK_SIZE;
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send set chunk size failed. "
-                "stream=%s, chunk_size=%d, ret=%d", 
-                stream.c_str(), SRS_CONSTS_RTMP_SRS_CHUNK_SIZE, ret);
+                      "stream=%s, chunk_size=%d, ret=%d",
+                      stream.c_str(), SRS_CONSTS_RTMP_SRS_CHUNK_SIZE, ret);
             return ret;
         }
     }
-    
+
     return ret;
 }
 
 int SrsRtmpClient::publish(string stream, int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // SetChunkSize
-    if (true) {
+    if (true)
+    {
         SrsSetChunkSizePacket* pkt = new SrsSetChunkSizePacket();
         pkt->chunk_size = SRS_CONSTS_RTMP_SRS_CHUNK_SIZE;
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send set chunk size failed. "
-                "stream=%s, chunk_size=%d, ret=%d", 
-                stream.c_str(), SRS_CONSTS_RTMP_SRS_CHUNK_SIZE, ret);
+                      "stream=%s, chunk_size=%d, ret=%d",
+                      stream.c_str(), SRS_CONSTS_RTMP_SRS_CHUNK_SIZE, ret);
             return ret;
         }
     }
-    
+
     // publish(stream)
-    if (true) {
+    if (true)
+    {
         SrsPublishPacket* pkt = new SrsPublishPacket();
         pkt->stream_name = stream;
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send publish message failed. "
-                "stream=%s, stream_id=%d, ret=%d", 
-                stream.c_str(), stream_id, ret);
+                      "stream=%s, stream_id=%d, ret=%d",
+                      stream.c_str(), stream_id, ret);
             return ret;
         }
     }
-    
+
     return ret;
 }
 
 int SrsRtmpClient::fmle_publish(string stream, int& stream_id)
 {
     stream_id = 0;
-    
+
     int ret = ERROR_SUCCESS;
-    
+
     // SrsFMLEStartPacket
-    if (true) {
+    if (true)
+    {
         SrsFMLEStartPacket* pkt = SrsFMLEStartPacket::create_release_stream(stream);
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send FMLE publish "
-                "release stream failed. stream=%s, ret=%d", stream.c_str(), ret);
+                      "release stream failed. stream=%s, ret=%d", stream.c_str(), ret);
             return ret;
         }
     }
-    
+
     // FCPublish
-    if (true) {
+    if (true)
+    {
         SrsFMLEStartPacket* pkt = SrsFMLEStartPacket::create_FC_publish(stream);
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send FMLE publish "
-                "FCPublish failed. stream=%s, ret=%d", stream.c_str(), ret);
+                      "FCPublish failed. stream=%s, ret=%d", stream.c_str(), ret);
             return ret;
         }
     }
-    
+
     // CreateStream
-    if (true) {
+    if (true)
+    {
         SrsCreateStreamPacket* pkt = new SrsCreateStreamPacket();
         pkt->transaction_id = 4;
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send FMLE publish "
-                "createStream failed. stream=%s, ret=%d", stream.c_str(), ret);
+                      "createStream failed. stream=%s, ret=%d", stream.c_str(), ret);
             return ret;
         }
     }
-    
+
     // expect result of CreateStream
-    if (true) {
+    if (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsCreateStreamResPacket* pkt = NULL;
-        if ((ret = expect_message<SrsCreateStreamResPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = expect_message<SrsCreateStreamResPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("expect create stream response message failed. ret=%d", ret);
             return ret;
         }
@@ -23701,18 +24821,20 @@ int SrsRtmpClient::fmle_publish(string stream, int& stream_id)
 
         stream_id = (int)pkt->stream_id;
     }
-    
+
     // publish(stream)
-    if (true) {
+    if (true)
+    {
         SrsPublishPacket* pkt = new SrsPublishPacket();
         pkt->stream_name = stream;
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send FMLE publish publish failed. "
-                "stream=%s, stream_id=%d, ret=%d", stream.c_str(), stream_id, ret);
+                      "stream=%s, stream_id=%d, ret=%d", stream.c_str(), stream_id, ret);
             return ret;
         }
     }
-    
+
     return ret;
 }
 
@@ -23804,125 +24926,136 @@ int SrsRtmpServer::send_and_free_packet(SrsPacket* packet, int stream_id)
 int SrsRtmpServer::handshake()
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(hs_bytes);
-    
+
     SrsComplexHandshake complex_hs;
-    if ((ret = complex_hs.handshake_with_client(hs_bytes, io)) != ERROR_SUCCESS) {
-        if (ret == ERROR_RTMP_TRY_SIMPLE_HS) {
+    if ((ret = complex_hs.handshake_with_client(hs_bytes, io)) != ERROR_SUCCESS)
+    {
+        if (ret == ERROR_RTMP_TRY_SIMPLE_HS)
+        {
             SrsSimpleHandshake simple_hs;
-            if ((ret = simple_hs.handshake_with_client(hs_bytes, io)) != ERROR_SUCCESS) {
+            if ((ret = simple_hs.handshake_with_client(hs_bytes, io)) != ERROR_SUCCESS)
+            {
                 return ret;
             }
         }
         return ret;
     }
-    
+
     srs_freep(hs_bytes);
-    
+
     return ret;
 }
 
 int SrsRtmpServer::connect_app(SrsRequest* req)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsCommonMessage* msg = NULL;
     SrsConnectAppPacket* pkt = NULL;
-    if ((ret = expect_message<SrsConnectAppPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+    if ((ret = expect_message<SrsConnectAppPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+    {
         srs_error("expect connect app message failed. ret=%d", ret);
         return ret;
     }
     SrsAutoFree(SrsCommonMessage, msg);
     SrsAutoFree(SrsConnectAppPacket, pkt);
     srs_info("get connect app message");
-    
+
     SrsAmf0Any* prop = NULL;
-    
-    if ((prop = pkt->command_object->ensure_property_string("tcUrl")) == NULL) {
+
+    if ((prop = pkt->command_object->ensure_property_string("tcUrl")) == NULL)
+    {
         ret = ERROR_RTMP_REQ_CONNECT;
         srs_error("invalid request, must specifies the tcUrl. ret=%d", ret);
         return ret;
     }
     req->tcUrl = prop->to_str();
-    
-    if ((prop = pkt->command_object->ensure_property_string("pageUrl")) != NULL) {
+
+    if ((prop = pkt->command_object->ensure_property_string("pageUrl")) != NULL)
+    {
         req->pageUrl = prop->to_str();
     }
-    
-    if ((prop = pkt->command_object->ensure_property_string("swfUrl")) != NULL) {
+
+    if ((prop = pkt->command_object->ensure_property_string("swfUrl")) != NULL)
+    {
         req->swfUrl = prop->to_str();
     }
-    
-    if ((prop = pkt->command_object->ensure_property_number("objectEncoding")) != NULL) {
+
+    if ((prop = pkt->command_object->ensure_property_number("objectEncoding")) != NULL)
+    {
         req->objectEncoding = prop->to_number();
     }
-    
-    if (pkt->args) {
+
+    if (pkt->args)
+    {
         srs_freep(req->args);
         req->args = pkt->args->copy()->to_object();
         srs_info("copy edge traverse to origin auth args.");
     }
-    
+
     srs_info("get connect app message params success.");
-    
-    srs_discovery_tc_url(req->tcUrl, 
-        req->schema, req->host, req->vhost, req->app, req->port,
-        req->param);
+
+    srs_discovery_tc_url(req->tcUrl,
+                         req->schema, req->host, req->vhost, req->app, req->port,
+                         req->param);
     req->strip();
-    
+
     return ret;
 }
 
 int SrsRtmpServer::set_window_ack_size(int ack_size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsSetWindowAckSizePacket* pkt = new SrsSetWindowAckSizePacket();
     pkt->ackowledgement_window_size = ack_size;
-    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send ack size message failed. ret=%d", ret);
         return ret;
     }
     srs_info("send ack size message success. ack_size=%d", ack_size);
-    
+
     return ret;
 }
 
 int SrsRtmpServer::set_peer_bandwidth(int bandwidth, int type)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsSetPeerBandwidthPacket* pkt = new SrsSetPeerBandwidthPacket();
     pkt->bandwidth = bandwidth;
     pkt->type = type;
-    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send set bandwidth message failed. ret=%d", ret);
         return ret;
     }
     srs_info("send set bandwidth message "
-        "success. bandwidth=%d, type=%d", bandwidth, type);
-    
+             "success. bandwidth=%d, type=%d", bandwidth, type);
+
     return ret;
 }
 
 int SrsRtmpServer::response_connect_app(SrsRequest *req, const char* server_ip)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsConnectAppResPacket* pkt = new SrsConnectAppResPacket();
-    
+
     pkt->props->set("fmsVer", SrsAmf0Any::str("FMS/"RTMP_SIG_FMS_VER));
     pkt->props->set("capabilities", SrsAmf0Any::number(127));
     pkt->props->set("mode", SrsAmf0Any::number(1));
-    
+
     pkt->info->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
     pkt->info->set(StatusCode, SrsAmf0Any::str(StatusCodeConnectSuccess));
     pkt->info->set(StatusDescription, SrsAmf0Any::str("Connection succeeded"));
     pkt->info->set("objectEncoding", SrsAmf0Any::number(req->objectEncoding));
     SrsAmf0EcmaArray* data = SrsAmf0Any::ecma_array();
     pkt->info->set("data", data);
-    
+
     data->set("version", SrsAmf0Any::str(RTMP_SIG_FMS_VER));
     data->set("srs_sig", SrsAmf0Any::str(RTMP_SIG_SRS_KEY));
     data->set("srs_server", SrsAmf0Any::str(RTMP_SIG_SRS_SERVER));
@@ -23935,33 +25068,36 @@ int SrsRtmpServer::response_connect_app(SrsRequest *req, const char* server_ip)
     data->set("srs_copyright", SrsAmf0Any::str(RTMP_SIG_SRS_COPYRIGHT));
     data->set("srs_primary", SrsAmf0Any::str(RTMP_SIG_SRS_PRIMARY));
     data->set("srs_authors", SrsAmf0Any::str(RTMP_SIG_SRS_AUTHROS));
-    
-    if (server_ip) {
+
+    if (server_ip)
+    {
         data->set("srs_server_ip", SrsAmf0Any::str(server_ip));
     }
     // for edge to directly get the id of client.
     data->set("srs_pid", SrsAmf0Any::number(getpid()));
     data->set("srs_id", SrsAmf0Any::number(_srs_context->get_id()));
-    
-    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send connect app response message failed. ret=%d", ret);
         return ret;
     }
     srs_info("send connect app response message success.");
-    
+
     return ret;
 }
 
 void SrsRtmpServer::response_connect_reject(SrsRequest* /*req*/, const char* desc)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
     pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelError));
     pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeConnectRejected));
     pkt->data->set(StatusDescription, SrsAmf0Any::str(desc));
-    
-    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send connect app response rejected message failed. ret=%d", ret);
         return;
     }
@@ -23973,14 +25109,15 @@ void SrsRtmpServer::response_connect_reject(SrsRequest* /*req*/, const char* des
 int SrsRtmpServer::on_bw_done()
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsOnBWDonePacket* pkt = new SrsOnBWDonePacket();
-    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send onBWDone message failed. ret=%d", ret);
         return ret;
     }
     srs_info("send onBWDone message success.");
-    
+
     return ret;
 }
 
@@ -23988,11 +25125,14 @@ int SrsRtmpServer::identify_client(int stream_id, SrsRtmpConnType& type, string&
 {
     type = SrsRtmpConnUnknown;
     int ret = ERROR_SUCCESS;
-    
-    while (true) {
+
+    while (true)
+    {
         SrsCommonMessage* msg = NULL;
-        if ((ret = protocol->recv_message(&msg)) != ERROR_SUCCESS) {
-            if (!srs_is_client_gracefully_close(ret)) {
+        if ((ret = protocol->recv_message(&msg)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("recv identify client message failed. ret=%d", ret);
             }
             return ret;
@@ -24000,34 +25140,40 @@ int SrsRtmpServer::identify_client(int stream_id, SrsRtmpConnType& type, string&
 
         SrsAutoFree(SrsCommonMessage, msg);
         SrsMessageHeader& h = msg->header;
-        
-        if (h.is_ackledgement() || h.is_set_chunk_size() || h.is_window_ackledgement_size() || h.is_user_control_message()) {
+
+        if (h.is_ackledgement() || h.is_set_chunk_size() || h.is_window_ackledgement_size() || h.is_user_control_message())
+        {
             continue;
         }
-        
-        if (!h.is_amf0_command() && !h.is_amf3_command()) {
+
+        if (!h.is_amf0_command() && !h.is_amf3_command())
+        {
             srs_trace("identify ignore messages except "
-                "AMF0/AMF3 command message. type=%#x", h.message_type);
+                      "AMF0/AMF3 command message. type=%#x", h.message_type);
             continue;
         }
-        
+
         SrsPacket* pkt = NULL;
-        if ((ret = protocol->decode_message(msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = protocol->decode_message(msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("identify decode message failed. ret=%d", ret);
             return ret;
         }
-        
+
         SrsAutoFree(SrsPacket, pkt);
-        
-        if (dynamic_cast<SrsCreateStreamPacket*>(pkt)) {
+
+        if (dynamic_cast<SrsCreateStreamPacket*>(pkt))
+        {
             srs_info("identify client by create stream, play or flash publish.");
             return identify_create_stream_client(dynamic_cast<SrsCreateStreamPacket*>(pkt), stream_id, type, stream_name, duration);
         }
-        if (dynamic_cast<SrsFMLEStartPacket*>(pkt)) {
+        if (dynamic_cast<SrsFMLEStartPacket*>(pkt))
+        {
             srs_info("identify client by releaseStream, fmle publish.");
             return identify_fmle_publish_client(dynamic_cast<SrsFMLEStartPacket*>(pkt), type, stream_name);
         }
-        if (dynamic_cast<SrsPlayPacket*>(pkt)) {
+        if (dynamic_cast<SrsPlayPacket*>(pkt))
+        {
             srs_info("level0 identify client by play.");
             return identify_play_client(dynamic_cast<SrsPlayPacket*>(pkt), type, stream_name, duration);
         }
@@ -24036,303 +25182,344 @@ int SrsRtmpServer::identify_client(int stream_id, SrsRtmpConnType& type, string&
         // @see https://github.com/simple-rtmp-server/srs/issues/106
         // TODO: FIXME: response in right way, or forward in edge mode.
         SrsCallPacket* call = dynamic_cast<SrsCallPacket*>(pkt);
-        if (call) {
+        if (call)
+        {
             SrsCallResPacket* res = new SrsCallResPacket(call->transaction_id);
             res->command_object = SrsAmf0Any::null();
             res->response = SrsAmf0Any::null();
-            if ((ret = protocol->send_and_free_packet(res, 0)) != ERROR_SUCCESS) {
+            if ((ret = protocol->send_and_free_packet(res, 0)) != ERROR_SUCCESS)
+            {
                 srs_warn("response call failed. ret=%d", ret);
                 return ret;
             }
             continue;
         }
-        
+
         srs_trace("ignore AMF0/AMF3 command message.");
     }
-    
+
     return ret;
 }
 
 int SrsRtmpServer::set_chunk_size(int chunk_size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsSetChunkSizePacket* pkt = new SrsSetChunkSizePacket();
     pkt->chunk_size = chunk_size;
-    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+    if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+    {
         srs_error("send set chunk size message failed. ret=%d", ret);
         return ret;
     }
     srs_info("send set chunk size message success. chunk_size=%d", chunk_size);
-    
+
     return ret;
 }
 
 int SrsRtmpServer::start_play(int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // StreamBegin
-    if (true) {
+    if (true)
+    {
         SrsUserControlPacket* pkt = new SrsUserControlPacket();
         pkt->event_type = SrcPCUCStreamBegin;
         pkt->event_data = stream_id;
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send PCUC(StreamBegin) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send PCUC(StreamBegin) message success.");
     }
-    
+
     // onStatus(NetStream.Play.Reset)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeStreamReset));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Playing and resetting stream."));
         pkt->data->set(StatusDetails, SrsAmf0Any::str("stream"));
         pkt->data->set(StatusClientId, SrsAmf0Any::str(RTMP_SIG_CLIENT_ID));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send onStatus(NetStream.Play.Reset) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send onStatus(NetStream.Play.Reset) message success.");
     }
-    
+
     // onStatus(NetStream.Play.Start)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeStreamStart));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Started playing stream."));
         pkt->data->set(StatusDetails, SrsAmf0Any::str("stream"));
         pkt->data->set(StatusClientId, SrsAmf0Any::str(RTMP_SIG_CLIENT_ID));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send onStatus(NetStream.Play.Start) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send onStatus(NetStream.Play.Start) message success.");
     }
-    
+
     // |RtmpSampleAccess(false, false)
-    if (true) {
+    if (true)
+    {
         SrsSampleAccessPacket* pkt = new SrsSampleAccessPacket();
 
         // allow audio/video sample.
         // @see: https://github.com/simple-rtmp-server/srs/issues/49
         pkt->audio_sample_access = true;
         pkt->video_sample_access = true;
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send |RtmpSampleAccess(false, false) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send |RtmpSampleAccess(false, false) message success.");
     }
-    
+
     // onStatus(NetStream.Data.Start)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusDataPacket* pkt = new SrsOnStatusDataPacket();
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeDataStart));
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send onStatus(NetStream.Data.Start) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send onStatus(NetStream.Data.Start) message success.");
     }
-    
+
     srs_info("start play success.");
-    
+
     return ret;
 }
 
 int SrsRtmpServer::on_play_client_pause(int stream_id, bool is_pause)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (is_pause) {
+
+    if (is_pause)
+    {
         // onStatus(NetStream.Pause.Notify)
-        if (true) {
+        if (true)
+        {
             SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-            
+
             pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
             pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeStreamPause));
             pkt->data->set(StatusDescription, SrsAmf0Any::str("Paused stream."));
-            
-            if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+            if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+            {
                 srs_error("send onStatus(NetStream.Pause.Notify) message failed. ret=%d", ret);
                 return ret;
             }
             srs_info("send onStatus(NetStream.Pause.Notify) message success.");
         }
         // StreamEOF
-        if (true) {
+        if (true)
+        {
             SrsUserControlPacket* pkt = new SrsUserControlPacket();
-            
+
             pkt->event_type = SrcPCUCStreamEOF;
             pkt->event_data = stream_id;
-            
-            if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+            if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+            {
                 srs_error("send PCUC(StreamEOF) message failed. ret=%d", ret);
                 return ret;
             }
             srs_info("send PCUC(StreamEOF) message success.");
         }
-    } else {
+    }
+    else
+    {
         // onStatus(NetStream.Unpause.Notify)
-        if (true) {
+        if (true)
+        {
             SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-            
+
             pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
             pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeStreamUnpause));
             pkt->data->set(StatusDescription, SrsAmf0Any::str("Unpaused stream."));
-            
-            if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+            if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+            {
                 srs_error("send onStatus(NetStream.Unpause.Notify) message failed. ret=%d", ret);
                 return ret;
             }
             srs_info("send onStatus(NetStream.Unpause.Notify) message success.");
         }
         // StreanBegin
-        if (true) {
+        if (true)
+        {
             SrsUserControlPacket* pkt = new SrsUserControlPacket();
-            
+
             pkt->event_type = SrcPCUCStreamBegin;
             pkt->event_data = stream_id;
-            
-            if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+            if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+            {
                 srs_error("send PCUC(StreanBegin) message failed. ret=%d", ret);
                 return ret;
             }
             srs_info("send PCUC(StreanBegin) message success.");
         }
     }
-    
+
     return ret;
 }
 
 int SrsRtmpServer::start_fmle_publish(int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // FCPublish
     double fc_publish_tid = 0;
-    if (true) {
+    if (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsFMLEStartPacket* pkt = NULL;
-        if ((ret = expect_message<SrsFMLEStartPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = expect_message<SrsFMLEStartPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("recv FCPublish message failed. ret=%d", ret);
             return ret;
         }
         srs_info("recv FCPublish request message success.");
-        
+
         SrsAutoFree(SrsCommonMessage, msg);
         SrsAutoFree(SrsFMLEStartPacket, pkt);
-    
+
         fc_publish_tid = pkt->transaction_id;
     }
     // FCPublish response
-    if (true) {
+    if (true)
+    {
         SrsFMLEStartResPacket* pkt = new SrsFMLEStartResPacket(fc_publish_tid);
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send FCPublish response message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send FCPublish response message success.");
     }
-    
+
     // createStream
     double create_stream_tid = 0;
-    if (true) {
+    if (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsCreateStreamPacket* pkt = NULL;
-        if ((ret = expect_message<SrsCreateStreamPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = expect_message<SrsCreateStreamPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("recv createStream message failed. ret=%d", ret);
             return ret;
         }
         srs_info("recv createStream request message success.");
-        
+
         SrsAutoFree(SrsCommonMessage, msg);
         SrsAutoFree(SrsCreateStreamPacket, pkt);
-        
+
         create_stream_tid = pkt->transaction_id;
     }
     // createStream response
-    if (true) {
+    if (true)
+    {
         SrsCreateStreamResPacket* pkt = new SrsCreateStreamResPacket(create_stream_tid, stream_id);
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send createStream response message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send createStream response message success.");
     }
-    
+
     // publish
-    if (true) {
+    if (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsPublishPacket* pkt = NULL;
-        if ((ret = expect_message<SrsPublishPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = expect_message<SrsPublishPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("recv publish message failed. ret=%d", ret);
             return ret;
         }
         srs_info("recv publish request message success.");
-        
+
         SrsAutoFree(SrsCommonMessage, msg);
         SrsAutoFree(SrsPublishPacket, pkt);
     }
     // publish response onFCPublish(NetStream.Publish.Start)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->command_name = RTMP_AMF0_COMMAND_ON_FC_PUBLISH;
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodePublishStart));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Started publishing stream."));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send onFCPublish(NetStream.Publish.Start) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send onFCPublish(NetStream.Publish.Start) message success.");
     }
     // publish response onStatus(NetStream.Publish.Start)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodePublishStart));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Started publishing stream."));
         pkt->data->set(StatusClientId, SrsAmf0Any::str(RTMP_SIG_CLIENT_ID));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send onStatus(NetStream.Publish.Start) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send onStatus(NetStream.Publish.Start) message success.");
     }
-    
+
     srs_info("FMLE publish success.");
-    
+
     return ret;
 }
 
 int SrsRtmpServer::fmle_unpublish(int stream_id, double unpublish_tid)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // publish response onFCUnpublish(NetStream.unpublish.Success)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->command_name = RTMP_AMF0_COMMAND_ON_FC_UNPUBLISH;
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeUnpublishSuccess));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Stop publishing stream."));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
-            if (!srs_is_system_control_error(ret) && !srs_is_client_gracefully_close(ret)) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_system_control_error(ret) && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("send onFCUnpublish(NetStream.unpublish.Success) message failed. ret=%d", ret);
             }
             return ret;
@@ -24340,10 +25527,13 @@ int SrsRtmpServer::fmle_unpublish(int stream_id, double unpublish_tid)
         srs_info("send onFCUnpublish(NetStream.unpublish.Success) message success.");
     }
     // FCUnpublish response
-    if (true) {
+    if (true)
+    {
         SrsFMLEStartResPacket* pkt = new SrsFMLEStartResPacket(unpublish_tid);
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
-            if (!srs_is_system_control_error(ret) && !srs_is_client_gracefully_close(ret)) {
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_system_control_error(ret) && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("send FCUnpublish response message failed. ret=%d", ret);
             }
             return ret;
@@ -24351,70 +25541,80 @@ int SrsRtmpServer::fmle_unpublish(int stream_id, double unpublish_tid)
         srs_info("send FCUnpublish response message success.");
     }
     // publish response onStatus(NetStream.Unpublish.Success)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodeUnpublishSuccess));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Stream is now unpublished"));
         pkt->data->set(StatusClientId, SrsAmf0Any::str(RTMP_SIG_CLIENT_ID));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
-            if (!srs_is_system_control_error(ret) && !srs_is_client_gracefully_close(ret)) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_system_control_error(ret) && !srs_is_client_gracefully_close(ret))
+            {
                 srs_error("send onStatus(NetStream.Unpublish.Success) message failed. ret=%d", ret);
             }
             return ret;
         }
         srs_info("send onStatus(NetStream.Unpublish.Success) message success.");
     }
-    
+
     srs_info("FMLE unpublish success.");
-    
+
     return ret;
 }
 
 int SrsRtmpServer::start_flash_publish(int stream_id)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // publish response onStatus(NetStream.Publish.Start)
-    if (true) {
+    if (true)
+    {
         SrsOnStatusCallPacket* pkt = new SrsOnStatusCallPacket();
-        
+
         pkt->data->set(StatusLevel, SrsAmf0Any::str(StatusLevelStatus));
         pkt->data->set(StatusCode, SrsAmf0Any::str(StatusCodePublishStart));
         pkt->data->set(StatusDescription, SrsAmf0Any::str("Started publishing stream."));
         pkt->data->set(StatusClientId, SrsAmf0Any::str(RTMP_SIG_CLIENT_ID));
-        
-        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS) {
+
+        if ((ret = protocol->send_and_free_packet(pkt, stream_id)) != ERROR_SUCCESS)
+        {
             srs_error("send onStatus(NetStream.Publish.Start) message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send onStatus(NetStream.Publish.Start) message success.");
     }
-    
+
     srs_info("flash publish success.");
-    
+
     return ret;
 }
 
 int SrsRtmpServer::identify_create_stream_client(SrsCreateStreamPacket* req, int stream_id, SrsRtmpConnType& type, string& stream_name, double& duration)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (true) {
+
+    if (true)
+    {
         SrsCreateStreamResPacket* pkt = new SrsCreateStreamResPacket(req->transaction_id, stream_id);
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send createStream response message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send createStream response message success.");
     }
-    
-    while (true) {
+
+    while (true)
+    {
         SrsCommonMessage* msg = NULL;
-        if ((ret = protocol->recv_message(&msg)) != ERROR_SUCCESS) {
-            if (!srs_is_client_gracefully_close(ret)) {
+        if ((ret = protocol->recv_message(&msg)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("recv identify client message failed. ret=%d", ret);
             }
             return ret;
@@ -24422,82 +25622,90 @@ int SrsRtmpServer::identify_create_stream_client(SrsCreateStreamPacket* req, int
 
         SrsAutoFree(SrsCommonMessage, msg);
         SrsMessageHeader& h = msg->header;
-        
-        if (h.is_ackledgement() || h.is_set_chunk_size() || h.is_window_ackledgement_size() || h.is_user_control_message()) {
+
+        if (h.is_ackledgement() || h.is_set_chunk_size() || h.is_window_ackledgement_size() || h.is_user_control_message())
+        {
             continue;
         }
-    
-        if (!h.is_amf0_command() && !h.is_amf3_command()) {
+
+        if (!h.is_amf0_command() && !h.is_amf3_command())
+        {
             srs_trace("identify ignore messages except "
-                "AMF0/AMF3 command message. type=%#x", h.message_type);
+                      "AMF0/AMF3 command message. type=%#x", h.message_type);
             continue;
         }
-        
+
         SrsPacket* pkt = NULL;
-        if ((ret = protocol->decode_message(msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = protocol->decode_message(msg, &pkt)) != ERROR_SUCCESS)
+        {
             srs_error("identify decode message failed. ret=%d", ret);
             return ret;
         }
 
         SrsAutoFree(SrsPacket, pkt);
-        
-        if (dynamic_cast<SrsPlayPacket*>(pkt)) {
+
+        if (dynamic_cast<SrsPlayPacket*>(pkt))
+        {
             srs_info("level1 identify client by play.");
             return identify_play_client(dynamic_cast<SrsPlayPacket*>(pkt), type, stream_name, duration);
         }
-        if (dynamic_cast<SrsPublishPacket*>(pkt)) {
+        if (dynamic_cast<SrsPublishPacket*>(pkt))
+        {
             srs_info("identify client by publish, falsh publish.");
             return identify_flash_publish_client(dynamic_cast<SrsPublishPacket*>(pkt), type, stream_name);
         }
-        if (dynamic_cast<SrsCreateStreamPacket*>(pkt)) {
+        if (dynamic_cast<SrsCreateStreamPacket*>(pkt))
+        {
             srs_info("identify client by create stream, play or flash publish.");
             return identify_create_stream_client(dynamic_cast<SrsCreateStreamPacket*>(pkt), stream_id, type, stream_name, duration);
         }
-        
+
         srs_trace("ignore AMF0/AMF3 command message.");
     }
-    
+
     return ret;
 }
 
 int SrsRtmpServer::identify_fmle_publish_client(SrsFMLEStartPacket* req, SrsRtmpConnType& type, string& stream_name)
 {
     int ret = ERROR_SUCCESS;
-    
+
     type = SrsRtmpConnFMLEPublish;
     stream_name = req->stream_name;
-    
+
     // releaseStream response
-    if (true) {
+    if (true)
+    {
         SrsFMLEStartResPacket* pkt = new SrsFMLEStartResPacket(req->transaction_id);
-        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = protocol->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send releaseStream response message failed. ret=%d", ret);
             return ret;
         }
         srs_info("send releaseStream response message success.");
     }
-    
+
     return ret;
 }
 
 int SrsRtmpServer::identify_flash_publish_client(SrsPublishPacket* req, SrsRtmpConnType& type, string& stream_name)
 {
     int ret = ERROR_SUCCESS;
-    
+
     type = SrsRtmpConnFlashPublish;
     stream_name = req->stream_name;
-    
+
     return ret;
 }
 
 int SrsRtmpServer::identify_play_client(SrsPlayPacket* req, SrsRtmpConnType& type, string& stream_name, double& duration)
 {
     int ret = ERROR_SUCCESS;
-    
+
     type = SrsRtmpConnPlay;
     stream_name = req->stream_name;
     duration = req->duration;
-    
+
     srs_info("identity client type=play, stream_name=%s, duration=%.2f", stream_name.c_str(), duration);
 
     return ret;
@@ -24522,65 +25730,76 @@ int SrsConnectAppPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_CONNECT) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_CONNECT)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode connect command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
+
     // some client donot send id=1.0, so we only warn user if not match.
-    if (transaction_id != 1.0) {
+    if (transaction_id != 1.0)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_warn("amf0 decode connect transaction_id failed. "
-            "required=%.1f, actual=%.1f, ret=%d", 1.0, transaction_id, ret);
+                 "required=%.1f, actual=%.1f, ret=%d", 1.0, transaction_id, ret);
         ret = ERROR_SUCCESS;
     }
-    
-    if ((ret = command_object->read(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = command_object->read(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if (!stream->empty()) {
+
+    if (!stream->empty())
+    {
         srs_freep(args);
-        
+
         // see: https://github.com/simple-rtmp-server/srs/issues/186
         // the args maybe any amf0, for instance, a string. we should drop if not object.
         SrsAmf0Any* any = NULL;
-        if ((ret = SrsAmf0Any::discovery(stream, &any)) != ERROR_SUCCESS) {
+        if ((ret = SrsAmf0Any::discovery(stream, &any)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 find connect args failed. ret=%d", ret);
             return ret;
         }
         srs_assert(any);
-        
+
         // read the instance
-        if ((ret = any->read(stream)) != ERROR_SUCCESS) {
+        if ((ret = any->read(stream)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 decode connect args failed. ret=%d", ret);
             srs_freep(any);
             return ret;
         }
-        
+
         // drop when not an AMF0 object.
-        if (!any->is_object()) {
+        if (!any->is_object())
+        {
             srs_warn("drop the args, see: '4.1.1. connect', marker=%#x", any->marker);
             srs_freep(any);
-        } else {
+        }
+        else
+        {
             args = any->to_object();
         }
     }
-    
+
     srs_info("amf0 decode connect packet success");
-    
+
     return ret;
 }
 
@@ -24597,47 +25816,52 @@ int SrsConnectAppPacket::get_message_type()
 int SrsConnectAppPacket::get_size()
 {
     int size = 0;
-    
+
     size += SrsAmf0Size::str(command_name);
     size += SrsAmf0Size::number();
     size += SrsAmf0Size::object(command_object);
-    if (args) {
+    if (args)
+    {
         size += SrsAmf0Size::object(args);
     }
-    
+
     return size;
 }
 
 int SrsConnectAppPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = command_object->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = command_object->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if (args && (ret = args->write(stream)) != ERROR_SUCCESS) {
+
+    if (args && (ret = args->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode args failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode args success.");
-    
+
     srs_info("encode connect app request packet success.");
-    
+
     return ret;
 }
 
@@ -24659,42 +25883,48 @@ int SrsConnectAppResPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_RESULT) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_RESULT)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode connect command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
+
     // some client donot send id=1.0, so we only warn user if not match.
-    if (transaction_id != 1.0) {
+    if (transaction_id != 1.0)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_warn("amf0 decode connect transaction_id failed. "
-            "required=%.1f, actual=%.1f, ret=%d", 1.0, transaction_id, ret);
+                 "required=%.1f, actual=%.1f, ret=%d", 1.0, transaction_id, ret);
         ret = ERROR_SUCCESS;
     }
-    
-    if ((ret = props->read(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = props->read(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect props failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = info->read(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = info->read(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode connect info failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode connect response packet success");
-    
+
     return ret;
 }
 
@@ -24710,42 +25940,46 @@ int SrsConnectAppResPacket::get_message_type()
 
 int SrsConnectAppResPacket::get_size()
 {
-    return SrsAmf0Size::str(command_name) + SrsAmf0Size::number() 
-        + SrsAmf0Size::object(props) + SrsAmf0Size::object(info);
+    return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
+           + SrsAmf0Size::object(props) + SrsAmf0Size::object(info);
 }
 
 int SrsConnectAppResPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = props->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = props->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode props failed. ret=%d", ret);
         return ret;
     }
 
     srs_verbose("encode props success.");
-    
-    if ((ret = info->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = info->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode info failed. ret=%d", ret);
         return ret;
     }
 
     srs_verbose("encode info success.");
-    
+
     srs_info("encode connect app response packet success.");
-    
+
     return ret;
 }
 
@@ -24767,46 +26001,54 @@ int SrsCallPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode call command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty()) {
+    if (command_name.empty())
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode call command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode call transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_freep(command_object);
-    if ((ret = SrsAmf0Any::discovery(stream, &command_object)) != ERROR_SUCCESS) {
+    if ((ret = SrsAmf0Any::discovery(stream, &command_object)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 discovery call command_object failed. ret=%d", ret);
         return ret;
     }
-    if ((ret = command_object->read(stream)) != ERROR_SUCCESS) {
+    if ((ret = command_object->read(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode call command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if (!stream->empty()) {
+
+    if (!stream->empty())
+    {
         srs_freep(arguments);
-        if ((ret = SrsAmf0Any::discovery(stream, &arguments)) != ERROR_SUCCESS) {
+        if ((ret = SrsAmf0Any::discovery(stream, &arguments)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 discovery call arguments failed. ret=%d", ret);
             return ret;
         }
-        if ((ret = arguments->read(stream)) != ERROR_SUCCESS) {
+        if ((ret = arguments->read(stream)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 decode call arguments failed. ret=%d", ret);
             return ret;
         }
     }
-    
+
     srs_info("amf0 decode call packet success");
-    
+
     return ret;
 }
 
@@ -24823,50 +26065,56 @@ int SrsCallPacket::get_message_type()
 int SrsCallPacket::get_size()
 {
     int size = 0;
-    
+
     size += SrsAmf0Size::str(command_name) + SrsAmf0Size::number();
-    
-    if (command_object) {
+
+    if (command_object)
+    {
         size += command_object->total_size();
     }
-    
-    if (arguments) {
+
+    if (arguments)
+    {
         size += arguments->total_size();
     }
-    
+
     return size;
 }
 
 int SrsCallPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if (command_object && (ret = command_object->write(stream)) != ERROR_SUCCESS) {
+
+    if (command_object && (ret = command_object->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if (arguments && (ret = arguments->write(stream)) != ERROR_SUCCESS) {
+
+    if (arguments && (ret = arguments->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode arguments failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode arguments success.");
-    
+
     srs_info("encode create stream request packet success.");
-    
+
     return ret;
 }
 
@@ -24897,51 +26145,57 @@ int SrsCallResPacket::get_message_type()
 int SrsCallResPacket::get_size()
 {
     int size = 0;
-    
+
     size += SrsAmf0Size::str(command_name) + SrsAmf0Size::number();
-    
-    if (command_object) {
+
+    if (command_object)
+    {
         size += command_object->total_size();
     }
-    
-    if (response) {
+
+    if (response)
+    {
         size += response->total_size();
     }
-    
+
     return size;
 }
 
 int SrsCallResPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if (command_object && (ret = command_object->write(stream)) != ERROR_SUCCESS) {
+
+    if (command_object && (ret = command_object->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if (response && (ret = response->write(stream)) != ERROR_SUCCESS) {
+
+    if (response && (ret = response->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode response failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode response success.");
-    
-    
+
+
     srs_info("encode call response packet success.");
-    
+
     return ret;
 }
 
@@ -24961,29 +26215,33 @@ int SrsCreateStreamPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_CREATE_STREAM) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_CREATE_STREAM)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode createStream command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream command_object failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode createStream packet success");
-    
+
     return ret;
 }
 
@@ -25000,33 +26258,36 @@ int SrsCreateStreamPacket::get_message_type()
 int SrsCreateStreamPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null();
+           + SrsAmf0Size::null();
 }
 
 int SrsCreateStreamPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
+
     srs_info("encode create stream request packet success.");
-    
+
     return ret;
 }
 
@@ -25047,34 +26308,39 @@ int SrsCreateStreamResPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_RESULT) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_RESULT)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode createStream command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, stream_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, stream_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode createStream stream_id failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode createStream response packet success");
-    
+
     return ret;
 }
 
@@ -25091,40 +26357,44 @@ int SrsCreateStreamResPacket::get_message_type()
 int SrsCreateStreamResPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::number();
+           + SrsAmf0Size::null() + SrsAmf0Size::number();
 }
 
 int SrsCreateStreamResPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if ((ret = srs_amf0_write_number(stream, stream_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, stream_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode stream_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode stream_id success.");
-    
-    
+
+
     srs_info("encode createStream response packet success.");
-    
+
     return ret;
 }
 
@@ -25144,17 +26414,20 @@ int SrsCloseStreamPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode closeStream command_name failed. ret=%d", ret);
         return ret;
     }
 
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode closeStream transaction_id failed. ret=%d", ret);
         return ret;
     }
 
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode closeStream command_object failed. ret=%d", ret);
         return ret;
     }
@@ -25179,38 +26452,43 @@ int SrsFMLEStartPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() 
-        || (command_name != RTMP_AMF0_COMMAND_RELEASE_STREAM 
-        && command_name != RTMP_AMF0_COMMAND_FC_PUBLISH
-        && command_name != RTMP_AMF0_COMMAND_UNPUBLISH)
-    ) {
+    if (command_name.empty()
+            || (command_name != RTMP_AMF0_COMMAND_RELEASE_STREAM
+                && command_name != RTMP_AMF0_COMMAND_FC_PUBLISH
+                && command_name != RTMP_AMF0_COMMAND_UNPUBLISH)
+       )
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode FMLE start command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_string(stream, stream_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_string(stream, stream_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start stream_name failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode FMLE start packet success");
-    
+
     return ret;
 }
 
@@ -25227,62 +26505,66 @@ int SrsFMLEStartPacket::get_message_type()
 int SrsFMLEStartPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::str(stream_name);
+           + SrsAmf0Size::null() + SrsAmf0Size::str(stream_name);
 }
 
 int SrsFMLEStartPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if ((ret = srs_amf0_write_string(stream, stream_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, stream_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode stream_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode stream_name success.");
-    
-    
+
+
     srs_info("encode FMLE start response packet success.");
-    
+
     return ret;
 }
 
 SrsFMLEStartPacket* SrsFMLEStartPacket::create_release_stream(string stream)
 {
     SrsFMLEStartPacket* pkt = new SrsFMLEStartPacket();
-    
+
     pkt->command_name = RTMP_AMF0_COMMAND_RELEASE_STREAM;
     pkt->transaction_id = 2;
     pkt->stream_name = stream;
-    
+
     return pkt;
 }
 
 SrsFMLEStartPacket* SrsFMLEStartPacket::create_FC_publish(string stream)
 {
     SrsFMLEStartPacket* pkt = new SrsFMLEStartPacket();
-    
+
     pkt->command_name = RTMP_AMF0_COMMAND_FC_PUBLISH;
     pkt->transaction_id = 3;
     pkt->stream_name = stream;
-    
+
     return pkt;
 }
 
@@ -25304,34 +26586,39 @@ int SrsFMLEStartResPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start response command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_RESULT) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_RESULT)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode FMLE start response command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start response transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start response command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_undefined(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_undefined(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode FMLE start response stream_id failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode FMLE start packet success");
-    
+
     return ret;
 }
 
@@ -25348,40 +26635,44 @@ int SrsFMLEStartResPacket::get_message_type()
 int SrsFMLEStartResPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::undefined();
+           + SrsAmf0Size::null() + SrsAmf0Size::undefined();
 }
 
 int SrsFMLEStartResPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if ((ret = srs_amf0_write_undefined(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_undefined(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode args failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode args success.");
-    
-    
+
+
     srs_info("encode FMLE start response packet success.");
-    
+
     return ret;
 }
 
@@ -25402,39 +26693,45 @@ int SrsPublishPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode publish command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_PUBLISH) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_PUBLISH)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode publish command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode publish transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode publish command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_string(stream, stream_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_string(stream, stream_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode publish stream_name failed. ret=%d", ret);
         return ret;
     }
-    
-    if (!stream->empty() && (ret = srs_amf0_read_string(stream, type)) != ERROR_SUCCESS) {
+
+    if (!stream->empty() && (ret = srs_amf0_read_string(stream, type)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode publish type failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode publish packet success");
-    
+
     return ret;
 }
 
@@ -25451,46 +26748,51 @@ int SrsPublishPacket::get_message_type()
 int SrsPublishPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::str(stream_name)
-        + SrsAmf0Size::str(type);
+           + SrsAmf0Size::null() + SrsAmf0Size::str(stream_name)
+           + SrsAmf0Size::str(type);
 }
 
 int SrsPublishPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if ((ret = srs_amf0_write_string(stream, stream_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, stream_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode stream_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode stream_name success.");
-    
-    if ((ret = srs_amf0_write_string(stream, type)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, type)) != ERROR_SUCCESS)
+    {
         srs_error("encode type failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode type success.");
-    
+
     srs_info("encode play request packet success.");
-    
+
     return ret;
 }
 
@@ -25513,39 +26815,45 @@ int SrsPausePacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode pause command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_PAUSE) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_PAUSE)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode pause command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode pause transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode pause command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_boolean(stream, is_pause)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_boolean(stream, is_pause)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode pause is_pause failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, time_ms)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, time_ms)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode pause time_ms failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_info("amf0 decode pause packet success");
-    
+
     return ret;
 }
 
@@ -25569,62 +26877,77 @@ int SrsPlayPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode play command_name failed. ret=%d", ret);
         return ret;
     }
-    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_PLAY) {
+    if (command_name.empty() || command_name != RTMP_AMF0_COMMAND_PLAY)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 decode play command_name failed. "
-            "command_name=%s, ret=%d", command_name.c_str(), ret);
+                  "command_name=%s, ret=%d", command_name.c_str(), ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode play transaction_id failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode play command_object failed. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = srs_amf0_read_string(stream, stream_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_string(stream, stream_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode play stream_name failed. ret=%d", ret);
         return ret;
     }
-    
-    if (!stream->empty() && (ret = srs_amf0_read_number(stream, start)) != ERROR_SUCCESS) {
+
+    if (!stream->empty() && (ret = srs_amf0_read_number(stream, start)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode play start failed. ret=%d", ret);
         return ret;
     }
-    if (!stream->empty() && (ret = srs_amf0_read_number(stream, duration)) != ERROR_SUCCESS) {
+    if (!stream->empty() && (ret = srs_amf0_read_number(stream, duration)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode play duration failed. ret=%d", ret);
         return ret;
     }
 
-    if (stream->empty()) {
+    if (stream->empty())
+    {
         return ret;
     }
-    
+
     SrsAmf0Any* reset_value = NULL;
-    if ((ret = srs_amf0_read_any(stream, &reset_value)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_any(stream, &reset_value)) != ERROR_SUCCESS)
+    {
         ret = ERROR_RTMP_AMF0_DECODE;
         srs_error("amf0 read play reset marker failed. ret=%d", ret);
         return ret;
     }
     SrsAutoFree(SrsAmf0Any, reset_value);
-    
-    if (reset_value) {
+
+    if (reset_value)
+    {
         // check if the value is bool or number
         // An optional Boolean value or number that specifies whether
         // to flush any previous playlist
-        if (reset_value->is_boolean()) {
+        if (reset_value->is_boolean())
+        {
             reset = reset_value->to_boolean();
-        } else if (reset_value->is_number()) {
+        }
+        else if (reset_value->is_number())
+        {
             reset = (reset_value->to_number() != 0);
-        } else {
+        }
+        else
+        {
             ret = ERROR_RTMP_AMF0_DECODE;
             srs_error("amf0 invalid type=%#x, requires number or bool, ret=%d", reset_value->marker, ret);
             return ret;
@@ -25632,7 +26955,7 @@ int SrsPlayPacket::decode(SrsStream* stream)
     }
 
     srs_info("amf0 decode play packet success");
-    
+
     return ret;
 }
 
@@ -25649,71 +26972,81 @@ int SrsPlayPacket::get_message_type()
 int SrsPlayPacket::get_size()
 {
     int size = SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::str(stream_name);
-    
-    if (start != -2 || duration != -1 || !reset) {
+               + SrsAmf0Size::null() + SrsAmf0Size::str(stream_name);
+
+    if (start != -2 || duration != -1 || !reset)
+    {
         size += SrsAmf0Size::number();
     }
-    
-    if (duration != -1 || !reset) {
+
+    if (duration != -1 || !reset)
+    {
         size += SrsAmf0Size::number();
     }
-    
-    if (!reset) {
+
+    if (!reset)
+    {
         size += SrsAmf0Size::boolean();
     }
-    
+
     return size;
 }
 
 int SrsPlayPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if ((ret = srs_amf0_write_string(stream, stream_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, stream_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode stream_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode stream_name success.");
-    
-    if ((start != -2 || duration != -1 || !reset) && (ret = srs_amf0_write_number(stream, start)) != ERROR_SUCCESS) {
+
+    if ((start != -2 || duration != -1 || !reset) && (ret = srs_amf0_write_number(stream, start)) != ERROR_SUCCESS)
+    {
         srs_error("encode start failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode start success.");
-    
-    if ((duration != -1 || !reset) && (ret = srs_amf0_write_number(stream, duration)) != ERROR_SUCCESS) {
+
+    if ((duration != -1 || !reset) && (ret = srs_amf0_write_number(stream, duration)) != ERROR_SUCCESS)
+    {
         srs_error("encode duration failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode duration success.");
-    
-    if (!reset && (ret = srs_amf0_write_boolean(stream, reset)) != ERROR_SUCCESS) {
+
+    if (!reset && (ret = srs_amf0_write_boolean(stream, reset)) != ERROR_SUCCESS)
+    {
         srs_error("encode reset failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode reset success.");
-    
+
     srs_info("encode play request packet success.");
-    
+
     return ret;
 }
 
@@ -25744,40 +27077,44 @@ int SrsPlayResPacket::get_message_type()
 int SrsPlayResPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::object(desc);
+           + SrsAmf0Size::null() + SrsAmf0Size::object(desc);
 }
 
 int SrsPlayResPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_object failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_object success.");
-    
-    if ((ret = desc->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = desc->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode desc failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode desc success.");
-    
-    
+
+
     srs_info("encode play response packet success.");
-    
+
     return ret;
 }
 
@@ -25806,33 +27143,36 @@ int SrsOnBWDonePacket::get_message_type()
 int SrsOnBWDonePacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null();
+           + SrsAmf0Size::null();
 }
 
 int SrsOnBWDonePacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode args failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode args success.");
-    
+
     srs_info("encode onBWDone packet success.");
-    
+
     return ret;
 }
 
@@ -25863,39 +27203,43 @@ int SrsOnStatusCallPacket::get_message_type()
 int SrsOnStatusCallPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::object(data);
+           + SrsAmf0Size::null() + SrsAmf0Size::object(data);
 }
 
 int SrsOnStatusCallPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode args failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode args success.");;
-    
-    if ((ret = data->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = data->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode data failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode data success.");
-    
+
     srs_info("encode onStatus(Call) packet success.");
-    
+
     return ret;
 }
 
@@ -25917,25 +27261,30 @@ int SrsBandwidthPacket::decode(SrsStream *stream)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode bwtc command_name failed. ret=%d", ret);
         return ret;
     }
 
-    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode bwtc transaction_id failed. ret=%d", ret);
         return ret;
     }
 
-    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("amf0 decode bwtc command_object failed. ret=%d", ret);
         return ret;
     }
-    
+
     // @remark, for bandwidth test, ignore the data field.
     // only decode the stop-play, start-publish and finish packet.
-    if (is_stop_play() || is_start_publish() || is_finish()) {
-        if ((ret = data->read(stream)) != ERROR_SUCCESS) {
+    if (is_stop_play() || is_start_publish() || is_finish())
+    {
+        if ((ret = data->read(stream)) != ERROR_SUCCESS)
+        {
             srs_error("amf0 decode bwtc command_object failed. ret=%d", ret);
             return ret;
         }
@@ -25959,39 +27308,43 @@ int SrsBandwidthPacket::get_message_type()
 int SrsBandwidthPacket::get_size()
 {
     return SrsAmf0Size::str(command_name) + SrsAmf0Size::number()
-        + SrsAmf0Size::null() + SrsAmf0Size::object(data);
+           + SrsAmf0Size::null() + SrsAmf0Size::object(data);
 }
 
 int SrsBandwidthPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_number(stream, transaction_id)) != ERROR_SUCCESS)
+    {
         srs_error("encode transaction_id failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode transaction_id success.");
-    
-    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_null(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode args failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode args success.");;
-    
-    if ((ret = data->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = data->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode data failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode data success.");
-    
+
     srs_info("encode onStatus(Call) packet success.");
-    
+
     return ret;
 }
 
@@ -26120,7 +27473,7 @@ SrsBandwidthPacket* SrsBandwidthPacket::create_final()
 SrsBandwidthPacket* SrsBandwidthPacket::set_command(string command)
 {
     command_name = command;
-    
+
     return this;
 }
 
@@ -26153,21 +27506,23 @@ int SrsOnStatusDataPacket::get_size()
 int SrsOnStatusDataPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = data->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = data->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode data failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode data success.");
-    
+
     srs_info("encode onStatus(Data) packet success.");
-    
+
     return ret;
 }
 
@@ -26195,33 +27550,36 @@ int SrsSampleAccessPacket::get_message_type()
 int SrsSampleAccessPacket::get_size()
 {
     return SrsAmf0Size::str(command_name)
-        + SrsAmf0Size::boolean() + SrsAmf0Size::boolean();
+           + SrsAmf0Size::boolean() + SrsAmf0Size::boolean();
 }
 
 int SrsSampleAccessPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, command_name)) != ERROR_SUCCESS)
+    {
         srs_error("encode command_name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode command_name success.");
-    
-    if ((ret = srs_amf0_write_boolean(stream, video_sample_access)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_boolean(stream, video_sample_access)) != ERROR_SUCCESS)
+    {
         srs_error("encode video_sample_access failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode video_sample_access success.");
-    
-    if ((ret = srs_amf0_write_boolean(stream, audio_sample_access)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_boolean(stream, audio_sample_access)) != ERROR_SUCCESS)
+    {
         srs_error("encode audio_sample_access failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode audio_sample_access success.");;
-    
+
     srs_info("encode |RtmpSampleAccess packet success.");
-    
+
     return ret;
 }
 
@@ -26239,50 +27597,57 @@ SrsOnMetaDataPacket::~SrsOnMetaDataPacket()
 int SrsOnMetaDataPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_read_string(stream, name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_read_string(stream, name)) != ERROR_SUCCESS)
+    {
         srs_error("decode metadata name failed. ret=%d", ret);
         return ret;
     }
 
     // ignore the @setDataFrame
-    if (name == SRS_CONSTS_RTMP_SET_DATAFRAME) {
-        if ((ret = srs_amf0_read_string(stream, name)) != ERROR_SUCCESS) {
+    if (name == SRS_CONSTS_RTMP_SET_DATAFRAME)
+    {
+        if ((ret = srs_amf0_read_string(stream, name)) != ERROR_SUCCESS)
+        {
             srs_error("decode metadata name failed. ret=%d", ret);
             return ret;
         }
     }
-    
+
     srs_verbose("decode metadata name success. name=%s", name.c_str());
-    
+
     // the metadata maybe object or ecma array
     SrsAmf0Any* any = NULL;
-    if ((ret = srs_amf0_read_any(stream, &any)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_any(stream, &any)) != ERROR_SUCCESS)
+    {
         srs_error("decode metadata metadata failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_assert(any);
-    if (any->is_object()) {
+    if (any->is_object())
+    {
         srs_freep(metadata);
         metadata = any->to_object();
         srs_info("decode metadata object success");
         return ret;
     }
-    
+
     SrsAutoFree(SrsAmf0Any, any);
-    
-    if (any->is_ecma_array()) {
+
+    if (any->is_ecma_array())
+    {
         SrsAmf0EcmaArray* arr = any->to_ecma_array();
-    
+
         // if ecma array, copy to object.
-        for (int i = 0; i < arr->count(); i++) {
+        for (int i = 0; i < arr->count(); i++)
+        {
             metadata->set(arr->key_at(i), arr->value_at(i)->copy());
         }
-        
+
         srs_info("decode metadata array success");
     }
-    
+
     return ret;
 }
 
@@ -26304,19 +27669,21 @@ int SrsOnMetaDataPacket::get_size()
 int SrsOnMetaDataPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_amf0_write_string(stream, name)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_amf0_write_string(stream, name)) != ERROR_SUCCESS)
+    {
         srs_error("encode name failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode name success.");
-    
-    if ((ret = metadata->write(stream)) != ERROR_SUCCESS) {
+
+    if ((ret = metadata->write(stream)) != ERROR_SUCCESS)
+    {
         srs_error("encode metadata failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("encode metadata success.");
-    
+
     srs_info("encode onMetaData packet success.");
     return ret;
 }
@@ -26333,16 +27700,17 @@ SrsSetWindowAckSizePacket::~SrsSetWindowAckSizePacket()
 int SrsSetWindowAckSizePacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(4)) {
+
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_MESSAGE_DECODE;
         srs_error("decode ack window size failed. ret=%d", ret);
         return ret;
     }
-    
+
     ackowledgement_window_size = stream->read_4bytes();
     srs_info("decode ack window size success");
-    
+
     return ret;
 }
 
@@ -26364,18 +27732,19 @@ int SrsSetWindowAckSizePacket::get_size()
 int SrsSetWindowAckSizePacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(4)) {
+
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_MESSAGE_ENCODE;
         srs_error("encode ack size packet failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_4bytes(ackowledgement_window_size);
-    
+
     srs_verbose("encode ack size packet "
-        "success. ack_size=%d", ackowledgement_window_size);
-    
+                "success. ack_size=%d", ackowledgement_window_size);
+
     return ret;
 }
 
@@ -26406,18 +27775,19 @@ int SrsAcknowledgementPacket::get_size()
 int SrsAcknowledgementPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(4)) {
+
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_MESSAGE_ENCODE;
         srs_error("encode acknowledgement packet failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_4bytes(sequence_number);
-    
+
     srs_verbose("encode acknowledgement packet "
-        "success. sequence_number=%d", sequence_number);
-    
+                "success. sequence_number=%d", sequence_number);
+
     return ret;
 }
 
@@ -26433,16 +27803,17 @@ SrsSetChunkSizePacket::~SrsSetChunkSizePacket()
 int SrsSetChunkSizePacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(4)) {
+
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_MESSAGE_DECODE;
         srs_error("decode chunk size failed. ret=%d", ret);
         return ret;
     }
-    
+
     chunk_size = stream->read_4bytes();
     srs_info("decode chunk size success. chunk_size=%d", chunk_size);
-    
+
     return ret;
 }
 
@@ -26464,17 +27835,18 @@ int SrsSetChunkSizePacket::get_size()
 int SrsSetChunkSizePacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(4)) {
+
+    if (!stream->require(4))
+    {
         ret = ERROR_RTMP_MESSAGE_ENCODE;
         srs_error("encode chunk packet failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_4bytes(chunk_size);
-    
+
     srs_verbose("encode chunk packet success. ack_size=%d", chunk_size);
-    
+
     return ret;
 }
 
@@ -26506,19 +27878,20 @@ int SrsSetPeerBandwidthPacket::get_size()
 int SrsSetPeerBandwidthPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(5)) {
+
+    if (!stream->require(5))
+    {
         ret = ERROR_RTMP_MESSAGE_ENCODE;
         srs_error("encode set bandwidth packet failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_4bytes(bandwidth);
     stream->write_1bytes(type);
-    
+
     srs_verbose("encode set bandwidth packet "
-        "success. bandwidth=%d, type=%d", bandwidth, type);
-    
+                "success. bandwidth=%d, type=%d", bandwidth, type);
+
     return ret;
 }
 
@@ -26536,44 +27909,52 @@ SrsUserControlPacket::~SrsUserControlPacket()
 int SrsUserControlPacket::decode(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(2)) {
+
+    if (!stream->require(2))
+    {
         ret = ERROR_RTMP_MESSAGE_DECODE;
         srs_error("decode user control failed. ret=%d", ret);
         return ret;
     }
-    
+
     event_type = stream->read_2bytes();
-    
-    if (event_type == SrsPCUCFmsEvent0) {
-        if (!stream->require(1)) {
+
+    if (event_type == SrsPCUCFmsEvent0)
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_RTMP_MESSAGE_DECODE;
             srs_error("decode user control failed. ret=%d", ret);
             return ret;
         }
         event_data = stream->read_1bytes();
-    } else {
-        if (!stream->require(4)) {
+    }
+    else
+    {
+        if (!stream->require(4))
+        {
             ret = ERROR_RTMP_MESSAGE_DECODE;
             srs_error("decode user control failed. ret=%d", ret);
             return ret;
         }
         event_data = stream->read_4bytes();
     }
-    
-    if (event_type == SrcPCUCSetBufferLength) {
-        if (!stream->require(4)) {
+
+    if (event_type == SrcPCUCSetBufferLength)
+    {
+        if (!stream->require(4))
+        {
             ret = ERROR_RTMP_MESSAGE_ENCODE;
             srs_error("decode user control packet failed. ret=%d", ret);
             return ret;
         }
         extra_data = stream->read_4bytes();
     }
-    
+
     srs_info("decode user control success. "
-        "event_type=%d, event_data=%d, extra_data=%d", 
-        event_type, event_data, extra_data);
-    
+             "event_type=%d, event_data=%d, extra_data=%d",
+             event_type, event_data, extra_data);
+
     return ret;
 }
 
@@ -26590,48 +27971,57 @@ int SrsUserControlPacket::get_message_type()
 int SrsUserControlPacket::get_size()
 {
     int size = 2;
-    
-    if (event_type == SrsPCUCFmsEvent0) {
+
+    if (event_type == SrsPCUCFmsEvent0)
+    {
         size += 1;
-    } else {
+    }
+    else
+    {
         size += 4;
     }
-    
-    if (event_type == SrcPCUCSetBufferLength) {
+
+    if (event_type == SrcPCUCSetBufferLength)
+    {
         size += 4;
     }
-    
+
     return size;
 }
 
 int SrsUserControlPacket::encode_packet(SrsStream* stream)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (!stream->require(get_size())) {
+
+    if (!stream->require(get_size()))
+    {
         ret = ERROR_RTMP_MESSAGE_ENCODE;
         srs_error("encode user control packet failed. ret=%d", ret);
         return ret;
     }
-    
+
     stream->write_2bytes(event_type);
-    
-    if (event_type == SrsPCUCFmsEvent0) {
+
+    if (event_type == SrsPCUCFmsEvent0)
+    {
         stream->write_1bytes(event_data);
-    } else {
+    }
+    else
+    {
         stream->write_4bytes(event_data);
     }
 
     // when event type is set buffer length,
     // write the extra buffer length.
-    if (event_type == SrcPCUCSetBufferLength) {
+    if (event_type == SrcPCUCSetBufferLength)
+    {
         stream->write_4bytes(extra_data);
         srs_verbose("user control message, buffer_length=%d", extra_data);
     }
-    
+
     srs_verbose("encode user control packet success. "
-        "event_type=%d, event_data=%d", event_type, event_data);
-    
+                "event_type=%d, event_data=%d", event_type, event_data);
+
     return ret;
 }
 
@@ -26684,1045 +28074,1135 @@ using namespace _srs_internal;
 
 namespace _srs_internal
 {
-    // 68bytes FMS key which is used to sign the sever packet.
-    u_int8_t SrsGenuineFMSKey[] = {
-        0x47, 0x65, 0x6e, 0x75, 0x69, 0x6e, 0x65, 0x20,
-        0x41, 0x64, 0x6f, 0x62, 0x65, 0x20, 0x46, 0x6c,
-        0x61, 0x73, 0x68, 0x20, 0x4d, 0x65, 0x64, 0x69,
-        0x61, 0x20, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72,
-        0x20, 0x30, 0x30, 0x31, // Genuine Adobe Flash Media Server 001
-        0xf0, 0xee, 0xc2, 0x4a, 0x80, 0x68, 0xbe, 0xe8,
-        0x2e, 0x00, 0xd0, 0xd1, 0x02, 0x9e, 0x7e, 0x57,
-        0x6e, 0xec, 0x5d, 0x2d, 0x29, 0x80, 0x6f, 0xab,
-        0x93, 0xb8, 0xe6, 0x36, 0xcf, 0xeb, 0x31, 0xae
-    }; // 68
-    
-    // 62bytes FP key which is used to sign the client packet.
-    u_int8_t SrsGenuineFPKey[] = {
-        0x47, 0x65, 0x6E, 0x75, 0x69, 0x6E, 0x65, 0x20,
-        0x41, 0x64, 0x6F, 0x62, 0x65, 0x20, 0x46, 0x6C,
-        0x61, 0x73, 0x68, 0x20, 0x50, 0x6C, 0x61, 0x79,
-        0x65, 0x72, 0x20, 0x30, 0x30, 0x31, // Genuine Adobe Flash Player 001
-        0xF0, 0xEE, 0xC2, 0x4A, 0x80, 0x68, 0xBE, 0xE8,
-        0x2E, 0x00, 0xD0, 0xD1, 0x02, 0x9E, 0x7E, 0x57,
-        0x6E, 0xEC, 0x5D, 0x2D, 0x29, 0x80, 0x6F, 0xAB,
-        0x93, 0xB8, 0xE6, 0x36, 0xCF, 0xEB, 0x31, 0xAE
-    }; // 62
-    
-    int do_openssl_HMACsha256(HMAC_CTX* ctx, const void* data, int data_size, void* digest, unsigned int* digest_size) 
+// 68bytes FMS key which is used to sign the sever packet.
+u_int8_t SrsGenuineFMSKey[] =
+{
+    0x47, 0x65, 0x6e, 0x75, 0x69, 0x6e, 0x65, 0x20,
+    0x41, 0x64, 0x6f, 0x62, 0x65, 0x20, 0x46, 0x6c,
+    0x61, 0x73, 0x68, 0x20, 0x4d, 0x65, 0x64, 0x69,
+    0x61, 0x20, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72,
+    0x20, 0x30, 0x30, 0x31, // Genuine Adobe Flash Media Server 001
+    0xf0, 0xee, 0xc2, 0x4a, 0x80, 0x68, 0xbe, 0xe8,
+    0x2e, 0x00, 0xd0, 0xd1, 0x02, 0x9e, 0x7e, 0x57,
+    0x6e, 0xec, 0x5d, 0x2d, 0x29, 0x80, 0x6f, 0xab,
+    0x93, 0xb8, 0xe6, 0x36, 0xcf, 0xeb, 0x31, 0xae
+}; // 68
+
+// 62bytes FP key which is used to sign the client packet.
+u_int8_t SrsGenuineFPKey[] =
+{
+    0x47, 0x65, 0x6E, 0x75, 0x69, 0x6E, 0x65, 0x20,
+    0x41, 0x64, 0x6F, 0x62, 0x65, 0x20, 0x46, 0x6C,
+    0x61, 0x73, 0x68, 0x20, 0x50, 0x6C, 0x61, 0x79,
+    0x65, 0x72, 0x20, 0x30, 0x30, 0x31, // Genuine Adobe Flash Player 001
+    0xF0, 0xEE, 0xC2, 0x4A, 0x80, 0x68, 0xBE, 0xE8,
+    0x2E, 0x00, 0xD0, 0xD1, 0x02, 0x9E, 0x7E, 0x57,
+    0x6E, 0xEC, 0x5D, 0x2D, 0x29, 0x80, 0x6F, 0xAB,
+    0x93, 0xB8, 0xE6, 0x36, 0xCF, 0xEB, 0x31, 0xAE
+}; // 62
+
+int do_openssl_HMACsha256(HMAC_CTX* ctx, const void* data, int data_size, void* digest, unsigned int* digest_size)
+{
+    int ret = ERROR_SUCCESS;
+
+    if (HMAC_Update(ctx, (unsigned char *) data, data_size) < 0)
     {
-        int ret = ERROR_SUCCESS;
-        
-        if (HMAC_Update(ctx, (unsigned char *) data, data_size) < 0) {
-            ret = ERROR_OpenSslSha256Update;
-            return ret;
-        }
-    
-        if (HMAC_Final(ctx, (unsigned char *) digest, digest_size) < 0) {
-            ret = ERROR_OpenSslSha256Final;
-            return ret;
-        }
-        
+        ret = ERROR_OpenSslSha256Update;
         return ret;
     }
-    /**
-    * sha256 digest algorithm.
-    * @param key the sha256 key, NULL to use EVP_Digest, for instance,
-    *       hashlib.sha256(data).digest().
-    */
-    int openssl_HMACsha256(const void* key, int key_size, const void* data, int data_size, void* digest) 
+
+    if (HMAC_Final(ctx, (unsigned char *) digest, digest_size) < 0)
     {
-        int ret = ERROR_SUCCESS;
-        
-        unsigned int digest_size = 0;
-        
-        unsigned char* temp_key = (unsigned char*)key;
-        unsigned char* temp_digest = (unsigned char*)digest;
-        
-        if (key == NULL) {
-            // use data to digest.
-            // @see ./crypto/sha/sha256t.c
-            // @see ./crypto/evp/digest.c
-            if (EVP_Digest(data, data_size, temp_digest, &digest_size, EVP_sha256(), NULL) < 0)
-            {
-                ret = ERROR_OpenSslSha256EvpDigest;
-                return ret;
-            }
-        } else {
-            // use key-data to digest.
-            HMAC_CTX ctx;
-            
-            // @remark, if no key, use EVP_Digest to digest,
-            // for instance, in python, hashlib.sha256(data).digest().
-            HMAC_CTX_init(&ctx);
-            if (HMAC_Init_ex(&ctx, temp_key, key_size, EVP_sha256(), NULL) < 0) {
-                ret = ERROR_OpenSslSha256Init;
-                return ret;
-            }
-            
-            ret = do_openssl_HMACsha256(&ctx, data, data_size, temp_digest, &digest_size);
-            HMAC_CTX_cleanup(&ctx);
-            
-            if (ret != ERROR_SUCCESS) {
-                return ret;
-            }
-        }
-        
-        if (digest_size != 32) {
-            ret = ERROR_OpenSslSha256DigestSize;
-            return ret;
-        }
-        
+        ret = ERROR_OpenSslSha256Final;
         return ret;
     }
-    
-    #define RFC2409_PRIME_1024 \
+
+    return ret;
+}
+/**
+* sha256 digest algorithm.
+* @param key the sha256 key, NULL to use EVP_Digest, for instance,
+*       hashlib.sha256(data).digest().
+*/
+int openssl_HMACsha256(const void* key, int key_size, const void* data, int data_size, void* digest)
+{
+    int ret = ERROR_SUCCESS;
+
+    unsigned int digest_size = 0;
+
+    unsigned char* temp_key = (unsigned char*)key;
+    unsigned char* temp_digest = (unsigned char*)digest;
+
+    if (key == NULL)
+    {
+        // use data to digest.
+        // @see ./crypto/sha/sha256t.c
+        // @see ./crypto/evp/digest.c
+        if (EVP_Digest(data, data_size, temp_digest, &digest_size, EVP_sha256(), NULL) < 0)
+        {
+            ret = ERROR_OpenSslSha256EvpDigest;
+            return ret;
+        }
+    }
+    else
+    {
+        // use key-data to digest.
+        HMAC_CTX ctx;
+
+        // @remark, if no key, use EVP_Digest to digest,
+        // for instance, in python, hashlib.sha256(data).digest().
+        HMAC_CTX_init(&ctx);
+        if (HMAC_Init_ex(&ctx, temp_key, key_size, EVP_sha256(), NULL) < 0)
+        {
+            ret = ERROR_OpenSslSha256Init;
+            return ret;
+        }
+
+        ret = do_openssl_HMACsha256(&ctx, data, data_size, temp_digest, &digest_size);
+        HMAC_CTX_cleanup(&ctx);
+
+        if (ret != ERROR_SUCCESS)
+        {
+            return ret;
+        }
+    }
+
+    if (digest_size != 32)
+    {
+        ret = ERROR_OpenSslSha256DigestSize;
+        return ret;
+    }
+
+    return ret;
+}
+
+#define RFC2409_PRIME_1024 \
             "FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1" \
             "29024E088A67CC74020BBEA63B139B22514A08798E3404DD" \
             "EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245" \
             "E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED" \
             "EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE65381" \
             "FFFFFFFFFFFFFFFF"
-    
-    SrsDH::SrsDH()
+
+SrsDH::SrsDH()
+{
+    pdh = NULL;
+}
+
+SrsDH::~SrsDH()
+{
+    if (pdh != NULL)
     {
+        if (pdh->p != NULL)
+        {
+            BN_free(pdh->p);
+            pdh->p = NULL;
+        }
+        if (pdh->g != NULL)
+        {
+            BN_free(pdh->g);
+            pdh->g = NULL;
+        }
+        DH_free(pdh);
         pdh = NULL;
     }
-    
-    SrsDH::~SrsDH()
+}
+
+int SrsDH::initialize(bool ensure_128bytes_public_key)
+{
+    int ret = ERROR_SUCCESS;
+
+    for (;;)
     {
-        if (pdh != NULL) {
-            if (pdh->p != NULL) {
-                BN_free(pdh->p);
-                pdh->p = NULL;
-            }
-            if (pdh->g != NULL) {
-                BN_free(pdh->g);
-                pdh->g = NULL;
-            }
-            DH_free(pdh);
-            pdh = NULL;
+        if ((ret = do_initialize()) != ERROR_SUCCESS)
+        {
+            return ret;
         }
+
+        if (ensure_128bytes_public_key)
+        {
+            int32_t key_size = BN_num_bytes(pdh->pub_key);
+            if (key_size != 128)
+            {
+                srs_warn("regenerate 128B key, current=%dB", key_size);
+                continue;
+            }
+        }
+
+        break;
     }
-    
-    int SrsDH::initialize(bool ensure_128bytes_public_key)
+
+    return ret;
+}
+
+int SrsDH::copy_public_key(char* pkey, int32_t& pkey_size)
+{
+    int ret = ERROR_SUCCESS;
+
+    // copy public key to bytes.
+    // sometimes, the key_size is 127, seems ok.
+    int32_t key_size = BN_num_bytes(pdh->pub_key);
+    srs_assert(key_size > 0);
+
+    // maybe the key_size is 127, but dh will write all 128bytes pkey,
+    // so, donot need to set/initialize the pkey.
+    // @see https://github.com/simple-rtmp-server/srs/issues/165
+    key_size = BN_bn2bin(pdh->pub_key, (unsigned char*)pkey);
+    srs_assert(key_size > 0);
+
+    // output the size of public key.
+    // @see https://github.com/simple-rtmp-server/srs/issues/165
+    srs_assert(key_size <= pkey_size);
+    pkey_size = key_size;
+
+    return ret;
+}
+
+int SrsDH::copy_shared_key(const char* ppkey, int32_t ppkey_size, char* skey, int32_t& skey_size)
+{
+    int ret = ERROR_SUCCESS;
+
+    BIGNUM* ppk = NULL;
+    if ((ppk = BN_bin2bn((const unsigned char*)ppkey, ppkey_size, 0)) == NULL)
     {
-        int ret = ERROR_SUCCESS;
-        
-        for (;;) {
-            if ((ret = do_initialize()) != ERROR_SUCCESS) {
-                return ret;
-            }
-            
-            if (ensure_128bytes_public_key) {
-                int32_t key_size = BN_num_bytes(pdh->pub_key);
-                if (key_size != 128) {
-                    srs_warn("regenerate 128B key, current=%dB", key_size);
-                    continue;
-                }
-            }
-            
-            break;
-        }
-        
+        ret = ERROR_OpenSslGetPeerPublicKey;
         return ret;
     }
-    
-    int SrsDH::copy_public_key(char* pkey, int32_t& pkey_size)
+
+    // if failed, donot return, do cleanup, @see ./test/dhtest.c:168
+    // maybe the key_size is 127, but dh will write all 128bytes skey,
+    // so, donot need to set/initialize the skey.
+    // @see https://github.com/simple-rtmp-server/srs/issues/165
+    int32_t key_size = DH_compute_key((unsigned char*)skey, ppk, pdh);
+
+    if (key_size < ppkey_size)
     {
-        int ret = ERROR_SUCCESS;
-        
-        // copy public key to bytes.
-        // sometimes, the key_size is 127, seems ok.
-        int32_t key_size = BN_num_bytes(pdh->pub_key);
-        srs_assert(key_size > 0);
-        
-        // maybe the key_size is 127, but dh will write all 128bytes pkey,
-        // so, donot need to set/initialize the pkey.
-        // @see https://github.com/simple-rtmp-server/srs/issues/165
-        key_size = BN_bn2bin(pdh->pub_key, (unsigned char*)pkey);
-        srs_assert(key_size > 0);
-        
-        // output the size of public key.
-        // @see https://github.com/simple-rtmp-server/srs/issues/165
-        srs_assert(key_size <= pkey_size);
-        pkey_size = key_size;
-        
+        srs_warn("shared key size=%d, ppk_size=%d", key_size, ppkey_size);
+    }
+
+    if (key_size < 0 || key_size > skey_size)
+    {
+        ret = ERROR_OpenSslComputeSharedKey;
+    }
+    else
+    {
+        skey_size = key_size;
+    }
+
+    if (ppk)
+    {
+        BN_free(ppk);
+    }
+
+    return ret;
+}
+
+int SrsDH::do_initialize()
+{
+    int ret = ERROR_SUCCESS;
+
+    int32_t bits_count = 1024;
+
+    //1. Create the DH
+    if ((pdh = DH_new()) == NULL)
+    {
+        ret = ERROR_OpenSslCreateDH;
         return ret;
     }
-    
-    int SrsDH::copy_shared_key(const char* ppkey, int32_t ppkey_size, char* skey, int32_t& skey_size)
+
+    //2. Create his internal p and g
+    if ((pdh->p = BN_new()) == NULL)
     {
-        int ret = ERROR_SUCCESS;
-        
-        BIGNUM* ppk = NULL;
-        if ((ppk = BN_bin2bn((const unsigned char*)ppkey, ppkey_size, 0)) == NULL) {
-            ret = ERROR_OpenSslGetPeerPublicKey;
-            return ret;
-        }
-        
-        // if failed, donot return, do cleanup, @see ./test/dhtest.c:168
-        // maybe the key_size is 127, but dh will write all 128bytes skey,
-        // so, donot need to set/initialize the skey.
-        // @see https://github.com/simple-rtmp-server/srs/issues/165
-        int32_t key_size = DH_compute_key((unsigned char*)skey, ppk, pdh);
-        
-        if (key_size < ppkey_size) {
-            srs_warn("shared key size=%d, ppk_size=%d", key_size, ppkey_size);
-        }
-        
-        if (key_size < 0 || key_size > skey_size) {
-            ret = ERROR_OpenSslComputeSharedKey;
-        } else {
-            skey_size = key_size;
-        }
-        
-        if (ppk) {
-            BN_free(ppk);
-        }
-        
+        ret = ERROR_OpenSslCreateP;
         return ret;
     }
-    
-    int SrsDH::do_initialize()
+    if ((pdh->g = BN_new()) == NULL)
     {
-        int ret = ERROR_SUCCESS;
-        
-        int32_t bits_count = 1024; 
-        
-        //1. Create the DH
-        if ((pdh = DH_new()) == NULL) {
-            ret = ERROR_OpenSslCreateDH; 
-            return ret;
-        }
-    
-        //2. Create his internal p and g
-        if ((pdh->p = BN_new()) == NULL) {
-            ret = ERROR_OpenSslCreateP; 
-            return ret;
-        }
-        if ((pdh->g = BN_new()) == NULL) {
-            ret = ERROR_OpenSslCreateG; 
-            return ret;
-        }
-    
-        //3. initialize p and g, @see ./test/ectest.c:260
-        if (!BN_hex2bn(&pdh->p, RFC2409_PRIME_1024)) {
-            ret = ERROR_OpenSslParseP1024; 
-            return ret;
-        }
-        // @see ./test/bntest.c:1764
-        if (!BN_set_word(pdh->g, 2)) {
-            ret = ERROR_OpenSslSetG;
-            return ret;
-        }
-    
-        // 4. Set the key length
-        pdh->length = bits_count;
-    
-        // 5. Generate private and public key
-        // @see ./test/dhtest.c:152
-        if (!DH_generate_key(pdh)) {
-            ret = ERROR_OpenSslGenerateDHKeys;
-            return ret;
-        }
-        
+        ret = ERROR_OpenSslCreateG;
         return ret;
     }
-    
-    key_block::key_block()
+
+    //3. initialize p and g, @see ./test/ectest.c:260
+    if (!BN_hex2bn(&pdh->p, RFC2409_PRIME_1024))
     {
-        offset = (int32_t)rand();
-        random0 = NULL;
-        random1 = NULL;
-        
-        int valid_offset = calc_valid_offset();
-        srs_assert(valid_offset >= 0);
-        
-        random0_size = valid_offset;
-        if (random0_size > 0) {
-            random0 = new char[random0_size];
-            srs_random_generate(random0, random0_size);
-            snprintf(random0, random0_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
-        }
-        
-        srs_random_generate(key, sizeof(key));
-        
-        random1_size = 764 - valid_offset - 128 - 4;
-        if (random1_size > 0) {
-            random1 = new char[random1_size];
-            srs_random_generate(random1, random1_size);
-            snprintf(random1, random1_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
-        }
+        ret = ERROR_OpenSslParseP1024;
+        return ret;
     }
-    
-    key_block::~key_block()
+    // @see ./test/bntest.c:1764
+    if (!BN_set_word(pdh->g, 2))
+    {
+        ret = ERROR_OpenSslSetG;
+        return ret;
+    }
+
+    // 4. Set the key length
+    pdh->length = bits_count;
+
+    // 5. Generate private and public key
+    // @see ./test/dhtest.c:152
+    if (!DH_generate_key(pdh))
+    {
+        ret = ERROR_OpenSslGenerateDHKeys;
+        return ret;
+    }
+
+    return ret;
+}
+
+key_block::key_block()
+{
+    offset = (int32_t)rand();
+    random0 = NULL;
+    random1 = NULL;
+
+    int valid_offset = calc_valid_offset();
+    srs_assert(valid_offset >= 0);
+
+    random0_size = valid_offset;
+    if (random0_size > 0)
+    {
+        random0 = new char[random0_size];
+        srs_random_generate(random0, random0_size);
+        snprintf(random0, random0_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
+    }
+
+    srs_random_generate(key, sizeof(key));
+
+    random1_size = 764 - valid_offset - 128 - 4;
+    if (random1_size > 0)
+    {
+        random1 = new char[random1_size];
+        srs_random_generate(random1, random1_size);
+        snprintf(random1, random1_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
+    }
+}
+
+key_block::~key_block()
+{
+    srs_freep(random0);
+    srs_freep(random1);
+}
+
+int key_block::parse(SrsStream* stream)
+{
+    int ret = ERROR_SUCCESS;
+
+    // the key must be 764 bytes.
+    srs_assert(stream->require(764));
+
+    // read the last offset first, 760-763
+    stream->skip(764 - sizeof(int32_t));
+    offset = stream->read_4bytes();
+
+    // reset stream to read others.
+    stream->skip(-764);
+
+    int valid_offset = calc_valid_offset();
+    srs_assert(valid_offset >= 0);
+
+    random0_size = valid_offset;
+    if (random0_size > 0)
     {
         srs_freep(random0);
+        random0 = new char[random0_size];
+        stream->read_bytes(random0, random0_size);
+    }
+
+    stream->read_bytes(key, 128);
+
+    random1_size = 764 - valid_offset - 128 - 4;
+    if (random1_size > 0)
+    {
         srs_freep(random1);
+        random1 = new char[random1_size];
+        stream->read_bytes(random1, random1_size);
     }
-    
-    int key_block::parse(SrsStream* stream)
+
+    return ret;
+}
+
+int key_block::calc_valid_offset()
+{
+    int max_offset_size = 764 - 128 - 4;
+
+    int valid_offset = 0;
+    u_int8_t* pp = (u_int8_t*)&offset;
+    valid_offset += *pp++;
+    valid_offset += *pp++;
+    valid_offset += *pp++;
+    valid_offset += *pp++;
+
+    return valid_offset % max_offset_size;
+}
+
+digest_block::digest_block()
+{
+    offset = (int32_t)rand();
+    random0 = NULL;
+    random1 = NULL;
+
+    int valid_offset = calc_valid_offset();
+    srs_assert(valid_offset >= 0);
+
+    random0_size = valid_offset;
+    if (random0_size > 0)
     {
-        int ret = ERROR_SUCCESS;
-        
-        // the key must be 764 bytes.
-        srs_assert(stream->require(764));
-    
-        // read the last offset first, 760-763
-        stream->skip(764 - sizeof(int32_t));
-        offset = stream->read_4bytes();
-        
-        // reset stream to read others.
-        stream->skip(-764);
-        
-        int valid_offset = calc_valid_offset();
-        srs_assert(valid_offset >= 0);
-        
-        random0_size = valid_offset;
-        if (random0_size > 0) {
-            srs_freep(random0);
-            random0 = new char[random0_size];
-            stream->read_bytes(random0, random0_size);
-        }
-        
-        stream->read_bytes(key, 128);
-        
-        random1_size = 764 - valid_offset - 128 - 4;
-        if (random1_size > 0) {
-            srs_freep(random1);
-            random1 = new char[random1_size];
-            stream->read_bytes(random1, random1_size);
-        }
-        
-        return ret;
+        random0 = new char[random0_size];
+        srs_random_generate(random0, random0_size);
+        snprintf(random0, random0_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
     }
-    
-    int key_block::calc_valid_offset()
+
+    srs_random_generate(digest, sizeof(digest));
+
+    random1_size = 764 - 4 - valid_offset - 32;
+    if (random1_size > 0)
     {
-        int max_offset_size = 764 - 128 - 4;
-        
-        int valid_offset = 0;
-        u_int8_t* pp = (u_int8_t*)&offset;
-        valid_offset += *pp++;
-        valid_offset += *pp++;
-        valid_offset += *pp++;
-        valid_offset += *pp++;
-    
-        return valid_offset % max_offset_size;
+        random1 = new char[random1_size];
+        srs_random_generate(random1, random1_size);
+        snprintf(random1, random1_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
     }
-    
-    digest_block::digest_block()
-    {
-        offset = (int32_t)rand();
-        random0 = NULL;
-        random1 = NULL;
-        
-        int valid_offset = calc_valid_offset();
-        srs_assert(valid_offset >= 0);
-        
-        random0_size = valid_offset;
-        if (random0_size > 0) {
-            random0 = new char[random0_size];
-            srs_random_generate(random0, random0_size);
-            snprintf(random0, random0_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
-        }
-        
-        srs_random_generate(digest, sizeof(digest));
-        
-        random1_size = 764 - 4 - valid_offset - 32;
-        if (random1_size > 0) {
-            random1 = new char[random1_size];
-            srs_random_generate(random1, random1_size);
-            snprintf(random1, random1_size, "%s", RTMP_SIG_SRS_HANDSHAKE);
-        }
-    }
-    
-    digest_block::~digest_block()
+}
+
+digest_block::~digest_block()
+{
+    srs_freep(random0);
+    srs_freep(random1);
+}
+
+int digest_block::parse(SrsStream* stream)
+{
+    int ret = ERROR_SUCCESS;
+
+    // the digest must be 764 bytes.
+    srs_assert(stream->require(764));
+
+    offset = stream->read_4bytes();
+
+    int valid_offset = calc_valid_offset();
+    srs_assert(valid_offset >= 0);
+
+    random0_size = valid_offset;
+    if (random0_size > 0)
     {
         srs_freep(random0);
+        random0 = new char[random0_size];
+        stream->read_bytes(random0, random0_size);
+    }
+
+    stream->read_bytes(digest, 32);
+
+    random1_size = 764 - 4 - valid_offset - 32;
+    if (random1_size > 0)
+    {
         srs_freep(random1);
+        random1 = new char[random1_size];
+        stream->read_bytes(random1, random1_size);
     }
 
-    int digest_block::parse(SrsStream* stream)
+    return ret;
+}
+
+int digest_block::calc_valid_offset()
+{
+    int max_offset_size = 764 - 32 - 4;
+
+    int valid_offset = 0;
+    u_int8_t* pp = (u_int8_t*)&offset;
+    valid_offset += *pp++;
+    valid_offset += *pp++;
+    valid_offset += *pp++;
+    valid_offset += *pp++;
+
+    return valid_offset % max_offset_size;
+}
+
+c1s1_strategy::c1s1_strategy()
+{
+}
+
+c1s1_strategy::~c1s1_strategy()
+{
+}
+
+char* c1s1_strategy::get_digest()
+{
+    return digest.digest;
+}
+
+char* c1s1_strategy::get_key()
+{
+    return key.key;
+}
+
+int c1s1_strategy::dump(c1s1* owner, char* _c1s1, int size)
+{
+    srs_assert(size == 1536);
+    return copy_to(owner, _c1s1, size, true);
+}
+
+int c1s1_strategy::c1_create(c1s1* owner)
+{
+    int ret = ERROR_SUCCESS;
+
+    // generate digest
+    char* c1_digest = NULL;
+
+    if ((ret = calc_c1_digest(owner, c1_digest)) != ERROR_SUCCESS)
     {
-        int ret = ERROR_SUCCESS;
-        
-        // the digest must be 764 bytes.
-        srs_assert(stream->require(764));
-        
-        offset = stream->read_4bytes();
-        
-        int valid_offset = calc_valid_offset();
-        srs_assert(valid_offset >= 0);
-        
-        random0_size = valid_offset;
-        if (random0_size > 0) {
-            srs_freep(random0);
-            random0 = new char[random0_size];
-            stream->read_bytes(random0, random0_size);
-        }
-        
-        stream->read_bytes(digest, 32);
-        
-        random1_size = 764 - 4 - valid_offset - 32;
-        if (random1_size > 0) {
-            srs_freep(random1);
-            random1 = new char[random1_size];
-            stream->read_bytes(random1, random1_size);
-        }
-        
+        srs_error("sign c1 error, failed to calc digest. ret=%d", ret);
         return ret;
     }
-    
-    int digest_block::calc_valid_offset()
+
+    srs_assert(c1_digest != NULL);
+    SrsAutoFree(char, c1_digest);
+
+    memcpy(digest.digest, c1_digest, 32);
+
+    return ret;
+}
+
+int c1s1_strategy::c1_validate_digest(c1s1* owner, bool& is_valid)
+{
+    int ret = ERROR_SUCCESS;
+
+    char* c1_digest = NULL;
+
+    if ((ret = calc_c1_digest(owner, c1_digest)) != ERROR_SUCCESS)
     {
-        int max_offset_size = 764 - 32 - 4;
-        
-        int valid_offset = 0;
-        u_int8_t* pp = (u_int8_t*)&offset;
-        valid_offset += *pp++;
-        valid_offset += *pp++;
-        valid_offset += *pp++;
-        valid_offset += *pp++;
-    
-        return valid_offset % max_offset_size;
+        srs_error("validate c1 error, failed to calc digest. ret=%d", ret);
+        return ret;
     }
-    
-    c1s1_strategy::c1s1_strategy()
+
+    srs_assert(c1_digest != NULL);
+    SrsAutoFree(char, c1_digest);
+
+    is_valid = srs_bytes_equals(digest.digest, c1_digest, 32);
+
+    return ret;
+}
+
+int c1s1_strategy::s1_create(c1s1* owner, c1s1* c1)
+{
+    int ret = ERROR_SUCCESS;
+
+    SrsDH dh;
+
+    // ensure generate 128bytes public key.
+    if ((ret = dh.initialize(true)) != ERROR_SUCCESS)
     {
+        return ret;
     }
-    
-    c1s1_strategy::~c1s1_strategy()
+
+    // directly generate the public key.
+    // @see: https://github.com/simple-rtmp-server/srs/issues/148
+    int pkey_size = 128;
+    if ((ret = dh.copy_shared_key(c1->get_key(), 128, key.key, pkey_size)) != ERROR_SUCCESS)
     {
+        srs_error("calc s1 key failed. ret=%d", ret);
+        return ret;
     }
-    
-    char* c1s1_strategy::get_digest()
+
+    // altough the public key is always 128bytes, but the share key maybe not.
+    // we just ignore the actual key size, but if need to use the key, must use the actual size.
+    // TODO: FIXME: use the actual key size.
+    //srs_assert(pkey_size == 128);
+    srs_verbose("calc s1 key success.");
+
+    char* s1_digest = NULL;
+    if ((ret = calc_s1_digest(owner, s1_digest))  != ERROR_SUCCESS)
     {
-        return digest.digest;
+        srs_error("calc s1 digest failed. ret=%d", ret);
+        return ret;
     }
-    
-    char* c1s1_strategy::get_key()
+    srs_verbose("calc s1 digest success.");
+
+    srs_assert(s1_digest != NULL);
+    SrsAutoFree(char, s1_digest);
+
+    memcpy(digest.digest, s1_digest, 32);
+    srs_verbose("copy s1 key success.");
+
+    return ret;
+}
+
+int c1s1_strategy::s1_validate_digest(c1s1* owner, bool& is_valid)
+{
+    int ret = ERROR_SUCCESS;
+
+    char* s1_digest = NULL;
+
+    if ((ret = calc_s1_digest(owner, s1_digest)) != ERROR_SUCCESS)
     {
-        return key.key;
+        srs_error("validate s1 error, failed to calc digest. ret=%d", ret);
+        return ret;
     }
-    
-    int c1s1_strategy::dump(c1s1* owner, char* _c1s1, int size)
+
+    srs_assert(s1_digest != NULL);
+    SrsAutoFree(char, s1_digest);
+
+    is_valid = srs_bytes_equals(digest.digest, s1_digest, 32);
+
+    return ret;
+}
+
+int c1s1_strategy::calc_c1_digest(c1s1* owner, char*& c1_digest)
+{
+    int ret = ERROR_SUCCESS;
+
+    /**
+    * c1s1 is splited by digest:
+    *     c1s1-part1: n bytes (time, version, key and digest-part1).
+    *     digest-data: 32bytes
+    *     c1s1-part2: (1536-n-32)bytes (digest-part2)
+    * @return a new allocated bytes, user must free it.
+    */
+    char* c1s1_joined_bytes = new char[1536 -32];
+    SrsAutoFree(char, c1s1_joined_bytes);
+    if ((ret = copy_to(owner, c1s1_joined_bytes, 1536 - 32, false)) != ERROR_SUCCESS)
+    {
+        return ret;
+    }
+
+    c1_digest = new char[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(SrsGenuineFPKey, 30, c1s1_joined_bytes, 1536 - 32, c1_digest)) != ERROR_SUCCESS)
+    {
+        srs_freep(c1_digest);
+        srs_error("calc digest for c1 failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("digest calculated for c1");
+
+    return ret;
+}
+
+int c1s1_strategy::calc_s1_digest(c1s1* owner, char*& s1_digest)
+{
+    int ret = ERROR_SUCCESS;
+
+    /**
+    * c1s1 is splited by digest:
+    *     c1s1-part1: n bytes (time, version, key and digest-part1).
+    *     digest-data: 32bytes
+    *     c1s1-part2: (1536-n-32)bytes (digest-part2)
+    * @return a new allocated bytes, user must free it.
+    */
+    char* c1s1_joined_bytes = new char[1536 -32];
+    SrsAutoFree(char, c1s1_joined_bytes);
+    if ((ret = copy_to(owner, c1s1_joined_bytes, 1536 - 32, false)) != ERROR_SUCCESS)
+    {
+        return ret;
+    }
+
+    s1_digest = new char[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(SrsGenuineFMSKey, 36, c1s1_joined_bytes, 1536 - 32, s1_digest)) != ERROR_SUCCESS)
+    {
+        srs_freep(s1_digest);
+        srs_error("calc digest for s1 failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("digest calculated for s1");
+
+    return ret;
+}
+
+void c1s1_strategy::copy_time_version(SrsStream* stream, c1s1* owner)
+{
+    srs_assert(stream->require(8));
+
+    // 4bytes time
+    stream->write_4bytes(owner->time);
+
+    // 4bytes version
+    stream->write_4bytes(owner->version);
+}
+void c1s1_strategy::copy_key(SrsStream* stream)
+{
+    srs_assert(key.random0_size >= 0);
+    srs_assert(key.random1_size >= 0);
+
+    int total = key.random0_size + 128 + key.random1_size + 4;
+    srs_assert(stream->require(total));
+
+    // 764bytes key block
+    if (key.random0_size > 0)
+    {
+        stream->write_bytes(key.random0, key.random0_size);
+    }
+
+    stream->write_bytes(key.key, 128);
+
+    if (key.random1_size > 0)
+    {
+        stream->write_bytes(key.random1, key.random1_size);
+    }
+
+    stream->write_4bytes(key.offset);
+}
+void c1s1_strategy::copy_digest(SrsStream* stream, bool with_digest)
+{
+    srs_assert(key.random0_size >= 0);
+    srs_assert(key.random1_size >= 0);
+
+    int total = 4 + digest.random0_size + digest.random1_size;
+    if (with_digest)
+    {
+        total += 32;
+    }
+    srs_assert(stream->require(total));
+
+    // 732bytes digest block without the 32bytes digest-data
+    // nbytes digest block part1
+    stream->write_4bytes(digest.offset);
+
+    // digest random padding.
+    if (digest.random0_size > 0)
+    {
+        stream->write_bytes(digest.random0, digest.random0_size);
+    }
+
+    // digest
+    if (with_digest)
+    {
+        stream->write_bytes(digest.digest, 32);
+    }
+
+    // nbytes digest block part2
+    if (digest.random1_size > 0)
+    {
+        stream->write_bytes(digest.random1, digest.random1_size);
+    }
+}
+
+c1s1_strategy_schema0::c1s1_strategy_schema0()
+{
+}
+
+c1s1_strategy_schema0::~c1s1_strategy_schema0()
+{
+}
+
+srs_schema_type c1s1_strategy_schema0::schema()
+{
+    return srs_schema0;
+}
+
+int c1s1_strategy_schema0::parse(char* _c1s1, int size)
+{
+    int ret = ERROR_SUCCESS;
+
+    srs_assert(size == 1536);
+
+    SrsStream stream;
+
+    if ((ret = stream.initialize(_c1s1 + 8, 764)) != ERROR_SUCCESS)
+    {
+        return ret;
+    }
+
+    if ((ret = key.parse(&stream)) != ERROR_SUCCESS)
+    {
+        srs_error("parse the c1 key failed. ret=%d", ret);
+        return ret;
+    }
+
+    if ((ret = stream.initialize(_c1s1 + 8 + 764, 764)) != ERROR_SUCCESS)
+    {
+        return ret;
+    }
+
+    if ((ret = digest.parse(&stream)) != ERROR_SUCCESS)
+    {
+        srs_error("parse the c1 digest failed. ret=%d", ret);
+        return ret;
+    }
+
+    srs_verbose("parse c1 key-digest success");
+
+    return ret;
+}
+
+int c1s1_strategy_schema0::copy_to(c1s1* owner, char* bytes, int size, bool with_digest)
+{
+    int ret = ERROR_SUCCESS;
+
+    if (with_digest)
     {
         srs_assert(size == 1536);
-        return copy_to(owner, _c1s1, size, true);
     }
-    
-    int c1s1_strategy::c1_create(c1s1* owner)
+    else
     {
-        int ret = ERROR_SUCCESS;
-        
-        // generate digest
-        char* c1_digest = NULL;
-        
-        if ((ret = calc_c1_digest(owner, c1_digest)) != ERROR_SUCCESS) {
-            srs_error("sign c1 error, failed to calc digest. ret=%d", ret);
-            return ret;
-        }
-        
-        srs_assert(c1_digest != NULL);
-        SrsAutoFree(char, c1_digest);
-        
-        memcpy(digest.digest, c1_digest, 32);
-        
-        return ret;
+        srs_assert(size == 1504);
     }
-    
-    int c1s1_strategy::c1_validate_digest(c1s1* owner, bool& is_valid)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        char* c1_digest = NULL;
-        
-        if ((ret = calc_c1_digest(owner, c1_digest)) != ERROR_SUCCESS) {
-            srs_error("validate c1 error, failed to calc digest. ret=%d", ret);
-            return ret;
-        }
-        
-        srs_assert(c1_digest != NULL);
-        SrsAutoFree(char, c1_digest);
-        
-        is_valid = srs_bytes_equals(digest.digest, c1_digest, 32);
-        
-        return ret;
-    }
-    
-    int c1s1_strategy::s1_create(c1s1* owner, c1s1* c1)
-    {
-        int ret = ERROR_SUCCESS;
 
-        SrsDH dh;
-        
-        // ensure generate 128bytes public key.
-        if ((ret = dh.initialize(true)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        // directly generate the public key.
-        // @see: https://github.com/simple-rtmp-server/srs/issues/148
-        int pkey_size = 128;
-        if ((ret = dh.copy_shared_key(c1->get_key(), 128, key.key, pkey_size)) != ERROR_SUCCESS) {
-            srs_error("calc s1 key failed. ret=%d", ret);
-            return ret;
-        }
+    SrsStream stream;
 
-        // altough the public key is always 128bytes, but the share key maybe not.
-        // we just ignore the actual key size, but if need to use the key, must use the actual size.
-        // TODO: FIXME: use the actual key size.
-        //srs_assert(pkey_size == 128);
-        srs_verbose("calc s1 key success.");
-            
-        char* s1_digest = NULL;
-        if ((ret = calc_s1_digest(owner, s1_digest))  != ERROR_SUCCESS) {
-            srs_error("calc s1 digest failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("calc s1 digest success.");
-        
-        srs_assert(s1_digest != NULL);
-        SrsAutoFree(char, s1_digest);
-        
-        memcpy(digest.digest, s1_digest, 32);
-        srs_verbose("copy s1 key success.");
-        
+    if ((ret = stream.initialize(bytes, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    int c1s1_strategy::s1_validate_digest(c1s1* owner, bool& is_valid)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        char* s1_digest = NULL;
-        
-        if ((ret = calc_s1_digest(owner, s1_digest)) != ERROR_SUCCESS) {
-            srs_error("validate s1 error, failed to calc digest. ret=%d", ret);
-            return ret;
-        }
-        
-        srs_assert(s1_digest != NULL);
-        SrsAutoFree(char, s1_digest);
-        
-        is_valid = srs_bytes_equals(digest.digest, s1_digest, 32);
-        
-        return ret;
-    }
-    
-    int c1s1_strategy::calc_c1_digest(c1s1* owner, char*& c1_digest)
-    {
-        int ret = ERROR_SUCCESS;
 
-        /**
-        * c1s1 is splited by digest:
-        *     c1s1-part1: n bytes (time, version, key and digest-part1).
-        *     digest-data: 32bytes
-        *     c1s1-part2: (1536-n-32)bytes (digest-part2)
-        * @return a new allocated bytes, user must free it.
-        */
-        char* c1s1_joined_bytes = new char[1536 -32];
-        SrsAutoFree(char, c1s1_joined_bytes);
-        if ((ret = copy_to(owner, c1s1_joined_bytes, 1536 - 32, false)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        c1_digest = new char[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(SrsGenuineFPKey, 30, c1s1_joined_bytes, 1536 - 32, c1_digest)) != ERROR_SUCCESS) {
-            srs_freep(c1_digest);
-            srs_error("calc digest for c1 failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("digest calculated for c1");
-        
-        return ret;
-    }
-    
-    int c1s1_strategy::calc_s1_digest(c1s1* owner, char*& s1_digest)
-    {
-        int ret = ERROR_SUCCESS;
+    copy_time_version(&stream, owner);
+    copy_key(&stream);
+    copy_digest(&stream, with_digest);
 
-        /**
-        * c1s1 is splited by digest:
-        *     c1s1-part1: n bytes (time, version, key and digest-part1).
-        *     digest-data: 32bytes
-        *     c1s1-part2: (1536-n-32)bytes (digest-part2)
-        * @return a new allocated bytes, user must free it.
-        */
-        char* c1s1_joined_bytes = new char[1536 -32];
-        SrsAutoFree(char, c1s1_joined_bytes);
-        if ((ret = copy_to(owner, c1s1_joined_bytes, 1536 - 32, false)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        s1_digest = new char[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(SrsGenuineFMSKey, 36, c1s1_joined_bytes, 1536 - 32, s1_digest)) != ERROR_SUCCESS) {
-            srs_freep(s1_digest);
-            srs_error("calc digest for s1 failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("digest calculated for s1");
+    srs_assert(stream.empty());
 
-        return ret;
-    }
-    
-    void c1s1_strategy::copy_time_version(SrsStream* stream, c1s1* owner)
-    {
-        srs_assert(stream->require(8));
-        
-        // 4bytes time
-        stream->write_4bytes(owner->time);
+    return ret;
+}
 
-        // 4bytes version
-        stream->write_4bytes(owner->version);
-    }
-    void c1s1_strategy::copy_key(SrsStream* stream)
-    {
-        srs_assert(key.random0_size >= 0);
-        srs_assert(key.random1_size >= 0);
-        
-        int total = key.random0_size + 128 + key.random1_size + 4;
-        srs_assert(stream->require(total));
-        
-        // 764bytes key block
-        if (key.random0_size > 0) {
-            stream->write_bytes(key.random0, key.random0_size);
-        }
-        
-        stream->write_bytes(key.key, 128);
-        
-        if (key.random1_size > 0) {
-            stream->write_bytes(key.random1, key.random1_size);
-        }
-        
-        stream->write_4bytes(key.offset);
-    }
-    void c1s1_strategy::copy_digest(SrsStream* stream, bool with_digest)
-    {
-        srs_assert(key.random0_size >= 0);
-        srs_assert(key.random1_size >= 0);
-        
-        int total = 4 + digest.random0_size + digest.random1_size;
-        if (with_digest) {
-            total += 32;
-        }
-        srs_assert(stream->require(total));
-        
-        // 732bytes digest block without the 32bytes digest-data
-        // nbytes digest block part1
-        stream->write_4bytes(digest.offset);
-        
-        // digest random padding.
-        if (digest.random0_size > 0) {
-            stream->write_bytes(digest.random0, digest.random0_size);
-        }
-        
-        // digest
-        if (with_digest) {
-            stream->write_bytes(digest.digest, 32);
-        }
-        
-        // nbytes digest block part2
-        if (digest.random1_size > 0) {
-            stream->write_bytes(digest.random1, digest.random1_size);
-        }
-    }
-    
-    c1s1_strategy_schema0::c1s1_strategy_schema0()
-    {
-    }
-    
-    c1s1_strategy_schema0::~c1s1_strategy_schema0()
-    {
-    }
-    
-    srs_schema_type c1s1_strategy_schema0::schema()
-    {
-        return srs_schema0;
-    }
-    
-    int c1s1_strategy_schema0::parse(char* _c1s1, int size)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        srs_assert(size == 1536);
-        
-        SrsStream stream;
-        
-        if ((ret = stream.initialize(_c1s1 + 8, 764)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        if ((ret = key.parse(&stream)) != ERROR_SUCCESS) {
-            srs_error("parse the c1 key failed. ret=%d", ret);
-            return ret;
-        }
-        
-        if ((ret = stream.initialize(_c1s1 + 8 + 764, 764)) != ERROR_SUCCESS) {
-            return ret;
-        }
+c1s1_strategy_schema1::c1s1_strategy_schema1()
+{
+}
 
-        if ((ret = digest.parse(&stream)) != ERROR_SUCCESS) {
-            srs_error("parse the c1 digest failed. ret=%d", ret);
-            return ret;
-        }
-        
-        srs_verbose("parse c1 key-digest success");
-        
-        return ret;
-    }
-    
-    int c1s1_strategy_schema0::copy_to(c1s1* owner, char* bytes, int size, bool with_digest)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        if (with_digest) {
-            srs_assert(size == 1536);
-        } else {
-            srs_assert(size == 1504);
-        }
-        
-        SrsStream stream;
-        
-        if ((ret = stream.initialize(bytes, size)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        copy_time_version(&stream, owner);
-        copy_key(&stream);
-        copy_digest(&stream, with_digest);
-        
-        srs_assert(stream.empty());
-        
-        return ret;
-    }
-    
-    c1s1_strategy_schema1::c1s1_strategy_schema1()
-    {
-    }
-    
-    c1s1_strategy_schema1::~c1s1_strategy_schema1()
-    {
-    }
-    
-    srs_schema_type c1s1_strategy_schema1::schema()
-    {
-        return srs_schema1;
-    }
-    
-    int c1s1_strategy_schema1::parse(char* _c1s1, int size)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        srs_assert(size == 1536);
-        
-        SrsStream stream;
-        
-        if ((ret = stream.initialize(_c1s1 + 8, 764)) != ERROR_SUCCESS) {
-            return ret;
-        }
+c1s1_strategy_schema1::~c1s1_strategy_schema1()
+{
+}
 
-        if ((ret = digest.parse(&stream)) != ERROR_SUCCESS) {
-            srs_error("parse the c1 digest failed. ret=%d", ret);
-            return ret;
-        }
-        
-        if ((ret = stream.initialize(_c1s1 + 8 + 764, 764)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        if ((ret = key.parse(&stream)) != ERROR_SUCCESS) {
-            srs_error("parse the c1 key failed. ret=%d", ret);
-            return ret;
-        }
-        
-        srs_verbose("parse c1 digest-key success");
-        
+srs_schema_type c1s1_strategy_schema1::schema()
+{
+    return srs_schema1;
+}
+
+int c1s1_strategy_schema1::parse(char* _c1s1, int size)
+{
+    int ret = ERROR_SUCCESS;
+
+    srs_assert(size == 1536);
+
+    SrsStream stream;
+
+    if ((ret = stream.initialize(_c1s1 + 8, 764)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    int c1s1_strategy_schema1::copy_to(c1s1* owner, char* bytes, int size, bool with_digest)
+
+    if ((ret = digest.parse(&stream)) != ERROR_SUCCESS)
     {
-        int ret = ERROR_SUCCESS;
-        
-        if (with_digest) {
-            srs_assert(size == 1536);
-        } else {
-            srs_assert(size == 1504);
-        }
-        
-        SrsStream stream;
-        
-        if ((ret = stream.initialize(bytes, size)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        copy_time_version(&stream, owner);
-        copy_digest(&stream, with_digest);
-        copy_key(&stream);
-        
-        srs_assert(stream.empty());
-        
+        srs_error("parse the c1 digest failed. ret=%d", ret);
         return ret;
     }
-    
-    c1s1::c1s1()
+
+    if ((ret = stream.initialize(_c1s1 + 8 + 764, 764)) != ERROR_SUCCESS)
     {
-        payload = NULL;
+        return ret;
     }
-    c1s1::~c1s1()
+
+    if ((ret = key.parse(&stream)) != ERROR_SUCCESS)
     {
-        srs_freep(payload);
+        srs_error("parse the c1 key failed. ret=%d", ret);
+        return ret;
     }
-    
-    srs_schema_type c1s1::schema()
-    {
-        srs_assert(payload != NULL);
-        return payload->schema();
-    }
-    
-    char* c1s1::get_digest()
-    {
-        srs_assert(payload != NULL);
-        return payload->get_digest();
-    }
-    
-    char* c1s1::get_key()
-    {
-        srs_assert(payload != NULL);
-        return payload->get_key();
-    }
-    
-    int c1s1::dump(char* _c1s1, int size)
+
+    srs_verbose("parse c1 digest-key success");
+
+    return ret;
+}
+
+int c1s1_strategy_schema1::copy_to(c1s1* owner, char* bytes, int size, bool with_digest)
+{
+    int ret = ERROR_SUCCESS;
+
+    if (with_digest)
     {
         srs_assert(size == 1536);
-        srs_assert(payload != NULL);
-        return payload->dump(this, _c1s1, size);
     }
-    
-    int c1s1::parse(char* _c1s1, int size, srs_schema_type schema)
+    else
     {
-        int ret = ERROR_SUCCESS;
-        
-        srs_assert(size == 1536);
-        
-        if (schema != srs_schema0 && schema != srs_schema1) {
-            ret = ERROR_RTMP_CH_SCHEMA;
-            srs_error("parse c1 failed. invalid schema=%d, ret=%d", schema, ret);
-            return ret;
-        }
-        
-        SrsStream stream;
-        
-        if ((ret = stream.initialize(_c1s1, size)) != ERROR_SUCCESS) {
-            return ret;
-        }
-        
-        time = stream.read_4bytes();
-        version = stream.read_4bytes(); // client c1 version
-        
-        srs_freep(payload);
-        if (schema == srs_schema0) {
-            payload = new c1s1_strategy_schema0();
-        } else {
-            payload = new c1s1_strategy_schema1();
-        }
+        srs_assert(size == 1504);
+    }
 
-        return payload->parse(_c1s1, size);
-    }
-    
-    int c1s1::c1_create(srs_schema_type schema)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        if (schema != srs_schema0 && schema != srs_schema1) {
-            ret = ERROR_RTMP_CH_SCHEMA;
-            srs_error("create c1 failed. invalid schema=%d, ret=%d", schema, ret);
-            return ret;
-        }
-        
-        // client c1 time and version
-        time = ::time(NULL);
-        version = 0x80000702; // client c1 version
+    SrsStream stream;
 
-        // generate signature by schema
-        srs_freep(payload);
-        if (schema == srs_schema0) {
-            payload = new c1s1_strategy_schema0();
-        } else {
-            payload = new c1s1_strategy_schema1();
-        }
-        
-        return payload->c1_create(this);
-    }
-    
-    int c1s1::c1_validate_digest(bool& is_valid)
+    if ((ret = stream.initialize(bytes, size)) != ERROR_SUCCESS)
     {
-        is_valid = false;
-        srs_assert(payload);
-        return payload->c1_validate_digest(this, is_valid);
-    }
-    
-    int c1s1::s1_create(c1s1* c1)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        if (c1->schema() != srs_schema0 && c1->schema() != srs_schema1) {
-            ret = ERROR_RTMP_CH_SCHEMA;
-            srs_error("create s1 failed. invalid schema=%d, ret=%d", c1->schema(), ret);
-            return ret;
-        }
-        
-        time = ::time(NULL);
-        version = 0x01000504; // server s1 version
-        
-        srs_freep(payload);
-        if (c1->schema() == srs_schema0) {
-            payload = new c1s1_strategy_schema0();
-        } else {
-            payload = new c1s1_strategy_schema1();
-        }
-        
-        return payload->s1_create(this, c1);
-    }
-    
-    int c1s1::s1_validate_digest(bool& is_valid)
-    {
-        is_valid = false;
-        srs_assert(payload);
-        return payload->s1_validate_digest(this, is_valid);
-    }
-    
-    c2s2::c2s2()
-    {
-        srs_random_generate(random, 1504);
-        
-        int size = snprintf(random, 1504, "%s", RTMP_SIG_SRS_HANDSHAKE);
-        srs_assert(++size < 1504);
-        snprintf(random + 1504 - size, size, "%s", RTMP_SIG_SRS_HANDSHAKE);
-        
-        srs_random_generate(digest, 32);
-    }
-    
-    c2s2::~c2s2()
-    {
-    }
-    
-    int c2s2::dump(char* _c2s2, int size)
-    {
-        srs_assert(size == 1536);
-        
-        memcpy(_c2s2, random, 1504);
-        memcpy(_c2s2 + 1504, digest, 32);
-        
-        return ERROR_SUCCESS;
-    }
-    
-    int c2s2::parse(char* _c2s2, int size)
-    {
-        srs_assert(size == 1536);
-        
-        memcpy(random, _c2s2, 1504);
-        memcpy(digest, _c2s2 + 1504, 32);
-        
-        return ERROR_SUCCESS;
-    }
-    
-    int c2s2::c2_create(c1s1* s1)
-    {
-        int ret = ERROR_SUCCESS;
-        
-        char temp_key[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(SrsGenuineFPKey, 62, s1->get_digest(), 32, temp_key)) != ERROR_SUCCESS) {
-            srs_error("create c2 temp key failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate c2 temp key success.");
-        
-        char _digest[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS) {
-            srs_error("create c2 digest failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate c2 digest success.");
-        
-        memcpy(digest, _digest, 32);
-        
         return ret;
     }
-    
-    int c2s2::c2_validate(c1s1* s1, bool& is_valid)
+
+    copy_time_version(&stream, owner);
+    copy_digest(&stream, with_digest);
+    copy_key(&stream);
+
+    srs_assert(stream.empty());
+
+    return ret;
+}
+
+c1s1::c1s1()
+{
+    payload = NULL;
+}
+c1s1::~c1s1()
+{
+    srs_freep(payload);
+}
+
+srs_schema_type c1s1::schema()
+{
+    srs_assert(payload != NULL);
+    return payload->schema();
+}
+
+char* c1s1::get_digest()
+{
+    srs_assert(payload != NULL);
+    return payload->get_digest();
+}
+
+char* c1s1::get_key()
+{
+    srs_assert(payload != NULL);
+    return payload->get_key();
+}
+
+int c1s1::dump(char* _c1s1, int size)
+{
+    srs_assert(size == 1536);
+    srs_assert(payload != NULL);
+    return payload->dump(this, _c1s1, size);
+}
+
+int c1s1::parse(char* _c1s1, int size, srs_schema_type schema)
+{
+    int ret = ERROR_SUCCESS;
+
+    srs_assert(size == 1536);
+
+    if (schema != srs_schema0 && schema != srs_schema1)
     {
-        is_valid = false;
-        int ret = ERROR_SUCCESS;
-        
-        char temp_key[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(SrsGenuineFPKey, 62, s1->get_digest(), 32, temp_key)) != ERROR_SUCCESS) {
-            srs_error("create c2 temp key failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate c2 temp key success.");
-        
-        char _digest[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS) {
-            srs_error("create c2 digest failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate c2 digest success.");
-        
-        is_valid = srs_bytes_equals(digest, _digest, 32);
-        
+        ret = ERROR_RTMP_CH_SCHEMA;
+        srs_error("parse c1 failed. invalid schema=%d, ret=%d", schema, ret);
         return ret;
     }
-    
-    int c2s2::s2_create(c1s1* c1)
+
+    SrsStream stream;
+
+    if ((ret = stream.initialize(_c1s1, size)) != ERROR_SUCCESS)
     {
-        int ret = ERROR_SUCCESS;
-        
-        char temp_key[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(SrsGenuineFMSKey, 68, c1->get_digest(), 32, temp_key)) != ERROR_SUCCESS) {
-            srs_error("create s2 temp key failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate s2 temp key success.");
-        
-        char _digest[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS) {
-            srs_error("create s2 digest failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate s2 digest success.");
-        
-        memcpy(digest, _digest, 32);
-        
         return ret;
     }
-    
-    int c2s2::s2_validate(c1s1* c1, bool& is_valid)
+
+    time = stream.read_4bytes();
+    version = stream.read_4bytes(); // client c1 version
+
+    srs_freep(payload);
+    if (schema == srs_schema0)
     {
-        is_valid = false;
-        int ret = ERROR_SUCCESS;
-        
-        char temp_key[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(SrsGenuineFMSKey, 68, c1->get_digest(), 32, temp_key)) != ERROR_SUCCESS) {
-            srs_error("create s2 temp key failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate s2 temp key success.");
-        
-        char _digest[SRS_OpensslHashSize];
-        if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS) {
-            srs_error("create s2 digest failed. ret=%d", ret);
-            return ret;
-        }
-        srs_verbose("generate s2 digest success.");
-        
-        is_valid = srs_bytes_equals(digest, _digest, 32);
-        
+        payload = new c1s1_strategy_schema0();
+    }
+    else
+    {
+        payload = new c1s1_strategy_schema1();
+    }
+
+    return payload->parse(_c1s1, size);
+}
+
+int c1s1::c1_create(srs_schema_type schema)
+{
+    int ret = ERROR_SUCCESS;
+
+    if (schema != srs_schema0 && schema != srs_schema1)
+    {
+        ret = ERROR_RTMP_CH_SCHEMA;
+        srs_error("create c1 failed. invalid schema=%d, ret=%d", schema, ret);
         return ret;
     }
+
+    // client c1 time and version
+    time = ::time(NULL);
+    version = 0x80000702; // client c1 version
+
+    // generate signature by schema
+    srs_freep(payload);
+    if (schema == srs_schema0)
+    {
+        payload = new c1s1_strategy_schema0();
+    }
+    else
+    {
+        payload = new c1s1_strategy_schema1();
+    }
+
+    return payload->c1_create(this);
+}
+
+int c1s1::c1_validate_digest(bool& is_valid)
+{
+    is_valid = false;
+    srs_assert(payload);
+    return payload->c1_validate_digest(this, is_valid);
+}
+
+int c1s1::s1_create(c1s1* c1)
+{
+    int ret = ERROR_SUCCESS;
+
+    if (c1->schema() != srs_schema0 && c1->schema() != srs_schema1)
+    {
+        ret = ERROR_RTMP_CH_SCHEMA;
+        srs_error("create s1 failed. invalid schema=%d, ret=%d", c1->schema(), ret);
+        return ret;
+    }
+
+    time = ::time(NULL);
+    version = 0x01000504; // server s1 version
+
+    srs_freep(payload);
+    if (c1->schema() == srs_schema0)
+    {
+        payload = new c1s1_strategy_schema0();
+    }
+    else
+    {
+        payload = new c1s1_strategy_schema1();
+    }
+
+    return payload->s1_create(this, c1);
+}
+
+int c1s1::s1_validate_digest(bool& is_valid)
+{
+    is_valid = false;
+    srs_assert(payload);
+    return payload->s1_validate_digest(this, is_valid);
+}
+
+c2s2::c2s2()
+{
+    srs_random_generate(random, 1504);
+
+    int size = snprintf(random, 1504, "%s", RTMP_SIG_SRS_HANDSHAKE);
+    srs_assert(++size < 1504);
+    snprintf(random + 1504 - size, size, "%s", RTMP_SIG_SRS_HANDSHAKE);
+
+    srs_random_generate(digest, 32);
+}
+
+c2s2::~c2s2()
+{
+}
+
+int c2s2::dump(char* _c2s2, int size)
+{
+    srs_assert(size == 1536);
+
+    memcpy(_c2s2, random, 1504);
+    memcpy(_c2s2 + 1504, digest, 32);
+
+    return ERROR_SUCCESS;
+}
+
+int c2s2::parse(char* _c2s2, int size)
+{
+    srs_assert(size == 1536);
+
+    memcpy(random, _c2s2, 1504);
+    memcpy(digest, _c2s2 + 1504, 32);
+
+    return ERROR_SUCCESS;
+}
+
+int c2s2::c2_create(c1s1* s1)
+{
+    int ret = ERROR_SUCCESS;
+
+    char temp_key[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(SrsGenuineFPKey, 62, s1->get_digest(), 32, temp_key)) != ERROR_SUCCESS)
+    {
+        srs_error("create c2 temp key failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate c2 temp key success.");
+
+    char _digest[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS)
+    {
+        srs_error("create c2 digest failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate c2 digest success.");
+
+    memcpy(digest, _digest, 32);
+
+    return ret;
+}
+
+int c2s2::c2_validate(c1s1* s1, bool& is_valid)
+{
+    is_valid = false;
+    int ret = ERROR_SUCCESS;
+
+    char temp_key[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(SrsGenuineFPKey, 62, s1->get_digest(), 32, temp_key)) != ERROR_SUCCESS)
+    {
+        srs_error("create c2 temp key failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate c2 temp key success.");
+
+    char _digest[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS)
+    {
+        srs_error("create c2 digest failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate c2 digest success.");
+
+    is_valid = srs_bytes_equals(digest, _digest, 32);
+
+    return ret;
+}
+
+int c2s2::s2_create(c1s1* c1)
+{
+    int ret = ERROR_SUCCESS;
+
+    char temp_key[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(SrsGenuineFMSKey, 68, c1->get_digest(), 32, temp_key)) != ERROR_SUCCESS)
+    {
+        srs_error("create s2 temp key failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate s2 temp key success.");
+
+    char _digest[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS)
+    {
+        srs_error("create s2 digest failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate s2 digest success.");
+
+    memcpy(digest, _digest, 32);
+
+    return ret;
+}
+
+int c2s2::s2_validate(c1s1* c1, bool& is_valid)
+{
+    is_valid = false;
+    int ret = ERROR_SUCCESS;
+
+    char temp_key[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(SrsGenuineFMSKey, 68, c1->get_digest(), 32, temp_key)) != ERROR_SUCCESS)
+    {
+        srs_error("create s2 temp key failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate s2 temp key success.");
+
+    char _digest[SRS_OpensslHashSize];
+    if ((ret = openssl_HMACsha256(temp_key, 32, random, 1504, _digest)) != ERROR_SUCCESS)
+    {
+        srs_error("create s2 digest failed. ret=%d", ret);
+        return ret;
+    }
+    srs_verbose("generate s2 digest success.");
+
+    is_valid = srs_bytes_equals(digest, _digest, 32);
+
+    return ret;
+}
 }
 
 #endif
@@ -27738,79 +29218,90 @@ SrsSimpleHandshake::~SrsSimpleHandshake()
 int SrsSimpleHandshake::handshake_with_client(SrsHandshakeBytes* hs_bytes, ISrsProtocolReaderWriter* io)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ssize_t nsize;
-    
-    if ((ret = hs_bytes->read_c0c1(io)) != ERROR_SUCCESS) {
+
+    if ((ret = hs_bytes->read_c0c1(io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // plain text required.
-    if (hs_bytes->c0c1[0] != 0x03) {
+    if (hs_bytes->c0c1[0] != 0x03)
+    {
         ret = ERROR_RTMP_PLAIN_REQUIRED;
         srs_warn("only support rtmp plain text. ret=%d", ret);
         return ret;
     }
     srs_verbose("check c0 success, required plain text.");
-    
-    if ((ret = hs_bytes->create_s0s1s2(hs_bytes->c0c1 + 1)) != ERROR_SUCCESS) {
+
+    if ((ret = hs_bytes->create_s0s1s2(hs_bytes->c0c1 + 1)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = io->write(hs_bytes->s0s1s2, 3073, &nsize)) != ERROR_SUCCESS) {
+
+    if ((ret = io->write(hs_bytes->s0s1s2, 3073, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("simple handshake send s0s1s2 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("simple handshake send s0s1s2 success.");
-    
-    if ((ret = hs_bytes->read_c2(io)) != ERROR_SUCCESS) {
+
+    if ((ret = hs_bytes->read_c2(io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     srs_trace("simple handshake success.");
-    
+
     return ret;
 }
 
 int SrsSimpleHandshake::handshake_with_server(SrsHandshakeBytes* hs_bytes, ISrsProtocolReaderWriter* io)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ssize_t nsize;
-    
+
     // simple handshake
-    if ((ret = hs_bytes->create_c0c1()) != ERROR_SUCCESS) {
+    if ((ret = hs_bytes->create_c0c1()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = io->write(hs_bytes->c0c1, 1537, &nsize)) != ERROR_SUCCESS) {
+
+    if ((ret = io->write(hs_bytes->c0c1, 1537, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("write c0c1 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("write c0c1 success.");
-    
-    if ((ret = hs_bytes->read_s0s1s2(io)) != ERROR_SUCCESS) {
+
+    if ((ret = hs_bytes->read_s0s1s2(io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // plain text required.
-    if (hs_bytes->s0s1s2[0] != 0x03) {
+    if (hs_bytes->s0s1s2[0] != 0x03)
+    {
         ret = ERROR_RTMP_HANDSHAKE;
         srs_warn("handshake failed, plain text required. ret=%d", ret);
         return ret;
     }
-    
-    if ((ret = hs_bytes->create_c2()) != ERROR_SUCCESS) {
+
+    if ((ret = hs_bytes->create_c2()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = io->write(hs_bytes->c2, 1536, &nsize)) != ERROR_SUCCESS) {
+    if ((ret = io->write(hs_bytes->c2, 1536, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("simple handshake write c2 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("simple handshake write c2 success.");
-    
+
     srs_trace("simple handshake success.");
-    
+
     return ret;
 }
 
@@ -27834,99 +29325,116 @@ int SrsComplexHandshake::handshake_with_client(SrsHandshakeBytes* hs_bytes, ISrs
     int ret = ERROR_SUCCESS;
 
     ssize_t nsize;
-    
-    if ((ret = hs_bytes->read_c0c1(io)) != ERROR_SUCCESS) {
+
+    if ((ret = hs_bytes->read_c0c1(io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // decode c1
     c1s1 c1;
     // try schema0.
     // @remark, use schema0 to make flash player happy.
-    if ((ret = c1.parse(hs_bytes->c0c1 + 1, 1536, srs_schema0)) != ERROR_SUCCESS) {
+    if ((ret = c1.parse(hs_bytes->c0c1 + 1, 1536, srs_schema0)) != ERROR_SUCCESS)
+    {
         srs_error("parse c1 schema%d error. ret=%d", srs_schema0, ret);
         return ret;
     }
     // try schema1
     bool is_valid = false;
-    if ((ret = c1.c1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid) {
+    if ((ret = c1.c1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid)
+    {
         srs_info("schema0 failed, try schema1.");
-        if ((ret = c1.parse(hs_bytes->c0c1 + 1, 1536, srs_schema1)) != ERROR_SUCCESS) {
+        if ((ret = c1.parse(hs_bytes->c0c1 + 1, 1536, srs_schema1)) != ERROR_SUCCESS)
+        {
             srs_error("parse c1 schema%d error. ret=%d", srs_schema1, ret);
             return ret;
         }
-        
-        if ((ret = c1.c1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid) {
+
+        if ((ret = c1.c1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid)
+        {
             ret = ERROR_RTMP_TRY_SIMPLE_HS;
             srs_info("all schema valid failed, try simple handshake. ret=%d", ret);
             return ret;
         }
-    } else {
+    }
+    else
+    {
         srs_info("schema0 is ok.");
     }
     srs_verbose("decode c1 success.");
-    
+
     // encode s1
     c1s1 s1;
-    if ((ret = s1.s1_create(&c1)) != ERROR_SUCCESS) {
+    if ((ret = s1.s1_create(&c1)) != ERROR_SUCCESS)
+    {
         srs_error("create s1 from c1 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("create s1 from c1 success.");
     // verify s1
-    if ((ret = s1.s1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid) {
+    if ((ret = s1.s1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid)
+    {
         ret = ERROR_RTMP_TRY_SIMPLE_HS;
         srs_info("verify s1 failed, try simple handshake. ret=%d", ret);
         return ret;
     }
     srs_verbose("verify s1 success.");
-    
+
     c2s2 s2;
-    if ((ret = s2.s2_create(&c1)) != ERROR_SUCCESS) {
+    if ((ret = s2.s2_create(&c1)) != ERROR_SUCCESS)
+    {
         srs_error("create s2 from c1 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("create s2 from c1 success.");
     // verify s2
-    if ((ret = s2.s2_validate(&c1, is_valid)) != ERROR_SUCCESS || !is_valid) {
+    if ((ret = s2.s2_validate(&c1, is_valid)) != ERROR_SUCCESS || !is_valid)
+    {
         ret = ERROR_RTMP_TRY_SIMPLE_HS;
         srs_info("verify s2 failed, try simple handshake. ret=%d", ret);
         return ret;
     }
     srs_verbose("verify s2 success.");
-    
+
     // sendout s0s1s2
-    if ((ret = hs_bytes->create_s0s1s2()) != ERROR_SUCCESS) {
+    if ((ret = hs_bytes->create_s0s1s2()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = s1.dump(hs_bytes->s0s1s2 + 1, 1536)) != ERROR_SUCCESS) {
+    if ((ret = s1.dump(hs_bytes->s0s1s2 + 1, 1536)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = s2.dump(hs_bytes->s0s1s2 + 1537, 1536)) != ERROR_SUCCESS) {
+    if ((ret = s2.dump(hs_bytes->s0s1s2 + 1537, 1536)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = io->write(hs_bytes->s0s1s2, 3073, &nsize)) != ERROR_SUCCESS) {
+    if ((ret = io->write(hs_bytes->s0s1s2, 3073, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("complex handshake send s0s1s2 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("complex handshake send s0s1s2 success.");
-    
+
     // recv c2
-    if ((ret = hs_bytes->read_c2(io)) != ERROR_SUCCESS) {
+    if ((ret = hs_bytes->read_c2(io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     c2s2 c2;
-    if ((ret = c2.parse(hs_bytes->c2, 1536)) != ERROR_SUCCESS) {
+    if ((ret = c2.parse(hs_bytes->c2, 1536)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     srs_verbose("complex handshake read c2 success.");
-    
+
     // verify c2
     // never verify c2, for ffmpeg will failed.
     // it's ok for flash.
-    
+
     srs_trace("complex handshake success");
-    
+
     return ret;
 }
 #endif
@@ -27942,78 +29450,90 @@ int SrsComplexHandshake::handshake_with_server(SrsHandshakeBytes* hs_bytes, ISrs
     int ret = ERROR_SUCCESS;
 
     ssize_t nsize;
-    
+
     // complex handshake
-    if ((ret = hs_bytes->create_c0c1()) != ERROR_SUCCESS) {
+    if ((ret = hs_bytes->create_c0c1()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // sign c1
     c1s1 c1;
     // @remark, FMS requires the schema1(digest-key), or connect failed.
-    if ((ret = c1.c1_create(srs_schema1)) != ERROR_SUCCESS) {
+    if ((ret = c1.c1_create(srs_schema1)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = c1.dump(hs_bytes->c0c1 + 1, 1536)) != ERROR_SUCCESS) {
+    if ((ret = c1.dump(hs_bytes->c0c1 + 1, 1536)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // verify c1
     bool is_valid;
-    if ((ret = c1.c1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid) {
+    if ((ret = c1.c1_validate_digest(is_valid)) != ERROR_SUCCESS || !is_valid)
+    {
         ret = ERROR_RTMP_TRY_SIMPLE_HS;
         return ret;
     }
-    
-    if ((ret = io->write(hs_bytes->c0c1, 1537, &nsize)) != ERROR_SUCCESS) {
+
+    if ((ret = io->write(hs_bytes->c0c1, 1537, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("write c0c1 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("write c0c1 success.");
-    
+
     // s0s1s2
-    if ((ret = hs_bytes->read_s0s1s2(io)) != ERROR_SUCCESS) {
+    if ((ret = hs_bytes->read_s0s1s2(io)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // plain text required.
-    if (hs_bytes->s0s1s2[0] != 0x03) {
+    if (hs_bytes->s0s1s2[0] != 0x03)
+    {
         ret = ERROR_RTMP_HANDSHAKE;
         srs_warn("handshake failed, plain text required. ret=%d", ret);
         return ret;
     }
-    
+
     // verify s1s2
     c1s1 s1;
-    if ((ret = s1.parse(hs_bytes->s0s1s2 + 1, 1536, c1.schema())) != ERROR_SUCCESS) {
+    if ((ret = s1.parse(hs_bytes->s0s1s2 + 1, 1536, c1.schema())) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // never verify the s1,
     // for if forward to nginx-rtmp, verify s1 will failed,
     // TODO: FIXME: find the handshake schema of nginx-rtmp.
-    
+
     // c2
-    if ((ret = hs_bytes->create_c2()) != ERROR_SUCCESS) {
+    if ((ret = hs_bytes->create_c2()) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     c2s2 c2;
-    if ((ret = c2.c2_create(&s1)) != ERROR_SUCCESS) {
+    if ((ret = c2.c2_create(&s1)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
-    if ((ret = c2.dump(hs_bytes->c2, 1536)) != ERROR_SUCCESS) {
+    if ((ret = c2.dump(hs_bytes->c2, 1536)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = io->write(hs_bytes->c2, 1536, &nsize)) != ERROR_SUCCESS) {
+    if ((ret = io->write(hs_bytes->c2, 1536, &nsize)) != ERROR_SUCCESS)
+    {
         srs_warn("complex handshake write c2 failed. ret=%d", ret);
         return ret;
     }
     srs_verbose("complex handshake write c2 success.");
-    
+
     srs_trace("complex handshake success.");
-    
+
     return ret;
 }
 #endif
@@ -28063,32 +29583,36 @@ using namespace std;
 //#include <srs_rtmp_io.hpp>
 
 void srs_discovery_tc_url(
-    string tcUrl, 
-    string& schema, string& host, string& vhost, 
+    string tcUrl,
+    string& schema, string& host, string& vhost,
     string& app, string& port, std::string& param
-) {
+)
+{
     size_t pos = std::string::npos;
     std::string url = tcUrl;
-    
-    if ((pos = url.find("://")) != std::string::npos) {
+
+    if ((pos = url.find("://")) != std::string::npos)
+    {
         schema = url.substr(0, pos);
         url = url.substr(schema.length() + 3);
         srs_info("discovery schema=%s", schema.c_str());
     }
-    
-    if ((pos = url.find("/")) != std::string::npos) {
+
+    if ((pos = url.find("/")) != std::string::npos)
+    {
         host = url.substr(0, pos);
         url = url.substr(host.length() + 1);
         srs_info("discovery host=%s", host.c_str());
     }
 
     port = SRS_CONSTS_RTMP_DEFAULT_PORT;
-    if ((pos = host.find(":")) != std::string::npos) {
+    if ((pos = host.find(":")) != std::string::npos)
+    {
         port = host.substr(pos + 1);
         host = host.substr(0, pos);
         srs_info("discovery host=%s, port=%s", host.c_str(), port.c_str());
     }
-    
+
     app = url;
     vhost = host;
     srs_vhost_resolve(vhost, app, param);
@@ -28098,44 +29622,51 @@ void srs_vhost_resolve(string& vhost, string& app, string& param)
 {
     // get original param
     size_t pos = 0;
-    if ((pos = app.find("?")) != std::string::npos) {
+    if ((pos = app.find("?")) != std::string::npos)
+    {
         param = app.substr(pos);
     }
-    
+
     // filter tcUrl
     app = srs_string_replace(app, ",", "?");
     app = srs_string_replace(app, "...", "?");
     app = srs_string_replace(app, "&&", "?");
     app = srs_string_replace(app, "=", "?");
-    
-    if ((pos = app.find("?")) != std::string::npos) {
+
+    if ((pos = app.find("?")) != std::string::npos)
+    {
         std::string query = app.substr(pos + 1);
         app = app.substr(0, pos);
-        
-        if ((pos = query.find("vhost?")) != std::string::npos) {
+
+        if ((pos = query.find("vhost?")) != std::string::npos)
+        {
             query = query.substr(pos + 6);
-            if (!query.empty()) {
+            if (!query.empty())
+            {
                 vhost = query;
             }
-            if ((pos = vhost.find("?")) != std::string::npos) {
+            if ((pos = vhost.find("?")) != std::string::npos)
+            {
                 vhost = vhost.substr(0, pos);
             }
         }
     }
-    
+
     /* others */
 }
 
 void srs_random_generate(char* bytes, int size)
 {
     static bool _random_initialized = false;
-    if (!_random_initialized) {
+    if (!_random_initialized)
+    {
         srand(0);
         _random_initialized = true;
         srs_trace("srand initialized the random.");
     }
-    
-    for (int i = 0; i < size; i++) {
+
+    for (int i = 0; i < size; i++)
+    {
         // the common value in [0x0f, 0xf0]
         bytes[i] = 0x0f + (rand() % (256 - 0x0f - 0x0f));
     }
@@ -28144,22 +29675,26 @@ void srs_random_generate(char* bytes, int size)
 string srs_generate_tc_url(string ip, string vhost, string app, string port, string param)
 {
     string tcUrl = "rtmp://";
-    
-    if (vhost == SRS_CONSTS_RTMP_DEFAULT_VHOST) {
+
+    if (vhost == SRS_CONSTS_RTMP_DEFAULT_VHOST)
+    {
         tcUrl += ip;
-    } else {
+    }
+    else
+    {
         tcUrl += vhost;
     }
-    
-    if (port != SRS_CONSTS_RTMP_DEFAULT_PORT) {
+
+    if (port != SRS_CONSTS_RTMP_DEFAULT_PORT)
+    {
         tcUrl += ":";
         tcUrl += port;
     }
-    
+
     tcUrl += "/";
     tcUrl += app;
     tcUrl += param;
-    
+
     return tcUrl;
 }
 
@@ -28170,17 +29705,21 @@ bool srs_bytes_equals(void* pa, void* pb, int size)
 {
     u_int8_t* a = (u_int8_t*)pa;
     u_int8_t* b = (u_int8_t*)pb;
-    
-    if (!a && !b) {
+
+    if (!a && !b)
+    {
         return true;
     }
-    
-    if (!a || !b) {
+
+    if (!a || !b)
+    {
         return false;
     }
-    
-    for(int i = 0; i < size; i++){
-        if(a[i] != b[i]){
+
+    for(int i = 0; i < size; i++)
+    {
+        if(a[i] != b[i])
+        {
             return false;
         }
     }
@@ -28191,38 +29730,48 @@ bool srs_bytes_equals(void* pa, void* pb, int size)
 int srs_do_rtmp_create_msg(char type, u_int32_t timestamp, char* data, int size, int stream_id, SrsSharedPtrMessage** ppmsg)
 {
     int ret = ERROR_SUCCESS;
-    
+
     *ppmsg = NULL;
     SrsSharedPtrMessage* msg = NULL;
-    
-    if (type == SrsCodecFlvTagAudio) {
+
+    if (type == SrsCodecFlvTagAudio)
+    {
         SrsMessageHeader header;
         header.initialize_audio(size, timestamp, stream_id);
-        
+
         msg = new SrsSharedPtrMessage();
-        if ((ret = msg->create(&header, data, size)) != ERROR_SUCCESS) {
+        if ((ret = msg->create(&header, data, size)) != ERROR_SUCCESS)
+        {
             srs_freep(msg);
             return ret;
         }
-    } else if (type == SrsCodecFlvTagVideo) {
+    }
+    else if (type == SrsCodecFlvTagVideo)
+    {
         SrsMessageHeader header;
         header.initialize_video(size, timestamp, stream_id);
-        
+
         msg = new SrsSharedPtrMessage();
-        if ((ret = msg->create(&header, data, size)) != ERROR_SUCCESS) {
+        if ((ret = msg->create(&header, data, size)) != ERROR_SUCCESS)
+        {
             srs_freep(msg);
             return ret;
         }
-    } else if (type == SrsCodecFlvTagScript) {
+    }
+    else if (type == SrsCodecFlvTagScript)
+    {
         SrsMessageHeader header;
         header.initialize_amf0_script(size, stream_id);
-        
+
         msg = new SrsSharedPtrMessage();
-        if ((ret = msg->create(&header, data, size)) != ERROR_SUCCESS) {
+        if ((ret = msg->create(&header, data, size)) != ERROR_SUCCESS)
+        {
             srs_freep(msg);
             return ret;
         }
-    } else {
+    }
+    else
+    {
         ret = ERROR_STREAM_CASTER_FLV_TAG;
         srs_error("rtmp unknown tag type=%#x. ret=%d", type, ret);
         return ret;
@@ -28238,7 +29787,8 @@ int srs_rtmp_create_msg(char type, u_int32_t timestamp, char* data, int size, in
     int ret = ERROR_SUCCESS;
 
     // only when failed, we must free the data.
-    if ((ret = srs_do_rtmp_create_msg(type, timestamp, data, size, stream_id, ppmsg)) != ERROR_SUCCESS) {
+    if ((ret = srs_do_rtmp_create_msg(type, timestamp, data, size, stream_id, ppmsg)) != ERROR_SUCCESS)
+    {
         srs_freep(data);
         return ret;
     }
@@ -28246,12 +29796,13 @@ int srs_rtmp_create_msg(char type, u_int32_t timestamp, char* data, int size, in
     return ret;
 }
 
-std::string srs_generate_stream_url(std::string vhost, std::string app, std::string stream) 
+std::string srs_generate_stream_url(std::string vhost, std::string app, std::string stream)
 {
     std::string url = "";
-    
-    if (SRS_CONSTS_RTMP_DEFAULT_VHOST != vhost){
-    	url += vhost;
+
+    if (SRS_CONSTS_RTMP_DEFAULT_VHOST != vhost)
+    {
+        url += vhost;
     }
     url += "/";
     url += app;
@@ -28264,7 +29815,7 @@ std::string srs_generate_stream_url(std::string vhost, std::string app, std::str
 int srs_write_large_iovs(ISrsProtocolReaderWriter* skt, iovec* iovs, int size, ssize_t* pnwrite)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // the limits of writev iovs.
     // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifndef _WIN32
@@ -28273,31 +29824,37 @@ int srs_write_large_iovs(ISrsProtocolReaderWriter* skt, iovec* iovs, int size, s
 #else
     static int limits = 1024;
 #endif
-    
+
     // send in a time.
-    if (size < limits) {
-        if ((ret = skt->writev(iovs, size, pnwrite)) != ERROR_SUCCESS) {
-            if (!srs_is_client_gracefully_close(ret)) {
+    if (size < limits)
+    {
+        if ((ret = skt->writev(iovs, size, pnwrite)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("send with writev failed. ret=%d", ret);
             }
             return ret;
         }
         return ret;
     }
-    
+
     // send in multiple times.
     int cur_iov = 0;
-    while (cur_iov < size) {
+    while (cur_iov < size)
+    {
         int cur_count = srs_min(limits, size - cur_iov);
-        if ((ret = skt->writev(iovs + cur_iov, cur_count, pnwrite)) != ERROR_SUCCESS) {
-            if (!srs_is_client_gracefully_close(ret)) {
+        if ((ret = skt->writev(iovs + cur_iov, cur_count, pnwrite)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("send with writev failed. ret=%d", ret);
             }
             return ret;
         }
         cur_iov += cur_count;
     }
-    
+
     return ret;
 }
 
@@ -28332,10 +29889,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 SrsMessageArray::SrsMessageArray(int max_msgs)
 {
     srs_assert(max_msgs > 0);
-    
+
     msgs = new SrsSharedPtrMessage*[max_msgs];
     max = max_msgs;
-    
+
     zero(max_msgs);
 }
 
@@ -28350,10 +29907,11 @@ SrsMessageArray::~SrsMessageArray()
 void SrsMessageArray::free(int count)
 {
     // initialize
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++)
+    {
         SrsSharedPtrMessage* msg = msgs[i];
         srs_freep(msg);
-        
+
         msgs[i] = NULL;
     }
 }
@@ -28361,7 +29919,8 @@ void SrsMessageArray::free(int count)
 void SrsMessageArray::zero(int count)
 {
     // initialize
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++)
+    {
         msgs[i] = NULL;
     }
 }
@@ -28428,7 +29987,7 @@ SrsFastBuffer::SrsFastBuffer()
     merged_read = false;
     _handler = NULL;
 #endif
-    
+
     nb_buffer = SRS_DEFAULT_RECV_BUFFER_SIZE;
     buffer = (char*)malloc(nb_buffer);
     p = end = buffer;
@@ -28453,23 +30012,25 @@ char* SrsFastBuffer::bytes()
 void SrsFastBuffer::set_buffer(int buffer_size)
 {
     // never exceed the max size.
-    if (buffer_size > SRS_MAX_SOCKET_BUFFER) {
-        srs_warn("limit the user-space buffer from %d to %d", 
-            buffer_size, SRS_MAX_SOCKET_BUFFER);
+    if (buffer_size > SRS_MAX_SOCKET_BUFFER)
+    {
+        srs_warn("limit the user-space buffer from %d to %d",
+                 buffer_size, SRS_MAX_SOCKET_BUFFER);
     }
-    
+
     // the user-space buffer size limit to a max value.
     int nb_resize_buf = srs_min(buffer_size, SRS_MAX_SOCKET_BUFFER);
 
     // only realloc when buffer changed bigger
-    if (nb_resize_buf <= nb_buffer) {
+    if (nb_resize_buf <= nb_buffer)
+    {
         return;
     }
-    
+
     // realloc for buffer change bigger.
     int start = (int)(p - buffer);
     int nb_bytes = (int)(end - p);
-    
+
     buffer = (char*)realloc(buffer, nb_resize_buf);
     nb_buffer = nb_resize_buf;
     p = buffer + start;
@@ -28487,7 +30048,7 @@ char* SrsFastBuffer::read_slice(int size)
     srs_assert(size >= 0);
     srs_assert(end - p >= size);
     srs_assert(p + size >= buffer);
-    
+
     char* ptr = p;
     p += size;
 
@@ -28506,53 +30067,61 @@ int SrsFastBuffer::grow(ISrsBufferReader* reader, int required_size)
     int ret = ERROR_SUCCESS;
 
     // already got required size of bytes.
-    if (end - p >= required_size) {
+    if (end - p >= required_size)
+    {
         return ret;
     }
 
     // must be positive.
     srs_assert(required_size > 0);
 
-    // the free space of buffer, 
+    // the free space of buffer,
     //      buffer = consumed_bytes + exists_bytes + free_space.
     int nb_free_space = (int)(buffer + nb_buffer - end);
     // resize the space when no left space.
-    if (nb_free_space < required_size) {
+    if (nb_free_space < required_size)
+    {
         // the bytes already in buffer
         int nb_exists_bytes = (int)(end - p);
         srs_assert(nb_exists_bytes >= 0);
         srs_verbose("move fast buffer %d bytes", nb_exists_bytes);
 
         // reset or move to get more space.
-        if (!nb_exists_bytes) {
+        if (!nb_exists_bytes)
+        {
             // reset when buffer is empty.
             p = end = buffer;
             srs_verbose("all consumed, reset fast buffer");
-        } else {
+        }
+        else
+        {
             // move the left bytes to start of buffer.
             srs_assert(nb_exists_bytes < nb_buffer);
             buffer = (char*)memmove(buffer, p, nb_exists_bytes);
             p = buffer;
             end = p + nb_exists_bytes;
         }
-        
+
         // check whether enough free space in buffer.
         nb_free_space = (int)(buffer + nb_buffer - end);
-        if (nb_free_space < required_size) {
+        if (nb_free_space < required_size)
+        {
             ret = ERROR_READER_BUFFER_OVERFLOW;
-            srs_error("buffer overflow, required=%d, max=%d, left=%d, ret=%d", 
-                required_size, nb_buffer, nb_free_space, ret);
+            srs_error("buffer overflow, required=%d, max=%d, left=%d, ret=%d",
+                      required_size, nb_buffer, nb_free_space, ret);
             return ret;
         }
     }
 
     // buffer is ok, read required size of bytes.
-    while (end - p < required_size) {
+    while (end - p < required_size)
+    {
         ssize_t nread;
-        if ((ret = reader->read(end, nb_free_space, &nread)) != ERROR_SUCCESS) {
+        if ((ret = reader->read(end, nb_free_space, &nread)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
 #ifdef SRS_PERF_MERGED_READ
         /**
         * to improve read performance, merge some packets then read,
@@ -28560,17 +30129,18 @@ int SrsFastBuffer::grow(ISrsBufferReader* reader, int required_size)
         * that is, we merge some data to read together.
         * @see https://github.com/simple-rtmp-server/srs/issues/241
         */
-        if (merged_read && _handler) {
+        if (merged_read && _handler)
+        {
             _handler->on_read(nread);
         }
 #endif
-        
+
         // we just move the ptr to next.
         srs_assert((int)nread > 0);
         end += nread;
         nb_free_space -= nread;
     }
-    
+
     return ret;
 }
 
@@ -28633,24 +30203,28 @@ int SrsRawH264Stream::annexb_demux(SrsStream* stream, char** pframe, int* pnb_fr
     *pframe = NULL;
     *pnb_frame = 0;
 
-    while (!stream->empty()) {
+    while (!stream->empty())
+    {
         // each frame must prefixed by annexb format.
         // about annexb, @see H.264-AVC-ISO_IEC_14496-10.pdf, page 211.
         int pnb_start_code = 0;
-        if (!srs_avc_startswith_annexb(stream, &pnb_start_code)) {
+        if (!srs_avc_startswith_annexb(stream, &pnb_start_code))
+        {
             return ERROR_H264_API_NO_PREFIXED;
         }
         int start = stream->pos() + pnb_start_code;
-        
+
         // find the last frame prefixed by annexb format.
         stream->skip(pnb_start_code);
-        while (!stream->empty()) {
-            if (srs_avc_startswith_annexb(stream, NULL)) {
+        while (!stream->empty())
+        {
+            if (srs_avc_startswith_annexb(stream, NULL))
+            {
                 break;
             }
             stream->skip(1);
         }
-        
+
         // demux the frame.
         *pnb_frame = stream->pos() - start;
         *pframe = stream->data() + start;
@@ -28663,8 +30237,8 @@ int SrsRawH264Stream::annexb_demux(SrsStream* stream, char** pframe, int* pnb_fr
 bool SrsRawH264Stream::is_sps(char* frame, int nb_frame)
 {
     srs_assert(nb_frame > 0);
-    
-    // 5bits, 7.3.1 NAL unit syntax, 
+
+    // 5bits, 7.3.1 NAL unit syntax,
     // H.264-AVC-ISO_IEC_14496-10.pdf, page 44.
     //  7: SPS, 8: PPS, 5: I Frame, 1: P Frame
     u_int8_t nal_unit_type = (char)frame[0] & 0x1f;
@@ -28675,8 +30249,8 @@ bool SrsRawH264Stream::is_sps(char* frame, int nb_frame)
 bool SrsRawH264Stream::is_pps(char* frame, int nb_frame)
 {
     srs_assert(nb_frame > 0);
-    
-    // 5bits, 7.3.1 NAL unit syntax, 
+
+    // 5bits, 7.3.1 NAL unit syntax,
     // H.264-AVC-ISO_IEC_14496-10.pdf, page 44.
     //  7: SPS, 8: PPS, 5: I Frame, 1: P Frame
     u_int8_t nal_unit_type = (char)frame[0] & 0x1f;
@@ -28689,20 +30263,23 @@ int SrsRawH264Stream::sps_demux(char* frame, int nb_frame, string& sps)
     int ret = ERROR_SUCCESS;
 
     // atleast 1bytes for SPS to decode the type, profile, constrain and level.
-    if (nb_frame < 4) {
+    if (nb_frame < 4)
+    {
         return ret;
     }
-        
+
     sps = "";
-    if (nb_frame > 0) {
+    if (nb_frame > 0)
+    {
         sps.append(frame, nb_frame);
     }
-    
+
     // should never be empty.
-    if (sps.empty()) {
+    if (sps.empty())
+    {
         return ERROR_STREAM_CASTER_AVC_SPS;
     }
-        
+
     return ret;
 }
 
@@ -28711,12 +30288,14 @@ int SrsRawH264Stream::pps_demux(char* frame, int nb_frame, string& pps)
     int ret = ERROR_SUCCESS;
 
     pps = "";
-    if (nb_frame > 0) {
+    if (nb_frame > 0)
+    {
         pps.append(frame, nb_frame);
     }
 
     // should never be empty.
-    if (pps.empty()) {
+    if (pps.empty())
+    {
         return ERROR_STREAM_CASTER_AVC_PPS;
     }
 
@@ -28738,24 +30317,26 @@ int SrsRawH264Stream::mux_sequence_header(string sps, string pps, u_int32_t dts,
     //      numOfPictureParameterSets, pictureParameterSetLength
     // Nbytes of pps:
     //      pictureParameterSetNALUnit
-    int nb_packet = 5 
-        + 3 + (int)sps.length() 
-        + 3 + (int)pps.length();
+    int nb_packet = 5
+                    + 3 + (int)sps.length()
+                    + 3 + (int)pps.length();
     char* packet = new char[nb_packet];
     SrsAutoFree(char, packet);
 
     // use stream to generate the h264 packet.
     SrsStream stream;
-    if ((ret = stream.initialize(packet, nb_packet)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(packet, nb_packet)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    // decode the SPS: 
+
+    // decode the SPS:
     // @see: 7.3.2.1.1, H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 62
-    if (true) {
+    if (true)
+    {
         srs_assert((int)sps.length() >= 4);
         char* frame = (char*)sps.data();
-    
+
         // @see: Annex A Profiles and levels, H.264-AVC-ISO_IEC_14496-10.pdf, page 205
         //      Baseline profile profile_idc is 66(0x42).
         //      Main profile profile_idc is 77(0x4d).
@@ -28763,7 +30344,7 @@ int SrsRawH264Stream::mux_sequence_header(string sps, string pps, u_int32_t dts,
         u_int8_t profile_idc = frame[1];
         //u_int8_t constraint_set = frame[2];
         u_int8_t level_idc = frame[3];
-        
+
         // generate the sps/pps header
         // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
         // configurationVersion
@@ -28778,9 +30359,10 @@ int SrsRawH264Stream::mux_sequence_header(string sps, string pps, u_int32_t dts,
         // so we always set it to 0x03.
         stream.write_1bytes(0x03);
     }
-    
+
     // sps
-    if (true) {
+    if (true)
+    {
         // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
         // numOfSequenceParameterSets, always 1
         stream.write_1bytes(0x01);
@@ -28789,9 +30371,10 @@ int SrsRawH264Stream::mux_sequence_header(string sps, string pps, u_int32_t dts,
         // sequenceParameterSetNALUnit
         stream.write_string(sps);
     }
-    
+
     // pps
-    if (true) {
+    if (true)
+    {
         // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
         // numOfPictureParameterSets, always 1
         stream.write_1bytes(0x01);
@@ -28814,7 +30397,7 @@ int SrsRawH264Stream::mux_sequence_header(string sps, string pps, u_int32_t dts,
 int SrsRawH264Stream::mux_ipb_frame(char* frame, int nb_frame, string& ibp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // 4bytes size of nalu:
     //      NALUnitLength
     // Nbytes of nalu.
@@ -28822,18 +30405,19 @@ int SrsRawH264Stream::mux_ipb_frame(char* frame, int nb_frame, string& ibp)
     int nb_packet = 4 + nb_frame;
     char* packet = new char[nb_packet];
     SrsAutoFree(char, packet);
-    
+
     // use stream to generate the h264 packet.
     SrsStream stream;
-    if ((ret = stream.initialize(packet, nb_packet)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(packet, nb_packet)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     // 5.3.4.2.1 Syntax, H.264-AVC-ISO_IEC_14496-15.pdf, page 16
     // lengthSizeMinusOne, or NAL_unit_length, always use 4bytes size
     u_int32_t NAL_unit_length = nb_frame;
-    
-    // mux the avc NALU in "ISO Base Media File Format" 
+
+    // mux the avc NALU in "ISO Base Media File Format"
     // from H.264-AVC-ISO_IEC_14496-15.pdf, page 20
     // NALUnitLength
     stream.write_4bytes(NAL_unit_length);
@@ -28849,7 +30433,7 @@ int SrsRawH264Stream::mux_ipb_frame(char* frame, int nb_frame, string& ibp)
 int SrsRawH264Stream::mux_avc2flv(string video, int8_t frame_type, int8_t avc_packet_type, u_int32_t dts, u_int32_t pts, char** flv, int* nb_flv)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // for h264 in RTMP video payload, there is 5bytes header:
     //      1bytes, FrameType | CodecID
     //      1bytes, AVCPacketType
@@ -28858,18 +30442,18 @@ int SrsRawH264Stream::mux_avc2flv(string video, int8_t frame_type, int8_t avc_pa
     int size = (int)video.length() + 5;
     char* data = new char[size];
     char* p = data;
-    
+
     // @see: E.4.3 Video Tags, video_file_format_spec_v10_1.pdf, page 78
     // Frame Type, Type of video frame.
     // CodecID, Codec Identifier.
     // set the rtmp header
     *p++ = (frame_type << 4) | SrsCodecVideoAVC;
-    
+
     // AVCPacketType
     *p++ = avc_packet_type;
 
     // CompositionTime
-    // pts = dts + cts, or 
+    // pts = dts + cts, or
     // cts = pts - dts.
     // where cts is the header in rtmp video packet payload header.
     u_int32_t cts = pts - dts;
@@ -28877,7 +30461,7 @@ int SrsRawH264Stream::mux_avc2flv(string video, int8_t frame_type, int8_t avc_pa
     *p++ = pp[2];
     *p++ = pp[1];
     *p++ = pp[0];
-    
+
     // h.264 raw data.
     memcpy(p, video.data(), video.length());
 
@@ -28898,16 +30482,17 @@ SrsRawAacStream::~SrsRawAacStream()
 int SrsRawAacStream::adts_demux(SrsStream* stream, char** pframe, int* pnb_frame, SrsRawAacStreamCodec& codec)
 {
     int ret = ERROR_SUCCESS;
-    
-    while (!stream->empty()) {
+
+    while (!stream->empty())
+    {
         int adts_header_start = stream->pos();
-        
+
         // decode the ADTS.
         // @see aac-iso-13818-7.pdf, page 26
         //      6.2 Audio Data Transport Stream, ADTS
         // @see https://github.com/simple-rtmp-server/srs/issues/212#issuecomment-64145885
         // byte_alignment()
-        
+
         // adts_fixed_header:
         //      12bits syncword,
         //      16bits left.
@@ -28921,15 +30506,17 @@ int SrsRawAacStream::adts_demux(SrsStream* stream, char** pframe, int* pnb_frame
         //      require(7bytes)=56bits
         // else
         //      require(9bytes)=72bits
-        if (!stream->require(7)) {
+        if (!stream->require(7))
+        {
             return ERROR_AAC_ADTS_HEADER;
         }
-        
+
         // for aac, the frame must be ADTS format.
-        if (!srs_aac_startswith_adts(stream)) {
+        if (!srs_aac_startswith_adts(stream))
+        {
             return ERROR_AAC_REQUIRED_ADTS;
         }
-        
+
         // syncword 12 bslbf
         stream->read_1bytes();
         // 4bits left.
@@ -28941,20 +30528,21 @@ int SrsRawAacStream::adts_demux(SrsStream* stream, char** pframe, int* pnb_frame
         int8_t id = (pav >> 3) & 0x01;
         /*int8_t layer = (pav >> 1) & 0x03;*/
         int8_t protection_absent = pav & 0x01;
-        
+
         /**
         * ID: MPEG identifier, set to '1' if the audio data in the ADTS stream are MPEG-2 AAC (See ISO/IEC 13818-7)
         * and set to '0' if the audio data are MPEG-4. See also ISO/IEC 11172-3, subclause 2.4.2.3.
         */
-        if (id != 0x01) {
+        if (id != 0x01)
+        {
             srs_info("adts: id must be 1(aac), actual 0(mp4a). ret=%d", ret);
-            
+
             // well, some system always use 0, but actually is aac format.
             // for example, houjian vod ts always set the aac id to 0, actually 1.
             // we just ignore it, and alwyas use 1(aac) to demux.
             id = 0x01;
         }
-        
+
         int16_t sfiv = stream->read_2bytes();
         // profile 2 uimsbf
         // sampling_frequency_index 4 uimsbf
@@ -28979,7 +30567,7 @@ int SrsRawAacStream::adts_demux(SrsStream* stream, char** pframe, int* pnb_frame
         // use the left 2bits as the 13 and 12 bit,
         // the frame_length is 13bits, so we move 13-2=11.
         int16_t frame_length = (sfiv << 11) & 0x1800;
-        
+
         int32_t abfv = stream->read_3bytes();
         // frame_length 13 bslbf: consume the first 13-2=11bits
         // the fh2 is 24bits, so we move right 24-11=13.
@@ -28989,43 +30577,55 @@ int SrsRawAacStream::adts_demux(SrsStream* stream, char** pframe, int* pnb_frame
         // number_of_raw_data_blocks_in_frame 2 uimsbf
         /*int16_t number_of_raw_data_blocks_in_frame = abfv & 0x03;*/
         // adts_error_check(), 1.A.2.2.3 Error detection
-        if (!protection_absent) {
-            if (!stream->require(2)) {
+        if (!protection_absent)
+        {
+            if (!stream->require(2))
+            {
                 return ERROR_AAC_ADTS_HEADER;
             }
             // crc_check 16 Rpchof
             /*int16_t crc_check = */stream->read_2bytes();
         }
-        
+
         // TODO: check the sampling_frequency_index
         // TODO: check the channel_configuration
-        
+
         // raw_data_blocks
         int adts_header_size = stream->pos() - adts_header_start;
         int raw_data_size = frame_length - adts_header_size;
-        if (!stream->require(raw_data_size)) {
+        if (!stream->require(raw_data_size))
+        {
             return ERROR_AAC_ADTS_HEADER;
         }
-        
+
         // the codec info.
         codec.protection_absent = protection_absent;
         codec.aac_object = srs_codec_aac_ts2rtmp((SrsAacProfile)profile);
         codec.sampling_frequency_index = sampling_frequency_index;
         codec.channel_configuration = channel_configuration;
         codec.frame_length = frame_length;
-        
+
         // @see srs_audio_write_raw_frame().
         // TODO: FIXME: maybe need to resample audio.
         codec.sound_format = 10; // AAC
-        if (sampling_frequency_index <= 0x0c && sampling_frequency_index > 0x0a) {
+        if (sampling_frequency_index <= 0x0c && sampling_frequency_index > 0x0a)
+        {
             codec.sound_rate = SrsCodecAudioSampleRate5512;
-        } else if (sampling_frequency_index <= 0x0a && sampling_frequency_index > 0x07) {
+        }
+        else if (sampling_frequency_index <= 0x0a && sampling_frequency_index > 0x07)
+        {
             codec.sound_rate = SrsCodecAudioSampleRate11025;
-        } else if (sampling_frequency_index <= 0x07 && sampling_frequency_index > 0x04) {
+        }
+        else if (sampling_frequency_index <= 0x07 && sampling_frequency_index > 0x04)
+        {
             codec.sound_rate = SrsCodecAudioSampleRate22050;
-        } else if (sampling_frequency_index <= 0x04) {
+        }
+        else if (sampling_frequency_index <= 0x04)
+        {
             codec.sound_rate = SrsCodecAudioSampleRate44100;
-        } else {
+        }
+        else
+        {
             codec.sound_rate = SrsCodecAudioSampleRate44100;
             srs_warn("adts invalid sample rate for flv, rate=%#x", sampling_frequency_index);
         }
@@ -29049,25 +30649,30 @@ int SrsRawAacStream::mux_sequence_header(SrsRawAacStreamCodec* codec, string& sh
     int ret = ERROR_SUCCESS;
 
     // only support aac profile 1-4.
-    if (codec->aac_object == SrsAacObjectTypeReserved) {
+    if (codec->aac_object == SrsAacObjectTypeReserved)
+    {
         return ERROR_AAC_DATA_INVALID;
     }
-    
+
     SrsAacObjectType audioObjectType = codec->aac_object;
     char channelConfiguration = codec->channel_configuration;
     char samplingFrequencyIndex = codec->sampling_frequency_index;
 
     // override the aac samplerate by user specified.
     // @see https://github.com/simple-rtmp-server/srs/issues/212#issuecomment-64146899
-    switch (codec->sound_rate) {
-        case SrsCodecAudioSampleRate11025: 
-            samplingFrequencyIndex = 0x0a; break;
-        case SrsCodecAudioSampleRate22050: 
-            samplingFrequencyIndex = 0x07; break;
-        case SrsCodecAudioSampleRate44100: 
-            samplingFrequencyIndex = 0x04; break;
-        default:
-            break;
+    switch (codec->sound_rate)
+    {
+    case SrsCodecAudioSampleRate11025:
+        samplingFrequencyIndex = 0x0a;
+        break;
+    case SrsCodecAudioSampleRate22050:
+        samplingFrequencyIndex = 0x07;
+        break;
+    case SrsCodecAudioSampleRate44100:
+        samplingFrequencyIndex = 0x04;
+        break;
+    default:
+        break;
     }
 
     sh = "";
@@ -29079,20 +30684,21 @@ int SrsRawAacStream::mux_sequence_header(SrsRawAacStreamCodec* codec, string& sh
     // audioObjectType; 5 bslbf
     ch = (audioObjectType << 3) & 0xf8;
     // 3bits left.
-        
+
     // samplingFrequencyIndex; 4 bslbf
     ch |= (samplingFrequencyIndex >> 1) & 0x07;
     sh += ch;
     ch = (samplingFrequencyIndex << 7) & 0x80;
-    if (samplingFrequencyIndex == 0x0f) {
+    if (samplingFrequencyIndex == 0x0f)
+    {
         return ERROR_AAC_DATA_INVALID;
     }
     // 7bits left.
-        
+
     // channelConfiguration; 4 bslbf
     ch |= (channelConfiguration << 3) & 0x78;
     // 3bits left.
-        
+
     // GASpecificConfig(), page 451
     // 4.4.1 Decoder configuration (GASpecificConfig)
     // frameLengthFlag; 1 bslbf
@@ -29117,23 +30723,25 @@ int SrsRawAacStream::mux_aac2flv(char* frame, int nb_frame, SrsRawAacStreamCodec
     //      1bytes, SoundFormat|SoundRate|SoundSize|SoundType
     //      1bytes, AACPacketType for SoundFormat == 10, 0 is sequence header.
     int size = nb_frame + 1;
-    if (sound_format == SrsCodecAudioAAC) {
+    if (sound_format == SrsCodecAudioAAC)
+    {
         size += 1;
     }
     char* data = new char[size];
     char* p = data;
-    
+
     u_int8_t audio_header = sound_type & 0x01;
     audio_header |= (sound_size << 1) & 0x02;
     audio_header |= (sound_rate << 2) & 0x0c;
     audio_header |= (sound_format << 4) & 0xf0;
-    
+
     *p++ = audio_header;
-    
-    if (sound_format == SrsCodecAudioAAC) {
+
+    if (sound_format == SrsCodecAudioAAC)
+    {
         *p++ = aac_packet_type;
     }
-    
+
     memcpy(p, frame, nb_frame);
 
     *flv = data;
@@ -29190,78 +30798,95 @@ using namespace std;
 string srs_generate_rtsp_status_text(int status)
 {
     static std::map<int, std::string> _status_map;
-    if (_status_map.empty()) {
-        _status_map[SRS_CONSTS_RTSP_Continue                       ] = SRS_CONSTS_RTSP_Continue_str                        ;      
-        _status_map[SRS_CONSTS_RTSP_OK                             ] = SRS_CONSTS_RTSP_OK_str                              ;      
-        _status_map[SRS_CONSTS_RTSP_Created                        ] = SRS_CONSTS_RTSP_Created_str                         ;      
-        _status_map[SRS_CONSTS_RTSP_LowOnStorageSpace              ] = SRS_CONSTS_RTSP_LowOnStorageSpace_str               ;      
-        _status_map[SRS_CONSTS_RTSP_MultipleChoices                ] = SRS_CONSTS_RTSP_MultipleChoices_str                 ;      
-        _status_map[SRS_CONSTS_RTSP_MovedPermanently               ] = SRS_CONSTS_RTSP_MovedPermanently_str                ;      
-        _status_map[SRS_CONSTS_RTSP_MovedTemporarily               ] = SRS_CONSTS_RTSP_MovedTemporarily_str                ;      
-        _status_map[SRS_CONSTS_RTSP_SeeOther                       ] = SRS_CONSTS_RTSP_SeeOther_str                        ;      
-        _status_map[SRS_CONSTS_RTSP_NotModified                    ] = SRS_CONSTS_RTSP_NotModified_str                     ;      
-        _status_map[SRS_CONSTS_RTSP_UseProxy                       ] = SRS_CONSTS_RTSP_UseProxy_str                        ;      
-        _status_map[SRS_CONSTS_RTSP_BadRequest                     ] = SRS_CONSTS_RTSP_BadRequest_str                      ;      
-        _status_map[SRS_CONSTS_RTSP_Unauthorized                   ] = SRS_CONSTS_RTSP_Unauthorized_str                    ;      
-        _status_map[SRS_CONSTS_RTSP_PaymentRequired                ] = SRS_CONSTS_RTSP_PaymentRequired_str                 ;      
-        _status_map[SRS_CONSTS_RTSP_Forbidden                      ] = SRS_CONSTS_RTSP_Forbidden_str                       ;      
-        _status_map[SRS_CONSTS_RTSP_NotFound                       ] = SRS_CONSTS_RTSP_NotFound_str                        ;      
-        _status_map[SRS_CONSTS_RTSP_MethodNotAllowed               ] = SRS_CONSTS_RTSP_MethodNotAllowed_str                ;      
-        _status_map[SRS_CONSTS_RTSP_NotAcceptable                  ] = SRS_CONSTS_RTSP_NotAcceptable_str                   ;      
-        _status_map[SRS_CONSTS_RTSP_ProxyAuthenticationRequired    ] = SRS_CONSTS_RTSP_ProxyAuthenticationRequired_str     ;      
-        _status_map[SRS_CONSTS_RTSP_RequestTimeout                 ] = SRS_CONSTS_RTSP_RequestTimeout_str                  ;      
-        _status_map[SRS_CONSTS_RTSP_Gone                           ] = SRS_CONSTS_RTSP_Gone_str                            ;      
-        _status_map[SRS_CONSTS_RTSP_LengthRequired                 ] = SRS_CONSTS_RTSP_LengthRequired_str                  ;      
-        _status_map[SRS_CONSTS_RTSP_PreconditionFailed             ] = SRS_CONSTS_RTSP_PreconditionFailed_str              ;      
-        _status_map[SRS_CONSTS_RTSP_RequestEntityTooLarge          ] = SRS_CONSTS_RTSP_RequestEntityTooLarge_str           ;      
-        _status_map[SRS_CONSTS_RTSP_RequestURITooLarge             ] = SRS_CONSTS_RTSP_RequestURITooLarge_str              ;      
-        _status_map[SRS_CONSTS_RTSP_UnsupportedMediaType           ] = SRS_CONSTS_RTSP_UnsupportedMediaType_str            ;      
-        _status_map[SRS_CONSTS_RTSP_ParameterNotUnderstood         ] = SRS_CONSTS_RTSP_ParameterNotUnderstood_str          ;      
-        _status_map[SRS_CONSTS_RTSP_ConferenceNotFound             ] = SRS_CONSTS_RTSP_ConferenceNotFound_str              ;      
-        _status_map[SRS_CONSTS_RTSP_NotEnoughBandwidth             ] = SRS_CONSTS_RTSP_NotEnoughBandwidth_str              ;      
-        _status_map[SRS_CONSTS_RTSP_SessionNotFound                ] = SRS_CONSTS_RTSP_SessionNotFound_str                 ;      
-        _status_map[SRS_CONSTS_RTSP_MethodNotValidInThisState      ] = SRS_CONSTS_RTSP_MethodNotValidInThisState_str       ;      
-        _status_map[SRS_CONSTS_RTSP_HeaderFieldNotValidForResource ] = SRS_CONSTS_RTSP_HeaderFieldNotValidForResource_str  ;      
-        _status_map[SRS_CONSTS_RTSP_InvalidRange                   ] = SRS_CONSTS_RTSP_InvalidRange_str                    ;      
-        _status_map[SRS_CONSTS_RTSP_ParameterIsReadOnly            ] = SRS_CONSTS_RTSP_ParameterIsReadOnly_str             ;      
-        _status_map[SRS_CONSTS_RTSP_AggregateOperationNotAllowed   ] = SRS_CONSTS_RTSP_AggregateOperationNotAllowed_str    ;      
-        _status_map[SRS_CONSTS_RTSP_OnlyAggregateOperationAllowed  ] = SRS_CONSTS_RTSP_OnlyAggregateOperationAllowed_str   ;      
-        _status_map[SRS_CONSTS_RTSP_UnsupportedTransport           ] = SRS_CONSTS_RTSP_UnsupportedTransport_str            ;      
-        _status_map[SRS_CONSTS_RTSP_DestinationUnreachable         ] = SRS_CONSTS_RTSP_DestinationUnreachable_str          ;      
-        _status_map[SRS_CONSTS_RTSP_InternalServerError            ] = SRS_CONSTS_RTSP_InternalServerError_str             ;      
-        _status_map[SRS_CONSTS_RTSP_NotImplemented                 ] = SRS_CONSTS_RTSP_NotImplemented_str                  ;      
-        _status_map[SRS_CONSTS_RTSP_BadGateway                     ] = SRS_CONSTS_RTSP_BadGateway_str                      ;     
-        _status_map[SRS_CONSTS_RTSP_ServiceUnavailable             ] = SRS_CONSTS_RTSP_ServiceUnavailable_str              ;     
-        _status_map[SRS_CONSTS_RTSP_GatewayTimeout                 ] = SRS_CONSTS_RTSP_GatewayTimeout_str                  ;     
-        _status_map[SRS_CONSTS_RTSP_RTSPVersionNotSupported        ] = SRS_CONSTS_RTSP_RTSPVersionNotSupported_str         ;     
-        _status_map[SRS_CONSTS_RTSP_OptionNotSupported             ] = SRS_CONSTS_RTSP_OptionNotSupported_str              ;        
+    if (_status_map.empty())
+    {
+        _status_map[SRS_CONSTS_RTSP_Continue                       ] = SRS_CONSTS_RTSP_Continue_str                        ;
+        _status_map[SRS_CONSTS_RTSP_OK                             ] = SRS_CONSTS_RTSP_OK_str                              ;
+        _status_map[SRS_CONSTS_RTSP_Created                        ] = SRS_CONSTS_RTSP_Created_str                         ;
+        _status_map[SRS_CONSTS_RTSP_LowOnStorageSpace              ] = SRS_CONSTS_RTSP_LowOnStorageSpace_str               ;
+        _status_map[SRS_CONSTS_RTSP_MultipleChoices                ] = SRS_CONSTS_RTSP_MultipleChoices_str                 ;
+        _status_map[SRS_CONSTS_RTSP_MovedPermanently               ] = SRS_CONSTS_RTSP_MovedPermanently_str                ;
+        _status_map[SRS_CONSTS_RTSP_MovedTemporarily               ] = SRS_CONSTS_RTSP_MovedTemporarily_str                ;
+        _status_map[SRS_CONSTS_RTSP_SeeOther                       ] = SRS_CONSTS_RTSP_SeeOther_str                        ;
+        _status_map[SRS_CONSTS_RTSP_NotModified                    ] = SRS_CONSTS_RTSP_NotModified_str                     ;
+        _status_map[SRS_CONSTS_RTSP_UseProxy                       ] = SRS_CONSTS_RTSP_UseProxy_str                        ;
+        _status_map[SRS_CONSTS_RTSP_BadRequest                     ] = SRS_CONSTS_RTSP_BadRequest_str                      ;
+        _status_map[SRS_CONSTS_RTSP_Unauthorized                   ] = SRS_CONSTS_RTSP_Unauthorized_str                    ;
+        _status_map[SRS_CONSTS_RTSP_PaymentRequired                ] = SRS_CONSTS_RTSP_PaymentRequired_str                 ;
+        _status_map[SRS_CONSTS_RTSP_Forbidden                      ] = SRS_CONSTS_RTSP_Forbidden_str                       ;
+        _status_map[SRS_CONSTS_RTSP_NotFound                       ] = SRS_CONSTS_RTSP_NotFound_str                        ;
+        _status_map[SRS_CONSTS_RTSP_MethodNotAllowed               ] = SRS_CONSTS_RTSP_MethodNotAllowed_str                ;
+        _status_map[SRS_CONSTS_RTSP_NotAcceptable                  ] = SRS_CONSTS_RTSP_NotAcceptable_str                   ;
+        _status_map[SRS_CONSTS_RTSP_ProxyAuthenticationRequired    ] = SRS_CONSTS_RTSP_ProxyAuthenticationRequired_str     ;
+        _status_map[SRS_CONSTS_RTSP_RequestTimeout                 ] = SRS_CONSTS_RTSP_RequestTimeout_str                  ;
+        _status_map[SRS_CONSTS_RTSP_Gone                           ] = SRS_CONSTS_RTSP_Gone_str                            ;
+        _status_map[SRS_CONSTS_RTSP_LengthRequired                 ] = SRS_CONSTS_RTSP_LengthRequired_str                  ;
+        _status_map[SRS_CONSTS_RTSP_PreconditionFailed             ] = SRS_CONSTS_RTSP_PreconditionFailed_str              ;
+        _status_map[SRS_CONSTS_RTSP_RequestEntityTooLarge          ] = SRS_CONSTS_RTSP_RequestEntityTooLarge_str           ;
+        _status_map[SRS_CONSTS_RTSP_RequestURITooLarge             ] = SRS_CONSTS_RTSP_RequestURITooLarge_str              ;
+        _status_map[SRS_CONSTS_RTSP_UnsupportedMediaType           ] = SRS_CONSTS_RTSP_UnsupportedMediaType_str            ;
+        _status_map[SRS_CONSTS_RTSP_ParameterNotUnderstood         ] = SRS_CONSTS_RTSP_ParameterNotUnderstood_str          ;
+        _status_map[SRS_CONSTS_RTSP_ConferenceNotFound             ] = SRS_CONSTS_RTSP_ConferenceNotFound_str              ;
+        _status_map[SRS_CONSTS_RTSP_NotEnoughBandwidth             ] = SRS_CONSTS_RTSP_NotEnoughBandwidth_str              ;
+        _status_map[SRS_CONSTS_RTSP_SessionNotFound                ] = SRS_CONSTS_RTSP_SessionNotFound_str                 ;
+        _status_map[SRS_CONSTS_RTSP_MethodNotValidInThisState      ] = SRS_CONSTS_RTSP_MethodNotValidInThisState_str       ;
+        _status_map[SRS_CONSTS_RTSP_HeaderFieldNotValidForResource ] = SRS_CONSTS_RTSP_HeaderFieldNotValidForResource_str  ;
+        _status_map[SRS_CONSTS_RTSP_InvalidRange                   ] = SRS_CONSTS_RTSP_InvalidRange_str                    ;
+        _status_map[SRS_CONSTS_RTSP_ParameterIsReadOnly            ] = SRS_CONSTS_RTSP_ParameterIsReadOnly_str             ;
+        _status_map[SRS_CONSTS_RTSP_AggregateOperationNotAllowed   ] = SRS_CONSTS_RTSP_AggregateOperationNotAllowed_str    ;
+        _status_map[SRS_CONSTS_RTSP_OnlyAggregateOperationAllowed  ] = SRS_CONSTS_RTSP_OnlyAggregateOperationAllowed_str   ;
+        _status_map[SRS_CONSTS_RTSP_UnsupportedTransport           ] = SRS_CONSTS_RTSP_UnsupportedTransport_str            ;
+        _status_map[SRS_CONSTS_RTSP_DestinationUnreachable         ] = SRS_CONSTS_RTSP_DestinationUnreachable_str          ;
+        _status_map[SRS_CONSTS_RTSP_InternalServerError            ] = SRS_CONSTS_RTSP_InternalServerError_str             ;
+        _status_map[SRS_CONSTS_RTSP_NotImplemented                 ] = SRS_CONSTS_RTSP_NotImplemented_str                  ;
+        _status_map[SRS_CONSTS_RTSP_BadGateway                     ] = SRS_CONSTS_RTSP_BadGateway_str                      ;
+        _status_map[SRS_CONSTS_RTSP_ServiceUnavailable             ] = SRS_CONSTS_RTSP_ServiceUnavailable_str              ;
+        _status_map[SRS_CONSTS_RTSP_GatewayTimeout                 ] = SRS_CONSTS_RTSP_GatewayTimeout_str                  ;
+        _status_map[SRS_CONSTS_RTSP_RTSPVersionNotSupported        ] = SRS_CONSTS_RTSP_RTSPVersionNotSupported_str         ;
+        _status_map[SRS_CONSTS_RTSP_OptionNotSupported             ] = SRS_CONSTS_RTSP_OptionNotSupported_str              ;
     }
-    
+
     std::string status_text;
-    if (_status_map.find(status) == _status_map.end()) {
+    if (_status_map.find(status) == _status_map.end())
+    {
         status_text = "Status Unknown";
-    } else {
+    }
+    else
+    {
         status_text = _status_map[status];
     }
-    
+
     return status_text;
 }
 
-std::string srs_generate_rtsp_method_str(SrsRtspMethod method) 
+std::string srs_generate_rtsp_method_str(SrsRtspMethod method)
 {
-    switch (method) {
-        case SrsRtspMethodDescribe: return SRS_METHOD_DESCRIBE;
-        case SrsRtspMethodAnnounce: return SRS_METHOD_ANNOUNCE;
-        case SrsRtspMethodGetParameter: return SRS_METHOD_GET_PARAMETER;
-        case SrsRtspMethodOptions: return SRS_METHOD_OPTIONS;
-        case SrsRtspMethodPause: return SRS_METHOD_PAUSE;
-        case SrsRtspMethodPlay: return SRS_METHOD_PLAY;
-        case SrsRtspMethodRecord: return SRS_METHOD_RECORD;
-        case SrsRtspMethodRedirect: return SRS_METHOD_REDIRECT;
-        case SrsRtspMethodSetup: return SRS_METHOD_SETUP;
-        case SrsRtspMethodSetParameter: return SRS_METHOD_SET_PARAMETER;
-        case SrsRtspMethodTeardown: return SRS_METHOD_TEARDOWN;
-        default: return "Unknown";
+    switch (method)
+    {
+    case SrsRtspMethodDescribe:
+        return SRS_METHOD_DESCRIBE;
+    case SrsRtspMethodAnnounce:
+        return SRS_METHOD_ANNOUNCE;
+    case SrsRtspMethodGetParameter:
+        return SRS_METHOD_GET_PARAMETER;
+    case SrsRtspMethodOptions:
+        return SRS_METHOD_OPTIONS;
+    case SrsRtspMethodPause:
+        return SRS_METHOD_PAUSE;
+    case SrsRtspMethodPlay:
+        return SRS_METHOD_PLAY;
+    case SrsRtspMethodRecord:
+        return SRS_METHOD_RECORD;
+    case SrsRtspMethodRedirect:
+        return SRS_METHOD_REDIRECT;
+    case SrsRtspMethodSetup:
+        return SRS_METHOD_SETUP;
+    case SrsRtspMethodSetParameter:
+        return SRS_METHOD_SET_PARAMETER;
+    case SrsRtspMethodTeardown:
+        return SRS_METHOD_TEARDOWN;
+    default:
+        return "Unknown";
     }
 }
 
@@ -29314,7 +30939,7 @@ void SrsRtpPacket::reap(SrsRtpPacket* src)
     srs_freep(payload);
     payload = src->payload;
     src->payload = NULL;
-    
+
     srs_freep(audio_samples);
     audio_samples = src->audio_samples;
     src->audio_samples = NULL;
@@ -29325,7 +30950,8 @@ int SrsRtpPacket::decode(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // 12bytes header
-    if (!stream->require(12)) {
+    if (!stream->require(12))
+    {
         ret = ERROR_RTP_HEADER_CORRUPT;
         srs_error("rtsp: rtp header corrupt. ret=%d", ret);
         return ret;
@@ -29348,9 +30974,12 @@ int SrsRtpPacket::decode(SrsStream* stream)
     // TODO: FIXME: check sequence number.
 
     // video codec.
-    if (payload_type == 96) {
+    if (payload_type == 96)
+    {
         return decode_96(stream);
-    } else if (payload_type == 97) {
+    }
+    else if (payload_type == 97)
+    {
         return decode_97(stream);
     }
 
@@ -29362,7 +30991,8 @@ int SrsRtpPacket::decode_97(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 2bytes content.
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_RTP_TYPE97_CORRUPT;
         srs_error("rtsp: rtp type97 corrupt. ret=%d", ret);
         return ret;
@@ -29372,7 +31002,8 @@ int SrsRtpPacket::decode_97(SrsStream* stream)
     int8_t lasv = stream->read_1bytes();
     u_int16_t au_size = ((hasv << 5) & 0xE0) | ((lasv >> 3) & 0x1f);
 
-    if (!stream->require(au_size)) {
+    if (!stream->require(au_size))
+    {
         ret = ERROR_RTP_TYPE97_CORRUPT;
         srs_error("rtsp: rtp type97 au_size corrupt. ret=%d", ret);
         return ret;
@@ -29382,31 +31013,35 @@ int SrsRtpPacket::decode_97(SrsStream* stream)
 
     // append left bytes to payload.
     payload->append(
-        stream->data() + stream->pos() + au_size, 
+        stream->data() + stream->pos() + au_size,
         stream->size() - stream->pos() - au_size
     );
     char* p = payload->bytes();
 
-    for (int i = 0; i < au_size; i += 2) {
+    for (int i = 0; i < au_size; i += 2)
+    {
         hasv = stream->read_1bytes();
         lasv = stream->read_1bytes();
 
         u_int16_t sample_size = ((hasv << 5) & 0xE0) | ((lasv >> 3) & 0x1f);
         // TODO: FIXME: finger out how to parse the size of sample.
-        if (sample_size < 0x100 && stream->require(required_size + sample_size + 0x100)) {
+        if (sample_size < 0x100 && stream->require(required_size + sample_size + 0x100))
+        {
             sample_size = sample_size | 0x100;
         }
 
         char* sample = p + required_size;
         required_size += sample_size;
 
-        if (!stream->require(required_size)) {
+        if (!stream->require(required_size))
+        {
             ret = ERROR_RTP_TYPE97_CORRUPT;
             srs_error("rtsp: rtp type97 samples corrupt. ret=%d", ret);
             return ret;
         }
 
-        if ((ret = audio_samples->add_sample_unit(sample, sample_size)) != ERROR_SUCCESS) {
+        if ((ret = audio_samples->add_sample_unit(sample, sample_size)) != ERROR_SUCCESS)
+        {
             srs_error("rtsp: rtp type97 add sample failed. ret=%d", ret);
             return ret;
         }
@@ -29423,7 +31058,8 @@ int SrsRtpPacket::decode_96(SrsStream* stream)
     int ret = ERROR_SUCCESS;
 
     // atleast 2bytes content.
-    if (!stream->require(2)) {
+    if (!stream->require(2))
+    {
         ret = ERROR_RTP_TYPE96_CORRUPT;
         srs_error("rtsp: rtp type96 corrupt. ret=%d", ret);
         return ret;
@@ -29450,16 +31086,18 @@ int SrsRtpPacket::decode_96(SrsStream* stream)
     int8_t nalu_0x1f = nriv & 0x1f;
 
     // chunked, generate the first byte NALU.
-    if (fu_indicator == 0x1c && (first_chunk || last_chunk || contious_chunk)) {
+    if (fu_indicator == 0x1c && (first_chunk || last_chunk || contious_chunk))
+    {
         chunked = true;
         completed = last_chunk;
 
         // generate and append the first byte NALU.
-        if (first_chunk) {
+        if (first_chunk)
+        {
             int8_t nalu_byte0 = nalu_0x60 | nalu_0x1f;
             payload->append((char*)&nalu_byte0, 1);
         }
-        
+
         payload->append(stream->data() + stream->pos(), stream->size() - stream->pos());
         return ret;
     }
@@ -29485,11 +31123,12 @@ int SrsRtspSdp::parse(string token)
 {
     int ret = ERROR_SUCCESS;
 
-    if (token.empty()) {
+    if (token.empty())
+    {
         srs_info("rtsp: ignore empty token.");
         return ret;
     }
-    
+
     size_t pos = string::npos;
 
     char* start = (char*)token.data();
@@ -29518,19 +31157,23 @@ int SrsRtspSdp::parse(string token)
 
     // left bytes as attr string.
     std::string attr_str;
-    if (end - p) {
+    if (end - p)
+    {
         attr_str.append(p, end - p);
     }
 
     // parse the attributes from left bytes.
     std::vector<std::string> attrs;
-    while (p < end) {
+    while (p < end)
+    {
         // parse an attribute, split by SP.
         char* pa = p;
-        for (; p < end && p[0] != SRS_RTSP_SP; p++) {
+        for (; p < end && p[0] != SRS_RTSP_SP; p++)
+        {
         }
         std::string attr;
-        if (p > pa) {
+        if (p > pa)
+        {
             attr.append(pa, p - pa);
             attrs.push_back(attr);
         }
@@ -29540,98 +31183,132 @@ int SrsRtspSdp::parse(string token)
     // parse the first attr as desc, update the first elem for desc.
     // for example, the value can be "tool", "AS", "rtpmap", "fmtp", "control"
     std::string desc_key;
-    if (attrs.size() > 0) {
+    if (attrs.size() > 0)
+    {
         std::string attr = attrs.at(0);
-        if ((pos = attr.find(":")) != string::npos) {
+        if ((pos = attr.find(":")) != string::npos)
+        {
             desc_key = attr.substr(0, pos);
             attr = attr.substr(pos + 1);
             attr_str = attr_str.substr(pos + 1);
             attrs[0] = attr;
-        } else {
+        }
+        else
+        {
             desc_key = attr;
         }
     }
 
     // interpret the attribute according by key.
-    switch (key) {
-        case 'v': version = attr_str; break;
-        case 'o':
-            owner_username = (attrs.size() > 0)? attrs[0]:"";
-            owner_session_id = (attrs.size() > 1)? attrs[1]:"";
-            owner_session_version = (attrs.size() > 2)? attrs[2]:"";
-            owner_network_type = (attrs.size() > 3)? attrs[3]:"";
-            owner_address_type = (attrs.size() > 4)? attrs[4]:"";
-            owner_address = (attrs.size() > 5)? attrs[5]:"";
-            break;
-        case 's': session_name = attr_str; break;
-        case 'c':
-            connection_network_type = (attrs.size() > 0)? attrs[0]:"";
-            connection_address_type = (attrs.size() > 0)? attrs[0]:"";
-            connection_address = (attrs.size() > 0)? attrs[0]:"";
-            break;
-        case 'a':
-            if (desc_key == "tool") {
-                tool = attr_str;
-            } else if (desc_key == "rtpmap") {
-                if (state == SrsRtspSdpStateVideo) {
-                    video_codec = (attrs.size() > 1)? attrs[1]:"";
-                    if ((pos = video_codec.find("/")) != string::npos) {
-                        video_sample_rate = video_codec.substr(pos + 1);
-                        video_codec = video_codec.substr(0, pos);
-                    }
-                } else if (state == SrsRtspSdpStateAudio) {
-                    audio_codec = (attrs.size() > 1)? attrs[1]:"";
-                    if ((pos = audio_codec.find("/")) != string::npos) {
-                        audio_sample_rate = audio_codec.substr(pos + 1);
-                        audio_codec = audio_codec.substr(0, pos);
-                    }
-                    if ((pos = audio_sample_rate.find("/")) != string::npos) {
-                        audio_channel = audio_sample_rate.substr(pos + 1);
-                        audio_sample_rate = audio_sample_rate.substr(0, pos);
-                    }
-                }
-            } else if (desc_key == "fmtp") {
-                for (int i = 1; i < (int)attrs.size(); i++) {
-                    std::string attr = attrs.at(i);
-                    if ((ret = parse_fmtp_attribute(attr)) != ERROR_SUCCESS) {
-                        srs_error("rtsp: parse fmtp failed, attr=%s. ret=%d", attr.c_str(), ret);
-                        return ret;
-                    }
-                }
-            } else if (desc_key == "control") {
-                for (int i = 0; i < (int)attrs.size(); i++) {
-                    std::string attr = attrs.at(i);
-                    if ((ret = parse_control_attribute(attr)) != ERROR_SUCCESS) {
-                        srs_error("rtsp: parse control failed, attr=%s. ret=%d", attr.c_str(), ret);
-                        return ret;
-                    }
+    switch (key)
+    {
+    case 'v':
+        version = attr_str;
+        break;
+    case 'o':
+        owner_username = (attrs.size() > 0)? attrs[0]:"";
+        owner_session_id = (attrs.size() > 1)? attrs[1]:"";
+        owner_session_version = (attrs.size() > 2)? attrs[2]:"";
+        owner_network_type = (attrs.size() > 3)? attrs[3]:"";
+        owner_address_type = (attrs.size() > 4)? attrs[4]:"";
+        owner_address = (attrs.size() > 5)? attrs[5]:"";
+        break;
+    case 's':
+        session_name = attr_str;
+        break;
+    case 'c':
+        connection_network_type = (attrs.size() > 0)? attrs[0]:"";
+        connection_address_type = (attrs.size() > 0)? attrs[0]:"";
+        connection_address = (attrs.size() > 0)? attrs[0]:"";
+        break;
+    case 'a':
+        if (desc_key == "tool")
+        {
+            tool = attr_str;
+        }
+        else if (desc_key == "rtpmap")
+        {
+            if (state == SrsRtspSdpStateVideo)
+            {
+                video_codec = (attrs.size() > 1)? attrs[1]:"";
+                if ((pos = video_codec.find("/")) != string::npos)
+                {
+                    video_sample_rate = video_codec.substr(pos + 1);
+                    video_codec = video_codec.substr(0, pos);
                 }
             }
-            break;
-        case 'm':
-            if (desc_key == "video") {
-                state = SrsRtspSdpStateVideo;
-                video_port = (attrs.size() > 1)? attrs[1]:"";
-                video_protocol = (attrs.size() > 2)? attrs[2]:"";
-                video_transport_format = (attrs.size() > 3)? attrs[3]:"";
-            } else if (desc_key == "audio") {
-                state = SrsRtspSdpStateAudio;
-                audio_port = (attrs.size() > 1)? attrs[1]:"";
-                audio_protocol = (attrs.size() > 2)? attrs[2]:"";
-                audio_transport_format = (attrs.size() > 3)? attrs[3]:"";
-            }
-            break;
-        case 'b':
-            if (desc_key == "AS") {
-                if (state == SrsRtspSdpStateVideo) {
-                    video_bandwidth_kbps = (attrs.size() > 0)? attrs[0]:"";
-                } else if (state == SrsRtspSdpStateAudio) {
-                    audio_bandwidth_kbps = (attrs.size() > 0)? attrs[0]:"";
+            else if (state == SrsRtspSdpStateAudio)
+            {
+                audio_codec = (attrs.size() > 1)? attrs[1]:"";
+                if ((pos = audio_codec.find("/")) != string::npos)
+                {
+                    audio_sample_rate = audio_codec.substr(pos + 1);
+                    audio_codec = audio_codec.substr(0, pos);
+                }
+                if ((pos = audio_sample_rate.find("/")) != string::npos)
+                {
+                    audio_channel = audio_sample_rate.substr(pos + 1);
+                    audio_sample_rate = audio_sample_rate.substr(0, pos);
                 }
             }
-            break;
-        case 't':
-        default: break;
+        }
+        else if (desc_key == "fmtp")
+        {
+            for (int i = 1; i < (int)attrs.size(); i++)
+            {
+                std::string attr = attrs.at(i);
+                if ((ret = parse_fmtp_attribute(attr)) != ERROR_SUCCESS)
+                {
+                    srs_error("rtsp: parse fmtp failed, attr=%s. ret=%d", attr.c_str(), ret);
+                    return ret;
+                }
+            }
+        }
+        else if (desc_key == "control")
+        {
+            for (int i = 0; i < (int)attrs.size(); i++)
+            {
+                std::string attr = attrs.at(i);
+                if ((ret = parse_control_attribute(attr)) != ERROR_SUCCESS)
+                {
+                    srs_error("rtsp: parse control failed, attr=%s. ret=%d", attr.c_str(), ret);
+                    return ret;
+                }
+            }
+        }
+        break;
+    case 'm':
+        if (desc_key == "video")
+        {
+            state = SrsRtspSdpStateVideo;
+            video_port = (attrs.size() > 1)? attrs[1]:"";
+            video_protocol = (attrs.size() > 2)? attrs[2]:"";
+            video_transport_format = (attrs.size() > 3)? attrs[3]:"";
+        }
+        else if (desc_key == "audio")
+        {
+            state = SrsRtspSdpStateAudio;
+            audio_port = (attrs.size() > 1)? attrs[1]:"";
+            audio_protocol = (attrs.size() > 2)? attrs[2]:"";
+            audio_transport_format = (attrs.size() > 3)? attrs[3]:"";
+        }
+        break;
+    case 'b':
+        if (desc_key == "AS")
+        {
+            if (state == SrsRtspSdpStateVideo)
+            {
+                video_bandwidth_kbps = (attrs.size() > 0)? attrs[0]:"";
+            }
+            else if (state == SrsRtspSdpStateAudio)
+            {
+                audio_bandwidth_kbps = (attrs.size() > 0)? attrs[0]:"";
+            }
+        }
+        break;
+    case 't':
+    default:
+        break;
     }
 
     return ret;
@@ -29640,31 +31317,41 @@ int SrsRtspSdp::parse(string token)
 int SrsRtspSdp::parse_fmtp_attribute(string attr)
 {
     int ret = ERROR_SUCCESS;
-    
+
     size_t pos = string::npos;
     std::string token = attr;
 
-    while (!token.empty()) {
+    while (!token.empty())
+    {
         std::string item = token;
-        if ((pos = item.find(";")) != string::npos) {
+        if ((pos = item.find(";")) != string::npos)
+        {
             item = token.substr(0, pos);
             token = token.substr(pos + 1);
-        } else {
+        }
+        else
+        {
             token = "";
         }
 
         std::string item_key = item, item_value;
-        if ((pos = item.find("=")) != string::npos) {
+        if ((pos = item.find("=")) != string::npos)
+        {
             item_key = item.substr(0, pos);
             item_value = item.substr(pos + 1);
         }
 
-        if (state == SrsRtspSdpStateVideo) {
-            if (item_key == "packetization-mode") {
+        if (state == SrsRtspSdpStateVideo)
+        {
+            if (item_key == "packetization-mode")
+            {
                 video_packetization_mode = item_value;
-            } else if (item_key == "sprop-parameter-sets") {
+            }
+            else if (item_key == "sprop-parameter-sets")
+            {
                 video_sps = item_value;
-                if ((pos = video_sps.find(",")) != string::npos) {
+                if ((pos = video_sps.find(",")) != string::npos)
+                {
                     video_pps = video_sps.substr(pos + 1);
                     video_sps = video_sps.substr(0, pos);
                 }
@@ -29672,19 +31359,33 @@ int SrsRtspSdp::parse_fmtp_attribute(string attr)
                 video_sps = base64_decode(video_sps);
                 video_pps = base64_decode(video_pps);
             }
-        } else if (state == SrsRtspSdpStateAudio) {
-            if (item_key == "profile-level-id") {
+        }
+        else if (state == SrsRtspSdpStateAudio)
+        {
+            if (item_key == "profile-level-id")
+            {
                 audio_profile_level_id = item_value;
-            } else if (item_key == "mode") {
+            }
+            else if (item_key == "mode")
+            {
                 audio_mode = item_value;
-            } else if (item_key == "sizelength") {
+            }
+            else if (item_key == "sizelength")
+            {
                 audio_size_length = item_value;
-            } else if (item_key == "indexlength") {
+            }
+            else if (item_key == "indexlength")
+            {
                 audio_index_length = item_value;
-            } else if (item_key == "indexdeltalength") {
+            }
+            else if (item_key == "indexdeltalength")
+            {
                 audio_index_delta_length = item_value;
-            } else if (item_key == "config") {
-                if (item_value.length() <= 0) {
+            }
+            else if (item_key == "config")
+            {
+                if (item_value.length() <= 0)
+                {
                     ret = ERROR_RTSP_AUDIO_CONFIG;
                     srs_error("rtsp: audio config failed. ret=%d", ret);
                     return ret;
@@ -29705,31 +31406,41 @@ int SrsRtspSdp::parse_fmtp_attribute(string attr)
 int SrsRtspSdp::parse_control_attribute(string attr)
 {
     int ret = ERROR_SUCCESS;
-    
+
     size_t pos = string::npos;
     std::string token = attr;
 
-    while (!token.empty()) {
+    while (!token.empty())
+    {
         std::string item = token;
-        if ((pos = item.find(";")) != string::npos) {
+        if ((pos = item.find(";")) != string::npos)
+        {
             item = token.substr(0, pos);
             token = token.substr(pos + 1);
-        } else {
+        }
+        else
+        {
             token = "";
         }
 
         std::string item_key = item, item_value;
-        if ((pos = item.find("=")) != string::npos) {
+        if ((pos = item.find("=")) != string::npos)
+        {
             item_key = item.substr(0, pos);
             item_value = item.substr(pos + 1);
         }
 
-        if (state == SrsRtspSdpStateVideo) {
-            if (item_key == "streamid") {
+        if (state == SrsRtspSdpStateVideo)
+        {
+            if (item_key == "streamid")
+            {
                 video_stream_id = item_value;
             }
-        } else if (state == SrsRtspSdpStateAudio) {
-            if (item_key == "streamid") {
+        }
+        else if (state == SrsRtspSdpStateAudio)
+        {
+            if (item_key == "streamid")
+            {
                 audio_stream_id = item_value;
             }
         }
@@ -29740,7 +31451,8 @@ int SrsRtspSdp::parse_control_attribute(string attr)
 
 string SrsRtspSdp::base64_decode(string value)
 {
-    if (value.empty()) {
+    if (value.empty())
+    {
         return "";
     }
 
@@ -29749,7 +31461,8 @@ string SrsRtspSdp::base64_decode(string value)
     SrsAutoFree(u_int8_t, output);
 
     int ret = srs_av_base64_decode(output, (char*)value.c_str(), nb_output);
-    if (ret <= 0) {
+    if (ret <= 0)
+    {
         return "";
     }
 
@@ -29771,45 +31484,59 @@ SrsRtspTransport::~SrsRtspTransport()
 int SrsRtspTransport::parse(string attr)
 {
     int ret = ERROR_SUCCESS;
-    
+
     size_t pos = string::npos;
     std::string token = attr;
 
-    while (!token.empty()) {
+    while (!token.empty())
+    {
         std::string item = token;
-        if ((pos = item.find(";")) != string::npos) {
+        if ((pos = item.find(";")) != string::npos)
+        {
             item = token.substr(0, pos);
             token = token.substr(pos + 1);
-        } else {
+        }
+        else
+        {
             token = "";
         }
 
         std::string item_key = item, item_value;
-        if ((pos = item.find("=")) != string::npos) {
+        if ((pos = item.find("=")) != string::npos)
+        {
             item_key = item.substr(0, pos);
             item_value = item.substr(pos + 1);
         }
 
-        if (transport.empty()) {
+        if (transport.empty())
+        {
             transport = item_key;
-            if ((pos = transport.find("/")) != string::npos) {
+            if ((pos = transport.find("/")) != string::npos)
+            {
                 profile = transport.substr(pos + 1);
                 transport = transport.substr(0, pos);
             }
-            if ((pos = profile.find("/")) != string::npos) {
+            if ((pos = profile.find("/")) != string::npos)
+            {
                 lower_transport = profile.substr(pos + 1);
                 profile = profile.substr(0, pos);
             }
         }
 
-        if (item_key == "unicast" || item_key == "multicast") {
+        if (item_key == "unicast" || item_key == "multicast")
+        {
             cast_type = item_key;
-        } else if (item_key == "mode") {
+        }
+        else if (item_key == "mode")
+        {
             mode = item_value;
-        } else if (item_key == "client_port") {
+        }
+        else if (item_key == "client_port")
+        {
             std::string sport = item_value;
             std::string eport = item_value;
-            if ((pos = eport.find("-")) != string::npos) {
+            if ((pos = eport.find("-")) != string::npos)
+            {
                 sport = eport.substr(0, pos);
                 eport = eport.substr(pos + 1);
             }
@@ -29871,24 +31598,26 @@ int SrsRtspResponse::encode(stringstream& ss)
     int ret = ERROR_SUCCESS;
 
     // status line
-    ss << SRS_RTSP_VERSION << SRS_RTSP_SP 
-        << status << SRS_RTSP_SP 
-        << srs_generate_rtsp_status_text(status) << SRS_RTSP_CRLF;
+    ss << SRS_RTSP_VERSION << SRS_RTSP_SP
+       << status << SRS_RTSP_SP
+       << srs_generate_rtsp_status_text(status) << SRS_RTSP_CRLF;
 
     // cseq
     ss << SRS_RTSP_TOKEN_CSEQ << ":" << SRS_RTSP_SP << seq << SRS_RTSP_CRLF;
 
     // others.
     ss << "Cache-Control: no-store" << SRS_RTSP_CRLF
-        << "Pragma: no-cache" << SRS_RTSP_CRLF
-        << "Server: " << RTMP_SIG_SRS_SERVER << SRS_RTSP_CRLF;
+       << "Pragma: no-cache" << SRS_RTSP_CRLF
+       << "Server: " << RTMP_SIG_SRS_SERVER << SRS_RTSP_CRLF;
 
     // session if specified.
-    if (!session.empty()) {
+    if (!session.empty())
+    {
         ss << SRS_RTSP_TOKEN_SESSION << ":" << session << SRS_RTSP_CRLF;
     }
 
-    if ((ret = encode_header(ss)) != ERROR_SUCCESS) {
+    if ((ret = encode_header(ss)) != ERROR_SUCCESS)
+    {
         srs_error("rtsp: encode header failed. ret=%d", ret);
         return ret;
     };
@@ -29906,9 +31635,9 @@ int SrsRtspResponse::encode_header(std::stringstream& ss)
 
 SrsRtspOptionsResponse::SrsRtspOptionsResponse(int cseq) : SrsRtspResponse(cseq)
 {
-    methods = (SrsRtspMethod)(SrsRtspMethodDescribe | SrsRtspMethodOptions 
-        | SrsRtspMethodPause | SrsRtspMethodPlay | SrsRtspMethodSetup | SrsRtspMethodTeardown
-        | SrsRtspMethodAnnounce | SrsRtspMethodRecord);
+    methods = (SrsRtspMethod)(SrsRtspMethodDescribe | SrsRtspMethodOptions
+                              | SrsRtspMethodPause | SrsRtspMethodPlay | SrsRtspMethodSetup | SrsRtspMethodTeardown
+                              | SrsRtspMethodAnnounce | SrsRtspMethodRecord);
 }
 
 SrsRtspOptionsResponse::~SrsRtspOptionsResponse()
@@ -29917,7 +31646,8 @@ SrsRtspOptionsResponse::~SrsRtspOptionsResponse()
 
 int SrsRtspOptionsResponse::encode_header(stringstream& ss)
 {
-    SrsRtspMethod rtsp_methods[] = {
+    SrsRtspMethod rtsp_methods[] =
+    {
         SrsRtspMethodDescribe,
         SrsRtspMethodAnnounce,
         SrsRtspMethodGetParameter,
@@ -29935,13 +31665,16 @@ int SrsRtspOptionsResponse::encode_header(stringstream& ss)
 
     bool appended = false;
     int nb_methods = (int)(sizeof(rtsp_methods) / sizeof(SrsRtspMethod));
-    for (int i = 0; i < nb_methods; i++) {
+    for (int i = 0; i < nb_methods; i++)
+    {
         SrsRtspMethod method = rtsp_methods[i];
-        if (((int)methods & (int)method) != (int)method) {
+        if (((int)methods & (int)method) != (int)method)
+        {
             continue;
         }
 
-        if (appended) {
+        if (appended)
+        {
             ss << ", ";
         }
         ss << srs_generate_rtsp_method_str(method);
@@ -29965,10 +31698,10 @@ SrsRtspSetupResponse::~SrsRtspSetupResponse()
 int SrsRtspSetupResponse::encode_header(stringstream& ss)
 {
     ss << SRS_RTSP_TOKEN_SESSION << ":" << SRS_RTSP_SP << session << SRS_RTSP_CRLF;
-    ss << SRS_RTSP_TOKEN_TRANSPORT << ":" << SRS_RTSP_SP 
-        << "RTP/AVP;unicast;client_port=" << client_port_min << "-" << client_port_max << ";"
-        << "server_port=" << local_port_min << "-" << local_port_max
-        << SRS_RTSP_CRLF;
+    ss << SRS_RTSP_TOKEN_TRANSPORT << ":" << SRS_RTSP_SP
+       << "RTP/AVP;unicast;client_port=" << client_port_min << "-" << client_port_max << ";"
+       << "server_port=" << local_port_min << "-" << local_port_max
+       << SRS_RTSP_CRLF;
     return ERROR_SUCCESS;
 }
 
@@ -29988,7 +31721,8 @@ int SrsRtspStack::recv_message(SrsRtspRequest** preq)
     int ret = ERROR_SUCCESS;
 
     SrsRtspRequest* req = new SrsRtspRequest();
-    if ((ret = do_recv_message(req)) != ERROR_SUCCESS) {
+    if ((ret = do_recv_message(req)) != ERROR_SUCCESS)
+    {
         srs_freep(req);
         return ret;
     }
@@ -30009,8 +31743,10 @@ int SrsRtspStack::send_message(SrsRtspResponse* res)
     std::string str = ss.str();
     srs_assert(!str.empty());
 
-    if ((ret = skt->write((char*)str.c_str(), (int)str.length(), NULL)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+    if ((ret = skt->write((char*)str.c_str(), (int)str.length(), NULL)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: send response failed. ret=%d", ret);
         }
         return ret;
@@ -30025,100 +31761,136 @@ int SrsRtspStack::do_recv_message(SrsRtspRequest* req)
     int ret = ERROR_SUCCESS;
 
     // parse request line.
-    if ((ret = recv_token_normal(req->method)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+    if ((ret = recv_token_normal(req->method)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: parse method failed. ret=%d", ret);
         }
         return ret;
     }
 
-    if ((ret = recv_token_normal(req->uri)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+    if ((ret = recv_token_normal(req->uri)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: parse uri failed. ret=%d", ret);
         }
         return ret;
     }
 
-    if ((ret = recv_token_eof(req->version)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+    if ((ret = recv_token_eof(req->version)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: parse version failed. ret=%d", ret);
         }
         return ret;
     }
 
     // parse headers.
-    for (;;) {
+    for (;;)
+    {
         // parse the header name
         std::string token;
-        if ((ret = recv_token_normal(token)) != ERROR_SUCCESS) {
-            if (ret == ERROR_RTSP_REQUEST_HEADER_EOF) {
+        if ((ret = recv_token_normal(token)) != ERROR_SUCCESS)
+        {
+            if (ret == ERROR_RTSP_REQUEST_HEADER_EOF)
+            {
                 ret = ERROR_SUCCESS;
                 srs_info("rtsp: message header parsed");
                 break;
             }
-            if (!srs_is_client_gracefully_close(ret)) {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("rtsp: parse token failed. ret=%d", ret);
             }
             return ret;
         }
 
         // parse the header value according by header name
-        if (token == SRS_RTSP_TOKEN_CSEQ) {
+        if (token == SRS_RTSP_TOKEN_CSEQ)
+        {
             std::string seq;
-            if ((ret = recv_token_eof(seq)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+            if ((ret = recv_token_eof(seq)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("rtsp: parse %s failed. ret=%d", SRS_RTSP_TOKEN_CSEQ, ret);
                 }
                 return ret;
             }
             req->seq = ::atol(seq.c_str());
-        } else if (token == SRS_RTSP_TOKEN_CONTENT_TYPE) {
+        }
+        else if (token == SRS_RTSP_TOKEN_CONTENT_TYPE)
+        {
             std::string ct;
-            if ((ret = recv_token_eof(ct)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+            if ((ret = recv_token_eof(ct)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("rtsp: parse %s failed. ret=%d", SRS_RTSP_TOKEN_CONTENT_TYPE, ret);
                 }
                 return ret;
             }
             req->content_type = ct;
-        } else if (token == SRS_RTSP_TOKEN_CONTENT_LENGTH) {
+        }
+        else if (token == SRS_RTSP_TOKEN_CONTENT_LENGTH)
+        {
             std::string cl;
-            if ((ret = recv_token_eof(cl)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+            if ((ret = recv_token_eof(cl)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("rtsp: parse %s failed. ret=%d", SRS_RTSP_TOKEN_CONTENT_LENGTH, ret);
                 }
                 return ret;
             }
             req->content_length = ::atol(cl.c_str());
-        } else if (token == SRS_RTSP_TOKEN_TRANSPORT) {
+        }
+        else if (token == SRS_RTSP_TOKEN_TRANSPORT)
+        {
             std::string transport;
-            if ((ret = recv_token_eof(transport)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+            if ((ret = recv_token_eof(transport)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("rtsp: parse %s failed. ret=%d", SRS_RTSP_TOKEN_TRANSPORT, ret);
                 }
                 return ret;
             }
-            if (!req->transport) {
+            if (!req->transport)
+            {
                 req->transport = new SrsRtspTransport();
             }
-            if ((ret = req->transport->parse(transport)) != ERROR_SUCCESS) {
+            if ((ret = req->transport->parse(transport)) != ERROR_SUCCESS)
+            {
                 srs_error("rtsp: parse transport failed, transport=%s. ret=%d", transport.c_str(), ret);
                 return ret;
             }
-        } else if (token == SRS_RTSP_TOKEN_SESSION) {
-            if ((ret = recv_token_eof(req->session)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+        }
+        else if (token == SRS_RTSP_TOKEN_SESSION)
+        {
+            if ((ret = recv_token_eof(req->session)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("rtsp: parse %s failed. ret=%d", SRS_RTSP_TOKEN_SESSION, ret);
                 }
                 return ret;
             }
-        } else {
+        }
+        else
+        {
             // unknown header name, parse util EOF.
             SrsRtspTokenState state = SrsRtspTokenStateNormal;
-            while (state == SrsRtspTokenStateNormal) {
+            while (state == SrsRtspTokenStateNormal)
+            {
                 std::string value;
-                if ((ret = recv_token(value, state)) != ERROR_SUCCESS) {
-                    if (!srs_is_client_gracefully_close(ret)) {
+                if ((ret = recv_token(value, state)) != ERROR_SUCCESS)
+                {
+                    if (!srs_is_client_gracefully_close(ret))
+                    {
                         srs_error("rtsp: parse token failed. ret=%d", ret);
                     }
                     return ret;
@@ -30129,13 +31901,16 @@ int SrsRtspStack::do_recv_message(SrsRtspRequest* req)
     }
 
     // for setup, parse the stream id from uri.
-    if (req->is_setup()) {
+    if (req->is_setup())
+    {
         size_t pos = string::npos;
         std::string stream_id;
-        if ((pos = req->uri.rfind("/")) != string::npos) {
+        if ((pos = req->uri.rfind("/")) != string::npos)
+        {
             stream_id = req->uri.substr(pos + 1);
         }
-        if ((pos = stream_id.find("=")) != string::npos) {
+        if ((pos = stream_id.find("=")) != string::npos)
+        {
             stream_id = stream_id.substr(pos + 1);
         }
         req->stream_id = ::atoi(stream_id.c_str());
@@ -30144,22 +31919,27 @@ int SrsRtspStack::do_recv_message(SrsRtspRequest* req)
 
     // parse rdp body.
     long consumed = 0;
-    while (consumed < req->content_length) {
-        if (!req->sdp) {
+    while (consumed < req->content_length)
+    {
+        if (!req->sdp)
+        {
             req->sdp = new SrsRtspSdp();
         }
 
         int nb_token = 0;
         std::string token;
-        if ((ret = recv_token_util_eof(token, &nb_token)) != ERROR_SUCCESS) {
-            if (!srs_is_client_gracefully_close(ret)) {
+        if ((ret = recv_token_util_eof(token, &nb_token)) != ERROR_SUCCESS)
+        {
+            if (!srs_is_client_gracefully_close(ret))
+            {
                 srs_error("rtsp: parse sdp token failed. ret=%d", ret);
             }
             return ret;
         }
         consumed += nb_token;
 
-        if ((ret = req->sdp->parse(token)) != ERROR_SUCCESS) {
+        if ((ret = req->sdp->parse(token)) != ERROR_SUCCESS)
+        {
             srs_error("rtsp: sdp parse token failed, token=%s. ret=%d", token.c_str(), ret);
             return ret;
         }
@@ -30176,17 +31956,21 @@ int SrsRtspStack::recv_token_normal(std::string& token)
 
     SrsRtspTokenState state;
 
-    if ((ret = recv_token(token, state)) != ERROR_SUCCESS) {
-        if (ret == ERROR_RTSP_REQUEST_HEADER_EOF) {
+    if ((ret = recv_token(token, state)) != ERROR_SUCCESS)
+    {
+        if (ret == ERROR_RTSP_REQUEST_HEADER_EOF)
+        {
             return ret;
         }
-        if (!srs_is_client_gracefully_close(ret)) {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: parse token failed. ret=%d", ret);
         }
         return ret;
     }
 
-    if (state != SrsRtspTokenStateNormal) {
+    if (state != SrsRtspTokenStateNormal)
+    {
         ret = ERROR_RTSP_TOKEN_NOT_NORMAL;
         srs_error("rtsp: parse normal token failed, state=%d. ret=%d", state, ret);
         return ret;
@@ -30201,17 +31985,21 @@ int SrsRtspStack::recv_token_eof(std::string& token)
 
     SrsRtspTokenState state;
 
-    if ((ret = recv_token(token, state)) != ERROR_SUCCESS) {
-        if (ret == ERROR_RTSP_REQUEST_HEADER_EOF) {
+    if ((ret = recv_token(token, state)) != ERROR_SUCCESS)
+    {
+        if (ret == ERROR_RTSP_REQUEST_HEADER_EOF)
+        {
             return ret;
         }
-        if (!srs_is_client_gracefully_close(ret)) {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: parse token failed. ret=%d", ret);
         }
         return ret;
     }
 
-    if (state != SrsRtspTokenStateEOF) {
+    if (state != SrsRtspTokenStateEOF)
+    {
         ret = ERROR_RTSP_TOKEN_NOT_NORMAL;
         srs_error("rtsp: parse eof token failed, state=%d. ret=%d", state, ret);
         return ret;
@@ -30227,17 +32015,21 @@ int SrsRtspStack::recv_token_util_eof(std::string& token, int* pconsumed)
     SrsRtspTokenState state;
 
     // use 0x00 as ignore the normal token flag.
-    if ((ret = recv_token(token, state, 0x00, pconsumed)) != ERROR_SUCCESS) {
-        if (ret == ERROR_RTSP_REQUEST_HEADER_EOF) {
+    if ((ret = recv_token(token, state, 0x00, pconsumed)) != ERROR_SUCCESS)
+    {
+        if (ret == ERROR_RTSP_REQUEST_HEADER_EOF)
+        {
             return ret;
         }
-        if (!srs_is_client_gracefully_close(ret)) {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("rtsp: parse token failed. ret=%d", ret);
         }
         return ret;
     }
 
-    if (state != SrsRtspTokenStateEOF) {
+    if (state != SrsRtspTokenStateEOF)
+    {
         ret = ERROR_RTSP_TOKEN_NOT_NORMAL;
         srs_error("rtsp: parse eof token failed, state=%d. ret=%d", state, ret);
         return ret;
@@ -30257,15 +32049,19 @@ int SrsRtspStack::recv_token(std::string& token, SrsRtspTokenState& state, char 
     bool append_bytes = buf->length() == 0;
 
     // parse util token.
-    for (;;) {
+    for (;;)
+    {
         // append bytes if required.
-        if (append_bytes) {
+        if (append_bytes)
+        {
             append_bytes = false;
 
             char buffer[SRS_RTSP_BUFFER];
             ssize_t nb_read = 0;
-            if ((ret = skt->read(buffer, SRS_RTSP_BUFFER, &nb_read)) != ERROR_SUCCESS) {
-                if (!srs_is_client_gracefully_close(ret)) {
+            if ((ret = skt->read(buffer, SRS_RTSP_BUFFER, &nb_read)) != ERROR_SUCCESS)
+            {
+                if (!srs_is_client_gracefully_close(ret))
+                {
                     srs_error("rtsp: io read failed. ret=%d", ret);
                 }
                 return ret;
@@ -30281,38 +32077,49 @@ int SrsRtspStack::recv_token(std::string& token, SrsRtspTokenState& state, char 
         char* p = start;
 
         // find util SP/CR/LF, max 2 EOF, to finger out the EOF of message.
-        for (; p < end && p[0] != normal_ch && p[0] != SRS_RTSP_CR && p[0] != SRS_RTSP_LF; p++) {
+        for (; p < end && p[0] != normal_ch && p[0] != SRS_RTSP_CR && p[0] != SRS_RTSP_LF; p++)
+        {
         }
 
         // matched.
-        if (p < end) {
+        if (p < end)
+        {
             // finger out the state.
-            if (p[0] == normal_ch) {
+            if (p[0] == normal_ch)
+            {
                 state = SrsRtspTokenStateNormal;
-            } else {
+            }
+            else
+            {
                 state = SrsRtspTokenStateEOF;
             }
-            
+
             // got the token.
             int nb_token = p - start;
             // trim last ':' character.
-            if (nb_token && p[-1] == ':') {
+            if (nb_token && p[-1] == ':')
+            {
                 nb_token--;
             }
-            if (nb_token) {
+            if (nb_token)
+            {
                 token.append(start, nb_token);
-            } else {
+            }
+            else
+            {
                 ret = ERROR_RTSP_REQUEST_HEADER_EOF;
             }
 
             // ignore SP/CR/LF
-            for (int i = 0; i < 2 && p < end && (p[0] == normal_ch || p[0] == SRS_RTSP_CR || p[0] == SRS_RTSP_LF); p++, i++) {
+            for (int i = 0; i < 2 && p < end && (p[0] == normal_ch || p[0] == SRS_RTSP_CR || p[0] == SRS_RTSP_LF); p++, i++)
+            {
             }
 
             // consume the token bytes.
             srs_assert(p - start);
             buf->erase(p - start);
-            if (pconsumed) {
+            if (pconsumed)
+            {
                 *pconsumed = p - start;
             }
             break;
@@ -30330,19 +32137,19 @@ int SrsRtspStack::recv_token(std::string& token, SrsRtspTokenState& state, char 
 // following is generated by src/protocol/srs_http_stack.cpp
 /*
  The MIT License (MIT)
- 
+
  Copyright (c) 2013-2015 SRS(simple-rtmp-server)
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy of
  this software and associated documentation files (the "Software"), to deal in
  the Software without restriction, including without limitation the rights to
  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  the Software, and to permit persons to whom the Software is furnished to do so,
  subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in all
  copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -30369,7 +32176,8 @@ using namespace std;
 string srs_generate_http_status_text(int status)
 {
     static std::map<int, std::string> _status_map;
-    if (_status_map.empty()) {
+    if (_status_map.empty())
+    {
         _status_map[SRS_CONSTS_HTTP_Continue                       ] = SRS_CONSTS_HTTP_Continue_str                     ;
         _status_map[SRS_CONSTS_HTTP_SwitchingProtocols             ] = SRS_CONSTS_HTTP_SwitchingProtocols_str           ;
         _status_map[SRS_CONSTS_HTTP_OK                             ] = SRS_CONSTS_HTTP_OK_str                           ;
@@ -30411,14 +32219,17 @@ string srs_generate_http_status_text(int status)
         _status_map[SRS_CONSTS_HTTP_GatewayTimeout                 ] = SRS_CONSTS_HTTP_GatewayTimeout_str               ;
         _status_map[SRS_CONSTS_HTTP_HTTPVersionNotSupported        ] = SRS_CONSTS_HTTP_HTTPVersionNotSupported_str      ;
     }
-    
+
     std::string status_text;
-    if (_status_map.find(status) == _status_map.end()) {
+    if (_status_map.find(status) == _status_map.end())
+    {
         status_text = "Status Unknown";
-    } else {
+    }
+    else
+    {
         status_text = _status_map[status];
     }
-    
+
     return status_text;
 }
 
@@ -30426,12 +32237,15 @@ string srs_generate_http_status_text(int status)
 // permits a body.  See RFC2616, section 4.4.
 bool srs_go_http_body_allowd(int status)
 {
-    if (status >= 100 && status <= 199) {
-        return false;
-    } else if (status == 204 || status == 304) {
+    if (status >= 100 && status <= 199)
+    {
         return false;
     }
-    
+    else if (status == 204 || status == 304)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -30444,7 +32258,8 @@ bool srs_go_http_body_allowd(int status)
 string srs_go_http_detect(char* data, int size)
 {
     // detect only when data specified.
-    if (data) {
+    if (data)
+    {
     }
     return "application/octet-stream"; // fallback
 }
@@ -30454,22 +32269,22 @@ string srs_go_http_detect(char* data, int size)
 int srs_go_http_error(ISrsHttpResponseWriter* w, int code, string error)
 {
     int ret = ERROR_SUCCESS;
-    
+
     w->header()->set_content_type("text/plain; charset=utf-8");
     w->header()->set_content_length(error.length());
     w->write_header(code);
     w->write((char*)error.data(), (int)error.length());
-    
+
     return ret;
 }
 
 int srs_http_response_json(ISrsHttpResponseWriter* w, string data)
 {
     SrsHttpHeader* h = w->header();
-    
+
     h->set_content_length(data.length());
     h->set_content_type("application/json");
-    
+
     return w->write((char*)data.data(), (int)data.length());
 }
 
@@ -30489,22 +32304,24 @@ void SrsHttpHeader::set(string key, string value)
 string SrsHttpHeader::get(string key)
 {
     std::string v;
-    
-    if (headers.find(key) != headers.end()) {
+
+    if (headers.find(key) != headers.end())
+    {
         v = headers[key];
     }
-    
+
     return v;
 }
 
 int64_t SrsHttpHeader::content_length()
 {
     std::string cl = get("Content-Length");
-    
-    if (cl.empty()) {
+
+    if (cl.empty())
+    {
         return -1;
     }
-    
+
     return (int64_t)::atof(cl.c_str());
 }
 
@@ -30528,7 +32345,8 @@ void SrsHttpHeader::set_content_type(string ct)
 void SrsHttpHeader::write(stringstream& ss)
 {
     std::map<std::string, std::string>::iterator it;
-    for (it = headers.begin(); it != headers.end(); ++it) {
+    for (it = headers.begin(); it != headers.end(); ++it)
+    {
         ss << it->first << ": " << it->second << SRS_HTTP_CRLF;
     }
 }
@@ -30620,40 +32438,48 @@ SrsHttpFileServer::~SrsHttpFileServer()
 int SrsHttpFileServer::serve_http(ISrsHttpResponseWriter* w, ISrsHttpMessage* r)
 {
     string upath = r->path();
-    
+
     // add default pages.
-    if (srs_string_ends_with(upath, "/")) {
+    if (srs_string_ends_with(upath, "/"))
+    {
         upath += SRS_HTTP_DEFAULT_PAGE;
     }
-    
+
     string fullpath = dir + "/";
-    
+
     // remove the virtual directory.
     srs_assert(entry);
     size_t pos = entry->pattern.find("/");
-    if (upath.length() > entry->pattern.length() && pos != string::npos) {
+    if (upath.length() > entry->pattern.length() && pos != string::npos)
+    {
         fullpath += upath.substr(entry->pattern.length() - pos);
-    } else {
+    }
+    else
+    {
         fullpath += upath;
     }
-    
+
     // stat current dir, if exists, return error.
-    if (!srs_path_exists(fullpath)) {
+    if (!srs_path_exists(fullpath))
+    {
         srs_warn("http miss file=%s, pattern=%s, upath=%s",
                  fullpath.c_str(), entry->pattern.c_str(), upath.c_str());
         return SrsHttpNotFoundHandler().serve_http(w, r);
     }
     srs_trace("http match file=%s, pattern=%s, upath=%s",
               fullpath.c_str(), entry->pattern.c_str(), upath.c_str());
-    
+
     // handle file according to its extension.
     // use vod stream for .flv/.fhv
-    if (srs_string_ends_with(fullpath, ".flv") || srs_string_ends_with(fullpath, ".fhv")) {
+    if (srs_string_ends_with(fullpath, ".flv") || srs_string_ends_with(fullpath, ".fhv"))
+    {
         return serve_flv_file(w, r, fullpath);
-    } else if (srs_string_ends_with(fullpath, ".mp4")) {
+    }
+    else if (srs_string_ends_with(fullpath, ".mp4"))
+    {
         return serve_mp4_file(w, r, fullpath);
     }
-    
+
     // serve common static file.
     return serve_file(w, r, fullpath);
 }
@@ -30661,22 +32487,24 @@ int SrsHttpFileServer::serve_http(ISrsHttpResponseWriter* w, ISrsHttpMessage* r)
 int SrsHttpFileServer::serve_file(ISrsHttpResponseWriter* w, ISrsHttpMessage* r, string fullpath)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // open the target file.
     SrsFileReader fs;
-    
-    if ((ret = fs.open(fullpath)) != ERROR_SUCCESS) {
+
+    if ((ret = fs.open(fullpath)) != ERROR_SUCCESS)
+    {
         srs_warn("open file %s failed, ret=%d", fullpath.c_str(), ret);
         return ret;
     }
-    
+
     int64_t length = fs.filesize();
-    
+
     // unset the content length to encode in chunked encoding.
     w->header()->set_content_length(length);
-    
+
     static std::map<std::string, std::string> _mime;
-    if (_mime.empty()) {
+    if (_mime.empty())
+    {
         _mime[".ts"] = "video/MP2T";
         _mime[".flv"] = "video/x-flv";
         _mime[".m4v"] = "video/x-m4v";
@@ -30705,45 +32533,54 @@ int SrsHttpFileServer::serve_file(ISrsHttpResponseWriter* w, ISrsHttpMessage* r,
         _mime[".jpg"] = "image/jpeg";
         _mime[".gif"] = "image/gif";
     }
-    
-    if (true) {
+
+    if (true)
+    {
         size_t pos;
         std::string ext = fullpath;
-        if ((pos = ext.rfind(".")) != string::npos) {
+        if ((pos = ext.rfind(".")) != string::npos)
+        {
             ext = ext.substr(pos);
         }
-        
-        if (_mime.find(ext) == _mime.end()) {
+
+        if (_mime.find(ext) == _mime.end())
+        {
             w->header()->set_content_type("application/octet-stream");
-        } else {
+        }
+        else
+        {
             w->header()->set_content_type(_mime[ext]);
         }
     }
-    
+
     // write body.
     int64_t left = length;
-    if ((ret = copy(w, &fs, r, (int)left)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+    if ((ret = copy(w, &fs, r, (int)left)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("read file=%s size=%d failed, ret=%d", fullpath.c_str(), left, ret);
         }
         return ret;
     }
-    
+
     return w->final_request();
 }
 
 int SrsHttpFileServer::serve_flv_file(ISrsHttpResponseWriter* w, ISrsHttpMessage* r, string fullpath)
 {
     std::string start = r->query_get("start");
-    if (start.empty()) {
+    if (start.empty())
+    {
         return serve_file(w, r, fullpath);
     }
-    
+
     int offset = ::atoi(start.c_str());
-    if (offset <= 0) {
+    if (offset <= 0)
+    {
         return serve_file(w, r, fullpath);
     }
-    
+
     return serve_flv_stream(w, r, fullpath, offset);
 }
 
@@ -30754,33 +32591,38 @@ int SrsHttpFileServer::serve_mp4_file(ISrsHttpResponseWriter* w, ISrsHttpMessage
     std::string range = r->query_get("range");
     // or, use bytes to request range,
     // for example, http://dashas.castlabs.com/demo/try.html
-    if (range.empty()) {
+    if (range.empty())
+    {
         range = r->query_get("bytes");
     }
-    
+
     // rollback to serve whole file.
     size_t pos = string::npos;
-    if (range.empty() || (pos = range.find("-")) == string::npos) {
+    if (range.empty() || (pos = range.find("-")) == string::npos)
+    {
         return serve_file(w, r, fullpath);
     }
-    
+
     // parse the start in query string
     int start = 0;
-    if (pos > 0) {
+    if (pos > 0)
+    {
         start = ::atoi(range.substr(0, pos).c_str());
     }
-    
+
     // parse end in query string.
     int end = -1;
-    if (pos < range.length() - 1) {
+    if (pos < range.length() - 1)
+    {
         end = ::atoi(range.substr(pos + 1).c_str());
     }
-    
+
     // invalid param, serve as whole mp4 file.
-    if (start < 0 || (end != -1 && start > end)) {
+    if (start < 0 || (end != -1 && start > end))
+    {
         return serve_file(w, r, fullpath);
     }
-    
+
     return serve_mp4_stream(w, r, fullpath, start, end);
 }
 
@@ -30797,23 +32639,26 @@ int SrsHttpFileServer::serve_mp4_stream(ISrsHttpResponseWriter* w, ISrsHttpMessa
 int SrsHttpFileServer::copy(ISrsHttpResponseWriter* w, SrsFileReader* fs, ISrsHttpMessage* r, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     int left = size;
     char* buf = r->http_ts_send_buffer();
-    
-    while (left > 0) {
+
+    while (left > 0)
+    {
         ssize_t nread = -1;
         int max_read = srs_min(left, SRS_HTTP_TS_SEND_BUFFER_SIZE);
-        if ((ret = fs->read(buf, max_read, &nread)) != ERROR_SUCCESS) {
+        if ((ret = fs->read(buf, max_read, &nread)) != ERROR_SUCCESS)
+        {
             break;
         }
-        
+
         left -= nread;
-        if ((ret = w->write(buf, (int)nread)) != ERROR_SUCCESS) {
+        if ((ret = w->write(buf, (int)nread)) != ERROR_SUCCESS)
+        {
             break;
         }
     }
-    
+
     return ret;
 }
 
@@ -30852,12 +32697,13 @@ SrsHttpServeMux::SrsHttpServeMux()
 SrsHttpServeMux::~SrsHttpServeMux()
 {
     std::map<std::string, SrsHttpMuxEntry*>::iterator it;
-    for (it = entries.begin(); it != entries.end(); ++it) {
+    for (it = entries.begin(); it != entries.end(); ++it)
+    {
         SrsHttpMuxEntry* entry = it->second;
         srs_freep(entry);
     }
     entries.clear();
-    
+
     vhosts.clear();
     hijackers.clear();
 }
@@ -30872,7 +32718,8 @@ int SrsHttpServeMux::initialize()
 void SrsHttpServeMux::hijack(ISrsHttpMatchHijacker* h)
 {
     std::vector<ISrsHttpMatchHijacker*>::iterator it = ::find(hijackers.begin(), hijackers.end(), h);
-    if (it != hijackers.end()) {
+    if (it != hijackers.end())
+    {
         return;
     }
     hijackers.push_back(h);
@@ -30881,7 +32728,8 @@ void SrsHttpServeMux::hijack(ISrsHttpMatchHijacker* h)
 void SrsHttpServeMux::unhijack(ISrsHttpMatchHijacker* h)
 {
     std::vector<ISrsHttpMatchHijacker*>::iterator it = ::find(hijackers.begin(), hijackers.end(), h);
-    if (it == hijackers.end()) {
+    if (it == hijackers.end())
+    {
         return;
     }
     hijackers.erase(it);
@@ -30890,87 +32738,99 @@ void SrsHttpServeMux::unhijack(ISrsHttpMatchHijacker* h)
 int SrsHttpServeMux::handle(std::string pattern, ISrsHttpHandler* handler)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(handler);
-    
-    if (pattern.empty()) {
+
+    if (pattern.empty())
+    {
         ret = ERROR_HTTP_PATTERN_EMPTY;
         srs_error("http: empty pattern. ret=%d", ret);
         return ret;
     }
-    
-    if (entries.find(pattern) != entries.end()) {
+
+    if (entries.find(pattern) != entries.end())
+    {
         SrsHttpMuxEntry* exists = entries[pattern];
-        if (exists->explicit_match) {
+        if (exists->explicit_match)
+        {
             ret = ERROR_HTTP_PATTERN_DUPLICATED;
             srs_error("http: multiple registrations for %s. ret=%d", pattern.c_str(), ret);
             return ret;
         }
     }
-    
+
     std::string vhost = pattern;
-    if (pattern.at(0) != '/') {
-        if (pattern.find("/") != string::npos) {
+    if (pattern.at(0) != '/')
+    {
+        if (pattern.find("/") != string::npos)
+        {
             vhost = pattern.substr(0, pattern.find("/"));
         }
         vhosts[vhost] = handler;
     }
-    
-    if (true) {
+
+    if (true)
+    {
         SrsHttpMuxEntry* entry = new SrsHttpMuxEntry();
         entry->explicit_match = true;
         entry->handler = handler;
         entry->pattern = pattern;
         entry->handler->entry = entry;
-        
-        if (entries.find(pattern) != entries.end()) {
+
+        if (entries.find(pattern) != entries.end())
+        {
             SrsHttpMuxEntry* exists = entries[pattern];
             srs_freep(exists);
         }
         entries[pattern] = entry;
     }
-    
+
     // Helpful behavior:
     // If pattern is /tree/, insert an implicit permanent redirect for /tree.
     // It can be overridden by an explicit registration.
-    if (pattern != "/" && !pattern.empty() && pattern.at(pattern.length() - 1) == '/') {
+    if (pattern != "/" && !pattern.empty() && pattern.at(pattern.length() - 1) == '/')
+    {
         std::string rpattern = pattern.substr(0, pattern.length() - 1);
         SrsHttpMuxEntry* entry = NULL;
-        
+
         // free the exists not explicit entry
-        if (entries.find(rpattern) != entries.end()) {
+        if (entries.find(rpattern) != entries.end())
+        {
             SrsHttpMuxEntry* exists = entries[rpattern];
-            if (!exists->explicit_match) {
+            if (!exists->explicit_match)
+            {
                 entry = exists;
             }
         }
-        
+
         // create implicit redirect.
-        if (!entry || entry->explicit_match) {
+        if (!entry || entry->explicit_match)
+        {
             srs_freep(entry);
-            
+
             entry = new SrsHttpMuxEntry();
             entry->explicit_match = false;
             entry->handler = new SrsHttpRedirectHandler(pattern, SRS_CONSTS_HTTP_MovedPermanently);
             entry->pattern = pattern;
             entry->handler->entry = entry;
-            
+
             entries[rpattern] = entry;
         }
     }
-    
+
     return ret;
 }
 
 bool SrsHttpServeMux::can_serve(ISrsHttpMessage* r)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ISrsHttpHandler* h = NULL;
-    if ((ret = find_handler(r, &h)) != ERROR_SUCCESS) {
+    if ((ret = find_handler(r, &h)) != ERROR_SUCCESS)
+    {
         return false;
     }
-    
+
     srs_assert(h);
     return !h->is_not_found();
 }
@@ -30978,120 +32838,138 @@ bool SrsHttpServeMux::can_serve(ISrsHttpMessage* r)
 int SrsHttpServeMux::serve_http(ISrsHttpResponseWriter* w, ISrsHttpMessage* r)
 {
     int ret = ERROR_SUCCESS;
-    
+
     ISrsHttpHandler* h = NULL;
-    if ((ret = find_handler(r, &h)) != ERROR_SUCCESS) {
+    if ((ret = find_handler(r, &h)) != ERROR_SUCCESS)
+    {
         srs_error("find handler failed. ret=%d", ret);
         return ret;
     }
-    
+
     srs_assert(h);
-    if ((ret = h->serve_http(w, r)) != ERROR_SUCCESS) {
-        if (!srs_is_client_gracefully_close(ret)) {
+    if ((ret = h->serve_http(w, r)) != ERROR_SUCCESS)
+    {
+        if (!srs_is_client_gracefully_close(ret))
+        {
             srs_error("handler serve http failed. ret=%d", ret);
         }
         return ret;
     }
-    
+
     return ret;
 }
 
 int SrsHttpServeMux::find_handler(ISrsHttpMessage* r, ISrsHttpHandler** ph)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // TODO: FIXME: support the path . and ..
-    if (r->url().find("..") != std::string::npos) {
+    if (r->url().find("..") != std::string::npos)
+    {
         ret = ERROR_HTTP_URL_NOT_CLEAN;
         srs_error("htt url not canonical, url=%s. ret=%d", r->url().c_str(), ret);
         return ret;
     }
-    
-    if ((ret = match(r, ph)) != ERROR_SUCCESS) {
+
+    if ((ret = match(r, ph)) != ERROR_SUCCESS)
+    {
         srs_error("http match handler failed. ret=%d", ret);
         return ret;
     }
-    
+
     // always hijack.
-    if (!hijackers.empty()) {
+    if (!hijackers.empty())
+    {
         // notice all hijacker the match failed.
         std::vector<ISrsHttpMatchHijacker*>::iterator it;
-        for (it = hijackers.begin(); it != hijackers.end(); ++it) {
+        for (it = hijackers.begin(); it != hijackers.end(); ++it)
+        {
             ISrsHttpMatchHijacker* hijacker = *it;
-            if ((ret = hijacker->hijack(r, ph)) != ERROR_SUCCESS) {
+            if ((ret = hijacker->hijack(r, ph)) != ERROR_SUCCESS)
+            {
                 srs_error("hijacker match failed. ret=%d", ret);
                 return ret;
             }
         }
     }
-    
+
     static ISrsHttpHandler* h404 = new SrsHttpNotFoundHandler();
-    if (*ph == NULL) {
+    if (*ph == NULL)
+    {
         *ph = h404;
     }
-    
+
     return ret;
 }
 
 int SrsHttpServeMux::match(ISrsHttpMessage* r, ISrsHttpHandler** ph)
 {
     int ret = ERROR_SUCCESS;
-    
+
     std::string path = r->path();
-    
+
     // Host-specific pattern takes precedence over generic ones
-    if (!vhosts.empty() && vhosts.find(r->host()) != vhosts.end()) {
+    if (!vhosts.empty() && vhosts.find(r->host()) != vhosts.end())
+    {
         path = r->host() + path;
     }
-    
+
     int nb_matched = 0;
     ISrsHttpHandler* h = NULL;
-    
+
     std::map<std::string, SrsHttpMuxEntry*>::iterator it;
-    for (it = entries.begin(); it != entries.end(); ++it) {
+    for (it = entries.begin(); it != entries.end(); ++it)
+    {
         std::string pattern = it->first;
         SrsHttpMuxEntry* entry = it->second;
-        
-        if (!entry->enabled) {
+
+        if (!entry->enabled)
+        {
             continue;
         }
-        
-        if (!path_match(pattern, path)) {
+
+        if (!path_match(pattern, path))
+        {
             continue;
         }
-        
-        if (!h || (int)pattern.length() > nb_matched) {
+
+        if (!h || (int)pattern.length() > nb_matched)
+        {
             nb_matched = (int)pattern.length();
             h = entry->handler;
         }
     }
-    
+
     *ph = h;
-    
+
     return ret;
 }
 
 bool SrsHttpServeMux::path_match(string pattern, string path)
 {
-    if (pattern.empty()) {
+    if (pattern.empty())
+    {
         return false;
     }
-    
+
     int n = (int)pattern.length();
-    
+
     // not endswith '/', exactly match.
-    if (pattern.at(n - 1) != '/') {
+    if (pattern.at(n - 1) != '/')
+    {
         return pattern == path;
     }
-    
+
     // endswith '/', match any,
     // for example, '/api/' match '/api/[N]'
-    if ((int)path.length() >= n) {
-        if (memcmp(pattern.data(), path.data(), n) == 0) {
+    if ((int)path.length() >= n)
+    {
+        if (memcmp(pattern.data(), path.data(), n) == 0)
+        {
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -31163,44 +33041,52 @@ void SrsKbpsSlice::sample()
 {
     int64_t now = srs_get_system_time_ms();
     int64_t total_bytes = get_total_bytes();
-    
-    if (sample_30s.time <= 0) {
+
+    if (sample_30s.time <= 0)
+    {
         sample_30s.kbps = 0;
         sample_30s.time = now;
         sample_30s.bytes = total_bytes;
     }
-    if (sample_1m.time <= 0) {
+    if (sample_1m.time <= 0)
+    {
         sample_1m.kbps = 0;
         sample_1m.time = now;
         sample_1m.bytes = total_bytes;
     }
-    if (sample_5m.time <= 0) {
+    if (sample_5m.time <= 0)
+    {
         sample_5m.kbps = 0;
         sample_5m.time = now;
         sample_5m.bytes = total_bytes;
     }
-    if (sample_60m.time <= 0) {
+    if (sample_60m.time <= 0)
+    {
         sample_60m.kbps = 0;
         sample_60m.time = now;
         sample_60m.bytes = total_bytes;
     }
-    
-    if (now - sample_30s.time > 30 * 1000) {
+
+    if (now - sample_30s.time > 30 * 1000)
+    {
         sample_30s.kbps = (int)((total_bytes - sample_30s.bytes) * 8 / (now - sample_30s.time));
         sample_30s.time = now;
         sample_30s.bytes = total_bytes;
     }
-    if (now - sample_1m.time > 60 * 1000) {
+    if (now - sample_1m.time > 60 * 1000)
+    {
         sample_1m.kbps = (int)((total_bytes - sample_1m.bytes) * 8 / (now - sample_1m.time));
         sample_1m.time = now;
         sample_1m.bytes = total_bytes;
     }
-    if (now - sample_5m.time > 300 * 1000) {
+    if (now - sample_5m.time > 300 * 1000)
+    {
         sample_5m.kbps = (int)((total_bytes - sample_5m.bytes) * 8 / (now - sample_5m.time));
         sample_5m.time = now;
         sample_5m.bytes = total_bytes;
     }
-    if (now - sample_60m.time > 3600 * 1000) {
+    if (now - sample_60m.time > 3600 * 1000)
+    {
         sample_60m.kbps = (int)((total_bytes - sample_60m.bytes) * 8 / (now - sample_60m.time));
         sample_60m.time = now;
         sample_60m.bytes = total_bytes;
@@ -31227,35 +33113,41 @@ void SrsKbps::set_io(ISrsProtocolStatistic* in, ISrsProtocolStatistic* out)
 {
     // set input stream
     // now, set start time.
-    if (is.starttime == 0) {
+    if (is.starttime == 0)
+    {
         is.starttime = srs_get_system_time_ms();
     }
     // save the old in bytes.
-    if (is.io.in) {
+    if (is.io.in)
+    {
         is.bytes += is.last_bytes - is.io_bytes_base;
     }
     // use new io.
     is.io.in = in;
     is.last_bytes = is.io_bytes_base = 0;
-    if (in) {
+    if (in)
+    {
         is.last_bytes = is.io_bytes_base = in->get_recv_bytes();
     }
     // resample
     is.sample();
-    
+
     // set output stream
     // now, set start time.
-    if (os.starttime == 0) {
+    if (os.starttime == 0)
+    {
         os.starttime = srs_get_system_time_ms();
     }
     // save the old in bytes.
-    if (os.io.out) {
+    if (os.io.out)
+    {
         os.bytes += os.last_bytes - os.io_bytes_base;
     }
     // use new io.
     os.io.out = out;
     os.last_bytes = os.io_bytes_base = 0;
-    if (out) {
+    if (out)
+    {
         os.last_bytes = os.io_bytes_base = out->get_send_bytes();
     }
     // resample
@@ -31265,7 +33157,8 @@ void SrsKbps::set_io(ISrsProtocolStatistic* in, ISrsProtocolStatistic* out)
 int SrsKbps::get_send_kbps()
 {
     int64_t duration = srs_get_system_time_ms() - is.starttime;
-    if (duration <= 0) {
+    if (duration <= 0)
+    {
         return 0;
     }
     int64_t bytes = get_send_bytes();
@@ -31275,7 +33168,8 @@ int SrsKbps::get_send_kbps()
 int SrsKbps::get_recv_kbps()
 {
     int64_t duration = srs_get_system_time_ms() - os.starttime;
-    if (duration <= 0) {
+    if (duration <= 0)
+    {
         return 0;
     }
     int64_t bytes = get_recv_bytes();
@@ -31338,25 +33232,27 @@ void SrsKbps::cleanup()
 void SrsKbps::add_delta(IKbpsDelta* delta)
 {
     srs_assert(delta);
-    
+
     // update the total bytes
     is.last_bytes += delta->get_recv_bytes_delta();
     os.last_bytes += delta->get_send_bytes_delta();
-    
+
     // we donot sample, please use sample() to do resample.
 }
 
 void SrsKbps::sample()
 {
     // update the total bytes
-    if (os.io.out) {
+    if (os.io.out)
+    {
         os.last_bytes = os.io.out->get_send_bytes();
     }
-    
-    if (is.io.in) {
+
+    if (is.io.in)
+    {
         is.last_bytes = is.io.in->get_recv_bytes();
     }
-    
+
     // resample
     is.sample();
     os.sample();
@@ -31435,22 +33331,22 @@ struct Context
 
     // extra request object for connect to server, NULL to ignore.
     SrsRequest* req;
-    
+
     // the message received cache,
     // for example, when got aggregate message,
     // the context will parse to videos/audios,
     // and return one by one.
     std::vector<SrsCommonMessage*> msgs;
-    
+
     SrsRtmpClient* rtmp;
     SimpleSocketStream* skt;
     int stream_id;
-    
+
     // the remux raw codec.
     SrsRawH264Stream avc_raw;
     SrsRawAacStream aac_raw;
 
-    // for h264 raw stream, 
+    // for h264 raw stream,
     // @see: https://github.com/simple-rtmp-server/srs/issues/66#issuecomment-62240521
     SrsStream h264_raw_stream;
     // about SPS, @see: 7.3.2.1.1, H.264-AVC-ISO_IEC_14496-10-2012.pdf, page 62
@@ -31468,8 +33364,9 @@ struct Context
     SrsStream aac_raw_stream;
     // the aac sequence header.
     std::string aac_specific_config;
-    
-    Context() {
+
+    Context()
+    {
         rtmp = NULL;
         skt = NULL;
         req = NULL;
@@ -31478,13 +33375,15 @@ struct Context
         h264_sps_changed = false;
         h264_pps_changed = false;
     }
-    virtual ~Context() {
+    virtual ~Context()
+    {
         srs_freep(req);
         srs_freep(rtmp);
         srs_freep(skt);
-        
+
         std::vector<SrsCommonMessage*>::iterator it;
-        for (it = msgs.begin(); it != msgs.end(); ++it) {
+        for (it = msgs.begin(); it != msgs.end(); ++it)
+        {
             SrsCommonMessage* msg = *it;
             srs_freep(msg);
         }
@@ -31494,396 +33393,422 @@ struct Context
 
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifdef _WIN32
-    int gettimeofday(struct timeval* tv, struct timezone* tz)
-    {  
-        time_t clock;
-        struct tm tm;
-        SYSTEMTIME win_time;
-    
-        GetLocalTime(&win_time);
-    
-        tm.tm_year = win_time.wYear - 1900;
-        tm.tm_mon = win_time.wMonth - 1;
-        tm.tm_mday = win_time.wDay;
-        tm.tm_hour = win_time.wHour;
-        tm.tm_min = win_time.wMinute;
-        tm.tm_sec = win_time.wSecond;
-        tm.tm_isdst = -1;
-    
-        clock = mktime(&tm);
-    
-        tv->tv_sec = (long)clock;
-        tv->tv_usec = win_time.wMilliseconds * 1000;
-    
-        return 0;
-    }
-    
-    int socket_setup()
+int gettimeofday(struct timeval* tv, struct timezone* tz)
+{
+    time_t clock;
+    struct tm tm;
+    SYSTEMTIME win_time;
+
+    GetLocalTime(&win_time);
+
+    tm.tm_year = win_time.wYear - 1900;
+    tm.tm_mon = win_time.wMonth - 1;
+    tm.tm_mday = win_time.wDay;
+    tm.tm_hour = win_time.wHour;
+    tm.tm_min = win_time.wMinute;
+    tm.tm_sec = win_time.wSecond;
+    tm.tm_isdst = -1;
+
+    clock = mktime(&tm);
+
+    tv->tv_sec = (long)clock;
+    tv->tv_usec = win_time.wMilliseconds * 1000;
+
+    return 0;
+}
+
+int socket_setup()
+{
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+
+    /* Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h */
+    wVersionRequested = MAKEWORD(2, 2);
+
+    err = WSAStartup(wVersionRequested, &wsaData);
+    if (err != 0)
     {
-        WORD wVersionRequested;
-        WSADATA wsaData;
-        int err;
-    
-        /* Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h */
-        wVersionRequested = MAKEWORD(2, 2);
-    
-        err = WSAStartup(wVersionRequested, &wsaData);
-        if (err != 0) {
-            /* Tell the user that we could not find a usable */
-            /* Winsock DLL.                                  */
-            //printf("WSAStartup failed with error: %d\n", err);
-            return -1;
+        /* Tell the user that we could not find a usable */
+        /* Winsock DLL.                                  */
+        //printf("WSAStartup failed with error: %d\n", err);
+        return -1;
+    }
+    return 0;
+}
+
+int socket_cleanup()
+{
+    WSACleanup();
+    return 0;
+}
+
+pid_t getpid(void)
+{
+    return (pid_t)GetCurrentProcessId();
+}
+
+int usleep(useconds_t usec)
+{
+    Sleep((DWORD)(usec / 1000));
+    return 0;
+}
+
+ssize_t writev(int fd, const struct iovec *iov, int iovcnt)
+{
+    ssize_t nwrite = 0;
+    for (int i = 0; i < iovcnt; i++)
+    {
+        const struct iovec* current = iov + i;
+
+        int nsent = ::send(fd, (char*)current->iov_base, current->iov_len, 0);
+        if (nsent < 0)
+        {
+            return nsent;
         }
-        return 0;
-    }
-    
-    int socket_cleanup()
-    {
-        WSACleanup();
-        return 0;
-    }
-    
-    pid_t getpid(void)
-    {
-        return (pid_t)GetCurrentProcessId();
-    }
-    
-    int usleep(useconds_t usec)
-    {
-        Sleep((DWORD)(usec / 1000));
-        return 0;
-    }
-    
-    ssize_t writev(int fd, const struct iovec *iov, int iovcnt)
-    {
-        ssize_t nwrite = 0;
-        for (int i = 0; i < iovcnt; i++) {
-            const struct iovec* current = iov + i;
-    
-            int nsent = ::send(fd, (char*)current->iov_base, current->iov_len, 0);
-            if (nsent < 0) {
-                return nsent;
-            }
-    
-            nwrite += nsent;
-            if (nsent == 0) {
-                return nwrite;
-            }
+
+        nwrite += nsent;
+        if (nsent == 0)
+        {
+            return nwrite;
         }
-        return nwrite;
     }
-    
-    ////////////////////////   strlcpy.c (modified) //////////////////////////
-    
-    /*    $OpenBSD: strlcpy.c,v 1.11 2006/05/05 15:27:38 millert Exp $    */
-    
-    /*-
-     * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
-     *
-     * Permission to use, copy, modify, and distribute this software for any
-     * purpose with or without fee is hereby granted, provided that the above
-     * copyright notice and this permission notice appear in all copies.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-     * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-     * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-     * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-     * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-     * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-     * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-     */
-    
-    //#include <sys/cdefs.h> // ****
-    //#include <cstddef> // ****
-    // __FBSDID("$FreeBSD: stable/9/sys/libkern/strlcpy.c 243811 2012-12-03 18:08:44Z delphij $"); // ****
-    
-    // #include <sys/types.h> // ****
-    // #include <sys/libkern.h> // ****
-    
-    /*
-     * Copy src to string dst of size siz.  At most siz-1 characters
-     * will be copied.  Always NUL terminates (unless siz == 0).
-     * Returns strlen(src); if retval >= siz, truncation occurred.
-     */
-    
-    //#define __restrict // ****
-    
-    std::size_t strlcpy(char * __restrict dst, const char * __restrict src, size_t siz)
+    return nwrite;
+}
+
+////////////////////////   strlcpy.c (modified) //////////////////////////
+
+/*    $OpenBSD: strlcpy.c,v 1.11 2006/05/05 15:27:38 millert Exp $    */
+
+/*-
+ * Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+//#include <sys/cdefs.h> // ****
+//#include <cstddef> // ****
+// __FBSDID("$FreeBSD: stable/9/sys/libkern/strlcpy.c 243811 2012-12-03 18:08:44Z delphij $"); // ****
+
+// #include <sys/types.h> // ****
+// #include <sys/libkern.h> // ****
+
+/*
+ * Copy src to string dst of size siz.  At most siz-1 characters
+ * will be copied.  Always NUL terminates (unless siz == 0).
+ * Returns strlen(src); if retval >= siz, truncation occurred.
+ */
+
+//#define __restrict // ****
+
+std::size_t strlcpy(char * __restrict dst, const char * __restrict src, size_t siz)
+{
+    char *d = dst;
+    const char *s = src;
+    size_t n = siz;
+
+    /* Copy as many bytes as will fit */
+    if (n != 0)
     {
-        char *d = dst;
-        const char *s = src;
-        size_t n = siz;
-    
-        /* Copy as many bytes as will fit */
-        if (n != 0) {
-            while (--n != 0) {
-                if ((*d++ = *s++) == '\0')
-                    break;
-            }
+        while (--n != 0)
+        {
+            if ((*d++ = *s++) == '\0')
+                break;
         }
-    
-        /* Not enough room in dst, add NUL and traverse rest of src */
-        if (n == 0) {
-            if (siz != 0)
-                *d = '\0';        /* NUL-terminate dst */
-            while (*s++)
-                ;
-        }
-    
-        return(s - src - 1);    /* count does not include NUL */
     }
-    
-    // http://www.cplusplus.com/forum/general/141779/////////////////////////   inet_ntop.c (modified) //////////////////////////
-    /*
-     * Copyright (c) 2004 by Internet Systems Consortium, Inc. ("ISC")
-     * Copyright (c) 1996-1999 by Internet Software Consortium.
-     *
-     * Permission to use, copy, modify, and distribute this software for any
-     * purpose with or without fee is hereby granted, provided that the above
-     * copyright notice and this permission notice appear in all copies.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS" AND ISC DISCLAIMS ALL WARRANTIES
-     * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-     * MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL ISC BE LIABLE FOR
-     * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-     * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-     * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
-     * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-     */
-    
-    // #if defined(LIBC_SCCS) && !defined(lint) // ****
-    //static const char rcsid[] = "$Id: inet_ntop.c,v 1.3.18.2 2005/11/03 23:02:22 marka Exp $";
-    // #endif /* LIBC_SCCS and not lint */ // ****
-    // #include <sys/cdefs.h> // ****
-    // __FBSDID("$FreeBSD: stable/9/sys/libkern/inet_ntop.c 213103 2010-09-24 15:01:45Z attilio $"); // ****
-    
-    //#define _WIN32_WINNT _WIN32_WINNT_WIN8 // ****
-    //#include <Ws2tcpip.h> // ****
-    #pragma comment(lib, "Ws2_32.lib") // ****
-    //#include <cstdio> // ****
-    
-    // #include <sys/param.h> // ****
-    // #include <sys/socket.h> // ****
-    // #include <sys/systm.h> // ****
-    
-    // #include <netinet/in.h> // ****
-    
-    /*%
-     * WARNING: Don't even consider trying to compile this on a system where
-     * sizeof(int) < 4.  sizeof(int) > 4 is fine; all the world's not a VAX.
-     */
-    
-    static char *inet_ntop4(const u_char *src, char *dst, socklen_t size);
-    static char *inet_ntop6(const u_char *src, char *dst, socklen_t size);
-    
-    /* char *
-     * inet_ntop(af, src, dst, size)
-     *    convert a network format address to presentation format.
-     * return:
-     *    pointer to presentation format address (`dst'), or NULL (see errno).
-     * author:
-     *    Paul Vixie, 1996.
-     */
-    const char* inet_ntop(int af, const void *src, char *dst, socklen_t size)
+
+    /* Not enough room in dst, add NUL and traverse rest of src */
+    if (n == 0)
     {
-        switch (af) {
-        case AF_INET:
-            return (inet_ntop4( (unsigned char*)src, (char*)dst, size)); // ****
-    #ifdef AF_INET6
-        #error "IPv6 not supported"
+        if (siz != 0)
+            *d = '\0';        /* NUL-terminate dst */
+        while (*s++)
+            ;
+    }
+
+    return(s - src - 1);    /* count does not include NUL */
+}
+
+// http://www.cplusplus.com/forum/general/141779/////////////////////////   inet_ntop.c (modified) //////////////////////////
+/*
+ * Copyright (c) 2004 by Internet Systems Consortium, Inc. ("ISC")
+ * Copyright (c) 1996-1999 by Internet Software Consortium.
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND ISC DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL ISC BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+ * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+// #if defined(LIBC_SCCS) && !defined(lint) // ****
+//static const char rcsid[] = "$Id: inet_ntop.c,v 1.3.18.2 2005/11/03 23:02:22 marka Exp $";
+// #endif /* LIBC_SCCS and not lint */ // ****
+// #include <sys/cdefs.h> // ****
+// __FBSDID("$FreeBSD: stable/9/sys/libkern/inet_ntop.c 213103 2010-09-24 15:01:45Z attilio $"); // ****
+
+//#define _WIN32_WINNT _WIN32_WINNT_WIN8 // ****
+//#include <Ws2tcpip.h> // ****
+#pragma comment(lib, "Ws2_32.lib") // ****
+//#include <cstdio> // ****
+
+// #include <sys/param.h> // ****
+// #include <sys/socket.h> // ****
+// #include <sys/systm.h> // ****
+
+// #include <netinet/in.h> // ****
+
+/*%
+ * WARNING: Don't even consider trying to compile this on a system where
+ * sizeof(int) < 4.  sizeof(int) > 4 is fine; all the world's not a VAX.
+ */
+
+static char *inet_ntop4(const u_char *src, char *dst, socklen_t size);
+static char *inet_ntop6(const u_char *src, char *dst, socklen_t size);
+
+/* char *
+ * inet_ntop(af, src, dst, size)
+ *    convert a network format address to presentation format.
+ * return:
+ *    pointer to presentation format address (`dst'), or NULL (see errno).
+ * author:
+ *    Paul Vixie, 1996.
+ */
+const char* inet_ntop(int af, const void *src, char *dst, socklen_t size)
+{
+    switch (af)
+    {
+    case AF_INET:
+        return (inet_ntop4( (unsigned char*)src, (char*)dst, size)); // ****
+#ifdef AF_INET6
+#error "IPv6 not supported"
         //case AF_INET6:
         //    return (char*)(inet_ntop6( (unsigned char*)src, (char*)dst, size)); // ****
-    #endif
-        default:
-            // return (NULL); // ****
-            return 0 ; // ****
-        }
-        /* NOTREACHED */
+#endif
+    default:
+        // return (NULL); // ****
+        return 0 ; // ****
     }
-    
-    /* const char *
-     * inet_ntop4(src, dst, size)
-     *    format an IPv4 address
-     * return:
-     *    `dst' (as a const)
-     * notes:
-     *    (1) uses no statics
-     *    (2) takes a u_char* not an in_addr as input
-     * author:
-     *    Paul Vixie, 1996.
-     */
-    static char * inet_ntop4(const u_char *src, char *dst, socklen_t size)
+    /* NOTREACHED */
+}
+
+/* const char *
+ * inet_ntop4(src, dst, size)
+ *    format an IPv4 address
+ * return:
+ *    `dst' (as a const)
+ * notes:
+ *    (1) uses no statics
+ *    (2) takes a u_char* not an in_addr as input
+ * author:
+ *    Paul Vixie, 1996.
+ */
+static char * inet_ntop4(const u_char *src, char *dst, socklen_t size)
+{
+    static const char fmt[128] = "%u.%u.%u.%u";
+    char tmp[sizeof "255.255.255.255"];
+    int l;
+
+    l = snprintf(tmp, sizeof(tmp), fmt, src[0], src[1], src[2], src[3]); // ****
+    if (l <= 0 || (socklen_t) l >= size)
     {
-        static const char fmt[128] = "%u.%u.%u.%u";
-        char tmp[sizeof "255.255.255.255"];
-        int l;
-    
-        l = snprintf(tmp, sizeof(tmp), fmt, src[0], src[1], src[2], src[3]); // ****
-        if (l <= 0 || (socklen_t) l >= size) {
-            return (NULL);
-        }
-        strlcpy(dst, tmp, size);
-        return (dst);
+        return (NULL);
     }
-    
-    /* const char *
-     * inet_ntop6(src, dst, size)
-     *    convert IPv6 binary address into presentation (printable) format
-     * author:
-     *    Paul Vixie, 1996.
+    strlcpy(dst, tmp, size);
+    return (dst);
+}
+
+/* const char *
+ * inet_ntop6(src, dst, size)
+ *    convert IPv6 binary address into presentation (printable) format
+ * author:
+ *    Paul Vixie, 1996.
+ */
+static char * inet_ntop6(const u_char *src, char *dst, socklen_t size)
+{
+    /*
+     * Note that int32_t and int16_t need only be "at least" large enough
+     * to contain a value of the specified size.  On some systems, like
+     * Crays, there is no such thing as an integer variable with 16 bits.
+     * Keep this in mind if you think this function should have been coded
+     * to use pointer overlays.  All the world's not a VAX.
      */
-    static char * inet_ntop6(const u_char *src, char *dst, socklen_t size)
+    char tmp[sizeof "ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255"], *tp;
+    struct
     {
-        /*
-         * Note that int32_t and int16_t need only be "at least" large enough
-         * to contain a value of the specified size.  On some systems, like
-         * Crays, there is no such thing as an integer variable with 16 bits.
-         * Keep this in mind if you think this function should have been coded
-         * to use pointer overlays.  All the world's not a VAX.
-         */
-        char tmp[sizeof "ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255"], *tp;
-        struct { int base, len; } best, cur;
-    #define NS_IN6ADDRSZ 16
-    #define NS_INT16SZ 2
-        u_int words[NS_IN6ADDRSZ / NS_INT16SZ];
-        int i;
-    
-        /*
-         * Preprocess:
-         *    Copy the input (bytewise) array into a wordwise array.
-         *    Find the longest run of 0x00's in src[] for :: shorthanding.
-         */
-        memset(words, '\0', sizeof words);
-        for (i = 0; i < NS_IN6ADDRSZ; i++)
-            words[i / 2] |= (src[i] << ((1 - (i % 2)) << 3));
+        int base, len;
+    } best, cur;
+#define NS_IN6ADDRSZ 16
+#define NS_INT16SZ 2
+    u_int words[NS_IN6ADDRSZ / NS_INT16SZ];
+    int i;
+
+    /*
+     * Preprocess:
+     *    Copy the input (bytewise) array into a wordwise array.
+     *    Find the longest run of 0x00's in src[] for :: shorthanding.
+     */
+    memset(words, '\0', sizeof words);
+    for (i = 0; i < NS_IN6ADDRSZ; i++)
+        words[i / 2] |= (src[i] << ((1 - (i % 2)) << 3));
+    best.base = -1;
+    best.len = 0;
+    cur.base = -1;
+    cur.len = 0;
+    for (i = 0; i < (NS_IN6ADDRSZ / NS_INT16SZ); i++)
+    {
+        if (words[i] == 0)
+        {
+            if (cur.base == -1)
+                cur.base = i, cur.len = 1;
+            else
+                cur.len++;
+        }
+        else
+        {
+            if (cur.base != -1)
+            {
+                if (best.base == -1 || cur.len > best.len)
+                    best = cur;
+                cur.base = -1;
+            }
+        }
+    }
+    if (cur.base != -1)
+    {
+        if (best.base == -1 || cur.len > best.len)
+            best = cur;
+    }
+    if (best.base != -1 && best.len < 2)
         best.base = -1;
-        best.len = 0;
-        cur.base = -1;
-        cur.len = 0;
-        for (i = 0; i < (NS_IN6ADDRSZ / NS_INT16SZ); i++) {
-            if (words[i] == 0) {
-                if (cur.base == -1)
-                    cur.base = i, cur.len = 1;
-                else
-                    cur.len++;
-            } else {
-                if (cur.base != -1) {
-                    if (best.base == -1 || cur.len > best.len)
-                        best = cur;
-                    cur.base = -1;
-                }
-            }
-        }
-        if (cur.base != -1) {
-            if (best.base == -1 || cur.len > best.len)
-                best = cur;
-        }
-        if (best.base != -1 && best.len < 2)
-            best.base = -1;
-    
-        /*
-         * Format the result.
-         */
-        tp = tmp;
-        for (i = 0; i < (NS_IN6ADDRSZ / NS_INT16SZ); i++) {
-            /* Are we inside the best run of 0x00's? */
-            if (best.base != -1 && i >= best.base &&
-                i < (best.base + best.len)) {
-                if (i == best.base)
-                    *tp++ = ':';
-                continue;
-            }
-            /* Are we following an initial run of 0x00s or any real hex? */
-            if (i != 0)
+
+    /*
+     * Format the result.
+     */
+    tp = tmp;
+    for (i = 0; i < (NS_IN6ADDRSZ / NS_INT16SZ); i++)
+    {
+        /* Are we inside the best run of 0x00's? */
+        if (best.base != -1 && i >= best.base &&
+                i < (best.base + best.len))
+        {
+            if (i == best.base)
                 *tp++ = ':';
-            /* Is this address an encapsulated IPv4? */
-            if (i == 6 && best.base == 0 && (best.len == 6 ||
-                (best.len == 7 && words[7] != 0x0001) ||
-                (best.len == 5 && words[5] == 0xffff))) {
-                if (!inet_ntop4(src+12, tp, sizeof tmp - (tp - tmp)))
-                    return (NULL);
-                tp += strlen(tp);
-                break;
-            }
-            tp += std::sprintf(tp, "%x", words[i]); // ****
+            continue;
         }
-        /* Was it a trailing run of 0x00's? */
-        if (best.base != -1 && (best.base + best.len) == 
-            (NS_IN6ADDRSZ / NS_INT16SZ))
+        /* Are we following an initial run of 0x00s or any real hex? */
+        if (i != 0)
             *tp++ = ':';
-        *tp++ = '\0';
-    
-        /*
-         * Check for overflow, copy, and we're done.
-         */
-        if ((socklen_t)(tp - tmp) > size) {
-            return (NULL);
+        /* Is this address an encapsulated IPv4? */
+        if (i == 6 && best.base == 0 && (best.len == 6 ||
+                                         (best.len == 7 && words[7] != 0x0001) ||
+                                         (best.len == 5 && words[5] == 0xffff)))
+        {
+            if (!inet_ntop4(src+12, tp, sizeof tmp - (tp - tmp)))
+                return (NULL);
+            tp += strlen(tp);
+            break;
         }
-        strcpy(dst, tmp);
-        return (dst);
+        tp += std::sprintf(tp, "%x", words[i]); // ****
     }
+    /* Was it a trailing run of 0x00's? */
+    if (best.base != -1 && (best.base + best.len) ==
+            (NS_IN6ADDRSZ / NS_INT16SZ))
+        *tp++ = ':';
+    *tp++ = '\0';
+
+    /*
+     * Check for overflow, copy, and we're done.
+     */
+    if ((socklen_t)(tp - tmp) > size)
+    {
+        return (NULL);
+    }
+    strcpy(dst, tmp);
+    return (dst);
+}
 #endif
 
-int srs_librtmp_context_parse_uri(Context* context) 
+int srs_librtmp_context_parse_uri(Context* context)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // parse uri
     size_t pos = string::npos;
     string uri = context->url;
     // tcUrl, stream
-    if ((pos = uri.rfind("/")) != string::npos) {
+    if ((pos = uri.rfind("/")) != string::npos)
+    {
         context->stream = uri.substr(pos + 1);
         context->tcUrl = uri = uri.substr(0, pos);
     }
-    
+
     std::string schema;
-    srs_discovery_tc_url(context->tcUrl, 
-        schema, context->host, context->vhost, context->app, context->port,
-        context->param);
-    
+    srs_discovery_tc_url(context->tcUrl,
+                         schema, context->host, context->vhost, context->app, context->port,
+                         context->param);
+
     return ret;
 }
 
-int srs_librtmp_context_resolve_host(Context* context) 
+int srs_librtmp_context_resolve_host(Context* context)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // create socket
     srs_freep(context->skt);
     context->skt = new SimpleSocketStream();
-    
-    if ((ret = context->skt->create_socket()) != ERROR_SUCCESS) {
+
+    if ((ret = context->skt->create_socket()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // connect to server:port
     context->ip = srs_dns_resolve(context->host);
-    if (context->ip.empty()) {
+    if (context->ip.empty())
+    {
         return -1;
     }
-    
+
     return ret;
 }
 
-int srs_librtmp_context_connect(Context* context) 
+int srs_librtmp_context_connect(Context* context)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(context->skt);
-    
+
     std::string ip = context->ip;
     int port = ::atoi(context->port.c_str());
-    
-    if ((ret = context->skt->connect(ip.c_str(), port)) != ERROR_SUCCESS) {
+
+    if ((ret = context->skt->connect(ip.c_str(), port)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 int srs_version_major()
@@ -31911,75 +33836,82 @@ srs_rtmp_t srs_rtmp_create(const char* url)
 srs_rtmp_t srs_rtmp_create2(const char* url)
 {
     Context* context = new Context();
-    
+
     // use url as tcUrl.
     context->url = url;
     // auto append stream.
     context->url += "/livestream";
-    
+
     return context;
 }
 
 void srs_rtmp_destroy(srs_rtmp_t rtmp)
 {
-    if (!rtmp) {
+    if (!rtmp)
+    {
         return;
     }
-    
+
     Context* context = (Context*)rtmp;
-    
+
     srs_freep(context);
 }
 
 int srs_rtmp_handshake(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
-    if ((ret = srs_rtmp_dns_resolve(rtmp)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_rtmp_dns_resolve(rtmp)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = srs_rtmp_connect_server(rtmp)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_rtmp_connect_server(rtmp)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = srs_rtmp_do_simple_handshake(rtmp)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_rtmp_do_simple_handshake(rtmp)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_dns_resolve(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     // parse uri
-    if ((ret = srs_librtmp_context_parse_uri(context)) != ERROR_SUCCESS) {
+    if ((ret = srs_librtmp_context_parse_uri(context)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     // resolve host
-    if ((ret = srs_librtmp_context_resolve_host(context)) != ERROR_SUCCESS) {
+    if ((ret = srs_librtmp_context_resolve_host(context)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_connect_server(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
-    if ((ret = srs_librtmp_context_connect(context)) != ERROR_SUCCESS) {
+
+    if ((ret = srs_librtmp_context_connect(context)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -31991,96 +33923,104 @@ int srs_rtmp_do_complex_handshake(srs_rtmp_t rtmp)
 #endif
 
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     srs_assert(context->skt != NULL);
-    
+
     // simple handshake
     srs_freep(context->rtmp);
     context->rtmp = new SrsRtmpClient(context->skt);
-    
-    if ((ret = context->rtmp->complex_handshake()) != ERROR_SUCCESS) {
+
+    if ((ret = context->rtmp->complex_handshake()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
-int srs_rtmp_set_connect_args(srs_rtmp_t rtmp, 
-    const char* tcUrl, const char* swfUrl, const char* pageUrl, srs_amf0_t args
-) {
+int srs_rtmp_set_connect_args(srs_rtmp_t rtmp,
+                              const char* tcUrl, const char* swfUrl, const char* pageUrl, srs_amf0_t args
+                             )
+{
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     srs_freep(context->req);
     context->req = new SrsRequest();
-    
-    if (args) {
+
+    if (args)
+    {
         context->req->args = (SrsAmf0Object*)args;
     }
-    if (tcUrl) {
+    if (tcUrl)
+    {
         context->req->tcUrl = tcUrl;
     }
-    if (swfUrl) {
+    if (swfUrl)
+    {
         context->req->swfUrl = swfUrl;
     }
-    if (pageUrl) {
+    if (pageUrl)
+    {
         context->req->pageUrl = pageUrl;
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_do_simple_handshake(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     srs_assert(context->skt != NULL);
-    
+
     // simple handshake
     srs_freep(context->rtmp);
     context->rtmp = new SrsRtmpClient(context->skt);
-    
-    if ((ret = context->rtmp->simple_handshake()) != ERROR_SUCCESS) {
+
+    if ((ret = context->rtmp->simple_handshake()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_connect_app(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     string tcUrl = srs_generate_tc_url(
-        context->ip, context->vhost, context->app, context->port,
-        context->param
-    );
-    
+                       context->ip, context->vhost, context->app, context->port,
+                       context->param
+                   );
+
     if ((ret = context->rtmp->connect_app(
-        context->app, tcUrl, context->req, true)) != ERROR_SUCCESS) 
+                   context->app, tcUrl, context->req, true)) != ERROR_SUCCESS)
     {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_connect_app2(srs_rtmp_t rtmp,
-    char srs_server_ip[128],char srs_server[128], 
-    char srs_primary[128], char srs_authors[128], 
-    char srs_version[32], int* srs_id, int* srs_pid
-) {
+                          char srs_server_ip[128],char srs_server[128],
+                          char srs_primary[128], char srs_authors[128],
+                          char srs_version[32], int* srs_id, int* srs_pid
+                         )
+{
     srs_server_ip[0] = 0;
     srs_server[0] = 0;
     srs_primary[0] = 0;
@@ -32090,68 +34030,73 @@ int srs_rtmp_connect_app2(srs_rtmp_t rtmp,
     *srs_pid = 0;
 
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     string tcUrl = srs_generate_tc_url(
-        context->ip, context->vhost, context->app, context->port,
-        context->param
-    );
-    
+                       context->ip, context->vhost, context->app, context->port,
+                       context->param
+                   );
+
     std::string sip, sserver, sprimary, sauthors, sversion;
-    
+
     if ((ret = context->rtmp->connect_app2(context->app, tcUrl, NULL, true,
-        sip, sserver, sprimary, sauthors, sversion, *srs_id, *srs_pid)) != ERROR_SUCCESS) {
+                                           sip, sserver, sprimary, sauthors, sversion, *srs_id, *srs_pid)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     snprintf(srs_server_ip, 128, "%s", sip.c_str());
     snprintf(srs_server, 128, "%s", sserver.c_str());
     snprintf(srs_primary, 128, "%s", sprimary.c_str());
     snprintf(srs_authors, 128, "%s", sauthors.c_str());
     snprintf(srs_version, 32, "%s", sversion.c_str());
-    
+
     return ret;
 }
 
 int srs_rtmp_play_stream(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
-    if ((ret = context->rtmp->create_stream(context->stream_id)) != ERROR_SUCCESS) {
+
+    if ((ret = context->rtmp->create_stream(context->stream_id)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = context->rtmp->play(context->stream, context->stream_id)) != ERROR_SUCCESS) {
+    if ((ret = context->rtmp->play(context->stream, context->stream_id)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_publish_stream(srs_rtmp_t rtmp)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
-    if ((ret = context->rtmp->fmle_publish(context->stream, context->stream_id)) != ERROR_SUCCESS) {
+
+    if ((ret = context->rtmp->fmle_publish(context->stream, context->stream_id)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
-int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp, 
-    int64_t* start_time, int64_t* end_time, 
-    int* play_kbps, int* publish_kbps,
-    int* play_bytes, int* publish_bytes,
-    int* play_duration, int* publish_duration
-) {
+int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp,
+                             int64_t* start_time, int64_t* end_time,
+                             int* play_kbps, int* publish_kbps,
+                             int* play_bytes, int* publish_bytes,
+                             int* play_duration, int* publish_duration
+                            )
+{
     *start_time = 0;
     *end_time = 0;
     *play_kbps = 0;
@@ -32160,25 +34105,27 @@ int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp,
     *publish_bytes = 0;
     *play_duration = 0;
     *publish_duration = 0;
-    
+
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     SrsBandwidthClient client;
 
-    if ((ret = client.initialize(context->rtmp)) != ERROR_SUCCESS) {
+    if ((ret = client.initialize(context->rtmp)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     if ((ret = client.bandwidth_check(
-        start_time, end_time, play_kbps, publish_kbps,
-        play_bytes, publish_bytes, play_duration, publish_duration)) != ERROR_SUCCESS
-    ) {
+                   start_time, end_time, play_kbps, publish_kbps,
+                   play_bytes, publish_bytes, play_duration, publish_duration)) != ERROR_SUCCESS
+       )
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -32186,76 +34133,86 @@ int srs_rtmp_bandwidth_check(srs_rtmp_t rtmp,
 int srs_rtmp_on_aggregate(Context* context, SrsCommonMessage* msg)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsStream aggregate_stream;
     SrsStream* stream = &aggregate_stream;
-    if ((ret = stream->initialize(msg->payload, msg->size)) != ERROR_SUCCESS) {
+    if ((ret = stream->initialize(msg->payload, msg->size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // the aggregate message always use abs time.
     int delta = -1;
-    
-    while (!stream->empty()) {
-        if (!stream->require(1)) {
+
+    while (!stream->empty())
+    {
+        if (!stream->require(1))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message type. ret=%d", ret);
             return ret;
         }
         int8_t type = stream->read_1bytes();
-        
-        if (!stream->require(3)) {
+
+        if (!stream->require(3))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message size. ret=%d", ret);
             return ret;
         }
         int32_t data_size = stream->read_3bytes();
-        
-        if (data_size < 0) {
+
+        if (data_size < 0)
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message size(negative). ret=%d", ret);
             return ret;
         }
-        
-        if (!stream->require(3)) {
+
+        if (!stream->require(3))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message time. ret=%d", ret);
             return ret;
         }
         int32_t timestamp = stream->read_3bytes();
-        
-        if (!stream->require(1)) {
+
+        if (!stream->require(1))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message time(high). ret=%d", ret);
             return ret;
         }
         int32_t time_h = stream->read_1bytes();
-        
+
         timestamp |= time_h<<24;
         timestamp &= 0x7FFFFFFF;
-        
+
         // adjust abs timestamp in aggregate msg.
-        if (delta < 0) {
+        if (delta < 0)
+        {
             delta = (int)msg->header.timestamp - (int)timestamp;
         }
         timestamp += delta;
-        
-        if (!stream->require(3)) {
+
+        if (!stream->require(3))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message stream_id. ret=%d", ret);
             return ret;
         }
         int32_t stream_id = stream->read_3bytes();
-        
-        if (data_size > 0 && !stream->require(data_size)) {
+
+        if (data_size > 0 && !stream->require(data_size))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message data. ret=%d", ret);
             return ret;
         }
-        
+
         // to common message.
         SrsCommonMessage o;
-        
+
         o.header.message_type = type;
         o.header.payload_length = data_size;
         o.header.timestamp_delta = timestamp;
@@ -32263,13 +34220,15 @@ int srs_rtmp_on_aggregate(Context* context, SrsCommonMessage* msg)
         o.header.stream_id = stream_id;
         o.header.perfer_cid = msg->header.perfer_cid;
 
-        if (data_size > 0) {
+        if (data_size > 0)
+        {
             o.size = data_size;
             o.payload = new char[o.size];
             stream->read_bytes(o.payload, o.size);
         }
-        
-        if (!stream->require(4)) {
+
+        if (!stream->require(4))
+        {
             ret = ERROR_RTMP_AGGREGATE;
             srs_error("invalid aggregate message previous tag size. ret=%d", ret);
             return ret;
@@ -32284,52 +34243,63 @@ int srs_rtmp_on_aggregate(Context* context, SrsCommonMessage* msg)
         o.payload = NULL;
         context->msgs.push_back(parsed_msg);
     }
-    
+
     return ret;
 }
 
-int srs_rtmp_go_packet(Context* context, SrsCommonMessage* msg, 
-    char* type, u_int32_t* timestamp, char** data, int* size,
-    bool* got_msg
-) {
+int srs_rtmp_go_packet(Context* context, SrsCommonMessage* msg,
+                       char* type, u_int32_t* timestamp, char** data, int* size,
+                       bool* got_msg
+                      )
+{
     int ret = ERROR_SUCCESS;
 
     // generally we got a message.
     *got_msg = true;
-    
-    if (msg->header.is_audio()) {
+
+    if (msg->header.is_audio())
+    {
         *type = SRS_RTMP_TYPE_AUDIO;
         *timestamp = (u_int32_t)msg->header.timestamp;
         *data = (char*)msg->payload;
         *size = (int)msg->size;
         // detach bytes from packet.
         msg->payload = NULL;
-    } else if (msg->header.is_video()) {
+    }
+    else if (msg->header.is_video())
+    {
         *type = SRS_RTMP_TYPE_VIDEO;
         *timestamp = (u_int32_t)msg->header.timestamp;
         *data = (char*)msg->payload;
         *size = (int)msg->size;
         // detach bytes from packet.
         msg->payload = NULL;
-    } else if (msg->header.is_amf0_data() || msg->header.is_amf3_data()) {
+    }
+    else if (msg->header.is_amf0_data() || msg->header.is_amf3_data())
+    {
         *type = SRS_RTMP_TYPE_SCRIPT;
         *data = (char*)msg->payload;
         *size = (int)msg->size;
         // detach bytes from packet.
         msg->payload = NULL;
-    } else if (msg->header.is_aggregate()) {
-        if ((ret = srs_rtmp_on_aggregate(context, msg)) != ERROR_SUCCESS) {
+    }
+    else if (msg->header.is_aggregate())
+    {
+        if ((ret = srs_rtmp_on_aggregate(context, msg)) != ERROR_SUCCESS)
+        {
             return ret;
         }
         *got_msg = false;
-    } else {
+    }
+    else
+    {
         *type = msg->header.message_type;
         *data = (char*)msg->payload;
         *size = (int)msg->size;
         // detach bytes from packet.
         msg->payload = NULL;
     }
-    
+
     return ret;
 }
 
@@ -32339,98 +34309,111 @@ int srs_rtmp_read_packet(srs_rtmp_t rtmp, char* type, u_int32_t* timestamp, char
     *timestamp = 0;
     *data = NULL;
     *size = 0;
-    
+
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
-    for (;;) {
+
+    for (;;)
+    {
         SrsCommonMessage* msg = NULL;
-        
+
         // read from cache first.
-        if (!context->msgs.empty()) {
+        if (!context->msgs.empty())
+        {
             std::vector<SrsCommonMessage*>::iterator it = context->msgs.begin();
             msg = *it;
             context->msgs.erase(it);
         }
-        
+
         // read from protocol sdk.
-        if (!msg && (ret = context->rtmp->recv_message(&msg)) != ERROR_SUCCESS) {
+        if (!msg && (ret = context->rtmp->recv_message(&msg)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         // no msg, try again.
-        if (!msg) {
+        if (!msg)
+        {
             continue;
         }
-        
+
         SrsAutoFree(SrsCommonMessage, msg);
-        
+
         // process the got packet, if nothing, try again.
         bool got_msg;
-        if ((ret = srs_rtmp_go_packet(context, msg, type, timestamp, data, size, &got_msg)) != ERROR_SUCCESS) {
+        if ((ret = srs_rtmp_go_packet(context, msg, type, timestamp, data, size, &got_msg)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
+
         // got expected message.
-        if (got_msg) {
+        if (got_msg)
+        {
             break;
         }
     }
-    
+
     return ret;
 }
 
 int srs_rtmp_write_packet(srs_rtmp_t rtmp, char type, u_int32_t timestamp, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
+
     SrsSharedPtrMessage* msg = NULL;
 
-    if ((ret = srs_rtmp_create_msg(type, timestamp, data, size, context->stream_id, &msg)) != ERROR_SUCCESS) {
+    if ((ret = srs_rtmp_create_msg(type, timestamp, data, size, context->stream_id, &msg)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
     srs_assert(msg);
 
     // send out encoded msg.
-    if ((ret = context->rtmp->send_and_free_message(msg, context->stream_id)) != ERROR_SUCCESS) {
+    if ((ret = context->rtmp->send_and_free_message(msg, context->stream_id)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 srs_bool srs_rtmp_is_onMetaData(char type, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (type != SRS_RTMP_TYPE_SCRIPT) {
+
+    if (type != SRS_RTMP_TYPE_SCRIPT)
+    {
         return false;
     }
-    
+
     SrsStream stream;
-    if ((ret = stream.initialize(data, size)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(data, size)) != ERROR_SUCCESS)
+    {
         return false;
     }
-    
+
     std::string name;
-    if ((ret = srs_amf0_read_string(&stream, name)) != ERROR_SUCCESS) {
+    if ((ret = srs_amf0_read_string(&stream, name)) != ERROR_SUCCESS)
+    {
         return false;
     }
-    
-    if (name == SRS_CONSTS_RTMP_ON_METADATA) {
+
+    if (name == SRS_CONSTS_RTMP_ON_METADATA)
+    {
         return true;
     }
-    
-    if (name == SRS_CONSTS_RTMP_SET_DATAFRAME) {
+
+    if (name == SRS_CONSTS_RTMP_SET_DATAFRAME)
+    {
         return true;
     }
-    
+
     return false;
 }
 
@@ -32438,42 +34421,48 @@ srs_bool srs_rtmp_is_onMetaData(char type, char* data, int size)
 * directly write a audio frame.
 */
 int srs_write_audio_raw_frame(Context* context,
-    char* frame, int frame_size, SrsRawAacStreamCodec* codec, u_int32_t timestamp
-) {
+                              char* frame, int frame_size, SrsRawAacStreamCodec* codec, u_int32_t timestamp
+                             )
+{
     int ret = ERROR_SUCCESS;
 
     char* data = NULL;
     int size = 0;
-    if ((ret = context->aac_raw.mux_aac2flv(frame, frame_size, codec, timestamp, &data, &size)) != ERROR_SUCCESS) {
+    if ((ret = context->aac_raw.mux_aac2flv(frame, frame_size, codec, timestamp, &data, &size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return srs_rtmp_write_packet(context, SRS_RTMP_TYPE_AUDIO, timestamp, data, size);
 }
 
 /**
 * write aac frame in adts.
 */
-int srs_write_aac_adts_frame(Context* context, 
-    SrsRawAacStreamCodec* codec, char* frame, int frame_size, u_int32_t timestamp
-) {
+int srs_write_aac_adts_frame(Context* context,
+                             SrsRawAacStreamCodec* codec, char* frame, int frame_size, u_int32_t timestamp
+                            )
+{
     int ret = ERROR_SUCCESS;
-    
+
     // send out aac sequence header if not sent.
-    if (context->aac_specific_config.empty()) {
+    if (context->aac_specific_config.empty())
+    {
         std::string sh;
-        if ((ret = context->aac_raw.mux_sequence_header(codec, sh)) != ERROR_SUCCESS) {
+        if ((ret = context->aac_raw.mux_sequence_header(codec, sh)) != ERROR_SUCCESS)
+        {
             return ret;
         }
         context->aac_specific_config = sh;
 
         codec->aac_packet_type = 0;
 
-        if ((ret = srs_write_audio_raw_frame(context, (char*)sh.data(), (int)sh.length(), codec, timestamp)) != ERROR_SUCCESS) {
+        if ((ret = srs_write_audio_raw_frame(context, (char*)sh.data(), (int)sh.length(), codec, timestamp)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     codec->aac_packet_type = 1;
     return srs_write_audio_raw_frame(context, frame, frame_size, codec, timestamp);
 }
@@ -32482,21 +34471,25 @@ int srs_write_aac_adts_frame(Context* context,
 * write aac frames in adts.
 */
 int srs_write_aac_adts_frames(Context* context,
-    char sound_format, char sound_rate, char sound_size, char sound_type,
-    char* frames, int frames_size, u_int32_t timestamp
-) {
+                              char sound_format, char sound_rate, char sound_size, char sound_type,
+                              char* frames, int frames_size, u_int32_t timestamp
+                             )
+{
     int ret = ERROR_SUCCESS;
-    
+
     SrsStream* stream = &context->aac_raw_stream;
-    if ((ret = stream->initialize(frames, frames_size)) != ERROR_SUCCESS) {
+    if ((ret = stream->initialize(frames, frames_size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    while (!stream->empty()) {
+
+    while (!stream->empty())
+    {
         char* frame = NULL;
         int frame_size = 0;
         SrsRawAacStreamCodec codec;
-        if ((ret = context->aac_raw.adts_demux(stream, &frame, &frame_size, codec)) != ERROR_SUCCESS) {
+        if ((ret = context->aac_raw.adts_demux(stream, &frame, &frame_size, codec)) != ERROR_SUCCESS)
+        {
             return ret;
         }
 
@@ -32506,37 +34499,43 @@ int srs_write_aac_adts_frames(Context* context,
         codec.sound_size = sound_size;
         codec.sound_type = sound_type;
 
-        if ((ret = srs_write_aac_adts_frame(context, &codec, frame, frame_size, timestamp)) != ERROR_SUCCESS) {
+        if ((ret = srs_write_aac_adts_frame(context, &codec, frame, frame_size, timestamp)) != ERROR_SUCCESS)
+        {
             return ret;
         }
     }
-    
+
     return ret;
 }
 
 /**
 * write audio raw frame to SRS.
 */
-int srs_audio_write_raw_frame(srs_rtmp_t rtmp, 
-    char sound_format, char sound_rate, char sound_size, char sound_type,
-    char* frame, int frame_size, u_int32_t timestamp
-) {
+int srs_audio_write_raw_frame(srs_rtmp_t rtmp,
+                              char sound_format, char sound_rate, char sound_size, char sound_type,
+                              char* frame, int frame_size, u_int32_t timestamp
+                             )
+{
     int ret = ERROR_SUCCESS;
-    
+
     Context* context = (Context*)rtmp;
     srs_assert(context);
-    
-    if (sound_format == SrsCodecAudioAAC) {
+
+    if (sound_format == SrsCodecAudioAAC)
+    {
         // for aac, the frame must be ADTS format.
-        if (!srs_aac_is_adts(frame, frame_size)) {
+        if (!srs_aac_is_adts(frame, frame_size))
+        {
             return ERROR_AAC_REQUIRED_ADTS;
         }
-        
+
         // for aac, demux the ADTS to RTMP format.
-        return srs_write_aac_adts_frames(context, 
-            sound_format, sound_rate, sound_size, sound_type, 
-            frame, frame_size, timestamp);
-    } else {
+        return srs_write_aac_adts_frames(context,
+                                         sound_format, sound_rate, sound_size, sound_type,
+                                         frame, frame_size, timestamp);
+    }
+    else
+    {
         // use codec info for aac.
         SrsRawAacStreamCodec codec;
         codec.sound_format = sound_format;
@@ -32548,8 +34547,8 @@ int srs_audio_write_raw_frame(srs_rtmp_t rtmp,
         // for other data, directly write frame.
         return srs_write_audio_raw_frame(context, frame, frame_size, &codec, timestamp);
     }
-    
-    
+
+
     return ret;
 }
 
@@ -32560,10 +34559,11 @@ int srs_audio_write_raw_frame(srs_rtmp_t rtmp,
 srs_bool srs_aac_is_adts(char* aac_raw_data, int ac_raw_size)
 {
     SrsStream stream;
-    if (stream.initialize(aac_raw_data, ac_raw_size) != ERROR_SUCCESS) {
+    if (stream.initialize(aac_raw_data, ac_raw_size) != ERROR_SUCCESS)
+    {
         return false;
     }
-    
+
     return srs_aac_startswith_adts(&stream);
 }
 
@@ -32573,65 +34573,72 @@ srs_bool srs_aac_is_adts(char* aac_raw_data, int ac_raw_size)
 int srs_aac_adts_frame_size(char* aac_raw_data, int ac_raw_size)
 {
     int size = -1;
-    
-    if (!srs_aac_is_adts(aac_raw_data, ac_raw_size)) {
+
+    if (!srs_aac_is_adts(aac_raw_data, ac_raw_size))
+    {
         return size;
     }
-    
+
     // adts always 7bytes.
-    if (ac_raw_size <= 7) {
+    if (ac_raw_size <= 7)
+    {
         return size;
     }
-    
+
     // last 2bits
     int16_t ch3 = aac_raw_data[3];
     // whole 8bits
     int16_t ch4 = aac_raw_data[4];
     // first 3bits
     int16_t ch5 = aac_raw_data[5];
-    
+
     size = ((ch3 << 11) & 0x1800) | ((ch4 << 3) & 0x07f8) | ((ch5 >> 5) & 0x0007);
-    
+
     return size;
 }
-    
+
 /**
 * write h264 IPB-frame.
 */
-int srs_write_h264_ipb_frame(Context* context, 
-    char* frame, int frame_size, u_int32_t dts, u_int32_t pts
-) {
+int srs_write_h264_ipb_frame(Context* context,
+                             char* frame, int frame_size, u_int32_t dts, u_int32_t pts
+                            )
+{
     int ret = ERROR_SUCCESS;
-    
+
     // when sps or pps not sent, ignore the packet.
     // @see https://github.com/simple-rtmp-server/srs/issues/203
-    if (!context->h264_sps_pps_sent) {
+    if (!context->h264_sps_pps_sent)
+    {
         return ERROR_H264_DROP_BEFORE_SPS_PPS;
     }
-    
+
     // 5bits, 7.3.1 NAL unit syntax,
     // H.264-AVC-ISO_IEC_14496-10.pdf, page 44.
     //  7: SPS, 8: PPS, 5: I Frame, 1: P Frame
     SrsAvcNaluType nal_unit_type = (SrsAvcNaluType)(frame[0] & 0x1f);
-    
+
     // for IDR frame, the frame is keyframe.
     SrsCodecVideoAVCFrame frame_type = SrsCodecVideoAVCFrameInterFrame;
-    if (nal_unit_type == SrsAvcNaluTypeIDR) {
+    if (nal_unit_type == SrsAvcNaluTypeIDR)
+    {
         frame_type = SrsCodecVideoAVCFrameKeyFrame;
     }
-    
+
     std::string ibp;
-    if ((ret = context->avc_raw.mux_ipb_frame(frame, frame_size, ibp)) != ERROR_SUCCESS) {
+    if ((ret = context->avc_raw.mux_ipb_frame(frame, frame_size, ibp)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     int8_t avc_packet_type = SrsCodecVideoAVCTypeNALU;
     char* flv = NULL;
     int nb_flv = 0;
-    if ((ret = context->avc_raw.mux_avc2flv(ibp, frame_type, avc_packet_type, dts, pts, &flv, &nb_flv)) != ERROR_SUCCESS) {
+    if ((ret = context->avc_raw.mux_avc2flv(ibp, frame_type, avc_packet_type, dts, pts, &flv, &nb_flv)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // the timestamp in rtmp message header is dts.
     u_int32_t timestamp = dts;
     return srs_rtmp_write_packet(context, SRS_RTMP_TYPE_VIDEO, timestamp, flv, nb_flv);
@@ -32643,32 +34650,35 @@ int srs_write_h264_ipb_frame(Context* context,
 int srs_write_h264_sps_pps(Context* context, u_int32_t dts, u_int32_t pts)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // send when sps or pps changed.
-    if (!context->h264_sps_changed && !context->h264_pps_changed) {
+    if (!context->h264_sps_changed && !context->h264_pps_changed)
+    {
         return ret;
     }
-    
+
     // h264 raw to h264 packet.
     std::string sh;
-    if ((ret = context->avc_raw.mux_sequence_header(context->h264_sps, context->h264_pps, dts, pts, sh)) != ERROR_SUCCESS) {
+    if ((ret = context->avc_raw.mux_sequence_header(context->h264_sps, context->h264_pps, dts, pts, sh)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // h264 packet to flv packet.
     int8_t frame_type = SrsCodecVideoAVCFrameKeyFrame;
     int8_t avc_packet_type = SrsCodecVideoAVCTypeSequenceHeader;
     char* flv = NULL;
     int nb_flv = 0;
-    if ((ret = context->avc_raw.mux_avc2flv(sh, frame_type, avc_packet_type, dts, pts, &flv, &nb_flv)) != ERROR_SUCCESS) {
+    if ((ret = context->avc_raw.mux_avc2flv(sh, frame_type, avc_packet_type, dts, pts, &flv, &nb_flv)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // reset sps and pps.
     context->h264_sps_changed = false;
     context->h264_pps_changed = false;
     context->h264_sps_pps_sent = true;
-    
+
     // the timestamp in rtmp message header is dts.
     u_int32_t timestamp = dts;
     return srs_rtmp_write_packet(context, SRS_RTMP_TYPE_VIDEO, timestamp, flv, nb_flv);
@@ -32677,45 +34687,53 @@ int srs_write_h264_sps_pps(Context* context, u_int32_t dts, u_int32_t pts)
 /**
 * write h264 raw frame, maybe sps/pps/IPB-frame.
 */
-int srs_write_h264_raw_frame(Context* context, 
-    char* frame, int frame_size, u_int32_t dts, u_int32_t pts
-) {
+int srs_write_h264_raw_frame(Context* context,
+                             char* frame, int frame_size, u_int32_t dts, u_int32_t pts
+                            )
+{
     int ret = ERROR_SUCCESS;
 
     // for sps
-    if (context->avc_raw.is_sps(frame, frame_size)) {
+    if (context->avc_raw.is_sps(frame, frame_size))
+    {
         std::string sps;
-        if ((ret = context->avc_raw.sps_demux(frame, frame_size, sps)) != ERROR_SUCCESS) {
+        if ((ret = context->avc_raw.sps_demux(frame, frame_size, sps)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
-        if (context->h264_sps == sps) {
+
+        if (context->h264_sps == sps)
+        {
             return ERROR_H264_DUPLICATED_SPS;
         }
         context->h264_sps_changed = true;
         context->h264_sps = sps;
-        
+
         return ret;
     }
 
     // for pps
-    if (context->avc_raw.is_pps(frame, frame_size)) {
+    if (context->avc_raw.is_pps(frame, frame_size))
+    {
         std::string pps;
-        if ((ret = context->avc_raw.pps_demux(frame, frame_size, pps)) != ERROR_SUCCESS) {
+        if ((ret = context->avc_raw.pps_demux(frame, frame_size, pps)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-        
-        if (context->h264_pps == pps) {
+
+        if (context->h264_pps == pps)
+        {
             return ERROR_H264_DUPLICATED_PPS;
         }
         context->h264_pps_changed = true;
         context->h264_pps = pps;
-        
+
         return ret;
     }
-    
+
     // send pps+sps before ipb frames when sps/pps changed.
-    if ((ret = srs_write_h264_sps_pps(context, dts, pts)) != ERROR_SUCCESS) {
+    if ((ret = srs_write_h264_sps_pps(context, dts, pts)) != ERROR_SUCCESS)
+    {
         return ret;
     }
 
@@ -32726,56 +34744,63 @@ int srs_write_h264_raw_frame(Context* context,
 /**
 * write h264 multiple frames, in annexb format.
 */
-int srs_h264_write_raw_frames(srs_rtmp_t rtmp, 
-    char* frames, int frames_size, u_int32_t dts, u_int32_t pts
-) {
+int srs_h264_write_raw_frames(srs_rtmp_t rtmp,
+                              char* frames, int frames_size, u_int32_t dts, u_int32_t pts
+                             )
+{
     int ret = ERROR_SUCCESS;
-    
+
     srs_assert(frames != NULL);
     srs_assert(frames_size > 0);
-    
+
     srs_assert(rtmp != NULL);
     Context* context = (Context*)rtmp;
-    
-    if ((ret = context->h264_raw_stream.initialize(frames, frames_size)) != ERROR_SUCCESS) {
+
+    if ((ret = context->h264_raw_stream.initialize(frames, frames_size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // use the last error
     // @see https://github.com/simple-rtmp-server/srs/issues/203
     // @see https://github.com/simple-rtmp-server/srs/issues/204
     int error_code_return = ret;
-    
+
     // send each frame.
-    while (!context->h264_raw_stream.empty()) {
+    while (!context->h264_raw_stream.empty())
+    {
         char* frame = NULL;
         int frame_size = 0;
-        if ((ret = context->avc_raw.annexb_demux(&context->h264_raw_stream, &frame, &frame_size)) != ERROR_SUCCESS) {
+        if ((ret = context->avc_raw.annexb_demux(&context->h264_raw_stream, &frame, &frame_size)) != ERROR_SUCCESS)
+        {
             return ret;
         }
-    
+
         // ignore invalid frame,
         // atleast 1bytes for SPS to decode the type
-        if (frame_size <= 0) {
+        if (frame_size <= 0)
+        {
             continue;
         }
 
         // it may be return error, but we must process all packets.
-        if ((ret = srs_write_h264_raw_frame(context, frame, frame_size, dts, pts)) != ERROR_SUCCESS) {
+        if ((ret = srs_write_h264_raw_frame(context, frame, frame_size, dts, pts)) != ERROR_SUCCESS)
+        {
             error_code_return = ret;
-            
+
             // ignore known error, process all packets.
             if (srs_h264_is_dvbsp_error(ret)
-                || srs_h264_is_duplicated_sps_error(ret)
-                || srs_h264_is_duplicated_pps_error(ret)
-            ) {
+                    || srs_h264_is_duplicated_sps_error(ret)
+                    || srs_h264_is_duplicated_pps_error(ret)
+               )
+            {
                 continue;
             }
-            
+
             return ret;
         }
     }
-    
+
     return error_code_return;
 }
 
@@ -32797,10 +34822,11 @@ srs_bool srs_h264_is_duplicated_pps_error(int error_code)
 srs_bool srs_h264_startswith_annexb(char* h264_raw_data, int h264_raw_size, int* pnb_start_code)
 {
     SrsStream stream;
-    if (stream.initialize(h264_raw_data, h264_raw_size) != ERROR_SUCCESS) {
+    if (stream.initialize(h264_raw_data, h264_raw_size) != ERROR_SUCCESS)
+    {
         return false;
     }
-    
+
     return srs_avc_startswith_annexb(&stream, pnb_start_code);
 }
 
@@ -32815,38 +34841,42 @@ struct FlvContext
 srs_flv_t srs_flv_open_read(const char* file)
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* flv = new FlvContext();
-    
-    if ((ret = flv->reader.open(file)) != ERROR_SUCCESS) {
+
+    if ((ret = flv->reader.open(file)) != ERROR_SUCCESS)
+    {
         srs_freep(flv);
         return NULL;
     }
-    
-    if ((ret = flv->dec.initialize(&flv->reader)) != ERROR_SUCCESS) {
+
+    if ((ret = flv->dec.initialize(&flv->reader)) != ERROR_SUCCESS)
+    {
         srs_freep(flv);
         return NULL;
     }
-    
+
     return flv;
 }
 
 srs_flv_t srs_flv_open_write(const char* file)
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* flv = new FlvContext();
-    
-    if ((ret = flv->writer.open(file)) != ERROR_SUCCESS) {
+
+    if ((ret = flv->writer.open(file)) != ERROR_SUCCESS)
+    {
         srs_freep(flv);
         return NULL;
     }
-    
-    if ((ret = flv->enc.initialize(&flv->writer)) != ERROR_SUCCESS) {
+
+    if ((ret = flv->enc.initialize(&flv->writer)) != ERROR_SUCCESS)
+    {
         srs_freep(flv);
         return NULL;
     }
-    
+
     return flv;
 }
 
@@ -32859,96 +34889,112 @@ void srs_flv_close(srs_flv_t flv)
 int srs_flv_read_header(srs_flv_t flv, char header[9])
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* context = (FlvContext*)flv;
 
-    if (!context->reader.is_open()) {
+    if (!context->reader.is_open())
+    {
         return ERROR_SYSTEM_IO_INVALID;
     }
-    
-    if ((ret = context->dec.read_header(header)) != ERROR_SUCCESS) {
+
+    if ((ret = context->dec.read_header(header)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     char ts[4]; // tag size
-    if ((ret = context->dec.read_previous_tag_size(ts)) != ERROR_SUCCESS) {
+    if ((ret = context->dec.read_previous_tag_size(ts)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_flv_read_tag_header(srs_flv_t flv, char* ptype, int32_t* pdata_size, u_int32_t* ptime)
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* context = (FlvContext*)flv;
 
-    if (!context->reader.is_open()) {
+    if (!context->reader.is_open())
+    {
         return ERROR_SYSTEM_IO_INVALID;
     }
-    
-    if ((ret = context->dec.read_tag_header(ptype, pdata_size, ptime)) != ERROR_SUCCESS) {
+
+    if ((ret = context->dec.read_tag_header(ptype, pdata_size, ptime)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_flv_read_tag_data(srs_flv_t flv, char* data, int32_t size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* context = (FlvContext*)flv;
 
-    if (!context->reader.is_open()) {
+    if (!context->reader.is_open())
+    {
         return ERROR_SYSTEM_IO_INVALID;
     }
-    
-    if ((ret = context->dec.read_tag_data(data, size)) != ERROR_SUCCESS) {
+
+    if ((ret = context->dec.read_tag_data(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     char ts[4]; // tag size
-    if ((ret = context->dec.read_previous_tag_size(ts)) != ERROR_SUCCESS) {
+    if ((ret = context->dec.read_previous_tag_size(ts)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_flv_write_header(srs_flv_t flv, char header[9])
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* context = (FlvContext*)flv;
 
-    if (!context->writer.is_open()) {
+    if (!context->writer.is_open())
+    {
         return ERROR_SYSTEM_IO_INVALID;
     }
-    
-    if ((ret = context->enc.write_header(header)) != ERROR_SUCCESS) {
+
+    if ((ret = context->enc.write_header(header)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
 int srs_flv_write_tag(srs_flv_t flv, char type, int32_t time, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     FlvContext* context = (FlvContext*)flv;
 
-    if (!context->writer.is_open()) {
+    if (!context->writer.is_open())
+    {
         return ERROR_SYSTEM_IO_INVALID;
     }
-    
-    if (type == SRS_RTMP_TYPE_AUDIO) {
+
+    if (type == SRS_RTMP_TYPE_AUDIO)
+    {
         return context->enc.write_audio(time, data, size);
-    } else if (type == SRS_RTMP_TYPE_VIDEO) {
+    }
+    else if (type == SRS_RTMP_TYPE_VIDEO)
+    {
         return context->enc.write_video(time, data, size);
-    } else {
+    }
+    else
+    {
         return context->enc.write_metadata(type, data, size);
     }
 
@@ -32990,30 +35036,34 @@ srs_bool srs_flv_is_keyframe(char* data, int32_t size)
 srs_amf0_t srs_amf0_parse(char* data, int size, int* nparsed)
 {
     int ret = ERROR_SUCCESS;
-    
+
     srs_amf0_t amf0 = NULL;
-    
+
     SrsStream stream;
-    if ((ret = stream.initialize(data, size)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(data, size)) != ERROR_SUCCESS)
+    {
         return amf0;
     }
-    
+
     SrsAmf0Any* any = NULL;
-    if ((ret = SrsAmf0Any::discovery(&stream, &any)) != ERROR_SUCCESS) {
+    if ((ret = SrsAmf0Any::discovery(&stream, &any)) != ERROR_SUCCESS)
+    {
         return amf0;
     }
-    
+
     stream.skip(-1 * stream.pos());
-    if ((ret = any->read(&stream)) != ERROR_SUCCESS) {
+    if ((ret = any->read(&stream)) != ERROR_SUCCESS)
+    {
         srs_freep(any);
         return amf0;
     }
-    
-    if (nparsed) {
+
+    if (nparsed)
+    {
         *nparsed = stream.pos();
     }
     amf0 = (srs_amf0_t)any;
-    
+
     return amf0;
 }
 
@@ -33048,13 +35098,14 @@ srs_amf0_t srs_amf0_ecma_array_to_object(srs_amf0_t ecma_arr)
 
     SrsAmf0EcmaArray* arr = (SrsAmf0EcmaArray*)ecma_arr;
     SrsAmf0Object* obj = SrsAmf0Any::object();
-    
-    for (int i = 0; i < arr->count(); i++) {
+
+    for (int i = 0; i < arr->count(); i++)
+    {
         std::string key = arr->key_at(i);
         SrsAmf0Any* value = arr->value_at(i);
         obj->set(key, value->copy());
     }
-    
+
     return obj;
 }
 
@@ -33073,18 +35124,20 @@ int srs_amf0_size(srs_amf0_t amf0)
 int srs_amf0_serialize(srs_amf0_t amf0, char* data, int size)
 {
     int ret = ERROR_SUCCESS;
-    
+
     SrsAmf0Any* any = (SrsAmf0Any*)amf0;
-    
+
     SrsStream stream;
-    if ((ret = stream.initialize(data, size)) != ERROR_SUCCESS) {
+    if ((ret = stream.initialize(data, size)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
-    if ((ret = any->write(&stream)) != ERROR_SUCCESS) {
+
+    if ((ret = any->write(&stream)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     return ret;
 }
 
@@ -33305,32 +35358,37 @@ int64_t srs_utils_recv_bytes(srs_rtmp_t rtmp)
 int srs_utils_parse_timestamp(
     u_int32_t time, char type, char* data, int size,
     u_int32_t* ppts
-) {
+)
+{
     int ret = ERROR_SUCCESS;
-    
-    if (type != SRS_RTMP_TYPE_VIDEO) {
+
+    if (type != SRS_RTMP_TYPE_VIDEO)
+    {
         *ppts = time;
         return ret;
     }
 
-    if (!SrsFlvCodec::video_is_h264(data, size)) {
+    if (!SrsFlvCodec::video_is_h264(data, size))
+    {
         return ERROR_FLV_INVALID_VIDEO_TAG;
     }
 
-    if (SrsFlvCodec::video_is_sequence_header(data, size)) {
+    if (SrsFlvCodec::video_is_sequence_header(data, size))
+    {
         *ppts = time;
         return ret;
     }
-    
+
     // 1bytes, frame type and codec id.
     // 1bytes, avc packet type.
     // 3bytes, cts, composition time,
-    //      pts = dts + cts, or 
+    //      pts = dts + cts, or
     //      cts = pts - dts.
-    if (size < 5) {
+    if (size < 5)
+    {
         return ERROR_FLV_INVALID_VIDEO_TAG;
     }
-    
+
     u_int32_t cts = 0;
     char* p = data + 2;
     char* pp = (char*)&cts;
@@ -33339,10 +35397,10 @@ int srs_utils_parse_timestamp(
     pp[0] = *p++;
 
     *ppts = time + cts;
-    
+
     return ret;
 }
-    
+
 srs_bool srs_utils_flv_tag_is_ok(char type)
 {
     return type == SRS_RTMP_TYPE_AUDIO || type == SRS_RTMP_TYPE_VIDEO || type == SRS_RTMP_TYPE_SCRIPT;
@@ -33352,7 +35410,7 @@ srs_bool srs_utils_flv_tag_is_audio(char type)
 {
     return type == SRS_RTMP_TYPE_AUDIO;
 }
-    
+
 srs_bool srs_utils_flv_tag_is_video(char type)
 {
     return type == SRS_RTMP_TYPE_VIDEO;
@@ -33365,140 +35423,159 @@ srs_bool srs_utils_flv_tag_is_av(char type)
 
 char srs_utils_flv_video_codec_id(char* data, int size)
 {
-    if (size < 1) {
+    if (size < 1)
+    {
         return 0;
     }
 
     char codec_id = data[0];
     codec_id = codec_id & 0x0F;
-    
+
     return codec_id;
 }
 
 char srs_utils_flv_video_avc_packet_type(char* data, int size)
 {
-    if (size < 2) {
+    if (size < 2)
+    {
         return -1;
     }
-    
-    if (!SrsFlvCodec::video_is_h264(data, size)) {
+
+    if (!SrsFlvCodec::video_is_h264(data, size))
+    {
         return -1;
     }
-    
+
     u_int8_t avc_packet_type = data[1];
-    
-    if (avc_packet_type > 2) {
+
+    if (avc_packet_type > 2)
+    {
         return -1;
     }
-    
+
     return avc_packet_type;
 }
 
 char srs_utils_flv_video_frame_type(char* data, int size)
 {
-    if (size < 1) {
+    if (size < 1)
+    {
         return -1;
     }
-    
-    if (!SrsFlvCodec::video_is_h264(data, size)) {
+
+    if (!SrsFlvCodec::video_is_h264(data, size))
+    {
         return -1;
     }
-    
+
     u_int8_t frame_type = data[0];
     frame_type = (frame_type >> 4) & 0x0f;
-    if (frame_type < 1 || frame_type > 5) {
+    if (frame_type < 1 || frame_type > 5)
+    {
         return -1;
     }
-    
+
     return frame_type;
 }
 
 char srs_utils_flv_audio_sound_format(char* data, int size)
 {
-    if (size < 1) {
+    if (size < 1)
+    {
         return -1;
     }
-    
+
     u_int8_t sound_format = data[0];
     sound_format = (sound_format >> 4) & 0x0f;
-    if (sound_format > 15 || sound_format == 12 || sound_format == 13) {
+    if (sound_format > 15 || sound_format == 12 || sound_format == 13)
+    {
         return -1;
     }
-    
+
     return sound_format;
 }
 
 char srs_utils_flv_audio_sound_rate(char* data, int size)
 {
-    if (size < 1) {
+    if (size < 1)
+    {
         return -1;
     }
-    
+
     u_int8_t sound_rate = data[0];
     sound_rate = (sound_rate >> 2) & 0x03;
-    if (sound_rate > 3) {
+    if (sound_rate > 3)
+    {
         return -1;
     }
-    
+
     return sound_rate;
 }
 
 char srs_utils_flv_audio_sound_size(char* data, int size)
 {
-    if (size < 1) {
+    if (size < 1)
+    {
         return -1;
     }
-    
+
     u_int8_t sound_size = data[0];
     sound_size = (sound_size >> 1) & 0x01;
-    if (sound_size > 1) {
+    if (sound_size > 1)
+    {
         return -1;
     }
-    
+
     return sound_size;
 }
 
 char srs_utils_flv_audio_sound_type(char* data, int size)
 {
-    if (size < 1) {
+    if (size < 1)
+    {
         return -1;
     }
-    
+
     u_int8_t sound_type = data[0];
     sound_type = sound_type & 0x01;
-    if (sound_type > 1) {
+    if (sound_type > 1)
+    {
         return -1;
     }
-    
+
     return sound_type;
 }
 
 char srs_utils_flv_audio_aac_packet_type(char* data, int size)
 {
-    if (size < 2) {
+    if (size < 2)
+    {
         return -1;
     }
-    
-    if (srs_utils_flv_audio_sound_format(data, size) != 10) {
+
+    if (srs_utils_flv_audio_sound_format(data, size) != 10)
+    {
         return -1;
     }
-    
+
     u_int8_t aac_packet_type = data[1];
-    if (aac_packet_type > 1) {
+    if (aac_packet_type > 1)
+    {
         return -1;
     }
-    
+
     return aac_packet_type;
 }
 
 char* srs_human_amf0_print(srs_amf0_t amf0, char** pdata, int* psize)
 {
-    if (!amf0) {
+    if (!amf0)
+    {
         return NULL;
     }
-    
+
     SrsAmf0Any* any = (SrsAmf0Any*)amf0;
-    
+
     return any->human_print(pdata, psize);
 }
 
@@ -33508,19 +35585,23 @@ const char* srs_human_flv_tag_type2string(char type)
     static const char* video = "Video";
     static const char* data = "Data";
     static const char* unknown = "Unknown";
-	static char cType[64] = {0};
-    
-    switch (type) {
-        case SRS_RTMP_TYPE_AUDIO: return audio;
-        case SRS_RTMP_TYPE_VIDEO: return video;
-        case SRS_RTMP_TYPE_SCRIPT: return data;
-		default: 
-			{
-				sprintf(cType,"type:0x%0x",type);
-				return cType;
-			}
+    static char cType[64] = {0};
+
+    switch (type)
+    {
+    case SRS_RTMP_TYPE_AUDIO:
+        return audio;
+    case SRS_RTMP_TYPE_VIDEO:
+        return video;
+    case SRS_RTMP_TYPE_SCRIPT:
+        return data;
+    default:
+    {
+        sprintf(cType,"type:0x%0x",type);
+        return cType;
     }
-    
+    }
+
     return unknown;
 }
 
@@ -33533,17 +35614,25 @@ const char* srs_human_flv_video_codec_id2string(char codec_id)
     static const char* screen2 = "Screen2";
     static const char* h264 = "H.264";
     static const char* unknown = "Unknown";
-    
-    switch (codec_id) {
-        case 2: return h263;
-        case 3: return screen;
-        case 4: return vp6;
-        case 5: return vp6_alpha;
-        case 6: return screen2;
-        case 7: return h264;
-        default: return unknown;
+
+    switch (codec_id)
+    {
+    case 2:
+        return h263;
+    case 3:
+        return screen;
+    case 4:
+        return vp6;
+    case 5:
+        return vp6_alpha;
+    case 6:
+        return screen2;
+    case 7:
+        return h264;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33553,14 +35642,19 @@ const char* srs_human_flv_video_avc_packet_type2string(char avc_packet_type)
     static const char* nalu = "Nalu";
     static const char* sps_pps_end = "SpsPpsEnd";
     static const char* unknown = "Unknown";
-    
-    switch (avc_packet_type) {
-        case 0: return sps_pps;
-        case 1: return nalu;
-        case 2: return sps_pps_end;
-        default: return unknown;
+
+    switch (avc_packet_type)
+    {
+    case 0:
+        return sps_pps;
+    case 1:
+        return nalu;
+    case 2:
+        return sps_pps_end;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33572,16 +35666,23 @@ const char* srs_human_flv_video_frame_type2string(char frame_type)
     static const char* generated_keyframe = "GI";
     static const char* video_infoframe = "VI";
     static const char* unknown = "Unknown";
-    
-    switch (frame_type) {
-        case 1: return keyframe;
-        case 2: return interframe;
-        case 3: return disposable_interframe;
-        case 4: return generated_keyframe;
-        case 5: return video_infoframe;
-        default: return unknown;
+
+    switch (frame_type)
+    {
+    case 1:
+        return keyframe;
+    case 2:
+        return interframe;
+    case 3:
+        return disposable_interframe;
+    case 4:
+        return generated_keyframe;
+    case 5:
+        return video_infoframe;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33602,25 +35703,41 @@ const char* srs_human_flv_audio_sound_format2string(char sound_format)
     static const char* mp3_8khz = "MP3KHz8";
     static const char* device_specific = "DeviceSpecific";
     static const char* unknown = "Unknown";
-    
-    switch (sound_format) {
-        case 0: return linear_pcm;
-        case 1: return ad_pcm;
-        case 2: return mp3;
-        case 3: return linear_pcm_le;
-        case 4: return nellymoser_16khz;
-        case 5: return nellymoser_8khz;
-        case 6: return nellymoser;
-        case 7: return g711_a_pcm;
-        case 8: return g711_mu_pcm;
-        case 9: return reserved;
-        case 10: return aac;
-        case 11: return speex;
-        case 14: return mp3_8khz;
-        case 15: return device_specific;
-        default: return unknown;
+
+    switch (sound_format)
+    {
+    case 0:
+        return linear_pcm;
+    case 1:
+        return ad_pcm;
+    case 2:
+        return mp3;
+    case 3:
+        return linear_pcm_le;
+    case 4:
+        return nellymoser_16khz;
+    case 5:
+        return nellymoser_8khz;
+    case 6:
+        return nellymoser;
+    case 7:
+        return g711_a_pcm;
+    case 8:
+        return g711_mu_pcm;
+    case 9:
+        return reserved;
+    case 10:
+        return aac;
+    case 11:
+        return speex;
+    case 14:
+        return mp3_8khz;
+    case 15:
+        return device_specific;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33631,15 +35748,21 @@ const char* srs_human_flv_audio_sound_rate2string(char sound_rate)
     static const char* khz_22 = "22KHz";
     static const char* khz_44 = "44KHz";
     static const char* unknown = "Unknown";
-    
-    switch (sound_rate) {
-        case 0: return khz_5_5;
-        case 1: return khz_11;
-        case 2: return khz_22;
-        case 3: return khz_44;
-        default: return unknown;
+
+    switch (sound_rate)
+    {
+    case 0:
+        return khz_5_5;
+    case 1:
+        return khz_11;
+    case 2:
+        return khz_22;
+    case 3:
+        return khz_44;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33648,13 +35771,17 @@ const char* srs_human_flv_audio_sound_size2string(char sound_size)
     static const char* bit_8 = "8bit";
     static const char* bit_16 = "16bit";
     static const char* unknown = "Unknown";
-    
-    switch (sound_size) {
-        case 0: return bit_8;
-        case 1: return bit_16;
-        default: return unknown;
+
+    switch (sound_size)
+    {
+    case 0:
+        return bit_8;
+    case 1:
+        return bit_16;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33663,13 +35790,17 @@ const char* srs_human_flv_audio_sound_type2string(char sound_type)
     static const char* mono = "Mono";
     static const char* stereo = "Stereo";
     static const char* unknown = "Unknown";
-    
-    switch (sound_type) {
-        case 0: return mono;
-        case 1: return stereo;
-        default: return unknown;
+
+    switch (sound_type)
+    {
+    case 0:
+        return mono;
+    case 1:
+        return stereo;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
 
@@ -33678,16 +35809,20 @@ const char* srs_human_flv_audio_aac_packet_type2string(char aac_packet_type)
     static const char* sps_pps = "SH";
     static const char* raw = "Raw";
     static const char* unknown = "Unknown";
-    
-    switch (aac_packet_type) {
-        case 0: return sps_pps;
-        case 1: return raw;
-        default: return unknown;
+
+    switch (aac_packet_type)
+    {
+    case 0:
+        return sps_pps;
+    case 1:
+        return raw;
+    default:
+        return unknown;
     }
-    
+
     return unknown;
 }
-    
+
 int srs_human_print_rtmp_packet(char type, u_int32_t timestamp, char* data, int size)
 {
     return srs_human_print_rtmp_packet2(type, timestamp, data, size, 0);
@@ -33697,84 +35832,98 @@ int srs_human_print_rtmp_packet2(char type, u_int32_t timestamp, char* data, int
 {
     return srs_human_print_rtmp_packet3(type, timestamp, data, size, pre_timestamp, 0);
 }
-    
+
 int srs_human_print_rtmp_packet3(char type, u_int32_t timestamp, char* data, int size, u_int32_t pre_timestamp, int64_t pre_now)
 {
     return srs_human_print_rtmp_packet4(type, timestamp, data, size, pre_timestamp, pre_now, 0, 0);
 }
-    
+
 int srs_human_print_rtmp_packet4(char type, u_int32_t timestamp, char* data, int size, u_int32_t pre_timestamp, int64_t pre_now, int64_t starttime, int64_t nb_packets)
 {
     int ret = ERROR_SUCCESS;
-    
+
     // packets interval in milliseconds.
     double pi = 0;
-    if (pre_now > starttime) {
+    if (pre_now > starttime)
+    {
         pi = (pre_now - starttime) / (double)nb_packets;
     }
-    
+
     // global fps(video and audio mixed fps).
     double gfps = 0;
-    if (pi > 0) {
+    if (pi > 0)
+    {
         gfps = 1000 / pi;
     }
-    
+
     int diff = 0;
-    if (pre_timestamp > 0) {
+    if (pre_timestamp > 0)
+    {
         diff = (int)timestamp - (int)pre_timestamp;
     }
-    
+
     int ndiff = 0;
-    if (pre_now > 0) {
+    if (pre_now > 0)
+    {
         ndiff = (int)(srs_utils_time_ms() - pre_now);
     }
-    
+
     u_int32_t pts;
-    if (srs_utils_parse_timestamp(timestamp, type, data, size, &pts) != 0) {
+    if (srs_utils_parse_timestamp(timestamp, type, data, size, &pts) != 0)
+    {
         srs_human_trace("Rtmp packet id=%"PRId64"/%.1f/%.1f, type=%s, dts=%d, ndiff=%d, diff=%d, size=%d, DecodeError",
-            nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, ndiff, diff, size
-        );
+                        nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, ndiff, diff, size
+                       );
         return ret;
     }
-    
-    if (type == SRS_RTMP_TYPE_VIDEO) {
+
+    if (type == SRS_RTMP_TYPE_VIDEO)
+    {
         srs_human_trace("Video packet id=%"PRId64"/%.1f/%.1f, type=%s, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d, %s(%s,%s)",
-            nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, pts, ndiff, diff, size,
-            srs_human_flv_video_codec_id2string(srs_utils_flv_video_codec_id(data, size)),
-            srs_human_flv_video_avc_packet_type2string(srs_utils_flv_video_avc_packet_type(data, size)),
-            srs_human_flv_video_frame_type2string(srs_utils_flv_video_frame_type(data, size))
-        );
-    } else if (type == SRS_RTMP_TYPE_AUDIO) {
+                        nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, pts, ndiff, diff, size,
+                        srs_human_flv_video_codec_id2string(srs_utils_flv_video_codec_id(data, size)),
+                        srs_human_flv_video_avc_packet_type2string(srs_utils_flv_video_avc_packet_type(data, size)),
+                        srs_human_flv_video_frame_type2string(srs_utils_flv_video_frame_type(data, size))
+                       );
+    }
+    else if (type == SRS_RTMP_TYPE_AUDIO)
+    {
         srs_human_trace("Audio packet id=%"PRId64"/%.1f/%.1f, type=%s, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d, %s(%s,%s,%s,%s)",
-            nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, pts, ndiff, diff, size,
-            srs_human_flv_audio_sound_format2string(srs_utils_flv_audio_sound_format(data, size)),
-            srs_human_flv_audio_sound_rate2string(srs_utils_flv_audio_sound_rate(data, size)),
-            srs_human_flv_audio_sound_size2string(srs_utils_flv_audio_sound_size(data, size)),
-            srs_human_flv_audio_sound_type2string(srs_utils_flv_audio_sound_type(data, size)),
-            srs_human_flv_audio_aac_packet_type2string(srs_utils_flv_audio_aac_packet_type(data, size))
-        );
-    } else if (type == SRS_RTMP_TYPE_SCRIPT) {
+                        nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, pts, ndiff, diff, size,
+                        srs_human_flv_audio_sound_format2string(srs_utils_flv_audio_sound_format(data, size)),
+                        srs_human_flv_audio_sound_rate2string(srs_utils_flv_audio_sound_rate(data, size)),
+                        srs_human_flv_audio_sound_size2string(srs_utils_flv_audio_sound_size(data, size)),
+                        srs_human_flv_audio_sound_type2string(srs_utils_flv_audio_sound_type(data, size)),
+                        srs_human_flv_audio_aac_packet_type2string(srs_utils_flv_audio_aac_packet_type(data, size))
+                       );
+    }
+    else if (type == SRS_RTMP_TYPE_SCRIPT)
+    {
         srs_human_verbose("Data packet id=%"PRId64"/%.1f/%.1f, type=%s, time=%d, ndiff=%d, diff=%d, size=%d",
-            nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, ndiff, diff, size);
+                          nb_packets, pi, gfps, srs_human_flv_tag_type2string(type), timestamp, ndiff, diff, size);
         int nparsed = 0;
-        while (nparsed < size) {
+        while (nparsed < size)
+        {
             int nb_parsed_this = 0;
             srs_amf0_t amf0 = srs_amf0_parse(data + nparsed, size - nparsed, &nb_parsed_this);
-            if (amf0 == NULL) {
+            if (amf0 == NULL)
+            {
                 break;
             }
-    
+
             nparsed += nb_parsed_this;
-            
+
             char* amf0_str = NULL;
             srs_human_raw("%s", srs_human_amf0_print(amf0, &amf0_str, NULL));
             srs_freep(amf0_str);
         }
-    } else {
-        srs_human_trace("Rtmp packet id=%"PRId64"/%.1f/%.1f, type=%#x, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d",
-            nb_packets, pi, gfps, type, timestamp, pts, ndiff, diff, size);
     }
-    
+    else
+    {
+        srs_human_trace("Rtmp packet id=%"PRId64"/%.1f/%.1f, type=%#x, dts=%d, pts=%d, ndiff=%d, diff=%d, size=%d",
+                        nb_packets, pi, gfps, type, timestamp, pts, ndiff, diff, size);
+    }
+
     return ret;
 }
 
@@ -33782,29 +35931,31 @@ const char* srs_human_format_time()
 {
     struct timeval tv;
     static char buf[23];
-    
+
     memset(buf, 0, sizeof(buf));
-    
+
     // clock time
-    if (gettimeofday(&tv, NULL) == -1) {
+    if (gettimeofday(&tv, NULL) == -1)
+    {
         return buf;
     }
-    
+
     // to calendar time
     struct tm* tm;
-    if ((tm = localtime((const time_t*)&tv.tv_sec)) == NULL) {
+    if ((tm = localtime((const time_t*)&tv.tv_sec)) == NULL)
+    {
         return buf;
     }
-    
-    snprintf(buf, sizeof(buf), 
-        "%d-%02d-%02d %02d:%02d:%02d.%03d", 
-        1900 + tm->tm_year, 1 + tm->tm_mon, tm->tm_mday, 
-        tm->tm_hour, tm->tm_min, tm->tm_sec, 
-        (int)(tv.tv_usec / 1000));
-        
+
+    snprintf(buf, sizeof(buf),
+             "%d-%02d-%02d %02d:%02d:%02d.%03d",
+             1900 + tm->tm_year, 1 + tm->tm_mon, tm->tm_mday,
+             tm->tm_hour, tm->tm_min, tm->tm_sec,
+             (int)(tv.tv_usec / 1000));
+
     // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
     buf[sizeof(buf) - 1] = 0;
-    
+
     return buf;
 }
 
@@ -33812,15 +35963,17 @@ const char* srs_human_format_time()
 #ifdef SRS_HIJACK_IO
 srs_hijack_io_t srs_hijack_io_get(srs_rtmp_t rtmp)
 {
-    if (!rtmp) {
+    if (!rtmp)
+    {
         return NULL;
     }
-    
+
     Context* context = (Context*)rtmp;
-    if (!context->skt) {
+    if (!context->skt)
+    {
         return NULL;
     }
-    
+
     return context->skt->hijack_io();
 }
 #endif
@@ -33859,39 +36012,39 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifndef _WIN32
-    #define SOCKET_ETIME ETIME
-    #define SOCKET_ECONNRESET ECONNRESET
+#define SOCKET_ETIME ETIME
+#define SOCKET_ECONNRESET ECONNRESET
 
-    #define SOCKET_ERRNO() errno
-    #define SOCKET_RESET(fd) fd = -1; (void)0
-    #define SOCKET_CLOSE(fd) \
+#define SOCKET_ERRNO() errno
+#define SOCKET_RESET(fd) fd = -1; (void)0
+#define SOCKET_CLOSE(fd) \
         if (fd > 0) {\
             ::close(fd); \
             fd = -1; \
         } \
         (void)0
-    #define SOCKET_VALID(x) (x > 0)
-    #define SOCKET_SETUP() (void)0
-    #define SOCKET_CLEANUP() (void)0
+#define SOCKET_VALID(x) (x > 0)
+#define SOCKET_SETUP() (void)0
+#define SOCKET_CLEANUP() (void)0
 #else
-    #define SOCKET_ETIME WSAETIMEDOUT
-    #define SOCKET_ECONNRESET WSAECONNRESET
-    #define SOCKET_ERRNO() WSAGetLastError()
-    #define SOCKET_RESET(x) x=INVALID_SOCKET
-    #define SOCKET_CLOSE(x) if(x!=INVALID_SOCKET){::closesocket(x);x=INVALID_SOCKET;}
-    #define SOCKET_VALID(x) (x!=INVALID_SOCKET)
-    #define SOCKET_BUFF(x) ((char*)x)
-    #define SOCKET_SETUP() socket_setup()
-    #define SOCKET_CLEANUP() socket_cleanup()
+#define SOCKET_ETIME WSAETIMEDOUT
+#define SOCKET_ECONNRESET WSAECONNRESET
+#define SOCKET_ERRNO() WSAGetLastError()
+#define SOCKET_RESET(x) x=INVALID_SOCKET
+#define SOCKET_CLOSE(x) if(x!=INVALID_SOCKET){::closesocket(x);x=INVALID_SOCKET;}
+#define SOCKET_VALID(x) (x!=INVALID_SOCKET)
+#define SOCKET_BUFF(x) ((char*)x)
+#define SOCKET_SETUP() socket_setup()
+#define SOCKET_CLEANUP() socket_cleanup()
 #endif
 
 // for srs-librtmp, @see https://github.com/simple-rtmp-server/srs/issues/213
 #ifndef _WIN32
-    #include <unistd.h>
-    #include <sys/socket.h>
-    #include <netinet/in.h>
-    #include <arpa/inet.h>
-    #include <sys/uio.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/uio.h>
 #endif
 
 #include <sys/types.h>
@@ -33900,213 +36053,230 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //#include <srs_kernel_utility.hpp>
 
 #ifndef ST_UTIME_NO_TIMEOUT
-    #define ST_UTIME_NO_TIMEOUT -1
+#define ST_UTIME_NO_TIMEOUT -1
 #endif
 
 // when io not hijacked, use simple socket, the block sync stream.
 #ifndef SRS_HIJACK_IO
-    struct SrsBlockSyncSocket
+struct SrsBlockSyncSocket
+{
+    SOCKET fd;
+    int64_t recv_timeout;
+    int64_t send_timeout;
+    int64_t recv_bytes;
+    int64_t send_bytes;
+
+    SrsBlockSyncSocket()
     {
-        SOCKET fd;
-        int64_t recv_timeout;
-        int64_t send_timeout;
-        int64_t recv_bytes;
-        int64_t send_bytes;
-        
-        SrsBlockSyncSocket() {
-            send_timeout = recv_timeout = ST_UTIME_NO_TIMEOUT;
-            recv_bytes = send_bytes = 0;
-            
-            SOCKET_RESET(fd);
-            SOCKET_SETUP();
+        send_timeout = recv_timeout = ST_UTIME_NO_TIMEOUT;
+        recv_bytes = send_bytes = 0;
+
+        SOCKET_RESET(fd);
+        SOCKET_SETUP();
+    }
+
+    virtual ~SrsBlockSyncSocket()
+    {
+        SOCKET_CLOSE(fd);
+        SOCKET_CLEANUP();
+    }
+};
+srs_hijack_io_t srs_hijack_io_create()
+{
+    SrsBlockSyncSocket* skt = new SrsBlockSyncSocket();
+    return skt;
+}
+void srs_hijack_io_destroy(srs_hijack_io_t ctx)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    srs_freep(skt);
+}
+int srs_hijack_io_create_socket(srs_hijack_io_t ctx)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+
+    skt->fd = ::socket(AF_INET, SOCK_STREAM, 0);
+    if (!SOCKET_VALID(skt->fd))
+    {
+        return ERROR_SOCKET_CREATE;
+    }
+
+    return ERROR_SUCCESS;
+}
+int srs_hijack_io_connect(srs_hijack_io_t ctx, const char* server_ip, int port)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = inet_addr(server_ip);
+
+    if(::connect(skt->fd, (const struct sockaddr*)&addr, sizeof(sockaddr_in)) < 0)
+    {
+        return ERROR_SOCKET_CONNECT;
+    }
+
+    return ERROR_SUCCESS;
+}
+int srs_hijack_io_read(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+
+    int ret = ERROR_SUCCESS;
+
+    ssize_t nb_read = ::recv(skt->fd, (char*)buf, size, 0);
+
+    if (nread)
+    {
+        *nread = nb_read;
+    }
+
+    // On success a non-negative integer indicating the number of bytes actually read is returned
+    // (a value of 0 means the network connection is closed or end of file is reached).
+    if (nb_read <= 0)
+    {
+        if (nb_read < 0 && SOCKET_ERRNO() == SOCKET_ETIME)
+        {
+            return ERROR_SOCKET_TIMEOUT;
         }
-        
-        virtual ~SrsBlockSyncSocket() {
-            SOCKET_CLOSE(fd);
-            SOCKET_CLEANUP();
+
+        if (nb_read == 0)
+        {
+            errno = SOCKET_ECONNRESET;
         }
-    };
-    srs_hijack_io_t srs_hijack_io_create()
-    {
-        SrsBlockSyncSocket* skt = new SrsBlockSyncSocket();
-        return skt;
+
+        return ERROR_SOCKET_READ;
     }
-    void srs_hijack_io_destroy(srs_hijack_io_t ctx)
+
+    skt->recv_bytes += nb_read;
+
+    return ret;
+}
+void srs_hijack_io_set_recv_timeout(srs_hijack_io_t ctx, int64_t timeout_us)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    skt->recv_timeout = timeout_us;
+}
+int64_t srs_hijack_io_get_recv_timeout(srs_hijack_io_t ctx)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    return skt->recv_timeout;
+}
+int64_t srs_hijack_io_get_recv_bytes(srs_hijack_io_t ctx)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    return skt->recv_bytes;
+}
+void srs_hijack_io_set_send_timeout(srs_hijack_io_t ctx, int64_t timeout_us)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    skt->send_timeout = timeout_us;
+}
+int64_t srs_hijack_io_get_send_timeout(srs_hijack_io_t ctx)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    return skt->send_timeout;
+}
+int64_t srs_hijack_io_get_send_bytes(srs_hijack_io_t ctx)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+    return skt->send_bytes;
+}
+int srs_hijack_io_writev(srs_hijack_io_t ctx, const iovec *iov, int iov_size, ssize_t* nwrite)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+
+    int ret = ERROR_SUCCESS;
+
+    ssize_t nb_write = ::writev(skt->fd, iov, iov_size);
+
+    if (nwrite)
     {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        srs_freep(skt);
+        *nwrite = nb_write;
     }
-    int srs_hijack_io_create_socket(srs_hijack_io_t ctx)
+
+    // On  success,  the  readv()  function  returns the number of bytes read;
+    // the writev() function returns the number of bytes written.  On error, -1 is
+    // returned, and errno is set appropriately.
+    if (nb_write <= 0)
     {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        
-        skt->fd = ::socket(AF_INET, SOCK_STREAM, 0);
-        if (!SOCKET_VALID(skt->fd)) {
-            return ERROR_SOCKET_CREATE;
+        // @see https://github.com/simple-rtmp-server/srs/issues/200
+        if (nb_write < 0 && SOCKET_ERRNO() == SOCKET_ETIME)
+        {
+            return ERROR_SOCKET_TIMEOUT;
         }
-    
-        return ERROR_SUCCESS;
+
+        return ERROR_SOCKET_WRITE;
     }
-    int srs_hijack_io_connect(srs_hijack_io_t ctx, const char* server_ip, int port)
+
+    skt->send_bytes += nb_write;
+
+    return ret;
+}
+bool srs_hijack_io_is_never_timeout(srs_hijack_io_t ctx, int64_t timeout_us)
+{
+    return timeout_us == (int64_t)ST_UTIME_NO_TIMEOUT;
+}
+int srs_hijack_io_read_fully(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+
+    int ret = ERROR_SUCCESS;
+
+    size_t left = size;
+    ssize_t nb_read = 0;
+
+    while (left > 0)
     {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        
-        sockaddr_in addr;
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(port);
-        addr.sin_addr.s_addr = inet_addr(server_ip);
-        
-        if(::connect(skt->fd, (const struct sockaddr*)&addr, sizeof(sockaddr_in)) < 0){
-            return ERROR_SOCKET_CONNECT;
+        char* this_buf = (char*)buf + nb_read;
+        ssize_t this_nread;
+
+        if ((ret = srs_hijack_io_read(ctx, this_buf, left, &this_nread)) != ERROR_SUCCESS)
+        {
+            return ret;
         }
-        
-        return ERROR_SUCCESS;
+
+        nb_read += this_nread;
+        left -= (size_t)this_nread;
     }
-    int srs_hijack_io_read(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread)
+
+    if (nread)
     {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        
-        int ret = ERROR_SUCCESS;
-        
-        ssize_t nb_read = ::recv(skt->fd, (char*)buf, size, 0);
-        
-        if (nread) {
-            *nread = nb_read;
+        *nread = nb_read;
+    }
+    skt->recv_bytes += nb_read;
+
+    return ret;
+}
+int srs_hijack_io_write(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nwrite)
+{
+    SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
+
+    int ret = ERROR_SUCCESS;
+
+    ssize_t nb_write = ::send(skt->fd, (char*)buf, size, 0);
+
+    if (nwrite)
+    {
+        *nwrite = nb_write;
+    }
+
+    if (nb_write <= 0)
+    {
+        // @see https://github.com/simple-rtmp-server/srs/issues/200
+        if (nb_write < 0 && SOCKET_ERRNO() == SOCKET_ETIME)
+        {
+            return ERROR_SOCKET_TIMEOUT;
         }
-        
-        // On success a non-negative integer indicating the number of bytes actually read is returned 
-        // (a value of 0 means the network connection is closed or end of file is reached).
-        if (nb_read <= 0) {
-            if (nb_read < 0 && SOCKET_ERRNO() == SOCKET_ETIME) {
-                return ERROR_SOCKET_TIMEOUT;
-            }
-            
-            if (nb_read == 0) {
-                errno = SOCKET_ECONNRESET;
-            }
-            
-            return ERROR_SOCKET_READ;
-        }
-        
-        skt->recv_bytes += nb_read;
-        
-        return ret;
+
+        return ERROR_SOCKET_WRITE;
     }
-    void srs_hijack_io_set_recv_timeout(srs_hijack_io_t ctx, int64_t timeout_us)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        skt->recv_timeout = timeout_us;
-    }
-    int64_t srs_hijack_io_get_recv_timeout(srs_hijack_io_t ctx)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        return skt->recv_timeout;
-    }
-    int64_t srs_hijack_io_get_recv_bytes(srs_hijack_io_t ctx)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        return skt->recv_bytes;
-    }
-    void srs_hijack_io_set_send_timeout(srs_hijack_io_t ctx, int64_t timeout_us)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        skt->send_timeout = timeout_us;
-    }
-    int64_t srs_hijack_io_get_send_timeout(srs_hijack_io_t ctx)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        return skt->send_timeout;
-    }
-    int64_t srs_hijack_io_get_send_bytes(srs_hijack_io_t ctx)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        return skt->send_bytes;
-    }
-    int srs_hijack_io_writev(srs_hijack_io_t ctx, const iovec *iov, int iov_size, ssize_t* nwrite)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        
-        int ret = ERROR_SUCCESS;
-        
-        ssize_t nb_write = ::writev(skt->fd, iov, iov_size);
-        
-        if (nwrite) {
-            *nwrite = nb_write;
-        }
-        
-        // On  success,  the  readv()  function  returns the number of bytes read; 
-        // the writev() function returns the number of bytes written.  On error, -1 is
-        // returned, and errno is set appropriately.
-        if (nb_write <= 0) {
-            // @see https://github.com/simple-rtmp-server/srs/issues/200
-            if (nb_write < 0 && SOCKET_ERRNO() == SOCKET_ETIME) {
-                return ERROR_SOCKET_TIMEOUT;
-            }
-            
-            return ERROR_SOCKET_WRITE;
-        }
-        
-        skt->send_bytes += nb_write;
-        
-        return ret;
-    }
-    bool srs_hijack_io_is_never_timeout(srs_hijack_io_t ctx, int64_t timeout_us)
-    {
-        return timeout_us == (int64_t)ST_UTIME_NO_TIMEOUT;
-    }
-    int srs_hijack_io_read_fully(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nread)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        
-        int ret = ERROR_SUCCESS;
-        
-        size_t left = size;
-        ssize_t nb_read = 0;
-        
-        while (left > 0) {
-            char* this_buf = (char*)buf + nb_read;
-            ssize_t this_nread;
-            
-            if ((ret = srs_hijack_io_read(ctx, this_buf, left, &this_nread)) != ERROR_SUCCESS) {
-                return ret;
-            }
-            
-            nb_read += this_nread;
-            left -= (size_t)this_nread;
-        }
-        
-        if (nread) {
-            *nread = nb_read;
-        }
-        skt->recv_bytes += nb_read;
-        
-        return ret;
-    }
-    int srs_hijack_io_write(srs_hijack_io_t ctx, void* buf, size_t size, ssize_t* nwrite)
-    {
-        SrsBlockSyncSocket* skt = (SrsBlockSyncSocket*)ctx;
-        
-        int ret = ERROR_SUCCESS;
-        
-        ssize_t nb_write = ::send(skt->fd, (char*)buf, size, 0);
-        
-        if (nwrite) {
-            *nwrite = nb_write;
-        }
-        
-        if (nb_write <= 0) {
-            // @see https://github.com/simple-rtmp-server/srs/issues/200
-            if (nb_write < 0 && SOCKET_ERRNO() == SOCKET_ETIME) {
-                return ERROR_SOCKET_TIMEOUT;
-            }
-            
-            return ERROR_SOCKET_WRITE;
-        }
-        
-        skt->send_bytes += nb_write;
-        
-        return ret;
-    }
+
+    skt->send_bytes += nb_write;
+
+    return ret;
+}
 #endif
 
 SimpleSocketStream::SimpleSocketStream()
@@ -34116,7 +36286,8 @@ SimpleSocketStream::SimpleSocketStream()
 
 SimpleSocketStream::~SimpleSocketStream()
 {
-    if (io) {
+    if (io)
+    {
         srs_hijack_io_destroy(io);
         io = NULL;
     }
@@ -34278,45 +36449,51 @@ bool _bandwidth_is_finish(SrsBandwidthPacket* pkt)
 int _srs_expect_bandwidth_packet(SrsRtmpClient* rtmp, _CheckPacketType pfn)
 {
     int ret = ERROR_SUCCESS;
-    
-    while (true) {
+
+    while (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsBandwidthPacket* pkt = NULL;
-        if ((ret = rtmp->expect_message<SrsBandwidthPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = rtmp->expect_message<SrsBandwidthPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             return ret;
         }
         SrsAutoFree(SrsCommonMessage, msg);
         SrsAutoFree(SrsBandwidthPacket, pkt);
         srs_info("get final message success.");
-        
-        if (pfn(pkt)) {
+
+        if (pfn(pkt))
+        {
             return ret;
         }
     }
-    
+
     return ret;
 }
 int _srs_expect_bandwidth_packet2(SrsRtmpClient* rtmp, _CheckPacketType pfn, SrsBandwidthPacket** ppkt)
 {
     int ret = ERROR_SUCCESS;
-    
-    while (true) {
+
+    while (true)
+    {
         SrsCommonMessage* msg = NULL;
         SrsBandwidthPacket* pkt = NULL;
-        if ((ret = rtmp->expect_message<SrsBandwidthPacket>(&msg, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = rtmp->expect_message<SrsBandwidthPacket>(&msg, &pkt)) != ERROR_SUCCESS)
+        {
             return ret;
         }
         SrsAutoFree(SrsCommonMessage, msg);
         srs_info("get final message success.");
-        
-        if (pfn(pkt)) {
+
+        if (pfn(pkt))
+        {
             *ppkt = pkt;
             return ret;
         }
-        
+
         srs_freep(pkt);
     }
-    
+
     return ret;
 }
 
@@ -34337,72 +36514,87 @@ int SrsBandwidthClient::initialize(SrsRtmpClient* rtmp)
 }
 
 int SrsBandwidthClient::bandwidth_check(
-    int64_t* start_time, int64_t* end_time, 
+    int64_t* start_time, int64_t* end_time,
     int* play_kbps, int* publish_kbps,
     int* play_bytes, int* publish_bytes,
     int* play_duration, int* publish_duration
-) {
+)
+{
     int ret = ERROR_SUCCESS;
 
     srs_update_system_time_ms();
     *start_time = srs_get_system_time_ms();
-    
+
     // play
-    if ((ret = play_start()) != ERROR_SUCCESS) {
+    if ((ret = play_start()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = play_checking()) != ERROR_SUCCESS) {
+    if ((ret = play_checking()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = play_stop()) != ERROR_SUCCESS) {
+    if ((ret = play_stop()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     // publish
     int duration_ms = 0;
     int actual_play_kbps = 0;
-    if ((ret = publish_start(duration_ms, actual_play_kbps)) != ERROR_SUCCESS) {
+    if ((ret = publish_start(duration_ms, actual_play_kbps)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = publish_checking(duration_ms, actual_play_kbps)) != ERROR_SUCCESS) {
+    if ((ret = publish_checking(duration_ms, actual_play_kbps)) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    if ((ret = publish_stop()) != ERROR_SUCCESS) {
+    if ((ret = publish_stop()) != ERROR_SUCCESS)
+    {
         return ret;
     }
-    
+
     SrsBandwidthPacket* pkt = NULL;
-    if ((ret = final(&pkt)) != ERROR_SUCCESS) {
+    if ((ret = final(&pkt)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     SrsAutoFree(SrsBandwidthPacket, pkt);
-    
+
     // get data
-    if (true ) {
+    if (true )
+    {
         SrsAmf0Any* prop = NULL;
-        if ((prop = pkt->data->ensure_property_number("play_kbps")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("play_kbps")) != NULL)
+        {
             *play_kbps = (int)prop->to_number();
         }
-        if ((prop = pkt->data->ensure_property_number("publish_kbps")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("publish_kbps")) != NULL)
+        {
             *publish_kbps = (int)prop->to_number();
         }
-        if ((prop = pkt->data->ensure_property_number("play_bytes")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("play_bytes")) != NULL)
+        {
             *play_bytes = (int)prop->to_number();
         }
-        if ((prop = pkt->data->ensure_property_number("publish_bytes")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("publish_bytes")) != NULL)
+        {
             *publish_bytes = (int)prop->to_number();
         }
-        if ((prop = pkt->data->ensure_property_number("play_time")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("play_time")) != NULL)
+        {
             *play_duration = (int)prop->to_number();
         }
-        if ((prop = pkt->data->ensure_property_number("publish_time")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("publish_time")) != NULL)
+        {
             *publish_duration = (int)prop->to_number();
         }
     }
 
     srs_update_system_time_ms();
     *end_time = srs_get_system_time_ms();
-    
+
     return ret;
 }
 
@@ -34410,22 +36602,25 @@ int SrsBandwidthClient::play_start()
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = _srs_expect_bandwidth_packet(_rtmp, _bandwidth_is_start_play)) != ERROR_SUCCESS) {
+    if ((ret = _srs_expect_bandwidth_packet(_rtmp, _bandwidth_is_start_play)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     srs_info("BW check recv play begin request.");
-    
-    if (true) {
+
+    if (true)
+    {
         // send start play response to server.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_starting_play();
-    
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check start play message failed. ret=%d", ret);
             return ret;
         }
     }
     srs_info("BW check play begin.");
-    
+
     return ret;
 }
 
@@ -34439,22 +36634,25 @@ int SrsBandwidthClient::play_stop()
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = _srs_expect_bandwidth_packet(_rtmp, _bandwidth_is_stop_play)) != ERROR_SUCCESS) {
+    if ((ret = _srs_expect_bandwidth_packet(_rtmp, _bandwidth_is_stop_play)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     srs_info("BW check recv play stop request.");
-    
-    if (true) {
+
+    if (true)
+    {
         // send stop play response to server.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_stopped_play();
-    
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check stop play message failed. ret=%d", ret);
             return ret;
         }
     }
     srs_info("BW check play stop.");
-    
+
     return ret;
 }
 
@@ -34462,48 +36660,56 @@ int SrsBandwidthClient::publish_start(int& duration_ms, int& play_kbps)
 {
     int ret = ERROR_SUCCESS;
 
-    if (true) {
+    if (true)
+    {
         SrsBandwidthPacket* pkt = NULL;
-        if ((ret = _srs_expect_bandwidth_packet2(_rtmp, _bandwidth_is_start_publish, &pkt)) != ERROR_SUCCESS) {
+        if ((ret = _srs_expect_bandwidth_packet2(_rtmp, _bandwidth_is_start_publish, &pkt)) != ERROR_SUCCESS)
+        {
             return ret;
         }
         SrsAutoFree(SrsBandwidthPacket, pkt);
-        
+
         SrsAmf0Any* prop = NULL;
-        if ((prop = pkt->data->ensure_property_number("duration_ms")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("duration_ms")) != NULL)
+        {
             duration_ms = (int)prop->to_number();
         }
-        if ((prop = pkt->data->ensure_property_number("limit_kbps")) != NULL) {
+        if ((prop = pkt->data->ensure_property_number("limit_kbps")) != NULL)
+        {
             play_kbps = (int)prop->to_number();
         }
     }
     srs_info("BW check recv publish begin request.");
-    
-    if (true) {
+
+    if (true)
+    {
         // send start publish response to server.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_starting_publish();
-    
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check start publish message failed. ret=%d", ret);
             return ret;
         }
     }
     srs_info("BW check publish begin.");
-    
+
     return ret;
 }
 
 int SrsBandwidthClient::publish_checking(int duration_ms, int play_kbps)
 {
     int ret = ERROR_SUCCESS;
-    
-    if (duration_ms <= 0) {
+
+    if (duration_ms <= 0)
+    {
         ret = ERROR_RTMP_BWTC_DATA;
         srs_error("server must specifies the duration, ret=%d", ret);
         return ret;
     }
-    
-    if (play_kbps <= 0) {
+
+    if (play_kbps <= 0)
+    {
         ret = ERROR_RTMP_BWTC_DATA;
         srs_error("server must specifies the play kbp, ret=%d", ret);
         return ret;
@@ -34512,12 +36718,14 @@ int SrsBandwidthClient::publish_checking(int duration_ms, int play_kbps)
     int data_count = 1;
     srs_update_system_time_ms();
     int64_t starttime = srs_get_system_time_ms();
-    while ((srs_get_system_time_ms() - starttime) < duration_ms) {
+    while ((srs_get_system_time_ms() - starttime) < duration_ms)
+    {
         // TODO: FIXME: use shared ptr message.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_publishing();
 
         // TODO: FIXME: magic number
-        for (int i = 0; i < data_count; ++i) {
+        for (int i = 0; i < data_count; ++i)
+        {
             std::stringstream seq;
             seq << i;
             std::string play_data = "SRS band check data from server's publishing......";
@@ -34525,17 +36733,20 @@ int SrsBandwidthClient::publish_checking(int duration_ms, int play_kbps)
         }
         data_count += 2;
 
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check publish messages failed. ret=%d", ret);
             return ret;
         }
-        
+
         // use the play kbps to control the publish
         srs_update_system_time_ms();
         int elaps = (int)(srs_get_system_time_ms() - starttime);
-        if (elaps > 0) {
+        if (elaps > 0)
+        {
             int current_kbps = (int)(_rtmp->get_send_bytes() * 8 / elaps);
-            while (current_kbps > play_kbps) {
+            while (current_kbps > play_kbps)
+            {
                 srs_update_system_time_ms();
                 elaps = (int)(srs_get_system_time_ms() - starttime);
                 current_kbps = (int)(_rtmp->get_send_bytes() * 8 / elaps);
@@ -34544,41 +36755,46 @@ int SrsBandwidthClient::publish_checking(int duration_ms, int play_kbps)
         }
     }
     srs_info("BW check send publish bytes over.");
-    
+
     return ret;
 }
 
 int SrsBandwidthClient::publish_stop()
 {
     int ret = ERROR_SUCCESS;
-    
-    if (true) {
+
+    if (true)
+    {
         // send start publish response to server.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_stop_publish();
-    
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check stop publish message failed. ret=%d", ret);
             return ret;
         }
     }
     srs_info("BW client stop publish request.");
 
-    if ((ret = _srs_expect_bandwidth_packet(_rtmp, _bandwidth_is_stop_publish)) != ERROR_SUCCESS) {
+    if ((ret = _srs_expect_bandwidth_packet(_rtmp, _bandwidth_is_stop_publish)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     srs_info("BW check recv publish stop request.");
-    
-    if (true) {
+
+    if (true)
+    {
         // send start publish response to server.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_stopped_publish();
-    
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check stop publish message failed. ret=%d", ret);
             return ret;
         }
     }
     srs_info("BW check publish stop.");
-    
+
     return ret;
 }
 
@@ -34586,22 +36802,25 @@ int SrsBandwidthClient::final(SrsBandwidthPacket** ppkt)
 {
     int ret = ERROR_SUCCESS;
 
-    if ((ret = _srs_expect_bandwidth_packet2(_rtmp, _bandwidth_is_finish, ppkt)) != ERROR_SUCCESS) {
+    if ((ret = _srs_expect_bandwidth_packet2(_rtmp, _bandwidth_is_finish, ppkt)) != ERROR_SUCCESS)
+    {
         return ret;
     }
     srs_info("BW check recv finish/report request.");
-    
-    if (true) {
+
+    if (true)
+    {
         // send final response to server.
         SrsBandwidthPacket* pkt = SrsBandwidthPacket::create_final();
-    
-        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS) {
+
+        if ((ret = _rtmp->send_and_free_packet(pkt, 0)) != ERROR_SUCCESS)
+        {
             srs_error("send bandwidth check final message failed. ret=%d", ret);
             return ret;
         }
     }
     srs_info("BW check final.");
-    
+
     return ret;
 }
 

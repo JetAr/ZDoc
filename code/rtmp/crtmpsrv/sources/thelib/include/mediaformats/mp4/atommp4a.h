@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -28,32 +28,33 @@ class AtomCHAN;
 #include "mediaformats/mp4/versionedboxatom.h"
 
 class AtomMP4A
-: public VersionedBoxAtom {
+    : public VersionedBoxAtom
+{
 protected:
-	AtomESDS *_pESDS;
-	AtomWAVE *_pWAVE;
-	AtomCHAN *_pCHAN;
-	uint16_t _dataReferenceIndex;
-	uint16_t _innerVersion;
-	uint16_t _revisionLevel;
-	uint32_t _vendor;
-	uint16_t _numberOfChannels;
-	uint16_t _sampleSizeInBits;
-	int16_t _compressionId;
-	uint16_t _packetSize;
-	uint32_t _sampleRate;
-	uint32_t _samplesPerPacket;
-	uint32_t _bytesPerPacket;
-	uint32_t _bytesPerFrame;
-	uint32_t _bytesPerSample;
+    AtomESDS *_pESDS;
+    AtomWAVE *_pWAVE;
+    AtomCHAN *_pCHAN;
+    uint16_t _dataReferenceIndex;
+    uint16_t _innerVersion;
+    uint16_t _revisionLevel;
+    uint32_t _vendor;
+    uint16_t _numberOfChannels;
+    uint16_t _sampleSizeInBits;
+    int16_t _compressionId;
+    uint16_t _packetSize;
+    uint32_t _sampleRate;
+    uint32_t _samplesPerPacket;
+    uint32_t _bytesPerPacket;
+    uint32_t _bytesPerFrame;
+    uint32_t _bytesPerSample;
 public:
-	AtomMP4A(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMP4A();
+    AtomMP4A(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMP4A();
 
 
 protected:
-	virtual bool ReadData();
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool ReadData();
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMMP4A_H */

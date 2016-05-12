@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,58 +23,61 @@
 
 #include "streaming/codectypes.h"
 
-struct _VIDEO_AVC {
-	uint8_t *_pSPS;
-	uint16_t _spsLength;
-	uint8_t *_pPPS;
-	uint16_t _ppsLength;
-	uint32_t _rate;
-	Variant _SPSInfo;
-	Variant _PPSInfo;
-	uint32_t _width;
-	uint32_t _height;
+struct _VIDEO_AVC
+{
+    uint8_t *_pSPS;
+    uint16_t _spsLength;
+    uint8_t *_pPPS;
+    uint16_t _ppsLength;
+    uint32_t _rate;
+    Variant _SPSInfo;
+    Variant _PPSInfo;
+    uint32_t _width;
+    uint32_t _height;
 
-	DLLEXP _VIDEO_AVC();
-	DLLEXP virtual ~_VIDEO_AVC();
-	bool Init(uint8_t *pSPS, uint32_t spsLength, uint8_t *pPPS, uint32_t ppsLength);
-	void Clear();
+    DLLEXP _VIDEO_AVC();
+    DLLEXP virtual ~_VIDEO_AVC();
+    bool Init(uint8_t *pSPS, uint32_t spsLength, uint8_t *pPPS, uint32_t ppsLength);
+    void Clear();
 
-	DLLEXP operator string();
+    DLLEXP operator string();
 };
 
-struct _AUDIO_AAC {
-	uint8_t *_pAAC;
-	uint32_t _aacLength;
-	uint8_t _audioObjectType;
-	uint8_t _sampleRateIndex;
-	uint32_t _sampleRate;
-	uint8_t _channelConfigurationIndex;
+struct _AUDIO_AAC
+{
+    uint8_t *_pAAC;
+    uint32_t _aacLength;
+    uint8_t _audioObjectType;
+    uint8_t _sampleRateIndex;
+    uint32_t _sampleRate;
+    uint8_t _channelConfigurationIndex;
 
-	DLLEXP _AUDIO_AAC();
-	DLLEXP virtual ~_AUDIO_AAC();
-	bool Init(uint8_t *pBuffer, uint32_t length);
-	void Clear();
-	DLLEXP string GetRTSPFmtpConfig();
+    DLLEXP _AUDIO_AAC();
+    DLLEXP virtual ~_AUDIO_AAC();
+    bool Init(uint8_t *pBuffer, uint32_t length);
+    void Clear();
+    DLLEXP string GetRTSPFmtpConfig();
 
-	operator string();
+    operator string();
 };
 
-class DLLEXP StreamCapabilities {
+class DLLEXP StreamCapabilities
+{
 public:
-	uint64_t videoCodecId;
-	uint64_t audioCodecId;
-	_VIDEO_AVC avc;
-	_AUDIO_AAC aac;
+    uint64_t videoCodecId;
+    uint64_t audioCodecId;
+    _VIDEO_AVC avc;
+    _AUDIO_AAC aac;
 public:
-	StreamCapabilities();
-	virtual ~StreamCapabilities();
+    StreamCapabilities();
+    virtual ~StreamCapabilities();
 
-	bool InitAudioAAC(uint8_t *pBuffer, uint32_t length);
-	bool InitVideoH264(uint8_t *pSPS, uint32_t spsLength, uint8_t *pPPS, uint32_t ppsLength);
+    bool InitAudioAAC(uint8_t *pBuffer, uint32_t length);
+    bool InitVideoH264(uint8_t *pSPS, uint32_t spsLength, uint8_t *pPPS, uint32_t ppsLength);
 
-	void ClearVideo();
-	void ClearAudio();
-	void Clear();
+    void ClearVideo();
+    void ClearAudio();
+    void Clear();
 };
 
 #endif	/* _STRAMCAPABILITIES_H */

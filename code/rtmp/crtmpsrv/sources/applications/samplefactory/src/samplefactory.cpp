@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,16 +22,19 @@
 #include "samplefactoryapplication.h"
 using namespace app_samplefactory;
 
-extern "C" BaseClientApplication *GetApplication_samplefactory(Variant configuration) {
-	SampleFactoryApplication *pApplication = new SampleFactoryApplication(
-			configuration);
-	return pApplication;
+extern "C" BaseClientApplication *GetApplication_samplefactory(Variant configuration)
+{
+    SampleFactoryApplication *pApplication = new SampleFactoryApplication(
+        configuration);
+    return pApplication;
 }
 
-extern "C" void ReleaseApplication_samplefactory(BaseClientApplication *pApplication) {
-	if (pApplication != NULL) {
-		delete pApplication;
-	}
+extern "C" void ReleaseApplication_samplefactory(BaseClientApplication *pApplication)
+{
+    if (pApplication != NULL)
+    {
+        delete pApplication;
+    }
 }
 
 

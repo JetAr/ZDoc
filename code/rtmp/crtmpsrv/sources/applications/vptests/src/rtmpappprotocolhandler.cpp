@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,59 +25,68 @@
 using namespace app_vptests;
 
 RTMPAppProtocolHandler::RTMPAppProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
+    : BaseRTMPAppProtocolHandler(configuration)
+{
 
 }
 
-RTMPAppProtocolHandler::~RTMPAppProtocolHandler() {
+RTMPAppProtocolHandler::~RTMPAppProtocolHandler()
+{
 }
 
-bool RTMPAppProtocolHandler::ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request) {
-	request["Buggy_node"] = "<map>&some other xml stuff</map>";
-	if (!Send("http://localhost/~shiretu/phpframework/input.php", request)) {
-		FATAL("Unable to send the variant request");
-		return false;
-	}
-	return true;
+bool RTMPAppProtocolHandler::ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request)
+{
+    request["Buggy_node"] = "<map>&some other xml stuff</map>";
+    if (!Send("http://localhost/~shiretu/phpframework/input.php", request))
+    {
+        FATAL("Unable to send the variant request");
+        return false;
+    }
+    return true;
 }
 
-VariantAppProtocolHandler *RTMPAppProtocolHandler::GetVariantHandler(bool xml) {
+VariantAppProtocolHandler *RTMPAppProtocolHandler::GetVariantHandler(bool xml)
+{
 #ifdef HAS_PROTOCOL_VAR
-	if (xml)
-		return (VariantAppProtocolHandler *) GetProtocolHandler(PT_XML_VAR);
-	else
-		return (VariantAppProtocolHandler *) GetProtocolHandler(PT_BIN_VAR);
+    if (xml)
+        return (VariantAppProtocolHandler *) GetProtocolHandler(PT_XML_VAR);
+    else
+        return (VariantAppProtocolHandler *) GetProtocolHandler(PT_BIN_VAR);
 #else
-	FATAL("Variant protocol not available");
-	return NULL;
+    FATAL("Variant protocol not available");
+    return NULL;
 #endif /* HAS_PROTOCOL_VAR */
 }
 
-bool RTMPAppProtocolHandler::Send(string ip, uint16_t port, Variant &variant, bool xml) {
+bool RTMPAppProtocolHandler::Send(string ip, uint16_t port, Variant &variant, bool xml)
+{
 #ifdef HAS_PROTOCOL_VAR
-	VariantAppProtocolHandler *pHandler = GetVariantHandler(xml);
-	if (pHandler == NULL) {
-		FATAL("Unable to get the protocol handler");
-		return false;
-	}
-	return pHandler->Send(ip, port, variant, xml);
+    VariantAppProtocolHandler *pHandler = GetVariantHandler(xml);
+    if (pHandler == NULL)
+    {
+        FATAL("Unable to get the protocol handler");
+        return false;
+    }
+    return pHandler->Send(ip, port, variant, xml);
 #else
-	FATAL("Variant protocol not available");
-	return false;
+    FATAL("Variant protocol not available");
+    return false;
 #endif /* HAS_PROTOCOL_VAR */
 }
 
-bool RTMPAppProtocolHandler::Send(string url, Variant &variant, bool xml) {
+bool RTMPAppProtocolHandler::Send(string url, Variant &variant, bool xml)
+{
 #ifdef HAS_PROTOCOL_VAR
-	VariantAppProtocolHandler *pHandler = GetVariantHandler(xml);
-	if (pHandler == NULL) {
-		FATAL("Unable to get the protocol handler");
-		return false;
-	}
-	return pHandler->Send(url, variant, xml);
+    VariantAppProtocolHandler *pHandler = GetVariantHandler(xml);
+    if (pHandler == NULL)
+    {
+        FATAL("Unable to get the protocol handler");
+        return false;
+    }
+    return pHandler->Send(url, variant, xml);
 #else
-	FATAL("Variant protocol not available");
-	return false;
+    FATAL("Variant protocol not available");
+    return false;
 #endif /* HAS_PROTOCOL_VAR */
 }
 #endif /* HAS_PROTOCOL_RTMP */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,33 +24,34 @@
 #include "common.h"
 #include "mediaformats/mediafile.h"
 
-class ID3Parser {
+class ID3Parser
+{
 protected:
-	bool _unsynchronisation;
-	bool _compression;
-	bool _extendedHeader;
-	bool _experimentalIndicator;
-	bool _footerPresent;
-	Variant _metadata;
-	uint32_t _majorVersion;
-	uint32_t _minorVersion;
+    bool _unsynchronisation;
+    bool _compression;
+    bool _extendedHeader;
+    bool _experimentalIndicator;
+    bool _footerPresent;
+    Variant _metadata;
+    uint32_t _majorVersion;
+    uint32_t _minorVersion;
 public:
-	ID3Parser(uint32_t majorVersion, uint32_t minorVersion);
-	virtual ~ID3Parser();
+    ID3Parser(uint32_t majorVersion, uint32_t minorVersion);
+    virtual ~ID3Parser();
 
-	Variant GetMetadata();
-	bool Parse(MediaFile &file);
+    Variant GetMetadata();
+    bool Parse(MediaFile &file);
 private:
-	bool ParseTags(IOBuffer &buffer);
-	bool ReadStringWithSize(IOBuffer &buffer, Variant &value, uint32_t size, bool hasEncoding);
-	bool ReadStringNullTerminated(IOBuffer &buffer, Variant &value, bool unicode);
-	bool ParseTextTag(IOBuffer &buffer, Variant &tag);
-	bool ParseUSLT(IOBuffer &buffer, Variant &tag);
-	bool ParseAPIC(IOBuffer &buffer, Variant &tag);
-	bool ParseCOMM(IOBuffer &buffer, Variant &tag);
-	bool ParseUrlTag(IOBuffer &buffer, Variant &tag);
-	bool ParseWXXX(IOBuffer &buffer, Variant &tag);
-	bool ParseTXXX(IOBuffer &buffer, Variant &tag);
+    bool ParseTags(IOBuffer &buffer);
+    bool ReadStringWithSize(IOBuffer &buffer, Variant &value, uint32_t size, bool hasEncoding);
+    bool ReadStringNullTerminated(IOBuffer &buffer, Variant &value, bool unicode);
+    bool ParseTextTag(IOBuffer &buffer, Variant &tag);
+    bool ParseUSLT(IOBuffer &buffer, Variant &tag);
+    bool ParseAPIC(IOBuffer &buffer, Variant &tag);
+    bool ParseCOMM(IOBuffer &buffer, Variant &tag);
+    bool ParseUrlTag(IOBuffer &buffer, Variant &tag);
+    bool ParseWXXX(IOBuffer &buffer, Variant &tag);
+    bool ParseTXXX(IOBuffer &buffer, Variant &tag);
 };
 
 

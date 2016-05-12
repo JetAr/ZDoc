@@ -33,13 +33,14 @@
 using namespace app_#APPNAME_LC#;
 
 extern "C" BaseClientApplication *GetApplication_#APPNAME_LC#(Variant configuration) {
-    #APPNAME#Application *pApplication = new #APPNAME#Application(
-            configuration);
+#APPNAME#Application *pApplication = new #APPNAME#Application(
+    configuration);
     return pApplication;
 }
 
 extern "C" void ReleaseApplication_#APPNAME_LC#(BaseClientApplication *pApplication) {
-    if (pApplication != NULL) {
+    if (pApplication != NULL)
+    {
         delete pApplication;
     }
 }

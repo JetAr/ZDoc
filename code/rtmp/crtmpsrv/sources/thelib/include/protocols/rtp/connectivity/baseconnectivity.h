@@ -23,13 +23,14 @@
 
 #include "common.h"
 
-class DLLEXP BaseConnectivity {
+class DLLEXP BaseConnectivity
+{
 public:
-	BaseConnectivity();
-	virtual ~BaseConnectivity();
+    BaseConnectivity();
+    virtual ~BaseConnectivity();
 
-	static uint32_t ToRTPTS(struct timeval &tv, uint32_t rate);
-	static uint32_t ToRTPTS(double milliseconds, uint32_t rate);
+    static uint32_t ToRTPTS(struct timeval &tv, uint32_t rate);
+    static uint32_t ToRTPTS(double milliseconds, uint32_t rate);
 };
 
 

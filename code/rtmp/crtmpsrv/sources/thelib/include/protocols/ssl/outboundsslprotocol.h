@@ -23,13 +23,14 @@
 #include "protocols/ssl/basesslprotocol.h"
 
 class OutboundSSLProtocol
-: public BaseSSLProtocol {
+    : public BaseSSLProtocol
+{
 public:
-	OutboundSSLProtocol();
-	virtual ~OutboundSSLProtocol();
+    OutboundSSLProtocol();
+    virtual ~OutboundSSLProtocol();
 protected:
-	virtual bool InitGlobalContext(Variant &parameters);
-	virtual bool DoHandshake();
+    virtual bool InitGlobalContext(Variant &parameters);
+    virtual bool DoHandshake();
 };
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,84 +24,101 @@
 #include "protocols/baseprotocol.h"
 
 InboundNamedPipeCarrier::InboundNamedPipeCarrier(int32_t fd, string path)
-: IOHandler(fd, fd, IOHT_INBOUNDNAMEDPIPE_CARRIER) {
-	_path = path;
+    : IOHandler(fd, fd, IOHT_INBOUNDNAMEDPIPE_CARRIER)
+{
+    _path = path;
 }
 
-InboundNamedPipeCarrier::~InboundNamedPipeCarrier() {
-	DeleteFile(_path);
+InboundNamedPipeCarrier::~InboundNamedPipeCarrier()
+{
+    DeleteFile(_path);
 }
 
 InboundNamedPipeCarrier *InboundNamedPipeCarrier::Create(string path,
-		uint16_t mode) {
-	if (mkfifo(STR(path), mode) != 0) {
-		int err = errno;
-		FATAL("Unable to create named pipe %s with mode %u: %s (%d)",
-				STR(path), (uint32_t) mode, strerror(err), err);
-		return NULL;
-	}
+        uint16_t mode)
+{
+    if (mkfifo(STR(path), mode) != 0)
+    {
+        int err = errno;
+        FATAL("Unable to create named pipe %s with mode %u: %s (%d)",
+              STR(path), (uint32_t) mode, strerror(err), err);
+        return NULL;
+    }
 
-	int32_t fd = open(STR(path), O_RDONLY | O_NONBLOCK);
-	if (fd < 0) {
-		int err = errno;
-		FATAL("Unable to open named pipe %s:%s (%d)",
-				STR(path), strerror(err), err);
-		DeleteFile(path);
-		return NULL;
-	}
+    int32_t fd = open(STR(path), O_RDONLY | O_NONBLOCK);
+    if (fd < 0)
+    {
+        int err = errno;
+        FATAL("Unable to open named pipe %s:%s (%d)",
+              STR(path), strerror(err), err);
+        DeleteFile(path);
+        return NULL;
+    }
 
-	InboundNamedPipeCarrier *pResult = new InboundNamedPipeCarrier(fd, path);
+    InboundNamedPipeCarrier *pResult = new InboundNamedPipeCarrier(fd, path);
 
-	if (!IOHandlerManager::EnableReadData(pResult)) {
-		FATAL("Unable to enable read event on the named pipe");
-		delete pResult;
-		return NULL;
-	}
+    if (!IOHandlerManager::EnableReadData(pResult))
+    {
+        FATAL("Unable to enable read event on the named pipe");
+        delete pResult;
+        return NULL;
+    }
 
-	return pResult;
+    return pResult;
 }
 
-bool InboundNamedPipeCarrier::SignalOutputData() {
-	NYIR;
+bool InboundNamedPipeCarrier::SignalOutputData()
+{
+    NYIR;
 }
 
-bool InboundNamedPipeCarrier::OnEvent(struct epoll_event &event) {
-	if (_pProtocol == NULL) {
-		ASSERT("This pipe has no upper protocols");
-		return false;
-	}
+bool InboundNamedPipeCarrier::OnEvent(struct epoll_event &event)
+{
+    if (_pProtocol == NULL)
+    {
+        ASSERT("This pipe has no upper protocols");
+        return false;
+    }
 
-	int32_t recvBytes = 0;
+    int32_t recvBytes = 0;
 
-	if ((event.events & EPOLLIN) != 0) {
-		IOBuffer *pInputBuffer = _pProtocol->GetInputBuffer();
-		assert(pInputBuffer != NULL);
-		if (!pInputBuffer->ReadFromPipe(_inboundFd, FD_READ_CHUNK,
-				recvBytes)) {
-			FATAL("Unable to read data");
-			return false;
-		}
+    if ((event.events & EPOLLIN) != 0)
+    {
+        IOBuffer *pInputBuffer = _pProtocol->GetInputBuffer();
+        assert(pInputBuffer != NULL);
+        if (!pInputBuffer->ReadFromPipe(_inboundFd, FD_READ_CHUNK,
+                                        recvBytes))
+        {
+            FATAL("Unable to read data");
+            return false;
+        }
 
-		return _pProtocol->SignalInputData(recvBytes);
-	} else if (event.events & EPOLLHUP) {
-		WARN("This is a HUP");
-		if (_pProtocol != NULL)
-			_pProtocol->EnqueueForDelete();
-		return false;
-	} else {
-		ASSERT("Invalid state: %x", event.events);
+        return _pProtocol->SignalInputData(recvBytes);
+    }
+    else if (event.events & EPOLLHUP)
+    {
+        WARN("This is a HUP");
+        if (_pProtocol != NULL)
+            _pProtocol->EnqueueForDelete();
+        return false;
+    }
+    else
+    {
+        ASSERT("Invalid state: %x", event.events);
 
-		return false;
-	}
+        return false;
+    }
 }
 
-InboundNamedPipeCarrier::operator string() {
-	if (_pProtocol != NULL)
-		return STR(*_pProtocol);
-	return format("INP(%d)", _inboundFd);
+InboundNamedPipeCarrier::operator string()
+{
+    if (_pProtocol != NULL)
+        return STR(*_pProtocol);
+    return format("INP(%d)", _inboundFd);
 }
 
-void InboundNamedPipeCarrier::GetStats(Variant &info) {
+void InboundNamedPipeCarrier::GetStats(Variant &info)
+{
 
 }
 

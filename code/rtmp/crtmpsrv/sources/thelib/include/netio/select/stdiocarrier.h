@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,19 +25,20 @@
 #include "netio/select/iohandler.h"
 
 class DLLEXP StdioCarrier
-: public IOHandler {
+    : public IOHandler
+{
 private:
-	static StdioCarrier *_pInstance;
-	bool _writeDataEnabled;
+    static StdioCarrier *_pInstance;
+    bool _writeDataEnabled;
 private:
-	StdioCarrier();
+    StdioCarrier();
 public:
-	static StdioCarrier *GetInstance(BaseProtocol *pProtocol);
-	virtual ~StdioCarrier();
-	virtual bool OnEvent(select_event &event);
-	virtual bool SignalOutputData();
-	virtual operator string();
-	virtual void GetStats(Variant &info);
+    static StdioCarrier *GetInstance(BaseProtocol *pProtocol);
+    virtual ~StdioCarrier();
+    virtual bool OnEvent(select_event &event);
+    virtual bool SignalOutputData();
+    virtual operator string();
+    virtual void GetStats(Variant &info);
 };
 
 #endif	/* _STDIOCARRIER_H */

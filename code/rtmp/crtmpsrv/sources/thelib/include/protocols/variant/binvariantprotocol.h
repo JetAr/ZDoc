@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,14 +25,15 @@
 #include "protocols/variant/basevariantprotocol.h"
 
 class DLLEXP BinVariantProtocol
-: public BaseVariantProtocol {
+    : public BaseVariantProtocol
+{
 public:
-	BinVariantProtocol();
-	virtual ~BinVariantProtocol();
+    BinVariantProtocol();
+    virtual ~BinVariantProtocol();
 protected:
-	virtual bool Serialize(string &rawData, Variant &variant);
-	virtual bool Deserialize(uint8_t *pBuffer, uint32_t bufferLength,
-			Variant &result);
+    virtual bool Serialize(string &rawData, Variant &variant);
+    virtual bool Deserialize(uint8_t *pBuffer, uint32_t bufferLength,
+                             Variant &result);
 };
 
 

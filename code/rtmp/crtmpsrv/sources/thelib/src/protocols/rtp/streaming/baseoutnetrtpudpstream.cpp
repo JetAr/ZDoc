@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,93 +26,119 @@
 #include "protocols/rtp/connectivity/outboundconnectivity.h"
 
 BaseOutNetRTPUDPStream::BaseOutNetRTPUDPStream(BaseProtocol *pProtocol,
-		StreamsManager *pStreamsManager, string name)
-: BaseOutNetStream(NULL /*FIXME pProtocol*/, pStreamsManager, ST_OUT_NET_RTP, name) {
-	_ssrc = 12;
-	_pConnectivity = NULL;
-	_videoCounter = rand();
-	_audioCounter = rand();
+        StreamsManager *pStreamsManager, string name)
+    : BaseOutNetStream(NULL /*FIXME pProtocol*/, pStreamsManager, ST_OUT_NET_RTP, name)
+{
+    _ssrc = 12;
+    _pConnectivity = NULL;
+    _videoCounter = rand();
+    _audioCounter = rand();
 }
 
-BaseOutNetRTPUDPStream::~BaseOutNetRTPUDPStream() {
+BaseOutNetRTPUDPStream::~BaseOutNetRTPUDPStream()
+{
 }
 
-OutboundConnectivity *BaseOutNetRTPUDPStream::GetConnectivity() {
-	return _pConnectivity;
+OutboundConnectivity *BaseOutNetRTPUDPStream::GetConnectivity()
+{
+    return _pConnectivity;
 }
 
-void BaseOutNetRTPUDPStream::SetConnectivity(OutboundConnectivity *pConnectivity) {
-	_pConnectivity = pConnectivity;
+void BaseOutNetRTPUDPStream::SetConnectivity(OutboundConnectivity *pConnectivity)
+{
+    _pConnectivity = pConnectivity;
 }
 
-void BaseOutNetRTPUDPStream::HasAudioVideo(bool hasAudio, bool hasVideo) {
-	_hasAudio = hasAudio;
-	_hasVideo = hasVideo;
+void BaseOutNetRTPUDPStream::HasAudioVideo(bool hasAudio, bool hasVideo)
+{
+    _hasAudio = hasAudio;
+    _hasVideo = hasVideo;
 }
 
-uint32_t BaseOutNetRTPUDPStream::SSRC() {
-	return _ssrc;
+uint32_t BaseOutNetRTPUDPStream::SSRC()
+{
+    return _ssrc;
 }
 
-uint16_t BaseOutNetRTPUDPStream::VideoCounter() {
-	return _videoCounter;
+uint16_t BaseOutNetRTPUDPStream::VideoCounter()
+{
+    return _videoCounter;
 }
 
-uint16_t BaseOutNetRTPUDPStream::AudioCounter() {
-	return _audioCounter;
+uint16_t BaseOutNetRTPUDPStream::AudioCounter()
+{
+    return _audioCounter;
 }
 
-bool BaseOutNetRTPUDPStream::SignalPlay(double &absoluteTimestamp, double &length) {
-	NYIR;
+bool BaseOutNetRTPUDPStream::SignalPlay(double &absoluteTimestamp, double &length)
+{
+    NYIR;
 }
 
-bool BaseOutNetRTPUDPStream::SignalPause() {
-	NYIR;
+bool BaseOutNetRTPUDPStream::SignalPause()
+{
+    NYIR;
 }
 
-bool BaseOutNetRTPUDPStream::SignalResume() {
-	NYIR;
+bool BaseOutNetRTPUDPStream::SignalResume()
+{
+    NYIR;
 }
 
-bool BaseOutNetRTPUDPStream::SignalSeek(double &absoluteTimestamp) {
-	NYIR;
+bool BaseOutNetRTPUDPStream::SignalSeek(double &absoluteTimestamp)
+{
+    NYIR;
 }
 
-bool BaseOutNetRTPUDPStream::SignalStop() {
-	NYIR;
+bool BaseOutNetRTPUDPStream::SignalStop()
+{
+    NYIR;
 }
 
-bool BaseOutNetRTPUDPStream::IsCompatibleWithType(uint64_t type) {
-	return type == ST_IN_NET_RTMP
-			|| type == ST_IN_NET_TS;
+bool BaseOutNetRTPUDPStream::IsCompatibleWithType(uint64_t type)
+{
+    return type == ST_IN_NET_RTMP
+           || type == ST_IN_NET_TS;
 }
 
-void BaseOutNetRTPUDPStream::SignalDetachedFromInStream() {
-	_pConnectivity->SignalDetachedFromInStream();
+void BaseOutNetRTPUDPStream::SignalDetachedFromInStream()
+{
+    _pConnectivity->SignalDetachedFromInStream();
 }
 
-void BaseOutNetRTPUDPStream::SignalStreamCompleted() {
-	NYIA;
+void BaseOutNetRTPUDPStream::SignalStreamCompleted()
+{
+    NYIA;
 }
 
 bool BaseOutNetRTPUDPStream::FeedData(uint8_t *pData, uint32_t dataLength,
-		uint32_t processedLength, uint32_t totalLength,
-		double absoluteTimestamp, bool isAudio) {
-	if (isAudio) {
-		if (_hasAudio) {
-			return FeedDataAudio(pData, dataLength, processedLength, totalLength,
-					absoluteTimestamp, isAudio);
-		} else {
-			return true;
-		}
-	} else {
-		if (_hasVideo) {
-			return FeedDataVideo(pData, dataLength, processedLength, totalLength,
-					absoluteTimestamp, isAudio);
-		} else {
-			return true;
-		}
-	}
+                                      uint32_t processedLength, uint32_t totalLength,
+                                      double absoluteTimestamp, bool isAudio)
+{
+    if (isAudio)
+    {
+        if (_hasAudio)
+        {
+            return FeedDataAudio(pData, dataLength, processedLength, totalLength,
+                                 absoluteTimestamp, isAudio);
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        if (_hasVideo)
+        {
+            return FeedDataVideo(pData, dataLength, processedLength, totalLength,
+                                 absoluteTimestamp, isAudio);
+        }
+        else
+        {
+            return true;
+        }
+    }
 }
 
 #endif /* HAS_PROTOCOL_RTP */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,46 +27,47 @@
 	@class BaseLogLocation
 	@brief Base class that all logging must derive from.
 */
-class DLLEXP BaseLogLocation {
+class DLLEXP BaseLogLocation
+{
 protected:
-	int32_t _level;
-	string _name;
+    int32_t _level;
+    string _name;
 public:
-	BaseLogLocation();
-	virtual ~BaseLogLocation();
+    BaseLogLocation();
+    virtual ~BaseLogLocation();
 
-	/*!
-		@brief Returns the level of logging
-	*/
-	int32_t GetLevel();
+    /*!
+    	@brief Returns the level of logging
+    */
+    int32_t GetLevel();
 
-	/*!
-		@brief Sets the level of logging
-		@param level - Level of logging
-	*/
-	void SetLevel(int32_t level);
+    /*!
+    	@brief Sets the level of logging
+    	@param level - Level of logging
+    */
+    void SetLevel(int32_t level);
 
-	/*!
-		@brief Gets the name of the log message based on its level
-	*/
-	string GetName();
+    /*!
+    	@brief Gets the name of the log message based on its level
+    */
+    string GetName();
 
-	/*!
-		@brief Sets the name of the type of log message
-		@param name
-	*/
-	void SetName(string name);
+    /*!
+    	@brief Sets the name of the type of log message
+    	@param name
+    */
+    void SetName(string name);
 
-	/*! @brief Logs the message
-		@param level: Variable that indicates how critical the log is about. It ranges from "INFO" to "FATAL".
-		@param filename: Shows file name of the source code that displayed the log message.
-		@param lineNumber: Shows line number in the source code that displayed the log message.
-		@param functionName: Shows the name of the function that displayed the log message.
-		@param message: Accepts the log message and displays it in the appropriate format.
-	
-	*/
-	virtual void Log(int32_t level, string fileName, uint32_t lineNumber,
-			string functionName, string message) = 0;
+    /*! @brief Logs the message
+    	@param level: Variable that indicates how critical the log is about. It ranges from "INFO" to "FATAL".
+    	@param filename: Shows file name of the source code that displayed the log message.
+    	@param lineNumber: Shows line number in the source code that displayed the log message.
+    	@param functionName: Shows the name of the function that displayed the log message.
+    	@param message: Accepts the log message and displays it in the appropriate format.
+
+    */
+    virtual void Log(int32_t level, string fileName, uint32_t lineNumber,
+                     string functionName, string message) = 0;
 };
 
 

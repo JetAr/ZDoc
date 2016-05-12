@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -32,105 +32,106 @@ class BaseStream;
 /*!
 	@brief
 */
-class DLLEXP BaseClientApplication {
+class DLLEXP BaseClientApplication
+{
 private:
-	static uint32_t _idGenerator;
-	uint32_t _id;
-	string _name;
-	vector<string> _aliases;
-	map<uint64_t, BaseAppProtocolHandler *> _protocolsHandlers;
-	StreamsManager _streamsManager;
+    static uint32_t _idGenerator;
+    uint32_t _id;
+    string _name;
+    vector<string> _aliases;
+    map<uint64_t, BaseAppProtocolHandler *> _protocolsHandlers;
+    StreamsManager _streamsManager;
 protected:
-	Variant _configuration;
-	bool _isDefault;
+    Variant _configuration;
+    bool _isDefault;
 public:
-	BaseClientApplication(Variant &configuration);
-	virtual ~BaseClientApplication();
+    BaseClientApplication(Variant &configuration);
+    virtual ~BaseClientApplication();
 
-	/*!
-		@brief Returns the application's id. The id is auto-generated in the constructor
-	*/
-	uint32_t GetId();
+    /*!
+    	@brief Returns the application's id. The id is auto-generated in the constructor
+    */
+    uint32_t GetId();
 
-	/*!
-		@brief Returns the name of the application, taken from the configuration file.
-	*/
-	string GetName();
+    /*!
+    	@brief Returns the name of the application, taken from the configuration file.
+    */
+    string GetName();
 
-	/*!
-		@brief Returns the variant that contains the configuration information about the application.
-	*/
-	Variant GetConfiguration();
+    /*!
+    	@brief Returns the variant that contains the configuration information about the application.
+    */
+    Variant GetConfiguration();
 
-	/*!
-		@brief Returns the alias of the application from the configuration file
-	*/
-	vector<string> GetAliases();
+    /*!
+    	@brief Returns the alias of the application from the configuration file
+    */
+    vector<string> GetAliases();
 
-	/*!
-		@brief Returns the boolean that tells if the application is the default application.
-	*/
-	bool IsDefault();
-	StreamsManager *GetStreamsManager();
+    /*!
+    	@brief Returns the boolean that tells if the application is the default application.
+    */
+    bool IsDefault();
+    StreamsManager *GetStreamsManager();
 
-	virtual bool Initialize();
+    virtual bool Initialize();
 
-	/*!
-		@brief Registers this application to the BaseAppProtocolHandler.
-		@protocolType - Type of protocol
-		@pAppProtocolHandler
-	*/
-	void RegisterAppProtocolHandler(uint64_t protocolType,
-			BaseAppProtocolHandler *pAppProtocolHandler);
-	/*!
-		@brief Erases this application to the BaseAppProtocolHandler by setting it to NULL.
-		@param protocolType - Type of protocol
-	*/
-	void UnRegisterAppProtocolHandler(uint64_t protocolType);
+    /*!
+    	@brief Registers this application to the BaseAppProtocolHandler.
+    	@protocolType - Type of protocol
+    	@pAppProtocolHandler
+    */
+    void RegisterAppProtocolHandler(uint64_t protocolType,
+                                    BaseAppProtocolHandler *pAppProtocolHandler);
+    /*!
+    	@brief Erases this application to the BaseAppProtocolHandler by setting it to NULL.
+    	@param protocolType - Type of protocol
+    */
+    void UnRegisterAppProtocolHandler(uint64_t protocolType);
 
-	BaseAppProtocolHandler *GetProtocolHandler(BaseProtocol *pProtocol);
-	BaseAppProtocolHandler *GetProtocolHandler(uint64_t protocolType);
-	virtual BaseAppProtocolHandler *GetProtocolHandler(string &scheme);
+    BaseAppProtocolHandler *GetProtocolHandler(BaseProtocol *pProtocol);
+    BaseAppProtocolHandler *GetProtocolHandler(uint64_t protocolType);
+    virtual BaseAppProtocolHandler *GetProtocolHandler(string &scheme);
 
-	/*!
-		@brief This is called bt the framework when an outbound connection failed to connect
-		@param customParameters
-	*/
-	virtual bool OutboundConnectionFailed(Variant &customParameters);
+    /*!
+    	@brief This is called bt the framework when an outbound connection failed to connect
+    	@param customParameters
+    */
+    virtual bool OutboundConnectionFailed(Variant &customParameters);
 
-	/*!
-		@brief Registers the protocol to the client application
-		@param pProtocol
-	*/
-	virtual void RegisterProtocol(BaseProtocol *pProtocol);
+    /*!
+    	@brief Registers the protocol to the client application
+    	@param pProtocol
+    */
+    virtual void RegisterProtocol(BaseProtocol *pProtocol);
 
-	/*!
-		@brief Erases the protocol to the client application
-		@param pProtocol
-	*/
-	virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
+    /*!
+    	@brief Erases the protocol to the client application
+    	@param pProtocol
+    */
+    virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
 
-	/*!
-		@brief Displays the registered stream's ID, type, and name in the logs 
-		@param pStream
-	*/
-	virtual void SignalStreamRegistered(BaseStream *pStream);
+    /*!
+    	@brief Displays the registered stream's ID, type, and name in the logs
+    	@param pStream
+    */
+    virtual void SignalStreamRegistered(BaseStream *pStream);
 
-	/*!
-		@brief Displays the unregistered stream's ID, type, and name in the logs 
-		@param pStream
-	*/
-	virtual void SignalStreamUnRegistered(BaseStream *pStream);
+    /*!
+    	@brief Displays the unregistered stream's ID, type, and name in the logs
+    	@param pStream
+    */
+    virtual void SignalStreamUnRegistered(BaseStream *pStream);
 
-	virtual bool PullExternalStreams();
-	virtual bool PullExternalStream(Variant streamConfig);
-	virtual bool PushLocalStream(Variant streamConfig);
+    virtual bool PullExternalStreams();
+    virtual bool PullExternalStream(Variant streamConfig);
+    virtual bool PushLocalStream(Variant streamConfig);
 
-	/*!
-		@brief Deletes all active protocols and IOHandlers bound to the application.
-		@param pApplication
-	*/
-	static void Shutdown(BaseClientApplication *pApplication);
+    /*!
+    	@brief Deletes all active protocols and IOHandlers bound to the application.
+    	@param pApplication
+    */
+    static void Shutdown(BaseClientApplication *pApplication);
 };
 
 

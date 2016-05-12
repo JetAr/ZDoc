@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,80 +25,90 @@
 using namespace app_applestreamingclient;
 
 TSAppProtocolHandler::TSAppProtocolHandler(Variant &configuration)
-: BaseTSAppProtocolHandler(configuration) {
+    : BaseTSAppProtocolHandler(configuration)
+{
 
 }
 
-TSAppProtocolHandler::~TSAppProtocolHandler() {
+TSAppProtocolHandler::~TSAppProtocolHandler()
+{
 
 }
 
-void TSAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	//1. Run the default behaviour
-	BaseTSAppProtocolHandler::RegisterProtocol(pProtocol);
+void TSAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    //1. Run the default behaviour
+    BaseTSAppProtocolHandler::RegisterProtocol(pProtocol);
 
-	//2. Get the context
-	uint32_t contextId = pProtocol->GetCustomParameters()["payload"]["contextId"];
-	ClientContext *pContext = ClientContext::GetContext(contextId, 0, 0);
-	if (pContext == NULL) {
-		FATAL("Unable to get the context with id: %u", contextId);
-		pProtocol->EnqueueForDelete();
-		return;
-	}
+    //2. Get the context
+    uint32_t contextId = pProtocol->GetCustomParameters()["payload"]["contextId"];
+    ClientContext *pContext = ClientContext::GetContext(contextId, 0, 0);
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get the context with id: %u", contextId);
+        pProtocol->EnqueueForDelete();
+        return;
+    }
 
-	//3. Mark this protocol as a survivor upont chain tear-down
-	pProtocol->GetFarProtocol()->DeleteNearProtocol(false);
+    //3. Mark this protocol as a survivor upont chain tear-down
+    pProtocol->GetFarProtocol()->DeleteNearProtocol(false);
 
-	//4. This is a step-by-step feed process
-	((InboundTSProtocol *) pProtocol)->SetStepByStep(true);
+    //4. This is a step-by-step feed process
+    ((InboundTSProtocol *) pProtocol)->SetStepByStep(true);
 
-	//5. Tell the context about this new TS protocol
-	uint32_t bw = pProtocol->GetCustomParameters()["payload"]["bw"];
-	if (!pContext->SignalTSProtocolAvailable(pProtocol->GetId(), bw)) {
-		FATAL("Unable to signal the context about new TS protocol");
-		pProtocol->EnqueueForDelete();
-		return;
-	}
+    //5. Tell the context about this new TS protocol
+    uint32_t bw = pProtocol->GetCustomParameters()["payload"]["bw"];
+    if (!pContext->SignalTSProtocolAvailable(pProtocol->GetId(), bw))
+    {
+        FATAL("Unable to signal the context about new TS protocol");
+        pProtocol->EnqueueForDelete();
+        return;
+    }
 
-	//6. Do the HTTP request
-	if (!DoHTTPRequest(pProtocol)) {
-		FATAL("Unable to do the HTTP request");
-		pProtocol->EnqueueForDelete();
-	}
+    //6. Do the HTTP request
+    if (!DoHTTPRequest(pProtocol))
+    {
+        FATAL("Unable to do the HTTP request");
+        pProtocol->EnqueueForDelete();
+    }
 
-	//7. Done
-	FINEST("%s", STR(*pProtocol));
+    //7. Done
+    FINEST("%s", STR(*pProtocol));
 }
 
-bool TSAppProtocolHandler::DoHTTPRequest(BaseProtocol *pProtocol) {
-	//1. Get the paramaters
-	Variant &parameters = pProtocol->GetCustomParameters();
+bool TSAppProtocolHandler::DoHTTPRequest(BaseProtocol *pProtocol)
+{
+    //1. Get the paramaters
+    Variant &parameters = pProtocol->GetCustomParameters();
 
-	//2. Get the http protocol
-	OutboundHTTPProtocol *pHTTP = NULL;
-	BaseProtocol *pTemp = pProtocol;
-	while (pTemp != NULL) {
-		if (pTemp->GetType() == PT_OUTBOUND_HTTP) {
-			pHTTP = (OutboundHTTPProtocol *) pTemp;
-			break;
-		}
-		pTemp = pTemp->GetFarProtocol();
-	}
-	if (pHTTP == NULL) {
-		FATAL("This is not a HTTP based protocol chain");
-		return false;
-	}
+    //2. Get the http protocol
+    OutboundHTTPProtocol *pHTTP = NULL;
+    BaseProtocol *pTemp = pProtocol;
+    while (pTemp != NULL)
+    {
+        if (pTemp->GetType() == PT_OUTBOUND_HTTP)
+        {
+            pHTTP = (OutboundHTTPProtocol *) pTemp;
+            break;
+        }
+        pTemp = pTemp->GetFarProtocol();
+    }
+    if (pHTTP == NULL)
+    {
+        FATAL("This is not a HTTP based protocol chain");
+        return false;
+    }
 
-	//3. We wish to disconnect after the transfer is complete
-	pHTTP->SetDisconnectAfterTransfer(true);
+    //3. We wish to disconnect after the transfer is complete
+    pHTTP->SetDisconnectAfterTransfer(true);
 
-	//4. This is a GET request
-	pHTTP->Method(HTTP_METHOD_GET);
+    //4. This is a GET request
+    pHTTP->Method(HTTP_METHOD_GET);
 
-	//5. Our document and the host
-	pHTTP->Document(parameters["document"]);
-	pHTTP->Host(parameters["host"]);
+    //5. Our document and the host
+    pHTTP->Document(parameters["document"]);
+    pHTTP->Host(parameters["host"]);
 
-	//6. Done
-	return pHTTP->EnqueueForOutbound();
+    //6. Done
+    return pHTTP->EnqueueForOutbound();
 }

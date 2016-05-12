@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,11 +23,13 @@
 #include "testvmlua.h"
 
 TestVMLua::TestVMLua()
-: BaseVMLua() {
+    : BaseVMLua()
+{
 
 }
 
-TestVMLua::~TestVMLua() {
+TestVMLua::~TestVMLua()
+{
 }
 
 #endif	/* VM_LUA */

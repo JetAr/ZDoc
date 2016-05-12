@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,18 +23,19 @@
 
 #include "common.h"
 
-class BaseVM {
+class BaseVM
+{
 public:
-	BaseVM();
-	virtual ~BaseVM();
+    BaseVM();
+    virtual ~BaseVM();
 
-	virtual bool Supports64bit() = 0;
-	virtual bool SupportsUndefined() = 0;
-	virtual bool Initialize() = 0;
-	virtual bool Shutdown() = 0;
-	virtual bool LoadScriptFile(string scriptFileName, string scriptName) = 0;
-	virtual bool LoadScriptString(string scriptContent, string scriptName) = 0;
-	virtual bool Call(string functionName, Variant &parameters, Variant &results) = 0;
+    virtual bool Supports64bit() = 0;
+    virtual bool SupportsUndefined() = 0;
+    virtual bool Initialize() = 0;
+    virtual bool Shutdown() = 0;
+    virtual bool LoadScriptFile(string scriptFileName, string scriptName) = 0;
+    virtual bool LoadScriptString(string scriptContent, string scriptName) = 0;
+    virtual bool Call(string functionName, Variant &parameters, Variant &results) = 0;
 };
 
 #endif	/* _BASEVM_H */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,47 +21,57 @@
 #include "mediaformats/mp4/atomstts.h"
 
 AtomSTTS::AtomSTTS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
+    : VersionedAtom(pDocument, type, size, start)
+{
 }
 
-AtomSTTS::~AtomSTTS() {
+AtomSTTS::~AtomSTTS()
+{
 }
 
-vector<uint32_t> AtomSTTS::GetEntries() {
-	if (_normalizedEntries.size() != 0)
-		return _normalizedEntries;
+vector<uint32_t> AtomSTTS::GetEntries()
+{
+    if (_normalizedEntries.size() != 0)
+        return _normalizedEntries;
 
-	FOR_VECTOR_ITERATOR(STTSEntry, _sttsEntries, i) {
-		for (uint32_t j = 0; j < VECTOR_VAL(i).count; j++) {
-			ADD_VECTOR_END(_normalizedEntries, VECTOR_VAL(i).delta);
-		}
-	}
-	return _normalizedEntries;
+    FOR_VECTOR_ITERATOR(STTSEntry, _sttsEntries, i)
+    {
+        for (uint32_t j = 0; j < VECTOR_VAL(i).count; j++)
+        {
+            ADD_VECTOR_END(_normalizedEntries, VECTOR_VAL(i).delta);
+        }
+    }
+    return _normalizedEntries;
 }
 
-bool AtomSTTS::ReadData() {
-	uint32_t entryCount;
-	if (!ReadUInt32(entryCount)) {
-		FATAL("Unable to read entry count");
-		return false;
-	}
+bool AtomSTTS::ReadData()
+{
+    uint32_t entryCount;
+    if (!ReadUInt32(entryCount))
+    {
+        FATAL("Unable to read entry count");
+        return false;
+    }
 
-	for (uint32_t i = 0; i < entryCount; i++) {
-		STTSEntry entry;
+    for (uint32_t i = 0; i < entryCount; i++)
+    {
+        STTSEntry entry;
 
-		if (!ReadUInt32(entry.count)) {
-			FATAL("Unable to read count");
-			return false;
-		}
+        if (!ReadUInt32(entry.count))
+        {
+            FATAL("Unable to read count");
+            return false;
+        }
 
-		if (!ReadUInt32(entry.delta)) {
-			FATAL("Unable to read delta");
-			return false;
-		}
+        if (!ReadUInt32(entry.delta))
+        {
+            FATAL("Unable to read delta");
+            return false;
+        }
 
-		ADD_VECTOR_END(_sttsEntries, entry);
-	}
-	return true;
+        ADD_VECTOR_END(_sttsEntries, entry);
+    }
+    return true;
 }
 
 

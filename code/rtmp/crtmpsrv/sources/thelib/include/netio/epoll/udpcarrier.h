@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,33 +27,34 @@
 class BaseProtocol;
 
 class UDPCarrier
-: public IOHandler {
+    : public IOHandler
+{
 private:
-	sockaddr_in _peerAddress;
-	sockaddr_in _nearAddress;
-	string _nearIp;
-	uint16_t _nearPort;
-	uint64_t _rx;
-	uint64_t _tx;
+    sockaddr_in _peerAddress;
+    sockaddr_in _nearAddress;
+    string _nearIp;
+    uint16_t _nearPort;
+    uint64_t _rx;
+    uint64_t _tx;
 public:
-	UDPCarrier(int32_t fd);
-	virtual ~UDPCarrier();
+    UDPCarrier(int32_t fd);
+    virtual ~UDPCarrier();
 
-	virtual bool OnEvent(struct epoll_event &event);
-	virtual bool SignalOutputData();
-	virtual operator string();
-	virtual void GetStats(Variant &info);
+    virtual bool OnEvent(struct epoll_event &event);
+    virtual bool SignalOutputData();
+    virtual operator string();
+    virtual void GetStats(Variant &info);
 
-	string GetFarEndpointAddress();
-	uint16_t GetFarEndpointPort();
-	string GetNearEndpointAddress();
-	uint16_t GetNearEndpointPort();
+    string GetFarEndpointAddress();
+    uint16_t GetFarEndpointPort();
+    string GetNearEndpointAddress();
+    uint16_t GetNearEndpointPort();
 
-	static UDPCarrier* Create(string bindIp, uint16_t bindPort);
-	static UDPCarrier* Create(string bindIp, uint16_t bindPort, BaseProtocol *pProtocol);
+    static UDPCarrier* Create(string bindIp, uint16_t bindPort);
+    static UDPCarrier* Create(string bindIp, uint16_t bindPort, BaseProtocol *pProtocol);
 private:
-	bool Setup(Variant &settings);
-	bool GetEndpointsInfo();
+    bool Setup(Variant &settings);
+    bool GetEndpointsInfo();
 };
 
 

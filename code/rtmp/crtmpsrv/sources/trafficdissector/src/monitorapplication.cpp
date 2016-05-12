@@ -23,10 +23,12 @@
 #include "localdefines.h"
 
 MonitorApplication::MonitorApplication(Variant &configuration)
-: BaseClientApplication(configuration) {
-	_pRTMPHandler = new MonitorRTMPProtocolHandler(configuration);
-	RegisterAppProtocolHandler(PT_MONITORRTMP, _pRTMPHandler);
+    : BaseClientApplication(configuration)
+{
+    _pRTMPHandler = new MonitorRTMPProtocolHandler(configuration);
+    RegisterAppProtocolHandler(PT_MONITORRTMP, _pRTMPHandler);
 }
 
-MonitorApplication::~MonitorApplication() {
+MonitorApplication::~MonitorApplication()
+{
 }

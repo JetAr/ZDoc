@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -38,59 +38,60 @@
 	@class DHWrapper
 	@brief Class that handles the DH wrapper
 */
-class DLLEXP DHWrapper {
+class DLLEXP DHWrapper
+{
 private:
-	int32_t _bitsCount;
-	DH *_pDH;
-	uint8_t *_pSharedKey;
-	int32_t _sharedKeyLength;
-	BIGNUM *_peerPublickey;
+    int32_t _bitsCount;
+    DH *_pDH;
+    uint8_t *_pSharedKey;
+    int32_t _sharedKeyLength;
+    BIGNUM *_peerPublickey;
 public:
-	DHWrapper(int32_t bitsCount);
-	virtual ~DHWrapper();
+    DHWrapper(int32_t bitsCount);
+    virtual ~DHWrapper();
 
-	/*!
-		@brief Initializes the DH wrapper
-	*/
-	bool Initialize();
+    /*!
+    	@brief Initializes the DH wrapper
+    */
+    bool Initialize();
 
-	/*!
-		@brief Copies the public key.
-		@param pDst - Where the copied key is stored
-		@param dstLength
-	*/
-	bool CopyPublicKey(uint8_t *pDst, int32_t dstLength);
+    /*!
+    	@brief Copies the public key.
+    	@param pDst - Where the copied key is stored
+    	@param dstLength
+    */
+    bool CopyPublicKey(uint8_t *pDst, int32_t dstLength);
 
-	/*!
-		@brief Copies the private key.
-		@param pDst - Where the copied key is stored
-		@param dstLength
-	*/
-	bool CopyPrivateKey(uint8_t *pDst, int32_t dstLength);
+    /*!
+    	@brief Copies the private key.
+    	@param pDst - Where the copied key is stored
+    	@param dstLength
+    */
+    bool CopyPrivateKey(uint8_t *pDst, int32_t dstLength);
 
-	/*!
-		@brief Creates a shared secret key
-		@param pPeerPublicKey
-		@param length
-	*/
-	bool CreateSharedKey(uint8_t *pPeerPublicKey, int32_t length);
-	
-	/*!
-		@brief Copies the shared secret key.
-		@param pDst - Where the copied key is stored
-		@param dstLength
-	*/
-	bool CopySharedKey(uint8_t *pDst, int32_t dstLength);
+    /*!
+    	@brief Creates a shared secret key
+    	@param pPeerPublicKey
+    	@param length
+    */
+    bool CreateSharedKey(uint8_t *pPeerPublicKey, int32_t length);
+
+    /*!
+    	@brief Copies the shared secret key.
+    	@param pDst - Where the copied key is stored
+    	@param dstLength
+    */
+    bool CopySharedKey(uint8_t *pDst, int32_t dstLength);
 private:
-	void Cleanup();
-	bool CopyKey(BIGNUM *pNum, uint8_t *pDst, int32_t dstLength);
+    void Cleanup();
+    bool CopyKey(BIGNUM *pNum, uint8_t *pDst, int32_t dstLength);
 };
 
 DLLEXP void InitRC4Encryption(uint8_t *secretKey, uint8_t *pubKeyIn, uint8_t *pubKeyOut,
-		RC4_KEY *rc4keyIn, RC4_KEY *rc4keyOut);
+                              RC4_KEY *rc4keyIn, RC4_KEY *rc4keyOut);
 DLLEXP string md5(string source, bool textResult);
 DLLEXP void HMACsha256(const void *pData, uint32_t dataLength, const void *pKey,
-		uint32_t keyLength, void *pResult);
+                       uint32_t keyLength, void *pResult);
 DLLEXP string b64(string source);
 DLLEXP string b64(uint8_t *pBuffer, uint32_t length);
 DLLEXP string unb64(string source);

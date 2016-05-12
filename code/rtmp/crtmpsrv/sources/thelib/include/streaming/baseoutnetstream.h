@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,11 +24,12 @@
 #include "streaming/baseoutstream.h"
 
 class DLLEXP BaseOutNetStream
-: public BaseOutStream {
+    : public BaseOutStream
+{
 public:
-	BaseOutNetStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			uint64_t type, string name);
-	virtual ~BaseOutNetStream();
+    BaseOutNetStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                     uint64_t type, string name);
+    virtual ~BaseOutNetStream();
 };
 
 #endif	/* _BASEOUTNETSTREAM_H */

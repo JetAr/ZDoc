@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,17 +24,18 @@
 #include "mediaformats/mp4/baseatom.h"
 
 class VersionedAtom
-: public BaseAtom {
+    : public BaseAtom
+{
 private:
-	uint8_t _version;
-	uint8_t _flags[3];
+    uint8_t _version;
+    uint8_t _flags[3];
 public:
-	VersionedAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~VersionedAtom();
-	bool Read();
-	virtual string Hierarchy(uint32_t indent);
+    VersionedAtom(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~VersionedAtom();
+    bool Read();
+    virtual string Hierarchy(uint32_t indent);
 protected:
-	virtual bool ReadData() = 0;
+    virtual bool ReadData() = 0;
 };
 
 #endif	/* _VERSIONEDATOM_H */

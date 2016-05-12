@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,19 +25,21 @@
 #include "protocols/protocoltypes.h"
 
 #define PT_DBACCESS MAKE_TAG4('O','D','B','A')
-namespace app_samplefactory {
+namespace app_samplefactory
+{
 
-	class DLLEXP ProtocolFactory
-	: public BaseProtocolFactory {
-	public:
-		ProtocolFactory();
-		virtual ~ProtocolFactory();
+class DLLEXP ProtocolFactory
+    : public BaseProtocolFactory
+{
+public:
+    ProtocolFactory();
+    virtual ~ProtocolFactory();
 
-		virtual vector<uint64_t> HandledProtocols();
-		virtual vector<string> HandledProtocolChains();
-		virtual vector<uint64_t> ResolveProtocolChain(string name);
-		virtual BaseProtocol *SpawnProtocol(uint64_t type, Variant &parameters);
-	};
+    virtual vector<uint64_t> HandledProtocols();
+    virtual vector<string> HandledProtocolChains();
+    virtual vector<uint64_t> ResolveProtocolChain(string name);
+    virtual BaseProtocol *SpawnProtocol(uint64_t type, Variant &parameters);
+};
 }
 
 #endif	/* _PROTOCOLFACTORY_H */

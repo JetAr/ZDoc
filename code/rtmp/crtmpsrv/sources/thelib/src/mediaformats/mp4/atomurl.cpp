@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,19 +21,23 @@
 #include "mediaformats/mp4/atomurl.h"
 
 AtomURL::AtomURL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
+    : VersionedAtom(pDocument, type, size, start)
+{
 
 }
 
-AtomURL::~AtomURL() {
+AtomURL::~AtomURL()
+{
 }
 
-bool AtomURL::ReadData() {
-	if (!ReadString(_location, _size - 12)) {
-		FATAL("Unable to read location");
-		return false;
-	}
-	return true;
+bool AtomURL::ReadData()
+{
+    if (!ReadString(_location, _size - 12))
+    {
+        FATAL("Unable to read location");
+        return false;
+    }
+    return true;
 }
 
 #endif /* HAS_MEDIA_MP4 */

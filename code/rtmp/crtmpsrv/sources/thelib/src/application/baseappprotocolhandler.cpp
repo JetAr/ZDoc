@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,37 +22,44 @@
 #include "application/baseappprotocolhandler.h"
 #include "application/baseclientapplication.h"
 
-BaseAppProtocolHandler::BaseAppProtocolHandler(Variant &configuration) {
-	_configuration = configuration;
+BaseAppProtocolHandler::BaseAppProtocolHandler(Variant &configuration)
+{
+    _configuration = configuration;
 }
 
-BaseAppProtocolHandler::~BaseAppProtocolHandler() {
+BaseAppProtocolHandler::~BaseAppProtocolHandler()
+{
 }
 
-void BaseAppProtocolHandler::SetApplication(BaseClientApplication *pApplication) {
-	_pApplication = pApplication;
+void BaseAppProtocolHandler::SetApplication(BaseClientApplication *pApplication)
+{
+    _pApplication = pApplication;
 }
 
-BaseClientApplication *BaseAppProtocolHandler::GetApplication() {
-	return _pApplication;
+BaseClientApplication *BaseAppProtocolHandler::GetApplication()
+{
+    return _pApplication;
 }
 
-BaseAppProtocolHandler * BaseAppProtocolHandler::GetProtocolHandler(uint64_t protocolType) {
-	if (_pApplication == NULL)
-		return NULL;
-	return _pApplication->GetProtocolHandler(protocolType);
+BaseAppProtocolHandler * BaseAppProtocolHandler::GetProtocolHandler(uint64_t protocolType)
+{
+    if (_pApplication == NULL)
+        return NULL;
+    return _pApplication->GetProtocolHandler(protocolType);
 }
 
-bool BaseAppProtocolHandler::PullExternalStream(URI uri, Variant streamConfig) {
-	WARN("Pulling in streams for scheme %s in application %s not yet implemented. Stream configuration was:\n%s",
-			STR(uri.scheme),
-			STR(GetApplication()->GetName()),
-			STR(streamConfig.ToString()));
-	return false;
+bool BaseAppProtocolHandler::PullExternalStream(URI uri, Variant streamConfig)
+{
+    WARN("Pulling in streams for scheme %s in application %s not yet implemented. Stream configuration was:\n%s",
+         STR(uri.scheme),
+         STR(GetApplication()->GetName()),
+         STR(streamConfig.ToString()));
+    return false;
 }
 
-bool BaseAppProtocolHandler::PushLocalStream(BaseInStream *pInStream, Variant streamConfig) {
-	WARN("Pushing out streams for this protocol handler in application %s not yet implemented.",
-			STR(GetApplication()->GetName()));
-	return false;
+bool BaseAppProtocolHandler::PushLocalStream(BaseInStream *pInStream, Variant streamConfig)
+{
+    WARN("Pushing out streams for this protocol handler in application %s not yet implemented.",
+         STR(GetApplication()->GetName()));
+    return false;
 }

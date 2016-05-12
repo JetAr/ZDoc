@@ -22,69 +22,85 @@
 #include "streaming/streamstypes.h"
 
 MonitorStream::MonitorStream(BaseProtocol *pProtocol,
-		StreamsManager *pStreamsManager, string name)
-: BaseStream(pProtocol, pStreamsManager, ST_NEUTRAL_RTMP, name) {
+                             StreamsManager *pStreamsManager, string name)
+    : BaseStream(pProtocol, pStreamsManager, ST_NEUTRAL_RTMP, name)
+{
 
 }
 
-MonitorStream::~MonitorStream() {
+MonitorStream::~MonitorStream()
+{
 }
 
-StreamCapabilities * MonitorStream::GetCapabilities() {
-	NYI;
-	return NULL;
+StreamCapabilities * MonitorStream::GetCapabilities()
+{
+    NYI;
+    return NULL;
 }
 
-bool MonitorStream::Play(double absoluteTimestamp, double length) {
-	NYIR;
+bool MonitorStream::Play(double absoluteTimestamp, double length)
+{
+    NYIR;
 }
 
-bool MonitorStream::Pause() {
-	NYIR;
+bool MonitorStream::Pause()
+{
+    NYIR;
 }
 
-bool MonitorStream::Resume() {
-	NYIR;
+bool MonitorStream::Resume()
+{
+    NYIR;
 }
 
-bool MonitorStream::Seek(double absoluteTimestamp) {
-	NYIR;
+bool MonitorStream::Seek(double absoluteTimestamp)
+{
+    NYIR;
 }
 
-bool MonitorStream::Stop() {
-	NYIR;
+bool MonitorStream::Stop()
+{
+    NYIR;
 }
 
-bool MonitorStream::SignalPlay(double &absoluteTimestamp, double &length) {
-	NYIR;
+bool MonitorStream::SignalPlay(double &absoluteTimestamp, double &length)
+{
+    NYIR;
 }
 
-bool MonitorStream::SignalPause() {
-	NYIR;
+bool MonitorStream::SignalPause()
+{
+    NYIR;
 }
 
-bool MonitorStream::SignalResume() {
-	NYIR;
+bool MonitorStream::SignalResume()
+{
+    NYIR;
 }
 
-bool MonitorStream::SignalSeek(double &absoluteTimestamp) {
-	NYIR;
+bool MonitorStream::SignalSeek(double &absoluteTimestamp)
+{
+    NYIR;
 }
 
-bool MonitorStream::SignalStop() {
-	NYIR;
+bool MonitorStream::SignalStop()
+{
+    NYIR;
 }
 
 bool MonitorStream::FeedData(uint8_t *pData, uint32_t dataLength,
-		uint32_t processedLength, uint32_t totalLength,
-		double absoluteTimestamp, bool isAudio) {
-	NYIR;
+                             uint32_t processedLength, uint32_t totalLength,
+                             double absoluteTimestamp, bool isAudio)
+{
+    NYIR;
 }
 
-void MonitorStream::ReadyForSend() {
-	NYI;
+void MonitorStream::ReadyForSend()
+{
+    NYI;
 }
 
-bool MonitorStream::IsCompatibleWithType(uint64_t type) {
-	NYIR;
+bool MonitorStream::IsCompatibleWithType(uint64_t type)
+{
+    NYIR;
 }

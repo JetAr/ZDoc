@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -174,7 +174,7 @@ do{ \
         (((uint32_t)(((uint8_t *)(pNetworkPointer))[0]))<<16)| \
         (((uint32_t)(((uint8_t *)(pNetworkPointer))[1]))<<8)| \
         ((uint32_t)(((uint8_t *)(pNetworkPointer))[2])) \
-        )) 
+        ))
 
 #endif	/* _LITTLE_ENDIAN_SHORT_ALIGNED_H */
 

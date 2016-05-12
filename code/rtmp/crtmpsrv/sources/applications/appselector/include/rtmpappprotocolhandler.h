@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,17 +23,19 @@
 
 #include "protocols/rtmp/basertmpappprotocolhandler.h"
 
-namespace app_appselector {
+namespace app_appselector
+{
 
-	class RTMPAppProtocolHandler
-	: public BaseRTMPAppProtocolHandler {
-	public:
-		RTMPAppProtocolHandler(Variant &configuration);
-		virtual ~RTMPAppProtocolHandler();
+class RTMPAppProtocolHandler
+    : public BaseRTMPAppProtocolHandler
+{
+public:
+    RTMPAppProtocolHandler(Variant &configuration);
+    virtual ~RTMPAppProtocolHandler();
 
-		bool ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request);
-		virtual bool OutboundConnectionEstablished(OutboundRTMPProtocol *pFrom);
-	};
+    bool ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request);
+    virtual bool OutboundConnectionEstablished(OutboundRTMPProtocol *pFrom);
+};
 }
 #endif	/* _RTMPAPPPROTOCOLHANDLER_H */
 #endif /* HAS_PROTOCOL_RTMP */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,16 +22,19 @@
 #include "flvplaybackapplication.h"
 using namespace app_flvplayback;
 
-extern "C" BaseClientApplication *GetApplication_flvplayback(Variant configuration) {
-	FLVPlaybackApplication *pApplication = new FLVPlaybackApplication(
-			configuration);
-	return pApplication;
+extern "C" BaseClientApplication *GetApplication_flvplayback(Variant configuration)
+{
+    FLVPlaybackApplication *pApplication = new FLVPlaybackApplication(
+        configuration);
+    return pApplication;
 }
 
-extern "C" void ReleaseApplication_flvplayback(BaseClientApplication *pApplication) {
-	if (pApplication != NULL) {
-		delete pApplication;
-	}
+extern "C" void ReleaseApplication_flvplayback(BaseClientApplication *pApplication)
+{
+    if (pApplication != NULL)
+    {
+        delete pApplication;
+    }
 }
 
 

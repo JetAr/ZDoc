@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,16 +24,17 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomSMHD
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	uint16_t _balance;
-	uint16_t _reserved;
+    uint16_t _balance;
+    uint16_t _reserved;
 public:
-	AtomSMHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomSMHD();
+    AtomSMHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomSMHD();
 
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMSMHD_H */

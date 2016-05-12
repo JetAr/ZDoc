@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -33,23 +33,24 @@ class AtomCTTS;
 class AtomSTSS;
 
 class AtomSTBL
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomSTSD *_pSTSD;
-	AtomSTTS *_pSTTS;
-	AtomSTSC *_pSTSC;
-	AtomSTSZ *_pSTSZ;
-	AtomSTCO *_pSTCO;
-	AtomCO64 *_pCO64;
-	AtomCTTS *_pCTTS;
-	AtomSTSS *_pSTSS;
+    AtomSTSD *_pSTSD;
+    AtomSTTS *_pSTTS;
+    AtomSTSC *_pSTSC;
+    AtomSTSZ *_pSTSZ;
+    AtomSTCO *_pSTCO;
+    AtomCO64 *_pCO64;
+    AtomCTTS *_pCTTS;
+    AtomSTSS *_pSTSS;
 public:
-	AtomSTBL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomSTBL();
+    AtomSTBL(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomSTBL();
 
 
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMSTBL_H */

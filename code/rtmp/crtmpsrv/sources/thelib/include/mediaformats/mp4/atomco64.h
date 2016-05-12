@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,16 +24,17 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomCO64
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	vector<uint64_t> _entries;
+    vector<uint64_t> _entries;
 public:
-	AtomCO64(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomCO64();
+    AtomCO64(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomCO64();
 
-	vector<uint64_t> GetEntries();
+    vector<uint64_t> GetEntries();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMCO64_H */

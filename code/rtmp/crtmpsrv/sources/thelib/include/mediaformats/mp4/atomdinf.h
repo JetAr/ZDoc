@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,14 +26,15 @@
 class AtomDREF;
 
 class AtomDINF
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomDREF *_pDREF;
+    AtomDREF *_pDREF;
 public:
-	AtomDINF(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomDINF();
+    AtomDINF(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomDINF();
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMDINF_H */

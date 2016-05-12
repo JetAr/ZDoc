@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -20,9 +20,11 @@
 
 #include "basevm.h"
 
-BaseVM::BaseVM() {
+BaseVM::BaseVM()
+{
 }
 
-BaseVM::~BaseVM() {
+BaseVM::~BaseVM()
+{
 }
 

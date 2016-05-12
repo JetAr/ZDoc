@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -28,95 +28,118 @@
 using namespace app_flvplayback;
 
 RTMPAppProtocolHandler::RTMPAppProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
+    : BaseRTMPAppProtocolHandler(configuration)
+{
 
 }
 
-RTMPAppProtocolHandler::~RTMPAppProtocolHandler() {
+RTMPAppProtocolHandler::~RTMPAppProtocolHandler()
+{
 }
 
 bool RTMPAppProtocolHandler::ProcessInvokeGeneric(BaseRTMPProtocol *pFrom,
-		Variant &request) {
+        Variant &request)
+{
 
-	string functionName = M_INVOKE_FUNCTION(request);
-	if (functionName == "getAvailableFlvs") {
-		return ProcessGetAvailableFlvs(pFrom, request);
-	} else if (functionName == "insertMetadata") {
-		return ProcessInsertMetadata(pFrom, request);
-	} else {
-		return BaseRTMPAppProtocolHandler::ProcessInvokeGeneric(pFrom, request);
-	}
+    string functionName = M_INVOKE_FUNCTION(request);
+    if (functionName == "getAvailableFlvs")
+    {
+        return ProcessGetAvailableFlvs(pFrom, request);
+    }
+    else if (functionName == "insertMetadata")
+    {
+        return ProcessInsertMetadata(pFrom, request);
+    }
+    else
+    {
+        return BaseRTMPAppProtocolHandler::ProcessInvokeGeneric(pFrom, request);
+    }
 }
 
-bool RTMPAppProtocolHandler::ProcessGetAvailableFlvs(BaseRTMPProtocol *pFrom, Variant &request) {
-	Variant parameters;
-	parameters.PushToArray(Variant());
-	parameters.PushToArray(Variant());
+bool RTMPAppProtocolHandler::ProcessGetAvailableFlvs(BaseRTMPProtocol *pFrom, Variant &request)
+{
+    Variant parameters;
+    parameters.PushToArray(Variant());
+    parameters.PushToArray(Variant());
 
-	vector<string> files;
-	if (!ListFolder(_configuration[CONF_APPLICATION_MEDIAFOLDER],
-			_configuration[CONF_APPLICATION_MEDIAFOLDER],
-			files)) {
-		FATAL("Unable to list folder %s",
-				STR(_configuration[CONF_APPLICATION_MEDIAFOLDER]));
-		return false;
-	}
+    vector<string> files;
+    if (!ListFolder(_configuration[CONF_APPLICATION_MEDIAFOLDER],
+                    _configuration[CONF_APPLICATION_MEDIAFOLDER],
+                    files))
+    {
+        FATAL("Unable to list folder %s",
+              STR(_configuration[CONF_APPLICATION_MEDIAFOLDER]));
+        return false;
+    }
 
-	string file, name, extension;
+    string file, name, extension;
 
-	FOR_VECTOR_ITERATOR(string, files, i) {
-		file = VECTOR_VAL(i);
+    FOR_VECTOR_ITERATOR(string, files, i)
+    {
+        file = VECTOR_VAL(i);
 
-		splitFileName(file, name, extension);
-		extension = lowercase(extension);
+        splitFileName(file, name, extension);
+        extension = lowercase(extension);
 
-		if (extension != MEDIA_TYPE_FLV
-				&& extension != MEDIA_TYPE_MP3
-				&& extension != MEDIA_TYPE_MP4
-				&& extension != MEDIA_TYPE_M4A
-				&& extension != MEDIA_TYPE_M4V
-				&& extension != MEDIA_TYPE_MOV
-				&& extension != MEDIA_TYPE_F4V
-				&& extension != MEDIA_TYPE_TS
-				&& extension != MEDIA_TYPE_NSV)
-			continue;
-		string flashName = "";
-		if (extension == MEDIA_TYPE_FLV) {
-			flashName = name;
-		} else if (extension == MEDIA_TYPE_MP3) {
-			flashName = extension + ":" + name;
-		} else if (extension == MEDIA_TYPE_NSV) {
-			flashName = extension + ":" + name + "." + extension;
-		} else {
-			if (extension == MEDIA_TYPE_MP4
-					|| extension == MEDIA_TYPE_M4A
-					|| extension == MEDIA_TYPE_M4V
-					|| extension == MEDIA_TYPE_MOV
-					|| extension == MEDIA_TYPE_F4V) {
-				flashName = MEDIA_TYPE_MP4":" + name + "." + extension;
-			} else {
-				flashName = extension + ":" + name + "." + extension;
-			}
-		}
+        if (extension != MEDIA_TYPE_FLV
+                && extension != MEDIA_TYPE_MP3
+                && extension != MEDIA_TYPE_MP4
+                && extension != MEDIA_TYPE_M4A
+                && extension != MEDIA_TYPE_M4V
+                && extension != MEDIA_TYPE_MOV
+                && extension != MEDIA_TYPE_F4V
+                && extension != MEDIA_TYPE_TS
+                && extension != MEDIA_TYPE_NSV)
+            continue;
+        string flashName = "";
+        if (extension == MEDIA_TYPE_FLV)
+        {
+            flashName = name;
+        }
+        else if (extension == MEDIA_TYPE_MP3)
+        {
+            flashName = extension + ":" + name;
+        }
+        else if (extension == MEDIA_TYPE_NSV)
+        {
+            flashName = extension + ":" + name + "." + extension;
+        }
+        else
+        {
+            if (extension == MEDIA_TYPE_MP4
+                    || extension == MEDIA_TYPE_M4A
+                    || extension == MEDIA_TYPE_M4V
+                    || extension == MEDIA_TYPE_MOV
+                    || extension == MEDIA_TYPE_F4V)
+            {
+                flashName = MEDIA_TYPE_MP4":" + name + "." + extension;
+            }
+            else
+            {
+                flashName = extension + ":" + name + "." + extension;
+            }
+        }
 
-		parameters[(uint32_t) 1].PushToArray(flashName);
-	}
+        parameters[(uint32_t) 1].PushToArray(flashName);
+    }
 
-	map<uint32_t, BaseStream *> allInboundStreams =
-			GetApplication()->GetStreamsManager()->FindByType(ST_IN_NET, true);
+    map<uint32_t, BaseStream *> allInboundStreams =
+        GetApplication()->GetStreamsManager()->FindByType(ST_IN_NET, true);
 
-	FOR_MAP(allInboundStreams, uint32_t, BaseStream *, i) {
-		parameters[(uint32_t) 1].PushToArray(MAP_VAL(i)->GetName());
-	}
+    FOR_MAP(allInboundStreams, uint32_t, BaseStream *, i)
+    {
+        parameters[(uint32_t) 1].PushToArray(MAP_VAL(i)->GetName());
+    }
 
-	Variant message = GenericMessageFactory::GetInvoke(3, 0, 0, false, 0,
-			"SetAvailableFlvs", parameters);
+    Variant message = GenericMessageFactory::GetInvoke(3, 0, 0, false, 0,
+                      "SetAvailableFlvs", parameters);
 
-	return SendRTMPMessage(pFrom, message);
+    return SendRTMPMessage(pFrom, message);
 }
 
-bool RTMPAppProtocolHandler::ProcessInsertMetadata(BaseRTMPProtocol *pFrom, Variant &request) {
-	NYIR;
+bool RTMPAppProtocolHandler::ProcessInsertMetadata(BaseRTMPProtocol *pFrom, Variant &request)
+{
+    NYIR;
 }
 #endif /* HAS_PROTOCOL_RTMP */
 

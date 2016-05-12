@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,26 +21,31 @@
 #include "mediaformats/mp4/atomsmhd.h"
 
 AtomSMHD::AtomSMHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
-	_balance = 0;
-	_reserved = 0;
+    : VersionedAtom(pDocument, type, size, start)
+{
+    _balance = 0;
+    _reserved = 0;
 }
 
-AtomSMHD::~AtomSMHD() {
+AtomSMHD::~AtomSMHD()
+{
 }
 
-bool AtomSMHD::ReadData() {
-	if (!ReadUInt16(_balance)) {
-		FATAL("Unable to read balance");
-		return false;
-	}
+bool AtomSMHD::ReadData()
+{
+    if (!ReadUInt16(_balance))
+    {
+        FATAL("Unable to read balance");
+        return false;
+    }
 
-	if (!ReadUInt16(_reserved)) {
-		FATAL("Unable to read reserved");
-		return false;
-	}
+    if (!ReadUInt16(_reserved))
+    {
+        FATAL("Unable to read reserved");
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 

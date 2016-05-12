@@ -26,10 +26,11 @@
 class MonitorRTMPProtocol;
 
 class MonitorRTMPProtocolHandler
-: public BaseRTMPAppProtocolHandler {
+    : public BaseRTMPAppProtocolHandler
+{
 public:
-	MonitorRTMPProtocolHandler(Variant &configuration);
-	virtual ~MonitorRTMPProtocolHandler();
+    MonitorRTMPProtocolHandler(Variant &configuration);
+    virtual ~MonitorRTMPProtocolHandler();
 };
 
 

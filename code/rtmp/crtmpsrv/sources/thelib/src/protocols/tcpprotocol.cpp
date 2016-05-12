@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,70 +22,86 @@
 #include "netio/netio.h"
 
 TCPProtocol::TCPProtocol()
-: BaseProtocol(PT_TCP) {
-	_decodedBytesCount = 0;
-	_pCarrier = NULL;
+    : BaseProtocol(PT_TCP)
+{
+    _decodedBytesCount = 0;
+    _pCarrier = NULL;
 }
 
-TCPProtocol::~TCPProtocol() {
-	if (_pCarrier != NULL) {
-		IOHandler *pCarrier = _pCarrier;
-		_pCarrier = NULL;
-		pCarrier->SetProtocol(NULL);
-		delete pCarrier;
-	}
+TCPProtocol::~TCPProtocol()
+{
+    if (_pCarrier != NULL)
+    {
+        IOHandler *pCarrier = _pCarrier;
+        _pCarrier = NULL;
+        pCarrier->SetProtocol(NULL);
+        delete pCarrier;
+    }
 }
 
-bool TCPProtocol::Initialize(Variant &parameters) {
-	return true;
+bool TCPProtocol::Initialize(Variant &parameters)
+{
+    return true;
 }
 
-IOHandler *TCPProtocol::GetIOHandler() {
-	return _pCarrier;
+IOHandler *TCPProtocol::GetIOHandler()
+{
+    return _pCarrier;
 }
 
-void TCPProtocol::SetIOHandler(IOHandler *pIOHandler) {
-	if (pIOHandler != NULL) {
-		if ((pIOHandler->GetType() != IOHT_TCP_CARRIER)
-				&& (pIOHandler->GetType() != IOHT_STDIO)) {
-			ASSERT("This protocol accepts only TCP carriers");
-		}
-	}
-	_pCarrier = pIOHandler;
+void TCPProtocol::SetIOHandler(IOHandler *pIOHandler)
+{
+    if (pIOHandler != NULL)
+    {
+        if ((pIOHandler->GetType() != IOHT_TCP_CARRIER)
+                && (pIOHandler->GetType() != IOHT_STDIO))
+        {
+            ASSERT("This protocol accepts only TCP carriers");
+        }
+    }
+    _pCarrier = pIOHandler;
 }
 
-bool TCPProtocol::AllowFarProtocol(uint64_t type) {
-	WARN("This protocol doesn't accept any far protocol");
-	return false;
+bool TCPProtocol::AllowFarProtocol(uint64_t type)
+{
+    WARN("This protocol doesn't accept any far protocol");
+    return false;
 }
 
-bool TCPProtocol::AllowNearProtocol(uint64_t type) {
-	return true;
+bool TCPProtocol::AllowNearProtocol(uint64_t type)
+{
+    return true;
 }
 
-IOBuffer * TCPProtocol::GetInputBuffer() {
-	return &_inputBuffer;
+IOBuffer * TCPProtocol::GetInputBuffer()
+{
+    return &_inputBuffer;
 }
 
-bool TCPProtocol::SignalInputData(int32_t recvAmount) {
-	_decodedBytesCount += recvAmount;
-	return _pNearProtocol->SignalInputData(_inputBuffer);
+bool TCPProtocol::SignalInputData(int32_t recvAmount)
+{
+    _decodedBytesCount += recvAmount;
+    return _pNearProtocol->SignalInputData(_inputBuffer);
 }
 
-bool TCPProtocol::SignalInputData(IOBuffer & /* ignored */) {
-	ASSERT("OPERATION NOT SUPPORTED");
-	return false;
+bool TCPProtocol::SignalInputData(IOBuffer & /* ignored */)
+{
+    ASSERT("OPERATION NOT SUPPORTED");
+    return false;
 }
 
-bool TCPProtocol::EnqueueForOutbound() {
-	if (_pCarrier == NULL) {
-		ASSERT("TCPProtocol has no carrier");
-		return false;
-	}
-	return _pCarrier->SignalOutputData();
+bool TCPProtocol::EnqueueForOutbound()
+{
+    if (_pCarrier == NULL)
+    {
+        ASSERT("TCPProtocol has no carrier");
+        return false;
+    }
+    return _pCarrier->SignalOutputData();
 }
 
-uint32_t TCPProtocol::GetDecodedBytesCount() {
-	return _decodedBytesCount;
+uint32_t TCPProtocol::GetDecodedBytesCount()
+{
+    return _decodedBytesCount;
 }
 

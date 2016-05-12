@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,44 +24,46 @@
 #include "common.h"
 #include "netio/epoll/iohandlermanagertoken.h"
 
-typedef enum _IOHandlerType {
-	IOHT_ACCEPTOR,
-	IOHT_TCP_CONNECTOR,
-	IOHT_TCP_CARRIER,
-	IOHT_UDP_CARRIER,
-	IOHT_INBOUNDNAMEDPIPE_CARRIER,
-	IOHT_TIMER,
-	IOHT_STDIO
+typedef enum _IOHandlerType
+{
+    IOHT_ACCEPTOR,
+    IOHT_TCP_CONNECTOR,
+    IOHT_TCP_CARRIER,
+    IOHT_UDP_CARRIER,
+    IOHT_INBOUNDNAMEDPIPE_CARRIER,
+    IOHT_TIMER,
+    IOHT_STDIO
 } IOHandlerType;
 
 class BaseProtocol;
 
-class IOHandler {
+class IOHandler
+{
 protected:
-	static uint32_t _idGenerator;
-	uint32_t _id;
-	int32_t _inboundFd;
-	int32_t _outboundFd;
-	BaseProtocol *_pProtocol;
+    static uint32_t _idGenerator;
+    uint32_t _id;
+    int32_t _inboundFd;
+    int32_t _outboundFd;
+    BaseProtocol *_pProtocol;
 private:
-	IOHandlerType _type;
-	IOHandlerManagerToken *_pToken;
+    IOHandlerType _type;
+    IOHandlerManagerToken *_pToken;
 public:
-	IOHandler(int32_t inboundFd, int32_t outboundFd, IOHandlerType type);
-	virtual ~IOHandler();
-	void SetIOHandlerManagerToken(IOHandlerManagerToken *pToken);
-	IOHandlerManagerToken * GetIOHandlerManagerToken();
-	uint32_t GetId();
-	int32_t GetInboundFd();
-	int32_t GetOutboundFd();
-	IOHandlerType GetType();
-	void SetProtocol(BaseProtocol *pPotocol);
-	BaseProtocol *GetProtocol();
-	virtual bool SignalOutputData() = 0;
-	virtual bool OnEvent(struct epoll_event &event) = 0;
-	static string IOHTToString(IOHandlerType type);
-	virtual operator string() = 0;
-	virtual void GetStats(Variant &info) = 0;
+    IOHandler(int32_t inboundFd, int32_t outboundFd, IOHandlerType type);
+    virtual ~IOHandler();
+    void SetIOHandlerManagerToken(IOHandlerManagerToken *pToken);
+    IOHandlerManagerToken * GetIOHandlerManagerToken();
+    uint32_t GetId();
+    int32_t GetInboundFd();
+    int32_t GetOutboundFd();
+    IOHandlerType GetType();
+    void SetProtocol(BaseProtocol *pPotocol);
+    BaseProtocol *GetProtocol();
+    virtual bool SignalOutputData() = 0;
+    virtual bool OnEvent(struct epoll_event &event) = 0;
+    static string IOHTToString(IOHandlerType type);
+    virtual operator string() = 0;
+    virtual void GetStats(Variant &info) = 0;
 };
 
 

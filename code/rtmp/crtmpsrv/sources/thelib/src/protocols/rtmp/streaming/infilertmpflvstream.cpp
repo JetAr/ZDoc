@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,79 +25,91 @@
 #include "protocols/rtmp/streaming/baseoutnetrtmpstream.h"
 
 InFileRTMPFLVStream::InFileRTMPFLVStream(BaseProtocol *pProtocol,
-		StreamsManager *pStreamsManager, string name)
-: InFileRTMPStream(pProtocol, pStreamsManager, ST_IN_FILE_RTMP_FLV, name) {
+        StreamsManager *pStreamsManager, string name)
+    : InFileRTMPStream(pProtocol, pStreamsManager, ST_IN_FILE_RTMP_FLV, name)
+{
 
 }
 
-InFileRTMPFLVStream::~InFileRTMPFLVStream() {
+InFileRTMPFLVStream::~InFileRTMPFLVStream()
+{
 }
 
 bool InFileRTMPFLVStream::BuildFrame(FileClass *pFile, MediaFrame &mediaFrame,
-		IOBuffer &buffer) {
-	//1. Seek into the data file at the correct position
-	if (!pFile->SeekTo(mediaFrame.start)) {
-		FATAL("Unable to seek to position %"PRIu64, mediaFrame.start);
-		return false;
-	}
+                                     IOBuffer &buffer)
+{
+    //1. Seek into the data file at the correct position
+    if (!pFile->SeekTo(mediaFrame.start))
+    {
+        FATAL("Unable to seek to position %"PRIu64, mediaFrame.start);
+        return false;
+    }
 
-	//2. Read the data
-	if (!buffer.ReadFromFs(*pFile, (uint32_t) mediaFrame.length)) {
-		FATAL("Unable to read %"PRIu64" bytes from offset %"PRIu64, mediaFrame.length, mediaFrame.start);
-		return false;
-	}
+    //2. Read the data
+    if (!buffer.ReadFromFs(*pFile, (uint32_t) mediaFrame.length))
+    {
+        FATAL("Unable to read %"PRIu64" bytes from offset %"PRIu64, mediaFrame.length, mediaFrame.start);
+        return false;
+    }
 
-	//3. Done
-	return true;
+    //3. Done
+    return true;
 }
 
-bool InFileRTMPFLVStream::FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame) {
-	//1. Seek into the data file at the correct position
-	if (!pFile->SeekTo(mediaFrame.start)) {
-		FATAL("Unable to seek to position %"PRIu64, mediaFrame.start);
-		return false;
-	}
+bool InFileRTMPFLVStream::FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame)
+{
+    //1. Seek into the data file at the correct position
+    if (!pFile->SeekTo(mediaFrame.start))
+    {
+        FATAL("Unable to seek to position %"PRIu64, mediaFrame.start);
+        return false;
+    }
 
-	//2. Read the data
-	_metadataBuffer.IgnoreAll();
-	if (!_metadataBuffer.ReadFromFs(*pFile, (uint32_t) mediaFrame.length)) {
-		FATAL("Unable to read %"PRIu64" bytes from offset %"PRIu64, mediaFrame.length, mediaFrame.start);
-		return false;
-	}
+    //2. Read the data
+    _metadataBuffer.IgnoreAll();
+    if (!_metadataBuffer.ReadFromFs(*pFile, (uint32_t) mediaFrame.length))
+    {
+        FATAL("Unable to read %"PRIu64" bytes from offset %"PRIu64, mediaFrame.length, mediaFrame.start);
+        return false;
+    }
 
-	//3. Parse the metadata
-	_metadataName = "";
-	_metadataParameters.Reset();
+    //3. Parse the metadata
+    _metadataName = "";
+    _metadataParameters.Reset();
 
-	_tempVariant.Reset();
-	if (!_amfSerializer.Read(_metadataBuffer, _tempVariant)) {
-		WARN("Unable to read metadata");
-		return true;
-	}
-	if (_tempVariant != V_STRING) {
-		WARN("Unable to read metadata");
-		return true;
-	}
-	_metadataName = ((string) _tempVariant);
+    _tempVariant.Reset();
+    if (!_amfSerializer.Read(_metadataBuffer, _tempVariant))
+    {
+        WARN("Unable to read metadata");
+        return true;
+    }
+    if (_tempVariant != V_STRING)
+    {
+        WARN("Unable to read metadata");
+        return true;
+    }
+    _metadataName = ((string) _tempVariant);
 
-	while (GETAVAILABLEBYTESCOUNT(_metadataBuffer) > 0) {
-		_tempVariant.Reset();
-		if (!_amfSerializer.Read(_metadataBuffer, _tempVariant)) {
-			WARN("Unable to read metadata");
-			return true;
-		}
-		_metadataParameters.PushToArray(_tempVariant);
-	}
+    while (GETAVAILABLEBYTESCOUNT(_metadataBuffer) > 0)
+    {
+        _tempVariant.Reset();
+        if (!_amfSerializer.Read(_metadataBuffer, _tempVariant))
+        {
+            WARN("Unable to read metadata");
+            return true;
+        }
+        _metadataParameters.PushToArray(_tempVariant);
+    }
 
-	Variant message = GenericMessageFactory::GetNotify(
-			((BaseOutNetRTMPStream *) _pOutStreams->info)->GetCommandsChannelId(),
-			((BaseOutNetRTMPStream *) _pOutStreams->info)->GetRTMPStreamId(),
-			mediaFrame.absoluteTime,
-			true,
-			_metadataName,
-			_metadataParameters);
+    Variant message = GenericMessageFactory::GetNotify(
+                          ((BaseOutNetRTMPStream *) _pOutStreams->info)->GetCommandsChannelId(),
+                          ((BaseOutNetRTMPStream *) _pOutStreams->info)->GetRTMPStreamId(),
+                          mediaFrame.absoluteTime,
+                          true,
+                          _metadataName,
+                          _metadataParameters);
 
-	//5. Send it
-	return ((BaseRTMPProtocol *) _pProtocol)->SendMessage(message);
+    //5. Send it
+    return ((BaseRTMPProtocol *) _pProtocol)->SendMessage(message);
 }
 #endif /* HAS_PROTOCOL_RTMP */

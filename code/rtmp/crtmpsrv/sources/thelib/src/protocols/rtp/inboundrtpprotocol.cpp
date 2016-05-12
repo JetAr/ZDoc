@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,160 +25,195 @@
 #include "protocols/rtp/connectivity/inboundconnectivity.h"
 
 InboundRTPProtocol::InboundRTPProtocol()
-: BaseProtocol(PT_INBOUND_RTP) {
-	_spsPpsPeriod = 0;
-	_pInStream = NULL;
-	_pConnectivity = NULL;
-	memset(&_rtpHeader, 0, sizeof (_rtpHeader));
-	_lastSeq = 0;
-	_seqRollOver = 0;
-	_isAudio = false;
-	_packetsCount = 0;
+    : BaseProtocol(PT_INBOUND_RTP)
+{
+    _spsPpsPeriod = 0;
+    _pInStream = NULL;
+    _pConnectivity = NULL;
+    memset(&_rtpHeader, 0, sizeof (_rtpHeader));
+    _lastSeq = 0;
+    _seqRollOver = 0;
+    _isAudio = false;
+    _packetsCount = 0;
 #ifdef RTP_DETECT_ROLLOVER
-	_lastTimestamp = 0;
-	_timestampRollover = 0;
+    _lastTimestamp = 0;
+    _timestampRollover = 0;
 #endif
 }
 
-InboundRTPProtocol::~InboundRTPProtocol() {
+InboundRTPProtocol::~InboundRTPProtocol()
+{
 }
 
-bool InboundRTPProtocol::Initialize(Variant &parameters) {
-	GetCustomParameters() = parameters;
-	return true;
+bool InboundRTPProtocol::Initialize(Variant &parameters)
+{
+    GetCustomParameters() = parameters;
+    return true;
 }
 
-bool InboundRTPProtocol::AllowFarProtocol(uint64_t type) {
-	return type == PT_RTSP
-			|| type == PT_UDP;
+bool InboundRTPProtocol::AllowFarProtocol(uint64_t type)
+{
+    return type == PT_RTSP
+           || type == PT_UDP;
 }
 
-bool InboundRTPProtocol::AllowNearProtocol(uint64_t type) {
-	return false;
+bool InboundRTPProtocol::AllowNearProtocol(uint64_t type)
+{
+    return false;
 }
 
-bool InboundRTPProtocol::SignalInputData(int32_t recvAmount) {
-	NYIR;
+bool InboundRTPProtocol::SignalInputData(int32_t recvAmount)
+{
+    NYIR;
 }
 
-bool InboundRTPProtocol::SignalInputData(IOBuffer &buffer) {
-	NYIR;
+bool InboundRTPProtocol::SignalInputData(IOBuffer &buffer)
+{
+    NYIR;
 }
 
 bool InboundRTPProtocol::SignalInputData(IOBuffer &buffer,
-		sockaddr_in *pPeerAddress) {
-	//1. Get the raw buffer and its length
-	uint8_t *pBuffer = GETIBPOINTER(buffer);
-	uint32_t length = GETAVAILABLEBYTESCOUNT(buffer);
+        sockaddr_in *pPeerAddress)
+{
+    //1. Get the raw buffer and its length
+    uint8_t *pBuffer = GETIBPOINTER(buffer);
+    uint32_t length = GETAVAILABLEBYTESCOUNT(buffer);
 
-	//2. Do we have enough data?
-	if (length < 12) {
-		buffer.IgnoreAll();
-		return true;
-	}
+    //2. Do we have enough data?
+    if (length < 12)
+    {
+        buffer.IgnoreAll();
+        return true;
+    }
 
-	//3. Get the RTP header parts that we are interested in
-	_rtpHeader._flags = ENTOHLP(pBuffer);
-	_rtpHeader._timestamp = ENTOHLP(pBuffer + 4);
-	_rtpHeader._ssrc = ENTOHLP(pBuffer + 8);
+    //3. Get the RTP header parts that we are interested in
+    _rtpHeader._flags = ENTOHLP(pBuffer);
+    _rtpHeader._timestamp = ENTOHLP(pBuffer + 4);
+    _rtpHeader._ssrc = ENTOHLP(pBuffer + 8);
 
-	//4. Advance the sequence roll-over counter if necessary
-	if (GET_RTP_SEQ(_rtpHeader) < _lastSeq) {
-		if ((_lastSeq - GET_RTP_SEQ(_rtpHeader)) > (0xffff >> 2)) {
-			_seqRollOver++;
-			_lastSeq = GET_RTP_SEQ(_rtpHeader);
-		} else {
-			buffer.IgnoreAll();
-			return true;
-		}
-	} else {
-		_lastSeq = GET_RTP_SEQ(_rtpHeader);
-	}
+    //4. Advance the sequence roll-over counter if necessary
+    if (GET_RTP_SEQ(_rtpHeader) < _lastSeq)
+    {
+        if ((_lastSeq - GET_RTP_SEQ(_rtpHeader)) > (0xffff >> 2))
+        {
+            _seqRollOver++;
+            _lastSeq = GET_RTP_SEQ(_rtpHeader);
+        }
+        else
+        {
+            buffer.IgnoreAll();
+            return true;
+        }
+    }
+    else
+    {
+        _lastSeq = GET_RTP_SEQ(_rtpHeader);
+    }
 
-	//5. Do we have enough data?
-	if (length < ((uint32_t) 12 + GET_RTP_CC(_rtpHeader)*4 + 1)) {
-		buffer.IgnoreAll();
-		return true;
-	}
+    //5. Do we have enough data?
+    if (length < ((uint32_t) 12 + GET_RTP_CC(_rtpHeader)*4 + 1))
+    {
+        buffer.IgnoreAll();
+        return true;
+    }
 
-	//6. Skip the RTP header
-	pBuffer += 12 + GET_RTP_CC(_rtpHeader)*4;
-	length -= 12 + GET_RTP_CC(_rtpHeader)*4;
+    //6. Skip the RTP header
+    pBuffer += 12 + GET_RTP_CC(_rtpHeader)*4;
+    length -= 12 + GET_RTP_CC(_rtpHeader)*4;
 
-	//7. Detect rollover and adjust the timestamp
+    //7. Detect rollover and adjust the timestamp
 #ifdef RTP_DETECT_ROLLOVER
-	if (_rtpHeader._timestamp < _lastTimestamp) {
-		if ((((_rtpHeader._timestamp & 0x80000000) >> 31) == 0)
-				&& (((_lastTimestamp & 0x80000000) >> 31) == 1)) {
-			_timestampRollover++;
-			_lastTimestamp = _rtpHeader._timestamp;
-		}
-	} else {
-		_lastTimestamp = _rtpHeader._timestamp;
-	}
-	_rtpHeader._timestamp = (_timestampRollover << 32) | _rtpHeader._timestamp;
+    if (_rtpHeader._timestamp < _lastTimestamp)
+    {
+        if ((((_rtpHeader._timestamp & 0x80000000) >> 31) == 0)
+                && (((_lastTimestamp & 0x80000000) >> 31) == 1))
+        {
+            _timestampRollover++;
+            _lastTimestamp = _rtpHeader._timestamp;
+        }
+    }
+    else
+    {
+        _lastTimestamp = _rtpHeader._timestamp;
+    }
+    _rtpHeader._timestamp = (_timestampRollover << 32) | _rtpHeader._timestamp;
 #endif
 
-	//5. Feed the data to the stream
-	if (_pInStream != NULL) {
-		if (_isAudio) {
-			if (!_pInStream->FeedAudioData(pBuffer, length, _rtpHeader)) {
-				FATAL("Unable to stream data");
-				if (_pConnectivity != NULL) {
-					_pConnectivity->EnqueueForDelete();
-					_pConnectivity = NULL;
-				}
-				return false;
-			}
-		} else {
-			if (!_pInStream->FeedVideoData(pBuffer, length, _rtpHeader)) {
-				FATAL("Unable to stream data");
-				if (_pConnectivity != NULL) {
-					_pConnectivity->EnqueueForDelete();
-					_pConnectivity = NULL;
-				}
-				return false;
-			}
-		}
-	}
+    //5. Feed the data to the stream
+    if (_pInStream != NULL)
+    {
+        if (_isAudio)
+        {
+            if (!_pInStream->FeedAudioData(pBuffer, length, _rtpHeader))
+            {
+                FATAL("Unable to stream data");
+                if (_pConnectivity != NULL)
+                {
+                    _pConnectivity->EnqueueForDelete();
+                    _pConnectivity = NULL;
+                }
+                return false;
+            }
+        }
+        else
+        {
+            if (!_pInStream->FeedVideoData(pBuffer, length, _rtpHeader))
+            {
+                FATAL("Unable to stream data");
+                if (_pConnectivity != NULL)
+                {
+                    _pConnectivity->EnqueueForDelete();
+                    _pConnectivity = NULL;
+                }
+                return false;
+            }
+        }
+    }
 
-	//6. Ignore the data
-	buffer.IgnoreAll();
+    //6. Ignore the data
+    buffer.IgnoreAll();
 
-	//7. Increment the packets count
-	_packetsCount++;
+    //7. Increment the packets count
+    _packetsCount++;
 
-	//8. Send the RR if necesary
-	if ((_packetsCount % 300) == 0) {
+    //8. Send the RR if necesary
+    if ((_packetsCount % 300) == 0)
+    {
 
-		if (_pConnectivity != NULL) {
-			if (!_pConnectivity->SendRR(_isAudio)) {
-				FATAL("Unable to send RR");
-				_pConnectivity->EnqueueForDelete();
-				_pConnectivity = NULL;
-				return false;
-			}
-		}
-	}
+        if (_pConnectivity != NULL)
+        {
+            if (!_pConnectivity->SendRR(_isAudio))
+            {
+                FATAL("Unable to send RR");
+                _pConnectivity->EnqueueForDelete();
+                _pConnectivity = NULL;
+                return false;
+            }
+        }
+    }
 
-	//7. Done
-	return true;
+    //7. Done
+    return true;
 }
 
-uint32_t InboundRTPProtocol::GetSSRC() {
-	return _rtpHeader._ssrc;
+uint32_t InboundRTPProtocol::GetSSRC()
+{
+    return _rtpHeader._ssrc;
 }
 
-uint32_t InboundRTPProtocol::GetExtendedSeq() {
-	return (((uint32_t) _seqRollOver) << 16) | _lastSeq;
+uint32_t InboundRTPProtocol::GetExtendedSeq()
+{
+    return (((uint32_t) _seqRollOver) << 16) | _lastSeq;
 }
 
-void InboundRTPProtocol::SetStream(InNetRTPStream *pInStream, bool isAudio) {
-	_pInStream = pInStream;
-	_isAudio = isAudio;
+void InboundRTPProtocol::SetStream(InNetRTPStream *pInStream, bool isAudio)
+{
+    _pInStream = pInStream;
+    _isAudio = isAudio;
 }
 
-void InboundRTPProtocol::SetInbboundConnectivity(InboundConnectivity *pConnectivity) {
-	_pConnectivity = pConnectivity;
+void InboundRTPProtocol::SetInbboundConnectivity(InboundConnectivity *pConnectivity)
+{
+    _pConnectivity = pConnectivity;
 }
 #endif /* HAS_PROTOCOL_RTP */

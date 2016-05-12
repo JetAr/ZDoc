@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,47 +27,48 @@
 class OutboundConnectivity;
 
 class DLLEXP BaseOutNetRTPUDPStream
-: public BaseOutNetStream {
+    : public BaseOutNetStream
+{
 protected:
-	uint32_t _ssrc;
-	OutboundConnectivity *_pConnectivity;
-	uint16_t _videoCounter;
-	uint16_t _audioCounter;
-	bool _hasAudio;
-	bool _hasVideo;
+    uint32_t _ssrc;
+    OutboundConnectivity *_pConnectivity;
+    uint16_t _videoCounter;
+    uint16_t _audioCounter;
+    bool _hasAudio;
+    bool _hasVideo;
 public:
-	BaseOutNetRTPUDPStream(BaseProtocol *pProtocol,
-			StreamsManager *pStreamsManager, string name);
-	virtual ~BaseOutNetRTPUDPStream();
+    BaseOutNetRTPUDPStream(BaseProtocol *pProtocol,
+                           StreamsManager *pStreamsManager, string name);
+    virtual ~BaseOutNetRTPUDPStream();
 
-	OutboundConnectivity *GetConnectivity();
-	void SetConnectivity(OutboundConnectivity *pConnectivity);
-	void HasAudioVideo(bool hasAudio, bool hasVideo);
+    OutboundConnectivity *GetConnectivity();
+    void SetConnectivity(OutboundConnectivity *pConnectivity);
+    void HasAudioVideo(bool hasAudio, bool hasVideo);
 
-	uint32_t SSRC();
-	uint16_t VideoCounter();
-	uint16_t AudioCounter();
+    uint32_t SSRC();
+    uint16_t VideoCounter();
+    uint16_t AudioCounter();
 
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
 
-	virtual bool IsCompatibleWithType(uint64_t type);
-	virtual void SignalDetachedFromInStream();
-	virtual void SignalStreamCompleted();
+    virtual bool IsCompatibleWithType(uint64_t type);
+    virtual void SignalDetachedFromInStream();
+    virtual void SignalStreamCompleted();
 
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
 protected:
-	virtual bool FeedDataVideo(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio) = 0;
-	virtual bool FeedDataAudio(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio) = 0;
+    virtual bool FeedDataVideo(uint8_t *pData, uint32_t dataLength,
+                               uint32_t processedLength, uint32_t totalLength,
+                               double absoluteTimestamp, bool isAudio) = 0;
+    virtual bool FeedDataAudio(uint8_t *pData, uint32_t dataLength,
+                               uint32_t processedLength, uint32_t totalLength,
+                               double absoluteTimestamp, bool isAudio) = 0;
 
 };
 

@@ -24,40 +24,40 @@
 #include "jnihelpers.h"
 
 extern "C" void Java_com_rtmpd_CommandsInterface_EnvRun(
-		JNIEnv* pEnv,
-		jobject thiz,
-		jobject callbackHandler,
-		jstring callbackClassName,
-		jstring callbackMethodName,
-		jstring ip,
-		jint port,
-		jint logLevel);
+    JNIEnv* pEnv,
+    jobject thiz,
+    jobject callbackHandler,
+    jstring callbackClassName,
+    jstring callbackMethodName,
+    jstring ip,
+    jint port,
+    jint logLevel);
 extern "C" void Java_com_rtmpd_CommandsInterface_WaitEnvReady(
-		JNIEnv* pEnv,
-		jobject thiz);
+    JNIEnv* pEnv,
+    jobject thiz);
 extern "C" void Java_com_rtmpd_CommandsInterface_EnvStop(
-		JNIEnv* pEnv, jobject thiz);
+    JNIEnv* pEnv, jobject thiz);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_ContextCreate(
-		JNIEnv* pEnv, jobject thiz);
+    JNIEnv* pEnv, jobject thiz);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_ContextList(
-		JNIEnv* pEnv, jobject thiz);
+    JNIEnv* pEnv, jobject thiz);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_ContextClose(
-		JNIEnv* pEnv, jobject thiz, jint contextId);
+    JNIEnv* pEnv, jobject thiz, jint contextId);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_ContextCloseAll(
-		JNIEnv* pEnv, jobject thiz);
+    JNIEnv* pEnv, jobject thiz);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_CommandSetBitrates(
-		JNIEnv* pEnv, jobject thiz, jint contextId, jstring bitrates);
+    JNIEnv* pEnv, jobject thiz, jint contextId, jstring bitrates);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_CommandPlay(
-		JNIEnv* pEnv, jobject thiz, jint contextId, jstring m3u8Uri,
-		jstring httpSessionId, jstring keyPassword);
+    JNIEnv* pEnv, jobject thiz, jint contextId, jstring m3u8Uri,
+    jstring httpSessionId, jstring keyPassword);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_CommandPause(
-		JNIEnv* pEnv, jobject thiz, jint contextId);
+    JNIEnv* pEnv, jobject thiz, jint contextId);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_CommandResume(
-		JNIEnv* pEnv, jobject thiz, jint contextId);
+    JNIEnv* pEnv, jobject thiz, jint contextId);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_InfoListStreams(
-		JNIEnv* pEnv, jobject thiz, jint contextId);
+    JNIEnv* pEnv, jobject thiz, jint contextId);
 extern "C" jobject Java_com_rtmpd_CommandsInterface_InfoListAllStreams(
-		JNIEnv* pEnv, jobject thiz);
+    JNIEnv* pEnv, jobject thiz);
 
 #endif	/* _JNIWRAPPER_H */
 #endif /* ANDROID */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,11 +24,13 @@
 using namespace app_proxypublish;
 
 LiveFLVAppProtocolHandler::LiveFLVAppProtocolHandler(Variant &configuration)
-: BaseLiveFLVAppProtocolHandler(configuration) {
+    : BaseLiveFLVAppProtocolHandler(configuration)
+{
 
 }
 
-LiveFLVAppProtocolHandler::~LiveFLVAppProtocolHandler() {
+LiveFLVAppProtocolHandler::~LiveFLVAppProtocolHandler()
+{
 }
 #endif /* HAS_PROTOCOL_LIVEFLV */
 

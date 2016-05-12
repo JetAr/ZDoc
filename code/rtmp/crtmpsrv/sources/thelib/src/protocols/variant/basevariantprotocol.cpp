@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,192 +26,222 @@
 #include "protocols/protocolmanager.h"
 
 BaseVariantProtocol::BaseVariantProtocol(uint64_t type)
-: BaseProtocol(type) {
-	_pProtocolHandler = NULL;
+    : BaseProtocol(type)
+{
+    _pProtocolHandler = NULL;
 }
 
-BaseVariantProtocol::~BaseVariantProtocol() {
+BaseVariantProtocol::~BaseVariantProtocol()
+{
 }
 
-bool BaseVariantProtocol::Initialize(Variant &parameters) {
-	return true;
+bool BaseVariantProtocol::Initialize(Variant &parameters)
+{
+    return true;
 }
 
-void BaseVariantProtocol::SetApplication(BaseClientApplication *pApplication) {
-	BaseProtocol::SetApplication(pApplication);
-	if (pApplication != NULL) {
-		_pProtocolHandler = (BaseVariantAppProtocolHandler *)
-				pApplication->GetProtocolHandler(this);
-	} else {
-		_pProtocolHandler = NULL;
-	}
+void BaseVariantProtocol::SetApplication(BaseClientApplication *pApplication)
+{
+    BaseProtocol::SetApplication(pApplication);
+    if (pApplication != NULL)
+    {
+        _pProtocolHandler = (BaseVariantAppProtocolHandler *)
+                            pApplication->GetProtocolHandler(this);
+    }
+    else
+    {
+        _pProtocolHandler = NULL;
+    }
 }
 
-IOBuffer * BaseVariantProtocol::GetOutputBuffer() {
-	if (GETAVAILABLEBYTESCOUNT(_outputBuffer) == 0)
-		return NULL;
-	return &_outputBuffer;
+IOBuffer * BaseVariantProtocol::GetOutputBuffer()
+{
+    if (GETAVAILABLEBYTESCOUNT(_outputBuffer) == 0)
+        return NULL;
+    return &_outputBuffer;
 }
 
-bool BaseVariantProtocol::AllowFarProtocol(uint64_t type) {
-	return type == PT_TCP
-			|| type == PT_OUTBOUND_HTTP
-			|| type == PT_INBOUND_HTTP;
+bool BaseVariantProtocol::AllowFarProtocol(uint64_t type)
+{
+    return type == PT_TCP
+           || type == PT_OUTBOUND_HTTP
+           || type == PT_INBOUND_HTTP;
 }
 
-bool BaseVariantProtocol::AllowNearProtocol(uint64_t type) {
-	ASSERT("This is an endpoint protocol");
-	return false;
+bool BaseVariantProtocol::AllowNearProtocol(uint64_t type)
+{
+    ASSERT("This is an endpoint protocol");
+    return false;
 }
 
-bool BaseVariantProtocol::SignalInputData(int32_t recvAmount) {
-	ASSERT("OPERATION NOT SUPPORTED");
-	return false;
+bool BaseVariantProtocol::SignalInputData(int32_t recvAmount)
+{
+    ASSERT("OPERATION NOT SUPPORTED");
+    return false;
 }
 
-bool BaseVariantProtocol::SignalInputData(IOBuffer &buffer) {
-	if (_pProtocolHandler == NULL) {
-		FATAL("This protocol is not registered to any application yet");
-		return false;
-	}
+bool BaseVariantProtocol::SignalInputData(IOBuffer &buffer)
+{
+    if (_pProtocolHandler == NULL)
+    {
+        FATAL("This protocol is not registered to any application yet");
+        return false;
+    }
 
-	if (_pFarProtocol->GetType() == PT_OUTBOUND_HTTP
-			|| _pFarProtocol->GetType() == PT_INBOUND_HTTP) {
+    if (_pFarProtocol->GetType() == PT_OUTBOUND_HTTP
+            || _pFarProtocol->GetType() == PT_INBOUND_HTTP)
+    {
 #ifdef HAS_PROTOCOL_HTTP
-		//1. This is a HTTP based transfer. We only start doing stuff
-		//after a complete request is made.
-		BaseHTTPProtocol *pHTTPProtocol = (BaseHTTPProtocol *) _pFarProtocol;
-		if (!pHTTPProtocol->TransferCompleted())
-			return true;
+        //1. This is a HTTP based transfer. We only start doing stuff
+        //after a complete request is made.
+        BaseHTTPProtocol *pHTTPProtocol = (BaseHTTPProtocol *) _pFarProtocol;
+        if (!pHTTPProtocol->TransferCompleted())
+            return true;
 
-		if (!Deserialize(GETIBPOINTER(buffer), pHTTPProtocol->GetContentLength(),
-				_lastReceived)) {
-			FATAL("Unable to deserialize content");
-			return false;
-		}
-		buffer.Ignore(pHTTPProtocol->GetContentLength());
+        if (!Deserialize(GETIBPOINTER(buffer), pHTTPProtocol->GetContentLength(),
+                         _lastReceived))
+        {
+            FATAL("Unable to deserialize content");
+            return false;
+        }
+        buffer.Ignore(pHTTPProtocol->GetContentLength());
 
-		_lastReceived.Compact();
+        _lastReceived.Compact();
 
-		return _pProtocolHandler->ProcessMessage(this, _lastSent, _lastReceived);
+        return _pProtocolHandler->ProcessMessage(this, _lastSent, _lastReceived);
 #else
-		FATAL("HTTP protocol not supported");
-		return false;
+        FATAL("HTTP protocol not supported");
+        return false;
 #endif /* HAS_PROTOCOL_HTTP */
-	} else if (_pFarProtocol->GetType() == PT_TCP) {
-		while (GETAVAILABLEBYTESCOUNT(buffer) > 4) {
-			uint32_t size = ENTOHLP(GETIBPOINTER(buffer));
-			if (size > 1024 * 128) {
-				FATAL("Size too big: %u", size);
-				return false;
-			}
-			if (GETAVAILABLEBYTESCOUNT(buffer) < size + 4) {
-				FINEST("Need more data");
-				return true;
-			}
+    }
+    else if (_pFarProtocol->GetType() == PT_TCP)
+    {
+        while (GETAVAILABLEBYTESCOUNT(buffer) > 4)
+        {
+            uint32_t size = ENTOHLP(GETIBPOINTER(buffer));
+            if (size > 1024 * 128)
+            {
+                FATAL("Size too big: %u", size);
+                return false;
+            }
+            if (GETAVAILABLEBYTESCOUNT(buffer) < size + 4)
+            {
+                FINEST("Need more data");
+                return true;
+            }
 
-			if (!Deserialize(GETIBPOINTER(buffer) + 4, size, _lastReceived)) {
-				FATAL("Unable to deserialize variant");
-				return false;
-			}
-			buffer.Ignore(size + 4);
+            if (!Deserialize(GETIBPOINTER(buffer) + 4, size, _lastReceived))
+            {
+                FATAL("Unable to deserialize variant");
+                return false;
+            }
+            buffer.Ignore(size + 4);
 
-			_lastReceived.Compact();
+            _lastReceived.Compact();
 
-			if (!_pProtocolHandler->ProcessMessage(this, _lastSent, _lastReceived)) {
-				FATAL("Unable to process message");
-				return false;
-			}
-		}
-		return true;
-	} else {
-		FATAL("Invalid protocol stack");
-		return false;
-	}
+            if (!_pProtocolHandler->ProcessMessage(this, _lastSent, _lastReceived))
+            {
+                FATAL("Unable to process message");
+                return false;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        FATAL("Invalid protocol stack");
+        return false;
+    }
 }
 
-bool BaseVariantProtocol::Send(Variant &variant) {
-	//1. Do we have a protocol?
-	if (_pFarProtocol == NULL) {
-		FATAL("This protocol is not linked");
-		return false;
-	}
+bool BaseVariantProtocol::Send(Variant &variant)
+{
+    //1. Do we have a protocol?
+    if (_pFarProtocol == NULL)
+    {
+        FATAL("This protocol is not linked");
+        return false;
+    }
 
-	//2. Save the variant
-	_lastSent = variant;
+    //2. Save the variant
+    _lastSent = variant;
 
-	//3. Depending on the far protocol, we do different stuff
-	string rawContent = "";
-	switch (_pFarProtocol->GetType()) {
-		case PT_TCP:
-		{
-			//5. Serialize it
-			if (!Serialize(rawContent, variant)) {
-				FATAL("Unable to serialize variant");
-				return false;
-			}
+    //3. Depending on the far protocol, we do different stuff
+    string rawContent = "";
+    switch (_pFarProtocol->GetType())
+    {
+    case PT_TCP:
+    {
+        //5. Serialize it
+        if (!Serialize(rawContent, variant))
+        {
+            FATAL("Unable to serialize variant");
+            return false;
+        }
 
-			_outputBuffer.ReadFromRepeat(0, 4);
-			uint32_t rawContentSize = rawContent.size();
-			EHTONLP(GETIBPOINTER(_outputBuffer), rawContentSize);
-			_outputBuffer.ReadFromString(rawContent);
+        _outputBuffer.ReadFromRepeat(0, 4);
+        uint32_t rawContentSize = rawContent.size();
+        EHTONLP(GETIBPOINTER(_outputBuffer), rawContentSize);
+        _outputBuffer.ReadFromString(rawContent);
 
-			//6. enqueue for outbound
-			return EnqueueForOutbound();
-		}
-		case PT_OUTBOUND_HTTP:
-		{
+        //6. enqueue for outbound
+        return EnqueueForOutbound();
+    }
+    case PT_OUTBOUND_HTTP:
+    {
 #ifdef HAS_PROTOCOL_HTTP
-			//7. This is a HTTP request. So, first things first: get the http protocol
-			OutboundHTTPProtocol *pHTTP = (OutboundHTTPProtocol *) _pFarProtocol;
+        //7. This is a HTTP request. So, first things first: get the http protocol
+        OutboundHTTPProtocol *pHTTP = (OutboundHTTPProtocol *) _pFarProtocol;
 
-			//8. We wish to disconnect after the transfer is complete
-			pHTTP->SetDisconnectAfterTransfer(true);
+        //8. We wish to disconnect after the transfer is complete
+        pHTTP->SetDisconnectAfterTransfer(true);
 
-			//9. This will always be a POST
-			pHTTP->Method(HTTP_METHOD_POST);
+        //9. This will always be a POST
+        pHTTP->Method(HTTP_METHOD_POST);
 
-			//10. Our document and the host
-			pHTTP->Document(variant["document"]);
-			pHTTP->Host(variant["host"]);
+        //10. Our document and the host
+        pHTTP->Document(variant["document"]);
+        pHTTP->Host(variant["host"]);
 
-			//11. Serialize it
-			if (!Serialize(rawContent, variant["payload"])) {
-				FATAL("Unable to serialize variant");
-				return false;
-			}
+        //11. Serialize it
+        if (!Serialize(rawContent, variant["payload"]))
+        {
+            FATAL("Unable to serialize variant");
+            return false;
+        }
 
-			_outputBuffer.ReadFromString(rawContent);
+        _outputBuffer.ReadFromString(rawContent);
 
-			//12. enqueue for outbound
-			return EnqueueForOutbound();
+        //12. enqueue for outbound
+        return EnqueueForOutbound();
 #else
-			FATAL("HTTP protocol not supported");
-			return false;
+        FATAL("HTTP protocol not supported");
+        return false;
 #endif /* HAS_PROTOCOL_HTTP */
-		}
-		case PT_INBOUND_HTTP:
-		{
+    }
+    case PT_INBOUND_HTTP:
+    {
 #ifdef HAS_PROTOCOL_HTTP
-			if (!Serialize(rawContent, variant)) {
-				FATAL("Unable to serialize variant");
-				return false;
-			}
+        if (!Serialize(rawContent, variant))
+        {
+            FATAL("Unable to serialize variant");
+            return false;
+        }
 
-			_outputBuffer.ReadFromString(rawContent);
+        _outputBuffer.ReadFromString(rawContent);
 
-			return EnqueueForOutbound();
+        return EnqueueForOutbound();
 #else
-			FATAL("HTTP protocol not supported");
-			return false;
+        FATAL("HTTP protocol not supported");
+        return false;
 #endif /* HAS_PROTOCOL_HTTP */
-		}
-		default:
-		{
-			ASSERT("We should not be here");
-			return false;
-		}
-	}
+    }
+    default:
+    {
+        ASSERT("We should not be here");
+        return false;
+    }
+    }
 }
 #endif	/* HAS_PROTOCOL_VAR */
 

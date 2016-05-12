@@ -23,14 +23,16 @@
 
 #include "protocols/rtmfp/basertmfpappprotocolhandler.h"
 
-namespace app_flvplayback {
+namespace app_flvplayback
+{
 
-	class RTMFPAppProtocolHandler
-	: public BaseRTMFPAppProtocolHandler {
-	public:
-		RTMFPAppProtocolHandler(Variant &configuration);
-		virtual ~RTMFPAppProtocolHandler();
-	};
+class RTMFPAppProtocolHandler
+    : public BaseRTMFPAppProtocolHandler
+{
+public:
+    RTMFPAppProtocolHandler(Variant &configuration);
+    virtual ~RTMFPAppProtocolHandler();
+};
 }
 
 #endif	/* _RTMFPAPPPROTOCOLHANDLER_H */

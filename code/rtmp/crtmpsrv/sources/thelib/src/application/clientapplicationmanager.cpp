@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,89 +25,105 @@ map<uint32_t, BaseClientApplication *> ClientApplicationManager::_applicationsBy
 map<string, BaseClientApplication *> ClientApplicationManager::_applicationsByName;
 BaseClientApplication *ClientApplicationManager::_pDefaultApplication = NULL;
 
-void ClientApplicationManager::Shutdown() {
+void ClientApplicationManager::Shutdown()
+{
 
-	FOR_MAP(_applicationsById, uint32_t, BaseClientApplication *, i) {
-		delete MAP_VAL(i);
-	}
-	_applicationsById.clear();
-	_applicationsByName.clear();
-	_pDefaultApplication = NULL;
+    FOR_MAP(_applicationsById, uint32_t, BaseClientApplication *, i)
+    {
+        delete MAP_VAL(i);
+    }
+    _applicationsById.clear();
+    _applicationsByName.clear();
+    _pDefaultApplication = NULL;
 }
 
-bool ClientApplicationManager::RegisterApplication(BaseClientApplication* pClientApplication) {
-	if (MAP_HAS1(_applicationsById, pClientApplication->GetId())) {
-		FATAL("Client application with id %u already registered",
-				pClientApplication->GetId());
-		return false;
-	}
-	if (MAP_HAS1(_applicationsByName, pClientApplication->GetName())) {
-		FATAL("Client application with name `%s` already registered",
-				STR(pClientApplication->GetName()));
-		return false;
-	}
+bool ClientApplicationManager::RegisterApplication(BaseClientApplication* pClientApplication)
+{
+    if (MAP_HAS1(_applicationsById, pClientApplication->GetId()))
+    {
+        FATAL("Client application with id %u already registered",
+              pClientApplication->GetId());
+        return false;
+    }
+    if (MAP_HAS1(_applicationsByName, pClientApplication->GetName()))
+    {
+        FATAL("Client application with name `%s` already registered",
+              STR(pClientApplication->GetName()));
+        return false;
+    }
 
-	vector<string> aliases = pClientApplication->GetAliases();
+    vector<string> aliases = pClientApplication->GetAliases();
 
-	FOR_VECTOR_ITERATOR(string, aliases, i) {
-		if (MAP_HAS1(_applicationsByName, VECTOR_VAL(i))) {
-			FATAL("Client application with alias `%s` already registered",
-					STR(VECTOR_VAL(i)));
-			return false;
-		}
-	}
-	_applicationsById[pClientApplication->GetId()] = pClientApplication;
-	_applicationsByName[pClientApplication->GetName()] = pClientApplication;
+    FOR_VECTOR_ITERATOR(string, aliases, i)
+    {
+        if (MAP_HAS1(_applicationsByName, VECTOR_VAL(i)))
+        {
+            FATAL("Client application with alias `%s` already registered",
+                  STR(VECTOR_VAL(i)));
+            return false;
+        }
+    }
+    _applicationsById[pClientApplication->GetId()] = pClientApplication;
+    _applicationsByName[pClientApplication->GetName()] = pClientApplication;
 
-	FOR_VECTOR_ITERATOR(string, aliases, i) {
-		_applicationsByName[VECTOR_VAL(i)] = pClientApplication;
-	}
+    FOR_VECTOR_ITERATOR(string, aliases, i)
+    {
+        _applicationsByName[VECTOR_VAL(i)] = pClientApplication;
+    }
 
-	if (pClientApplication->IsDefault())
-		_pDefaultApplication = pClientApplication;
-	return true;
+    if (pClientApplication->IsDefault())
+        _pDefaultApplication = pClientApplication;
+    return true;
 }
 
-void ClientApplicationManager::UnRegisterApplication(BaseClientApplication* pClientApplication) {
-	if (MAP_HAS1(_applicationsById, pClientApplication->GetId()))
-		_applicationsById.erase(pClientApplication->GetId());
-	if (MAP_HAS1(_applicationsByName, pClientApplication->GetName()))
-		_applicationsByName.erase(pClientApplication->GetName());
+void ClientApplicationManager::UnRegisterApplication(BaseClientApplication* pClientApplication)
+{
+    if (MAP_HAS1(_applicationsById, pClientApplication->GetId()))
+        _applicationsById.erase(pClientApplication->GetId());
+    if (MAP_HAS1(_applicationsByName, pClientApplication->GetName()))
+        _applicationsByName.erase(pClientApplication->GetName());
 
-	vector<string> aliases = pClientApplication->GetAliases();
+    vector<string> aliases = pClientApplication->GetAliases();
 
-	for (uint32_t i = 0; i < aliases.size(); i++) {
-		if (MAP_HAS1(_applicationsByName, aliases[i]))
-			_applicationsByName.erase(aliases[i]);
-	}
+    for (uint32_t i = 0; i < aliases.size(); i++)
+    {
+        if (MAP_HAS1(_applicationsByName, aliases[i]))
+            _applicationsByName.erase(aliases[i]);
+    }
 
-	if (_pDefaultApplication != NULL) {
-		if (_pDefaultApplication->GetId() == pClientApplication->GetId()) {
-			_pDefaultApplication = NULL;
-		}
-	}
+    if (_pDefaultApplication != NULL)
+    {
+        if (_pDefaultApplication->GetId() == pClientApplication->GetId())
+        {
+            _pDefaultApplication = NULL;
+        }
+    }
 
-	FINEST("Application `%s` (%u) unregistered", STR(pClientApplication->GetName()),
-			pClientApplication->GetId());
+    FINEST("Application `%s` (%u) unregistered", STR(pClientApplication->GetName()),
+           pClientApplication->GetId());
 }
 
-BaseClientApplication *ClientApplicationManager::GetDefaultApplication() {
-	return _pDefaultApplication;
+BaseClientApplication *ClientApplicationManager::GetDefaultApplication()
+{
+    return _pDefaultApplication;
 }
 
-BaseClientApplication *ClientApplicationManager::FindAppByName(string appName) {
-	if (MAP_HAS1(_applicationsByName, appName))
-		return _applicationsByName[appName];
-	return NULL;
+BaseClientApplication *ClientApplicationManager::FindAppByName(string appName)
+{
+    if (MAP_HAS1(_applicationsByName, appName))
+        return _applicationsByName[appName];
+    return NULL;
 }
 
-BaseClientApplication *ClientApplicationManager::FindAppById(uint32_t id) {
-	if (MAP_HAS1(_applicationsById, id))
-		return _applicationsById[id];
-	return NULL;
+BaseClientApplication *ClientApplicationManager::FindAppById(uint32_t id)
+{
+    if (MAP_HAS1(_applicationsById, id))
+        return _applicationsById[id];
+    return NULL;
 }
 
-map<uint32_t, BaseClientApplication *> ClientApplicationManager::GetAllApplications() {
-	return _applicationsById;
+map<uint32_t, BaseClientApplication *> ClientApplicationManager::GetAllApplications()
+{
+    return _applicationsById;
 }
 

@@ -26,442 +26,527 @@
 
 static map<uint32_t, SignalFnc> _signalHandlers;
 
-string format(string fmt, ...) {
-	string result = "";
-	va_list arguments;
-	va_start(arguments, fmt);
-	result = vformat(fmt, arguments);
-	va_end(arguments);
-	return result;
+string format(string fmt, ...)
+{
+    string result = "";
+    va_list arguments;
+    va_start(arguments, fmt);
+    result = vformat(fmt, arguments);
+    va_end(arguments);
+    return result;
 }
 
-string vformat(string fmt, va_list args) {
-	char *pBuffer = NULL;
-	if (vasprintf(&pBuffer, STR(fmt), args) == -1) {
-		ASSERT("vasprintf failed");
-		return "";
-	}
-	string result = pBuffer;
-	free(pBuffer);
-	return result;
+string vformat(string fmt, va_list args)
+{
+    char *pBuffer = NULL;
+    if (vasprintf(&pBuffer, STR(fmt), args) == -1)
+    {
+        ASSERT("vasprintf failed");
+        return "";
+    }
+    string result = pBuffer;
+    free(pBuffer);
+    return result;
 }
 
-int vasprintf(char **strp, const char *fmt, va_list ap, int size) {
-	*strp = (char *) malloc(size);
-	int result = 0;
-	if ((result = vsnprintf(*strp, size, fmt, ap)) == -1) {
-		free(*strp);
-		return vasprintf(strp, fmt, ap, size + size / 2);
-	} else {
-		return result;
-	}
+int vasprintf(char **strp, const char *fmt, va_list ap, int size)
+{
+    *strp = (char *) malloc(size);
+    int result = 0;
+    if ((result = vsnprintf(*strp, size, fmt, ap)) == -1)
+    {
+        free(*strp);
+        return vasprintf(strp, fmt, ap, size + size / 2);
+    }
+    else
+    {
+        return result;
+    }
 }
 
-bool fileExists(string path) {
-	char *lpStr2;
-	lpStr2 = (char *) path.c_str();
+bool fileExists(string path)
+{
+    char *lpStr2;
+    lpStr2 = (char *) path.c_str();
 
-	if (PathFileExists(lpStr2))
-		return true;
-	else
-		return false;
+    if (PathFileExists(lpStr2))
+        return true;
+    else
+        return false;
 }
 
-string tagToString(uint64_t tag) {
-	string result;
-	for (uint32_t i = 0; i < 8; i++) {
-		uint8_t v = (tag >> ((7 - i)*8)&0xff);
-		if (v == 0)
-			break;
-		result += (char) v;
-	}
-	return result;
+string tagToString(uint64_t tag)
+{
+    string result;
+    for (uint32_t i = 0; i < 8; i++)
+    {
+        uint8_t v = (tag >> ((7 - i)*8)&0xff);
+        if (v == 0)
+            break;
+        result += (char) v;
+    }
+    return result;
 }
 
-uint64_t getTagMask(uint64_t tag) {
-	uint64_t result = 0xffffffffffffffffLL;
-	for (int8_t i = 56; i >= 0; i -= 8) {
-		if (((tag >> i)&0xff) == 0)
-			break;
-		result = result >> 8;
-	}
-	return ~result;
+uint64_t getTagMask(uint64_t tag)
+{
+    uint64_t result = 0xffffffffffffffffLL;
+    for (int8_t i = 56; i >= 0; i -= 8)
+    {
+        if (((tag >> i)&0xff) == 0)
+            break;
+        result = result >> 8;
+    }
+    return ~result;
 }
 
-bool isNumeric(string value) {
-	return value == format("%d", atoi(STR(value)));
+bool isNumeric(string value)
+{
+    return value == format("%d", atoi(STR(value)));
 }
 
-string lowercase(string value) {
-	return changecase(value, true);
+string lowercase(string value)
+{
+    return changecase(value, true);
 }
 
-string uppercase(string value) {
-	return changecase(value, false);
+string uppercase(string value)
+{
+    return changecase(value, false);
 }
 
-void ltrim(string &value) {
-	string::size_type i = 0;
-	for (i = 0; i < value.length(); i++) {
-		if (value[i] != ' ' &&
-				value[i] != '\t' &&
-				value[i] != '\n' &&
-				value[i] != '\r')
-			break;
-	}
-	value = value.substr(i);
+void ltrim(string &value)
+{
+    string::size_type i = 0;
+    for (i = 0; i < value.length(); i++)
+    {
+        if (value[i] != ' ' &&
+                value[i] != '\t' &&
+                value[i] != '\n' &&
+                value[i] != '\r')
+            break;
+    }
+    value = value.substr(i);
 }
 
-void rtrim(string &value) {
-	int32_t i = 0;
-	for (i = (int32_t) value.length() - 1; i >= 0; i--) {
-		if (value[i] != ' ' &&
-				value[i] != '\t' &&
-				value[i] != '\n' &&
-				value[i] != '\r')
-			break;
-	}
-	value = value.substr(0, i + 1);
+void rtrim(string &value)
+{
+    int32_t i = 0;
+    for (i = (int32_t) value.length() - 1; i >= 0; i--)
+    {
+        if (value[i] != ' ' &&
+                value[i] != '\t' &&
+                value[i] != '\n' &&
+                value[i] != '\r')
+            break;
+    }
+    value = value.substr(0, i + 1);
 }
 
-void trim(string &value) {
-	ltrim(value);
-	rtrim(value);
+void trim(string &value)
+{
+    ltrim(value);
+    rtrim(value);
 }
 
-void replace(string &target, string search, string replacement) {
-	if (search == replacement)
-		return;
-	if (search == "")
-		return;
-	string::size_type i = string::npos;
-	string::size_type lastPos = 0;
-	while ((i = target.find(search, lastPos)) != string::npos) {
-		target.replace(i, search.length(), replacement);
-		lastPos = i + replacement.length();
-	}
+void replace(string &target, string search, string replacement)
+{
+    if (search == replacement)
+        return;
+    if (search == "")
+        return;
+    string::size_type i = string::npos;
+    string::size_type lastPos = 0;
+    while ((i = target.find(search, lastPos)) != string::npos)
+    {
+        target.replace(i, search.length(), replacement);
+        lastPos = i + replacement.length();
+    }
 }
 
-void split(string str, string separator, vector<string> &result) {
-	result.clear();
-	string::size_type position = str.find(separator);
-	string::size_type lastPosition = 0;
-	uint32_t separatorLength = separator.length();
+void split(string str, string separator, vector<string> &result)
+{
+    result.clear();
+    string::size_type position = str.find(separator);
+    string::size_type lastPosition = 0;
+    uint32_t separatorLength = separator.length();
 
-	while (position != str.npos) {
-		ADD_VECTOR_END(result, str.substr(lastPosition, position - lastPosition));
-		lastPosition = position + separatorLength;
-		position = str.find(separator, lastPosition);
-	}
-	ADD_VECTOR_END(result, str.substr(lastPosition, string::npos));
+    while (position != str.npos)
+    {
+        ADD_VECTOR_END(result, str.substr(lastPosition, position - lastPosition));
+        lastPosition = position + separatorLength;
+        position = str.find(separator, lastPosition);
+    }
+    ADD_VECTOR_END(result, str.substr(lastPosition, string::npos));
 }
 
-map<string, string> mapping(string str, string separator1, string separator2, bool trimStrings) {
-	map<string, string> result;
+map<string, string> mapping(string str, string separator1, string separator2, bool trimStrings)
+{
+    map<string, string> result;
 
-	vector<string> pairs;
-	split(str, separator1, pairs);
+    vector<string> pairs;
+    split(str, separator1, pairs);
 
-	FOR_VECTOR_ITERATOR(string, pairs, i) {
-		if (VECTOR_VAL(i) != "") {
-			if (VECTOR_VAL(i).find(separator2) != string::npos) {
-				string key = VECTOR_VAL(i).substr(0, VECTOR_VAL(i).find(separator2));
-				string value = VECTOR_VAL(i).substr(VECTOR_VAL(i).find(separator2) + 1);
-				if (trimStrings) {
-					trim(key);
-					trim(value);
-				}
-				result[key] = value;
-			} else {
-				if (trimStrings) {
-					trim(VECTOR_VAL(i));
-				}
-				result[VECTOR_VAL(i)] = "";
-			}
-		}
-	}
-	return result;
+    FOR_VECTOR_ITERATOR(string, pairs, i)
+    {
+        if (VECTOR_VAL(i) != "")
+        {
+            if (VECTOR_VAL(i).find(separator2) != string::npos)
+            {
+                string key = VECTOR_VAL(i).substr(0, VECTOR_VAL(i).find(separator2));
+                string value = VECTOR_VAL(i).substr(VECTOR_VAL(i).find(separator2) + 1);
+                if (trimStrings)
+                {
+                    trim(key);
+                    trim(value);
+                }
+                result[key] = value;
+            }
+            else
+            {
+                if (trimStrings)
+                {
+                    trim(VECTOR_VAL(i));
+                }
+                result[VECTOR_VAL(i)] = "";
+            }
+        }
+    }
+    return result;
 }
 
-string changecase(string &value, bool lowerCase) {
-	int32_t len = value.length();
-	string newvalue(value);
-	for (string::size_type i = 0, l = newvalue.length(); i < l; ++i)
-		newvalue[i] = lowerCase ? tolower(newvalue[i]) : toupper(newvalue[i]);
-	return newvalue;
+string changecase(string &value, bool lowerCase)
+{
+    int32_t len = value.length();
+    string newvalue(value);
+    for (string::size_type i = 0, l = newvalue.length(); i < l; ++i)
+        newvalue[i] = lowerCase ? tolower(newvalue[i]) : toupper(newvalue[i]);
+    return newvalue;
 }
 
-int gettimeofday(struct timeval *tv, void* tz) {
-	FILETIME ft;
-	GetSystemTimeAsFileTime(&ft);
-	uint64_t value = ((uint64_t) ft.dwHighDateTime << 32) | ft.dwLowDateTime;
-	tv->tv_usec = (long) ((value / 10LL) % 1000000LL);
-	tv->tv_sec = (long) ((value - 116444736000000000LL) / 10000000LL);
-	return (0);
+int gettimeofday(struct timeval *tv, void* tz)
+{
+    FILETIME ft;
+    GetSystemTimeAsFileTime(&ft);
+    uint64_t value = ((uint64_t) ft.dwHighDateTime << 32) | ft.dwLowDateTime;
+    tv->tv_usec = (long) ((value / 10LL) % 1000000LL);
+    tv->tv_sec = (long) ((value - 116444736000000000LL) / 10000000LL);
+    return (0);
 }
 
-bool HandlerRoutine(uint32_t dwCtrlType) {
-	if (MAP_HAS1(_signalHandlers, dwCtrlType)) {
-		_signalHandlers[dwCtrlType]();
-		return true;
-	}
-	return false;
+bool HandlerRoutine(uint32_t dwCtrlType)
+{
+    if (MAP_HAS1(_signalHandlers, dwCtrlType))
+    {
+        _signalHandlers[dwCtrlType]();
+        return true;
+    }
+    return false;
 }
 
-void InstallConfRereadSignal(SignalFnc pConfRereadSignalFnc) {
-	_signalHandlers[CTRL_BREAK_EVENT] = pConfRereadSignalFnc;
-	SetConsoleCtrlHandler((PHANDLER_ROUTINE) HandlerRoutine, TRUE);
+void InstallConfRereadSignal(SignalFnc pConfRereadSignalFnc)
+{
+    _signalHandlers[CTRL_BREAK_EVENT] = pConfRereadSignalFnc;
+    SetConsoleCtrlHandler((PHANDLER_ROUTINE) HandlerRoutine, TRUE);
 }
 
-void InstallQuitSignal(SignalFnc pQuitSignalFnc) {
-	_signalHandlers[CTRL_C_EVENT] = pQuitSignalFnc;
-	SetConsoleCtrlHandler((PHANDLER_ROUTINE) HandlerRoutine, TRUE);
+void InstallQuitSignal(SignalFnc pQuitSignalFnc)
+{
+    _signalHandlers[CTRL_C_EVENT] = pQuitSignalFnc;
+    SetConsoleCtrlHandler((PHANDLER_ROUTINE) HandlerRoutine, TRUE);
 }
 
-double GetFileModificationDate(string path) {
-	struct _stat64 s;
-	if (_stat64(STR(path), &s) != 0) {
-		FATAL("Unable to stat file %s", STR(path));
-		return 0;
-	}
-	return (double) s.st_mtime;
+double GetFileModificationDate(string path)
+{
+    struct _stat64 s;
+    if (_stat64(STR(path), &s) != 0)
+    {
+        FATAL("Unable to stat file %s", STR(path));
+        return 0;
+    }
+    return (double) s.st_mtime;
 }
 
-void InitNetworking() {
-	WSADATA wsa;
-	memset(&wsa,0,sizeof(wsa));
-	WSAStartup(0, &wsa);
-	WSAStartup(wsa.wHighVersion, &wsa);
+void InitNetworking()
+{
+    WSADATA wsa;
+    memset(&wsa,0,sizeof(wsa));
+    WSAStartup(0, &wsa);
+    WSAStartup(wsa.wHighVersion, &wsa);
 }
 
-int sendmsg(int s, const struct msghdr *msg, int flags) {
-	int result = 0;
-	int sentChunk = 0;
-	for (int i = 0; i < msg->msg_iovlen; i++) {
-		sentChunk = sendto(s,
-				(char *) msg->msg_iov[i].iov_base,
-				msg->msg_iov[i].iov_len,
-				flags,
-				(sockaddr *) msg->msg_name,
-				msg->msg_namelen);
-		if (sentChunk == SOCKET_ERROR)
-			return SOCKET_ERROR;
-		result += sentChunk;
-		if (sentChunk != msg->msg_iov[i].iov_len)
-			return result;
-	}
-	return result;
+int sendmsg(int s, const struct msghdr *msg, int flags)
+{
+    int result = 0;
+    int sentChunk = 0;
+    for (int i = 0; i < msg->msg_iovlen; i++)
+    {
+        sentChunk = sendto(s,
+                           (char *) msg->msg_iov[i].iov_base,
+                           msg->msg_iov[i].iov_len,
+                           flags,
+                           (sockaddr *) msg->msg_name,
+                           msg->msg_namelen);
+        if (sentChunk == SOCKET_ERROR)
+            return SOCKET_ERROR;
+        result += sentChunk;
+        if (sentChunk != msg->msg_iov[i].iov_len)
+            return result;
+    }
+    return result;
 }
 
-HMODULE UnicodeLoadLibrary(string fileName) {
-	return LoadLibrary(STR(fileName));
+HMODULE UnicodeLoadLibrary(string fileName)
+{
+    return LoadLibrary(STR(fileName));
 }
 
-int inet_aton(const char *pStr, struct in_addr *pRes) {
-	pRes->S_un.S_addr = inet_addr(pStr);
-	return true;
+int inet_aton(const char *pStr, struct in_addr *pRes)
+{
+    pRes->S_un.S_addr = inet_addr(pStr);
+    return true;
 }
 
-bool SetFdNonBlock(int32_t fd) {
-	u_long iMode = 1; // 0 for blocking, anything else for nonblocking
+bool SetFdNonBlock(int32_t fd)
+{
+    u_long iMode = 1; // 0 for blocking, anything else for nonblocking
 
-	if (ioctlsocket(fd, FIONBIO, &iMode) < 0) {
-		int32_t err = errno;
-		FATAL("Unable to set fd flags: %d,%s", err, strerror(err));
-		return false;
-	}
-	return true;
+    if (ioctlsocket(fd, FIONBIO, &iMode) < 0)
+    {
+        int32_t err = errno;
+        FATAL("Unable to set fd flags: %d,%s", err, strerror(err));
+        return false;
+    }
+    return true;
 }
 
-bool SetFdNoSIGPIPE(int32_t fd) {
-	return true;
+bool SetFdNoSIGPIPE(int32_t fd)
+{
+    return true;
 }
 
-bool SetFdKeepAlive(int32_t fd) {
-	BOOL value = TRUE;
-	if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *)&value, sizeof(BOOL)) == SOCKET_ERROR) {
-		FATAL("Error #%u", WSAGetLastError());
-		return false;
-	}
-	return true;
+bool SetFdKeepAlive(int32_t fd)
+{
+    BOOL value = TRUE;
+    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *)&value, sizeof(BOOL)) == SOCKET_ERROR)
+    {
+        FATAL("Error #%u", WSAGetLastError());
+        return false;
+    }
+    return true;
 }
 
-bool SetFdNoNagle(int32_t fd) {
-	BOOL value = TRUE;
-	if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&value, sizeof(BOOL)) == SOCKET_ERROR) {
-		FATAL("Error #%u", WSAGetLastError());
-		return false;
-	}
-	return true;
+bool SetFdNoNagle(int32_t fd)
+{
+    BOOL value = TRUE;
+    if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&value, sizeof(BOOL)) == SOCKET_ERROR)
+    {
+        FATAL("Error #%u", WSAGetLastError());
+        return false;
+    }
+    return true;
 }
 
-bool SetFdReuseAddress(int32_t fd) {
-	BOOL value = TRUE;
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&value, sizeof(BOOL)) == SOCKET_ERROR) {
-		FATAL("Error #%u", WSAGetLastError());
-		return false;
-	}
-	return true;
+bool SetFdReuseAddress(int32_t fd)
+{
+    BOOL value = TRUE;
+    if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&value, sizeof(BOOL)) == SOCKET_ERROR)
+    {
+        FATAL("Error #%u", WSAGetLastError());
+        return false;
+    }
+    return true;
 }
 
-bool SetFdOptions(int32_t fd) {
-	if (!SetFdNonBlock(fd)) {
-		FATAL("Unable to set non block");
-		return false;
-	}
+bool SetFdOptions(int32_t fd)
+{
+    if (!SetFdNonBlock(fd))
+    {
+        FATAL("Unable to set non block");
+        return false;
+    }
 
-	if (!SetFdNoSIGPIPE(fd)) {
-		FATAL("Unable to set no SIGPIPE");
-		return false;
-	}
+    if (!SetFdNoSIGPIPE(fd))
+    {
+        FATAL("Unable to set no SIGPIPE");
+        return false;
+    }
 
-	if (!SetFdKeepAlive(fd)) {
-		FATAL("Unable to set keep alive");
-		return false;
-	}
+    if (!SetFdKeepAlive(fd))
+    {
+        FATAL("Unable to set keep alive");
+        return false;
+    }
 
-	if (!SetFdNoNagle(fd)) {
-		FATAL("Unable to disable Nagle algorithm");
-		return false;
-	}
+    if (!SetFdNoNagle(fd))
+    {
+        FATAL("Unable to disable Nagle algorithm");
+        return false;
+    }
 
-	if (!SetFdReuseAddress(fd)) {
-		FATAL("Unable to enable reuse address");
-		return false;
-	}
+    if (!SetFdReuseAddress(fd))
+    {
+        FATAL("Unable to enable reuse address");
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 string alowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-string generateRandomString(uint32_t length) {
-	string result = "";
-	for (uint32_t i = 0; i < length; i++)
-		result += alowedCharacters[rand() % alowedCharacters.length()];
-	return result;
+string generateRandomString(uint32_t length)
+{
+    string result = "";
+    for (uint32_t i = 0; i < length; i++)
+        result += alowedCharacters[rand() % alowedCharacters.length()];
+    return result;
 }
 
-string GetHostByName(string name) {
-	struct hostent *pHostEnt = gethostbyname(STR(name));
-	if (pHostEnt == NULL)
-		return "";
-	if (pHostEnt->h_length <= 0)
-		return "";
-	string result = format("%hhu.%hhu.%hhu.%hhu",
-			(uint8_t) pHostEnt->h_addr_list[0][0],
-			(uint8_t) pHostEnt->h_addr_list[0][1],
-			(uint8_t) pHostEnt->h_addr_list[0][2],
-			(uint8_t) pHostEnt->h_addr_list[0][3]);
-	return result;
+string GetHostByName(string name)
+{
+    struct hostent *pHostEnt = gethostbyname(STR(name));
+    if (pHostEnt == NULL)
+        return "";
+    if (pHostEnt->h_length <= 0)
+        return "";
+    string result = format("%hhu.%hhu.%hhu.%hhu",
+                           (uint8_t) pHostEnt->h_addr_list[0][0],
+                           (uint8_t) pHostEnt->h_addr_list[0][1],
+                           (uint8_t) pHostEnt->h_addr_list[0][2],
+                           (uint8_t) pHostEnt->h_addr_list[0][3]);
+    return result;
 }
 
-void splitFileName(string fileName, string &name, string & extension, char separator) {
-	size_t dotPosition = fileName.find_last_of(separator);
-	if (dotPosition == string::npos) {
-		name = fileName;
-		extension = "";
-		return;
-	}
-	name = fileName.substr(0, dotPosition);
-	extension = fileName.substr(dotPosition + 1);
+void splitFileName(string fileName, string &name, string & extension, char separator)
+{
+    size_t dotPosition = fileName.find_last_of(separator);
+    if (dotPosition == string::npos)
+    {
+        name = fileName;
+        extension = "";
+        return;
+    }
+    name = fileName.substr(0, dotPosition);
+    extension = fileName.substr(dotPosition + 1);
 }
 
-string normalizePath(string base, string file) {
-	char dummy1[MAX_PATH ];
-	char dummy2[MAX_PATH ];
-	if (GetFullPathName(STR(base), MAX_PATH, dummy1, NULL) == 0)
-		return "";
-	if (GetFullPathName(STR(base + file), MAX_PATH, dummy2, NULL) == 0)
-		return "";
+string normalizePath(string base, string file)
+{
+    char dummy1[MAX_PATH ];
+    char dummy2[MAX_PATH ];
+    if (GetFullPathName(STR(base), MAX_PATH, dummy1, NULL) == 0)
+        return "";
+    if (GetFullPathName(STR(base + file), MAX_PATH, dummy2, NULL) == 0)
+        return "";
 
-	base = dummy1;
-	file = dummy2;
+    base = dummy1;
+    file = dummy2;
 
-	if (file == "" || base == "") {
-		return "";
-	}
+    if (file == "" || base == "")
+    {
+        return "";
+    }
 
-	if (file.find(base) != 0) {
-		return "";
-	} else {
-		if (!fileExists(file)) {
-			return "";
-		} else {
-			return file;
-		}
-	}
+    if (file.find(base) != 0)
+    {
+        return "";
+    }
+    else
+    {
+        if (!fileExists(file))
+        {
+            return "";
+        }
+        else
+        {
+            return file;
+        }
+    }
 }
 
-bool ListFolder(string root, string path, vector<string> &result) {
-	WIN32_FIND_DATA ffd;
-	TCHAR szDir[MAX_PATH];
-	size_t length_of_arg;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	DWORD dwError = 0;
+bool ListFolder(string root, string path, vector<string> &result)
+{
+    WIN32_FIND_DATA ffd;
+    TCHAR szDir[MAX_PATH];
+    size_t length_of_arg;
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    DWORD dwError = 0;
 
-	// Check that the input path plus 3 is not longer than MAX_PATH.
-	// Three characters are for the "\*" plus NULL appended below.
+    // Check that the input path plus 3 is not longer than MAX_PATH.
+    // Three characters are for the "\*" plus NULL appended below.
 
-	StringCchLength(path.c_str(), MAX_PATH, &length_of_arg);
+    StringCchLength(path.c_str(), MAX_PATH, &length_of_arg);
 
-	if (length_of_arg > (MAX_PATH - 3)) {
-		WARN("Directory path is too long: %s.", path.c_str());
-		return false;
-	}
+    if (length_of_arg > (MAX_PATH - 3))
+    {
+        WARN("Directory path is too long: %s.", path.c_str());
+        return false;
+    }
 
-	FINEST("Target directory: %s", path.c_str());
+    FINEST("Target directory: %s", path.c_str());
 
-	// Prepare string for use with FindFile functions.  First, copy the
-	// string to a buffer, then append '\*' to the directory name.
+    // Prepare string for use with FindFile functions.  First, copy the
+    // string to a buffer, then append '\*' to the directory name.
 
-	StringCchCopy(szDir, MAX_PATH, path.c_str());
-	StringCchCat(szDir, MAX_PATH, TEXT("\\*.*"));
+    StringCchCopy(szDir, MAX_PATH, path.c_str());
+    StringCchCat(szDir, MAX_PATH, TEXT("\\*.*"));
 
-	// Find the first file in the directory.
+    // Find the first file in the directory.
 
-	hFind = FindFirstFile(szDir, &ffd);
+    hFind = FindFirstFile(szDir, &ffd);
 
-	if (INVALID_HANDLE_VALUE == hFind) {
-		WARN("Invalid handle for FindFirstFile");
-		return false;
-	}
+    if (INVALID_HANDLE_VALUE == hFind)
+    {
+        WARN("Invalid handle for FindFirstFile");
+        return false;
+    }
 
-	do {
-		if (lstrcmp(ffd.cFileName, TEXT(".")) == 0 || lstrcmp(ffd.cFileName, TEXT("..")) == 0)
-			continue;
+    do
+    {
+        if (lstrcmp(ffd.cFileName, TEXT(".")) == 0 || lstrcmp(ffd.cFileName, TEXT("..")) == 0)
+            continue;
 
-		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			WARN("Subdirectory listing not implemented");
-		} else {
-			result.push_back(ffd.cFileName);
-		}
-	} while (FindNextFile(hFind, &ffd) != 0);
+        if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+            WARN("Subdirectory listing not implemented");
+        }
+        else
+        {
+            result.push_back(ffd.cFileName);
+        }
+    }
+    while (FindNextFile(hFind, &ffd) != 0);
 
-	dwError = GetLastError();
-	if (dwError != ERROR_NO_MORE_FILES) {
-		WARN("Unable to find first file");
-		return false;
-	}
-	FindClose(hFind);
-	return true;
+    dwError = GetLastError();
+    if (dwError != ERROR_NO_MORE_FILES)
+    {
+        WARN("Unable to find first file");
+        return false;
+    }
+    FindClose(hFind);
+    return true;
 }
 
-bool DeleteFile(string path) {
-	if (remove(STR(path)) != 0) {
-		FATAL("Unable to delete file `%s`", STR(path));
-		return false;
-	}
-	return true;
+bool DeleteFile(string path)
+{
+    if (remove(STR(path)) != 0)
+    {
+        FATAL("Unable to delete file `%s`", STR(path));
+        return false;
+    }
+    return true;
 }
 
-bool MoveFile(string src, string dst) {
-	if (rename(STR(src), STR(dst)) != 0) {
-		FATAL("Unable to move file from `%s` to `%s`",
-				STR(src), STR(dst));
-		return false;
-	}
-	return true;
+bool MoveFile(string src, string dst)
+{
+    if (rename(STR(src), STR(dst)) != 0)
+    {
+        FATAL("Unable to move file from `%s` to `%s`",
+              STR(src), STR(dst));
+        return false;
+    }
+    return true;
 }
 
 #endif /* WIN32 */

@@ -127,16 +127,18 @@ do { \
 }while (0);
 
 class OpenBSDPlatform
-: public BasePlatform {
+    : public BasePlatform
+{
 public:
-	OpenBSDPlatform();
-	virtual ~OpenBSDPlatform();
+    OpenBSDPlatform();
+    virtual ~OpenBSDPlatform();
 };
 
 typedef void (*SignalFnc)(void);
 
-typedef struct _select_event {
-	uint8_t type;
+typedef struct _select_event
+{
+    uint8_t type;
 } select_event;
 
 

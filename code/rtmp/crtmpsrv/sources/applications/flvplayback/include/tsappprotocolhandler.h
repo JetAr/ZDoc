@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,14 +24,16 @@
 
 #include "protocols/ts/basetsappprotocolhandler.h"
 
-namespace app_flvplayback {
+namespace app_flvplayback
+{
 
-	class TSAppProtocolHandler
-	: public BaseTSAppProtocolHandler {
-	public:
-		TSAppProtocolHandler(Variant &configuration);
-		virtual ~TSAppProtocolHandler();
-	};
+class TSAppProtocolHandler
+    : public BaseTSAppProtocolHandler
+{
+public:
+    TSAppProtocolHandler(Variant &configuration);
+    virtual ~TSAppProtocolHandler();
+};
 }
 
 #endif	/* _TSAPPPROTOCOLHANDLER_H */

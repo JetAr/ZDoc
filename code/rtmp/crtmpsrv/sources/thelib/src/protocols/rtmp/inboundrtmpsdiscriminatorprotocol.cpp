@@ -24,129 +24,146 @@
 #include "protocols/rtmp/inboundrtmpprotocol.h"
 
 InboundRTMPSDiscriminatorProtocol::InboundRTMPSDiscriminatorProtocol()
-: BaseProtocol(PT_INBOUND_RTMPS_DISC) {
+    : BaseProtocol(PT_INBOUND_RTMPS_DISC)
+{
 
 }
 
-InboundRTMPSDiscriminatorProtocol::~InboundRTMPSDiscriminatorProtocol() {
+InboundRTMPSDiscriminatorProtocol::~InboundRTMPSDiscriminatorProtocol()
+{
 }
 
-bool InboundRTMPSDiscriminatorProtocol::Initialize(Variant &parameters) {
-	GetCustomParameters() = parameters;
-	return true;
+bool InboundRTMPSDiscriminatorProtocol::Initialize(Variant &parameters)
+{
+    GetCustomParameters() = parameters;
+    return true;
 }
 
-bool InboundRTMPSDiscriminatorProtocol::AllowFarProtocol(uint64_t type) {
-	return type == PT_INBOUND_SSL;
+bool InboundRTMPSDiscriminatorProtocol::AllowFarProtocol(uint64_t type)
+{
+    return type == PT_INBOUND_SSL;
 }
 
-bool InboundRTMPSDiscriminatorProtocol::AllowNearProtocol(uint64_t type) {
-	return false;
+bool InboundRTMPSDiscriminatorProtocol::AllowNearProtocol(uint64_t type)
+{
+    return false;
 }
 
-bool InboundRTMPSDiscriminatorProtocol::SignalInputData(int32_t recvAmount) {
-	NYIR;
+bool InboundRTMPSDiscriminatorProtocol::SignalInputData(int32_t recvAmount)
+{
+    NYIR;
 }
 
-bool InboundRTMPSDiscriminatorProtocol::SignalInputData(IOBuffer &buffer) {
-	//1. Do we have enough data?
-	if (GETAVAILABLEBYTESCOUNT(buffer) < 4)
-		return true;
+bool InboundRTMPSDiscriminatorProtocol::SignalInputData(IOBuffer &buffer)
+{
+    //1. Do we have enough data?
+    if (GETAVAILABLEBYTESCOUNT(buffer) < 4)
+        return true;
 
-	//2. Get the first 4 bytes in a string
-	string method = string((char *) GETIBPOINTER(buffer), 4);
+    //2. Get the first 4 bytes in a string
+    string method = string((char *) GETIBPOINTER(buffer), 4);
 
-	//3. Create the proper RTMP stack
-	if (method == HTTP_METHOD_POST) {
+    //3. Create the proper RTMP stack
+    if (method == HTTP_METHOD_POST)
+    {
 #ifdef HAS_PROTOCOL_HTTP
-		return BindHTTP(buffer);
+        return BindHTTP(buffer);
 #else
-		FATAL("No HTTP protocol support");
-		return false;
+        FATAL("No HTTP protocol support");
+        return false;
 #endif /* HAS_PROTOCOL_HTTP */
-	} else {
-		return BindSSL(buffer);
-	}
+    }
+    else
+    {
+        return BindSSL(buffer);
+    }
 }
 
 #ifdef HAS_PROTOCOL_HTTP
 
-bool InboundRTMPSDiscriminatorProtocol::BindHTTP(IOBuffer &buffer) {
-	//1. Create the HTTP protocol
-	BaseProtocol *pHTTP = new InboundHTTPProtocol();
-	if (!pHTTP->Initialize(GetCustomParameters())) {
-		FATAL("Unable to create HTTP protocol");
-		pHTTP->EnqueueForDelete();
-		return false;
-	}
+bool InboundRTMPSDiscriminatorProtocol::BindHTTP(IOBuffer &buffer)
+{
+    //1. Create the HTTP protocol
+    BaseProtocol *pHTTP = new InboundHTTPProtocol();
+    if (!pHTTP->Initialize(GetCustomParameters()))
+    {
+        FATAL("Unable to create HTTP protocol");
+        pHTTP->EnqueueForDelete();
+        return false;
+    }
 
-	//2. Create the HTTP4RTMP protocol
-	BaseProtocol *pHTTP4RTMP = new InboundHTTP4RTMP();
-	if (!pHTTP4RTMP->Initialize(GetCustomParameters())) {
-		FATAL("Unable to create HTTP4RTMP protocol");
-		pHTTP->EnqueueForDelete();
-		pHTTP4RTMP->EnqueueForDelete();
-		return false;
-	}
+    //2. Create the HTTP4RTMP protocol
+    BaseProtocol *pHTTP4RTMP = new InboundHTTP4RTMP();
+    if (!pHTTP4RTMP->Initialize(GetCustomParameters()))
+    {
+        FATAL("Unable to create HTTP4RTMP protocol");
+        pHTTP->EnqueueForDelete();
+        pHTTP4RTMP->EnqueueForDelete();
+        return false;
+    }
 
-	//3. Destroy the link
-	BaseProtocol *pFar = _pFarProtocol;
-	pFar->ResetNearProtocol();
-	ResetFarProtocol();
+    //3. Destroy the link
+    BaseProtocol *pFar = _pFarProtocol;
+    pFar->ResetNearProtocol();
+    ResetFarProtocol();
 
-	//4. Create the new links
-	pFar->SetNearProtocol(pHTTP);
-	pHTTP->SetFarProtocol(pFar);
-	pHTTP->SetNearProtocol(pHTTP4RTMP);
-	pHTTP4RTMP->SetFarProtocol(pHTTP);
+    //4. Create the new links
+    pFar->SetNearProtocol(pHTTP);
+    pHTTP->SetFarProtocol(pFar);
+    pHTTP->SetNearProtocol(pHTTP4RTMP);
+    pHTTP4RTMP->SetFarProtocol(pHTTP);
 
-	//5. Set the application
-	pHTTP4RTMP->SetApplication(GetApplication());
+    //5. Set the application
+    pHTTP4RTMP->SetApplication(GetApplication());
 
-	//6. Enqueue for delete this protocol
-	EnqueueForDelete();
+    //6. Enqueue for delete this protocol
+    EnqueueForDelete();
 
-	//7. Process the data
-	if (!pHTTP->SignalInputData(buffer)) {
-		FATAL("Unable to process data");
-		pHTTP4RTMP->EnqueueForDelete();
-	}
+    //7. Process the data
+    if (!pHTTP->SignalInputData(buffer))
+    {
+        FATAL("Unable to process data");
+        pHTTP4RTMP->EnqueueForDelete();
+    }
 
-	return true;
+    return true;
 }
 #endif /* HAS_PROTOCOL_HTTP */
 
-bool InboundRTMPSDiscriminatorProtocol::BindSSL(IOBuffer &buffer) {
-	//1. Create the RTMP protocol
-	BaseProtocol *pRTMP = new InboundRTMPProtocol();
-	if (!pRTMP->Initialize(GetCustomParameters())) {
-		FATAL("Unable to create RTMP protocol");
-		pRTMP->EnqueueForDelete();
-		return false;
-	}
+bool InboundRTMPSDiscriminatorProtocol::BindSSL(IOBuffer &buffer)
+{
+    //1. Create the RTMP protocol
+    BaseProtocol *pRTMP = new InboundRTMPProtocol();
+    if (!pRTMP->Initialize(GetCustomParameters()))
+    {
+        FATAL("Unable to create RTMP protocol");
+        pRTMP->EnqueueForDelete();
+        return false;
+    }
 
-	//2. Destroy the link
-	BaseProtocol *pFar = _pFarProtocol;
-	pFar->ResetNearProtocol();
-	ResetFarProtocol();
+    //2. Destroy the link
+    BaseProtocol *pFar = _pFarProtocol;
+    pFar->ResetNearProtocol();
+    ResetFarProtocol();
 
-	//3. Create the new links
-	pFar->SetNearProtocol(pRTMP);
-	pRTMP->SetFarProtocol(pFar);
+    //3. Create the new links
+    pFar->SetNearProtocol(pRTMP);
+    pRTMP->SetFarProtocol(pFar);
 
-	//4. Set the application
-	pRTMP->SetApplication(GetApplication());
+    //4. Set the application
+    pRTMP->SetApplication(GetApplication());
 
-	//5. Enqueue for delete this protocol
-	EnqueueForDelete();
+    //5. Enqueue for delete this protocol
+    EnqueueForDelete();
 
-	//6. Process the data
-	if (!pRTMP->SignalInputData(buffer)) {
-		FATAL("Unable to process data");
-		pRTMP->EnqueueForDelete();
-	}
+    //6. Process the data
+    if (!pRTMP->SignalInputData(buffer))
+    {
+        FATAL("Unable to process data");
+        pRTMP->EnqueueForDelete();
+    }
 
-	return true;
+    return true;
 }
 
 #endif /* HAS_PROTOCOL_RTMP */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,16 +22,19 @@
 #include "appselectorapplication.h"
 using namespace app_appselector;
 
-extern "C" BaseClientApplication *GetApplication_appselector(Variant configuration) {
-	AppSelectorApplication *pApplication = new AppSelectorApplication(
-			configuration);
-	return pApplication;
+extern "C" BaseClientApplication *GetApplication_appselector(Variant configuration)
+{
+    AppSelectorApplication *pApplication = new AppSelectorApplication(
+        configuration);
+    return pApplication;
 }
 
-extern "C" void ReleaseApplication_appselector(BaseClientApplication *pApplication) {
-	if (pApplication != NULL) {
-		delete pApplication;
-	}
+extern "C" void ReleaseApplication_appselector(BaseClientApplication *pApplication)
+{
+    if (pApplication != NULL)
+    {
+        delete pApplication;
+    }
 }
 
 

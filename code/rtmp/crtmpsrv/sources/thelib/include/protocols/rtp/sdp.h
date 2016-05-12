@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -54,39 +54,40 @@
 #define SDP_AUDIO_CODEC_SETUP(x)	((x)["codecSetup"])
 
 class DLLEXP SDP
-: public Variant {
+    : public Variant
+{
 public:
-	SDP();
-	virtual ~SDP();
+    SDP();
+    virtual ~SDP();
 
-	static bool ParseSDP(SDP &sdp, string &raw);
-	Variant GetVideoTrack(uint32_t index, string uri);
-	Variant GetAudioTrack(uint32_t index, string uri);
-	string GetStreamName();
+    static bool ParseSDP(SDP &sdp, string &raw);
+    Variant GetVideoTrack(uint32_t index, string uri);
+    Variant GetAudioTrack(uint32_t index, string uri);
+    string GetStreamName();
 private:
-	static bool ParseSection(Variant &result, vector<string> &lines,
-			uint32_t start, uint32_t length);
-	static bool ParseSDPLine(Variant &result, string &line);
-	static bool ParseSDPLineA(string &attributeName, Variant &value, string line);
-	static bool ParseSDPLineB(Variant &result, string line);
-	static bool ParseSDPLineC(Variant &result, string line);
-	static bool ParseSDPLineE(Variant &result, string line);
-	static bool ParseSDPLineI(Variant &result, string line);
-	static bool ParseSDPLineK(Variant &result, string line);
-	static bool ParseSDPLineM(Variant &result, string line);
-	static bool ParseSDPLineO(Variant &result, string line);
-	static bool ParseSDPLineP(Variant &result, string line);
-	static bool ParseSDPLineR(Variant &result, string line);
-	static bool ParseSDPLineS(Variant &result, string line);
-	static bool ParseSDPLineT(Variant &result, string line);
-	static bool ParseSDPLineU(Variant &result, string line);
-	static bool ParseSDPLineV(Variant &result, string line);
-	static bool ParseSDPLineZ(Variant &result, string line);
+    static bool ParseSection(Variant &result, vector<string> &lines,
+                             uint32_t start, uint32_t length);
+    static bool ParseSDPLine(Variant &result, string &line);
+    static bool ParseSDPLineA(string &attributeName, Variant &value, string line);
+    static bool ParseSDPLineB(Variant &result, string line);
+    static bool ParseSDPLineC(Variant &result, string line);
+    static bool ParseSDPLineE(Variant &result, string line);
+    static bool ParseSDPLineI(Variant &result, string line);
+    static bool ParseSDPLineK(Variant &result, string line);
+    static bool ParseSDPLineM(Variant &result, string line);
+    static bool ParseSDPLineO(Variant &result, string line);
+    static bool ParseSDPLineP(Variant &result, string line);
+    static bool ParseSDPLineR(Variant &result, string line);
+    static bool ParseSDPLineS(Variant &result, string line);
+    static bool ParseSDPLineT(Variant &result, string line);
+    static bool ParseSDPLineU(Variant &result, string line);
+    static bool ParseSDPLineV(Variant &result, string line);
+    static bool ParseSDPLineZ(Variant &result, string line);
 
-	Variant GetTrack(uint32_t index, string type);
+    Variant GetTrack(uint32_t index, string type);
 private:
-	Variant ParseVideoTrack(Variant &track);
-	Variant ParseAudioTrack(Variant &track);
+    Variant ParseVideoTrack(Variant &track);
+    Variant ParseAudioTrack(Variant &track);
 };
 
 

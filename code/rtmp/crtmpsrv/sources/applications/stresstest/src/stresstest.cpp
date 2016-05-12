@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,16 +23,19 @@
 #include "stresstestapplication.h"
 using namespace app_stresstest;
 
-extern "C" BaseClientApplication *GetApplication_stresstest(Variant configuration) {
-	StressTestApplication *pApplication = new StressTestApplication(
-			configuration);
-	return pApplication;
+extern "C" BaseClientApplication *GetApplication_stresstest(Variant configuration)
+{
+    StressTestApplication *pApplication = new StressTestApplication(
+        configuration);
+    return pApplication;
 }
 
-extern "C" void ReleaseApplication_stresstest(BaseClientApplication *pApplication) {
-	if (pApplication != NULL) {
-		delete pApplication;
-	}
+extern "C" void ReleaseApplication_stresstest(BaseClientApplication *pApplication)
+{
+    if (pApplication != NULL)
+    {
+        delete pApplication;
+    }
 }
 
 

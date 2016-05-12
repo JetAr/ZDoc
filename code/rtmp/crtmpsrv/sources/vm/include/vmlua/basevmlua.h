@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,20 +24,21 @@
 #include "basevm.h"
 
 class BaseVMLua
-: public BaseVM {
+    : public BaseVM
+{
 private:
-	lua_State *_pGlobalState;
+    lua_State *_pGlobalState;
 public:
-	BaseVMLua();
-	virtual ~BaseVMLua();
+    BaseVMLua();
+    virtual ~BaseVMLua();
 
-	virtual bool Supports64bit();
-	virtual bool SupportsUndefined();
-	virtual bool Initialize();
-	virtual bool Shutdown();
-	virtual bool LoadScriptFile(string scriptFileName, string scriptName);
-	virtual bool LoadScriptString(string scriptContent, string scriptName);
-	virtual bool Call(string functionName, Variant &parameters, Variant &results);
+    virtual bool Supports64bit();
+    virtual bool SupportsUndefined();
+    virtual bool Initialize();
+    virtual bool Shutdown();
+    virtual bool LoadScriptFile(string scriptFileName, string scriptName);
+    virtual bool LoadScriptString(string scriptContent, string scriptName);
+    virtual bool Call(string functionName, Variant &parameters, Variant &results);
 };
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,30 +22,34 @@
 #include "mediaformats/mp4/mp4document.h"
 
 AtomWAVE::AtomWAVE(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BoxAtom(pDocument, type, size, start) {
-	_pMP4A = NULL;
-	_pESDS = NULL;
+    : BoxAtom(pDocument, type, size, start)
+{
+    _pMP4A = NULL;
+    _pESDS = NULL;
 }
 
-AtomWAVE::~AtomWAVE() {
+AtomWAVE::~AtomWAVE()
+{
 }
 
-bool AtomWAVE::AtomCreated(BaseAtom *pAtom) {
-	switch (pAtom->GetTypeNumeric()) {
-		case A_MP4A:
-			_pMP4A = (AtomMP4A *) pAtom;
-			return true;
-		case A_ESDS:
-			_pESDS = (AtomESDS *) pAtom;
-			return true;
-		case 0://NULL atom
-			return true;
-		default:
-		{
-			FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
-			return false;
-		}
-	}
+bool AtomWAVE::AtomCreated(BaseAtom *pAtom)
+{
+    switch (pAtom->GetTypeNumeric())
+    {
+    case A_MP4A:
+        _pMP4A = (AtomMP4A *) pAtom;
+        return true;
+    case A_ESDS:
+        _pESDS = (AtomESDS *) pAtom;
+        return true;
+    case 0://NULL atom
+        return true;
+    default:
+    {
+        FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
+        return false;
+    }
+    }
 }
 
 

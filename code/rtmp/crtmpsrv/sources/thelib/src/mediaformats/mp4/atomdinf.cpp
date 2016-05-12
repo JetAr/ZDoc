@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,24 +22,28 @@
 #include "mediaformats/mp4/mp4document.h"
 
 AtomDINF::AtomDINF(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BoxAtom(pDocument, type, size, start) {
-	_pDREF = NULL;
+    : BoxAtom(pDocument, type, size, start)
+{
+    _pDREF = NULL;
 }
 
-AtomDINF::~AtomDINF() {
+AtomDINF::~AtomDINF()
+{
 }
 
-bool AtomDINF::AtomCreated(BaseAtom *pAtom) {
-	switch (pAtom->GetTypeNumeric()) {
-		case A_DREF:
-			_pDREF = (AtomDREF *) pAtom;
-			return true;
-		default:
-		{
-			FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
-			return false;
-		}
-	}
+bool AtomDINF::AtomCreated(BaseAtom *pAtom)
+{
+    switch (pAtom->GetTypeNumeric())
+    {
+    case A_DREF:
+        _pDREF = (AtomDREF *) pAtom;
+        return true;
+    default:
+    {
+        FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
+        return false;
+    }
+    }
 }
 
 

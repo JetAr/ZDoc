@@ -32,10 +32,12 @@
 using namespace app_#APPNAME_LC#;
 
 RTMPAppProtocolHandler::RTMPAppProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
+    : BaseRTMPAppProtocolHandler(configuration)
+{
 
 }
 
-RTMPAppProtocolHandler::~RTMPAppProtocolHandler() {
+RTMPAppProtocolHandler::~RTMPAppProtocolHandler()
+{
 }
 

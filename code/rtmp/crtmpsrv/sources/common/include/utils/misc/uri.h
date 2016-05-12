@@ -23,26 +23,27 @@
 #include "platform/platform.h"
 #include "utils/misc/variant.h"
 
-typedef struct _URI {
-	string fullUri;
-	string scheme;
-	string host;
-	string ip;
-	uint16_t port;
-	string userName;
-	string password;
-	string fullDocumentPath;
-	string documentPath;
-	string document;
-	map<string, string> parameters;
+typedef struct _URI
+{
+    string fullUri;
+    string scheme;
+    string host;
+    string ip;
+    uint16_t port;
+    string userName;
+    string password;
+    string fullDocumentPath;
+    string documentPath;
+    string document;
+    map<string, string> parameters;
 
-	DLLEXP void Reset();
+    DLLEXP void Reset();
 
-	DLLEXP Variant ToVariant();
-	DLLEXP static bool FromVariant(Variant & variant, _URI & uri);
+    DLLEXP Variant ToVariant();
+    DLLEXP static bool FromVariant(Variant & variant, _URI & uri);
 
-	DLLEXP string ToString();
-	DLLEXP static bool FromString(string stringUri, bool resolveHost, _URI & uri);
+    DLLEXP string ToString();
+    DLLEXP static bool FromString(string stringUri, bool resolveHost, _URI & uri);
 } URI;
 
 #endif	/* _URI_H */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,18 +26,19 @@
 class AtomDATA;
 
 class AtomMetaField
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomDATA *_pDATA;
-	string _stringData;
+    AtomDATA *_pDATA;
+    string _stringData;
 public:
-	AtomMetaField(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMetaField();
+    AtomMetaField(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMetaField();
 
-	Variant GetVariant();
-	virtual bool Read();
+    Variant GetVariant();
+    virtual bool Read();
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMMETAFIELD_H */

@@ -25,12 +25,13 @@
 class MonitorRTMPProtocolHandler;
 
 class MonitorApplication
-: public BaseClientApplication {
+    : public BaseClientApplication
+{
 private:
-	MonitorRTMPProtocolHandler *_pRTMPHandler;
+    MonitorRTMPProtocolHandler *_pRTMPHandler;
 public:
-	MonitorApplication(Variant &configuration);
-	virtual ~MonitorApplication();
+    MonitorApplication(Variant &configuration);
+    virtual ~MonitorApplication();
 private:
 
 };

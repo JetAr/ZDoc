@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,26 +21,31 @@
 #include "mediaformats/mp4/atomvmhd.h"
 
 AtomVMHD::AtomVMHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: VersionedAtom(pDocument, type, size, start) {
-	_graphicsMode = 0;
-	memset(_opcolor, 0, 6);
+    : VersionedAtom(pDocument, type, size, start)
+{
+    _graphicsMode = 0;
+    memset(_opcolor, 0, 6);
 }
 
-AtomVMHD::~AtomVMHD() {
+AtomVMHD::~AtomVMHD()
+{
 }
 
-bool AtomVMHD::ReadData() {
-	if (!ReadUInt16(_graphicsMode)) {
-		FATAL("Unable to read graphics mode");
-		return false;
-	}
+bool AtomVMHD::ReadData()
+{
+    if (!ReadUInt16(_graphicsMode))
+    {
+        FATAL("Unable to read graphics mode");
+        return false;
+    }
 
-	if (!ReadArray(_opcolor, 6)) {
-		FATAL("Unable to read opcodes");
-		return false;
-	}
+    if (!ReadArray(_opcolor, 6))
+    {
+        FATAL("Unable to read opcodes");
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 

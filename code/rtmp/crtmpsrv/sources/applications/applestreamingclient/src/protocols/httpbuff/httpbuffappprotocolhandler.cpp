@@ -24,40 +24,46 @@
 using namespace app_applestreamingclient;
 
 HTTPBuffAppProtocolHandler::HTTPBuffAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-HTTPBuffAppProtocolHandler::~HTTPBuffAppProtocolHandler() {
+HTTPBuffAppProtocolHandler::~HTTPBuffAppProtocolHandler()
+{
 }
 
-void HTTPBuffAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	//1. Get the TS protocol ID from the parameters
-	uint32_t tsId = pProtocol->GetCustomParameters()["payload"]["tsId"];
+void HTTPBuffAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    //1. Get the TS protocol ID from the parameters
+    uint32_t tsId = pProtocol->GetCustomParameters()["payload"]["tsId"];
 
-	//2. Get the TS protocol
-	BaseProtocol *pTSProtocol = ProtocolManager::GetProtocol(tsId);
-	if (pTSProtocol == NULL) {
-		FATAL("Unable to get TS protocol by id: %u", tsId);
-		pProtocol->EnqueueForDelete();
-		return;
-	}
+    //2. Get the TS protocol
+    BaseProtocol *pTSProtocol = ProtocolManager::GetProtocol(tsId);
+    if (pTSProtocol == NULL)
+    {
+        FATAL("Unable to get TS protocol by id: %u", tsId);
+        pProtocol->EnqueueForDelete();
+        return;
+    }
 
-	//3. Link them
-	pProtocol->SetNearProtocol(pTSProtocol);
-	pTSProtocol->SetFarProtocol(pProtocol);
+    //3. Link them
+    pProtocol->SetNearProtocol(pTSProtocol);
+    pTSProtocol->SetFarProtocol(pProtocol);
 
-	//4. make sure that upper protocols survive AES protocol death
-	pProtocol->DeleteNearProtocol(false);
+    //4. make sure that upper protocols survive AES protocol death
+    pProtocol->DeleteNearProtocol(false);
 
-	//5. Do the HTTP request
-	if (!((GenericProtocol *) pProtocol)->DoHTTPRequest()) {
-		FATAL("Unable to do HTTP request");
-		pProtocol->EnqueueForDelete();
-		return;
-	}
+    //5. Do the HTTP request
+    if (!((GenericProtocol *) pProtocol)->DoHTTPRequest())
+    {
+        FATAL("Unable to do HTTP request");
+        pProtocol->EnqueueForDelete();
+        return;
+    }
 }
 
-void HTTPBuffAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
+void HTTPBuffAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }

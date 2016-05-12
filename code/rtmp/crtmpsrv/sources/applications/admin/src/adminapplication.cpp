@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,49 +24,54 @@
 using namespace app_admin;
 
 AdminApplication::AdminApplication(Variant &configuration)
-: BaseClientApplication(configuration) {
+    : BaseClientApplication(configuration)
+{
 #ifdef HAS_PROTOCOL_RTMP
-	_pRTMPHandler = NULL;
+    _pRTMPHandler = NULL;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_CLI
-	_pCLIHandler = NULL;
+    _pCLIHandler = NULL;
 #endif /* HAS_PROTOCOL_CLI */
 }
 
-AdminApplication::~AdminApplication() {
+AdminApplication::~AdminApplication()
+{
 #ifdef HAS_PROTOCOL_RTMP
-	UnRegisterAppProtocolHandler(PT_INBOUND_RTMP);
-	UnRegisterAppProtocolHandler(PT_OUTBOUND_RTMP);
-	if (_pRTMPHandler != NULL) {
-		delete _pRTMPHandler;
-		_pRTMPHandler = NULL;
-	}
+    UnRegisterAppProtocolHandler(PT_INBOUND_RTMP);
+    UnRegisterAppProtocolHandler(PT_OUTBOUND_RTMP);
+    if (_pRTMPHandler != NULL)
+    {
+        delete _pRTMPHandler;
+        _pRTMPHandler = NULL;
+    }
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_CLI
-	UnRegisterAppProtocolHandler(PT_INBOUND_JSONCLI);
-	if (_pCLIHandler != NULL) {
-		delete _pCLIHandler;
-		_pCLIHandler = NULL;
-	}
+    UnRegisterAppProtocolHandler(PT_INBOUND_JSONCLI);
+    if (_pCLIHandler != NULL)
+    {
+        delete _pCLIHandler;
+        _pCLIHandler = NULL;
+    }
 #endif /* HAS_PROTOCOL_CLI */
 }
 
-bool AdminApplication::Initialize() {
-	//TODO: Add your app init code here
-	//Things like parsing custom sections inside _configuration for example,
-	//initialize the protocol handler(s)
+bool AdminApplication::Initialize()
+{
+    //TODO: Add your app init code here
+    //Things like parsing custom sections inside _configuration for example,
+    //initialize the protocol handler(s)
 
-	//1. Initialize the protocol handler(s)
+    //1. Initialize the protocol handler(s)
 #ifdef HAS_PROTOCOL_RTMP
-	_pRTMPHandler = new RTMPAppProtocolHandler(_configuration);
-	RegisterAppProtocolHandler(PT_INBOUND_RTMP, _pRTMPHandler);
-	RegisterAppProtocolHandler(PT_OUTBOUND_RTMP, _pRTMPHandler);
+    _pRTMPHandler = new RTMPAppProtocolHandler(_configuration);
+    RegisterAppProtocolHandler(PT_INBOUND_RTMP, _pRTMPHandler);
+    RegisterAppProtocolHandler(PT_OUTBOUND_RTMP, _pRTMPHandler);
 #endif /* HAS_PROTOCOL_RTMP */
 
 #ifdef HAS_PROTOCOL_CLI
-	_pCLIHandler = new CLIAppProtocolHandler(_configuration);
-	RegisterAppProtocolHandler(PT_INBOUND_JSONCLI, _pCLIHandler);
+    _pCLIHandler = new CLIAppProtocolHandler(_configuration);
+    RegisterAppProtocolHandler(PT_INBOUND_JSONCLI, _pCLIHandler);
 #endif /* HAS_PROTOCOL_CLI */
 
-	return true;
+    return true;
 }

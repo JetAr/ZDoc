@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,38 +21,46 @@
 #include "mediaformats/mp4/atomftyp.h"
 
 AtomFTYP::AtomFTYP(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BaseAtom(pDocument, type, size, start) {
-	_majorBrand = 0;
-	_minorVersion = 0;
+    : BaseAtom(pDocument, type, size, start)
+{
+    _majorBrand = 0;
+    _minorVersion = 0;
 }
 
-AtomFTYP::~AtomFTYP() {
+AtomFTYP::~AtomFTYP()
+{
 }
 
-bool AtomFTYP::Read() {
-	if (!ReadUInt32(_majorBrand, false)) {
-		FATAL("Unable to read major brand");
-		return false;
-	}
+bool AtomFTYP::Read()
+{
+    if (!ReadUInt32(_majorBrand, false))
+    {
+        FATAL("Unable to read major brand");
+        return false;
+    }
 
-	if (!ReadUInt32(_minorVersion, false)) {
-		FATAL("Unable to read minor version");
-		return false;
-	}
+    if (!ReadUInt32(_minorVersion, false))
+    {
+        FATAL("Unable to read minor version");
+        return false;
+    }
 
-	for (uint64_t i = 16; i < _size; i += 4) {
-		uint32_t val = 0;
-		if (!ReadUInt32(val, false)) {
-			FATAL("Unable to read compatible brand");
-			return false;
-		}
-		ADD_VECTOR_END(_compatibleBrands, val);
-	}
-	return true;
+    for (uint64_t i = 16; i < _size; i += 4)
+    {
+        uint32_t val = 0;
+        if (!ReadUInt32(val, false))
+        {
+            FATAL("Unable to read compatible brand");
+            return false;
+        }
+        ADD_VECTOR_END(_compatibleBrands, val);
+    }
+    return true;
 }
 
-string AtomFTYP::Hierarchy(uint32_t indent) {
-	return string(4 * indent, ' ') + GetTypeString();
+string AtomFTYP::Hierarchy(uint32_t indent)
+{
+    return string(4 * indent, ' ') + GetTypeString();
 }
 
 

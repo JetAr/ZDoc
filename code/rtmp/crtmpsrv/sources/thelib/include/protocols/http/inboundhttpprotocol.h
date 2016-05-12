@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,22 +25,23 @@
 #include "protocols/http/basehttpprotocol.h"
 
 class InboundHTTPProtocol
-: public BaseHTTPProtocol {
+    : public BaseHTTPProtocol
+{
 private:
-	Variant _requestHeaders;
-	uint16_t _statusCode;
+    Variant _requestHeaders;
+    uint16_t _statusCode;
 public:
-	InboundHTTPProtocol();
-	virtual ~InboundHTTPProtocol();
+    InboundHTTPProtocol();
+    virtual ~InboundHTTPProtocol();
 
-	void SetStatusCode(uint16_t statusCode);
+    void SetStatusCode(uint16_t statusCode);
 
-	virtual bool Initialize(Variant &parameters);
-	virtual string GetOutputFirstLine();
-	virtual bool ParseFirstLine(string &line, Variant &headers);
-	virtual bool Authenticate();
+    virtual bool Initialize(Variant &parameters);
+    virtual string GetOutputFirstLine();
+    virtual bool ParseFirstLine(string &line, Variant &headers);
+    virtual bool Authenticate();
 private:
-	bool SendAuthRequired(Variant &auth);
+    bool SendAuthRequired(Variant &auth);
 };
 
 

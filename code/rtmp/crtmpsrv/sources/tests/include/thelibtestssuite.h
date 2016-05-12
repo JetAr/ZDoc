@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,15 +25,16 @@
 #include "basetestssuite.h"
 
 class TheLibTestsSuite
-: public BaseTestsSuite {
+    : public BaseTestsSuite
+{
 public:
-	TheLibTestsSuite();
-	virtual ~TheLibTestsSuite();
+    TheLibTestsSuite();
+    virtual ~TheLibTestsSuite();
 
-	virtual void Run();
+    virtual void Run();
 private:
 #ifdef HAS_PROTOCOL_RTMP
-	void test_Header();
+    void test_Header();
 #endif /* HAS_PROTOCOL_RTMP */
 };
 

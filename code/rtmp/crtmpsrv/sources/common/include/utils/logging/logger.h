@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -32,41 +32,42 @@ class BaseLogLocation;
 	@class Logger
 	@brief Class that implements logging capabilites of the Evostream server.
 */
-class DLLEXP Logger {
+class DLLEXP Logger
+{
 private:
-	static Logger *_pLogger; //! Pointer to the Logger class.
-	vector<BaseLogLocation *> _logLocations; //! Vector that stores the location of the log file.
-	bool _freeAppenders; //! Boolean that releases the logger.
+    static Logger *_pLogger; //! Pointer to the Logger class.
+    vector<BaseLogLocation *> _logLocations; //! Vector that stores the location of the log file.
+    bool _freeAppenders; //! Boolean that releases the logger.
 #ifdef HAS_SAFE_LOGGER
 public:
-	static pthread_mutex_t *_pMutex;
+    static pthread_mutex_t *_pMutex;
 #endif
 public:
-	Logger();
-	virtual ~Logger();
+    Logger();
+    virtual ~Logger();
 
-	/*! @brief Initiates the logger */
-	static void Init();
-	/*! @brief Releases the logger
-		@param freeApenders: Releases the logger when set to @c true
-	*/
-	static void Free(bool freeAppenders);
+    /*! @brief Initiates the logger */
+    static void Init();
+    /*! @brief Releases the logger
+    	@param freeApenders: Releases the logger when set to @c true
+    */
+    static void Free(bool freeAppenders);
 
-	/*! @brief Writes the log messages to the logger
-		@param level: Variable that indicates how critical the log is about. It ranges from "INFO" to "FATAL".
-		@param filename: Shows file name of the source code that displayed the log message.
-		@param lineNumber: Shows line number in the source code that displayed the log message.
-		@param functionName: Shows the name of the function that displayed the log message.
-		@param formatString: Accepts the log message and displays it in the appropriate format.
-	*/
-	static void Log(int32_t level, string fileName, uint32_t lineNumber,
-			string functionName, string formatString, ...);
+    /*! @brief Writes the log messages to the logger
+    	@param level: Variable that indicates how critical the log is about. It ranges from "INFO" to "FATAL".
+    	@param filename: Shows file name of the source code that displayed the log message.
+    	@param lineNumber: Shows line number in the source code that displayed the log message.
+    	@param functionName: Shows the name of the function that displayed the log message.
+    	@param formatString: Accepts the log message and displays it in the appropriate format.
+    */
+    static void Log(int32_t level, string fileName, uint32_t lineNumber,
+                    string functionName, string formatString, ...);
 
-	/*! @brief Allows saving of the logs in a specified location
-		@param plogLocation: Pointer to the BaseLogLocation
-		@sa BaseLogLocation
-	*/
-	static bool AddLogLocation(BaseLogLocation *pLogLocation);
+    /*! @brief Allows saving of the logs in a specified location
+    	@param plogLocation: Pointer to the BaseLogLocation
+    	@sa BaseLogLocation
+    */
+    static bool AddLogLocation(BaseLogLocation *pLogLocation);
 };
 
 

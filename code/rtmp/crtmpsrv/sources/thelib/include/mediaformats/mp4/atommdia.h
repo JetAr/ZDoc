@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -30,19 +30,20 @@ class AtomDINF;
 class AtomSTBL;
 
 class AtomMDIA
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomMDHD *_pMDHD;
-	AtomHDLR *_pHDLR;
-	AtomMINF *_pMINF;
-	AtomDINF *_pDINF;
-	AtomSTBL *_pSTBL;
+    AtomMDHD *_pMDHD;
+    AtomHDLR *_pHDLR;
+    AtomMINF *_pMINF;
+    AtomDINF *_pDINF;
+    AtomSTBL *_pSTBL;
 public:
-	AtomMDIA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMDIA();
+    AtomMDIA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMDIA();
 
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMMDIA_H */

@@ -26,34 +26,35 @@
 #include "protocols/rtmp/amf0serializer.h"
 
 class DLLEXP InFileRTMPNSVStream
-: public InFileRTMPStream {
+    : public InFileRTMPStream
+{
 private:
-	uint8_t _videoCodecHeaderInit[5];
-	uint8_t _videoCodecHeaderKeyFrame[2];
-	uint8_t _videoCodecHeader[2];
+    uint8_t _videoCodecHeaderInit[5];
+    uint8_t _videoCodecHeaderKeyFrame[2];
+    uint8_t _videoCodecHeader[2];
 
-	bool _spsAvailable;
-	uint8_t *_pSPSPPS;
-	uint32_t _SPSPPSLength;
-	uint32_t _PPSStart;
+    bool _spsAvailable;
+    uint8_t *_pSPSPPS;
+    uint32_t _SPSPPSLength;
+    uint32_t _PPSStart;
 
-	IOBuffer _metadataBuffer;
-	AMF0Serializer _amfSerializer;
-	string _metadataName;
-	Variant _metadataParameters;
-	Variant _tempVariant;
+    IOBuffer _metadataBuffer;
+    AMF0Serializer _amfSerializer;
+    string _metadataName;
+    Variant _metadataParameters;
+    Variant _tempVariant;
 public:
-	InFileRTMPNSVStream(BaseProtocol *pProtocol,
-			StreamsManager *pStreamsManager, string name);
-	virtual ~InFileRTMPNSVStream();
+    InFileRTMPNSVStream(BaseProtocol *pProtocol,
+                        StreamsManager *pStreamsManager, string name);
+    virtual ~InFileRTMPNSVStream();
 protected:
-	virtual bool BuildFrame(FileClass *pFile, MediaFrame &mediaFrame,
-			IOBuffer &buffer);
-	virtual bool FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame);
+    virtual bool BuildFrame(FileClass *pFile, MediaFrame &mediaFrame,
+                            IOBuffer &buffer);
+    virtual bool FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame);
 
 private:
-	bool BuildFrameHeaders(FileClass *pFile, MediaFrame &mediaFrame,
-			IOBuffer &buffer);
+    bool BuildFrameHeaders(FileClass *pFile, MediaFrame &mediaFrame,
+                           IOBuffer &buffer);
 };
 
 #endif	/* INFILERTMPNSVSTREAM_H */

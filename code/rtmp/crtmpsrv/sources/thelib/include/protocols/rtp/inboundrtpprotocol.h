@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -30,36 +30,37 @@ class InboundConnectivity;
 //#define RTP_DETECT_ROLLOVER
 
 class DLLEXP InboundRTPProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	RTPHeader _rtpHeader;
-	uint8_t _spsPpsPeriod;
-	InNetRTPStream *_pInStream;
-	InboundConnectivity *_pConnectivity;
-	uint16_t _lastSeq;
-	uint16_t _seqRollOver;
-	bool _isAudio;
-	uint32_t _packetsCount;
+    RTPHeader _rtpHeader;
+    uint8_t _spsPpsPeriod;
+    InNetRTPStream *_pInStream;
+    InboundConnectivity *_pConnectivity;
+    uint16_t _lastSeq;
+    uint16_t _seqRollOver;
+    bool _isAudio;
+    uint32_t _packetsCount;
 #ifdef RTP_DETECT_ROLLOVER
-	uint64_t _lastTimestamp;
-	uint64_t _timestampRollover;
+    uint64_t _lastTimestamp;
+    uint64_t _timestampRollover;
 #endif
 public:
-	InboundRTPProtocol();
-	virtual ~InboundRTPProtocol();
+    InboundRTPProtocol();
+    virtual ~InboundRTPProtocol();
 
-	virtual bool Initialize(Variant &parameters);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SignalInputData(IOBuffer &buffer);
-	virtual bool SignalInputData(IOBuffer &buffer, sockaddr_in *pPeerAddress);
+    virtual bool Initialize(Variant &parameters);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
+    virtual bool SignalInputData(IOBuffer &buffer, sockaddr_in *pPeerAddress);
 
-	uint32_t GetSSRC();
-	uint32_t GetExtendedSeq();
+    uint32_t GetSSRC();
+    uint32_t GetExtendedSeq();
 
-	void SetStream(InNetRTPStream *pInStream, bool isAudio);
-	void SetInbboundConnectivity(InboundConnectivity *pConnectivity);
+    void SetStream(InNetRTPStream *pInStream, bool isAudio);
+    void SetInbboundConnectivity(InboundConnectivity *pConnectivity);
 };
 
 

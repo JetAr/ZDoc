@@ -21,18 +21,22 @@
 #include "protocols/rtmfp/basertmfpappprotocolhandler.h"
 
 BaseRTMFPAppProtocolHandler::BaseRTMFPAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-BaseRTMFPAppProtocolHandler::~BaseRTMFPAppProtocolHandler() {
+BaseRTMFPAppProtocolHandler::~BaseRTMFPAppProtocolHandler()
+{
 }
 
-void BaseRTMFPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
+void BaseRTMFPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }
 
-void BaseRTMFPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
+void BaseRTMFPAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
 
 }
 #endif /* HAS_PROTOCOL_RTMFP */

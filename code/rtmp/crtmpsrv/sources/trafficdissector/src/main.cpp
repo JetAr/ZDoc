@@ -23,46 +23,51 @@
 
 bool ValidateParameters(Variant &parameters);
 
-int main(int argc, char **ppArgv) {
-	//1. Init the logger
-	Logger::Init();
-	ConsoleLogLocation *pLogLocation = new ConsoleLogLocation();
-	pLogLocation->SetLevel(_FINEST_);
-	Logger::AddLogLocation(pLogLocation);
-	INFO("Traffic dissector started (%u)", (uint32_t)getpid());
+int main(int argc, char **ppArgv)
+{
+    //1. Init the logger
+    Logger::Init();
+    ConsoleLogLocation *pLogLocation = new ConsoleLogLocation();
+    pLogLocation->SetLevel(_FINEST_);
+    Logger::AddLogLocation(pLogLocation);
+    INFO("Traffic dissector started (%u)", (uint32_t)getpid());
 
-	//2. Parse the parameters
-	if (argc != 2) {
-		FATAL("Invalid parameters");
-		return -1;
-	}
-	Variant parameters;
-	if (!ReadLuaFile(ppArgv[1], "config", parameters)) {
-		FATAL("Unable to read config file");
-		return -1;
-	}
+    //2. Parse the parameters
+    if (argc != 2)
+    {
+        FATAL("Invalid parameters");
+        return -1;
+    }
+    Variant parameters;
+    if (!ReadLuaFile(ppArgv[1], "config", parameters))
+    {
+        FATAL("Unable to read config file");
+        return -1;
+    }
 
-	//3. Validate the parameters
-	if (!ValidateParameters(parameters)) {
-		FATAL("Unable to validate parameters");
-		return -1;
-	}
+    //3. Validate the parameters
+    if (!ValidateParameters(parameters))
+    {
+        FATAL("Unable to validate parameters");
+        return -1;
+    }
 
-	//4. Initialize the monitor application
-	Variant monitorApplicationSettings;
-	monitorApplicationSettings[CONF_APPLICATION_NAME] = "monitor";
-	monitorApplicationSettings[CONF_APPLICATION_DEFAULT] = (bool)true;
-	monitorApplicationSettings[CONF_APPLICATION_MEDIAFOLDER] = "/somewhere";
-	MonitorApplication application(monitorApplicationSettings);
-	ClientApplicationManager::RegisterApplication(&application);
-
-
-	ASSERT("\n%s", STR(parameters.ToString()));
+    //4. Initialize the monitor application
+    Variant monitorApplicationSettings;
+    monitorApplicationSettings[CONF_APPLICATION_NAME] = "monitor";
+    monitorApplicationSettings[CONF_APPLICATION_DEFAULT] = (bool)true;
+    monitorApplicationSettings[CONF_APPLICATION_MEDIAFOLDER] = "/somewhere";
+    MonitorApplication application(monitorApplicationSettings);
+    ClientApplicationManager::RegisterApplication(&application);
 
 
-	return 0;
+    ASSERT("\n%s", STR(parameters.ToString()));
+
+
+    return 0;
 }
 
-bool ValidateParameters(Variant &parameters) {
-	NYIR;
+bool ValidateParameters(Variant &parameters)
+{
+    NYIR;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,29 +24,30 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomMVHD
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	uint32_t _creationTime;
-	uint32_t _modificationTime;
-	uint32_t _timeScale;
-	uint32_t _duration;
-	uint32_t _preferredRate;
-	uint16_t _preferredVolume;
-	uint8_t _reserved[10];
-	uint32_t _matrixStructure[9];
-	uint32_t _previewTime;
-	uint32_t _previewDuration;
-	uint32_t _posterTime;
-	uint32_t _selectionTime;
-	uint32_t _selectionDuration;
-	uint32_t _currentTime;
-	uint32_t _nextTrakId;
+    uint32_t _creationTime;
+    uint32_t _modificationTime;
+    uint32_t _timeScale;
+    uint32_t _duration;
+    uint32_t _preferredRate;
+    uint16_t _preferredVolume;
+    uint8_t _reserved[10];
+    uint32_t _matrixStructure[9];
+    uint32_t _previewTime;
+    uint32_t _previewDuration;
+    uint32_t _posterTime;
+    uint32_t _selectionTime;
+    uint32_t _selectionDuration;
+    uint32_t _currentTime;
+    uint32_t _nextTrakId;
 public:
-	AtomMVHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMVHD();
+    AtomMVHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMVHD();
 
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMMVHD_H */

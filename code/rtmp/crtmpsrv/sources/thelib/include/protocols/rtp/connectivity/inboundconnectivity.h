@@ -30,45 +30,46 @@ class RTSPProtocol;
 class BaseProtocol;
 
 class DLLEXP InboundConnectivity
-: public BaseConnectivity {
+    : public BaseConnectivity
+{
 private:
-	RTSPProtocol *_pRTSP;
+    RTSPProtocol *_pRTSP;
 
-	InboundRTPProtocol *_pRTPVideo;
-	RTCPProtocol *_pRTCPVideo;
-	uint8_t _videoRR[60];
-	InboundRTPProtocol *_pRTPAudio;
-	RTCPProtocol *_pRTCPAudio;
-	uint8_t _audioRR[60];
+    InboundRTPProtocol *_pRTPVideo;
+    RTCPProtocol *_pRTCPVideo;
+    uint8_t _videoRR[60];
+    InboundRTPProtocol *_pRTPAudio;
+    RTCPProtocol *_pRTCPAudio;
+    uint8_t _audioRR[60];
 
-	InNetRTPStream *_pInStream;
+    InNetRTPStream *_pInStream;
 
-	BaseProtocol *_pProtocols[256];
-	IOBuffer _inputBuffer;
-	sockaddr_in _dummyAddress;
+    BaseProtocol *_pProtocols[256];
+    IOBuffer _inputBuffer;
+    sockaddr_in _dummyAddress;
 
-	bool _forceTcp;
+    bool _forceTcp;
 public:
-	InboundConnectivity(RTSPProtocol *pRTSP);
-	virtual ~InboundConnectivity();
-	void EnqueueForDelete();
+    InboundConnectivity(RTSPProtocol *pRTSP);
+    virtual ~InboundConnectivity();
+    void EnqueueForDelete();
 
-	bool Initialize(Variant &videoTrack, Variant &audioTrack,
-			string streamName, bool forceTcp);
+    bool Initialize(Variant &videoTrack, Variant &audioTrack,
+                    string streamName, bool forceTcp);
 
-	string GetTransportHeaderLine(bool isAudio);
+    string GetTransportHeaderLine(bool isAudio);
 
-	bool FeedData(uint32_t channelId, uint8_t *pBuffer, uint32_t bufferLength);
+    bool FeedData(uint32_t channelId, uint8_t *pBuffer, uint32_t bufferLength);
 
-	string GetAudioClientPorts();
-	string GetVideoClientPorts();
-	bool SendRR(bool isAudio);
-	void ReportSR(uint64_t ntpMicroseconds, uint32_t rtpTimestamp, bool isAudio);
+    string GetAudioClientPorts();
+    string GetVideoClientPorts();
+    bool SendRR(bool isAudio);
+    void ReportSR(uint64_t ntpMicroseconds, uint32_t rtpTimestamp, bool isAudio);
 private:
-	bool InitializeUDP(Variant &videoTrack, Variant &audioTrack);
-	bool InitializeTCP(Variant &videoTrack, Variant &audioTrack);
-	void Cleanup();
-	bool CreateCarriers(InboundRTPProtocol *pRTP, RTCPProtocol *pRTCP);
+    bool InitializeUDP(Variant &videoTrack, Variant &audioTrack);
+    bool InitializeTCP(Variant &videoTrack, Variant &audioTrack);
+    void Cleanup();
+    bool CreateCarriers(InboundRTPProtocol *pRTP, RTCPProtocol *pRTCP);
 };
 
 

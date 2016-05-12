@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,38 +22,44 @@
 #include "streaming/streamstypes.h"
 
 InFileRTMPMP3Stream::InFileRTMPMP3Stream(BaseProtocol *pProtocol,
-		StreamsManager *pStreamsManager, string name)
-: InFileRTMPStream(pProtocol, pStreamsManager, ST_IN_FILE_RTMP_MP3, name) {
+        StreamsManager *pStreamsManager, string name)
+    : InFileRTMPStream(pProtocol, pStreamsManager, ST_IN_FILE_RTMP_MP3, name)
+{
 
 }
 
-InFileRTMPMP3Stream::~InFileRTMPMP3Stream() {
+InFileRTMPMP3Stream::~InFileRTMPMP3Stream()
+{
 }
 
 bool InFileRTMPMP3Stream::BuildFrame(FileClass *pFile, MediaFrame &mediaFrame,
-		IOBuffer &buffer) {
-	//1. Seek into the data file at the correct position
-	if (!pFile->SeekTo(mediaFrame.start)) {
-		FATAL("Unable to seek to position %"PRIu64, mediaFrame.start);
-		return false;
-	}
+                                     IOBuffer &buffer)
+{
+    //1. Seek into the data file at the correct position
+    if (!pFile->SeekTo(mediaFrame.start))
+    {
+        FATAL("Unable to seek to position %"PRIu64, mediaFrame.start);
+        return false;
+    }
 
-	//2. Put the mp3 marker
-	buffer.ReadFromRepeat(0x2f, 1);
+    //2. Put the mp3 marker
+    buffer.ReadFromRepeat(0x2f, 1);
 
-	//3. Read the data
-	if (!buffer.ReadFromFs(*pFile, (uint32_t) mediaFrame.length)) {
-		FATAL("Unable to read %"PRIu64" bytes from offset %"PRIu64, mediaFrame.length, mediaFrame.start);
-		return false;
-	}
+    //3. Read the data
+    if (!buffer.ReadFromFs(*pFile, (uint32_t) mediaFrame.length))
+    {
+        FATAL("Unable to read %"PRIu64" bytes from offset %"PRIu64, mediaFrame.length, mediaFrame.start);
+        return false;
+    }
 
-	//3. Done
-	return true;
+    //3. Done
+    return true;
 }
 
-bool InFileRTMPMP3Stream::FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame) {
-	NYI;
-	return true;
+bool InFileRTMPMP3Stream::FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame)
+{
+    NYI;
+    return true;
 }
 #endif /* HAS_PROTOCOL_RTMP */
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,17 +23,19 @@
 
 #include "application/baseappprotocolhandler.h"
 
-namespace app_applestreamingclient {
+namespace app_applestreamingclient
+{
 
-	class M3U8AppProtocolHandler
-	: public BaseAppProtocolHandler {
-	public:
-		M3U8AppProtocolHandler(Variant &configuration);
-		virtual ~M3U8AppProtocolHandler();
+class M3U8AppProtocolHandler
+    : public BaseAppProtocolHandler
+{
+public:
+    M3U8AppProtocolHandler(Variant &configuration);
+    virtual ~M3U8AppProtocolHandler();
 
-		virtual void RegisterProtocol(BaseProtocol *pProtocol);
-		virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
-	};
+    virtual void RegisterProtocol(BaseProtocol *pProtocol);
+    virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
+};
 }
 
 #endif	/* _M3U8PROTOCOLHANDLER_H */

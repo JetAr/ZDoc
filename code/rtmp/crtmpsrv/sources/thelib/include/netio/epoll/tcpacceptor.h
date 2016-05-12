@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -27,34 +27,35 @@
 class BaseClientApplication;
 
 class TCPAcceptor
-: public IOHandler {
+    : public IOHandler
+{
 private:
-	sockaddr_in _address;
-	vector<uint64_t> _protocolChain;
-	BaseClientApplication *_pApplication;
-	Variant _parameters;
-	bool _enabled;
-	uint32_t _acceptedCount;
-	uint32_t _droppedCount;
-	string _ipAddress;
-	uint16_t _port;
+    sockaddr_in _address;
+    vector<uint64_t> _protocolChain;
+    BaseClientApplication *_pApplication;
+    Variant _parameters;
+    bool _enabled;
+    uint32_t _acceptedCount;
+    uint32_t _droppedCount;
+    string _ipAddress;
+    uint16_t _port;
 public:
-	TCPAcceptor(string ipAddress, uint16_t port, Variant parameters,
-			vector<uint64_t>/*&*/ protocolChain);
-	virtual ~TCPAcceptor();
-	bool StartAccept(BaseClientApplication *pApplication);
-	virtual bool SignalOutputData();
-	virtual bool OnEvent(struct epoll_event &event);
-	virtual bool OnConnectionAvailable(struct epoll_event &event);
-	Variant & GetParameters();
-	BaseClientApplication *GetApplication();
-	vector<uint64_t> &GetProtocolChain();
-	virtual operator string();
-	virtual void GetStats(Variant &info);
-	bool Enable();
-	void Enable(bool enabled);
+    TCPAcceptor(string ipAddress, uint16_t port, Variant parameters,
+                vector<uint64_t>/*&*/ protocolChain);
+    virtual ~TCPAcceptor();
+    bool StartAccept(BaseClientApplication *pApplication);
+    virtual bool SignalOutputData();
+    virtual bool OnEvent(struct epoll_event &event);
+    virtual bool OnConnectionAvailable(struct epoll_event &event);
+    Variant & GetParameters();
+    BaseClientApplication *GetApplication();
+    vector<uint64_t> &GetProtocolChain();
+    virtual operator string();
+    virtual void GetStats(Variant &info);
+    bool Enable();
+    void Enable(bool enabled);
 private:
-	bool IsAlive();
+    bool IsAlive();
 };
 
 

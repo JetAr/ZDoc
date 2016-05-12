@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,18 +24,19 @@
 #include "netio/select/iohandler.h"
 
 class DLLEXP IOTimer
-: public IOHandler {
+    : public IOHandler
+{
 private:
-	static int32_t _idGenerator;
+    static int32_t _idGenerator;
 public:
-	IOTimer();
-	virtual ~IOTimer();
+    IOTimer();
+    virtual ~IOTimer();
 
-	virtual bool SignalOutputData();
-	virtual bool OnEvent(select_event &event);
-	bool EnqueueForTimeEvent(uint32_t seconds);
-	virtual operator string();
-	virtual void GetStats(Variant &info);
+    virtual bool SignalOutputData();
+    virtual bool OnEvent(select_event &event);
+    bool EnqueueForTimeEvent(uint32_t seconds);
+    virtual operator string();
+    virtual void GetStats(Variant &info);
 };
 
 #endif	/* _TIMERIO_H */

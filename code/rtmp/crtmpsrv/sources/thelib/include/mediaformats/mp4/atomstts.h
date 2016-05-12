@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,23 +23,25 @@
 
 #include "mediaformats/mp4/versionedatom.h"
 
-typedef struct _STTSEntry {
-	uint32_t count;
-	uint32_t delta;
+typedef struct _STTSEntry
+{
+    uint32_t count;
+    uint32_t delta;
 } STTSEntry;
 
 class AtomSTTS
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	vector<STTSEntry> _sttsEntries;
-	vector<uint32_t> _normalizedEntries;
+    vector<STTSEntry> _sttsEntries;
+    vector<uint32_t> _normalizedEntries;
 public:
-	AtomSTTS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomSTTS();
+    AtomSTTS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomSTTS();
 
-	vector<uint32_t> GetEntries();
+    vector<uint32_t> GetEntries();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMSTTS_H */

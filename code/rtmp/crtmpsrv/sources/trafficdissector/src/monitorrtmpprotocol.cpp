@@ -24,101 +24,122 @@
 #include "streaming/streamsmanager.h"
 
 MonitorRTMPProtocol::MonitorRTMPProtocol(bool isClient)
-: BaseRTMPProtocol(PT_MONITORRTMP) {
-	_isClient = isClient;
-	_handshakeStage = HSS_UNDEF;
+    : BaseRTMPProtocol(PT_MONITORRTMP)
+{
+    _isClient = isClient;
+    _handshakeStage = HSS_UNDEF;
 }
 
-MonitorRTMPProtocol::~MonitorRTMPProtocol() {
+MonitorRTMPProtocol::~MonitorRTMPProtocol()
+{
 }
 
-uint8_t MonitorRTMPProtocol::GetLogLevel() {
-	if (_isClient)
-		return _DEBUG_;
-	else
-		return _WARNING_;
+uint8_t MonitorRTMPProtocol::GetLogLevel()
+{
+    if (_isClient)
+        return _DEBUG_;
+    else
+        return _WARNING_;
 }
 
-bool MonitorRTMPProtocol::Initialize(Variant &parameters) {
-	for (uint32_t i = 0; i < MAX_STREAMS_COUNT; i++) {
-		_streams[i] = new MonitorStream(this,
-				GetApplication()->GetStreamsManager(), format("stream_%u", i));
-	}
-	return true;
+bool MonitorRTMPProtocol::Initialize(Variant &parameters)
+{
+    for (uint32_t i = 0; i < MAX_STREAMS_COUNT; i++)
+    {
+        _streams[i] = new MonitorStream(this,
+                                        GetApplication()->GetStreamsManager(), format("stream_%u", i));
+    }
+    return true;
 }
 
-bool MonitorRTMPProtocol::PerformHandshake(IOBuffer &buffer) {
-	if (_isClient) {
-		return PerformHandshakeClient(buffer);
-	} else {
-		return PerformHandshakeServer(buffer);
-	}
+bool MonitorRTMPProtocol::PerformHandshake(IOBuffer &buffer)
+{
+    if (_isClient)
+    {
+        return PerformHandshakeClient(buffer);
+    }
+    else
+    {
+        return PerformHandshakeServer(buffer);
+    }
 }
 
-bool MonitorRTMPProtocol::SetInboundChunkSize(uint32_t chunkSize) {
-	_inboundChunkSize = chunkSize;
-	return true;
+bool MonitorRTMPProtocol::SetInboundChunkSize(uint32_t chunkSize)
+{
+    _inboundChunkSize = chunkSize;
+    return true;
 }
 
-bool MonitorRTMPProtocol::SetOutboundChunkSize(uint32_t chunkSize) {
-	_outboundChunkSize = chunkSize;
-	return true;
+bool MonitorRTMPProtocol::SetOutboundChunkSize(uint32_t chunkSize)
+{
+    _outboundChunkSize = chunkSize;
+    return true;
 }
 
-bool MonitorRTMPProtocol::PerformHandshakeClient(IOBuffer &buffer) {
-	switch (_handshakeStage) {
-		case HSS_UNDEF:
-		{
-			if (GETAVAILABLEBYTESCOUNT(buffer) < 1537) {
-				return true;
-			}
-			if (!buffer.Ignore(1537)) {
-				LOG(GetLogLevel(), "Unable to ignore 1737 bytes");
-				return false;
-			}
-			_handshakeStage = HSS_HS;
-			return true;
-		}
-		case HSS_HS:
-		{
-			if (GETAVAILABLEBYTESCOUNT(buffer) < 1536) {
-				return true;
-			}
-			if (!buffer.Ignore(1536)) {
-				LOG(GetLogLevel(), "Unable to ignore 1736 bytes");
-				return false;
-			}
-			_handshakeStage = HSS_DONE;
-			_handshakeCompleted = true;
-			return true;
-		}
-		default:
-		{
-			LOG(GetLogLevel(), "Invalid handshake stage: %u", _handshakeStage);
-			return false;
-		}
-	}
+bool MonitorRTMPProtocol::PerformHandshakeClient(IOBuffer &buffer)
+{
+    switch (_handshakeStage)
+    {
+    case HSS_UNDEF:
+    {
+        if (GETAVAILABLEBYTESCOUNT(buffer) < 1537)
+        {
+            return true;
+        }
+        if (!buffer.Ignore(1537))
+        {
+            LOG(GetLogLevel(), "Unable to ignore 1737 bytes");
+            return false;
+        }
+        _handshakeStage = HSS_HS;
+        return true;
+    }
+    case HSS_HS:
+    {
+        if (GETAVAILABLEBYTESCOUNT(buffer) < 1536)
+        {
+            return true;
+        }
+        if (!buffer.Ignore(1536))
+        {
+            LOG(GetLogLevel(), "Unable to ignore 1736 bytes");
+            return false;
+        }
+        _handshakeStage = HSS_DONE;
+        _handshakeCompleted = true;
+        return true;
+    }
+    default:
+    {
+        LOG(GetLogLevel(), "Invalid handshake stage: %u", _handshakeStage);
+        return false;
+    }
+    }
 }
 
-bool MonitorRTMPProtocol::PerformHandshakeServer(IOBuffer &buffer) {
-	switch (_handshakeStage) {
-		case HSS_UNDEF:
-		{
-			if (GETAVAILABLEBYTESCOUNT(buffer) < 3073) {
-				return true;
-			}
-			if (!buffer.Ignore(3073)) {
-				LOG(GetLogLevel(), "Unable to ignore 3073 bytes");
-				return false;
-			}
-			_handshakeStage = HSS_DONE;
-			_handshakeCompleted = true;
-			return true;
-		}
-		default:
-		{
-			LOG(GetLogLevel(), "Invalid handshake stage: %u", _handshakeStage);
-			return false;
-		}
-	}
+bool MonitorRTMPProtocol::PerformHandshakeServer(IOBuffer &buffer)
+{
+    switch (_handshakeStage)
+    {
+    case HSS_UNDEF:
+    {
+        if (GETAVAILABLEBYTESCOUNT(buffer) < 3073)
+        {
+            return true;
+        }
+        if (!buffer.Ignore(3073))
+        {
+            LOG(GetLogLevel(), "Unable to ignore 3073 bytes");
+            return false;
+        }
+        _handshakeStage = HSS_DONE;
+        _handshakeCompleted = true;
+        return true;
+    }
+    default:
+    {
+        LOG(GetLogLevel(), "Invalid handshake stage: %u", _handshakeStage);
+        return false;
+    }
+    }
 }

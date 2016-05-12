@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,16 +23,19 @@
 #include "vptestsapplication.h"
 using namespace app_vptests;
 
-extern "C" BaseClientApplication *GetApplication_vptests(Variant configuration) {
-	VPTestsApplication *pApplication = new VPTestsApplication(
-			configuration);
-	return pApplication;
+extern "C" BaseClientApplication *GetApplication_vptests(Variant configuration)
+{
+    VPTestsApplication *pApplication = new VPTestsApplication(
+        configuration);
+    return pApplication;
 }
 
-extern "C" void ReleaseApplication_vptests(BaseClientApplication *pApplication) {
-	if (pApplication != NULL) {
-		delete pApplication;
-	}
+extern "C" void ReleaseApplication_vptests(BaseClientApplication *pApplication)
+{
+    if (pApplication != NULL)
+    {
+        delete pApplication;
+    }
 }
 
 

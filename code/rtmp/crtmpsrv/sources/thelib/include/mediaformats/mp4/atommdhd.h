@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,22 +24,23 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomMDHD
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	uint32_t _creationTime;
-	uint32_t _modificationTime;
-	uint32_t _timeScale;
-	uint32_t _duration;
-	uint16_t _language;
-	uint16_t _quality;
+    uint32_t _creationTime;
+    uint32_t _modificationTime;
+    uint32_t _timeScale;
+    uint32_t _duration;
+    uint16_t _language;
+    uint16_t _quality;
 public:
-	AtomMDHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMDHD();
+    AtomMDHD(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMDHD();
 
-	uint32_t GetTimeScale();
-	uint32_t GetDuration();
+    uint32_t GetTimeScale();
+    uint32_t GetDuration();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMMDHD_H */

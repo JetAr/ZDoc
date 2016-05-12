@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,39 +23,44 @@
 #include "mediaformats/mp4/atommvhd.h"
 
 AtomMOOV::AtomMOOV(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BoxAtom(pDocument, type, size, start) {
-	_pMVHD = NULL;
-	_pUDTA = NULL;
-	_pMETA = NULL;
+    : BoxAtom(pDocument, type, size, start)
+{
+    _pMVHD = NULL;
+    _pUDTA = NULL;
+    _pMETA = NULL;
 }
 
-AtomMOOV::~AtomMOOV() {
+AtomMOOV::~AtomMOOV()
+{
 }
 
-vector<AtomTRAK *> AtomMOOV::GetTracks() {
-	return _tracks;
+vector<AtomTRAK *> AtomMOOV::GetTracks()
+{
+    return _tracks;
 }
 
-bool AtomMOOV::AtomCreated(BaseAtom *pAtom) {
-	switch (pAtom->GetTypeNumeric()) {
-		case A_MVHD:
-			_pMVHD = (AtomMVHD *) pAtom;
-			return true;
-		case A_UDTA:
-			_pUDTA = (AtomUDTA *) pAtom;
-			return true;
-		case A_TRAK:
-			ADD_VECTOR_END(_tracks, (AtomTRAK *) pAtom);
-			return true;
-		case A_META:
-			_pMETA = (AtomMETA *) pAtom;
-			return true;
-		default:
-		{
-			FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
-			return false;
-		}
-	}
+bool AtomMOOV::AtomCreated(BaseAtom *pAtom)
+{
+    switch (pAtom->GetTypeNumeric())
+    {
+    case A_MVHD:
+        _pMVHD = (AtomMVHD *) pAtom;
+        return true;
+    case A_UDTA:
+        _pUDTA = (AtomUDTA *) pAtom;
+        return true;
+    case A_TRAK:
+        ADD_VECTOR_END(_tracks, (AtomTRAK *) pAtom);
+        return true;
+    case A_META:
+        _pMETA = (AtomMETA *) pAtom;
+        return true;
+    default:
+    {
+        FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
+        return false;
+    }
+    }
 }
 
 

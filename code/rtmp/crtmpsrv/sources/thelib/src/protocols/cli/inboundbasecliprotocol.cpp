@@ -26,54 +26,67 @@
 #include "protocols/cli/basecliappprotocolhandler.h"
 
 InboundBaseCLIProtocol::InboundBaseCLIProtocol(uint64_t type)
-: BaseProtocol(type) {
-	_pProtocolHandler = NULL;
+    : BaseProtocol(type)
+{
+    _pProtocolHandler = NULL;
 }
 
-InboundBaseCLIProtocol::~InboundBaseCLIProtocol() {
+InboundBaseCLIProtocol::~InboundBaseCLIProtocol()
+{
 }
 
-bool InboundBaseCLIProtocol::Initialize(Variant &parameters) {
-	GetCustomParameters() = parameters;
-	return true;
+bool InboundBaseCLIProtocol::Initialize(Variant &parameters)
+{
+    GetCustomParameters() = parameters;
+    return true;
 }
 
-void InboundBaseCLIProtocol::SetApplication(BaseClientApplication *pApplication) {
-	BaseProtocol::SetApplication(pApplication);
-	if (pApplication != NULL) {
-		_pProtocolHandler = (BaseCLIAppProtocolHandler *)
-				pApplication->GetProtocolHandler(this);
-	} else {
-		_pProtocolHandler = NULL;
-	}
+void InboundBaseCLIProtocol::SetApplication(BaseClientApplication *pApplication)
+{
+    BaseProtocol::SetApplication(pApplication);
+    if (pApplication != NULL)
+    {
+        _pProtocolHandler = (BaseCLIAppProtocolHandler *)
+                            pApplication->GetProtocolHandler(this);
+    }
+    else
+    {
+        _pProtocolHandler = NULL;
+    }
 }
 
-bool InboundBaseCLIProtocol::AllowFarProtocol(uint64_t type) {
-	return (type == PT_TCP) || (type == PT_INBOUND_HTTP);
+bool InboundBaseCLIProtocol::AllowFarProtocol(uint64_t type)
+{
+    return (type == PT_TCP) || (type == PT_INBOUND_HTTP);
 }
 
-bool InboundBaseCLIProtocol::AllowNearProtocol(uint64_t type) {
-	ASSERT("Operation not supported");
-	return false;
+bool InboundBaseCLIProtocol::AllowNearProtocol(uint64_t type)
+{
+    ASSERT("Operation not supported");
+    return false;
 }
 
-IOBuffer * InboundBaseCLIProtocol::GetOutputBuffer() {
-	if (GETAVAILABLEBYTESCOUNT(_outputBuffer) != 0)
-		return &_outputBuffer;
-	return NULL;
+IOBuffer * InboundBaseCLIProtocol::GetOutputBuffer()
+{
+    if (GETAVAILABLEBYTESCOUNT(_outputBuffer) != 0)
+        return &_outputBuffer;
+    return NULL;
 }
 
-bool InboundBaseCLIProtocol::SignalInputData(int32_t recvAmount) {
-	ASSERT("Operation not supported");
-	return false;
+bool InboundBaseCLIProtocol::SignalInputData(int32_t recvAmount)
+{
+    ASSERT("Operation not supported");
+    return false;
 }
 
-bool InboundBaseCLIProtocol::ProcessMessage(Variant &message) {
-	if (_pProtocolHandler == NULL) {
-		FATAL("No handler available yet");
-		return false;
-	}
-	return _pProtocolHandler->ProcessMessage(this, message);
+bool InboundBaseCLIProtocol::ProcessMessage(Variant &message)
+{
+    if (_pProtocolHandler == NULL)
+    {
+        FATAL("No handler available yet");
+        return false;
+    }
+    return _pProtocolHandler->ProcessMessage(this, message);
 }
 
 #endif /* HAS_PROTOCOL_CLI */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,188 +24,212 @@
 #ifdef NET_EPOLL
 #include "netio/epoll/tcpacceptor.h"
 #include "netio/epoll/iohandlermanager.h"
-#include "protocols/protocolfactorymanager.h" 
+#include "protocols/protocolfactorymanager.h"
 #include "protocols/tcpprotocol.h"
 #include "netio/epoll/tcpcarrier.h"
 #include "application/baseclientapplication.h"
 
 TCPAcceptor::TCPAcceptor(string ipAddress, uint16_t port, Variant parameters,
-		vector<uint64_t>/*&*/ protocolChain)
-: IOHandler(0, 0, IOHT_ACCEPTOR) {
-	_pApplication = NULL;
-	memset(&_address, 0, sizeof (sockaddr_in));
+                         vector<uint64_t>/*&*/ protocolChain)
+    : IOHandler(0, 0, IOHT_ACCEPTOR)
+{
+    _pApplication = NULL;
+    memset(&_address, 0, sizeof (sockaddr_in));
 
-	_address.sin_family = PF_INET;
-	_address.sin_addr.s_addr = inet_addr(ipAddress.c_str());
-	assert(_address.sin_addr.s_addr != INADDR_NONE);
-	_address.sin_port = EHTONS(port); //----MARKED-SHORT----
+    _address.sin_family = PF_INET;
+    _address.sin_addr.s_addr = inet_addr(ipAddress.c_str());
+    assert(_address.sin_addr.s_addr != INADDR_NONE);
+    _address.sin_port = EHTONS(port); //----MARKED-SHORT----
 
-	_protocolChain = protocolChain;
-	_parameters = parameters;
-	_enabled = false;
-	_acceptedCount = 0;
-	_droppedCount = 0;
-	_ipAddress = ipAddress;
-	_port = port;
+    _protocolChain = protocolChain;
+    _parameters = parameters;
+    _enabled = false;
+    _acceptedCount = 0;
+    _droppedCount = 0;
+    _ipAddress = ipAddress;
+    _port = port;
 }
 
-TCPAcceptor::~TCPAcceptor() {
-	close(_inboundFd);
+TCPAcceptor::~TCPAcceptor()
+{
+    close(_inboundFd);
 }
 
-bool TCPAcceptor::StartAccept(BaseClientApplication *pApplication) {
-	_pApplication = pApplication;
+bool TCPAcceptor::StartAccept(BaseClientApplication *pApplication)
+{
+    _pApplication = pApplication;
 
-	_inboundFd = _outboundFd = (int) socket(PF_INET, SOCK_STREAM, 0);
-	if (_inboundFd < 0) {
-		FATAL("Unable to create socket: %s(%d)", strerror(errno), errno);
-		return false;
-	}
+    _inboundFd = _outboundFd = (int) socket(PF_INET, SOCK_STREAM, 0);
+    if (_inboundFd < 0)
+    {
+        FATAL("Unable to create socket: %s(%d)", strerror(errno), errno);
+        return false;
+    }
 
-	if (!SetFdOptions(_inboundFd)) {
-		FATAL("Unable to set socket options");
-		return false;
-	}
+    if (!SetFdOptions(_inboundFd))
+    {
+        FATAL("Unable to set socket options");
+        return false;
+    }
 
-	if (bind(_inboundFd, (sockaddr *) & _address, sizeof (sockaddr)) != 0) {
-		int error = errno;
-		FATAL("Unable to bind on address: tcp://%s:%hu; Error was: %s (%d)",
-				inet_ntoa(((sockaddr_in *) & _address)->sin_addr),
-				ENTOHS(((sockaddr_in *) & _address)->sin_port),
-				strerror(error),
-				error);
-		return false;
-	}
+    if (bind(_inboundFd, (sockaddr *) & _address, sizeof (sockaddr)) != 0)
+    {
+        int error = errno;
+        FATAL("Unable to bind on address: tcp://%s:%hu; Error was: %s (%d)",
+              inet_ntoa(((sockaddr_in *) & _address)->sin_addr),
+              ENTOHS(((sockaddr_in *) & _address)->sin_port),
+              strerror(error),
+              error);
+        return false;
+    }
 
-	if (listen(_inboundFd, 100) != 0) {
-		FATAL("Unable to put the socket in listening mode");
-		return false;
-	}
+    if (listen(_inboundFd, 100) != 0)
+    {
+        FATAL("Unable to put the socket in listening mode");
+        return false;
+    }
 
-	_enabled = true;
+    _enabled = true;
 
-	return IOHandlerManager::EnableAcceptConnections(this);
+    return IOHandlerManager::EnableAcceptConnections(this);
 }
 
-bool TCPAcceptor::SignalOutputData() {
-	ASSERT("Operation not supported");
-	return false;
+bool TCPAcceptor::SignalOutputData()
+{
+    ASSERT("Operation not supported");
+    return false;
 }
 
-bool TCPAcceptor::OnEvent(struct epoll_event &event) {
-	//we should not return false here, because the acceptor will simply go down.
-	//Instead, after the connection accepting routine failed, check to
-	//see if the acceptor socket is stil in the business
-	if (!OnConnectionAvailable(event))
-		return IsAlive();
-	else
-		return true;
+bool TCPAcceptor::OnEvent(struct epoll_event &event)
+{
+    //we should not return false here, because the acceptor will simply go down.
+    //Instead, after the connection accepting routine failed, check to
+    //see if the acceptor socket is stil in the business
+    if (!OnConnectionAvailable(event))
+        return IsAlive();
+    else
+        return true;
 }
 
-bool TCPAcceptor::OnConnectionAvailable(struct epoll_event &event) {
-	sockaddr address;
-	memset(&address, 0, sizeof (sockaddr));
-	socklen_t len = sizeof (sockaddr);
-	int32_t fd;
-	int32_t error;
+bool TCPAcceptor::OnConnectionAvailable(struct epoll_event &event)
+{
+    sockaddr address;
+    memset(&address, 0, sizeof (sockaddr));
+    socklen_t len = sizeof (sockaddr);
+    int32_t fd;
+    int32_t error;
 
-	//1. Accept the connection
-	fd = accept(_inboundFd, &address, &len);
-	error = errno;
-	if (fd < 0) {
-		FATAL("Unable to accept client connection: %s (%d)", strerror(error), error);
-		return false;
-	}
-	if (!_enabled) {
-		CLOSE_SOCKET(fd);
-		_droppedCount++;
-		WARN("Acceptor is not enabled. Client dropped: %s:%hu -> %s:%hu",
-				inet_ntoa(((sockaddr_in *) & address)->sin_addr),
-				ENTOHS(((sockaddr_in *) & address)->sin_port),
-				STR(_ipAddress),
-				_port);
-		return true;
-	}
-	INFO("Client connected: %s:%hu -> %s:%hu",
-			inet_ntoa(((sockaddr_in *) & address)->sin_addr),
-			ENTOHS(((sockaddr_in *) & address)->sin_port),
-			STR(_ipAddress),
-			_port);
+    //1. Accept the connection
+    fd = accept(_inboundFd, &address, &len);
+    error = errno;
+    if (fd < 0)
+    {
+        FATAL("Unable to accept client connection: %s (%d)", strerror(error), error);
+        return false;
+    }
+    if (!_enabled)
+    {
+        CLOSE_SOCKET(fd);
+        _droppedCount++;
+        WARN("Acceptor is not enabled. Client dropped: %s:%hu -> %s:%hu",
+             inet_ntoa(((sockaddr_in *) & address)->sin_addr),
+             ENTOHS(((sockaddr_in *) & address)->sin_port),
+             STR(_ipAddress),
+             _port);
+        return true;
+    }
+    INFO("Client connected: %s:%hu -> %s:%hu",
+         inet_ntoa(((sockaddr_in *) & address)->sin_addr),
+         ENTOHS(((sockaddr_in *) & address)->sin_port),
+         STR(_ipAddress),
+         _port);
 
-	if (!SetFdOptions(_inboundFd)) {
-		FATAL("Unable to set socket options");
-		return false;
-	}
+    if (!SetFdOptions(_inboundFd))
+    {
+        FATAL("Unable to set socket options");
+        return false;
+    }
 
-	//4. Create the chain
-	BaseProtocol *pProtocol = ProtocolFactoryManager::CreateProtocolChain(_protocolChain, _parameters);
-	if (pProtocol == NULL) {
-		FATAL("Unable to create protocol chain");
-		close(fd);
-		return false;
-	}
+    //4. Create the chain
+    BaseProtocol *pProtocol = ProtocolFactoryManager::CreateProtocolChain(_protocolChain, _parameters);
+    if (pProtocol == NULL)
+    {
+        FATAL("Unable to create protocol chain");
+        close(fd);
+        return false;
+    }
 
-	//5. Create the carrier and bind it
-	TCPCarrier *pTCPCarrier = new TCPCarrier(fd);
-	pTCPCarrier->SetProtocol(pProtocol->GetFarEndpoint());
-	pProtocol->GetFarEndpoint()->SetIOHandler(pTCPCarrier);
+    //5. Create the carrier and bind it
+    TCPCarrier *pTCPCarrier = new TCPCarrier(fd);
+    pTCPCarrier->SetProtocol(pProtocol->GetFarEndpoint());
+    pProtocol->GetFarEndpoint()->SetIOHandler(pTCPCarrier);
 
-	//6. Register the protocol stack with an application
-	if (_pApplication != NULL) {
-		pProtocol = pProtocol->GetNearEndpoint();
-		pProtocol->SetApplication(_pApplication);
-	}
+    //6. Register the protocol stack with an application
+    if (_pApplication != NULL)
+    {
+        pProtocol = pProtocol->GetNearEndpoint();
+        pProtocol->SetApplication(_pApplication);
+    }
 
-	if (pProtocol->GetNearEndpoint()->GetOutputBuffer() != NULL)
-		pProtocol->GetNearEndpoint()->EnqueueForOutbound();
+    if (pProtocol->GetNearEndpoint()->GetOutputBuffer() != NULL)
+        pProtocol->GetNearEndpoint()->EnqueueForOutbound();
 
-	_acceptedCount++;
+    _acceptedCount++;
 
-	//7. Done
-	return true;
+    //7. Done
+    return true;
 }
 
-Variant & TCPAcceptor::GetParameters() {
-	return _parameters;
+Variant & TCPAcceptor::GetParameters()
+{
+    return _parameters;
 }
 
-BaseClientApplication *TCPAcceptor::GetApplication() {
-	return _pApplication;
+BaseClientApplication *TCPAcceptor::GetApplication()
+{
+    return _pApplication;
 }
 
-vector<uint64_t> &TCPAcceptor::GetProtocolChain() {
-	return _protocolChain;
+vector<uint64_t> &TCPAcceptor::GetProtocolChain()
+{
+    return _protocolChain;
 }
 
-TCPAcceptor::operator string() {
-	return format("A(%d)", _inboundFd);
+TCPAcceptor::operator string()
+{
+    return format("A(%d)", _inboundFd);
 }
 
-void TCPAcceptor::GetStats(Variant &info) {
-	info = _parameters;
-	info["id"] = GetId();
-	info["enabled"] = (bool)_enabled;
-	info["acceptedConnectionsCount"] = _acceptedCount;
-	info["droppedConnectionsCount"] = _droppedCount;
-	if (_pApplication != NULL) {
-		info["appId"] = _pApplication->GetId();
-		info["appName"] = _pApplication->GetName();
-	}
+void TCPAcceptor::GetStats(Variant &info)
+{
+    info = _parameters;
+    info["id"] = GetId();
+    info["enabled"] = (bool)_enabled;
+    info["acceptedConnectionsCount"] = _acceptedCount;
+    info["droppedConnectionsCount"] = _droppedCount;
+    if (_pApplication != NULL)
+    {
+        info["appId"] = _pApplication->GetId();
+        info["appName"] = _pApplication->GetName();
+    }
 }
 
-bool TCPAcceptor::Enable() {
-	return _enabled;
+bool TCPAcceptor::Enable()
+{
+    return _enabled;
 }
 
-void TCPAcceptor::Enable(bool enabled) {
-	_enabled = enabled;
+void TCPAcceptor::Enable(bool enabled)
+{
+    _enabled = enabled;
 }
 
-bool TCPAcceptor::IsAlive() {
-	//TODO: Implement this. It must return true
-	//if this acceptor is operational
-	NYI;
-	return true;
+bool TCPAcceptor::IsAlive()
+{
+    //TODO: Implement this. It must return true
+    //if this acceptor is operational
+    NYI;
+    return true;
 }
 
 #endif /* NET_EPOLL */

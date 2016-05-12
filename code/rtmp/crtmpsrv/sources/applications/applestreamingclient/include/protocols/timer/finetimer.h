@@ -23,32 +23,34 @@
 
 #include "protocols/baseprotocol.h"
 
-namespace app_applestreamingclient {
+namespace app_applestreamingclient
+{
 
-	class FineTimer
-	: public BaseProtocol {
-	private:
-		map<uint32_t, uint32_t> _contextIds;
-		pthread_t _thread;
-		sockaddr_in _address;
-		int32_t _fd;
-		uint32_t _period;
-	public:
-		FineTimer();
-		virtual ~FineTimer();
+class FineTimer
+    : public BaseProtocol
+{
+private:
+    map<uint32_t, uint32_t> _contextIds;
+    pthread_t _thread;
+    sockaddr_in _address;
+    int32_t _fd;
+    uint32_t _period;
+public:
+    FineTimer();
+    virtual ~FineTimer();
 
-		virtual bool Initialize(Variant &parameters);
-		virtual bool AllowFarProtocol(uint64_t type);
-		virtual bool AllowNearProtocol(uint64_t type);
-		virtual bool SignalInputData(int32_t recvAmount);
-		virtual bool SignalInputData(IOBuffer &buffer);
-		virtual bool SignalInputData(IOBuffer &buffer, sockaddr_in *pPeerAddress);
+    virtual bool Initialize(Variant &parameters);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
+    virtual bool SignalInputData(IOBuffer &buffer, sockaddr_in *pPeerAddress);
 
-		void RegisterContextId(uint32_t contextId);
-		void UnRegisterContextId(uint32_t contextId);
-	private:
-		static void* FineTimerWorker(void *pArg);
-	};
+    void RegisterContextId(uint32_t contextId);
+    void UnRegisterContextId(uint32_t contextId);
+private:
+    static void* FineTimerWorker(void *pArg);
+};
 }
 #endif	/* _FINETIMER_H */
 #endif /* HAS_MS_TIMER */

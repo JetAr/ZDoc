@@ -24,13 +24,14 @@
 #include "application/baseappprotocolhandler.h"
 
 class BaseRTMFPAppProtocolHandler
-: public BaseAppProtocolHandler {
+    : public BaseAppProtocolHandler
+{
 public:
-	BaseRTMFPAppProtocolHandler(Variant &configuration);
-	virtual ~BaseRTMFPAppProtocolHandler();
+    BaseRTMFPAppProtocolHandler(Variant &configuration);
+    virtual ~BaseRTMFPAppProtocolHandler();
 
-	virtual void RegisterProtocol(BaseProtocol *pProtocol);
-	virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
+    virtual void RegisterProtocol(BaseProtocol *pProtocol);
+    virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
 };
 
 

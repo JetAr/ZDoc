@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -34,76 +34,77 @@ class OutboundConnectivity;
 class InboundConnectivity;
 
 class DLLEXP RTSPProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 protected:
-	uint32_t _state;
-	bool _rtpData;
-	uint32_t _rtpDataLength;
-	uint32_t _rtpDataChanel;
-	Variant _inboundHeaders;
-	string _inboundContent;
-	uint32_t _contentLength;
-	SDP _inboundSDP;
-	BaseRTSPAppProtocolHandler *_pProtocolHandler;
-	IOBuffer _outputBuffer;
+    uint32_t _state;
+    bool _rtpData;
+    uint32_t _rtpDataLength;
+    uint32_t _rtpDataChanel;
+    Variant _inboundHeaders;
+    string _inboundContent;
+    uint32_t _contentLength;
+    SDP _inboundSDP;
+    BaseRTSPAppProtocolHandler *_pProtocolHandler;
+    IOBuffer _outputBuffer;
 
-	Variant _responseHeaders;
-	string _responseContent;
+    Variant _responseHeaders;
+    string _responseContent;
 
-	Variant _requestHeaders;
-	string _requestContent;
-	uint32_t _requestSequence;
+    Variant _requestHeaders;
+    string _requestContent;
+    uint32_t _requestSequence;
 
-	OutboundConnectivity *_pOutboundConnectivity;
-	InboundConnectivity *_pInboundConnectivity;
+    OutboundConnectivity *_pOutboundConnectivity;
+    InboundConnectivity *_pInboundConnectivity;
 public:
-	RTSPProtocol();
-	virtual ~RTSPProtocol();
+    RTSPProtocol();
+    virtual ~RTSPProtocol();
 
-	virtual IOBuffer * GetOutputBuffer();
-	virtual bool Initialize(Variant &parameters);
-	virtual void SetApplication(BaseClientApplication *pApplication);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SignalInputData(IOBuffer &buffer);
-	virtual void GetStats(Variant &info);
+    virtual IOBuffer * GetOutputBuffer();
+    virtual bool Initialize(Variant &parameters);
+    virtual void SetApplication(BaseClientApplication *pApplication);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
+    virtual void GetStats(Variant &info);
 
-	SDP &GetInboundSDP();
+    SDP &GetInboundSDP();
 
-	void ClearRequestMessage();
-	void PushRequestFirstLine(string method, string url, string version);
-	void PushRequestHeader(string name, string value);
-	void PushRequestContent(string outboundContent, bool append);
-	bool SendRequestMessage();
-	uint32_t LastRequestSequence();
-	Variant &GetRequestHeaders();
-	string &GetRequestContent();
+    void ClearRequestMessage();
+    void PushRequestFirstLine(string method, string url, string version);
+    void PushRequestHeader(string name, string value);
+    void PushRequestContent(string outboundContent, bool append);
+    bool SendRequestMessage();
+    uint32_t LastRequestSequence();
+    Variant &GetRequestHeaders();
+    string &GetRequestContent();
 
-	void ClearResponseMessage();
-	void PushResponseFirstLine(string version, uint32_t code, string reason);
-	void PushResponseHeader(string name, string value);
-	void PushResponseContent(string outboundContent, bool append);
-	bool SendResponseMessage();
+    void ClearResponseMessage();
+    void PushResponseFirstLine(string version, uint32_t code, string reason);
+    void PushResponseHeader(string name, string value);
+    void PushResponseContent(string outboundContent, bool append);
+    bool SendResponseMessage();
 
-	OutboundConnectivity * GetOutboundConnectivity(BaseInNetStream *pInNetStream);
-	void CloseOutboundConnectivity();
+    OutboundConnectivity * GetOutboundConnectivity(BaseInNetStream *pInNetStream);
+    void CloseOutboundConnectivity();
 
-	InboundConnectivity *GetInboundConnectivity(Variant &videoTrack,
-			Variant &audioTrack, string sdpStreamName);
-	void CloseInboundConnectivity();
+    InboundConnectivity *GetInboundConnectivity(Variant &videoTrack,
+            Variant &audioTrack, string sdpStreamName);
+    void CloseInboundConnectivity();
 
-	string GetTransportHeaderLine(bool isAudio);
+    string GetTransportHeaderLine(bool isAudio);
 
-	bool SendRaw(uint8_t *pBuffer, uint32_t length);
+    bool SendRaw(uint8_t *pBuffer, uint32_t length);
 
 private:
-	bool SendMessage(Variant &headers, string &content);
-	bool ParseHeaders(IOBuffer &buffer);
-	bool ParseInterleavedHeaders(IOBuffer &buffer);
-	bool ParseNormalHeaders(IOBuffer &buffer);
-	bool ParseFirstLine(string &line);
-	bool HandleRTSPMessage(IOBuffer &buffer);
+    bool SendMessage(Variant &headers, string &content);
+    bool ParseHeaders(IOBuffer &buffer);
+    bool ParseInterleavedHeaders(IOBuffer &buffer);
+    bool ParseNormalHeaders(IOBuffer &buffer);
+    bool ParseFirstLine(string &line);
+    bool HandleRTSPMessage(IOBuffer &buffer);
 };
 
 #endif	/* _RTSPPROTOCOL_H */

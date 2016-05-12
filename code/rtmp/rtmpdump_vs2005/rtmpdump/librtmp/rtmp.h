@@ -92,17 +92,17 @@ typedef struct RTMPChunk
 //z rtmp packet
 typedef struct RTMPPacket
 {
-	//z header type
+    //z header type
     uint8_t m_headerType;
-	//z packet type
+    //z packet type
     uint8_t m_packetType;
-	//z timestamp 是相对还是绝对的
+    //z timestamp 是相对还是绝对的
     uint8_t m_hasAbsTimestamp;	/* timestamp absolute or relative? */
-	//z 信道
+    //z 信道
     int m_nChannel;
-	//z 时间戳
+    //z 时间戳
     uint32_t m_nTimeStamp;	/* timestamp */
-	//z 在一个 long header 的最后4个bytes
+    //z 在一个 long header 的最后4个bytes
     int32_t m_nInfoField2;	/* last 4 bytes in a long header */
     uint32_t m_nBodySize;
     uint32_t m_nBytesRead;
@@ -112,12 +112,12 @@ typedef struct RTMPPacket
 
 typedef struct RTMPSockBuf
 {
-	//z 连接的套接字
+    //z 连接的套接字
     int sb_socket;
-	//z buf中还有多少字节未处理
+    //z buf中还有多少字节未处理
     int sb_size;		/* number of unprocessed bytes in buffer */
     char *sb_start;		/* pointer into sb_pBuffer of next byte to process */
-	//z 从socket读取过来的buf，大小为16k。
+    //z 从socket读取过来的buf，大小为16k。
     char sb_buf[RTMP_BUFFER_CACHE_SIZE];	/* data read from socket */
     int sb_timedout;
     void *sb_ssl;

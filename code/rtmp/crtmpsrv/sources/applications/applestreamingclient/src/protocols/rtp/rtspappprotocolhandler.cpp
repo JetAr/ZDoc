@@ -26,30 +26,36 @@
 using namespace app_applestreamingclient;
 
 RTSPAppProtocolHandler::RTSPAppProtocolHandler(Variant &configuration)
-: BaseRTSPAppProtocolHandler(configuration) {
+    : BaseRTSPAppProtocolHandler(configuration)
+{
 
 }
 
-RTSPAppProtocolHandler::~RTSPAppProtocolHandler() {
+RTSPAppProtocolHandler::~RTSPAppProtocolHandler()
+{
 }
 
-void RTSPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	BaseRTSPAppProtocolHandler::RegisterProtocol(pProtocol);
+void RTSPAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    BaseRTSPAppProtocolHandler::RegisterProtocol(pProtocol);
 }
 
 bool RTSPAppProtocolHandler::HandleRTSPRequest(RTSPProtocol *pFrom,
-		Variant &requestHeaders, string &content) {
-	return BaseRTSPAppProtocolHandler::HandleRTSPRequest(pFrom, requestHeaders,
-			content);
+        Variant &requestHeaders, string &content)
+{
+    return BaseRTSPAppProtocolHandler::HandleRTSPRequest(pFrom, requestHeaders,
+            content);
 }
 
 ClientContext * RTSPAppProtocolHandler::GetContext(uint32_t contextId,
-		uint64_t protocolType) {
-	ClientContext *pContext = ClientContext::GetContext(contextId,
-			GetApplication()->GetId(), protocolType);
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return NULL;
-	}
-	return pContext;
+        uint64_t protocolType)
+{
+    ClientContext *pContext = ClientContext::GetContext(contextId,
+                              GetApplication()->GetId(), protocolType);
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return NULL;
+    }
+    return pContext;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,27 +24,29 @@
 #include "application/baseclientapplication.h"
 class BaseRTMPProtocol;
 
-namespace app_samplefactory {
+namespace app_samplefactory
+{
 #ifdef HAS_PROTOCOL_RTMP
-	class RTMPAppProtocolHandler;
+class RTMPAppProtocolHandler;
 #endif /* HAS_PROTOCOL_RTMP */
-	class ProtocolFactory;
-	class DBAccessProtocolHandler;
+class ProtocolFactory;
+class DBAccessProtocolHandler;
 
-	class DLLEXP SampleFactoryApplication
-	: public BaseClientApplication {
-	private:
+class DLLEXP SampleFactoryApplication
+    : public BaseClientApplication
+{
+private:
 #ifdef HAS_PROTOCOL_RTMP
-		RTMPAppProtocolHandler *_pRTMPHandler;
+    RTMPAppProtocolHandler *_pRTMPHandler;
 #endif /* HAS_PROTOCOL_RTMP */
-		ProtocolFactory *_pFactory;
-		DBAccessProtocolHandler *_pDBAccessHandler;
-	public:
-		SampleFactoryApplication(Variant &configuration);
-		virtual ~SampleFactoryApplication();
+    ProtocolFactory *_pFactory;
+    DBAccessProtocolHandler *_pDBAccessHandler;
+public:
+    SampleFactoryApplication(Variant &configuration);
+    virtual ~SampleFactoryApplication();
 
-		virtual bool Initialize();
-	};
+    virtual bool Initialize();
+};
 }
 
 #endif	/* _SAMPLEFACTORYAPPLICATION_H */

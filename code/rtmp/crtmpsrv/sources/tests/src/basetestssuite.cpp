@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,11 +22,13 @@
 
 int BaseTestsSuite::_testsCount = 0;
 
-BaseTestsSuite::BaseTestsSuite() {
+BaseTestsSuite::BaseTestsSuite()
+{
 
 }
 
-BaseTestsSuite::~BaseTestsSuite() {
+BaseTestsSuite::~BaseTestsSuite()
+{
 }
 
 

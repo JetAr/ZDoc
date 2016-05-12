@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -21,15 +21,18 @@
 
 uint32_t BaseProtocolFactory::_idGenerator = 0;
 
-BaseProtocolFactory::BaseProtocolFactory() {
-	_id = ++_idGenerator;
+BaseProtocolFactory::BaseProtocolFactory()
+{
+    _id = ++_idGenerator;
 }
 
-BaseProtocolFactory::~BaseProtocolFactory() {
+BaseProtocolFactory::~BaseProtocolFactory()
+{
 }
 
-uint32_t BaseProtocolFactory::GetId() {
-	return _id;
+uint32_t BaseProtocolFactory::GetId()
+{
+    return _id;
 }
 
 

@@ -21,120 +21,138 @@
 #include "protocols/cli/inboundjsoncliprotocol.h"
 
 InboundJSONCLIProtocol::InboundJSONCLIProtocol()
-: InboundBaseCLIProtocol(PT_INBOUND_JSONCLI) {
-	_useLengthPadding = false;
+    : InboundBaseCLIProtocol(PT_INBOUND_JSONCLI)
+{
+    _useLengthPadding = false;
 }
 
-InboundJSONCLIProtocol::~InboundJSONCLIProtocol() {
+InboundJSONCLIProtocol::~InboundJSONCLIProtocol()
+{
 }
 
 #define MAX_COMMAND_LENGTH 1024
 
-bool InboundJSONCLIProtocol::Initialize(Variant &parameters) {
-	InboundBaseCLIProtocol::Initialize(parameters);
-	if (parameters["useLengthPadding"] == V_BOOL) {
-		_useLengthPadding = (bool)parameters["useLengthPadding"];
-	}
-	return true;
+bool InboundJSONCLIProtocol::Initialize(Variant &parameters)
+{
+    InboundBaseCLIProtocol::Initialize(parameters);
+    if (parameters["useLengthPadding"] == V_BOOL)
+    {
+        _useLengthPadding = (bool)parameters["useLengthPadding"];
+    }
+    return true;
 }
 
-bool InboundJSONCLIProtocol::SignalInputData(IOBuffer &buffer) {
-	//1. Get the buffer and the length
-	uint8_t *pBuffer = GETIBPOINTER(buffer);
-	uint32_t length = GETAVAILABLEBYTESCOUNT(buffer);
-	if (length == 0)
-		return true;
+bool InboundJSONCLIProtocol::SignalInputData(IOBuffer &buffer)
+{
+    //1. Get the buffer and the length
+    uint8_t *pBuffer = GETIBPOINTER(buffer);
+    uint32_t length = GETAVAILABLEBYTESCOUNT(buffer);
+    if (length == 0)
+        return true;
 
-	//2. Walk through the buffer and execute the commands
-	string command = "";
-	for (uint32_t i = 0; i < length; i++) {
-		if ((pBuffer[i] == 0x0d) || (pBuffer[i] == 0x0a)) {
-			if (command != "") {
-				if (!ParseCommand(command)) {
-					FATAL("Unable to parse command\n`%s`", STR(command));
-					return false;
-				}
-			}
-			command = "";
-			buffer.Ignore(i);
-			pBuffer = GETIBPOINTER(buffer);
-			length = GETAVAILABLEBYTESCOUNT(buffer);
-			i = 0;
-			continue;
-		}
-		command += (char) pBuffer[i];
-		if (command.length() >= MAX_COMMAND_LENGTH) {
-			FATAL("Command too long");
-			return false;
-		}
-	}
+    //2. Walk through the buffer and execute the commands
+    string command = "";
+    for (uint32_t i = 0; i < length; i++)
+    {
+        if ((pBuffer[i] == 0x0d) || (pBuffer[i] == 0x0a))
+        {
+            if (command != "")
+            {
+                if (!ParseCommand(command))
+                {
+                    FATAL("Unable to parse command\n`%s`", STR(command));
+                    return false;
+                }
+            }
+            command = "";
+            buffer.Ignore(i);
+            pBuffer = GETIBPOINTER(buffer);
+            length = GETAVAILABLEBYTESCOUNT(buffer);
+            i = 0;
+            continue;
+        }
+        command += (char) pBuffer[i];
+        if (command.length() >= MAX_COMMAND_LENGTH)
+        {
+            FATAL("Command too long");
+            return false;
+        }
+    }
 
-	//3. Done
-	return true;
+    //3. Done
+    return true;
 }
 
-bool InboundJSONCLIProtocol::SendMessage(Variant &message) {
-	string json;
-	if (!message.SerializeToJSON(json)) {
-		FATAL("Unable to serialize to JSON");
-		return false;
-	}
-	json += "\r\n\r\n";
-	if (_useLengthPadding) {
-		uint32_t size = htonl(json.length());
-		_outputBuffer.ReadFromBuffer((uint8_t *) & size, 4);
-	}
-	_outputBuffer.ReadFromString(json);
-	return EnqueueForOutbound();
+bool InboundJSONCLIProtocol::SendMessage(Variant &message)
+{
+    string json;
+    if (!message.SerializeToJSON(json))
+    {
+        FATAL("Unable to serialize to JSON");
+        return false;
+    }
+    json += "\r\n\r\n";
+    if (_useLengthPadding)
+    {
+        uint32_t size = htonl(json.length());
+        _outputBuffer.ReadFromBuffer((uint8_t *) & size, 4);
+    }
+    _outputBuffer.ReadFromString(json);
+    return EnqueueForOutbound();
 }
 
-bool InboundJSONCLIProtocol::ParseCommand(string &command) {
-	//1. Replace the '\\' escape sequence
-	replace(command, "\\\\", "_#slash#_");
+bool InboundJSONCLIProtocol::ParseCommand(string &command)
+{
+    //1. Replace the '\\' escape sequence
+    replace(command, "\\\\", "_#slash#_");
 
-	//2. Replace the '\ ' escape sequence
-	replace(command, "\\ ", "_#space#_");
+    //2. Replace the '\ ' escape sequence
+    replace(command, "\\ ", "_#space#_");
 
-	//2. Replace the '\=' escape sequence
-	replace(command, "\\=", "_#equal#_");
+    //2. Replace the '\=' escape sequence
+    replace(command, "\\=", "_#equal#_");
 
-	//3. Append "cmd=" in front of the command
-	command = "cmd=" + command;
-	INFO("command: `%s`",STR(command));
+    //3. Append "cmd=" in front of the command
+    command = "cmd=" + command;
+    INFO("command: `%s`",STR(command));
 
-	//4. create the map
-	map<string, string> rawMap = mapping(command, " ", "=", true);
+    //4. create the map
+    map<string, string> rawMap = mapping(command, " ", "=", true);
 
-	//5. Create the variant
-	Variant message;
-	message["command"] = rawMap["cmd"];
-	rawMap.erase("cmd");
+    //5. Create the variant
+    Variant message;
+    message["command"] = rawMap["cmd"];
+    rawMap.erase("cmd");
 
-	string key;
-	string value;
-	vector<string> list;
+    string key;
+    string value;
+    vector<string> list;
 
-	FOR_MAP(rawMap, string, string, i) {
-		key = lowercase(MAP_KEY(i));
-		replace(key, "_#space#_", " ");
-		replace(key, "_#slash#_", "\\");
-		replace(key, "_#equal#_", "=");
+    FOR_MAP(rawMap, string, string, i)
+    {
+        key = lowercase(MAP_KEY(i));
+        replace(key, "_#space#_", " ");
+        replace(key, "_#slash#_", "\\");
+        replace(key, "_#equal#_", "=");
 
-		value = MAP_VAL(i);
-		replace(value, "_#space#_", " ");
-		replace(value, "_#slash#_", "\\");
-		replace(value, "_#equal#_", "=");
+        value = MAP_VAL(i);
+        replace(value, "_#space#_", " ");
+        replace(value, "_#slash#_", "\\");
+        replace(value, "_#equal#_", "=");
 
-		list.clear();
-		split(value, ",", list);
-		if (list.size() != 1) {
+        list.clear();
+        split(value, ",", list);
+        if (list.size() != 1)
+        {
 
-		} else {
-			message["parameters"][key] = value;
-		}
-	}
+        }
+        else
+        {
+            message["parameters"][key] = value;
+        }
+    }
 
-	return ProcessMessage(message);
+    return ProcessMessage(message);
 }
 
 #endif /* HAS_PROTOCOL_CLI */

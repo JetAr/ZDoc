@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,16 +23,19 @@
 #include "proxypublishapplication.h"
 using namespace app_proxypublish;
 
-extern "C" BaseClientApplication *GetApplication_proxypublish(Variant configuration) {
-	ProxyPublishApplication *pApplication = new ProxyPublishApplication(
-			configuration);
-	return pApplication;
+extern "C" BaseClientApplication *GetApplication_proxypublish(Variant configuration)
+{
+    ProxyPublishApplication *pApplication = new ProxyPublishApplication(
+        configuration);
+    return pApplication;
 }
 
-extern "C" void ReleaseApplication_proxypublish(BaseClientApplication *pApplication) {
-	if (pApplication != NULL) {
-		delete pApplication;
-	}
+extern "C" void ReleaseApplication_proxypublish(BaseClientApplication *pApplication)
+{
+    if (pApplication != NULL)
+    {
+        delete pApplication;
+    }
 }
 
 

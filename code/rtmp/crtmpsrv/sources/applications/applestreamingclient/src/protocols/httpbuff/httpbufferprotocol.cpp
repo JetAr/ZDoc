@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,86 +25,104 @@
 using namespace app_applestreamingclient;
 
 HTTPBufferProtocol::HTTPBufferProtocol()
-: GenericProtocol(PT_HTTP_BUFF) {
-	_lastTimestamp = 0;
-	_lastAmount = 0;
-	_isEncrypted = false;
+    : GenericProtocol(PT_HTTP_BUFF)
+{
+    _lastTimestamp = 0;
+    _lastAmount = 0;
+    _isEncrypted = false;
 }
 
-HTTPBufferProtocol::~HTTPBufferProtocol() {
+HTTPBufferProtocol::~HTTPBufferProtocol()
+{
 }
 
-bool HTTPBufferProtocol::AllowFarProtocol(uint64_t type) {
-	return type == PT_OUTBOUND_HTTP;
+bool HTTPBufferProtocol::AllowFarProtocol(uint64_t type)
+{
+    return type == PT_OUTBOUND_HTTP;
 }
 
-bool HTTPBufferProtocol::AllowNearProtocol(uint64_t type) {
-	_isEncrypted = (type == PT_INBOUND_AES);
-	return true;
+bool HTTPBufferProtocol::AllowNearProtocol(uint64_t type)
+{
+    _isEncrypted = (type == PT_INBOUND_AES);
+    return true;
 }
 
-bool HTTPBufferProtocol::SignalInputData(int32_t recvAmount) {
-	NYIR;
+bool HTTPBufferProtocol::SignalInputData(int32_t recvAmount)
+{
+    NYIR;
 }
 
-bool HTTPBufferProtocol::SignalInputData(IOBuffer &buffer) {
-	//1. Get the context
-	ClientContext *pContext = GetContext();
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return false;
-	}
+bool HTTPBufferProtocol::SignalInputData(IOBuffer &buffer)
+{
+    //1. Get the context
+    ClientContext *pContext = GetContext();
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return false;
+    }
 
-	//2. Compute the speed
-	double currentTimestamp = 0;
-	GETCLOCKS(currentTimestamp);
+    //2. Compute the speed
+    double currentTimestamp = 0;
+    GETCLOCKS(currentTimestamp);
 
-	if (_lastTimestamp != 0) {
-		double instantTime = currentTimestamp - _lastTimestamp;
-		double instantAmount = ((TCPProtocol *) GetFarEndpoint())->GetDecodedBytesCount() - _lastAmount;
+    if (_lastTimestamp != 0)
+    {
+        double instantTime = currentTimestamp - _lastTimestamp;
+        double instantAmount = ((TCPProtocol *) GetFarEndpoint())->GetDecodedBytesCount() - _lastAmount;
 
-		pContext->SignalSpeedDetected(instantAmount, instantTime / CLOCKS_PER_SECOND);
-	}
+        pContext->SignalSpeedDetected(instantAmount, instantTime / CLOCKS_PER_SECOND);
+    }
 
-	_lastAmount = ((TCPProtocol *) GetFarEndpoint())->GetDecodedBytesCount();
-	GETCLOCKS(_lastTimestamp);
+    _lastAmount = ((TCPProtocol *) GetFarEndpoint())->GetDecodedBytesCount();
+    GETCLOCKS(_lastTimestamp);
 
-	if (_isEncrypted) {
-		if (!GetNearProtocol()->SignalInputData(buffer)) {
-			FATAL("Unable to signal upper protocols");
-			return false;
-		}
-	} else {
-		ClientContext *pContext = GetContext();
-		if (pContext == NULL) {
-			FATAL("Unable to get context");
-			return false;
-		}
+    if (_isEncrypted)
+    {
+        if (!GetNearProtocol()->SignalInputData(buffer))
+        {
+            FATAL("Unable to signal upper protocols");
+            return false;
+        }
+    }
+    else
+    {
+        ClientContext *pContext = GetContext();
+        if (pContext == NULL)
+        {
+            FATAL("Unable to get context");
+            return false;
+        }
 
-		if (!pContext->SignalAVDataAvailable(buffer)) {
-			FATAL("Unable to signal ts A/V data available");
-			return false;
-		}
-	}
+        if (!pContext->SignalAVDataAvailable(buffer))
+        {
+            FATAL("Unable to signal ts A/V data available");
+            return false;
+        }
+    }
 
-	//10. Signal the context about this finished chunk
-	if (TransferCompleted()) {
-		EnqueueForDelete();
-		ClientContext *pContext = GetContext();
-		if (pContext == NULL) {
-			FATAL("Unable to get context");
-			return false;
-		}
+    //10. Signal the context about this finished chunk
+    if (TransferCompleted())
+    {
+        EnqueueForDelete();
+        ClientContext *pContext = GetContext();
+        if (pContext == NULL)
+        {
+            FATAL("Unable to get context");
+            return false;
+        }
 
-		if (!pContext->SignalTSChunkComplete(GetNearProtocol()->GetId())) {
-			FATAL("Unable to signal ts chunk complete");
-			return false;
-		}
-	}
+        if (!pContext->SignalTSChunkComplete(GetNearProtocol()->GetId()))
+        {
+            FATAL("Unable to signal ts chunk complete");
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
-bool HTTPBufferProtocol::TransferCompleted() {
-	return ((OutboundHTTPProtocol *) GetFarProtocol())->TransferCompleted();
+bool HTTPBufferProtocol::TransferCompleted()
+{
+    return ((OutboundHTTPProtocol *) GetFarProtocol())->TransferCompleted();
 }

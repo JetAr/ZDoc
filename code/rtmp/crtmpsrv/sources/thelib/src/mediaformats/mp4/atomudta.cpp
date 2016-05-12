@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,45 +22,50 @@
 #include "mediaformats/mp4/mp4document.h"
 
 AtomUDTA::AtomUDTA(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BoxAtom(pDocument, type, size, start) {
-	_pMETA = NULL;
+    : BoxAtom(pDocument, type, size, start)
+{
+    _pMETA = NULL;
 }
 
-AtomUDTA::~AtomUDTA() {
+AtomUDTA::~AtomUDTA()
+{
 }
 
-bool AtomUDTA::Read() {
-	if (_pParent == NULL)
-		return SkipRead(false);
-	if (_pParent->GetTypeNumeric() != A_MOOV)
-		return SkipRead(false);
-	return BoxAtom::Read();
+bool AtomUDTA::Read()
+{
+    if (_pParent == NULL)
+        return SkipRead(false);
+    if (_pParent->GetTypeNumeric() != A_MOOV)
+        return SkipRead(false);
+    return BoxAtom::Read();
 }
 
-bool AtomUDTA::AtomCreated(BaseAtom *pAtom) {
-	switch (pAtom->GetTypeNumeric()) {
-		case A_META:
-			_pMETA = (AtomMETA *) pAtom;
-			return true;
-		case A_NAME:
-		case A__ALB:
-		case A__ART:
-		case A__CMT:
-		case A__CPY:
-		case A__DES:
-		case A__NAM:
-		case A__COM:
-		case A__GEN:
-		{
-			ADD_VECTOR_END(_metaFields, (AtomMetaField *) pAtom);
-			return true;
-		}
-		default:
-		{
-			FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
-			return false;
-		}
-	}
+bool AtomUDTA::AtomCreated(BaseAtom *pAtom)
+{
+    switch (pAtom->GetTypeNumeric())
+    {
+    case A_META:
+        _pMETA = (AtomMETA *) pAtom;
+        return true;
+    case A_NAME:
+    case A__ALB:
+    case A__ART:
+    case A__CMT:
+    case A__CPY:
+    case A__DES:
+    case A__NAM:
+    case A__COM:
+    case A__GEN:
+    {
+        ADD_VECTOR_END(_metaFields, (AtomMetaField *) pAtom);
+        return true;
+    }
+    default:
+    {
+        FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
+        return false;
+    }
+    }
 }
 
 #endif /* HAS_MEDIA_MP4 */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,36 +25,44 @@
 #include "application/baseclientapplication.h"
 
 BaseLiveFLVAppProtocolHandler::BaseLiveFLVAppProtocolHandler(Variant &configuration)
-: BaseAppProtocolHandler(configuration) {
+    : BaseAppProtocolHandler(configuration)
+{
 
 }
 
-BaseLiveFLVAppProtocolHandler::~BaseLiveFLVAppProtocolHandler() {
+BaseLiveFLVAppProtocolHandler::~BaseLiveFLVAppProtocolHandler()
+{
 }
 
-void BaseLiveFLVAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol) {
-	if (MAP_HAS1(_protocols, pProtocol->GetId())) {
-		ASSERT("Protocol ID %u already registered", pProtocol->GetId());
-		return;
-	}
-	if (pProtocol->GetType() != PT_INBOUND_LIVE_FLV) {
-		ASSERT("This protocol can't be registered here");
-		return;
-	}
-	_protocols[pProtocol->GetId()] = (InboundLiveFLVProtocol *) pProtocol;
-	FINEST("protocol %s registered to app %s", STR(*pProtocol), STR(GetApplication()->GetName()));
+void BaseLiveFLVAppProtocolHandler::RegisterProtocol(BaseProtocol *pProtocol)
+{
+    if (MAP_HAS1(_protocols, pProtocol->GetId()))
+    {
+        ASSERT("Protocol ID %u already registered", pProtocol->GetId());
+        return;
+    }
+    if (pProtocol->GetType() != PT_INBOUND_LIVE_FLV)
+    {
+        ASSERT("This protocol can't be registered here");
+        return;
+    }
+    _protocols[pProtocol->GetId()] = (InboundLiveFLVProtocol *) pProtocol;
+    FINEST("protocol %s registered to app %s", STR(*pProtocol), STR(GetApplication()->GetName()));
 }
 
-void BaseLiveFLVAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol) {
-	if (!MAP_HAS1(_protocols, pProtocol->GetId())) {
-		ASSERT("Protocol ID %u not registered", pProtocol->GetId());
-		return;
-	}
-	if (pProtocol->GetType() != PT_INBOUND_LIVE_FLV) {
-		ASSERT("This protocol can't be unregistered here");
-		return;
-	}
-	_protocols.erase(pProtocol->GetId());
-	FINEST("protocol %s unregistered from app %s", STR(*pProtocol), STR(GetApplication()->GetName()));
+void BaseLiveFLVAppProtocolHandler::UnRegisterProtocol(BaseProtocol *pProtocol)
+{
+    if (!MAP_HAS1(_protocols, pProtocol->GetId()))
+    {
+        ASSERT("Protocol ID %u not registered", pProtocol->GetId());
+        return;
+    }
+    if (pProtocol->GetType() != PT_INBOUND_LIVE_FLV)
+    {
+        ASSERT("This protocol can't be unregistered here");
+        return;
+    }
+    _protocols.erase(pProtocol->GetId());
+    FINEST("protocol %s unregistered from app %s", STR(*pProtocol), STR(GetApplication()->GetName()));
 }
 #endif /* HAS_PROTOCOL_LIVEFLV */

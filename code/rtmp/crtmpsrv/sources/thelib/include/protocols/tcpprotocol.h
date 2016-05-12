@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,24 +26,25 @@
 class IOHandler;
 
 class TCPProtocol
-: public BaseProtocol {
+    : public BaseProtocol
+{
 private:
-	IOHandler *_pCarrier;
-	IOBuffer _inputBuffer;
-	uint32_t _decodedBytesCount;
+    IOHandler *_pCarrier;
+    IOBuffer _inputBuffer;
+    uint32_t _decodedBytesCount;
 public:
-	TCPProtocol();
-	virtual ~TCPProtocol();
-	virtual bool Initialize(Variant &parameters);
-	virtual IOHandler *GetIOHandler();
-	virtual void SetIOHandler(IOHandler *pIOHandler);
-	virtual bool AllowFarProtocol(uint64_t type);
-	virtual bool AllowNearProtocol(uint64_t type);
-	virtual IOBuffer * GetInputBuffer();
-	virtual bool SignalInputData(int32_t recvAmount);
-	virtual bool SignalInputData(IOBuffer &buffer);
-	virtual bool EnqueueForOutbound();
-	virtual uint32_t GetDecodedBytesCount();
+    TCPProtocol();
+    virtual ~TCPProtocol();
+    virtual bool Initialize(Variant &parameters);
+    virtual IOHandler *GetIOHandler();
+    virtual void SetIOHandler(IOHandler *pIOHandler);
+    virtual bool AllowFarProtocol(uint64_t type);
+    virtual bool AllowNearProtocol(uint64_t type);
+    virtual IOBuffer * GetInputBuffer();
+    virtual bool SignalInputData(int32_t recvAmount);
+    virtual bool SignalInputData(IOBuffer &buffer);
+    virtual bool EnqueueForOutbound();
+    virtual uint32_t GetDecodedBytesCount();
 };
 
 

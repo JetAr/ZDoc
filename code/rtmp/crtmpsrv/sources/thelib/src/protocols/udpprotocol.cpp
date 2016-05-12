@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -22,75 +22,92 @@
 #include "netio/netio.h"
 
 UDPProtocol::UDPProtocol()
-: BaseProtocol(PT_UDP) {
-	_decodedBytesCount = 0;
-	_pCarrier = NULL;
+    : BaseProtocol(PT_UDP)
+{
+    _decodedBytesCount = 0;
+    _pCarrier = NULL;
 }
 
-UDPProtocol::~UDPProtocol() {
-	if (_pCarrier != NULL) {
-		IOHandler *pCarrier = _pCarrier;
-		_pCarrier = NULL;
-		pCarrier->SetProtocol(NULL);
-		delete pCarrier;
-	}
+UDPProtocol::~UDPProtocol()
+{
+    if (_pCarrier != NULL)
+    {
+        IOHandler *pCarrier = _pCarrier;
+        _pCarrier = NULL;
+        pCarrier->SetProtocol(NULL);
+        delete pCarrier;
+    }
 }
 
-bool UDPProtocol::Initialize(Variant &parameters) {
-	return true;
+bool UDPProtocol::Initialize(Variant &parameters)
+{
+    return true;
 }
 
-IOHandler *UDPProtocol::GetIOHandler() {
-	return _pCarrier;
+IOHandler *UDPProtocol::GetIOHandler()
+{
+    return _pCarrier;
 }
 
-void UDPProtocol::SetIOHandler(IOHandler *pIOHandler) {
-	if (pIOHandler != NULL) {
-		if (pIOHandler->GetType() != IOHT_UDP_CARRIER) {
-			ASSERT("This protocol accepts only UDP carrier");
-		}
-	}
-	_pCarrier = pIOHandler;
+void UDPProtocol::SetIOHandler(IOHandler *pIOHandler)
+{
+    if (pIOHandler != NULL)
+    {
+        if (pIOHandler->GetType() != IOHT_UDP_CARRIER)
+        {
+            ASSERT("This protocol accepts only UDP carrier");
+        }
+    }
+    _pCarrier = pIOHandler;
 }
 
-bool UDPProtocol::AllowFarProtocol(uint64_t type) {
-	WARN("This protocol doesn't accept any far protocol");
-	return false;
+bool UDPProtocol::AllowFarProtocol(uint64_t type)
+{
+    WARN("This protocol doesn't accept any far protocol");
+    return false;
 }
 
-bool UDPProtocol::AllowNearProtocol(uint64_t type) {
-	return true;
+bool UDPProtocol::AllowNearProtocol(uint64_t type)
+{
+    return true;
 }
 
-IOBuffer * UDPProtocol::GetInputBuffer() {
-	return &_inputBuffer;
+IOBuffer * UDPProtocol::GetInputBuffer()
+{
+    return &_inputBuffer;
 }
 
-bool UDPProtocol::SignalInputData(int32_t recvAmount) {
-	ASSERT("Operation not supported");
-	return false;
+bool UDPProtocol::SignalInputData(int32_t recvAmount)
+{
+    ASSERT("Operation not supported");
+    return false;
 }
 
-bool UDPProtocol::SignalInputData(int32_t recvAmount, sockaddr_in *pPeerAddress) {
-	_decodedBytesCount += recvAmount;
-	return _pNearProtocol->SignalInputData(_inputBuffer, pPeerAddress);
+bool UDPProtocol::SignalInputData(int32_t recvAmount, sockaddr_in *pPeerAddress)
+{
+    _decodedBytesCount += recvAmount;
+    return _pNearProtocol->SignalInputData(_inputBuffer, pPeerAddress);
 }
 
-bool UDPProtocol::SignalInputData(IOBuffer & /* ignored */) {
-	ASSERT("OPERATION NOT SUPPORTED");
-	return false;
+bool UDPProtocol::SignalInputData(IOBuffer & /* ignored */)
+{
+    ASSERT("OPERATION NOT SUPPORTED");
+    return false;
 }
 
-bool UDPProtocol::EnqueueForOutbound() {
-	if (_pCarrier == NULL) {
-		ASSERT("TCPProtocol has no carrier");
-		return false;
-	}
-	return _pCarrier->SignalOutputData();
+bool UDPProtocol::EnqueueForOutbound()
+{
+    if (_pCarrier == NULL)
+    {
+        ASSERT("TCPProtocol has no carrier");
+        return false;
+    }
+    return _pCarrier->SignalOutputData();
 }
 
-uint32_t UDPProtocol::GetDecodedBytesCount() {
-	return _decodedBytesCount;
+uint32_t UDPProtocol::GetDecodedBytesCount()
+{
+    return _decodedBytesCount;
 }
 
 

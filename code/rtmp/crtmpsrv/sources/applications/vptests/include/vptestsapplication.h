@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,29 +23,31 @@
 
 #include "application/baseclientapplication.h"
 
-namespace app_vptests {
+namespace app_vptests
+{
 #ifdef HAS_PROTOCOL_RTMP
-	class RTMPAppProtocolHandler;
+class RTMPAppProtocolHandler;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_VAR
-	class VariantAppProtocolHandler;
+class VariantAppProtocolHandler;
 #endif /* HAS_PROTOCOL_VAR */
 
-	class VPTestsApplication
-	: public BaseClientApplication {
-	private:
+class VPTestsApplication
+    : public BaseClientApplication
+{
+private:
 #ifdef HAS_PROTOCOL_RTMP
-		RTMPAppProtocolHandler *_pRTMPHandler;
+    RTMPAppProtocolHandler *_pRTMPHandler;
 #endif /* HAS_PROTOCOL_RTMP */
 #ifdef HAS_PROTOCOL_VAR
-		VariantAppProtocolHandler *_pVariantHandler;
+    VariantAppProtocolHandler *_pVariantHandler;
 #endif /* HAS_PROTOCOL_VAR */
-	public:
-		VPTestsApplication(Variant &configuration);
-		virtual ~VPTestsApplication();
+public:
+    VPTestsApplication(Variant &configuration);
+    virtual ~VPTestsApplication();
 
-		virtual bool Initialize();
-	};
+    virtual bool Initialize();
+};
 }
 
 #endif	/* _VPTESTSAPPLICATION_H */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -30,19 +30,20 @@ class AtomUDTA;
 class AtomMETA;
 
 class AtomMOOV
-: public BoxAtom {
+    : public BoxAtom
+{
 private:
-	AtomMVHD *_pMVHD;
-	vector<AtomTRAK *> _tracks;
-	AtomUDTA *_pUDTA;
-	AtomMETA *_pMETA;
+    AtomMVHD *_pMVHD;
+    vector<AtomTRAK *> _tracks;
+    AtomUDTA *_pUDTA;
+    AtomMETA *_pMETA;
 public:
-	AtomMOOV(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomMOOV();
+    AtomMOOV(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomMOOV();
 
-	vector<AtomTRAK *> GetTracks();
+    vector<AtomTRAK *> GetTracks();
 protected:
-	virtual bool AtomCreated(BaseAtom *pAtom);
+    virtual bool AtomCreated(BaseAtom *pAtom);
 };
 
 #endif	/* _ATOMMOOV_H */

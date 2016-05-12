@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,11 +24,12 @@
 #include "streaming/baseinstream.h"
 
 class DLLEXP BaseInNetStream
-: public BaseInStream {
+    : public BaseInStream
+{
 public:
-	BaseInNetStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			uint64_t type, string name);
-	virtual ~BaseInNetStream();
+    BaseInNetStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                    uint64_t type, string name);
+    virtual ~BaseInNetStream();
 };
 
 #endif	/* _BASEINNETSTREAM_H */

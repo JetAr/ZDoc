@@ -26,113 +26,128 @@
 using namespace app_applestreamingclient;
 
 VariantEventSink::VariantEventSink(uint32_t contextId)
-: BaseEventSink(EVENT_SYNC_VARIANT, contextId) {
+    : BaseEventSink(EVENT_SYNC_VARIANT, contextId)
+{
 }
 
-VariantEventSink::~VariantEventSink() {
+VariantEventSink::~VariantEventSink()
+{
 }
 
-bool VariantEventSink::SignalStreamRegistered(string streamName) {
-	if (MAP_HAS1(_streamNames, streamName))
-		return true;
-	_streamNames[streamName] = streamName;
+bool VariantEventSink::SignalStreamRegistered(string streamName)
+{
+    if (MAP_HAS1(_streamNames, streamName))
+        return true;
+    _streamNames[streamName] = streamName;
 #ifdef ANDROID
-	Variant message;
-	message["eventtype"] = "localuri";
-	message["localuri"] = GetRTSPHost() + streamName;
-	message["reason"] = "start";
-	return CallJava(message);
+    Variant message;
+    message["eventtype"] = "localuri";
+    message["localuri"] = GetRTSPHost() + streamName;
+    message["reason"] = "start";
+    return CallJava(message);
 #else
-	return true;
+    return true;
 #endif
 }
 
-bool VariantEventSink::SignalStreamUnRegistered(string streamName) {
-	_streamNames.erase(streamName);
-	return true;
+bool VariantEventSink::SignalStreamUnRegistered(string streamName)
+{
+    _streamNames.erase(streamName);
+    return true;
 }
 
-bool VariantEventSink::SignalUpgradeBandwidth(uint32_t oldBw, uint32_t newBw) {
+bool VariantEventSink::SignalUpgradeBandwidth(uint32_t oldBw, uint32_t newBw)
+{
 #ifdef ANDROID
-	Variant message;
-	message["eventtype"] = "switchup";
-	message["oldBw"] = (uint32_t) oldBw;
-	message["newBw"] = (uint32_t) newBw;
-	if (!CallJava(message)) {
-		FATAL("Unable to call java");
-		return false;
-	}
+    Variant message;
+    message["eventtype"] = "switchup";
+    message["oldBw"] = (uint32_t) oldBw;
+    message["newBw"] = (uint32_t) newBw;
+    if (!CallJava(message))
+    {
+        FATAL("Unable to call java");
+        return false;
+    }
 
-	message.Reset();
-	message["eventtype"] = "localuri";
-	message["localuri"] = GetRTSPHost() + MAP_VAL(_streamNames.begin());
-	message["reason"] = "switchup";
-	return CallJava(message);
+    message.Reset();
+    message["eventtype"] = "localuri";
+    message["localuri"] = GetRTSPHost() + MAP_VAL(_streamNames.begin());
+    message["reason"] = "switchup";
+    return CallJava(message);
 #else
-	return true;
+    return true;
 #endif
 }
 
-bool VariantEventSink::SignalDowngradeBandwidth(uint32_t oldBw, uint32_t newBw) {
+bool VariantEventSink::SignalDowngradeBandwidth(uint32_t oldBw, uint32_t newBw)
+{
 #ifdef ANDROID
-	Variant message;
-	message["eventtype"] = "switchdown";
-	message["oldBw"] = (uint32_t) oldBw;
-	message["newBw"] = (uint32_t) newBw;
-	if (!CallJava(message)) {
-		FATAL("Unable to call java");
-		return false;
-	}
+    Variant message;
+    message["eventtype"] = "switchdown";
+    message["oldBw"] = (uint32_t) oldBw;
+    message["newBw"] = (uint32_t) newBw;
+    if (!CallJava(message))
+    {
+        FATAL("Unable to call java");
+        return false;
+    }
 
-	message.Reset();
-	message["eventtype"] = "localuri";
-	message["localuri"] = GetRTSPHost() + MAP_VAL(_streamNames.begin());
-	message["reason"] = "switchdown";
-	return CallJava(message);
+    message.Reset();
+    message["eventtype"] = "localuri";
+    message["localuri"] = GetRTSPHost() + MAP_VAL(_streamNames.begin());
+    message["reason"] = "switchdown";
+    return CallJava(message);
 #else
-	return true;
+    return true;
 #endif
 }
 
-vector<string> VariantEventSink::GetStreamNames() {
-	vector<string> result;
+vector<string> VariantEventSink::GetStreamNames()
+{
+    vector<string> result;
 
-	FOR_MAP(_streamNames, string, string, i) {
-		ADD_VECTOR_END(result, MAP_KEY(i));
-	}
+    FOR_MAP(_streamNames, string, string, i)
+    {
+        ADD_VECTOR_END(result, MAP_KEY(i));
+    }
 
-	return result;
+    return result;
 }
 
 #ifdef ANDROID
 
-bool VariantEventSink::CallJava(Variant& message) {
-	ClientContext *pContext = GetContext();
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return false;
-	}
-	AppleStreamingClientApplication *pApp = pContext->GetApplication();
-	if (pApp == NULL) {
-		FATAL("Unable to get the application");
-		return false;
-	}
-	CallBackInfo &ci = pApp->GetJavaCallBackInterface();
-	FINEST("CallJava message:\n%s", STR(message.ToString()));
-	return ::CallJava(ci, message);
+bool VariantEventSink::CallJava(Variant& message)
+{
+    ClientContext *pContext = GetContext();
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return false;
+    }
+    AppleStreamingClientApplication *pApp = pContext->GetApplication();
+    if (pApp == NULL)
+    {
+        FATAL("Unable to get the application");
+        return false;
+    }
+    CallBackInfo &ci = pApp->GetJavaCallBackInterface();
+    FINEST("CallJava message:\n%s", STR(message.ToString()));
+    return ::CallJava(ci, message);
 }
 
-string VariantEventSink::GetRTSPHost() {
-	if (_rtspHost != "")
-		return _rtspHost;
-	ClientContext *pContext = GetContext();
-	if (pContext == NULL) {
-		FATAL("Unable to get context");
-		return false;
-	}
-	AppleStreamingClientApplication *pApp = pContext->GetApplication();
-	_rtspHost = (string) pApp->GetConfiguration()["rtspHost"];
-	return _rtspHost;
+string VariantEventSink::GetRTSPHost()
+{
+    if (_rtspHost != "")
+        return _rtspHost;
+    ClientContext *pContext = GetContext();
+    if (pContext == NULL)
+    {
+        FATAL("Unable to get context");
+        return false;
+    }
+    AppleStreamingClientApplication *pApp = pContext->GetApplication();
+    _rtspHost = (string) pApp->GetConfiguration()["rtspHost"];
+    return _rtspHost;
 }
 #endif
 

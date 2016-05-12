@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -43,69 +43,74 @@
 
 //2.4.4.8
 
-typedef struct _TSStreamInfo {
-	uint8_t streamType; //Table 2-29 : Stream type assignments
-	uint16_t elementaryPID;
-	uint16_t esInfoLength;
-	vector<StreamDescriptor> esDescriptors;
+typedef struct _TSStreamInfo
+{
+    uint8_t streamType; //Table 2-29 : Stream type assignments
+    uint16_t elementaryPID;
+    uint16_t esInfoLength;
+    vector<StreamDescriptor> esDescriptors;
 
-	_TSStreamInfo() {
-		streamType = 0;
-		elementaryPID = 0;
-		esInfoLength = 0;
-	}
+    _TSStreamInfo()
+    {
+        streamType = 0;
+        elementaryPID = 0;
+        esInfoLength = 0;
+    }
 
-	string toString(int32_t indent) {
-		string result = format("%sstreamType: %hhx; elementaryPID: %hu; esInfoLength: %hu; descriptors count: %zu\n",
-				STR(string(indent, '\t')),
-				streamType, elementaryPID, esInfoLength, esDescriptors.size());
-		for (uint32_t i = 0; i < esDescriptors.size(); i++) {
-			result += format("%s%s", STR(string(indent + 1, '\t')), STR(esDescriptors[i]));
-			if (i != esDescriptors.size() - 1)
-				result += "\n";
-		}
-		return result;
-	}
+    string toString(int32_t indent)
+    {
+        string result = format("%sstreamType: %hhx; elementaryPID: %hu; esInfoLength: %hu; descriptors count: %zu\n",
+                               STR(string(indent, '\t')),
+                               streamType, elementaryPID, esInfoLength, esDescriptors.size());
+        for (uint32_t i = 0; i < esDescriptors.size(); i++)
+        {
+            result += format("%s%s", STR(string(indent + 1, '\t')), STR(esDescriptors[i]));
+            if (i != esDescriptors.size() - 1)
+                result += "\n";
+        }
+        return result;
+    }
 } TSStreamInfo;
 
 //iso13818-1.pdf page 64/174
 //Table 2-28 ‚Äö√Ñ√¨ Transport Stream program map section
 
-class TSPacketPMT {
+class TSPacketPMT
+{
 private:
-	//fields
-	uint8_t _tableId;
-	bool _sectionSyntaxIndicator;
-	bool _reserved1;
-	uint8_t _reserved2;
-	uint16_t _sectionLength;
-	uint16_t _programNumber;
-	uint8_t _reserved3;
-	uint8_t _versionNumber;
-	bool _currentNextIndicator;
-	uint8_t _sectionNumber;
-	uint8_t _lastSectionNumber;
-	uint8_t _reserved4;
-	uint16_t _pcrPid;
-	uint8_t _reserved5;
-	uint16_t _programInfoLength;
-	uint32_t _crc;
+    //fields
+    uint8_t _tableId;
+    bool _sectionSyntaxIndicator;
+    bool _reserved1;
+    uint8_t _reserved2;
+    uint16_t _sectionLength;
+    uint16_t _programNumber;
+    uint8_t _reserved3;
+    uint8_t _versionNumber;
+    bool _currentNextIndicator;
+    uint8_t _sectionNumber;
+    uint8_t _lastSectionNumber;
+    uint8_t _reserved4;
+    uint16_t _pcrPid;
+    uint8_t _reserved5;
+    uint16_t _programInfoLength;
+    uint32_t _crc;
 
-	//internal variables
-	vector<StreamDescriptor> _programInfoDescriptors;
-	map<uint16_t, TSStreamInfo> _streams;
+    //internal variables
+    vector<StreamDescriptor> _programInfoDescriptors;
+    map<uint16_t, TSStreamInfo> _streams;
 public:
-	TSPacketPMT();
-	virtual ~TSPacketPMT();
+    TSPacketPMT();
+    virtual ~TSPacketPMT();
 
-	operator string();
+    operator string();
 
-	uint16_t GetProgramNumber();
-	uint32_t GetCRC();
-	map<uint16_t, TSStreamInfo> & GetStreamsInfo();
+    uint16_t GetProgramNumber();
+    uint32_t GetCRC();
+    map<uint16_t, TSStreamInfo> & GetStreamsInfo();
 
-	bool Read(uint8_t *pBuffer, uint32_t &cursor, uint32_t maxCursor);
-	static uint32_t PeekCRC(uint8_t *pBuffer, uint32_t cursor, uint32_t maxCursor);
+    bool Read(uint8_t *pBuffer, uint32_t &cursor, uint32_t maxCursor);
+    static uint32_t PeekCRC(uint8_t *pBuffer, uint32_t cursor, uint32_t maxCursor);
 };
 
 

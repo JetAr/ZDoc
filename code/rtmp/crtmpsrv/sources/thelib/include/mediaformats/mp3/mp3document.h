@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,26 +24,27 @@
 #include "mediaformats/basemediadocument.h"
 
 class MP3Document
-: public BaseMediaDocument {
+    : public BaseMediaDocument
+{
 private:
-	//ver/layer/bitRateIndex
-	static int32_t _bitRates[4][4][16];
-	static int32_t _samplingRates[4][4];
-	static string _versionNames[4];
-	static string _layerNames[4];
-	static map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, uint64_t > > > > > _frameSizes;
-	Variant _tags;
+    //ver/layer/bitRateIndex
+    static int32_t _bitRates[4][4][16];
+    static int32_t _samplingRates[4][4];
+    static string _versionNames[4];
+    static string _layerNames[4];
+    static map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, map<uint8_t, uint64_t > > > > > _frameSizes;
+    Variant _tags;
 public:
-	MP3Document(Variant &metadata);
-	virtual ~MP3Document();
+    MP3Document(Variant &metadata);
+    virtual ~MP3Document();
 protected:
-	virtual bool ParseDocument();
-	virtual bool BuildFrames();
-	virtual Variant GetRTMPMeta();
+    virtual bool ParseDocument();
+    virtual bool BuildFrames();
+    virtual Variant GetRTMPMeta();
 private:
-	bool FindFrameData();
-	bool ParseMetadata();
-	void InitFrameSizes();
+    bool FindFrameData();
+    bool ParseMetadata();
+    void InitFrameSizes();
 };
 
 

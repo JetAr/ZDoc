@@ -24,15 +24,16 @@
 #include "utils/logging/baseloglocation.h"
 
 class LogCatLogLocation
-: public BaseLogLocation {
+    : public BaseLogLocation
+{
 private:
-	static int _levelsMap[];
+    static int _levelsMap[];
 public:
-	LogCatLogLocation();
-	virtual ~LogCatLogLocation();
+    LogCatLogLocation();
+    virtual ~LogCatLogLocation();
 
-	virtual void Log(int32_t level, string fileName, uint32_t lineNumber,
-			string functionName, string message);
+    virtual void Log(int32_t level, string fileName, uint32_t lineNumber,
+                     string functionName, string message);
 };
 
 #endif	/* _LOGCATLOGLOCATION_H */

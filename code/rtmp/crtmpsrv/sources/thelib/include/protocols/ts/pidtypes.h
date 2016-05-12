@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -28,17 +28,18 @@
 //Table 2-3 – PID table
 //WARN: This are not the values from the table. This are types-over-types
 
-typedef enum _PIDType {
-	PID_TYPE_UNKNOWN,
-	PID_TYPE_PAT,
-	PID_TYPE_PMT,
-	PID_TYPE_NIT,
-	PID_TYPE_CAT,
-	PID_TYPE_TSDT,
-	PID_TYPE_RESERVED,
-	PID_TYPE_AUDIOSTREAM,
-	PID_TYPE_VIDEOSTREAM,
-	PID_TYPE_NULL
+typedef enum _PIDType
+{
+    PID_TYPE_UNKNOWN,
+    PID_TYPE_PAT,
+    PID_TYPE_PMT,
+    PID_TYPE_NIT,
+    PID_TYPE_CAT,
+    PID_TYPE_TSDT,
+    PID_TYPE_RESERVED,
+    PID_TYPE_AUDIOSTREAM,
+    PID_TYPE_VIDEOSTREAM,
+    PID_TYPE_NULL
 } PIDType;
 
 #endif	/* _PIDTYPES_H */

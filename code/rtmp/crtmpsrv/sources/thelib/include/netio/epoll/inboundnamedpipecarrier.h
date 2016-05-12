@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,19 +24,20 @@
 #include "netio/epoll/iohandler.h"
 
 class InboundNamedPipeCarrier
-: public IOHandler {
+    : public IOHandler
+{
 private:
-	string _path;
+    string _path;
 public:
-	InboundNamedPipeCarrier(int32_t fd, string path);
-	virtual ~InboundNamedPipeCarrier();
+    InboundNamedPipeCarrier(int32_t fd, string path);
+    virtual ~InboundNamedPipeCarrier();
 
-	static InboundNamedPipeCarrier *Create(string path, uint16_t mode);
+    static InboundNamedPipeCarrier *Create(string path, uint16_t mode);
 
-	virtual bool SignalOutputData();
-	virtual bool OnEvent(struct epoll_event &event);
-	virtual operator string();
-	virtual void GetStats(Variant &info);
+    virtual bool SignalOutputData();
+    virtual bool OnEvent(struct epoll_event &event);
+    virtual operator string();
+    virtual void GetStats(Variant &info);
 };
 
 #endif	/* _INBOUNDNAMEDPIPECARRIER_H */

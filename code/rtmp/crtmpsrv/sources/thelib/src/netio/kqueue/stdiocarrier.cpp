@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -46,88 +46,103 @@ if (_writeDataEnabled) { \
 StdioCarrier *StdioCarrier::_pInstance = NULL;
 
 StdioCarrier::StdioCarrier()
-: IOHandler(fileno(stdin), fileno(stdout), IOHT_STDIO) {
-	IOHandlerManager::EnableReadData(this);
-	_writeDataEnabled = false;
+    : IOHandler(fileno(stdin), fileno(stdout), IOHT_STDIO)
+{
+    IOHandlerManager::EnableReadData(this);
+    _writeDataEnabled = false;
 }
 
-StdioCarrier *StdioCarrier::GetInstance(BaseProtocol *pProtocol) {
-	if (_pInstance == NULL) {
-		_pInstance = new StdioCarrier();
-		_pInstance->SetProtocol(pProtocol);
-		pProtocol->GetFarEndpoint()->SetIOHandler(_pInstance);
-		return _pInstance;
-	}
-	assert(_pInstance->_pProtocol != NULL);
-	assert(pProtocol != NULL);
-	if (_pInstance->_pProtocol->GetId() != pProtocol->GetId()) {
-		FATAL("Stdio carrier is already acquired");
-		return NULL;
-	}
-	return _pInstance;
+StdioCarrier *StdioCarrier::GetInstance(BaseProtocol *pProtocol)
+{
+    if (_pInstance == NULL)
+    {
+        _pInstance = new StdioCarrier();
+        _pInstance->SetProtocol(pProtocol);
+        pProtocol->GetFarEndpoint()->SetIOHandler(_pInstance);
+        return _pInstance;
+    }
+    assert(_pInstance->_pProtocol != NULL);
+    assert(pProtocol != NULL);
+    if (_pInstance->_pProtocol->GetId() != pProtocol->GetId())
+    {
+        FATAL("Stdio carrier is already acquired");
+        return NULL;
+    }
+    return _pInstance;
 }
 
-StdioCarrier::~StdioCarrier() {
-	_pInstance = NULL;
+StdioCarrier::~StdioCarrier()
+{
+    _pInstance = NULL;
 }
 
-bool StdioCarrier::OnEvent(struct kevent &event) {
-	int32_t recvAmount = 0;
+bool StdioCarrier::OnEvent(struct kevent &event)
+{
+    int32_t recvAmount = 0;
 
-	//3. Do the I/O
-	switch (event.filter) {
-		case EVFILT_READ:
-		{
-			IOBuffer *pInputBuffer = _pProtocol->GetInputBuffer();
-			assert(pInputBuffer != NULL);
-			if (!pInputBuffer->ReadFromStdio(event.ident, event.data, recvAmount)) {
-				FATAL("Unable to read data");
-				return false;
-			}
+    //3. Do the I/O
+    switch (event.filter)
+    {
+    case EVFILT_READ:
+    {
+        IOBuffer *pInputBuffer = _pProtocol->GetInputBuffer();
+        assert(pInputBuffer != NULL);
+        if (!pInputBuffer->ReadFromStdio(event.ident, event.data, recvAmount))
+        {
+            FATAL("Unable to read data");
+            return false;
+        }
 
-			return _pProtocol->SignalInputData(recvAmount);
-		}
-		case EVFILT_WRITE:
-		{
-			IOBuffer *pOutputBuffer = NULL;
+        return _pProtocol->SignalInputData(recvAmount);
+    }
+    case EVFILT_WRITE:
+    {
+        IOBuffer *pOutputBuffer = NULL;
 
-			while ((pOutputBuffer = _pProtocol->GetOutputBuffer()) != NULL) {
-				if (!pOutputBuffer->WriteToStdio(event.ident, event.data)) {
-					FATAL("Unable to send data");
-					IOHandlerManager::EnqueueForDelete(this);
-					return false;
-				}
-				if (GETAVAILABLEBYTESCOUNT(*pOutputBuffer) > 0) {
-					ENABLE_WRITE_DATA;
-					break;
-				}
-			}
-			if (pOutputBuffer == NULL) {
-				DISABLE_WRITE_DATA;
-			}
-			return true;
-		}
-		default:
-		{
-			ASSERT("Invalid state: %hu", event.filter);
+        while ((pOutputBuffer = _pProtocol->GetOutputBuffer()) != NULL)
+        {
+            if (!pOutputBuffer->WriteToStdio(event.ident, event.data))
+            {
+                FATAL("Unable to send data");
+                IOHandlerManager::EnqueueForDelete(this);
+                return false;
+            }
+            if (GETAVAILABLEBYTESCOUNT(*pOutputBuffer) > 0)
+            {
+                ENABLE_WRITE_DATA;
+                break;
+            }
+        }
+        if (pOutputBuffer == NULL)
+        {
+            DISABLE_WRITE_DATA;
+        }
+        return true;
+    }
+    default:
+    {
+        ASSERT("Invalid state: %hu", event.filter);
 
-			return false;
-		}
-	}
+        return false;
+    }
+    }
 }
 
-bool StdioCarrier::SignalOutputData() {
-	ENABLE_WRITE_DATA;
-	return true;
+bool StdioCarrier::SignalOutputData()
+{
+    ENABLE_WRITE_DATA;
+    return true;
 }
 
-StdioCarrier::operator string() {
-	if (_pProtocol != NULL)
-		return STR(*_pProtocol);
-	return format("IO(%d,%d)", _inboundFd, _outboundFd);
+StdioCarrier::operator string()
+{
+    if (_pProtocol != NULL)
+        return STR(*_pProtocol);
+    return format("IO(%d,%d)", _inboundFd, _outboundFd);
 }
 
-void StdioCarrier::GetStats(Variant &info) {
+void StdioCarrier::GetStats(Variant &info)
+{
 
 }
 

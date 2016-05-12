@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,30 +24,31 @@
 #include "streaming/baseoutfilestream.h"
 
 class DLLEXP OutFileRTMPFLVStream
-: public BaseOutFileStream {
+    : public BaseOutFileStream
+{
 private:
-	File _file;
-	double _timeBase;
-	IOBuffer _audioBuffer;
-	IOBuffer _videoBuffer;
-	uint32_t _prevTagSize;
+    File _file;
+    double _timeBase;
+    IOBuffer _audioBuffer;
+    IOBuffer _videoBuffer;
+    uint32_t _prevTagSize;
 public:
-	OutFileRTMPFLVStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name);
-	virtual ~OutFileRTMPFLVStream();
+    OutFileRTMPFLVStream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                         string name);
+    virtual ~OutFileRTMPFLVStream();
 
-	virtual bool SignalPlay(double &absoluteTimestamp, double &length);
-	virtual bool SignalPause();
-	virtual bool SignalResume();
-	virtual bool SignalSeek(double &absoluteTimestamp);
-	virtual bool SignalStop();
-	virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
-			uint32_t processedLength, uint32_t totalLength,
-			double absoluteTimestamp, bool isAudio);
-	virtual bool IsCompatibleWithType(uint64_t type);
-	virtual void SignalAttachedToInStream();
-	virtual void SignalDetachedFromInStream();
-	virtual void SignalStreamCompleted();
+    virtual bool SignalPlay(double &absoluteTimestamp, double &length);
+    virtual bool SignalPause();
+    virtual bool SignalResume();
+    virtual bool SignalSeek(double &absoluteTimestamp);
+    virtual bool SignalStop();
+    virtual bool FeedData(uint8_t *pData, uint32_t dataLength,
+                          uint32_t processedLength, uint32_t totalLength,
+                          double absoluteTimestamp, bool isAudio);
+    virtual bool IsCompatibleWithType(uint64_t type);
+    virtual void SignalAttachedToInStream();
+    virtual void SignalDetachedFromInStream();
+    virtual void SignalStreamCompleted();
 };
 
 

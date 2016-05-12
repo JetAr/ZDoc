@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,22 +23,24 @@
 
 #include "mediaformats/mp4/versionedatom.h"
 
-typedef struct _CTTSEntry {
-	uint32_t sampleCount;
-	int32_t sampleOffset;
+typedef struct _CTTSEntry
+{
+    uint32_t sampleCount;
+    int32_t sampleOffset;
 } CTTSEntry;
 
 class AtomCTTS
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	vector<CTTSEntry> _entries;
-	vector<int32_t> _normalizedEntries;
+    vector<CTTSEntry> _entries;
+    vector<int32_t> _normalizedEntries;
 public:
-	AtomCTTS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomCTTS();
-	vector<int32_t> GetEntries();
+    AtomCTTS(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomCTTS();
+    vector<int32_t> GetEntries();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMCTTS_H */

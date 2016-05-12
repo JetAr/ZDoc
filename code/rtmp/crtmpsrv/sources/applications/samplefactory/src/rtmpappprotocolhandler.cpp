@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -26,22 +26,26 @@
 using namespace app_samplefactory;
 
 RTMPAppProtocolHandler::RTMPAppProtocolHandler(Variant &configuration)
-: BaseRTMPAppProtocolHandler(configuration) {
+    : BaseRTMPAppProtocolHandler(configuration)
+{
 
 }
 
-RTMPAppProtocolHandler::~RTMPAppProtocolHandler() {
+RTMPAppProtocolHandler::~RTMPAppProtocolHandler()
+{
 }
 
-bool RTMPAppProtocolHandler::ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request) {
-	Variant params;
-	params["username"] = "john";
-	params["password"] = "passwd_msdbfhjdsfghjds";
-	if (!Controller::EnqueueDBRequest("http://www.k.ro", params, GetApplication()->GetName())) {
-		FATAL("Can't do HTTP request");
-		return false;
-	}
-	return true;
+bool RTMPAppProtocolHandler::ProcessInvokeConnect(BaseRTMPProtocol *pFrom, Variant &request)
+{
+    Variant params;
+    params["username"] = "john";
+    params["password"] = "passwd_msdbfhjdsfghjds";
+    if (!Controller::EnqueueDBRequest("http://www.k.ro", params, GetApplication()->GetName()))
+    {
+        FATAL("Can't do HTTP request");
+        return false;
+    }
+    return true;
 }
 #endif /* HAS_PROTOCOL_RTMP */
 

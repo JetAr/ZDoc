@@ -24,10 +24,11 @@
 #include "protocols/rtmfp/basertmfpprotocol.h"
 
 class OutboundRTMFPProtocol
-: public BaseRTMFPProtocol {
+    : public BaseRTMFPProtocol
+{
 public:
-	OutboundRTMFPProtocol();
-	virtual ~OutboundRTMFPProtocol();
+    OutboundRTMFPProtocol();
+    virtual ~OutboundRTMFPProtocol();
 };
 
 #endif	/* _OUTBOUNDRTMFPPROTOCOL_H */

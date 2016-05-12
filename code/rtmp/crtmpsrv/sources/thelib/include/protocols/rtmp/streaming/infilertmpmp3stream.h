@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,15 +25,16 @@
 #include "protocols/rtmp/streaming/infilertmpstream.h"
 
 class DLLEXP InFileRTMPMP3Stream
-: public InFileRTMPStream {
+    : public InFileRTMPStream
+{
 public:
-	InFileRTMPMP3Stream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
-			string name);
-	virtual ~InFileRTMPMP3Stream();
+    InFileRTMPMP3Stream(BaseProtocol *pProtocol, StreamsManager *pStreamsManager,
+                        string name);
+    virtual ~InFileRTMPMP3Stream();
 protected:
-	virtual bool BuildFrame(FileClass *pFile, MediaFrame &mediaFrame,
-			IOBuffer &buffer);
-	virtual bool FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame);
+    virtual bool BuildFrame(FileClass *pFile, MediaFrame &mediaFrame,
+                            IOBuffer &buffer);
+    virtual bool FeedMetaData(FileClass *pFile, MediaFrame &mediaFrame);
 };
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,18 +24,19 @@
 #include "mediaformats/mp4/baseatom.h"
 
 class AtomFTYP
-: public BaseAtom {
+    : public BaseAtom
+{
 private:
-	uint32_t _majorBrand;
-	uint32_t _minorVersion;
-	vector<uint32_t> _compatibleBrands;
+    uint32_t _majorBrand;
+    uint32_t _minorVersion;
+    vector<uint32_t> _compatibleBrands;
 public:
-	AtomFTYP(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomFTYP();
+    AtomFTYP(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomFTYP();
 
-	virtual bool Read();
+    virtual bool Read();
 
-	virtual string Hierarchy(uint32_t indent);
+    virtual string Hierarchy(uint32_t indent);
 };
 
 #endif	/* _ATOMFTYP_H */

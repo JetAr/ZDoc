@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -24,18 +24,19 @@
 #include "mediaformats/mp4/versionedatom.h"
 
 class AtomSTSZ
-: public VersionedAtom {
+    : public VersionedAtom
+{
 private:
-	uint32_t _sampleSize;
-	uint32_t _sampleCount;
-	vector<uint64_t> _entries;
+    uint32_t _sampleSize;
+    uint32_t _sampleCount;
+    vector<uint64_t> _entries;
 public:
-	AtomSTSZ(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
-	virtual ~AtomSTSZ();
+    AtomSTSZ(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start);
+    virtual ~AtomSTSZ();
 
-	vector<uint64_t> GetEntries();
+    vector<uint64_t> GetEntries();
 protected:
-	virtual bool ReadData();
+    virtual bool ReadData();
 };
 
 #endif	/* _ATOMSTSZ_H */

@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,53 +23,59 @@
 #include "mediaformats/mp4/atommetafield.h"
 
 AtomILST::AtomILST(MP4Document *pDocument, uint32_t type, uint64_t size, uint64_t start)
-: BoxAtom(pDocument, type, size, start) {
+    : BoxAtom(pDocument, type, size, start)
+{
 }
 
-AtomILST::~AtomILST() {
+AtomILST::~AtomILST()
+{
 }
 
-Variant AtomILST::GetVariant() {
-	Variant result;
+Variant AtomILST::GetVariant()
+{
+    Variant result;
 
-	FOR_VECTOR(_metaFields, i) {
-		result[_metaFields[i]->GetTypeString()] = _metaFields[i]->GetVariant();
-	}
-	return result;
+    FOR_VECTOR(_metaFields, i)
+    {
+        result[_metaFields[i]->GetTypeString()] = _metaFields[i]->GetVariant();
+    }
+    return result;
 }
 
-bool AtomILST::AtomCreated(BaseAtom *pAtom) {
-	switch (pAtom->GetTypeNumeric()) {
-		case A__NAM:
-		case A_CPIL:
-		case A_PGAP:
-		case A_TMPO:
-		case A__TOO:
-		case A__ART:
-		case A__ALB:
-		case A_GNRE:
-		case A_TRKN:
-		case A__DAY:
-		case A_DISK:
-		case A__CMT:
-		case A_COVR:
-		case A_AART:
-		case A__WRT:
-		case A__GRP:
-		case A__LYR:
-		case A_DESC:
-		case A_TVSH:
-		case A_TVEN:
-		case A_TVSN:
-		case A_TVES:
-			ADD_VECTOR_END(_metaFields, (AtomMetaField *) pAtom);
-			return true;
-		default:
-		{
-			FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
-			return false;
-		}
-	}
+bool AtomILST::AtomCreated(BaseAtom *pAtom)
+{
+    switch (pAtom->GetTypeNumeric())
+    {
+    case A__NAM:
+    case A_CPIL:
+    case A_PGAP:
+    case A_TMPO:
+    case A__TOO:
+    case A__ART:
+    case A__ALB:
+    case A_GNRE:
+    case A_TRKN:
+    case A__DAY:
+    case A_DISK:
+    case A__CMT:
+    case A_COVR:
+    case A_AART:
+    case A__WRT:
+    case A__GRP:
+    case A__LYR:
+    case A_DESC:
+    case A_TVSH:
+    case A_TVEN:
+    case A_TVSN:
+    case A_TVES:
+        ADD_VECTOR_END(_metaFields, (AtomMetaField *) pAtom);
+        return true;
+    default:
+    {
+        FATAL("Invalid atom type: %s", STR(pAtom->GetTypeString()));
+        return false;
+    }
+    }
 }
 
 #endif /* HAS_MEDIA_MP4 */

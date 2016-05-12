@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -25,65 +25,75 @@
 #include "application/clientapplicationmanager.h"
 using namespace app_samplefactory;
 
-Controller::Controller() {
+Controller::Controller()
+{
 
 }
 
-Controller::~Controller() {
+Controller::~Controller()
+{
 }
 
-bool Controller::EnqueueDBRequest(string uriString, Variant &payload, string applicationName) {
+bool Controller::EnqueueDBRequest(string uriString, Variant &payload, string applicationName)
+{
 
-	vector<uint64_t> protocolStackTypes =
-			ProtocolFactoryManager::ResolveProtocolChain("outboundHTTPDBAccess");
-	if (protocolStackTypes.size() == 0) {
-		FATAL("Unable to resolve protocol stack protocolStackTypes");
-		return false;
-	}
+    vector<uint64_t> protocolStackTypes =
+        ProtocolFactoryManager::ResolveProtocolChain("outboundHTTPDBAccess");
+    if (protocolStackTypes.size() == 0)
+    {
+        FATAL("Unable to resolve protocol stack protocolStackTypes");
+        return false;
+    }
 
-	URI uri;
+    URI uri;
 
-	if (!URI::FromString(uriString, true, uri)) {
-		FATAL("Invalid uri: %s", STR(uriString));
-		return false;
-	}
+    if (!URI::FromString(uriString, true, uri))
+    {
+        FATAL("Invalid uri: %s", STR(uriString));
+        return false;
+    }
 
-	if (uri.fullDocumentPath == "") {
-		uri.fullDocumentPath = "/";
-	}
+    if (uri.fullDocumentPath == "")
+    {
+        uri.fullDocumentPath = "/";
+    }
 
-	Variant parameters;
-	parameters["document"] = uri.fullDocumentPath;
-	parameters["host"] = uri.host;
-	parameters["applicationName"] = applicationName;
-	parameters["payload"] = payload;
+    Variant parameters;
+    parameters["document"] = uri.fullDocumentPath;
+    parameters["host"] = uri.host;
+    parameters["applicationName"] = applicationName;
+    parameters["payload"] = payload;
 
-	FINEST("parameters:\n%s", STR(parameters.ToString()));
+    FINEST("parameters:\n%s", STR(parameters.ToString()));
 
-	if (!TCPConnector<Controller>::Connect(uri.ip, uri.port, protocolStackTypes, parameters)) {
-		FATAL("Unable to open connection to origin");
-		return false;
-	}
+    if (!TCPConnector<Controller>::Connect(uri.ip, uri.port, protocolStackTypes, parameters))
+    {
+        FATAL("Unable to open connection to origin");
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
-bool Controller::SignalProtocolCreated(BaseProtocol *pProtocol, Variant &parameters) {
-	if (pProtocol == NULL) {
-		FATAL("Connection failed:\n%s", STR(parameters.ToString()));
-		return false;
-	}
+bool Controller::SignalProtocolCreated(BaseProtocol *pProtocol, Variant &parameters)
+{
+    if (pProtocol == NULL)
+    {
+        FATAL("Connection failed:\n%s", STR(parameters.ToString()));
+        return false;
+    }
 
-	BaseProtocol *pEndpoint = pProtocol->GetNearEndpoint();
-	if (pEndpoint->GetType() != PT_DBACCESS) {
-		FATAL("This is not waht we've expected");
-		return false;
-	}
+    BaseProtocol *pEndpoint = pProtocol->GetNearEndpoint();
+    if (pEndpoint->GetType() != PT_DBACCESS)
+    {
+        FATAL("This is not waht we've expected");
+        return false;
+    }
 
-	DBAccessProtocol *pODBA = (DBAccessProtocol *) pEndpoint;
+    DBAccessProtocol *pODBA = (DBAccessProtocol *) pEndpoint;
 
-	pODBA->SetApplication(ClientApplicationManager::FindAppByName(parameters["applicationName"]));
+    pODBA->SetApplication(ClientApplicationManager::FindAppByName(parameters["applicationName"]));
 
-	return pODBA->DoRequest(parameters);
+    return pODBA->DoRequest(parameters);
 }
 

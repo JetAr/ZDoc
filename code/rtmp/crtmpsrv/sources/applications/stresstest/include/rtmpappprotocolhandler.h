@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (c) 2010,
  *  Gavriloaie Eugen-Andrei (shiretu@gmail.com)
  *
@@ -23,23 +23,25 @@
 #define	_RTMPAPPPROTOCOLHANDLER_H
 
 #include "protocols/rtmp/basertmpappprotocolhandler.h"
-namespace app_stresstest {
+namespace app_stresstest
+{
 
-	class RTMPAppProtocolHandler
-	: public BaseRTMPAppProtocolHandler {
-	private:
-		uint32_t _activeConnections;
-	public:
-		RTMPAppProtocolHandler(Variant &configuration);
-		virtual ~RTMPAppProtocolHandler();
+class RTMPAppProtocolHandler
+    : public BaseRTMPAppProtocolHandler
+{
+private:
+    uint32_t _activeConnections;
+public:
+    RTMPAppProtocolHandler(Variant &configuration);
+    virtual ~RTMPAppProtocolHandler();
 
-		virtual void RegisterProtocol(BaseProtocol *pProtocol);
-		virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
+    virtual void RegisterProtocol(BaseProtocol *pProtocol);
+    virtual void UnRegisterProtocol(BaseProtocol *pProtocol);
 
-		void SpawnConnections();
-	private:
-		string GetStreamName(uint32_t index, bool randomAccessStreams);
-	};
+    void SpawnConnections();
+private:
+    string GetStreamName(uint32_t index, bool randomAccessStreams);
+};
 }
 #endif	/* _RTMPAPPPROTOCOLHANDLER_H */
 #endif /* HAS_PROTOCOL_RTMP */

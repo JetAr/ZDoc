@@ -59,10 +59,11 @@ if(MAP_HAS1((m),(k1))){ \
 
 #define TAG_KIND_OF(tag,kind) ((bool)(((tag)&getTagMask((kind)))==(kind)))
 
-class BasePlatform {
+class BasePlatform
+{
 public:
-	BasePlatform();
-	virtual ~BasePlatform();
+    BasePlatform();
+    virtual ~BasePlatform();
 };
 
 #endif /* _BASEPLATFORM_H */
