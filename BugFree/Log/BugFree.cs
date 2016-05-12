@@ -286,3 +286,10 @@ demuxing_decoding.c, filtering_audio.c, filtering_video.c, qsvdec.c, remuxing.c,
         0,  // first index element to read
         7   // number of primitives to draw
     );
+
+2016/05/12
+    1. 添加铅垂线
+    2. 场景设置，增加 scale
+    3. amf3 协议封装
+    http://wooce.iteye.com/blog/1396278
+    
