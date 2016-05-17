@@ -25,12 +25,13 @@ int main(int argc, char** argv)
     }
 
     // startup socket for windows.
+	/*
     WSADATA WSAData;
     if (WSAStartup(MAKEWORD(1, 1), &WSAData))
     {
         printf("WSAStartup failed.\n");
         return -1;
-    }
+    }*/
 
     srs_human_trace("rtmp url: %s", argv[1]);
     srs_rtmp_t rtmp = srs_rtmp_create(argv[1]);
@@ -83,7 +84,7 @@ rtmp_destroy:
     srs_rtmp_destroy(rtmp);
 
     // cleanup socket for windows.
-    WSACleanup();
+    //WSACleanup();
 
     return 0;
 }
