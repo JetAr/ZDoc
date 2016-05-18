@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;.\..\OpenSSL-Win32\include&quot;;.\..\zlib\include;E:\rapidsvn\rtmpdump\stdint;E:\spring_git\spring\vclibs\boost\include;"
+				AdditionalIncludeDirectories="&quot;..\OpenSSL-Win32\include&quot;;..\stdint;..\zlib\include;E:\rapidsvn\rtmpdump\stdint;E:\spring_git\spring\vclibs\boost\include;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="zlib.lib ssleay32MT.lib libeay32MT.lib Ws2_32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="E:\spring_git\spring\vclibs\boost\lib;&quot;E:\MyDoc\Svn\ZDoc\code\rtmp\rtmpdump_vs2005\rtmpdump\OpenSSL-Win32\lib\VC&quot;;.\..\zlib\lib"
+				AdditionalLibraryDirectories="E:\spring_git\spring\vclibs\boost\lib;&quot;..\OpenSSL-Win32\lib\VC&quot;;..\zlib\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"

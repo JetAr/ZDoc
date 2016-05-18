@@ -292,4 +292,3 @@ demuxing_decoding.c, filtering_audio.c, filtering_video.c, qsvdec.c, remuxing.c,
     2. 场景设置，增加 scale
     3. amf3 协议封装
     http://wooce.iteye.com/blog/1396278
-    
