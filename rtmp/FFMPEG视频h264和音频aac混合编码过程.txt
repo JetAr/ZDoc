@@ -1,4 +1,4 @@
-FFMPEG视频h264和音频aac混合编码过程
+FFMPEG瑙嗛h264鍜岄煶棰慳ac娣峰悎缂栫爜杩囩▼
 
 /*
 The MIT License (MIT)
