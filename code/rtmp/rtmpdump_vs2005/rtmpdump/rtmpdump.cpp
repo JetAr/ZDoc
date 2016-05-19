@@ -40,6 +40,7 @@
 #define ftello ftell //o64
 #include <io.h>
 #include <fcntl.h>
+#include <sys/types.h>
 #define	SET_BINMODE(f)	setmode(fileno(f), O_BINARY)
 #else
 #define	SET_BINMODE(f)
@@ -131,8 +132,6 @@ static const AVal av_conn = AVC("conn");
 static const AVal av_token = AVC("token");
 static const AVal av_playlist = AVC("playlist");
 static const AVal av_true = AVC("true");
-
-#define off_t long
 
 int
 OpenResumeFile(const char *flvFile,	// file name [in]
