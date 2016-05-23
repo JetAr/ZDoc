@@ -528,90 +528,90 @@ Download(RTMP * rtmp,		// connected RTMP object
 
     now = RTMP_GetTime();
     lastUpdate = now - 1000;
-    do
-    {
-        nRead = RTMP_Read(rtmp, buffer, bufferSize);
-        //RTMP_LogPrintf("nRead: %d\n", nRead);
-        if (nRead > 0)
-        {
-            if (fwrite(buffer, sizeof(unsigned char), nRead, file) !=
-                    (size_t) nRead)
-            {
-                RTMP_Log(RTMP_LOGERROR, "%s: Failed writing, exiting!", __FUNCTION__);
-                free(buffer);
-                return RD_FAILED;
-            }
-            size += nRead;
+	do
+	{
+		nRead = RTMP_Read(rtmp, buffer, bufferSize);
+		//RTMP_LogPrintf("nRead: %d\n", nRead);
+		if (nRead > 0)
+		{
+			if (fwrite(buffer, sizeof(unsigned char), nRead, file) !=
+				(size_t) nRead)
+			{
+				RTMP_Log(RTMP_LOGERROR, "%s: Failed writing, exiting!", __FUNCTION__);
+				free(buffer);
+				return RD_FAILED;
+			}
+			size += nRead;
 
-            //RTMP_LogPrintf("write %dbytes (%.1f kB)\n", nRead, nRead/1024.0);
-            if (duration <= 0)	// if duration unknown try to get it from the stream (onMetaData)
-                duration = RTMP_GetDuration(rtmp);
+			//RTMP_LogPrintf("write %dbytes (%.1f kB)\n", nRead, nRead/1024.0);
+			if (duration <= 0)	// if duration unknown try to get it from the stream (onMetaData)
+				duration = RTMP_GetDuration(rtmp);
 
-            if (duration > 0)
-            {
-                // make sure we claim to have enough buffer time!
-                if (!bOverrideBufferTime && bufferTime < (duration * 1000.0))
-                {
-                    bufferTime = (uint32_t) (duration * 1000.0) + 5000;	// extra 5sec to make sure we've got enough
+			if (duration > 0)
+			{
+				// make sure we claim to have enough buffer time!
+				if (!bOverrideBufferTime && bufferTime < (duration * 1000.0))
+				{
+					bufferTime = (uint32_t) (duration * 1000.0) + 5000;	// extra 5sec to make sure we've got enough
 
-                    RTMP_Log(RTMP_LOGDEBUG,
-                             "Detected that buffer time is less than duration, resetting to: %dms",
-                             bufferTime);
-                    //z 重设 buffer 长度
-                    RTMP_SetBufferMS(rtmp, bufferTime);
-                    //z 向服务器发送 UserControl 消息通知Buffer改变
-                    RTMP_UpdateBufferMS(rtmp);
-                }
+					RTMP_Log(RTMP_LOGDEBUG,
+						"Detected that buffer time is less than duration, resetting to: %dms",
+						bufferTime);
+					//z 重设 buffer 长度
+					RTMP_SetBufferMS(rtmp, bufferTime);
+					//z 向服务器发送 UserControl 消息通知Buffer改变
+					RTMP_UpdateBufferMS(rtmp);
+				}
 
-                //z 计算百分比
-                *percent = ((double) rtmp->m_read.timestamp) / (duration * 1000.0) * 100.0;
-                *percent = ((double) (int) (*percent * 10.0)) / 10.0;
-                if (bHashes)
-                {
-                    if (lastPercent + 1 <= *percent)
-                    {
-                        RTMP_LogStatus("#");
-                        lastPercent = (unsigned long) *percent;
-                    }
-                }
-                else
-                {
-                    //z 设置显示数据的更新时间间隔200ms。
-                    now = RTMP_GetTime();
-                    if (abs(now - lastUpdate) > 200)
-                    {
-                        RTMP_LogStatus("\r%.3f kB / %.2f sec (%.1f%%)",
-                                       (double) size / 1024.0,
-                                       (double) (rtmp->m_read.timestamp) / 1000.0, *percent);
-                        lastUpdate = now;
-                    }
-                }
-            }
-            else
-            {
-                //z 现在距离开机的毫秒数
-                now = RTMP_GetTime();
-                //z 每间隔200ms刷新一次数据
-                if (abs(now - lastUpdate) > 200)
-                {
-                    if (bHashes)
-                        RTMP_LogStatus("#");
-                    else
-                        RTMP_LogStatus("\r%.3f kB / %.2f sec", (double) size / 1024.0,
-                                       (double) (rtmp->m_read.timestamp) / 1000.0);
-                    lastUpdate = now;
-                }
-            }
-        }
+				//z 计算百分比
+				*percent = ((double) rtmp->m_read.timestamp) / (duration * 1000.0) * 100.0;
+				*percent = ((double) (int) (*percent * 10.0)) / 10.0;
+				if (bHashes)
+				{
+					if (lastPercent + 1 <= *percent)
+					{
+						RTMP_LogStatus("#");
+						lastPercent = (unsigned long) *percent;
+					}
+				}
+				else
+				{
+					//z 设置显示数据的更新时间间隔200ms。
+					now = RTMP_GetTime();
+					if (abs(now - lastUpdate) > 200)
+					{
+						RTMP_LogStatus("\r%.3f kB / %.2f sec (%.1f%%)",
+							(double) size / 1024.0,
+							(double) (rtmp->m_read.timestamp) / 1000.0, *percent);
+						lastUpdate = now;
+					}
+				}
+			}
+			else
+			{
+				//z 现在距离开机的毫秒数
+				now = RTMP_GetTime();
+				//z 每间隔200ms刷新一次数据
+				if (abs(now - lastUpdate) > 200)
+				{
+					if (bHashes)
+						RTMP_LogStatus("#");
+					else
+						RTMP_LogStatus("\r%.3f kB / %.2f sec", (double) size / 1024.0,
+						(double) (rtmp->m_read.timestamp) / 1000.0);
+					lastUpdate = now;
+				}
+			}
+		}
 #ifdef _DEBUG
-        else
-        {
-            RTMP_Log(RTMP_LOGDEBUG, "zero read!");
-        }
+		else
+		{
+			RTMP_Log(RTMP_LOGDEBUG, "zero read!");
+		}
 #endif
-    }
-    while (!RTMP_ctrlC && nRead > -1 && RTMP_IsConnected(rtmp) && !RTMP_IsTimedout(rtmp));
-    free(buffer);
+	}
+	while (!RTMP_ctrlC && nRead > -1 && RTMP_IsConnected(rtmp) && !RTMP_IsTimedout(rtmp));
+	free(buffer);
 
     //z nRead 是读取情况
     if (nRead < 0)
