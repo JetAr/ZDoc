@@ -75,3 +75,7 @@ CMakeCache.txt
 CMakeFiles/*
 #Makefile
 #cmake*
+
+# special
+*.pid
+netstackdump*
