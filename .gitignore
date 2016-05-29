@@ -37,7 +37,7 @@
 *.ilk
 *.obj
 *.pdb
-#*.suo
+*.suo
 *.htm
 *.idb
 *.manifest
