@@ -329,9 +329,9 @@ typedef USHORT (WINAPI *CaptureStackBackTraceType)(__in ULONG, __in ULONG, __out
 
 void printStack(void);
 
+// cpp
 CaptureStackBackTraceType pfCaptureStackBackTrace = (CaptureStackBackTraceType)(GetProcAddress(LoadLibrary(_T("kernel32.dll")), "RtlCaptureStackBackTrace"));
 
-// cpp
 void printStack(void)
 {  
 	char cBuff[1024] = {0};  

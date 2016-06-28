@@ -738,6 +738,8 @@ void usage(char *prog)
     RTMP_LogPrintf("packet.\n\n");
 }
 
+//z -z -r "rtmp://202.117.80.19:1935/live" -y live2 -o e:\adump.flv
+//z -z -r "rtmp://192.168.3.111/hls" -y test -o e:\adump.flv
 int
 main(int argc, char **argv)
 {
