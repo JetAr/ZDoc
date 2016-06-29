@@ -111,6 +111,7 @@ typedef struct MyAVPacketList
 {
     AVPacket pkt;
     struct MyAVPacketList *next;
+	//z 得到 serial 值
     int serial;
 } MyAVPacketList;
 
@@ -122,6 +123,7 @@ typedef struct PacketQueue
     int64_t duration;
     int abort_request;
     int serial;
+	//z 设置 mutex 以及 cond 
     SDL_mutex *mutex;
     SDL_cond *cond;
 } PacketQueue;
@@ -129,6 +131,7 @@ typedef struct PacketQueue
 #define VIDEO_PICTURE_QUEUE_SIZE 3
 #define SUBPICTURE_QUEUE_SIZE 16
 #define SAMPLE_QUEUE_SIZE 9
+//z 16
 #define FRAME_QUEUE_SIZE FFMAX(SAMPLE_QUEUE_SIZE, FFMAX(VIDEO_PICTURE_QUEUE_SIZE, SUBPICTURE_QUEUE_SIZE))
 
 typedef struct AudioParams
@@ -141,6 +144,7 @@ typedef struct AudioParams
     int bytes_per_sec;
 } AudioParams;
 
+//z 设置 clock 信息
 typedef struct Clock
 {
     double pts;           /* clock base */
