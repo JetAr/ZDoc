@@ -71,7 +71,3 @@ BOOL AudiodecodeDlg::OnInitDialog()
 
 	return TRUE;
 }
-
-
-
-

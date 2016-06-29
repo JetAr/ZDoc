@@ -70,7 +70,9 @@ BOOL VideodecodeDlg::OnInitDialog()
 	resloader.LoadString(IDS_VIDEODECODE_CODENUM);
 	m_videodecodelist.InsertColumn(3,resloader,LVCFMT_CENTER,50,0);
 	resloader.LoadString(IDS_VIDEODECODE_PTS);
-	m_videodecodelist.InsertColumn(4,resloader,LVCFMT_CENTER,50,0);
+	m_videodecodelist.InsertColumn(4,resloader,LVCFMT_CENTER,80,0);
+	resloader.LoadString(IDS_VIDEODECODE_DTS);
+	m_videodecodelist.InsertColumn(5,resloader,LVCFMT_CENTER,80,0);
 
 	return TRUE;
 }

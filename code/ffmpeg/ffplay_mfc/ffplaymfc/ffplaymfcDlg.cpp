@@ -210,6 +210,10 @@ BOOL CffplaymfcDlg::OnInitDialog()
 		m_inputurl.SetWindowText(argvPath);
 		OnBnClickedStart();
 	}
+	else
+	{
+		m_inputurl.SetWindowText(L"rtmp://127.0.0.1:1935/live/demo");
+	}
 
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE

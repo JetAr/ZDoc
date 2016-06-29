@@ -343,6 +343,7 @@ void SysinfoDlg::GetSysinfo(){
 		//注：vframe_index不可以直接赋值！
 		//务必使用f_index执行Format!再赋值！
 		lvitem.pszText=f_index.GetBuffer();
+		f_index.ReleaseBuffer();
 		//lvitem.pszText=(LPWSTR)(LPCTSTR)f_index;
 		//------------------------
 		sysinfosubup.m_sysinfoup.InsertItem(&lvitem);
@@ -386,6 +387,7 @@ void SysinfoDlg::GetSysinfo(){
 		//注：vframe_index不可以直接赋值！
 		//务必使用f_index执行Format!再赋值！
 		lvitem.pszText=f_index.GetBuffer();
+		f_index.ReleaseBuffer();
 		//------------------------
 		sysinfosubif.m_sysinfoif.InsertItem(&lvitem);
 		sysinfosubif.m_sysinfoif.SetItemText(nIndex,1,name);
@@ -442,6 +444,7 @@ void SysinfoDlg::GetSysinfo(){
 			lvitem.iItem=nIndex;
 
 			lvitem.pszText=f_index.GetBuffer();
+			f_index.ReleaseBuffer();
 			//------------------------
 			sysinfosubvc.m_sysinfovc.InsertItem(&lvitem);
 			sysinfosubvc.m_sysinfovc.SetItemText(nIndex,1,name);
@@ -477,6 +480,7 @@ void SysinfoDlg::GetSysinfo(){
 			lvitem.iItem=nIndex;
 
 			lvitem.pszText=f_index.GetBuffer();
+			f_index.ReleaseBuffer();
 			//------------------------
 			sysinfosubac.m_sysinfoac.InsertItem(&lvitem);
 			sysinfosubac.m_sysinfoac.SetItemText(nIndex,1,name);
@@ -491,6 +495,7 @@ void SysinfoDlg::GetSysinfo(){
 			lvitem.iItem=nIndex;
 
 			lvitem.pszText=f_index.GetBuffer();
+			f_index.ReleaseBuffer();
 			//------------------------
 			sysinfosuboc.m_sysinfooc.InsertItem(&lvitem);
 			sysinfosuboc.m_sysinfooc.SetItemText(nIndex,1,name);

@@ -501,7 +501,9 @@ int ffmfc_param_packet(VideoState *is,AVPacket *packet){
 	AVCodecContext *pCodecCtx = pFormatCtx->streams[video_stream]->codec;
 	int packet_size;
 	//避免数据太多，超过一定量之后，就会清零--------------------------
+	
 	if(packet_index>=MAX_PACKET_NUM){
+		packet_index -= MAX_PACKET_NUM;
 		dlg->SystemClear();
 	}
 
@@ -524,11 +526,10 @@ int ffmfc_param_vframe(VideoState *is,AVFrame *pFrame,AVPacket *packet){
 	
 	USES_CONVERSION;
 	//避免数据太多，超过一定量之后，就会清零--------------------------
-
 	if(vframe_index>=MAX_FRAME_NUM){
+		vframe_index -= MAX_FRAME_NUM;//z 
 		dlg->SystemClear();
 	}
-
 	//------------------------------
 	f_index.Format(_T("%d"),vframe_index);
 	//获取当前记录条数
@@ -541,8 +542,8 @@ int ffmfc_param_vframe(VideoState *is,AVFrame *pFrame,AVPacket *packet){
 	//注：vframe_index不可以直接赋值！
 	//务必使用f_index执行Format!再赋值！
 	lvitem.pszText=f_index.GetBuffer();
+	f_index.ReleaseBuffer();
 	//------------------------
-
 
 	switch(pFrame->key_frame){
 	case 0:
@@ -576,16 +577,21 @@ int ffmfc_param_vframe(VideoState *is,AVFrame *pFrame,AVPacket *packet){
 
 	reference.Format(_T("%d"),pFrame->reference);
 	pts.Format(_T("%d"),pFrame->pkt_pts);
-	dts.Format(_T("%d"),pFrame->pkt_dts);
+	//z dts.Format(_T("%d"),pFrame->pkt_dts);
+	//z dts.Format(_T("%I64d"),av_frame_get_best_effort_timestamp(pFrame));
 	codednum.Format(_T("%d"),pFrame->coded_picture_number);
+	dts.Format(_T("%d"),pFrame->display_picture_number);
 
 	//插入表格------------------------
+	dlg->vddlg->m_videodecodelist.SetRedraw(FALSE);
 	dlg->vddlg->m_videodecodelist.InsertItem(&lvitem);
 	dlg->vddlg->m_videodecodelist.SetItemText(nIndex,1,pict_type);
 	dlg->vddlg->m_videodecodelist.SetItemText(nIndex,2,key_frame);
 	dlg->vddlg->m_videodecodelist.SetItemText(nIndex,3,codednum);
 	dlg->vddlg->m_videodecodelist.SetItemText(nIndex,4,pts);
-	dlg->vddlg->m_videodecodelist.SendMessage(WM_VSCROLL, SB_BOTTOM, NULL);
+	dlg->vddlg->m_videodecodelist.SetItemText(nIndex,5,dts);
+	//z dlg->vddlg->m_videodecodelist.SendMessage(WM_VSCROLL, SB_BOTTOM, NULL);
+	dlg->vddlg->m_videodecodelist.SetRedraw(TRUE);
 	vframe_index++;
 	return 0;
 }
@@ -599,6 +605,7 @@ int ffmfc_param_aframe(VideoState *is,AVFrame *pFrame,AVPacket *packet){
 	//避免数据太多，超过一定量之后，就会清零--------------------------
 
 	if(aframe_index>=MAX_FRAME_NUM){
+		aframe_index-=MAX_FRAME_NUM;
 		dlg->SystemClear();
 	}
 	//------------------------------
@@ -615,14 +622,17 @@ int ffmfc_param_aframe(VideoState *is,AVFrame *pFrame,AVPacket *packet){
 	//注：frame_index不可以直接赋值！
 	//务必使用f_index执行Format!再赋值！
 	lvitem.pszText=f_index.GetBuffer();
+	f_index.ReleaseBuffer();
 	//------------------------
 	packet_size.Format(_T("%d"),packet->size);
 	pts.Format(_T("%d"),packet->pts);
 	//---------------
+	dlg->addlg->m_audiodecodelist.SetRedraw(FALSE);
 	dlg->addlg->m_audiodecodelist.InsertItem(&lvitem);
 	dlg->addlg->m_audiodecodelist.SetItemText(nIndex,1,packet_size);
 	dlg->addlg->m_audiodecodelist.SetItemText(nIndex,2,pts);
 	dlg->addlg->m_audiodecodelist.SendMessage(WM_VSCROLL, SB_BOTTOM, NULL);
+	dlg->addlg->m_audiodecodelist.SetRedraw(TRUE);
 	aframe_index++;
 	return 0;
 }
@@ -1087,7 +1097,7 @@ static void video_image_display(VideoState *is)
 		}else if(is_stretch==1){
 			calculate_display_rect_f(&rect, is->xleft, is->ytop, is->width, is->height, vp);
 		}
-		SDL_DisplayYUVOverlay(vp->bmp, &rect);
+		//z SDL_DisplayYUVOverlay(vp->bmp, &rect);
 	}
 }
 
