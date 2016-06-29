@@ -578,9 +578,9 @@ int ffmfc_param_vframe(VideoState *is,AVFrame *pFrame,AVPacket *packet){
 	reference.Format(_T("%d"),pFrame->reference);
 	pts.Format(_T("%d"),pFrame->pkt_pts);
 	//z dts.Format(_T("%d"),pFrame->pkt_dts);
-	//z dts.Format(_T("%I64d"),av_frame_get_best_effort_timestamp(pFrame));
+	dts.Format(_T("%I64d"),av_frame_get_best_effort_timestamp(pFrame));
 	codednum.Format(_T("%d"),pFrame->coded_picture_number);
-	dts.Format(_T("%d"),pFrame->display_picture_number);
+	//z dts.Format(_T("%d"),pFrame->display_picture_number);
 
 	//²åÈë±í¸ñ------------------------
 	dlg->vddlg->m_videodecodelist.SetRedraw(FALSE);

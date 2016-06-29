@@ -1,15 +1,15 @@
 /* 
- *
- * 视频之眼
- * Video Eye
- *
- * 雷霄骅 Lei Xiaohua
- * leixiaohua1020@126.com
- * 中国传媒大学/数字电视技术
- * Communication University of China / Digital TV Technology
- * http://blog.csdn.net/leixiaohua1020
- *
- */
+*
+* 视频之眼
+* Video Eye
+*
+* 雷霄骅 Lei Xiaohua
+* leixiaohua1020@126.com
+* 中国传媒大学/数字电视技术
+* Communication University of China / Digital TV Technology
+* http://blog.csdn.net/leixiaohua1020
+*
+*/
 
 
 #include "stdafx.h"
@@ -160,7 +160,7 @@ END_MESSAGE_MAP()
 
 IMPLEMENT_DYNAMIC(SysinfoDlg, CDialogEx)
 
-SysinfoDlg::SysinfoDlg(CWnd* pParent /*=NULL*/)
+	SysinfoDlg::SysinfoDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(SysinfoDlg::IDD, pParent)
 {
 
@@ -190,7 +190,7 @@ BOOL SysinfoDlg::OnInitDialog(){
 	CString resloader;
 	resloader.LoadString(IDS_SYSINFO);
 	SetWindowText(resloader);
-	
+
 	sysinfosubup.Create(IDD_SYSINFOSUB_UP,&m_sysinfotab);
 	sysinfosubif.Create(IDD_SYSINFOSUB_IF,&m_sysinfotab);
 	sysinfosubvc.Create(IDD_SYSINFOSUB_VC,&m_sysinfotab);
@@ -310,7 +310,7 @@ BOOL SysinfoDlg::OnInitDialog(){
 void SysinfoDlg::GetSysinfo(){
 
 
-//取得系统支持的格式信息（协议，封装格式，编码器）
+	//取得系统支持的格式信息（协议，封装格式，编码器）
 
 	av_register_all();
 	//初始化
@@ -324,7 +324,7 @@ void SysinfoDlg::GetSysinfo(){
 	while((*pup)!=NULL){
 		CString f_index,name,isread,iswrite,priv_data_size;
 		int nIndex=0;
-		
+
 #ifdef _UNICODE
 		name.Format(_T("%S"),(*pup)->name);
 #else
@@ -353,11 +353,8 @@ void SysinfoDlg::GetSysinfo(){
 		up_index++;
 	}
 
-
-
-
-	si.first_if= av_iformat_next(NULL);
-	si.first_c=av_codec_next(NULL);
+	si.first_if = av_iformat_next(NULL);
+	si.first_c = av_codec_next(NULL);
 
 	AVInputFormat *if_temp=si.first_if;
 	AVCodec *c_temp=si.first_c;
@@ -506,9 +503,6 @@ void SysinfoDlg::GetSysinfo(){
 		c_temp=c_temp->next;
 		c_index++;
 	}
-
-
-
 }
 
 void SysinfoDlg::OnSelchangeSysinfoTab(NMHDR *pNMHDR, LRESULT *pResult)

@@ -5905,3 +5905,101 @@
 2016/06/29 16:36:58 [info] 9780#8104: *36 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/06/29 16:36:58 [info] 9780#8104: *36 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/06/29 16:36:58 [info] 9780#8104: *36 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:54:55 [info] 9780#8104: *37 client connected '127.0.0.1'
+2016/06/29 16:54:55 [info] 9780#8104: *37 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:54:55 [info] 9780#8104: *37 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:54:55 [info] 9780#8104: *37 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:17 [info] 9780#8104: *38 client connected '127.0.0.1'
+2016/06/29 16:55:17 [info] 9780#8104: *38 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:17 [info] 9780#8104: *38 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:17 [info] 9780#8104: *38 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:20 [info] 9780#8104: *37 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:20 [info] 9780#8104: *37 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:20 [info] 9780#8104: *37 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:20 [info] 9780#8104: *37 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:21 [info] 9780#8104: *39 client connected '127.0.0.1'
+2016/06/29 16:55:21 [info] 9780#8104: *39 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:21 [info] 9780#8104: *39 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:21 [info] 9780#8104: *39 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:49 [info] 9780#8104: *39 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:49 [info] 9780#8104: *39 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:49 [info] 9780#8104: *39 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:49 [info] 9780#8104: *39 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:50 [info] 9780#8104: *40 client connected '127.0.0.1'
+2016/06/29 16:55:50 [info] 9780#8104: *40 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:50 [info] 9780#8104: *40 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:50 [info] 9780#8104: *40 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:58 [info] 9780#8104: *40 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:58 [info] 9780#8104: *40 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:55:58 [info] 9780#8104: *40 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:56:04 [info] 9780#8104: *41 client connected '127.0.0.1'
+2016/06/29 16:56:04 [info] 9780#8104: *41 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:56:04 [info] 9780#8104: *41 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:56:04 [info] 9780#8104: *41 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:56:25 [info] 9780#8104: *41 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:56:25 [info] 9780#8104: *41 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:56:25 [info] 9780#8104: *41 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:20 [info] 9780#8104: *42 client connected '127.0.0.1'
+2016/06/29 16:57:20 [info] 9780#8104: *42 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:20 [info] 9780#8104: *42 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:20 [info] 9780#8104: *42 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:29 [info] 9780#8104: *42 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:29 [info] 9780#8104: *42 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:29 [info] 9780#8104: *42 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:31 [info] 9780#8104: *43 client connected '127.0.0.1'
+2016/06/29 16:57:31 [info] 9780#8104: *43 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:31 [info] 9780#8104: *43 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:31 [info] 9780#8104: *43 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:37 [info] 9780#8104: *43 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:37 [info] 9780#8104: *43 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:37 [info] 9780#8104: *43 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:46 [info] 9780#8104: *44 client connected '127.0.0.1'
+2016/06/29 16:57:46 [info] 9780#8104: *44 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:46 [info] 9780#8104: *44 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:57:46 [info] 9780#8104: *44 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:58:20 [info] 9780#8104: *44 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:58:20 [info] 9780#8104: *44 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:58:20 [info] 9780#8104: *44 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:58:20 [info] 9780#8104: *44 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:59:04 [info] 9780#8104: *45 client connected '127.0.0.1'
+2016/06/29 16:59:04 [info] 9780#8104: *45 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:59:04 [info] 9780#8104: *45 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 16:59:04 [info] 9780#8104: *45 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:05:49 [info] 9780#8104: *45 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:05:49 [info] 9780#8104: *45 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:05:49 [info] 9780#8104: *45 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:06:13 [info] 9780#8104: *38 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:06:13 [info] 9780#8104: *38 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:06:13 [info] 9780#8104: *38 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:06:17 [info] 9780#8104: *46 client connected '127.0.0.1'
+2016/06/29 17:06:17 [info] 9780#8104: *46 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:06:17 [info] 9780#8104: *46 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:06:17 [info] 9780#8104: *46 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:10:56 [info] 9780#8104: *47 client connected '127.0.0.1'
+2016/06/29 17:10:56 [info] 9780#8104: *47 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:10:56 [info] 9780#8104: *47 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:10:56 [info] 9780#8104: *47 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:16:25 [info] 9780#8104: *48 client connected '127.0.0.1'
+2016/06/29 17:16:25 [info] 9780#8104: *48 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:16:25 [info] 9780#8104: *48 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:16:25 [info] 9780#8104: *48 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:18:57 [info] 9780#8104: *48 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:18:57 [info] 9780#8104: *48 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:18:57 [info] 9780#8104: *48 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:18:57 [info] 9780#8104: *48 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:18:57 [info] 9780#8104: *48 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:37:31 [info] 9780#8104: *47 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:37:31 [info] 9780#8104: *47 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:37:31 [info] 9780#8104: *47 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:37:31 [info] 9780#8104: *47 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:56:05 [info] 9780#8104: *49 client connected '127.0.0.1'
+2016/06/29 17:56:05 [info] 9780#8104: *49 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:56:05 [info] 9780#8104: *49 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:56:05 [info] 9780#8104: *49 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:56:20 [info] 9780#8104: *49 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:56:20 [info] 9780#8104: *49 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 17:56:20 [info] 9780#8104: *49 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 18:11:08 [info] 9780#8104: *50 client connected '127.0.0.1'
+2016/06/29 18:11:08 [info] 9780#8104: *50 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 18:11:08 [info] 9780#8104: *50 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/29 18:11:08 [info] 9780#8104: *50 play: name='demo' args='' start=0 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935

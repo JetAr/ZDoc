@@ -386,7 +386,6 @@ void CffplaymfcDlg::OnBnClickedVideodecode()
 	vddlg->ShowWindow(TRUE);
 }
 
-
 void CffplaymfcDlg::OnBnClickedAudiodecode()
 {
 	addlg->ShowWindow(TRUE);

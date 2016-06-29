@@ -19,9 +19,7 @@
 #include "VideodecodeDlg.h"
 #include "afxdialogex.h"
 
-
 // VideodecodeDlg ¶Ô»°¿ò
-
 IMPLEMENT_DYNAMIC(VideodecodeDlg, CDialogEx)
 
 VideodecodeDlg::VideodecodeDlg(CWnd* pParent /*=NULL*/)
@@ -82,7 +80,6 @@ void VideodecodeDlg::OnCustomdrawMyList ( NMHDR* pNMHDR, LRESULT* pResult )
 {
 	//This code based on Michael Dunn's excellent article on
 	//list control custom draw at http://www.codeproject.com/listctrl/lvcustomdraw.asp
-
 	NMLVCUSTOMDRAW* pLVCD = reinterpret_cast<NMLVCUSTOMDRAW*>( pNMHDR );
 
 	// Take the default processing unless we set this to something else below.
@@ -98,14 +95,11 @@ void VideodecodeDlg::OnCustomdrawMyList ( NMHDR* pNMHDR, LRESULT* pResult )
 	{
 		// This is the notification message for an item.  We'll request
 		// notifications before each subitem's prepaint stage.
-
 		*pResult = CDRF_NOTIFYSUBITEMDRAW;
 	}
 	else if ( (CDDS_ITEMPREPAINT | CDDS_SUBITEM) == pLVCD->nmcd.dwDrawStage )
 	{
-
 		COLORREF clrNewTextColor, clrNewBkColor;
-
 		int    nItem = static_cast<int>( pLVCD->nmcd.dwItemSpec );
 
 		CString strTemp = m_videodecodelist.GetItemText(nItem,1);
@@ -128,10 +122,7 @@ void VideodecodeDlg::OnCustomdrawMyList ( NMHDR* pNMHDR, LRESULT* pResult )
 		pLVCD->clrText = clrNewTextColor;
 		pLVCD->clrTextBk = clrNewBkColor;
 
-
 		// Tell Windows to paint the control itself.
 		*pResult = CDRF_DODEFAULT;
-
-
 	}
 }
