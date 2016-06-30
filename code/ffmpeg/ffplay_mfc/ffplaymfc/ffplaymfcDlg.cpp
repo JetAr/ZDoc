@@ -1,18 +1,18 @@
 /* 
- * FFplay for MFC
- *
- * 雷霄骅 Lei Xiaohua
- * leixiaohua1020@126.com
- * 中国传媒大学/数字电视技术
- * Communication University of China / Digital TV Technology
- *
- * http://blog.csdn.net/leixiaohua1020
- * 
- * 本工程将ffmpeg项目中的ffplay播放器（ffplay.c）移植到了VC的环境下。
- * 并且使用MFC做了一套简单的界面。
- * This software transplant ffplay to Microsoft VC++ environment. 
- * And use MFC to build a simple Graphical User Interface. 
- */
+* FFplay for MFC
+*
+* 雷霄骅 Lei Xiaohua
+* leixiaohua1020@126.com
+* 中国传媒大学/数字电视技术
+* Communication University of China / Digital TV Technology
+*
+* http://blog.csdn.net/leixiaohua1020
+* 
+* 本工程将ffmpeg项目中的ffplay播放器（ffplay.c）移植到了VC的环境下。
+* 并且使用MFC做了一套简单的界面。
+* This software transplant ffplay to Microsoft VC++ environment. 
+* And use MFC to build a simple Graphical User Interface. 
+*/
 
 #include "stdafx.h"
 #include "ffplaymfc.h"
@@ -33,13 +33,13 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// 对话框数据
+	// 对话框数据
 	enum { IDD = IDD_ABOUTBOX };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 	virtual BOOL OnInitDialog();
-// 实现
+	// 实现
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -605,7 +605,6 @@ void CffplaymfcDlg::OnLangEn()
 	CDialogEx::OnCancel();
 }
 
-
 void CffplaymfcDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	//调整播放进度条
@@ -616,14 +615,10 @@ void CffplaymfcDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
-
 void CffplaymfcDlg::OnWebsite()
 {
 	ShellExecuteA( NULL,"open","http://blog.csdn.net/leixiaohua1020",NULL,NULL,SW_SHOWNORMAL);
 }
-
-
-
 
 void CffplaymfcDlg::OnIdcancel()
 {
@@ -638,12 +633,10 @@ void CffplaymfcDlg::OnIdcancel()
 	}
 }
 
-
 void CffplaymfcDlg::OnWindowstretchKeepratio()
 {
 	ffmfc_stretch(0);
 }
-
 
 void CffplaymfcDlg::OnWindowstretchResize()
 {

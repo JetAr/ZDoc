@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffplay_vc2005", "ffplay_vc2005.vcproj", "{EA978BCA-5D2F-4D3B-9E0A-42C8255FFB64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA978BCA-5D2F-4D3B-9E0A-42C8255FFB64}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EA978BCA-5D2F-4D3B-9E0A-42C8255FFB64}.Debug|Win32.Build.0 = Debug|Win32
+		{EA978BCA-5D2F-4D3B-9E0A-42C8255FFB64}.Release|Win32.ActiveCfg = Release|Win32
+		{EA978BCA-5D2F-4D3B-9E0A-42C8255FFB64}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

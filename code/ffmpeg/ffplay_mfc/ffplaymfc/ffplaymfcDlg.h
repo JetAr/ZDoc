@@ -1,18 +1,18 @@
 /* 
- * FFplay for MFC
- *
- * 雷霄骅 Lei Xiaohua
- * leixiaohua1020@126.com
- * 中国传媒大学/数字电视技术
- * Communication University of China / Digital TV Technology
- *
- * http://blog.csdn.net/leixiaohua1020
- * 
- * 本工程将ffmpeg项目中的ffplay播放器（ffplay.c）移植到了VC的环境下。
- * 并且使用MFC做了一套简单的界面。
- * This software transplant ffplay to Microsoft VC++ environment. 
- * And use MFC to build a simple Graphical User Interface. 
- */
+* FFplay for MFC
+*
+* 雷霄骅 Lei Xiaohua
+* leixiaohua1020@126.com
+* 中国传媒大学/数字电视技术
+* Communication University of China / Digital TV Technology
+*
+* http://blog.csdn.net/leixiaohua1020
+* 
+* 本工程将ffmpeg项目中的ffplay播放器（ffplay.c）移植到了VC的环境下。
+* 并且使用MFC做了一套简单的界面。
+* This software transplant ffplay to Microsoft VC++ environment. 
+* And use MFC to build a simple Graphical User Interface. 
+*/
 
 #pragma once
 #include "VideodecodeDlg.h"
@@ -22,18 +22,18 @@
 // CffplaymfcDlg 对话框
 class CffplaymfcDlg : public CDialogEx
 {
-// 构造
+	// 构造
 public:
 	CffplaymfcDlg(CWnd* pParent = NULL);	// 标准构造函数
 
-// 对话框数据
+	// 对话框数据
 	enum { IDD = IDD_FFPLAYMFC_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 
-// 实现
+	// 实现
 protected:
 	HICON m_hIcon;
 
@@ -77,7 +77,7 @@ public:
 
 	void ResetBtn();
 	void ActiveBtn();
-	
+
 	//Dialog
 	void SystemClear();
 	VideodecodeDlg *vddlg;
@@ -114,7 +114,6 @@ public:
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnWebsite();
 	afx_msg void OnIdcancel();
-
 
 	afx_msg void OnWindowstretchKeepratio();
 	afx_msg void OnWindowstretchResize();

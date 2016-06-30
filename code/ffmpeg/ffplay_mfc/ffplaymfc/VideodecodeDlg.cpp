@@ -1,18 +1,18 @@
-/* 
- * FFplay for MFC
- *
- * 雷霄骅 Lei Xiaohua
- * leixiaohua1020@126.com
- * 中国传媒大学/数字电视技术
- * Communication University of China / Digital TV Technology
- *
- * http://blog.csdn.net/leixiaohua1020
- * 
- * 本工程将ffmpeg项目中的ffplay播放器（ffplay.c）移植到了VC的环境下。
- * 并且使用MFC做了一套简单的界面。
- * This software transplant ffplay to Microsoft VC++ environment. 
- * And use MFC to build a simple Graphical User Interface. 
- */
+/*
+* FFplay for MFC
+*
+* 雷霄骅 Lei Xiaohua
+* leixiaohua1020@126.com
+* 中国传媒大学/数字电视技术
+* Communication University of China / Digital TV Technology
+*
+* http://blog.csdn.net/leixiaohua1020
+* 
+* 本工程将ffmpeg项目中的ffplay播放器（ffplay.c）移植到了VC的环境下。
+* 并且使用MFC做了一套简单的界面。
+* This software transplant ffplay to Microsoft VC++ environment. 
+* And use MFC to build a simple Graphical User Interface. 
+*/
 
 #include "stdafx.h"
 #include "ffplaymfc.h"
@@ -38,11 +38,9 @@ void VideodecodeDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_VIDEODECODE_LIST, m_videodecodelist);
 }
 
-
 BEGIN_MESSAGE_MAP(VideodecodeDlg, CDialogEx)
 	ON_NOTIFY ( NM_CUSTOMDRAW,IDC_VIDEODECODE_LIST, VideodecodeDlg::OnCustomdrawMyList )
 END_MESSAGE_MAP()
-
 
 // VideodecodeDlg 消息处理程序
 BOOL VideodecodeDlg::OnInitDialog()
