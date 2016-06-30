@@ -1097,7 +1097,7 @@ static void video_image_display(VideoState *is)
 		}else if(is_stretch==1){
 			calculate_display_rect_f(&rect, is->xleft, is->ytop, is->width, is->height, vp);
 		}
-		//z SDL_DisplayYUVOverlay(vp->bmp, &rect);
+		SDL_DisplayYUVOverlay(vp->bmp, &rect);
 	}
 }
 
