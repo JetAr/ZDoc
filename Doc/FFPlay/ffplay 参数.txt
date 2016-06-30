@@ -1,0 +1,4 @@
+//z 2016-06-30 18:30:38 L.184'19762 T2206139479.K
+ffplay -infbuf -report -loglevel trace rtmp://192.168.3.111/hls/test >e:\%p%t.log 2>&1
+
+或设置环境变量 FFREPORT=file=%p_%t.log:level=56

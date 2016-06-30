@@ -1429,6 +1429,9 @@ static void set_clock_at(Clock *c, double pts, int serial, double time)
     c->last_updated = time;
     c->pts_drift = c->pts - time;
     c->serial = serial;
+	/*z
+	初始化时，pts为NAN，serial为-1，time为当前系统时间（相对于1970.01.01）
+	*/
 }
 
 static void set_clock(Clock *c, double pts, int serial)
@@ -2877,6 +2880,7 @@ static int audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb
 }
 
 /* open a given stream. Return 0 if OK */
+//z 打开流
 static int stream_component_open(VideoState *is, int stream_index)
 {
     AVFormatContext *ic = is->ic;
