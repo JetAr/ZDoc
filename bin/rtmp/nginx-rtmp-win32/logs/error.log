@@ -6389,3 +6389,6 @@
 2016/06/30 16:42:26 [info] 6784#6532: *47 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
 2016/06/30 16:42:26 [info] 6784#6532: *47 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/06/30 16:42:26 [info] 6784#6532: *47 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/30 18:45:13 [info] 6784#6532: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/30 18:45:13 [info] 6784#6532: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/06/30 18:45:13 [info] 6784#6532: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
