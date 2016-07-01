@@ -6392,3 +6392,64 @@
 2016/06/30 18:45:13 [info] 6784#6532: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/06/30 18:45:13 [info] 6784#6532: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/06/30 18:45:13 [info] 6784#6532: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:47:51 [notice] 6476#6624: using the "select" event method
+2016/07/01 09:47:51 [notice] 6476#6624: nginx/1.9.5
+2016/07/01 09:47:51 [info] 6476#6624: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/01 09:47:51 [notice] 6476#6624: start worker processes
+2016/07/01 09:47:51 [notice] 6476#6624: start worker process 3420
+2016/07/01 09:47:51 [notice] 3420#6720: nginx/1.9.5
+2016/07/01 09:47:51 [info] 3420#6720: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/01 09:47:51 [notice] 3420#6720: create thread 1348
+2016/07/01 09:47:51 [notice] 3420#6720: create thread 3980
+2016/07/01 09:47:51 [notice] 3420#6720: create thread 3976
+2016/07/01 09:48:21 [info] 3420#1348: *1 client connected '127.0.0.1'
+2016/07/01 09:48:21 [info] 3420#1348: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:48:21 [info] 3420#1348: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:48:21 [info] 3420#1348: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:58:17 [info] 3420#1348: *2 client connected '127.0.0.1'
+2016/07/01 09:58:17 [info] 3420#1348: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:58:17 [info] 3420#1348: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:58:17 [info] 3420#1348: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:58:26 [info] 3420#1348: *2 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:58:26 [info] 3420#1348: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 09:58:26 [info] 3420#1348: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:22 [info] 3420#1348: *3 client connected '127.0.0.1'
+2016/07/01 10:17:22 [info] 3420#1348: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:22 [info] 3420#1348: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:22 [info] 3420#1348: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:52 [info] 3420#1348: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:52 [info] 3420#1348: *3 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:52 [info] 3420#1348: *3 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:52 [info] 3420#1348: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:17:52 [info] 3420#1348: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:24:10 [info] 3420#1348: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:24:10 [info] 3420#1348: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 10:24:10 [info] 3420#1348: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:22:50 [notice] 6476#6624: worker process 3420 exited with code 40010004
+2016/07/01 14:36:15 [notice] 7904#996: using the "select" event method
+2016/07/01 14:36:15 [notice] 7904#996: nginx/1.9.5
+2016/07/01 14:36:15 [info] 7904#996: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/01 14:36:15 [notice] 7904#996: start worker processes
+2016/07/01 14:36:15 [notice] 7904#996: start worker process 6212
+2016/07/01 14:36:15 [notice] 6212#7932: nginx/1.9.5
+2016/07/01 14:36:15 [info] 6212#7932: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/01 14:36:15 [notice] 6212#7932: create thread 3396
+2016/07/01 14:36:15 [notice] 6212#7932: create thread 3348
+2016/07/01 14:36:15 [notice] 6212#7932: create thread 2540
+2016/07/01 14:36:27 [info] 6212#3396: *1 client connected '127.0.0.1'
+2016/07/01 14:36:27 [info] 6212#3396: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:27 [info] 6212#3396: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:27 [info] 6212#3396: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:36 [info] 6212#3396: *2 client connected '127.0.0.1'
+2016/07/01 14:36:36 [info] 6212#3396: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:36 [info] 6212#3396: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:36 [info] 6212#3396: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:50 [info] 6212#3396: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:50 [info] 6212#3396: *2 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:50 [info] 6212#3396: *2 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:50 [info] 6212#3396: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:36:50 [info] 6212#3396: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:43:25 [info] 6212#3396: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:43:25 [info] 6212#3396: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 14:43:25 [info] 6212#3396: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/01 18:58:43 [notice] 7904#996: worker process 6212 exited with code 40010004

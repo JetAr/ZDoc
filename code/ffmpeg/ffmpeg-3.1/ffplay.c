@@ -582,6 +582,7 @@ static void decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue, 
     d->start_pts = AV_NOPTS_VALUE;
 }
 
+//z 解码音视频数据
 static int decoder_decode_frame(Decoder *d, AVFrame *frame, AVSubtitle *sub)
 {
     int got_frame = 0;
@@ -1635,6 +1636,7 @@ static void update_video_pts(VideoState *is, double pts, int64_t pos, int serial
 }
 
 /* called to display each frame */
+//z 渲染视频帧
 static void video_refresh(void *opaque, double *remaining_time)
 {
     VideoState *is = opaque;
@@ -1642,6 +1644,7 @@ static void video_refresh(void *opaque, double *remaining_time)
 
     Frame *sp, *sp2;
 
+	//z 是否采用了外部时钟
     if (!is->paused && get_master_sync_type(is) == AV_SYNC_EXTERNAL_CLOCK && is->realtime)
         check_external_clock_speed(is);
 
@@ -2620,6 +2623,7 @@ static int synchronize_audio(VideoState *is, int nb_samples)
  * stored in is->audio_buf, with size in bytes given by the return
  * value.
  */
+ //z 解码音频帧，返回未压缩的大小。
 static int audio_decode_frame(VideoState *is)
 {
     int data_size, resampled_data_size;
@@ -2728,7 +2732,9 @@ static int audio_decode_frame(VideoState *is)
 
     audio_clock0 = is->audio_clock;
     /* update the audio clock with the pts */
+	//z 解码时通过 audio frame 的 pts 设置 audio_clock 
     if (!isnan(af->pts))
+		//z pts 加上该帧所占时间
         is->audio_clock = af->pts + (double) af->frame->nb_samples / af->frame->sample_rate;
     else
         is->audio_clock = NAN;
@@ -2792,6 +2798,7 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
     if (!isnan(is->audio_clock))
     {
         set_clock_at(&is->audclk, is->audio_clock - (double)(2 * is->audio_hw_buf_size + is->audio_write_buf_size) / is->audio_tgt.bytes_per_sec, is->audio_clock_serial, audio_callback_time / 1000000.0);
+		//z 使用 audclk 来更新 extclk 
         sync_clock_to_slave(&is->extclk, &is->audclk);
     }
 }
@@ -3073,19 +3080,18 @@ static int stream_has_enough_packets(AVStream *st, int stream_id, PacketQueue *q
            queue->nb_packets > MIN_FRAMES && (!queue->duration || av_q2d(st->time_base) * queue->duration > 1.0);
 }
 
+//z 查看是否是直播视频
 static int is_realtime(AVFormatContext *s)
 {
-    if(   !strcmp(s->iformat->name, "rtp")
+    if(!strcmp(s->iformat->name, "rtp")
             || !strcmp(s->iformat->name, "rtsp")
             || !strcmp(s->iformat->name, "sdp")
       )
         return 1;
 
-    if(s->pb && (   !strncmp(s->filename, "rtp:", 4)
-                    || !strncmp(s->filename, "udp:", 4)
-                )
-      )
+    if(s->pb && ( !strncmp(s->filename, "rtp:", 4) || !strncmp(s->filename, "udp:", 4)))
         return 1;
+
     return 0;
 }
 

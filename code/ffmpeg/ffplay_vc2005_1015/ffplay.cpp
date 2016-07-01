@@ -1527,6 +1527,7 @@ static int queue_picture(VideoState *is, AVFrame *src_frame, double pts1, int64_
     return 0;
 }
 
+//z 对 packet 进行解码操作。
 static int get_video_frame(VideoState *is, AVFrame *frame, int64_t *pts, AVPacket *pkt)
 {
     int got_picture, i;
