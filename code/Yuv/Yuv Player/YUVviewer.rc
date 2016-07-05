@@ -1,0 +1,278 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\YUVviewer.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\YUVviewer.ico"
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About YUVviewer"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "YUVviewer Version 1.0",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "Copyright (C) 2001",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_YUVVIEWER_DIALOG DIALOGEX 100, 200, 366, 102
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "YUVviewer"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Quit",IDCANCEL,314,59,36,14
+    CONTROL         "CIF",IDC_SIZE_CIF,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,25,29,28,10
+    CONTROL         "QCIF",IDC_SIZE_QCIF,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,25,47,32,10
+    CONTROL         "Other",IDC_SIZE_OTHER,"Button",BS_AUTORADIOBUTTON,25,65,
+                    36,10
+    LTEXT           "Width",IDC_STATIC_W,76,58,21,8
+    LTEXT           "Height",IDC_STATIC_H,110,58,25,8
+    EDITTEXT        IDC_SIZE_WIDTH,72,70,27,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_SIZE_HEIGHT,109,70,27,12,ES_AUTOHSCROLL
+    GROUPBOX        "Frame Size",IDC_STATIC,16,12,131,75
+    LTEXT           "Frame Rate",IDC_STATIC,160,27,41,8
+    COMBOBOX        IDC_FRAME_RATE,207,25,46,64,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "From",IDC_STATIC,160,52,17,8
+    LTEXT           "To",IDC_STATIC,216,52,10,8
+    EDITTEXT        IDC_FRAME_FROM,180,50,26,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_FRAME_TO,227,50,26,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Open File",IDC_OPENFILE,314,14,36,14
+    PUSHBUTTON      "Play",IDC_PAUSEPLAY,314,29,36,14
+    PUSHBUTTON      "Next",IDC_NEXT,268,14,36,14
+    PUSHBUTTON      "Previous",IDC_PREVIOUS,268,44,36,14
+    PUSHBUTTON      "Backward",IDC_ORDER,268,74,36,14
+    PUSHBUTTON      "Next 5",IDC_NEXT5,268,29,36,14
+    PUSHBUTTON      "Previous 5",IDC_PREVIOUS5,268,59,36,14
+    GROUPBOX        "Play Parameters",IDC_STATIC,152,12,107,75
+    CONTROL         "Zoom 2x2",IDC_ZOOM,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,160,72,48,10
+    PUSHBUTTON      "Close All",IDCLOSEALL,314,44,36,14
+    PUSHBUTTON      "BackTo0",IDC_TRANSFER,314,74,36,14
+    CONTROL         "Black",IDC_BLACK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    69,25,64,15
+    CONTROL         "have no Cb Cr",IDC_NOCbCr,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,69,41,73,11
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "YUVviewer MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "YUVviewer\0"
+            VALUE "LegalCopyright", "Copyright (C) 2001\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "YUVviewer.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "YUVviewer Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_YUVVIEWER_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 359
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 94
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_YUVVIEWER_DIALOG DLGINIT
+BEGIN
+    IDC_FRAME_RATE, 0x403, 3, 0
+0x3520, "\000" 
+    IDC_FRAME_RATE, 0x403, 3, 0
+0x3031, "\000" 
+    IDC_FRAME_RATE, 0x403, 3, 0
+0x3531, "\000" 
+    IDC_FRAME_RATE, 0x403, 3, 0
+0x3032, "\000" 
+    IDC_FRAME_RATE, 0x403, 3, 0
+0x3532, "\000" 
+    IDC_FRAME_RATE, 0x403, 3, 0
+0x3033, "\000" 
+    IDC_FRAME_RATE, 0x403, 4, 0
+0x3939, 0x0039, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ABOUTBOX            "&About YUVviewer..."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\YUVviewer.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
