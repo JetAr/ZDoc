@@ -361,3 +361,19 @@ void printStack(void)
 
 	free(symbol);
 }
+
+
+#define D3D_DEBUG_INFO
+To enable debug information, the #define must get built before the D3D9.h file 
+
+Use the Call Stack for Extended Debug
+
+With Direct3D debug enabled, you can also look at a call stack each time an object is created. This will make your application very slow, but can be used to check for resource leaks. To write out the call stack, set the following registry key to 1:
+
+\\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Direct3D\\
+D3D9Debugging\\EnableCreationStack
+
+Building your application with debug enabled will give you access to this additional variable:
+LPCWSTR CreationCallStack;
+
+This variable will store the call stack each time that an object is created. This will make your application very slow, but can be used to debug resource leaks.
