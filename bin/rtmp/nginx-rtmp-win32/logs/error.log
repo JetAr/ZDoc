@@ -7091,3 +7091,38 @@
 2016/07/07 17:16:28 [info] 4088#6100: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/07 17:16:28 [info] 4088#6100: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/07 17:16:28 [info] 4088#6100: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:34:15 [notice] 3528#268: using the "select" event method
+2016/07/08 09:34:15 [notice] 3528#268: nginx/1.9.5
+2016/07/08 09:34:15 [info] 3528#268: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/08 09:34:15 [notice] 3528#268: start worker processes
+2016/07/08 09:34:15 [notice] 3528#268: start worker process 3824
+2016/07/08 09:34:15 [notice] 3824#3164: nginx/1.9.5
+2016/07/08 09:34:15 [info] 3824#3164: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/08 09:34:15 [notice] 3824#3164: create thread 2932
+2016/07/08 09:34:15 [notice] 3824#3164: create thread 3524
+2016/07/08 09:34:15 [notice] 3824#3164: create thread 3396
+2016/07/08 09:34:21 [info] 3824#2932: *1 client connected '127.0.0.1'
+2016/07/08 09:34:21 [info] 3824#2932: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:34:21 [info] 3824#2932: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:34:21 [info] 3824#2932: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:16 [info] 3824#2932: *2 client connected '127.0.0.1'
+2016/07/08 09:35:16 [info] 3824#2932: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:16 [info] 3824#2932: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:16 [info] 3824#2932: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:37 [info] 3824#2932: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:37 [info] 3824#2932: *2 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:37 [info] 3824#2932: *2 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:37 [info] 3824#2932: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 09:35:37 [info] 3824#2932: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:05:48 [info] 3824#2932: *3 client connected '127.0.0.1'
+2016/07/08 10:05:48 [info] 3824#2932: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:05:48 [info] 3824#2932: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:05:48 [info] 3824#2932: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:14 [info] 3824#2932: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:14 [info] 3824#2932: *3 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:14 [info] 3824#2932: *3 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:14 [info] 3824#2932: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:14 [info] 3824#2932: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:53 [info] 3824#2932: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:53 [info] 3824#2932: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/08 10:06:53 [info] 3824#2932: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
