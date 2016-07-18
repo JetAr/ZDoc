@@ -8061,3 +8061,24 @@
 2016/07/18 09:27:44 [info] 5104#4388: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/18 09:27:44 [info] 5104#4388: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/18 09:27:44 [info] 5104#4388: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:56:26 [info] 5104#4388: *2 client connected '127.0.0.1'
+2016/07/18 09:56:26 [info] 5104#4388: *2 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:56:26 [info] 5104#4388: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:56:26 [info] 5104#4388: *2 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 10:23:14 [info] 5104#4388: *3 client connected '127.0.0.1'
+2016/07/18 10:23:14 [info] 5104#4388: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 10:23:14 [info] 5104#4388: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 10:23:14 [info] 5104#4388: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 10:25:07 [info] 5104#4388: *3 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 10:25:07 [info] 5104#4388: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 10:25:07 [info] 5104#4388: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:11:27 [info] 5104#4388: *4 client connected '127.0.0.1'
+2016/07/18 11:11:27 [info] 5104#4388: *4 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:11:27 [info] 5104#4388: *4 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:11:27 [info] 5104#4388: *4 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:11:43 [info] 5104#4388: *4 WSASend() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:11:43 [info] 5104#4388: *4 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:11:43 [info] 5104#4388: *4 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:16:37 [info] 5104#4388: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:16:37 [info] 5104#4388: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 11:16:37 [info] 5104#4388: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
