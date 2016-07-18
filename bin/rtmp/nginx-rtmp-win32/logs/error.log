@@ -7912,3 +7912,152 @@
 2016/07/14 18:49:36 [info] 3840#3924: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/14 18:49:36 [info] 3840#3924: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/14 18:50:16 [notice] 4192#4172: worker process 3840 exited with code 40010004
+2016/07/15 09:44:20 [notice] 2800#2940: using the "select" event method
+2016/07/15 09:44:20 [notice] 2800#2940: nginx/1.9.5
+2016/07/15 09:44:20 [info] 2800#2940: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/15 09:44:20 [notice] 2800#2940: start worker processes
+2016/07/15 09:44:20 [notice] 2800#2940: start worker process 4004
+2016/07/15 09:44:20 [notice] 4004#6780: nginx/1.9.5
+2016/07/15 09:44:20 [info] 4004#6780: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/15 09:44:20 [notice] 4004#6780: create thread 172
+2016/07/15 09:44:20 [notice] 4004#6780: create thread 3856
+2016/07/15 09:44:20 [notice] 4004#6780: create thread 5672
+2016/07/15 09:44:26 [info] 4004#172: *1 client connected '127.0.0.1'
+2016/07/15 09:44:26 [info] 4004#172: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:44:26 [info] 4004#172: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:44:26 [info] 4004#172: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:47:54 [info] 4004#172: *2 client connected '127.0.0.1'
+2016/07/15 09:47:54 [info] 4004#172: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:47:54 [info] 4004#172: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:47:54 [info] 4004#172: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:49:31 [info] 4004#172: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:49:31 [info] 4004#172: *2 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:49:31 [info] 4004#172: *2 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:49:31 [info] 4004#172: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:49:31 [info] 4004#172: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:55:53 [info] 4004#172: *3 client connected '127.0.0.1'
+2016/07/15 09:55:53 [info] 4004#172: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:55:53 [info] 4004#172: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:55:53 [info] 4004#172: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:57:52 [info] 4004#172: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:57:52 [info] 4004#172: *3 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:57:52 [info] 4004#172: *3 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:57:52 [info] 4004#172: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:57:52 [info] 4004#172: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:11 [info] 4004#172: *4 client connected '127.0.0.1'
+2016/07/15 09:59:11 [info] 4004#172: *4 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:11 [info] 4004#172: *4 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:11 [info] 4004#172: *4 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:38 [info] 4004#172: *4 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:38 [info] 4004#172: *4 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:38 [info] 4004#172: *4 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:46 [info] 4004#172: *5 client connected '127.0.0.1'
+2016/07/15 09:59:46 [info] 4004#172: *5 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:46 [info] 4004#172: *5 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:46 [info] 4004#172: *5 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:51 [info] 4004#172: *5 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:51 [info] 4004#172: *5 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:51 [info] 4004#172: *5 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:51 [info] 4004#172: *5 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 09:59:51 [info] 4004#172: *5 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:19 [info] 4004#172: *6 client connected '127.0.0.1'
+2016/07/15 10:01:19 [info] 4004#172: *6 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:19 [info] 4004#172: *6 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:19 [info] 4004#172: *6 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:24 [info] 4004#172: *6 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:24 [info] 4004#172: *6 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:24 [info] 4004#172: *6 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:24 [info] 4004#172: *6 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:24 [info] 4004#172: *6 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:42 [info] 4004#172: *7 client connected '127.0.0.1'
+2016/07/15 10:01:42 [info] 4004#172: *7 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:42 [info] 4004#172: *7 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:01:42 [info] 4004#172: *7 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:06:22 [info] 4004#172: *8 client connected '127.0.0.1'
+2016/07/15 10:06:22 [info] 4004#172: *8 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:06:22 [info] 4004#172: *8 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:06:22 [info] 4004#172: *8 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:07:29 [info] 4004#172: *8 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:07:29 [info] 4004#172: *8 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:07:29 [info] 4004#172: *8 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:07:29 [info] 4004#172: *8 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:07:29 [info] 4004#172: *8 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:10:06 [info] 4004#172: *7 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:10:06 [info] 4004#172: *7 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:10:06 [info] 4004#172: *7 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:10:06 [info] 4004#172: *7 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:10:06 [info] 4004#172: *7 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:11:52 [info] 4004#172: *9 client connected '127.0.0.1'
+2016/07/15 10:11:52 [info] 4004#172: *9 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:11:52 [info] 4004#172: *9 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:11:52 [info] 4004#172: *9 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:11:56 [info] 4004#172: *9 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:11:56 [info] 4004#172: *9 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:11:56 [info] 4004#172: *9 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:12:58 [info] 4004#172: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:12:58 [info] 4004#172: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:12:58 [info] 4004#172: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:49:06 [notice] 5940#1152: using the "select" event method
+2016/07/15 10:49:06 [notice] 5940#1152: nginx/1.9.5
+2016/07/15 10:49:06 [info] 5940#1152: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/15 10:49:06 [notice] 5940#1152: start worker processes
+2016/07/15 10:49:06 [notice] 5940#1152: start worker process 6716
+2016/07/15 10:49:06 [notice] 6716#5288: nginx/1.9.5
+2016/07/15 10:49:06 [info] 6716#5288: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/15 10:49:06 [notice] 6716#5288: create thread 6992
+2016/07/15 10:49:06 [notice] 6716#5288: create thread 5368
+2016/07/15 10:49:06 [notice] 6716#5288: create thread 4292
+2016/07/15 10:49:17 [info] 6716#6992: *1 client connected '127.0.0.1'
+2016/07/15 10:49:17 [info] 6716#6992: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:49:17 [info] 6716#6992: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:49:17 [info] 6716#6992: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:49:50 [info] 6716#6992: *2 client connected '127.0.0.1'
+2016/07/15 10:49:50 [info] 6716#6992: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:49:50 [info] 6716#6992: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:49:50 [info] 6716#6992: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:53:11 [info] 6716#6992: *3 client connected '127.0.0.1'
+2016/07/15 10:53:11 [info] 6716#6992: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:53:11 [info] 6716#6992: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:53:11 [info] 6716#6992: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:53:15 [info] 6716#6992: *3 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:53:15 [info] 6716#6992: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:53:15 [info] 6716#6992: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:54:34 [info] 6716#6992: *4 client connected '127.0.0.1'
+2016/07/15 10:54:34 [info] 6716#6992: *4 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:54:34 [info] 6716#6992: *4 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:54:34 [info] 6716#6992: *4 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:54:39 [info] 6716#6992: *4 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:54:39 [info] 6716#6992: *4 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 10:54:39 [info] 6716#6992: *4 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:01:08 [info] 6716#6992: *5 client connected '127.0.0.1'
+2016/07/15 11:01:08 [info] 6716#6992: *5 connect: app='live' args='' flashver='LNX 9,0,124,2' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=4071 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:01:08 [info] 6716#6992: *5 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:01:08 [info] 6716#6992: *5 play: name='demo' args='' start=-2000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:11 [info] 6716#6992: *5 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:11 [info] 6716#6992: *5 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:11 [info] 6716#6992: *5 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:20 [info] 6716#6992: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:20 [info] 6716#6992: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:20 [info] 6716#6992: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:31 [info] 6716#6992: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:31 [info] 6716#6992: *2 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:31 [info] 6716#6992: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 11:20:31 [info] 6716#6992: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/15 18:21:05 [notice] 5940#1152: worker process 6716 exited with code 40010004
+2016/07/18 09:27:25 [notice] 5056#5060: using the "select" event method
+2016/07/18 09:27:25 [notice] 5056#5060: nginx/1.9.5
+2016/07/18 09:27:25 [info] 5056#5060: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/18 09:27:25 [notice] 5056#5060: start worker processes
+2016/07/18 09:27:25 [notice] 5056#5060: start worker process 5104
+2016/07/18 09:27:25 [notice] 5104#5036: nginx/1.9.5
+2016/07/18 09:27:25 [info] 5104#5036: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/18 09:27:25 [notice] 5104#5036: create thread 4388
+2016/07/18 09:27:25 [notice] 5104#5036: create thread 3100
+2016/07/18 09:27:25 [notice] 5104#5036: create thread 1732
+2016/07/18 09:27:43 [info] 5104#4388: *1 client connected '127.0.0.1'
+2016/07/18 09:27:43 [info] 5104#4388: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:27:43 [info] 5104#4388: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:27:43 [info] 5104#4388: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:27:44 [info] 5104#4388: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:27:44 [info] 5104#4388: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/18 09:27:44 [info] 5104#4388: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
