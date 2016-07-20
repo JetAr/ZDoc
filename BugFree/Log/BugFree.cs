@@ -40,7 +40,29 @@
        Zcl_S : //z 2016-05-23 19:23:03 L.222'16617 T130859507 .K ~0   +----+----+----+----+----+
        Zcl_E : //z 2016-05-23 19:23:03 L.222'16617 T130859507 .K ~0   +----+----+----+----+----+
      Zndex_S : //z 2016-05-23 19:23:03 L.222'16617 T130859507 .K ~0   +----+----+----+----+----+
-     Zndex_E : //z 2016-07-20 18:04:35 L.164'21325 T1296908437.K ~200 +----+----+----+----+----+
+      L118 ,  1:R#.1    @
+      L143,  2:znote astyle -A1 -R -Z -z1 -n *.cpp 
+      L156,  3:znote stream 一些资源    
+      L184,  4:todo rtmp 握手、建立连接、建立网络流，开始播放；寻找具体code验证下。
+      L185,  5:todo 接收 v/a 部分的数据；具体如何解析出v/a数据的，也需了解。
+      L186,  6:todo rtmpdump 中对数据的download部分。
+      L416,  7:R#.2    @h264相关文章，h264分析以及解码
+      L444,  8:R#.3    @看下使用 sdl 来播放 pcm 。
+      L465,  9:R#.4    @tn todo 编译av ； av同步； 剥离实现
+      L470, 10:todo 解析出rtmp的av数据，其中有dts数据，看看如何同步。
+      L483, 11:R#.5    @atom 编辑器
+      L489, 12:R#.6    @directshow audio capture filter
+      L496, 13:R#.7    @SGK
+      L497, 14:znote 36011
+      L510, 15:R#.8    @sdl 实际的例子
+      L540, 16:R#.9    @算法
+      L546, 17:R#.10   @hevc
+      L559, 18:R#.11   @png 载入
+      L566, 19:R#.12   @设置 beyond compare 为diff tool
+      L589, 20:R#.13   @iocp server
+      L593, 21:zsummer/zsummerX
+      L596, 22:R#.14   @ffmpeg
+     Zndex_E : //z 2016-07-20 23:32:39 L.164'1641  T3101759094.K ~214 +----+----+----+----+----+
      TimeCnt : //z 2016-07-20 18:04:20 L.164'21340 T1296908399.K ~24  +----+----+----+----+----+
      Reg.Cnt : //z 2016-07-20 18:04:18 L.164'21342 T1296908374.K ~14  +----+----+----+----+----+
      #14  R+ : //z 2016-07-20 18:04:18 L.164'21342 T1296908374.K ~14    V+.209  L+.575  
@@ -57,8 +79,10 @@
      #3   R+ : //z 2016-05-31 18:21:17 L.214'20323 T941162388 .K ~3     V+.41   L+.391  
      #2   R+ : //z 2016-05-23 19:25:37 L.222'16463 T130931484 .K ~2     V+.11   L+.363  
      #1   R+ : //z 2016-05-23 19:23:08 L.222'16612 T130859512 .K ~1     V+.2    L+.62   
-     File.Op : //z 2016-05-23 19:23:03 L.222'16617 T130859507 .K ~0   +----+----+----+----+----+
-     Version : //z 2016-07-20 18:04:35 L.164'21325 T1296908437.K ~214   R+.14   L+.577  --+----+
+     File.Op : //z 2016-07-20 22:58:14 L.164'3706  T1812878518.K ~1   +----+----+----+----+----+
+     #1   O+ : //z 2016-07-20 22:58:14 L.164'3706  T1812878518.K ~1     V+.215  L+.1    
+     Version : //z 2016-07-20 23:32:39 L.164'1641  T3101759094.K ~228   R+.14   L+.608  --+----+
+     #12  V+ : //z 2016-07-20 23:32:39 L.164'1641  T3101759094.K ~228   R+.14   L+.608  
      #11  R+ : //z 2016-07-20 18:04:18 L.164'21342 T1296908374.K ~209   R+.14   L+.576  V+.209  
      #10  R+ : //z 2016-07-20 17:15:56 L.164'24244 T6662393   .K ~198   R+.13   L+.567  V+.198  
      #10  V+ : //z 2016-07-19 15:16:23 L.165'31417 T91496538  .K ~190   R+.12   L+.542  
@@ -575,4 +599,13 @@ https://github.com/zsummer/zsummerX
 //z 2016-07-20 18:04:20 L.164'21340 T1296908399.K[T24,L575,R14,V210]
 01. vc 编译 ffmpeg
 https://trac.ffmpeg.org/wiki/CompilationGuide/MSVC
+https://www.ffmpeg.org/platform.html
+静态库：./configure --enable-static --prefix=./vs2013_build --enable-debug --toolchain=msvc 
+动态库：./configure --enable-shared --prefix=./vs2013_build --enable-debug --toolchain=msvc
+
+$ ./configure --enable-asm --enable-yasm --disable-ffserver --disable-avdevice --disable-doc --disable-ffplay --disable-ffprobe --disable-ffmpeg --enable-shared --disable-static --disable-bzlib --disable-libopenjpeg --disable-iconv --disable-zlib --prefix=/c/ffmpeg --toolchain=msvc --arch=amd64 --extra-cflags="-MDd" --extra-ldflags="/NODEFAULTLIB:libcmt" --enable-debug
+
+x86_64
+--disable-optimizations
+$ ./configure --enable-asm --enable-yasm --enable-shared --prefix=./vs2013_build --toolchain=msvc --arch=amd64 --extra-cflags="-MDd" --extra-ldflags="/NODEFAULTLIB:libcmt" --enable-debug
 #endregion //z 2016-07-20 18:04:18 L.164'21342 T1296908374.K.F4034662268---+----+----+----+----+
