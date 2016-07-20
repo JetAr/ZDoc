@@ -362,7 +362,7 @@ void printStack(void)
 	free(symbol);
 }
 
-
+// ----
 #define D3D_DEBUG_INFO
 To enable debug information, the #define must get built before the D3D9.h file 
 
@@ -377,3 +377,10 @@ Building your application with debug enabled will give you access to this additi
 LPCWSTR CreationCallStack;
 
 This variable will store the call stack each time that an object is created. This will make your application very slow, but can be used to debug resource leaks.
+// ---
+
+ π”√ /d2Zi+ ªÚ /Zo 
+Enable /d2Zi+ when building with Visual Studio 2013 ...
+Add "d2Zi+"/"Zo" compiler flag to debug optimized code
+
+// --- 
