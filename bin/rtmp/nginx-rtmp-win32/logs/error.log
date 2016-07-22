@@ -8900,3 +8900,150 @@
 2016/07/21 17:01:17 [info] 8048#7752: *5 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/21 17:01:17 [info] 8048#7752: *5 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/21 17:01:17 [info] 8048#7752: *5 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:21:09 [notice] 5436#6728: using the "select" event method
+2016/07/22 18:21:09 [notice] 5436#6728: nginx/1.9.5
+2016/07/22 18:21:09 [info] 5436#6728: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:21:09 [notice] 5436#6728: start worker processes
+2016/07/22 18:21:09 [notice] 5436#6728: start worker process 7524
+2016/07/22 18:21:09 [notice] 7524#5288: nginx/1.9.5
+2016/07/22 18:21:09 [info] 7524#5288: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:21:09 [notice] 7524#5288: create thread 7304
+2016/07/22 18:21:09 [notice] 7524#5288: create thread 4436
+2016/07/22 18:21:09 [notice] 7524#5288: create thread 4772
+2016/07/22 18:23:28 [info] 7524#7304: *1 client connected '127.0.0.1'
+2016/07/22 18:23:28 [info] 7524#7304: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:28 [info] 7524#7304: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:28 [info] 7524#7304: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:31 [info] 7524#7304: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:31 [info] 7524#7304: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:31 [info] 7524#7304: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:34 [info] 7524#7304: *2 client connected '127.0.0.1'
+2016/07/22 18:23:34 [info] 7524#7304: *2 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:34 [info] 7524#7304: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:34 [info] 7524#7304: *2 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:36 [info] 7524#7304: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:36 [info] 7524#7304: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:36 [info] 7524#7304: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:41 [info] 7524#7304: *3 client connected '127.0.0.1'
+2016/07/22 18:23:41 [info] 7524#7304: *3 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:41 [info] 7524#7304: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:41 [info] 7524#7304: *3 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:41 [info] 7524#7304: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:41 [info] 7524#7304: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:23:41 [info] 7524#7304: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:24:53 [notice] 7948#3808: using the "select" event method
+2016/07/22 18:24:53 [notice] 7948#3808: nginx/1.9.5
+2016/07/22 18:24:53 [info] 7948#3808: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:24:53 [notice] 7948#3808: start worker processes
+2016/07/22 18:24:53 [notice] 7948#3808: start worker process 8148
+2016/07/22 18:24:53 [notice] 8148#6156: nginx/1.9.5
+2016/07/22 18:24:53 [info] 8148#6156: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:24:53 [notice] 8148#6156: create thread 2856
+2016/07/22 18:24:53 [notice] 8148#6156: create thread 6912
+2016/07/22 18:24:53 [notice] 8148#6156: create thread 6736
+2016/07/22 18:25:24 [info] 8148#2856: *1 client connected '192.168.1.253'
+2016/07/22 18:25:24 [info] 8148#2856: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rtmp://192.168.1.252:1935/live' tc_url='rtmp://192.168.1.252:1935/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:25:25 [info] 8148#2856: *1 createStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:25:25 [info] 8148#2856: *1 publish: name='demo' args='' type=live silent=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:25:59 [info] 8148#2856: *2 client connected '127.0.0.1'
+2016/07/22 18:25:59 [info] 8148#2856: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:25:59 [info] 8148#2856: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:25:59 [info] 8148#2856: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:26:07 [info] 8148#2856: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:26:07 [info] 8148#2856: *2 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:26:07 [info] 8148#2856: *2 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:26:07 [info] 8148#2856: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:26:07 [info] 8148#2856: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:27:37 [info] 8148#2856: *3 client connected '127.0.0.1'
+2016/07/22 18:27:37 [info] 8148#2856: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:27:37 [info] 8148#2856: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:27:37 [info] 8148#2856: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:30:32 [info] 8148#2856: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:30:32 [info] 8148#2856: *3 WSASend() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:30:32 [info] 8148#2856: *3 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:30:32 [info] 8148#2856: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:30:32 [info] 8148#2856: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:31:03 [info] 8148#2856: *4 client connected '127.0.0.1'
+2016/07/22 18:31:03 [info] 8148#2856: *4 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:31:03 [info] 8148#2856: *4 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:31:03 [info] 8148#2856: *4 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:32:27 [info] 8148#2856: *1 deleteStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:27 [info] 8148#2856: *1 disconnect, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:27 [info] 8148#2856: *1 deleteStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:37 [info] 8148#2856: *4 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:32:37 [info] 8148#2856: *4 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:32:37 [info] 8148#2856: *4 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:32:37 [info] 8148#2856: *4 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:32:49 [info] 8148#2856: *5 client connected '192.168.1.253'
+2016/07/22 18:32:49 [info] 8148#2856: *5 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rtmp://192.168.1.252:1935/live' tc_url='rtmp://192.168.1.252:1935/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:49 [info] 8148#2856: *5 createStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:49 [info] 8148#2856: *5 publish: name='demo' args='' type=live silent=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:57 [info] 8148#2856: *5 too big message: 1048576, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:57 [info] 8148#2856: *5 disconnect, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:32:57 [info] 8148#2856: *5 deleteStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:33:08 [info] 8148#2856: *6 client connected '127.0.0.1'
+2016/07/22 18:33:08 [info] 8148#2856: *6 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:08 [info] 8148#2856: *6 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:08 [info] 8148#2856: *6 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:19 [info] 8148#2856: *6 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:19 [info] 8148#2856: *6 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:19 [info] 8148#2856: *6 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:19 [info] 8148#2856: *6 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:33:41 [info] 8148#2856: *7 client connected '192.168.1.253'
+2016/07/22 18:33:41 [info] 8148#2856: *7 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rtmp://192.168.1.252:1935/live' tc_url='rtmp://192.168.1.252:1935/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:33:41 [info] 8148#2856: *7 createStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:33:41 [info] 8148#2856: *7 publish: name='demo' args='' type=live silent=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:06 [notice] 1840#7820: using the "select" event method
+2016/07/22 18:34:06 [notice] 1840#7820: nginx/1.9.5
+2016/07/22 18:34:06 [info] 1840#7820: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:34:06 [notice] 1840#7820: start worker processes
+2016/07/22 18:34:06 [notice] 1840#7820: start worker process 6788
+2016/07/22 18:34:06 [notice] 6788#5696: nginx/1.9.5
+2016/07/22 18:34:06 [info] 6788#5696: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:34:06 [notice] 6788#5696: create thread 5412
+2016/07/22 18:34:06 [notice] 6788#5696: create thread 5280
+2016/07/22 18:34:06 [notice] 6788#5696: create thread 7980
+2016/07/22 18:34:30 [info] 6788#5412: *1 client connected '192.168.1.253'
+2016/07/22 18:34:30 [info] 6788#5412: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rtmp://192.168.1.252:1935/live' tc_url='rtmp://192.168.1.252:1935/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:30 [info] 6788#5412: *1 createStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:30 [info] 6788#5412: *1 publish: name='demo' args='' type=live silent=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:32 [info] 6788#5412: *2 client connected '127.0.0.1'
+2016/07/22 18:34:32 [info] 6788#5412: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:34:32 [info] 6788#5412: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:34:32 [info] 6788#5412: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:34:46 [info] 6788#5412: *1 too big message: 1048576, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:46 [info] 6788#5412: *1 disconnect, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:46 [info] 6788#5412: *1 deleteStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:34:57 [info] 6788#5412: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:34:57 [info] 6788#5412: *2 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:34:57 [info] 6788#5412: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:34:57 [info] 6788#5412: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:35:11 [info] 6788#5412: *3 client connected '192.168.1.253'
+2016/07/22 18:35:11 [info] 6788#5412: *3 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rtmp://192.168.1.252:1935/live' tc_url='rtmp://192.168.1.252:1935/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:35:11 [info] 6788#5412: *3 createStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:35:11 [info] 6788#5412: *3 publish: name='demo' args='' type=live silent=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:35:21 [notice] 5956#6072: using the "select" event method
+2016/07/22 18:35:21 [notice] 5956#6072: nginx/1.9.5
+2016/07/22 18:35:21 [info] 5956#6072: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:35:21 [notice] 5956#6072: start worker processes
+2016/07/22 18:35:21 [notice] 5956#6072: start worker process 6396
+2016/07/22 18:35:21 [notice] 6396#6060: nginx/1.9.5
+2016/07/22 18:35:21 [info] 6396#6060: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/22 18:35:21 [notice] 6396#6060: create thread 6468
+2016/07/22 18:35:21 [notice] 6396#6060: create thread 5812
+2016/07/22 18:35:21 [notice] 6396#6060: create thread 5556
+2016/07/22 18:35:40 [info] 6396#6468: *1 client connected '192.168.1.253'
+2016/07/22 18:35:40 [info] 6396#6468: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rtmp://192.168.1.252:1935/live' tc_url='rtmp://192.168.1.252:1935/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:35:40 [info] 6396#6468: *1 createStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:35:40 [info] 6396#6468: *1 publish: name='demo' args='' type=live silent=0, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:36:24 [info] 6396#6468: *2 client connected '127.0.0.1'
+2016/07/22 18:36:24 [info] 6396#6468: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:36:24 [info] 6396#6468: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:36:24 [info] 6396#6468: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:38:39 [info] 6396#6468: *1 deleteStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:38:39 [info] 6396#6468: *1 disconnect, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:38:39 [info] 6396#6468: *1 deleteStream, client: 192.168.1.253, server: 0.0.0.0:1935
+2016/07/22 18:38:49 [info] 6396#6468: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:38:49 [info] 6396#6468: *2 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:38:49 [info] 6396#6468: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/22 18:38:49 [info] 6396#6468: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935

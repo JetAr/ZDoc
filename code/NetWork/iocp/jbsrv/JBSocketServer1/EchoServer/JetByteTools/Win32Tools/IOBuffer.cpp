@@ -398,7 +398,7 @@ CIOBuffer *CIOBuffer::Allocator::Allocate()
 		//z 从 freelist 中获取一个 node
         pBuffer = m_freeList.PopNode();
 
-        pBuffer->AddRef();
+		pBuffer->AddRef();
     }
     else
     {
