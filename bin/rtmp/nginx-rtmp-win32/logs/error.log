@@ -8828,3 +8828,75 @@
 2016/07/20 17:48:47 [info] 3856#8232: *13 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/20 17:48:47 [info] 3856#8232: *13 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
 2016/07/20 17:48:47 [info] 3856#8232: *13 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:12:32 [info] 3856#8232: *14 client connected '127.0.0.1'
+2016/07/20 18:12:32 [info] 3856#8232: *14 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:12:32 [info] 3856#8232: *14 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:12:32 [info] 3856#8232: *14 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:12:37 [info] 3856#8232: *14 WSASend() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:12:37 [info] 3856#8232: *14 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:12:37 [info] 3856#8232: *14 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:13:50 [info] 3856#8232: *15 client connected '127.0.0.1'
+2016/07/20 18:13:50 [info] 3856#8232: *15 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:13:50 [info] 3856#8232: *15 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:13:50 [info] 3856#8232: *15 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:14:39 [info] 3856#8232: *15 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:14:39 [info] 3856#8232: *15 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:14:39 [info] 3856#8232: *15 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:20:38 [info] 3856#8232: *16 client connected '127.0.0.1'
+2016/07/20 18:20:38 [info] 3856#8232: *16 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:20:38 [info] 3856#8232: *16 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:20:38 [info] 3856#8232: *16 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:20:41 [info] 3856#8232: *16 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:20:41 [info] 3856#8232: *16 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:20:41 [info] 3856#8232: *16 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:22:17 [info] 3856#8232: *13 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:22:17 [info] 3856#8232: *13 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:22:17 [info] 3856#8232: *13 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/20 18:22:25 [notice] 1092#5648: worker process 3856 exited with code 40010004
+2016/07/21 11:41:49 [notice] 6624#6908: using the "select" event method
+2016/07/21 11:41:49 [notice] 6624#6908: nginx/1.9.5
+2016/07/21 11:41:49 [info] 6624#6908: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/21 11:41:49 [notice] 6624#6908: start worker processes
+2016/07/21 11:41:49 [notice] 6624#6908: start worker process 8048
+2016/07/21 11:41:49 [notice] 8048#3592: nginx/1.9.5
+2016/07/21 11:41:49 [info] 8048#3592: OS: 260110 build:7601, "Service Pack 1", suite:100, type:1
+2016/07/21 11:41:49 [notice] 8048#3592: create thread 7752
+2016/07/21 11:41:49 [notice] 8048#3592: create thread 6804
+2016/07/21 11:41:49 [notice] 8048#3592: create thread 8804
+2016/07/21 11:41:56 [info] 8048#7752: *1 client connected '127.0.0.1'
+2016/07/21 11:41:56 [info] 8048#7752: *1 connect: app='live' args='' flashver='FMLE/3.0 (compatible; FMSc/1.0)' swf_url='rmtp://127.0.0.1/live' tc_url='rmtp://127.0.0.1/live' page_url='' acodecs=0 vcodecs=0 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 11:41:56 [info] 8048#7752: *1 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 11:41:56 [info] 8048#7752: *1 publish: name='demo' args='' type=live silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 13:00:04 [info] 8048#7752: *2 client connected '127.0.0.1'
+2016/07/21 13:00:04 [info] 8048#7752: *2 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 13:00:04 [info] 8048#7752: *2 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 13:00:04 [info] 8048#7752: *2 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 13:01:25 [info] 8048#7752: *2 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 13:01:25 [info] 8048#7752: *2 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 13:01:25 [info] 8048#7752: *2 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:39:17 [info] 8048#7752: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:39:17 [info] 8048#7752: *1 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:39:17 [info] 8048#7752: *1 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:32 [info] 8048#7752: *3 client connected '127.0.0.1'
+2016/07/21 16:59:32 [info] 8048#7752: *3 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:32 [info] 8048#7752: *3 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:32 [info] 8048#7752: *3 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:43 [info] 8048#7752: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:43 [info] 8048#7752: *3 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:43 [info] 8048#7752: *3 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 16:59:43 [info] 8048#7752: *3 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:00:55 [info] 8048#7752: *4 client connected '127.0.0.1'
+2016/07/21 17:00:55 [info] 8048#7752: *4 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:00:55 [info] 8048#7752: *4 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:00:55 [info] 8048#7752: *4 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:00:56 [info] 8048#7752: *4 WSARecv() failed (10054: An existing connection was forcibly closed by the remote host), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:00:56 [info] 8048#7752: *4 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:00:56 [info] 8048#7752: *4 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:06 [info] 8048#7752: *5 client connected '127.0.0.1'
+2016/07/21 17:01:06 [info] 8048#7752: *5 connect: app='live' args='' flashver='' swf_url='' tc_url='rtmp://127.0.0.1:1935/live' page_url='' acodecs=3191 vcodecs=252 object_encoding=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:06 [info] 8048#7752: *5 createStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:06 [info] 8048#7752: *5 play: name='demo' args='' start=-1000 duration=0 reset=0 silent=0, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:17 [info] 8048#7752: *5 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:17 [info] 8048#7752: *5 WSARecv() failed (10053: An established connection was aborted by the software in your host machine), client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:17 [info] 8048#7752: *5 disconnect, client: 127.0.0.1, server: 0.0.0.0:1935
+2016/07/21 17:01:17 [info] 8048#7752: *5 deleteStream, client: 127.0.0.1, server: 0.0.0.0:1935
