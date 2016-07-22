@@ -11,7 +11,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	
+
 extern char *optarg;
 extern int optind;
 extern int opterr;

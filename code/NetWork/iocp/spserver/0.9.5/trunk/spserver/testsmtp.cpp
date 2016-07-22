@@ -22,90 +22,98 @@
 
 #include "spsmtp.hpp"
 
-class SP_FakeSmtpHandler : public SP_SmtpHandler {
+class SP_FakeSmtpHandler : public SP_SmtpHandler
+{
 public:
-	SP_FakeSmtpHandler(){
-		mAuthResult = 1;
-	}
+    SP_FakeSmtpHandler()
+    {
+        mAuthResult = 1;
+    }
 
-	virtual ~SP_FakeSmtpHandler() {}
+    virtual ~SP_FakeSmtpHandler() {}
 
-	int ehlo( const char * args, SP_Buffer * reply )
-	{
-		reply->append( "250-OK\n" );
-		reply->append( "250-AUTH LOGIN\n" );
-		reply->append( "250 HELP\n" );
+    int ehlo( const char * args, SP_Buffer * reply )
+    {
+        reply->append( "250-OK\n" );
+        reply->append( "250-AUTH LOGIN\n" );
+        reply->append( "250 HELP\n" );
 
-		return eAccept;
-	}
+        return eAccept;
+    }
 
-	int auth( const char * user, const char * pass, SP_Buffer * reply )
-	{
-		//printf( "auth user %s, pass %s\n", user, pass );
+    int auth( const char * user, const char * pass, SP_Buffer * reply )
+    {
+        //printf( "auth user %s, pass %s\n", user, pass );
 
-		reply->append( "235 Authentication successful.\r\n" );
-		mAuthResult = 1;
+        reply->append( "235 Authentication successful.\r\n" );
+        mAuthResult = 1;
 
-		return eAccept;
-	}
+        return eAccept;
+    }
 
-	virtual int from( const char * args, SP_Buffer * reply ) {
+    virtual int from( const char * args, SP_Buffer * reply )
+    {
 
-		//printf( "mail from: %s\n", args );
+        //printf( "mail from: %s\n", args );
 
-		if( 0 == mAuthResult ) {
-			reply->append( "503 Error: need AUTH command\r\n" );
-			return eReject;
-		}
+        if( 0 == mAuthResult )
+        {
+            reply->append( "503 Error: need AUTH command\r\n" );
+            return eReject;
+        }
 
-		char buffer[ 128 ] = { 0 };
-		snprintf( buffer, sizeof( buffer ), "250 %s, sender ok\r\n", args );
-		reply->append( buffer );
+        char buffer[ 128 ] = { 0 };
+        snprintf( buffer, sizeof( buffer ), "250 %s, sender ok\r\n", args );
+        reply->append( buffer );
 
-		return eAccept;
-	}
+        return eAccept;
+    }
 
-	virtual int rcpt( const char * args, SP_Buffer * reply ) {
+    virtual int rcpt( const char * args, SP_Buffer * reply )
+    {
 
-		//printf( "rcpt to: %s\n", args );
+        //printf( "rcpt to: %s\n", args );
 
-		char buffer[ 128 ] = { 0 };
-		snprintf( buffer, sizeof( buffer ), "250 %s, recipient ok\r\n", args );
-		reply->append( buffer );
+        char buffer[ 128 ] = { 0 };
+        snprintf( buffer, sizeof( buffer ), "250 %s, recipient ok\r\n", args );
+        reply->append( buffer );
 
-		return eAccept;
-	}
+        return eAccept;
+    }
 
-	virtual int data( const char * data, SP_Buffer * reply ) {
+    virtual int data( const char * data, SP_Buffer * reply )
+    {
 
-		//printf( "data length %d\n", strlen( data ) );
+        //printf( "data length %d\n", strlen( data ) );
 
-		reply->append( "250 Requested mail action okay, completed.\r\n" );
+        reply->append( "250 Requested mail action okay, completed.\r\n" );
 
-		return eAccept;
-	}
+        return eAccept;
+    }
 
-	virtual int rset( SP_Buffer * reply ) {
-		reply->append( "250 OK\r\n" );
+    virtual int rset( SP_Buffer * reply )
+    {
+        reply->append( "250 OK\r\n" );
 
-		return eAccept;
-	}
+        return eAccept;
+    }
 
 private:
-	int mAuthResult;
+    int mAuthResult;
 };
 
 //---------------------------------------------------------
 
-class SP_FakeSmtpHandlerFactory : public SP_SmtpHandlerFactory {
+class SP_FakeSmtpHandlerFactory : public SP_SmtpHandlerFactory
+{
 public:
-	SP_FakeSmtpHandlerFactory();
-	virtual ~SP_FakeSmtpHandlerFactory();
+    SP_FakeSmtpHandlerFactory();
+    virtual ~SP_FakeSmtpHandlerFactory();
 
-	virtual SP_SmtpHandler * create() const;
+    virtual SP_SmtpHandler * create() const;
 
-	//use default SP_CompletionHandler is enough, not need to implement
-	//virtual SP_CompletionHandler * createCompletionHandler() const;
+    //use default SP_CompletionHandler is enough, not need to implement
+    //virtual SP_CompletionHandler * createCompletionHandler() const;
 };
 
 SP_FakeSmtpHandlerFactory :: SP_FakeSmtpHandlerFactory()
@@ -118,65 +126,70 @@ SP_FakeSmtpHandlerFactory :: ~SP_FakeSmtpHandlerFactory()
 
 SP_SmtpHandler * SP_FakeSmtpHandlerFactory :: create() const
 {
-	return new SP_FakeSmtpHandler();
+    return new SP_FakeSmtpHandler();
 }
 
 //---------------------------------------------------------
 
 int main( int argc, char * argv[] )
 {
-	int port = 1025, maxThreads = 10;
-	const char * serverType = "hahs";
+    int port = 1025, maxThreads = 10;
+    const char * serverType = "hahs";
 
 #ifndef WIN32
-	extern char *optarg ;
-	int c ;
+    extern char *optarg ;
+    int c ;
 
-	while( ( c = getopt ( argc, argv, "p:t:s:v" )) != EOF ) {
-		switch ( c ) {
-			case 'p' :
-				port = atoi( optarg );
-				break;
-			case 't':
-				maxThreads = atoi( optarg );
-				break;
-			case 's':
-				serverType = optarg;
-				break;
-			case '?' :
-			case 'v' :
-				printf( "Usage: %s [-p <port>] [-t <threads>] [-s <hahs|lf>]\n", argv[0] );
-				exit( 0 );
-		}
-	}
+    while( ( c = getopt ( argc, argv, "p:t:s:v" )) != EOF )
+    {
+        switch ( c )
+        {
+        case 'p' :
+            port = atoi( optarg );
+            break;
+        case 't':
+            maxThreads = atoi( optarg );
+            break;
+        case 's':
+            serverType = optarg;
+            break;
+        case '?' :
+        case 'v' :
+            printf( "Usage: %s [-p <port>] [-t <threads>] [-s <hahs|lf>]\n", argv[0] );
+            exit( 0 );
+        }
+    }
 #endif
 
-	sp_openlog( "testsmtp", LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER );
+    sp_openlog( "testsmtp", LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER );
 
-	assert( 0 == sp_initsock() );
+    assert( 0 == sp_initsock() );
 
-	if( 0 == strcasecmp( serverType, "hahs" ) ) {
-		SP_Server server( "", port, new SP_SmtpHandlerAdapterFactory( new SP_FakeSmtpHandlerFactory() ) );
+    if( 0 == strcasecmp( serverType, "hahs" ) )
+    {
+        SP_Server server( "", port, new SP_SmtpHandlerAdapterFactory( new SP_FakeSmtpHandlerFactory() ) );
 
-		server.setMaxConnections( 2048 );
-		server.setTimeout( 600 );
-		server.setMaxThreads( maxThreads );
-		server.setReqQueueSize( 100, "Sorry, server is busy now!\n" );
+        server.setMaxConnections( 2048 );
+        server.setTimeout( 600 );
+        server.setMaxThreads( maxThreads );
+        server.setReqQueueSize( 100, "Sorry, server is busy now!\n" );
 
-		server.runForever();
-	} else {
-		SP_LFServer server( "", port, new SP_SmtpHandlerAdapterFactory( new SP_FakeSmtpHandlerFactory() ) );
+        server.runForever();
+    }
+    else
+    {
+        SP_LFServer server( "", port, new SP_SmtpHandlerAdapterFactory( new SP_FakeSmtpHandlerFactory() ) );
 
-		server.setMaxConnections( 2048 );
-		server.setTimeout( 600 );
-		server.setMaxThreads( maxThreads );
-		server.setReqQueueSize( 100, "Sorry, server is busy now!\n" );
+        server.setMaxConnections( 2048 );
+        server.setTimeout( 600 );
+        server.setMaxThreads( maxThreads );
+        server.setReqQueueSize( 100, "Sorry, server is busy now!\n" );
 
-		server.runForever();
-	}
+        server.runForever();
+    }
 
-	sp_closelog();
+    sp_closelog();
 
-	return 0;
+    return 0;
 }
 

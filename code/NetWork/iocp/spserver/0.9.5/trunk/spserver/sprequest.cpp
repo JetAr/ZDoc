@@ -14,58 +14,58 @@
 
 SP_Request :: SP_Request()
 {
-	mDecoder = new SP_DefaultMsgDecoder();
+    mDecoder = new SP_DefaultMsgDecoder();
 
-	memset( mClientIP, 0, sizeof( mClientIP ) );
-	mClientPort = 0;
+    memset( mClientIP, 0, sizeof( mClientIP ) );
+    mClientPort = 0;
 
-	memset( mServerIP, 0, sizeof( mServerIP ) );
+    memset( mServerIP, 0, sizeof( mServerIP ) );
 }
 
 SP_Request :: ~SP_Request()
 {
-	if( NULL != mDecoder ) delete mDecoder;
-	mDecoder = NULL;
+    if( NULL != mDecoder ) delete mDecoder;
+    mDecoder = NULL;
 }
 
 SP_MsgDecoder * SP_Request :: getMsgDecoder()
 {
-	return mDecoder;
+    return mDecoder;
 }
 
 void SP_Request :: setMsgDecoder( SP_MsgDecoder * decoder )
 {
-	if( NULL != mDecoder ) delete mDecoder;
-	mDecoder = decoder;
+    if( NULL != mDecoder ) delete mDecoder;
+    mDecoder = decoder;
 }
 
 void SP_Request :: setClientIP( const char * clientIP )
 {
-	sp_strlcpy( mClientIP, clientIP, sizeof( mClientIP ) );
+    sp_strlcpy( mClientIP, clientIP, sizeof( mClientIP ) );
 }
 
 const char * SP_Request :: getClientIP()
 {
-	return mClientIP;
+    return mClientIP;
 }
 
 void SP_Request :: setClientPort( int port )
 {
-	mClientPort = port;
+    mClientPort = port;
 }
 
 int SP_Request :: getClientPort()
 {
-	return mClientPort;
+    return mClientPort;
 }
 
 void SP_Request :: setServerIP( const char * ip )
 {
-	sp_strlcpy( mServerIP, ip, sizeof( mServerIP ) );
+    sp_strlcpy( mServerIP, ip, sizeof( mServerIP ) );
 }
 
 const char * SP_Request :: getServerIP()
 {
-	return mServerIP;
+    return mServerIP;
 }
 

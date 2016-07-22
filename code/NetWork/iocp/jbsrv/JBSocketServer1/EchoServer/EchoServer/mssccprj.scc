@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[EchoServer.dsp]
+SCC_Aux_Path = "I:\SourceSafe\JetByte"
+SCC_Project_Name = "$/Web Articles/SocketServers/EchoServer/EchoServer", BKAAAAAA

@@ -14,6 +14,6 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 int sp_init_gcrypt_pthread()
 {
-	return gcry_control( GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread );
+    return gcry_control( GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread );
 }
 

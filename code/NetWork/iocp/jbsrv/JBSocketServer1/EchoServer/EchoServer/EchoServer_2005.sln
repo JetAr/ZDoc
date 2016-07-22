@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EchoServer", "EchoServer_2005.vcproj", "{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116} = {1930C5DE-68B3-4CDD-80E4-A01688A54116}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Win32Tools", "..\JetByteTools\Win32Tools\Win32Tools_2005.vcproj", "{1930C5DE-68B3-4CDD-80E4-A01688A54116}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Unicode Debug|Win32 = Unicode Debug|Win32
+		Unicode Release|Win32 = Unicode Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Debug|Win32.Build.0 = Debug|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Release|Win32.ActiveCfg = Release|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Release|Win32.Build.0 = Release|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
+		{4FB6FC84-36FF-4EC7-9DDA-8ADA2B1FE8A4}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Debug|Win32.Build.0 = Debug|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Release|Win32.ActiveCfg = Release|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Release|Win32.Build.0 = Release|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Unicode Debug|Win32.ActiveCfg = Unicode Debug|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Unicode Debug|Win32.Build.0 = Unicode Debug|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Unicode Release|Win32.ActiveCfg = Unicode Release|Win32
+		{1930C5DE-68B3-4CDD-80E4-A01688A54116}.Unicode Release|Win32.Build.0 = Unicode Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

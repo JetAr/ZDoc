@@ -1,0 +1,11 @@
+
+/* Generated from file: echoserver.dsp */
+-i..\\
+-d_DEBUG
+-dWIN32
+-d_CONSOLE
+-d_MBCS
+-dUNICODE
+-d_UNICODE
+ServerMain.cpp
+SocketServer.cpp

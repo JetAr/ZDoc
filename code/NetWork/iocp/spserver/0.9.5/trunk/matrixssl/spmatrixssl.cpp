@@ -23,88 +23,96 @@
 
 SP_MatrixsslChannel :: SP_MatrixsslChannel( sslKeys_t * keys )
 {
-	mKeys = keys;
-	mConn = NULL;
+    mKeys = keys;
+    mConn = NULL;
 }
 
 SP_MatrixsslChannel :: ~SP_MatrixsslChannel()
 {
-	if( NULL != mConn ) {
-		sslFreeConnection( &mConn );
-	}
+    if( NULL != mConn )
+    {
+        sslFreeConnection( &mConn );
+    }
 }
 
 int SP_MatrixsslChannel :: init( int fd )
 {
-	SP_IOUtils::setBlock( fd );
+    SP_IOUtils::setBlock( fd );
 
-	int ret = sslAccept( &mConn, fd, mKeys, NULL, 0 );
+    int ret = sslAccept( &mConn, fd, mKeys, NULL, 0 );
 
-	SP_IOUtils::setNonblock( fd );
+    SP_IOUtils::setNonblock( fd );
 
-	if( 0 != ret ) {
-		sp_syslog( LOG_EMERG, "sslAccept fail" );
-		return -1;
-	}
+    if( 0 != ret )
+    {
+        sp_syslog( LOG_EMERG, "sslAccept fail" );
+        return -1;
+    }
 
-	return 0;
+    return 0;
 }
 
 int SP_MatrixsslChannel :: receive( SP_Session * session )
 {
-	char buffer[ 4096 ] = { 0 };
+    char buffer[ 4096 ] = { 0 };
 
-	int ret = sslRead( mConn, buffer, sizeof( buffer ), &errno );
-	if( ret > 0 ) {
-		session->getInBuffer()->append( buffer, ret );
-	} else if( ret < 0 ) {
-		sp_syslog( LOG_EMERG, "sslRead fail" );
-	}
+    int ret = sslRead( mConn, buffer, sizeof( buffer ), &errno );
+    if( ret > 0 )
+    {
+        session->getInBuffer()->append( buffer, ret );
+    }
+    else if( ret < 0 )
+    {
+        sp_syslog( LOG_EMERG, "sslRead fail" );
+    }
 
-	return ret;
+    return ret;
 }
 
 int SP_MatrixsslChannel :: write_vec( struct iovec * iovArray, int iovSize )
 {
-	int len = 0;
+    int len = 0;
 
-	for( int i = 0; i < iovSize; i++ ) {
-		int ret = sslWrite( mConn, (char*)iovArray[i].iov_base, iovArray[i].iov_len, &errno );
-		if( ret > 0 ) len += ret;
-		if( ret != (int)iovArray[i].iov_len ) break;
-	}
+    for( int i = 0; i < iovSize; i++ )
+    {
+        int ret = sslWrite( mConn, (char*)iovArray[i].iov_base, iovArray[i].iov_len, &errno );
+        if( ret > 0 ) len += ret;
+        if( ret != (int)iovArray[i].iov_len ) break;
+    }
 
-	return len;
+    return len;
 }
 
 //---------------------------------------------------------
 
 SP_MatrixsslChannelFactory :: SP_MatrixsslChannelFactory()
 {
-	mKeys = NULL;
+    mKeys = NULL;
 }
 
 SP_MatrixsslChannelFactory :: ~SP_MatrixsslChannelFactory()
 {
-	matrixSslFreeKeys( mKeys );
-	matrixSslClose();
+    matrixSslFreeKeys( mKeys );
+    matrixSslClose();
 }
 
 SP_IOChannel * SP_MatrixsslChannelFactory :: create() const
 {
-	return new SP_MatrixsslChannel( mKeys );
+    return new SP_MatrixsslChannel( mKeys );
 }
 
 int SP_MatrixsslChannelFactory :: init( const char * certFile, const char * keyFile )
 {
-	if( matrixSslOpen() < 0 ) {
-		sp_syslog( LOG_WARNING, "matrixSslOpen failed" );
-	}
+    if( matrixSslOpen() < 0 )
+    {
+        sp_syslog( LOG_WARNING, "matrixSslOpen failed" );
+    }
 
-	if( matrixSslReadKeys( &mKeys, certFile, keyFile, NULL, NULL ) < 0 ) {
-		sp_syslog( LOG_WARNING, "Error reading or parsing %s or %s.", certFile, keyFile );
-	}
+    if( matrixSslReadKeys( &mKeys, certFile, keyFile, NULL, NULL ) < 0 )
+    {
+        sp_syslog( LOG_WARNING, "Error reading or parsing %s or %s.", certFile, keyFile );
+    }
 
-	return 0;
+    return 0;
 }
 
