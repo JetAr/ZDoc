@@ -317,6 +317,7 @@ void CIOBuffer::AddData(
     AddData(&data, 1);
 }
 
+//z 计数
 void CIOBuffer::AddRef()
 {
     ::InterlockedIncrement(&m_ref);
@@ -394,6 +395,7 @@ CIOBuffer *CIOBuffer::Allocator::Allocate()
 
     if (!m_freeList.Empty())
     {
+		//z 从 freelist 中获取一个 node
         pBuffer = m_freeList.PopNode();
 
         pBuffer->AddRef();

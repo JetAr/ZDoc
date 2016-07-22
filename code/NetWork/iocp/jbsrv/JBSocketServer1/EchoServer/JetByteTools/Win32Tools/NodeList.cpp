@@ -120,15 +120,19 @@ bool CNodeList::Empty() const
 
 void CNodeList::RemoveNode(Node *pNode)
 {
+	//z 如果是 head 节点，需要重新将 head 节点指向下一个节点
     if (pNode == m_pHead)
     {
-        //lint -e{613} Possible use of null pointer
+		//z 指向下一个节点
+		//lint -e{613} Possible use of null pointer
         m_pHead = pNode->Next();
     }
 
-    //lint -e{613} Possible use of null pointer
+	//z 摘除
+	//lint -e{613} Possible use of null pointer
     pNode->Unlink();
 
+	//z 减少节点计数
     --m_numNodes;
 }
 
@@ -186,6 +190,7 @@ void CNodeList::Node::RemoveFromList()
     }
 }
 
+//z 从链表中将自身摘除
 void CNodeList::Node::Unlink()
 {
     if (m_pPrev)

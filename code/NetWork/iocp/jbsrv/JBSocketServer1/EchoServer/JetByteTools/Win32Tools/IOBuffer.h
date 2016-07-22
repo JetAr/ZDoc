@@ -184,7 +184,6 @@ namespace Win32
 ///////////////////////////////////////////////////////////////////////////////
 // CIOBuffer::Allocator
 ///////////////////////////////////////////////////////////////////////////////
-
 class CIOBuffer : public OVERLAPPED, public CNodeList::Node, public COpaqueUserData
 {
 public :
@@ -316,7 +315,9 @@ private :
 
     typedef TNodeList<CIOBuffer> BufferList;
 
+	//z 两个链表，一个 free list
     BufferList m_freeList;
+	//z 一个 active list
     BufferList m_activeList;
 
     const size_t m_maxFreeBuffers;

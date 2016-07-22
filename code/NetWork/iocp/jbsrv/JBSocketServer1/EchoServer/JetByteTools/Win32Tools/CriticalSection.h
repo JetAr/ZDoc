@@ -97,7 +97,7 @@ namespace Win32
 class CCriticalSection
 {
 public :
-	//z ·â×°ÁË 
+	//z scoped guard
     class Owner
     {
     public:

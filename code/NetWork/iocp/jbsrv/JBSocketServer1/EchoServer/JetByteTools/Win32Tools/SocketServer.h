@@ -665,17 +665,19 @@ private :
     CIOBuffer *GetNextBuffer(
         CIOBuffer *pBuffer = 0);
 
-    struct SequenceData
-    {
-        explicit SequenceData(
-            CCriticalSection &section);
+	struct SequenceData
+	{
+		explicit SequenceData(
+			CCriticalSection &section);
 
-        void Reset();
+		//z 重置计数器为0
+		void Reset();
 
-        long m_numbers[4];
+		//z 四种类型，四个计数器
+		long m_numbers[4];
 
-        CIOBuffer::InOrderBufferList m_outOfSequenceWrites;
-    };
+		CIOBuffer::InOrderBufferList m_outOfSequenceWrites;
+	};
 
     SequenceData *m_pSequenceData;
 
