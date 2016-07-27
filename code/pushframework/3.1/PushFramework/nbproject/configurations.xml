@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="90">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="f1" displayName="include" projectFiles="true">
+      <itemPath>include/Common.h</itemPath>
+      <itemPath>include/ConnectionContext.h</itemPath>
+      <itemPath>include/ListenerOptions.h</itemPath>
+      <itemPath>include/LogicalConnection.h</itemPath>
+      <itemPath>include/Plateform.h</itemPath>
+      <itemPath>include/PushFramework.h</itemPath>
+      <itemPath>include/PushFrameworkInc.h</itemPath>
+      <itemPath>include/QueueOptions.h</itemPath>
+      <itemPath>include/Server.h</itemPath>
+      <itemPath>include/ServerOptions.h</itemPath>
+      <itemPath>include/Service.h</itemPath>
+      <itemPath>include/SystemService.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f2" displayName="private" projectFiles="true">
+      <itemPath>private/Acceptor.cpp</itemPath>
+      <itemPath>private/Acceptor.h</itemPath>
+      <itemPath>private/BroadcastContext.h</itemPath>
+      <itemPath>private/BroadcastManager.cpp</itemPath>
+      <itemPath>private/BroadcastManager.h</itemPath>
+      <itemPath>private/BroadcastManagerBase.cpp</itemPath>
+      <itemPath>private/BroadcastManagerBase.h</itemPath>
+      <itemPath>private/BroadcastQueue.cpp</itemPath>
+      <itemPath>private/BroadcastQueue.h</itemPath>
+      <itemPath>private/BroadcastQueueContext.cpp</itemPath>
+      <itemPath>private/BroadcastQueueContext.h</itemPath>
+      <itemPath>private/BroadcastQueueGroupContext.cpp</itemPath>
+      <itemPath>private/BroadcastQueueGroupContext.h</itemPath>
+      <itemPath>private/BroadcastStreamer.cpp</itemPath>
+      <itemPath>private/BroadcastStreamer.h</itemPath>
+      <itemPath>private/ClientFactory.cpp</itemPath>
+      <itemPath>private/ClientFactory.h</itemPath>
+      <itemPath>private/ClientFactory_Linux.cpp</itemPath>
+      <itemPath>private/Common.cpp</itemPath>
+      <itemPath>private/ConnectionContext.cpp</itemPath>
+      <itemPath>private/ConnectionContextPool.cpp</itemPath>
+      <itemPath>private/ConnectionContextPool.h</itemPath>
+      <itemPath>private/CumulativeMeasure.cpp</itemPath>
+      <itemPath>private/CumulativeMeasure.h</itemPath>
+      <itemPath>private/Demultiplexor.cpp</itemPath>
+      <itemPath>private/Demultiplexor.h</itemPath>
+      <itemPath>private/DemuxImpl_Linux.cpp</itemPath>
+      <itemPath>private/DemuxImpl_Linux.h</itemPath>
+      <itemPath>private/Dispatcher.cpp</itemPath>
+      <itemPath>private/Dispatcher.h</itemPath>
+      <itemPath>private/DistributionMeasure.cpp</itemPath>
+      <itemPath>private/DistributionMeasure.h</itemPath>
+      <itemPath>private/DurationMeasure.cpp</itemPath>
+      <itemPath>private/DurationMeasure.h</itemPath>
+      <itemPath>private/GarbageCollector.cpp</itemPath>
+      <itemPath>private/GarbageCollector.h</itemPath>
+      <itemPath>private/IOQueue_Linux.cpp</itemPath>
+      <itemPath>private/IOQueue_Linux.h</itemPath>
+      <itemPath>private/KeyedAveragedDistributionMeasure.cpp</itemPath>
+      <itemPath>private/KeyedAveragedDistributionMeasure.h</itemPath>
+      <itemPath>private/KeyedAveragedMeasure.cpp</itemPath>
+      <itemPath>private/KeyedAveragedMeasure.h</itemPath>
+      <itemPath>private/Listener.cpp</itemPath>
+      <itemPath>private/Listener.h</itemPath>
+      <itemPath>private/ListenerImpl_Linux.cpp</itemPath>
+      <itemPath>private/ListenerImpl_Linux.h</itemPath>
+      <itemPath>private/ListenerOptions.cpp</itemPath>
+      <itemPath>private/LogicalConnection.cpp</itemPath>
+      <itemPath>private/LogicalConnectionImpl.cpp</itemPath>
+      <itemPath>private/LogicalConnectionImpl.h</itemPath>
+      <itemPath>private/LogicalConnectionPool.cpp</itemPath>
+      <itemPath>private/LogicalConnectionPool.h</itemPath>
+      <itemPath>private/Measure.cpp</itemPath>
+      <itemPath>private/Measure.h</itemPath>
+      <itemPath>private/MeasureArgs.cpp</itemPath>
+      <itemPath>private/MeasureArgs.h</itemPath>
+      <itemPath>private/MonitorAcceptor.cpp</itemPath>
+      <itemPath>private/MonitorAcceptor.h</itemPath>
+      <itemPath>private/MonitorConnection.cpp</itemPath>
+      <itemPath>private/MonitorConnection.h</itemPath>
+      <itemPath>private/MonitorsBroadcastManager.cpp</itemPath>
+      <itemPath>private/MonitorsBroadcastManager.h</itemPath>
+      <itemPath>private/MonitorsMsgFactory.cpp</itemPath>
+      <itemPath>private/MonitorsMsgFactory.h</itemPath>
+      <itemPath>private/PacketInfo.cpp</itemPath>
+      <itemPath>private/PacketInfo.h</itemPath>
+      <itemPath>private/PhysicalConnection.cpp</itemPath>
+      <itemPath>private/PhysicalConnection.h</itemPath>
+      <itemPath>private/PhysicalConnectionPool.cpp</itemPath>
+      <itemPath>private/PhysicalConnectionPool.h</itemPath>
+      <itemPath>private/PhysicalConnection_Linux.cpp</itemPath>
+      <itemPath>private/ProtocolManager.cpp</itemPath>
+      <itemPath>private/ProtocolManager.h</itemPath>
+      <itemPath>private/QueueOptions.cpp</itemPath>
+      <itemPath>private/ReadWriteLock.cpp</itemPath>
+      <itemPath>private/ReadWriteLock.h</itemPath>
+      <itemPath>private/ReadWriteLock_Linux.cpp</itemPath>
+      <itemPath>private/Routines.h</itemPath>
+      <itemPath>private/Routines_Linux.cpp</itemPath>
+      <itemPath>private/ScopedLock.h</itemPath>
+      <itemPath>private/Server.cpp</itemPath>
+      <itemPath>private/ServerImpl.cpp</itemPath>
+      <itemPath>private/ServerImpl.h</itemPath>
+      <itemPath>private/ServerOptions.cpp</itemPath>
+      <itemPath>private/ServerStats.cpp</itemPath>
+      <itemPath>private/ServerStats.h</itemPath>
+      <itemPath>private/Service.cpp</itemPath>
+      <itemPath>private/StdAfx.h</itemPath>
+      <itemPath>private/StopWatch.cpp</itemPath>
+      <itemPath>private/StopWatch.h</itemPath>
+      <itemPath>private/StopWatchImpl_Linux.cpp</itemPath>
+      <itemPath>private/StopWatchImpl_Linux.h</itemPath>
+      <itemPath>private/SystemService.cpp</itemPath>
+      <itemPath>private/SystemServiceImpl_Linux.cpp</itemPath>
+      <itemPath>private/SystemServiceImpl_Linux.h</itemPath>
+      <itemPath>private/Types.h</itemPath>
+      <itemPath>private/Utilities.h</itemPath>
+      <itemPath>private/Utilities_Linux.cpp</itemPath>
+      <itemPath>private/XMLPacket.cpp</itemPath>
+      <itemPath>private/XMLPacket.h</itemPath>
+      <itemPath>private/XMLProtocol.cpp</itemPath>
+      <itemPath>private/XMLProtocol.h</itemPath>
+      <itemPath>private/dllmain.cpp</itemPath>
+      <itemPath>private/linuxcs.cpp</itemPath>
+      <itemPath>private/linuxcs.h</itemPath>
+      <itemPath>private/stdafx.cpp</itemPath>
+      <itemPath>private/xmlParser.cpp</itemPath>
+      <itemPath>private/xmlParser.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="2">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <incDir>
+            <pElem>../ProtocolFramework/src</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>PUSHFRAMEWORK_EXPORTS</Elem>
+          </preprocessorList>
+        </ccTool>
+        <linkerTool>
+          <output>../output/libpushframework.so</output>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerOptionItem>-lrt</linkerOptionItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../ProtocolFramework"
+                            CT="2"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../ProtocolFramework"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="/home/ChessComposer/${CND_CONF}/libprotocolframework.so">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="include/Common.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ConnectionContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ListenerOptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/LogicalConnection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Plateform.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PushFramework.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PushFrameworkInc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/QueueOptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ServerOptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Service.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/SystemService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Acceptor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Acceptor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastManagerBase.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastManagerBase.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueGroupContext.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueGroupContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="private/BroadcastStreamer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastStreamer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ClientFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ClientFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ClientFactory_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Common.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ConnectionContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ConnectionContextPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ConnectionContextPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/CumulativeMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/CumulativeMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Demultiplexor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Demultiplexor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/DemuxImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/DemuxImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Dispatcher.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Dispatcher.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/DistributionMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/DistributionMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/DurationMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/DurationMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/GarbageCollector.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/GarbageCollector.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/IOQueue_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/IOQueue_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedDistributionMeasure.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedDistributionMeasure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Listener.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Listener.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ListenerImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ListenerImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ListenerOptions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionImpl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionImpl.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Measure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Measure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MeasureArgs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MeasureArgs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorAcceptor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MonitorAcceptor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorConnection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MonitorConnection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorsBroadcastManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/MonitorsBroadcastManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorsMsgFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MonitorsMsgFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PacketInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/PacketInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnectionPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnectionPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnection_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/ProtocolManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ProtocolManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/QueueOptions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ReadWriteLock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ReadWriteLock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ReadWriteLock_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Routines.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Routines_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ScopedLock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerImpl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerImpl.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ServerOptions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerStats.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerStats.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Service.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/StdAfx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/StopWatch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/StopWatch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/StopWatchImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/StopWatchImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/SystemService.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/SystemServiceImpl_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/SystemServiceImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Utilities.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Utilities_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/XMLPacket.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/XMLPacket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/XMLProtocol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/XMLProtocol.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/dllmain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/linuxcs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/linuxcs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/stdafx.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/xmlParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/xmlParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="2">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <standard>8</standard>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>../output/libpushframework.so</output>
+          <linkerLibItems>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerOptionItem>-lrt</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="include/Common.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ConnectionContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ListenerOptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/LogicalConnection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Plateform.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PushFramework.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/PushFrameworkInc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/QueueOptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/ServerOptions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Service.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/SystemService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Acceptor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Acceptor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastManagerBase.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastManagerBase.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueGroupContext.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/BroadcastQueueGroupContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="private/BroadcastStreamer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/BroadcastStreamer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ClientFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ClientFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ClientFactory_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Common.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ConnectionContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ConnectionContextPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ConnectionContextPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/CumulativeMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/CumulativeMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Demultiplexor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Demultiplexor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/DemuxImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/DemuxImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Dispatcher.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Dispatcher.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/DistributionMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/DistributionMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/DurationMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/DurationMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/GarbageCollector.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/GarbageCollector.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/IOQueue_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/IOQueue_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedDistributionMeasure.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedDistributionMeasure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedMeasure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/KeyedAveragedMeasure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Listener.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Listener.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ListenerImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ListenerImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ListenerOptions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionImpl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionImpl.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/LogicalConnectionPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Measure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Measure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MeasureArgs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MeasureArgs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorAcceptor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MonitorAcceptor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorConnection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MonitorConnection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorsBroadcastManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/MonitorsBroadcastManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/MonitorsMsgFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/MonitorsMsgFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PacketInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/PacketInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnectionPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnectionPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/PhysicalConnection_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/ProtocolManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ProtocolManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/QueueOptions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ReadWriteLock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ReadWriteLock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ReadWriteLock_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/Routines.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Routines_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ScopedLock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerImpl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerImpl.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/ServerOptions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerStats.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/ServerStats.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Service.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/StdAfx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/StopWatch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/StopWatch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/StopWatchImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/StopWatchImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/SystemService.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/SystemServiceImpl_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="private/SystemServiceImpl_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Utilities.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/Utilities_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/XMLPacket.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/XMLPacket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/XMLProtocol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/XMLProtocol.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/dllmain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/linuxcs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/linuxcs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="private/stdafx.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/xmlParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="private/xmlParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="project">
+      <UniqueIdentifier>{3cc83fe0-f6ea-417f-9583-b28ba5ce8683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utilities">
+      <UniqueIdentifier>{9f3fc0a0-597c-4776-8a4d-a56f79167c24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{9443888f-d7bb-4e25-81e7-50a8c8988a87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private">
+      <UniqueIdentifier>{1541b67e-c42c-410a-ae53-fb18d4392e6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="private\Stats">
+      <UniqueIdentifier>{ecac5a53-2917-452f-aea6-7d673e5103c1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="private\dllmain.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="private\stdafx.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Acceptor.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\BroadcastQueue.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\BroadcastStreamer.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ConnectionContext.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Demultiplexor.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\DemuxImpl_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Dispatcher.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\GarbageCollector.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\IOBuffer.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\IOQueue_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Listener.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ListenerImpl_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ListenerOptions.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\LogicalConnection.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\MonitorAcceptor.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\MonitorsBroadcastManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\MonitorsMsgFactory.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\PacketInfo.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\PhysicalConnection.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\PhysicalConnection_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\QueueOptions.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Routines_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Server.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ServerImpl.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ServerOptions.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ServerStats.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Service.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\StopWatch.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\StopWatchImpl_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\SystemService.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\SystemServiceImpl_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Utilities_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\XMLPacket.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\xmlParser.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\XMLProtocol.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\CumulativeMeasure.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\DistributionMeasure.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\DurationMeasure.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\KeyedAveragedDistributionMeasure.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\KeyedAveragedMeasure.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Measure.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\MeasureArgs.cpp">
+      <Filter>private\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="private\BroadcastManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\BroadcastManagerBase.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\BroadcastQueueContext.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\BroadcastQueueGroupContext.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\MonitorConnection.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ProtocolManager.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\LogicalConnectionImpl.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\Common.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ConnectionContextPool.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\PhysicalConnectionPool.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ClientFactory.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ClientFactory_Win.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\LogicalConnectionPool.cpp">
+      <Filter>private</Filter>
+    </ClCompile>
+    <ClCompile Include="private\ReadWriteLock_Win.cpp" />
+    <ClCompile Include="private\ReadWriteLock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\PushFramework.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PushFrameworkInc.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="private\StdAfx.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="private\targetver.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Overlap.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ScopedLock.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Utilities.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConnectionContext.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ListenerOptions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LogicalConnection.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Plateform.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\QueueOptions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Server.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ServerOptions.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Service.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SystemService.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Acceptor.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\BroadcastContext.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\BroadcastQueue.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\BroadcastStreamer.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Demultiplexor.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\DemuxImpl_Win.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Dispatcher.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\GarbageCollector.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\IOBuffer.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\IOQueue_Win.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Listener.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ListenerImpl_Win.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\MonitorAcceptor.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\MonitorsBroadcastManager.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\MonitorsMsgFactory.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\PacketInfo.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\PhysicalConnection.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Routines.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ServerImpl.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ServerStats.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\StopWatch.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\StopWatchImpl_Win.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\SystemServiceImpl_Win.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Types.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\XMLPacket.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\xmlParser.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\XMLProtocol.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\CumulativeMeasure.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="private\DistributionMeasure.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="private\DurationMeasure.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="private\KeyedAveragedDistributionMeasure.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="private\KeyedAveragedMeasure.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="private\Measure.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="private\MeasureArgs.h">
+      <Filter>private\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="private\BroadcastManager.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\BroadcastManagerBase.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\BroadcastQueueContext.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\BroadcastQueueGroupContext.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\MonitorConnection.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ProtocolManager.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\LogicalConnectionImpl.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Common.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ConnectionContextPool.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\PhysicalConnectionPool.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ClientFactory.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\LogicalConnectionPool.h">
+      <Filter>private</Filter>
+    </ClInclude>
+    <ClInclude Include="private\ReadWriteLock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Licence.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PushFramework.rc" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D208CCA6-2919-4B12-BF98-113AFB5B72C1}</ProjectGuid>
+    <RootNamespace>PushFramework</RootNamespace>
+    <SccProjectName>SAK</SccProjectName>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccProvider>SAK</SccProvider>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.61030.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\output\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\output\$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\ProtocolFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PUSHFRAMEWORK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>Winmm.lib ProtocolFramework.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>..\output\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;PUSHFRAMEWORK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>Winmm.lib %(AdditionalOptions)</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\ProtocolFramework\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PUSHFRAMEWORK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>Winmm.lib ProtocolFramework.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>..\output\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PUSHFRAMEWORK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalOptions>Winmm.lib %(AdditionalOptions)</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="private\BroadcastQueueGroupContext.cpp" />
+    <ClCompile Include="private\BroadcastQueueContext.cpp" />
+    <ClCompile Include="private\ConnectionContextPool.cpp" />
+    <ClCompile Include="private\dllmain.cpp" />
+    <ClCompile Include="private\LogicalConnectionImpl.cpp" />
+    <ClCompile Include="private\Common.cpp" />
+    <ClCompile Include="private\LogicalConnectionPool.cpp" />
+    <ClCompile Include="private\MonitorConnection.cpp" />
+    <ClCompile Include="private\PhysicalConnectionPool.cpp" />
+    <ClCompile Include="private\ProtocolManager.cpp" />
+    <ClCompile Include="private\ReadWriteLock.cpp" />
+    <ClCompile Include="private\ReadWriteLock_Win.cpp" />
+    <ClCompile Include="private\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="private\Acceptor.cpp" />
+    <ClCompile Include="private\BroadcastManager.cpp" />
+    <ClCompile Include="private\BroadcastManagerBase.cpp" />
+    <ClCompile Include="private\BroadcastQueue.cpp" />
+    <ClCompile Include="private\BroadcastStreamer.cpp" />
+    <ClCompile Include="private\ClientFactory_Win.cpp" />
+    <ClCompile Include="private\ClientFactory.cpp" />
+    <ClCompile Include="private\ConnectionContext.cpp" />
+    <ClCompile Include="private\Demultiplexor.cpp" />
+    <ClCompile Include="private\DemuxImpl_Win.cpp" />
+    <ClCompile Include="private\Dispatcher.cpp" />
+    <ClCompile Include="private\GarbageCollector.cpp" />
+    <ClCompile Include="private\IOBuffer.cpp" />
+    <ClCompile Include="private\IOQueue_Win.cpp" />
+    <ClCompile Include="private\Listener.cpp" />
+    <ClCompile Include="private\ListenerImpl_Win.cpp" />
+    <ClCompile Include="private\ListenerOptions.cpp" />
+    <ClCompile Include="private\LogicalConnection.cpp" />
+    <ClCompile Include="private\MonitorAcceptor.cpp" />
+    <ClCompile Include="private\MonitorsBroadcastManager.cpp" />
+    <ClCompile Include="private\MonitorsMsgFactory.cpp" />
+    <ClCompile Include="private\PacketInfo.cpp" />
+    <ClCompile Include="private\PhysicalConnection.cpp" />
+    <ClCompile Include="private\PhysicalConnection_Win.cpp" />
+    <ClCompile Include="private\QueueOptions.cpp" />
+    <ClCompile Include="private\Routines_Win.cpp" />
+    <ClCompile Include="private\Server.cpp" />
+    <ClCompile Include="private\ServerImpl.cpp" />
+    <ClCompile Include="private\ServerOptions.cpp" />
+    <ClCompile Include="private\ServerStats.cpp" />
+    <ClCompile Include="private\Service.cpp" />
+    <ClCompile Include="private\StopWatch.cpp" />
+    <ClCompile Include="private\StopWatchImpl_Win.cpp" />
+    <ClCompile Include="private\SystemService.cpp" />
+    <ClCompile Include="private\SystemServiceImpl_Win.cpp" />
+    <ClCompile Include="private\Utilities_Win.cpp" />
+    <ClCompile Include="private\XMLPacket.cpp" />
+    <ClCompile Include="private\xmlParser.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="private\XMLProtocol.cpp" />
+    <ClCompile Include="private\CumulativeMeasure.cpp" />
+    <ClCompile Include="private\DistributionMeasure.cpp" />
+    <ClCompile Include="private\DurationMeasure.cpp" />
+    <ClCompile Include="private\KeyedAveragedDistributionMeasure.cpp" />
+    <ClCompile Include="private\KeyedAveragedMeasure.cpp" />
+    <ClCompile Include="private\Measure.cpp" />
+    <ClCompile Include="private\MeasureArgs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\PushFramework.h" />
+    <ClInclude Include="include\PushFrameworkInc.h" />
+    <ClInclude Include="private\BroadcastQueueGroupContext.h" />
+    <ClInclude Include="private\BroadcastQueueContext.h" />
+    <ClInclude Include="private\ConnectionContextPool.h" />
+    <ClInclude Include="private\LogicalConnectionImpl.h" />
+    <ClInclude Include="private\LogicalConnectionPool.h" />
+    <ClInclude Include="private\MonitorConnection.h" />
+    <ClInclude Include="private\PhysicalConnectionPool.h" />
+    <ClInclude Include="private\ProtocolManager.h" />
+    <ClInclude Include="private\ReadWriteLock.h" />
+    <ClInclude Include="private\StdAfx.h" />
+    <ClInclude Include="private\targetver.h" />
+    <ClInclude Include="private\Overlap.h" />
+    <ClInclude Include="private\ScopedLock.h" />
+    <ClInclude Include="private\Utilities.h" />
+    <ClInclude Include="include\ConnectionContext.h" />
+    <ClInclude Include="include\Common.h" />
+    <ClInclude Include="include\ListenerOptions.h" />
+    <ClInclude Include="include\LogicalConnection.h" />
+    <ClInclude Include="include\Plateform.h" />
+    <ClInclude Include="include\QueueOptions.h" />
+    <ClInclude Include="include\Server.h" />
+    <ClInclude Include="include\ServerOptions.h" />
+    <ClInclude Include="include\Service.h" />
+    <ClInclude Include="include\SystemService.h" />
+    <ClInclude Include="private\Acceptor.h" />
+    <ClInclude Include="private\BroadcastContext.h" />
+    <ClInclude Include="private\BroadcastManager.h" />
+    <ClInclude Include="private\BroadcastManagerBase.h" />
+    <ClInclude Include="private\BroadcastQueue.h" />
+    <ClInclude Include="private\BroadcastStreamer.h" />
+    <ClInclude Include="private\ClientFactory.h" />
+    <ClInclude Include="private\Demultiplexor.h" />
+    <ClInclude Include="private\DemuxImpl_Win.h" />
+    <ClInclude Include="private\Dispatcher.h" />
+    <ClInclude Include="private\GarbageCollector.h" />
+    <ClInclude Include="private\IOBuffer.h" />
+    <ClInclude Include="private\IOQueue_Win.h" />
+    <ClInclude Include="private\Listener.h" />
+    <ClInclude Include="private\ListenerImpl_Win.h" />
+    <ClInclude Include="private\MonitorAcceptor.h" />
+    <ClInclude Include="private\MonitorsBroadcastManager.h" />
+    <ClInclude Include="private\MonitorsMsgFactory.h" />
+    <ClInclude Include="private\PacketInfo.h" />
+    <ClInclude Include="private\PhysicalConnection.h" />
+    <ClInclude Include="private\Routines.h" />
+    <ClInclude Include="private\ServerImpl.h" />
+    <ClInclude Include="private\ServerStats.h" />
+    <ClInclude Include="private\StopWatch.h" />
+    <ClInclude Include="private\StopWatchImpl_Win.h" />
+    <ClInclude Include="private\SystemServiceImpl_Win.h" />
+    <ClInclude Include="private\Types.h" />
+    <ClInclude Include="private\XMLPacket.h" />
+    <ClInclude Include="private\xmlParser.h" />
+    <ClInclude Include="private\XMLProtocol.h" />
+    <ClInclude Include="private\CumulativeMeasure.h" />
+    <ClInclude Include="private\DistributionMeasure.h" />
+    <ClInclude Include="private\DurationMeasure.h" />
+    <ClInclude Include="private\KeyedAveragedDistributionMeasure.h" />
+    <ClInclude Include="private\KeyedAveragedMeasure.h" />
+    <ClInclude Include="private\Measure.h" />
+    <ClInclude Include="private\MeasureArgs.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Licence.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PushFramework.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

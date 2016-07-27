@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="90">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>src/AbstractPool.h</itemPath>
+      <itemPath>src/Buffer.h</itemPath>
+      <itemPath>src/BufferPool.h</itemPath>
+      <itemPath>src/Connection.h</itemPath>
+      <itemPath>src/DeserializeData.h</itemPath>
+      <itemPath>src/ErrorCodes.h</itemPath>
+      <itemPath>src/IncomingPacket.h</itemPath>
+      <itemPath>src/MemorySegment.h</itemPath>
+      <itemPath>src/MessageFactory.h</itemPath>
+      <itemPath>src/OutgoingPacket.h</itemPath>
+      <itemPath>src/Plateform.h</itemPath>
+      <itemPath>src/Protocol.h</itemPath>
+      <itemPath>src/ProtocolContext.h</itemPath>
+      <itemPath>src/ProtocolFramework.h</itemPath>
+      <itemPath>src/ProtocolFrameworkInc.h</itemPath>
+      <itemPath>src/ProtocolManager.h</itemPath>
+      <itemPath>src/RecyclableBuffer.h</itemPath>
+      <itemPath>src/SerializeData.h</itemPath>
+      <itemPath>src/linuxcs.h</itemPath>
+      <itemPath>src/stdafx.h</itemPath>
+      <itemPath>src/targetver.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/AbstractPool.cpp</itemPath>
+      <itemPath>src/Buffer.cpp</itemPath>
+      <itemPath>src/BufferPool.cpp</itemPath>
+      <itemPath>src/Connection.cpp</itemPath>
+      <itemPath>src/DeserializeData.cpp</itemPath>
+      <itemPath>src/ErrorCodes.cpp</itemPath>
+      <itemPath>src/IncomingPacket.cpp</itemPath>
+      <itemPath>src/MemorySegment.cpp</itemPath>
+      <itemPath>src/MessageFactory.cpp</itemPath>
+      <itemPath>src/OutgoingPacket.cpp</itemPath>
+      <itemPath>src/Protocol.cpp</itemPath>
+      <itemPath>src/ProtocolContext.cpp</itemPath>
+      <itemPath>src/ProtocolFramework.cpp</itemPath>
+      <itemPath>src/ProtocolManager.cpp</itemPath>
+      <itemPath>src/RecyclableBuffer.cpp</itemPath>
+      <itemPath>src/SerializeData.cpp</itemPath>
+      <itemPath>src/linuxcs.cpp</itemPath>
+      <itemPath>src/stdafx.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="2">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <commandlineTool>g++</commandlineTool>
+        </ccTool>
+        <linkerTool>
+          <output>/home/ChessComposer/${CND_CONF}/libprotocolframework.so</output>
+        </linkerTool>
+      </compileType>
+      <item path="src/AbstractPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AbstractPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Buffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Buffer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/BufferPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/BufferPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Connection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Connection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DeserializeData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DeserializeData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ErrorCodes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ErrorCodes.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/IncomingPacket.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/IncomingPacket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MemorySegment.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MemorySegment.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/OutgoingPacket.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OutgoingPacket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Plateform.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Protocol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Protocol.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProtocolContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolFramework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProtocolFramework.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolFrameworkInc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProtocolManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/RecyclableBuffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RecyclableBuffer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SerializeData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SerializeData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/linuxcs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/linuxcs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/stdafx.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/targetver.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="2">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>/home/ChessComposer/${CND_CONF}/libprotocolframework.so</output>
+        </linkerTool>
+      </compileType>
+      <item path="src/AbstractPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AbstractPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Buffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Buffer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/BufferPool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/BufferPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Connection.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Connection.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DeserializeData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DeserializeData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ErrorCodes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ErrorCodes.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/IncomingPacket.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/IncomingPacket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MemorySegment.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MemorySegment.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/OutgoingPacket.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/OutgoingPacket.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Plateform.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Protocol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Protocol.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProtocolContext.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolFramework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProtocolFramework.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolFrameworkInc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ProtocolManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ProtocolManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/RecyclableBuffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RecyclableBuffer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SerializeData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SerializeData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/linuxcs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/linuxcs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/stdafx.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/targetver.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
