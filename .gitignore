@@ -80,3 +80,5 @@ CMakeFiles/*
 *.pid
 netstackdump*
 *logs/error.log
+
+logs/
