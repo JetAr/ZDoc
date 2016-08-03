@@ -62,7 +62,7 @@
       L589, 20:R#.13   @iocp server
       L593, 21:zsummer/zsummerX
       L596, 22:R#.14   @ffmpeg
-     Zndex_E : //z 2016-07-22 18:06:08 L.162'21232 T1432582969.K ~224 +----+----+----+----+----+
+     Zndex_E : //z 2016-08-03 10:03:12 L.150'50208 T910172233 .K ~230 +----+----+----+----+----+
      TimeCnt : //z 2016-07-20 18:04:20 L.164'21340 T1296908399.K ~24  +----+----+----+----+----+
      Reg.Cnt : //z 2016-07-22 14:21:02 L.162'34738 T563870540 .K ~15  +----+----+----+----+----+
      #15  R+ : //z 2016-07-22 14:21:02 L.162'34738 T563870540 .K ~15    V+.230  L+.616  
@@ -82,7 +82,7 @@
      #1   R+ : //z 2016-05-23 19:23:08 L.222'16612 T130859512 .K ~1     V+.2    L+.62   
      File.Op : //z 2016-07-20 22:58:14 L.164'3706  T1812878518.K ~1   +----+----+----+----+----+
      #1   O+ : //z 2016-07-20 22:58:14 L.164'3706  T1812878518.K ~1     V+.215  L+.1    
-     Version : //z 2016-07-22 18:06:08 L.162'21232 T1432582969.K ~239   R+.13   L+.601  --+----+
+     Version : //z 2016-08-03 10:03:12 L.150'50208 T910172233 .K ~245   R+.14   L+.617  --+----+
      #12  R+ : //z 2016-07-22 14:21:02 L.162'34738 T563870540 .K ~230   R+.15   L+.617  V+.230  
      #12  V+ : //z 2016-07-20 23:32:39 L.164'1641  T3101759094.K ~228   R+.14   L+.608  
      #11  R+ : //z 2016-07-20 18:04:18 L.164'21342 T1296908374.K ~209   R+.14   L+.576  V+.209  
@@ -611,6 +611,10 @@ https://www.ffmpeg.org/platform.html
 动态库：./configure --enable-shared --prefix=./vs2013_build --enable-debug --toolchain=msvc
 
 $ ./configure --enable-asm --enable-yasm --disable-ffserver --disable-avdevice --disable-doc --disable-ffplay --disable-ffprobe --disable-ffmpeg --enable-shared --disable-static --disable-bzlib --disable-libopenjpeg --disable-iconv --disable-zlib --prefix=/c/ffmpeg --toolchain=msvc --arch=amd64 --extra-cflags="-MDd" --extra-ldflags="/NODEFAULTLIB:libcmt" --enable-debug
+
+./configure --toolchain=msvc --arch=x86_64 --enable-debug --enable-shared --disable-optimizations --prefix=./vs2013_build_debug --enable-gpl --enable-nonfree --enable-cuvid --enable-cuda --extra-cflags=-I'D:/msys/local/include' --extra-cflags=/D'_DEBUG' --extra-cflags=-ID:/msys/local/inc --extra-ldflags=/LIBPATH:D:/MSYS/local/lib
+
+./configure --toolchain=msvc --arch=x86_64 --enable-debug --enable-shared --disable-optimizations --prefix=./vs2013_build_debug --enable-gpl --enable-nonfree --enable-cuvid --enable-cuda --extra-cflags=-I'D:/msys/local/include' --extra-ldflags=/LIBPATH:D:/MSYS/local/lib
 
 x86_64
 --disable-optimizations
