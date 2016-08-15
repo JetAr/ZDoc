@@ -1,0 +1,274 @@
+常用git指令
+Bitbucket-团队开发私有库使用指南
+发表于 2015 年 3 月 26 日
+使用Git维护代码比较好的是GitHub，但是GitHub的私有库是收费的。那么对于一个小团队前期开发时可以考虑使用Bitbucket免费私有库，默认是5个人，据说邀请好友可以赠送3个人，则是8个人。
+
+Bitbucket 和 Github 一样都是 代码维护管理仓库，可以较好的进行代码管理和协同合作。除众所周知的代码维护外，采用 Bitbucket/Github 进行团队开发的另外两大好处分别是
+1：WIKI页面管理，方便大家的讨论知识进行梳理；
+2：问题追踪，方便团队开发时进行 问题记录，责任下发，自由讨论，邮件关注，团队投票表决等；
+
+代码的维护统一采用Git工具，其他包括Wiki, 问题追踪等 文本排版建议采用Markdown语法。
+
+【第一步】：开通帐户
+Bitbucket（http://bitbucket.org/）支持使用Google帐号授权登录。
+
+【第二步】：添加团队
+从页面右上角进入 管理帐号，选择使用的Team，进入ACCESS MANAGEMENT -> User groups 添加用户组，如果是添加多个管理员的话则添加 Administrators,如果是 添加开发者用户的话，则添加Developers，添入他们的邮箱/用户名进行邀请（如果对方已通过邮箱注册了帐户则直接添加进来，如果尚未开通则发送邀请邮件）。
+此时进入团队首页就可以看到新添加的成员了。
+
+【第三步】：创建仓库
+在团队首页-概览-一栏 创建一个新的仓库：Create your first repo，添入一些基本信息后则创建成功。（其中有一个HipChat整合，由于内地使用不是很多，我们暂且不进行整合）
+
+【第四步】：安装Git
+Unix系统下可直接使用Git，而Win用户则需要安装可支持插件，Git的安装比较简单，直接参考【Git 安装指南】
+
+【第五步】：初始化本地仓库
+写在前面的话：如果是从服务器上拉仓库里的文件下来则使用pull，如果是要从服务器上直接把整个仓库Down下来则使用clone。
+
+安装好Git之后，我们选用命令行操作，打开Git Bash，创建一个文件夹，或者cd转到目标文件夹下。
+此处注意，Window下目录使用反斜杠\表示层级，但是Unix下使用斜杠/，而反斜杠在Unix下是转义符。
+
+%注意，以下以%表示注释
+$ mkdir /jacoxu/2015SemanticCode %转到目标路径下
+%注意，接下来有两种方式，1种是使用下面两行代码初始化本地仓库，1种是直接克隆clone服务器端的仓库
+%方式1
+$ git init %进行Git仓库初始化，如果目录下什么都没有的话，则提示初始化了一个空仓库
+%把服务器目标仓库地址添加到本地
+$ git remote add [别名] git@bitbucket.org:[团队名]/[仓库名].git , [别名]一般惯用origin
+%方式2
+$ git clone git@bitbucket.org:[团队名]/[仓库名].git
+#注，有HTTPS和SSH两种模式，上面采用的是SSH的URL，如果是HTTPS的URL则是：https://[用户名]@bitbucket.org/[团队名]/[仓库名].git
+
+此时则初始化一个本地仓库完毕，插曲一下。当我们维护了好几个远程库进行代码更新时，可能会经常替换远程库地址。
+那么使用 $ git remote -v 查看当前已有的服务器别名，使用 $ git remote rm [别名] 删除指定别名。
+另外其他的一些操作指令参考 参考博文1 2 3。
+
+【第六步】：提交代码
+先创建一个新文件README.md
+
+$ git add README.md %表示在当前版本中添加README.md文件，如果要添加所有更新后的文件的话，则直接使用 git add .
+$ git commit -m ‘Initial commit with contributors’ %添加一条注释，注意所有的版本工具是不能忽略注释的
+$ git push -u [别名] master %push提交到服务器上，注，pull则是从服务器上拉下代码
+%如果没有创建公钥的话，则需要输入密码个人Bitbucket的密码。
+
+（这里插曲一下，README.md）采用的是markdown语言通过句尾两个空格或一个空行来换行，很多PHP页面中都采用此格式进行排版。
+
+【其他指令】：
+$ git checkout jacoxu %从master切换到jacoxu分支
+$ git status %查看当前状态
+$ git branck %查看有那些分支，并且当前在哪个分支上
+
+【一些问题】：
+
+问题1：大家关注比较多的可能是多人同时编辑同一个文件的问题。Git提供了自动Merge操作，但是如果有删除和添加同时操作的情况下，自动Merge一般都是失效的。但是自动Merge会标注出两个版本的异同，此时，再手动进行Merge，所以应尽量避免两个人同时编辑同一个文件的情况，如果真的必要。那么在自己修改的地方添加一些备注，方便必须进行人工Merge时的参考。
+
+一般从一个分支提交代码时，为了避免冲突则先Pull一下代码，Git会进行自动Merge，然后在进行Push代码。
+
+问题2：删除文件后如何提交，参考如下，使用git add –all .
+$ git add .
+warning: You ran ‘git add’ with neither ‘-A (–all)’ or ‘–ignore-removal’,
+whose behaviour will change in Git 2.0 with respect to paths you removed.
+Paths like ‘data/jacoxu/all_Seg.txt’ that are
+removed from your working tree are ignored with this version of Git.
+
+* ‘git add –ignore-removal ‘, which is the current default,
+ignores paths you removed from your working tree.
+
+* ‘git add –all’ will let you also record the removals.
+
+Run ‘git status’ to check the paths you removed from your working tree.
+
+jacoxu@YSY2322 /jacoxu/2015Semantic/(master)
+$ git add –all .
+
+$ git commit -m ‘change some code –jiaming’
+[master af0ee74] change some code –jiaming
+2 files changed, 34 insertions(+), 22618 deletions(-)
+delete mode 100644 data/jacoxu/all_Seg.txt
+会发现，有delete操作（默认是忽略delete操作的）
+
+问题3：如果系统出现如下错误：warning: LF will be replaced by CRLF，则在仓库创建前输入如下指令：
+
+$ git config –global core.autocrlf false
+
+【参考博文】：
+1. Git 常用命令详解（一）；
+2. Git 常用命令详解（二）；
+3. Git 常用命令详解（三）；
+
+此条目由 jacoxu 发表在 Life&Work、Program Language 分类目录，并贴了 Git 标签。将固定链接加入收藏夹。
+《BITBUCKET-团队开发私有库使用指南》上有 1 条评论
+
+查看、添加、提交、删除、找回，重置修改文件
+
+git help <command> # 显示command的help
+
+git show # 显示某次提交的内容 git show $id
+
+git co -- <file> # 抛弃工作区修改
+
+git co . # 抛弃工作区修改
+
+git add <file> # 将工作文件修改提交到本地暂存区
+
+git add . # 将所有修改过的工作文件提交暂存区
+
+git rm <file> # 从版本库中删除文件
+
+git rm <file> --cached # 从版本库中删除文件，但不删除文件
+
+git reset <file> # 从暂存区恢复到工作文件
+
+git reset -- . # 从暂存区恢复到工作文件
+
+git reset --hard # 恢复最近一次提交过的状态，即放弃上次提交后的所有本次修改
+
+git ci <file> git ci . git ci -a # 将git add, git rm和git ci等操作都合并在一起做　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　git ci -am "some comments"
+
+git ci --amend # 修改最后一次提交记录
+
+git revert <$id> # 恢复某次提交的状态，恢复动作本身也创建次提交对象
+
+git revert HEAD # 恢复最后一次提交的状态
+
+查看文件diff
+
+git diff <file> # 比较当前文件和暂存区文件差异 git diff
+
+git diff <$id1> <$id2> # 比较两次提交之间的差异
+
+git diff <branch1>..<branch2> # 在两个分支之间比较
+
+git diff --staged # 比较暂存区和版本库差异
+
+git diff --cached # 比较暂存区和版本库差异
+
+git diff --stat # 仅仅比较统计信息
+
+查看提交记录
+
+git log git log <file> # 查看该文件每次提交记录
+
+git log -p <file> # 查看每次详细修改内容的diff
+
+git log -p -2 # 查看最近两次详细修改内容的diff
+
+git log --stat #查看提交统计信息
+
+tig
+
+Mac上可以使用tig代替diff和log，brew install tig
+
+Git 本地分支管理
+
+查看、切换、创建和删除分支
+
+git br -r # 查看远程分支
+
+git br <new_branch> # 创建新的分支
+
+git br -v # 查看各个分支最后提交信息
+
+git br --merged # 查看已经被合并到当前分支的分支
+
+git br --no-merged # 查看尚未被合并到当前分支的分支
+
+git co <branch> # 切换到某个分支
+
+git co -b <new_branch> # 创建新的分支，并且切换过去
+
+git co -b <new_branch> <branch> # 基于branch创建新的new_branch
+
+git co $id # 把某次历史提交记录checkout出来，但无分支信息，切换到其他分支会自动删除
+
+git co $id -b <new_branch> # 把某次历史提交记录checkout出来，创建成一个分支
+
+git br -d <branch> # 删除某个分支
+
+git br -D <branch> # 强制删除某个分支 (未被合并的分支被删除的时候需要强制)
+
+ 分支合并和rebase
+
+git merge <branch> # 将branch分支合并到当前分支
+
+git merge origin/master --no-ff # 不要Fast-Foward合并，这样可以生成merge提交
+
+git rebase master <branch> # 将master rebase到branch，相当于： git co <branch> && git rebase master && git co master && git merge <branch>
+
+ Git补丁管理(方便在多台机器上开发同步时用)
+
+git diff > ../sync.patch # 生成补丁
+
+git apply ../sync.patch # 打补丁
+
+git apply --check ../sync.patch #测试补丁能否成功
+
+ Git暂存管理
+
+git stash # 暂存
+
+git stash list # 列所有stash
+
+git stash apply # 恢复暂存的内容
+
+git stash drop # 删除暂存区
+
+Git远程分支管理
+
+git pull # 抓取远程仓库所有分支更新并合并到本地
+
+git pull --no-ff # 抓取远程仓库所有分支更新并合并到本地，不要快进合并
+
+git fetch origin # 抓取远程仓库更新
+
+git merge origin/master # 将远程主分支合并到本地当前分支
+
+git co --track origin/branch # 跟踪某个远程分支创建相应的本地分支
+
+git co -b <local_branch> origin/<remote_branch> # 基于远程分支创建本地分支，功能同上
+
+git push # push所有分支
+
+git push origin master # 将本地主分支推到远程主分支
+
+git push -u origin master # 将本地主分支推到远程(如无远程主分支则创建，用于初始化远程仓库)
+
+git push origin <local_branch> # 创建远程分支， origin是远程仓库名
+
+git push origin <local_branch>:<remote_branch> # 创建远程分支
+
+git push origin :<remote_branch> #先删除本地分支(git br -d <branch>)，然后再push删除远程分支
+
+Git远程仓库管理
+
+GitHub
+
+git remote -v # 查看远程服务器地址和仓库名称
+
+git remote show origin # 查看远程服务器仓库状态
+
+git remote add origin git@ github:robbin/robbin_site.git # 添加远程仓库地址
+
+git remote set-url origin git@ github.com:robbin/robbin_site.git # 设置远程仓库地址(用于修改远程仓库地址) git remote rm <repository> # 删除远程仓库
+
+创建远程仓库
+
+git clone --bare robbin_site robbin_site.git # 用带版本的项目创建纯版本仓库
+
+scp -r my_project.git git@ git.csdn.net:~ # 将纯仓库上传到服务器上
+
+mkdir robbin_site.git && cd robbin_site.git && git --bare init # 在服务器创建纯仓库
+
+git remote add origin git@ github.com:robbin/robbin_site.git # 设置远程仓库地址
+
+git push -u origin master # 客户端首次提交
+
+git push -u origin develop # 首次将本地develop分支提交到远程develop分支，并且track
+
+git remote set-head origin master # 设置远程仓库的HEAD指向master分支
+
+也可以命令设置跟踪远程库和本地库
+
+git branch --set-upstream master origin/master
+
+git branch --set-upstream develop origin/develop
