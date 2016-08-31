@@ -13,7 +13,9 @@
 #lib
 *.a
 *.la
+*.lai
 *.lo
+*.slo
 
 # Shared objects (inc. Windows DLLs)
 #*.dll
@@ -52,6 +54,8 @@
 *.sbr
 *.sdf
 *.opensdf
+
+*.bak
 
 *.psess
 *.vsp
