@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      rtp socket communication include file
  *
  *      initially contributed by Felix von Leitner

@@ -1,4 +1,4 @@
-/********************************************************************************
+﻿/********************************************************************************
  Copyright (C) 2013 Christophe Jeannin <chris.j84@free.fr>
                     Hugh Bailey <obs.jim@gmail.com>
                     Eric Bataille <e.c.p.bataille@gmail.com>

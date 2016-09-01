@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  LAME MP3 encoder for DirectShow
  *  Advanced property page
  *

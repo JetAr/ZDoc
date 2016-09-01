@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      GTK plotting routines source file
  *
  *      Copyright (c) 1999 Mark Taylor

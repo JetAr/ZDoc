@@ -1,4 +1,4 @@
-/*
+﻿/*
  * frontend/console.h
  *
  * This

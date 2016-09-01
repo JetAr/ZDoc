@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      mp3rtp command line frontend program
  *
  *      initially contributed by Felix von Leitner

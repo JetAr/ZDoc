@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Lame time routines include file
  *
  *	Copyright (c) 2000 Mark Taylor

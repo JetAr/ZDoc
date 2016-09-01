@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (C) 2008-2009 Andrej Stepanchuk
  *  Copyright (C) 2009-2010 Howard Chu
  *  Copyright (C) 2010 2a665470ced7adb7156fcef47f8199a6371c117b8a79e399a2771e0b36384090

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * MP3 quantization, intrinsics functions
  *
  *      Copyright (c) 2005-2006 Gabriel Bouvigne

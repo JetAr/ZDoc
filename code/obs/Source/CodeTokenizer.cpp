@@ -1,4 +1,4 @@
-/********************************************************************************
+Ôªø/********************************************************************************
  Copyright (C) 2012 Hugh Bailey <obs.jim@gmail.com>
 
  This program is free software; you can redistribute it and/or modify
@@ -92,7 +92,7 @@ BOOL CodeTokenizer::GetNextToken(String &token, BOOL bPeek)
                 if( ((*lpTokenStart == '=') && (*lpTemp != '=')) ||
                     (*lpTokenStart == ';') ||
                     (*lpTemp == ' ')   ||
-                    (*lpTemp == L'Å@') ||
+                    (*lpTemp == L'‰∏Ç') ||
                     (*lpTemp == '\'')  ||
                     (*lpTemp == '"')   ||
                     (*lpTemp == ';')   ||
@@ -170,7 +170,7 @@ BOOL CodeTokenizer::GetNextToken(String &token, BOOL bPeek)
                 }
 
                 if( (*lpTemp != ' ')   &&
-                    (*lpTemp != L'Å@') &&
+                    (*lpTemp != L'‰∏Ç') &&
                     (*lpTemp != '\r')  &&
                     (*lpTemp != '\t')  &&
                     (*lpTemp != '\n')  )

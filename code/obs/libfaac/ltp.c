@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
 
 This software module was originally developed by
 Nokia in the course of development of the MPEG-2 AAC/MPEG-4

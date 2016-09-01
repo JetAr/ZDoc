@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      Copyright (C) 2005-2008 Team XBMC
  *      http://www.xbmc.org
  *      Copyright (C) 2008-2009 Andrej Stepanchuk

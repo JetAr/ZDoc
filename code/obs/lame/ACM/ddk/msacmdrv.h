@@ -1,4 +1,4 @@
-/**
+﻿/**
  *
  * Alternative msacmdrv.h file, for use in the Lame project.
  * File from the FFDshow project, released under LGPL by permission

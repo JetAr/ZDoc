@@ -1,4 +1,4 @@
-/********************************************************************************
+﻿/********************************************************************************
  Copyright (C) 2013 HomeWorld <homeworld at gmail dot com>
 
  This program is free software; you can redistribute it and/or modify

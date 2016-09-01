@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      LAME MP3 encoding engine
  *
  *      Copyright (c) 1999 Mark Taylor

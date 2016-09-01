@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      lame utility library include file
  *
  *      Copyright (c) 1999 Albert L Faber

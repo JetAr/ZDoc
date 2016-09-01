@@ -1,4 +1,4 @@
-#ifndef LAME_GLOBAL_FLAGS_H
+﻿#ifndef LAME_GLOBAL_FLAGS_H
 #define LAME_GLOBAL_FLAGS_H
 
 #ifndef lame_internal_flags_defined

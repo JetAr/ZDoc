@@ -1,4 +1,4 @@
-/*
+﻿/*
  * id3tag.c -- Write ID3 version 1 and 2 tags.
  *
  * Copyright (C) 2000 Don Melton

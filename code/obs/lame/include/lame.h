@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Interface to MP3 LAME encoding engine
  *
  *	Copyright (c) 1999 Mark Taylor

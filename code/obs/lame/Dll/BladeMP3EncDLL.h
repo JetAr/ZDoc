@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Blade Type of DLL Interface for Lame encoder
  *
  * Copyright (c) 1999-2002 A.L. Faber

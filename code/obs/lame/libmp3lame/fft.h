@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Fast Fourier Transform include file
  *
  *	Copyright (c) 2000 Mark Taylor

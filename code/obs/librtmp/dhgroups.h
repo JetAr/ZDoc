@@ -1,4 +1,4 @@
-/*  librtmp - Diffie-Hellmann Key Exchange
+﻿/*  librtmp - Diffie-Hellmann Key Exchange
  *  Copyright (C) 2009 Andrej Stepanchuk
  *
  *  This file is part of librtmp.

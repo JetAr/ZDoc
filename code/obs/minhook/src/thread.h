@@ -1,4 +1,4 @@
-/* 
+ï»¿/* 
  *  MinHook - Minimalistic API Hook Library	
  *  Copyright (C) 2009 Tsuda Kageyu. All rights reserved.
  *  
@@ -35,7 +35,7 @@
 
 namespace MinHook
 {
-	// ScopedLock •t‚«ƒNƒŠƒeƒBƒJƒ‹ƒZƒNƒVƒ‡ƒ“
+	// ScopedLock ä»˜ãã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 	class CriticalSection
 	{
 		CriticalSection(const CriticalSection&);
@@ -61,7 +61,7 @@ namespace MinHook
 		void leave();
 	};
 
-	// “¯ˆêƒvƒƒZƒX“à‚Ì‘¼‚ÌƒXƒŒƒbƒh‚ğ‚·‚×‚Ä’â~
+	// åŒä¸€ãƒ—ãƒ­ã‚»ã‚¹å†…ã®ä»–ã®ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ã™ã¹ã¦åœæ­¢
 	class ScopedThreadExclusive
 	{
 	private:

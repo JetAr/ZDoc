@@ -1,4 +1,4 @@
-/* -*- mode: C; mode: fold -*- */
+﻿/* -*- mode: C; mode: fold -*- */
 /*
  * set/get functions for lame_global_flags
  *

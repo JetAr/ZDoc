@@ -1,4 +1,4 @@
-/**
+﻿/**
  *
  * Lame ACM wrapper, encode/decode MP3 based RIFF/AVI files in MS Windows
  *

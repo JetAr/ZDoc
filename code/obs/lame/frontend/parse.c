@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      Command line parsing related functions
  *
  *      Copyright (c) 1999 Mark Taylor

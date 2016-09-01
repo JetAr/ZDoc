@@ -1,4 +1,4 @@
-/*
+﻿/*
  * MP3 quantization
  *
  *      Copyright (c) 1999-2000 Mark Taylor

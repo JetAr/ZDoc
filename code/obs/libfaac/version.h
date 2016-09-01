@@ -1,4 +1,4 @@
-#ifndef _VERSION_H_
+﻿#ifndef _VERSION_H_
 #define _VERSION_H_
 
 #define FAAC_RELEASE 1

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2003 James Bursa <bursa@users.sourceforge.net>
  * Copyright 2004 John Tytgat <John.Tytgat@aaug.net>
  * Copyright 2004 Richard Wilson <richard.wilson@netsurf-browser.org>

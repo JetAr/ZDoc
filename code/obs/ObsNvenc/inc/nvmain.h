@@ -1,4 +1,4 @@
-/********************************************************************************
+﻿/********************************************************************************
  Copyright (C) 2014 Timo Rothenpieler <timo@rothenpieler.org>
  
  This program is free software; you can redistribute it and/or modify

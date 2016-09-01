@@ -1,4 +1,4 @@
-/*
+﻿/*
 *	Blade DLL Interface for LAME.
 *
 *	Copyright (c) 1999 - 2002 A.L. Faber

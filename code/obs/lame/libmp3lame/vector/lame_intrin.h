@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      lame_intrin.h include file
  *
  *      Copyright (c) 2006 Gabriel Bouvigne

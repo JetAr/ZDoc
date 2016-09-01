@@ -1,4 +1,4 @@
-/*  RTMPDump - Diffie-Hellmann Key Exchange
+﻿/*  RTMPDump - Diffie-Hellmann Key Exchange
  *  Copyright (C) 2009 Andrej Stepanchuk
  *  Copyright (C) 2009-2010 Howard Chu
  *

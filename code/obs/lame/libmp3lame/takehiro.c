@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	MP3 huffman table selecting and bit counting
  *
  *	Copyright (c) 1999-2005 Takehiro TOMINAGA

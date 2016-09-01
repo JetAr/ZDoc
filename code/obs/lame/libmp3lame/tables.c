@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	MPEG layer 3 tables source file
  *
  *	Copyright (c) 1999 Albert L Faber

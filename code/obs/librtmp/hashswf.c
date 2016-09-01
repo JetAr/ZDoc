@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (C) 2009-2010 Howard Chu
  *
  *  This file is part of librtmp.

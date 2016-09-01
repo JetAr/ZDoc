@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	quantize_pvt include file
  *
  *	Copyright (c) 1999 Takehiro TOMINAGA

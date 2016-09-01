@@ -1,4 +1,4 @@
-/************************* MPEG-2 NBC Audio Decoder **************************
+﻿/************************* MPEG-2 NBC Audio Decoder **************************
  *                                                                           *
 "This software module was originally developed by
 AT&T, Dolby Laboratories, Fraunhofer Gesellschaft IIS in the course of

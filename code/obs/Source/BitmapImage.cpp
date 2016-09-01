@@ -1,4 +1,4 @@
-#include "BitmapImage.h"
+﻿#include "BitmapImage.h"
 
 void *BI_def_bitmap_create(int width, int height)          {return Allocate(width * height * 4);}
 void  BI_def_bitmap_set_opaque(void *bitmap, BOOL opaque)  {}

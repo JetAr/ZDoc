@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	lame utility library source file
  *
  *	Copyright (c) 1999 Albert L Faber

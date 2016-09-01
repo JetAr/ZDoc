@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  *  MinHook - Minimalistic API Hook Library	
  *  Copyright (C) 2009 Tsuda Kageyu. All rights reserved.
  *  

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * set_get.h -- Internal set/get definitions
  *
  * Copyright (C) 2003 Gabriel Bouvigne / Lame project

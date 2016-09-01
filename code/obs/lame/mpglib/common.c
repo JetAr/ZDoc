@@ -1,4 +1,4 @@
-/*
+﻿/*
  * common.c: some common bitstream operations
  *
  * Copyright (C) 1999-2010 The L.A.M.E. project

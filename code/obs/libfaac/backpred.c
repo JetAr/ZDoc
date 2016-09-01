@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 
 This software module was originally developed by
 and edited by Nokia in the course of

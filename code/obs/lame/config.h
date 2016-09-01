@@ -1,4 +1,4 @@
-#ifndef CONFIGMS_H_INCLUDED
+﻿#ifndef CONFIGMS_H_INCLUDED
 #define CONFIGMS_H_INCLUDED
 
 /* The number of bytes in a double.  */

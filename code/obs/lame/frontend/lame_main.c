@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      Command line frontend program
  *
  *      Copyright (c) 1999 Mark Taylor

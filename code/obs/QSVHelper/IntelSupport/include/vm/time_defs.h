@@ -1,4 +1,4 @@
-/* ****************************************************************************** *\
+﻿/* ****************************************************************************** *\
 
 INTEL CORPORATION PROPRIETARY INFORMATION
 This software is supplied under the terms of a license agreement or nondisclosure

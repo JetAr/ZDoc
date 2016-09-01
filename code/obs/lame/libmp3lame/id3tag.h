@@ -1,4 +1,4 @@
-
+﻿
 #ifndef LAME_ID3_H
 #define LAME_ID3_H
 

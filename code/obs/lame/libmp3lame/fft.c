@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** FFT and FHT routines
 **  Copyright 1988, 1993; Ron Mayer
 **      Copyright (c) 1999-2000 Takehiro Tominaga

@@ -42,7 +42,7 @@
 *.suo
 *.htm
 *.idb
-*.manifest
+#*.manifest
 *.res
 *.dep
 *.user

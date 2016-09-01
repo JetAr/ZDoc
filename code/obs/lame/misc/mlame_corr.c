@@ -1,4 +1,4 @@
-/*
+﻿/*
     Bug: 
 	- runs only on little endian machines for WAV files
         - Not all WAV files are recognized

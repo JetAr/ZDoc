@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  A collection of LAME Error Codes
  *
  *  Please use the constants defined here instead of some arbitrary

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	time status related function include file
  *
  *	Copyright (c) 1999 Mark Taylor

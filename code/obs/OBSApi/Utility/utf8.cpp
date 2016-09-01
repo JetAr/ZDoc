@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2007 Alexey Vatchenko <av@bsdua.org>
  *
  * Permission to use, copy, modify, and/or distribute this software for any

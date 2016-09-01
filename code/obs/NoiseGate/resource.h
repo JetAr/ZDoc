@@ -1,6 +1,8 @@
+﻿/*
 #ifndef IDC_STATIC
 #define IDC_STATIC (-1)
 #endif
+*/
 
 #define IDD_CONFIGURENOISEGATE                  101
 #define IDC_ENABLEGATE                          1001

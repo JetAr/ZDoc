@@ -1,4 +1,4 @@
-/*
+﻿/*
  * presets.c -- Apply presets
  *
  *	Copyright (c) 2002-2008 Gabriel Bouvigne

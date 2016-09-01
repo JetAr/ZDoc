@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	LAME DLL Sample Code.
  *
  *	Copyright (c) 2000 A.L. Faber

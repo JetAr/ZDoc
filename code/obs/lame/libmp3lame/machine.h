@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      Machine dependent defines/includes for LAME.
  *
  *      Copyright (c) 1999 A.L. Faber

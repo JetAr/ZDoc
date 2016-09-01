@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	Bitrate histogram source file
  *
  *	Copyright (c) 2000 Mark Taylor

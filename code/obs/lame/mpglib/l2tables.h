@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 1999-2010 The L.A.M.E. project
  *
  * Initially written by Michael Hipp, see also AUTHORS and README.

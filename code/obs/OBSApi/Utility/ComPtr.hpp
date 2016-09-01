@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
   Copyright (c) 2013 by Hugh Bailey <obs.jim@gmail.com>
 
   This software is provided 'as-is', without any express or implied

@@ -1,4 +1,4 @@
-/* 
+ï»¿/* 
  *  MinHook - Minimalistic API Hook Library	
  *  Copyright (C) 2009 Tsuda Kageyu. All rights reserved.
  *  
@@ -36,7 +36,7 @@
 
 namespace MinHook { namespace
 {
-	// ©“®“I‚ÉCloseHandle‚³‚ê‚éWindowsƒnƒ“ƒhƒ‹
+	// è‡ªå‹•çš„ã«CloseHandleã•ã‚Œã‚‹Windowsãƒãƒ³ãƒ‰ãƒ«
 	class ScopedHandle
 	{
 		ScopedHandle(const ScopedHandle&);
@@ -62,7 +62,7 @@ namespace MinHook { namespace
 
 }}
 
-// CriticalSection, CriticalSection::ScopedLock ‚ÌÀ‘•
+// CriticalSection, CriticalSection::ScopedLock ã®å®Ÿè£…
 namespace MinHook
 {
 	CriticalSection::CriticalSection()
@@ -97,7 +97,7 @@ namespace MinHook
 	}
 }
 
-// ScopedThreadExclusive ‚ÌÀ‘•
+// ScopedThreadExclusive ã®å®Ÿè£…
 namespace MinHook
 {
 	ScopedThreadExclusive::ScopedThreadExclusive(const std::vector<uintptr_t>& oldIPs, const std::vector<uintptr_t>& newIPs)
@@ -150,7 +150,7 @@ namespace MinHook
 			ScopedHandle hThread = OpenThread(ThreadAccess, FALSE, tid);
 			SuspendThread(hThread);
 
-			// ‘‚«Š·‚¦”ÍˆÍ“à‚ÅƒXƒŒƒbƒh‚ª’â~‚µ‚½ê‡‚ÍAƒgƒ‰ƒ“ƒ|ƒŠƒ“ŠÖ”‚É§Œä‚ğˆÚ‚·
+			// æ›¸ãæ›ãˆç¯„å›²å†…ã§ã‚¹ãƒ¬ãƒƒãƒ‰ãŒåœæ­¢ã—ãŸå ´åˆã¯ã€ãƒˆãƒ©ãƒ³ãƒãƒªãƒ³é–¢æ•°ã«åˆ¶å¾¡ã‚’ç§»ã™
 			CONTEXT c = { 0 };
 			c.ContextFlags = CONTEXT_CONTROL;
 			if (!GetThreadContext(hThread, &c))

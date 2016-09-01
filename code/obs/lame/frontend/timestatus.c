@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      time status related function source file
  *
  *      Copyright (c) 1999 Mark Taylor

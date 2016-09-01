@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	New Modified DCT include file
  *
  *	Copyright (c) 1999 Takehiro TOMINAGA

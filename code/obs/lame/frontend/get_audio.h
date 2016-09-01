@@ -1,4 +1,4 @@
-/*
+﻿/*
  *    Get Audio routines include file
  *
  *    Copyright (c) 1999 Albert L Faber

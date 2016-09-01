@@ -1,4 +1,4 @@
-/********************************************************************************
+﻿/********************************************************************************
  Copyright (C) 2013 Ruwen Hahn <palana@stunned.de>
 
  This program is free software; you can redistribute it and/or modify

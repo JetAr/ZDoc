@@ -1,4 +1,4 @@
-/***
+﻿/***
 *concurrencysal.h - markers for documenting the concurrent semantics of APIs
 *
 *       Copyright (c) Microsoft Corporation. All rights reserved.

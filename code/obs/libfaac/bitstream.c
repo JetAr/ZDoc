@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 
 This software module was originally developed by
 and edited by Texas Instruments in the course of

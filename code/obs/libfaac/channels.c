@@ -1,4 +1,4 @@
-/************************* MPEG-2 NBC Audio Decoder **************************
+﻿/************************* MPEG-2 NBC Audio Decoder **************************
  *                                                                           *
 "This software module was originally developed in the course of
 development of the MPEG-2 NBC/MPEG-4 Audio standard ISO/IEC 13818-7,

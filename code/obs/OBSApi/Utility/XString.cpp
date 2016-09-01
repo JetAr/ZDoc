@@ -1,4 +1,4 @@
-/********************************************************************************
+Ôªø/********************************************************************************
  Copyright (C) 2001-2012 Hugh Bailey <obs.jim@gmail.com>
 
  This program is free software; you can redistribute it and/or modify
@@ -1661,7 +1661,7 @@ TCHAR *STDCALL sfix(TCHAR *str)
     TCHAR *lpTemp = str;
 
     //get rid of leading spaces
-    while(*lpTemp == ' ' || *lpTemp == '\t' || *lpTemp == L'Å@') ++lpTemp;
+    while(*lpTemp == ' ' || *lpTemp == '\t' || *lpTemp == L'‰∏Ç') ++lpTemp;
     UINT len = slen(lpTemp);
     if(lpTemp != str)
         mcpy(str, lpTemp, (len+1)*sizeof(TCHAR));
@@ -1670,7 +1670,7 @@ TCHAR *STDCALL sfix(TCHAR *str)
     {
         //get rid of ending spaces
         lpTemp = str+(len-1);
-        while(*lpTemp == ' ' || *lpTemp == '\t' || *lpTemp == L'Å@') *(lpTemp--) = 0;
+        while(*lpTemp == ' ' || *lpTemp == '\t' || *lpTemp == L'‰∏Ç') *(lpTemp--) = 0;
     }
 
     return str;

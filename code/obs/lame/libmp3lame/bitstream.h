@@ -1,4 +1,4 @@
-/*
+﻿/*
  *	MP3 bitstream Output interface for LAME
  *
  *	Copyright (c) 1999 Takehiro TOMINAGA

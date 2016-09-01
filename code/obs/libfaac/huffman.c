@@ -1,4 +1,4 @@
-/***********
+﻿/***********
 
 This software module was originally developed by Dolby
 Laboratories and edited by Sony Corporation

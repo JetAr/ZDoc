@@ -1,4 +1,4 @@
-/*
+﻿/*
 ** Copyright (C) 2007-2011 Erik de Castro Lopo <erikd@mega-nerd.com>
 **
 ** This program is free software; you can redistribute it and/or modify

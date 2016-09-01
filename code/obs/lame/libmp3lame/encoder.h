@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      encoder.h include file
  *
  *      Copyright (c) 2000 Mark Taylor

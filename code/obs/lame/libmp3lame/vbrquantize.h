@@ -1,4 +1,4 @@
-/*
+﻿/*
  * MP3 VBR quantization
  *
  * Copyright (c) 1999 Mark Taylor

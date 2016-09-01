@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      bit reservoir source file
  *
  *      Copyright (c) 1999-2000 Mark Taylor

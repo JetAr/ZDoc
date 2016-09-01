@@ -1,4 +1,4 @@
-/* 
+﻿/* 
  * layer2.c: Mpeg Layer-2 audio decoder 
  *
  * Copyright (C) 1999-2010 The L.A.M.E. project

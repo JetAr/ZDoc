@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      MP3 window subband -> subband filtering -> mdct routine
  *
  *      Copyright (c) 1999-2000 Takehiro Tominaga
