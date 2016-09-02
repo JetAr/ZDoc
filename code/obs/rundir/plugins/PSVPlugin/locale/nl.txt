@@ -1,9 +1,0 @@
-Cancel="Annuleren"
-OK="OK"
-
-Plugin.Name="Scèneafhankelijke Volume Plugin"
-Plugin.Description="Staat het instellen van de volume per scène toe."
-
-Config.Caption="Scèneafhankelijke Volume Configuratie"
-Config.Enable="Activeer scèneafhankelijke volume"
-

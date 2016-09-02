@@ -1,9 +1,0 @@
-Cancel="Peruuta"
-OK="OK"
-
-Plugin.Name="Skene-kohtainen ääniliitännäinen"
-Plugin.Description="Mahdollistaa skene-kohtaisten äänien seurannan."
-
-Config.Caption="Skene-kohtaisen ääniliitännäisen asetukset"
-Config.Enable="Skene-kohtaisten äänien seuranta päälle"
-

@@ -1,9 +1,0 @@
-Settings.WindowTitle="Título da xanela"
-Settings.Scene="Escena"
-Settings.Up="Arriba"
-Settings.Down="Abaixo"
-Settings.Add="Engadir"
-Settings.Remove="Eliminar"
-Settings.Milliseconds="milissegundos."
-Settings.Running="executándose"
-
