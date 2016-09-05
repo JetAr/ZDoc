@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\api.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\dumper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\emitter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\loader.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\parser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\reader.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\scanner.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\writer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\yaml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\yaml_private.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8035BFFB-8F70-3A24-A71E-A4F6DBEF342D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A7AE47DE-7D1D-35AD-8EA1-5FE040579993}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

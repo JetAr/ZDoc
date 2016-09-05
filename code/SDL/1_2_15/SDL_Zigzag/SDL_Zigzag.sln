@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello", "Hello\Hello.vcxproj", "{C7936FD5-20D4-4500-8278-F88B4249981D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloBmp", "HelloBmp\HelloBmp.vcxproj", "{9C6D9103-727B-470C-90E3-AB692C9D5177}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloSurface", "HelloSurface\HelloSurface.vcxproj", "{2B25E3DC-79AA-4730-A36D-B5041D3EA584}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloPng", "HelloPng\HelloPng.vcxproj", "{96CC4CC9-425E-4EC6-B657-030A8E2B2AAC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloEvent", "HelloEvent\HelloEvent.vcxproj", "{B300ED86-3BF3-4AFF-B1B3-1C2C38C3EF3C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloColorKey", "HelloColorKey\HelloColorKey.vcxproj", "{8E1BBF95-A911-427D-9046-FE58880F43F3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloSprite", "HelloSprite\HelloSprite.vcxproj", "{E3A803FA-3C0B-4F7A-8D9B-F0AB79B040F4}"
+EndProject
+Global
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7936FD5-20D4-4500-8278-F88B4249981D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C7936FD5-20D4-4500-8278-F88B4249981D}.Debug|Win32.Build.0 = Debug|Win32
+		{C7936FD5-20D4-4500-8278-F88B4249981D}.Release|Win32.ActiveCfg = Release|Win32
+		{C7936FD5-20D4-4500-8278-F88B4249981D}.Release|Win32.Build.0 = Release|Win32
+		{9C6D9103-727B-470C-90E3-AB692C9D5177}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9C6D9103-727B-470C-90E3-AB692C9D5177}.Debug|Win32.Build.0 = Debug|Win32
+		{9C6D9103-727B-470C-90E3-AB692C9D5177}.Release|Win32.ActiveCfg = Release|Win32
+		{9C6D9103-727B-470C-90E3-AB692C9D5177}.Release|Win32.Build.0 = Release|Win32
+		{2B25E3DC-79AA-4730-A36D-B5041D3EA584}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2B25E3DC-79AA-4730-A36D-B5041D3EA584}.Debug|Win32.Build.0 = Debug|Win32
+		{2B25E3DC-79AA-4730-A36D-B5041D3EA584}.Release|Win32.ActiveCfg = Release|Win32
+		{2B25E3DC-79AA-4730-A36D-B5041D3EA584}.Release|Win32.Build.0 = Release|Win32
+		{96CC4CC9-425E-4EC6-B657-030A8E2B2AAC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{96CC4CC9-425E-4EC6-B657-030A8E2B2AAC}.Debug|Win32.Build.0 = Debug|Win32
+		{96CC4CC9-425E-4EC6-B657-030A8E2B2AAC}.Release|Win32.ActiveCfg = Release|Win32
+		{96CC4CC9-425E-4EC6-B657-030A8E2B2AAC}.Release|Win32.Build.0 = Release|Win32
+		{B300ED86-3BF3-4AFF-B1B3-1C2C38C3EF3C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B300ED86-3BF3-4AFF-B1B3-1C2C38C3EF3C}.Debug|Win32.Build.0 = Debug|Win32
+		{B300ED86-3BF3-4AFF-B1B3-1C2C38C3EF3C}.Release|Win32.ActiveCfg = Release|Win32
+		{B300ED86-3BF3-4AFF-B1B3-1C2C38C3EF3C}.Release|Win32.Build.0 = Release|Win32
+		{8E1BBF95-A911-427D-9046-FE58880F43F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8E1BBF95-A911-427D-9046-FE58880F43F3}.Debug|Win32.Build.0 = Debug|Win32
+		{8E1BBF95-A911-427D-9046-FE58880F43F3}.Release|Win32.ActiveCfg = Release|Win32
+		{8E1BBF95-A911-427D-9046-FE58880F43F3}.Release|Win32.Build.0 = Release|Win32
+		{E3A803FA-3C0B-4F7A-8D9B-F0AB79B040F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E3A803FA-3C0B-4F7A-8D9B-F0AB79B040F4}.Debug|Win32.Build.0 = Debug|Win32
+		{E3A803FA-3C0B-4F7A-8D9B-F0AB79B040F4}.Release|Win32.ActiveCfg = Release|Win32
+		{E3A803FA-3C0B-4F7A-8D9B-F0AB79B040F4}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

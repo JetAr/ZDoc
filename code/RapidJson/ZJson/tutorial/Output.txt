@@ -1,0 +1,61 @@
+Original JSON:
+  { "hello" : "world", "t" : true , "f" : false, "n": null, "i":123, "pi": 3.1416, "a":[1, 2, 3, 4]
+}
+
+{ 
+"hello" : "world", 
+"t" : true , 
+"f" : false, 
+"n": null, 
+"i":123, 
+"pi": 3.1416, 
+"a":[1, 2, 3, 4]
+}
+
+Parsing to document succeeded.
+
+Access values in document:
+hello = world
+t = true
+f = false
+n = null
+i = 123
+pi = 3.1416
+a[0] = 1
+a[1] = 2
+a[2] = 3
+a[3] = 4
+a = 1 2 3 4
+Type of member hello is String
+Type of member t is True
+Type of member f is False
+Type of member n is Null
+Type of member i is Number
+Type of member pi is Number
+Type of member a is Array
+
+Modified JSON with reformatting:
+{
+    "hello": "rapidjson",
+    "t": true,
+    "f": false,
+    "n": null,
+    "i": 2432902008176640000,
+    "pi": 3.1416,
+    "a": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        "Lua",
+        "Mio"
+    ],
+    "author": "Milo Yip"
+}
+请按任意键继续. . .

@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tutorial", "tutorial\tutorial.vcxproj", "{12D11594-1660-48A9-B7B8-222ABF011145}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simplereader", "simplereader\simplereader.vcxproj", "{809AB82D-F06D-499D-8FCD-44990E56B1C5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simplewriter", "simplewriter\simplewriter.vcxproj", "{554AFBA3-7A65-4B91-BE7C-AF754D01FB25}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "capitalize", "capitalize\capitalize.vcxproj", "{CADA3D90-9A01-4440-BC7A-DAE32C026024}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12D11594-1660-48A9-B7B8-222ABF011145}.Debug|Win32.ActiveCfg = Debug|Win32
+		{12D11594-1660-48A9-B7B8-222ABF011145}.Debug|Win32.Build.0 = Debug|Win32
+		{12D11594-1660-48A9-B7B8-222ABF011145}.Release|Win32.ActiveCfg = Release|Win32
+		{12D11594-1660-48A9-B7B8-222ABF011145}.Release|Win32.Build.0 = Release|Win32
+		{809AB82D-F06D-499D-8FCD-44990E56B1C5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{809AB82D-F06D-499D-8FCD-44990E56B1C5}.Debug|Win32.Build.0 = Debug|Win32
+		{809AB82D-F06D-499D-8FCD-44990E56B1C5}.Release|Win32.ActiveCfg = Release|Win32
+		{809AB82D-F06D-499D-8FCD-44990E56B1C5}.Release|Win32.Build.0 = Release|Win32
+		{554AFBA3-7A65-4B91-BE7C-AF754D01FB25}.Debug|Win32.ActiveCfg = Debug|Win32
+		{554AFBA3-7A65-4B91-BE7C-AF754D01FB25}.Debug|Win32.Build.0 = Debug|Win32
+		{554AFBA3-7A65-4B91-BE7C-AF754D01FB25}.Release|Win32.ActiveCfg = Release|Win32
+		{554AFBA3-7A65-4B91-BE7C-AF754D01FB25}.Release|Win32.Build.0 = Release|Win32
+		{CADA3D90-9A01-4440-BC7A-DAE32C026024}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CADA3D90-9A01-4440-BC7A-DAE32C026024}.Debug|Win32.Build.0 = Debug|Win32
+		{CADA3D90-9A01-4440-BC7A-DAE32C026024}.Release|Win32.ActiveCfg = Release|Win32
+		{CADA3D90-9A01-4440-BC7A-DAE32C026024}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

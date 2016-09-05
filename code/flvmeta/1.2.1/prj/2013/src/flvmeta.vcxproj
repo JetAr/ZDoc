@@ -1,0 +1,656 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{318D0EE8-9882-38BF-A9BA-22DF1ED69501}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>flvmeta</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flvmeta.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flvmeta</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flvmeta</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flvmeta.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flvmeta</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flvmeta</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">flvmeta.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">flvmeta</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">flvmeta</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">flvmeta.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">flvmeta</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">flvmeta</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\Debug\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Debug/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Debug/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\Debug\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Debug/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Debug/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\Release\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Release/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Release/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\Release\yaml_$(Platform).lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Release/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/Release/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\MinSizeRel\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/MinSizeRel/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/MinSizeRel/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\MinSizeRel\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/MinSizeRel/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/MinSizeRel/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\RelWithDebInfo\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/RelWithDebInfo/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/RelWithDebInfo/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsC</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;HAVE_CONFIG_H;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;YAML_DECLARE_STATIC;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\libyaml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;libyaml\RelWithDebInfo\yaml.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/RelWithDebInfo/flvmeta.lib</ImportLibrary>
+      <ProgramDataBaseFile>E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/RelWithDebInfo/flvmeta.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+      <Version>
+      </Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"D:\Program Files (x86)\CMake\bin\cmake.exe" -HE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1 -BE:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013 --check-stamp-file E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/src/CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\amf.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\avc.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\check.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_json.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_raw.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_xml.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_yaml.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flv.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flvmeta.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\info.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\json.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\types.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\update.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\util.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\config.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\getopt.h" />
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\gettext.h" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\amf.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\avc.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\check.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_json.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_raw.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_xml.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_yaml.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flv.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flvmeta.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\info.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\json.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\types.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\update.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\util.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\getopt1.c" />
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\getopt.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/ZERO_CHECK.vcxproj">
+      <Project>A4E80BE2-632B-31A6-9EF5-C4DD16E363D7</Project>
+    </ProjectReference>
+    <ProjectReference Include="E:/MyDoc/BitBucket/ZDoc/PrjRef/flvmeta/1.2.1/prj/2013/src/libyaml/yaml.vcxproj">
+      <Project>23530A01-314D-3B06-8E57-182A992EA64E</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

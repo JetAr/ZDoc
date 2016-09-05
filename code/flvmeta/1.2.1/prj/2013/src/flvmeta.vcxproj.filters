@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\amf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\avc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\check.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_json.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_raw.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_xml.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_yaml.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flv.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flvmeta.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\info.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\json.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\types.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\update.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\util.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\getopt1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\getopt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\amf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\avc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\check.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_raw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_xml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\dump_yaml.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\flvmeta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\update.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\getopt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\compat\gettext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8035BFFB-8F70-3A24-A71E-A4F6DBEF342D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A7AE47DE-7D1D-35AD-8EA1-5FE040579993}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

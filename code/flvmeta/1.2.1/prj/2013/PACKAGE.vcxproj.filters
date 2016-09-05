@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="E:\MyDoc\BitBucket\ZDoc\PrjRef\flvmeta\1.2.1\prj\2013\CMakeFiles\5aed609cc9b58c3e8c7aae28d104f2e2\PACKAGE_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{96DC9B7D-BDDA-3153-BD20-6DD014924350}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

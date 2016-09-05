@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<associativeArray xmlns="http://schemas.flvmeta.org/AMF0/">
+  <entry name="hasMetadata">
+    <boolean value="true"/>
+  </entry>
+  <entry name="hasVideo">
+    <boolean value="true"/>
+  </entry>
+  <entry name="hasAudio">
+    <boolean value="true"/>
+  </entry>
+  <entry name="duration">
+    <number value="597.56"/>
+  </entry>
+  <entry name="metadatacreator">
+    <string>flvmeta 1.0.8</string>
+  </entry>
+  <entry name="hascuepoints">
+    <boolean value="false"/>
+  </entry>
+  <entry name="cuepoints">
+    <array/>
+  </entry>
+  <entry name="keyframes">
+    <associativeArray>
+      <entry name="times">
+        <array>
+          <number value="0.0"/>
+          <number value="0.2"/>
+        </array>
+      </entry>
+      <entry name="filepositions">
+        <array>
+          <number value="3142.0"/>
+          <number value="3221.0"/>
+        </array>
+      </entry>
+    </associativeArray>
+  </entry>
+</associativeArray>
