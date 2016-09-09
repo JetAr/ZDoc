@@ -1,0 +1,73 @@
+int LibRtmpSession::SendVideoSpsPps(unsigned char *pps,int pps_len,unsigned char * sps,int sps_len)
+{
+	unsigned char * body=NULL;
+	int iIndex = 0;
+
+	//z zfixme 这里为何是 1025
+	int rtmpLength = 1025;
+	RTMPPacket rtmp_pack;
+	RTMPPacket_Reset(&rtmp_pack);
+	//z 在这里分配的时候，采用的是 RTMP_MAX_HEADER_SIZE
+	RTMPPacket_Alloc(&rtmp_pack,rtmpLength);
+
+	body = (unsigned char *)rtmp_pack.m_body;
+
+	body[iIndex++] = 0x17;
+	body[iIndex++] = 0x00;
+
+	body[iIndex++] = 0x00;
+	body[iIndex++] = 0x00;
+	body[iIndex++] = 0x00;
+
+	body[iIndex++] = 0x01;
+	body[iIndex++] = sps[1];
+	body[iIndex++] = sps[2];
+	body[iIndex++] = sps[3];
+	body[iIndex++] = 0xff;
+
+	/*sps*/
+	body[iIndex++]   = 0xe1;
+	body[iIndex++] = (sps_len >> 8) & 0xff;
+	body[iIndex++] = sps_len & 0xff;
+	memcpy(&body[iIndex],sps,sps_len);
+	iIndex +=  sps_len;
+
+	/*pps*/
+	body[iIndex++]   = 0x01;
+	body[iIndex++] = (pps_len >> 8) & 0xff;
+	body[iIndex++] = (pps_len) & 0xff;
+	memcpy(&body[iIndex], pps, pps_len);
+	iIndex +=  pps_len;
+
+	rtmp_pack.m_packetType = RTMP_PACKET_TYPE_VIDEO;
+	rtmp_pack.m_nBodySize = iIndex;
+	rtmp_pack.m_nChannel = 0x04;
+	rtmp_pack.m_nTimeStamp = 0;
+	rtmp_pack.m_hasAbsTimestamp = 0;
+	rtmp_pack.m_headerType = RTMP_PACKET_SIZE_MEDIUM;
+
+	if(_pRtmp)
+		rtmp_pack.m_nInfoField2 = _pRtmp->m_stream_id;
+
+	int iRet = RtmpPacketSend(&rtmp_pack);
+	if(iRet > 0)
+	{
+		//z 保存 pps 数据
+		if(_pMetaData->Pps != pps)
+		{
+			_pMetaData->Pps = (unsigned char*)malloc(pps_len);
+			memcpy(_pMetaData->Pps, pps, pps_len);
+		}
+		//z 保存 sps 数据
+		if(_pMetaData->Sps != sps)
+		{
+			_pMetaData->Sps = (unsigned char*)malloc(sps_len);
+			memcpy(_pMetaData->Sps, sps, sps_len);
+		}
+		//z 已有 meta data
+		_iMetaDataFlag = 1;
+	}
+	//free(packet);
+
+	return iRet;
+}
