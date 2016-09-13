@@ -1,0 +1,1 @@
+git config --global alias.ls "log --stat --pretty=short --graph"
