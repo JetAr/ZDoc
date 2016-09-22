@@ -73,18 +73,16 @@
 #else
 #define	SSL_SET_SESSION(S,resume,timeout,ctx)	ssl_set_session(S,resume,timeout,ctx)
 #endif
-typedef struct tls_ctx
-{
-    havege_state hs;
-    ssl_session ssn;
+typedef struct tls_ctx {
+	havege_state hs;
+	ssl_session ssn;
 } tls_ctx;
-typedef struct tls_server_ctx
-{
-    havege_state *hs;
-    x509_cert cert;
-    rsa_context key;
-    ssl_session ssn;
-    const char *dhm_P, *dhm_G;
+typedef struct tls_server_ctx {
+	havege_state *hs;
+	x509_cert cert;
+	rsa_context key;
+	ssl_session ssn;
+	const char *dhm_P, *dhm_G;
 } tls_server_ctx;
 
 #define TLS_CTX tls_ctx *
@@ -110,10 +108,9 @@ typedef struct tls_server_ctx
 
 #elif defined(USE_GNUTLS)
 #include <gnutls/gnutls.h>
-typedef struct tls_ctx
-{
-    gnutls_certificate_credentials_t cred;
-    gnutls_priority_t prios;
+typedef struct tls_ctx {
+	gnutls_certificate_credentials_t cred;
+	gnutls_priority_t prios;
 } tls_ctx;
 #define TLS_CTX	tls_ctx *
 #define TLS_client(ctx,s)	gnutls_init((gnutls_session_t *)(&s), GNUTLS_CLIENT); gnutls_priority_set(s, ctx->prios); gnutls_credentials_set(s, GNUTLS_CRD_CERTIFICATE, ctx->cred)

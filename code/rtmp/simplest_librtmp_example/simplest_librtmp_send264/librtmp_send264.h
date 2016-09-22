@@ -16,11 +16,11 @@
  * 初始化并连接到服务器
  *
  * @param url 服务器上对应webapp的地址
- *
+ *					
  * @成功则返回1 , 失败则返回0
- */
-int RTMP264_Connect(const char* url);
-
+ */ 
+int RTMP264_Connect(const char* url);    
+    
 /**
  * 将内存中的一段H.264编码的视频数据利用RTMP协议发送到服务器
  *
@@ -30,12 +30,12 @@ int RTMP264_Connect(const char* url);
  *					int buf_size：外部数据大小
  *					返回值：成功读取的内存大小
  * @成功则返回1 , 失败则返回0
- */
+ */ 
 int RTMP264_Send(int (*read_buffer)(unsigned char *buf, int buf_size));
 
 /**
  * 断开连接，释放相关的资源。
  *
- */
-void RTMP264_Close();
+ */    
+void RTMP264_Close();  
 
