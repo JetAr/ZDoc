@@ -8,7 +8,7 @@
 
 extern const AMOVIESETUP_FILTER sudAlphaSource;
 
-class CAlphaSource 
+class CAlphaSource
     : public CSource
 {
 protected:
@@ -30,7 +30,7 @@ private:
     DECLARE_IUNKNOWN
     CAlphaSource(LPUNKNOWN lpunk, HRESULT *phr);
     ~CAlphaSource();
-    
+
     STDMETHODIMP NonDelegatingQueryInterface( REFIID riid, void ** ppv );
 
     int GetPinCount();
@@ -40,7 +40,7 @@ private:
 
 // CAlphaSourceStream manages the data flow from the output pin.
 //
-class CAlphaSourceStream 
+class CAlphaSourceStream
     : public CSourceStream
     , public CSourceSeeking
 {
@@ -81,9 +81,9 @@ public:
     HRESULT OnThreadStartPlay( );
 
     // need to override or we'll get an assert
-    STDMETHODIMP Notify( IBaseFilter * pFilter, Quality q ) 
-    { 
-        return S_OK; 
+    STDMETHODIMP Notify( IBaseFilter * pFilter, Quality q )
+    {
+        return S_OK;
     }
 
     // CSourceSeeking

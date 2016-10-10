@@ -90,7 +90,7 @@ typedef struct DPCOMPOUNDADDRESSELEMENT
 {
     GUID                guidDataType;
     DWORD               dwDataSize;
-	LPVOID				lpData;
+    LPVOID				lpData;
 } DPCOMPOUNDADDRESSELEMENT, FAR *LPDPCOMPOUNDADDRESSELEMENT;
 
 /*
@@ -175,8 +175,8 @@ typedef struct DPAPPLICATIONDESC2
     LPWSTR      lpszDescriptionW;
     union
     {
-    	LPSTR		lpszAppLauncherNameA;
-    	LPWSTR      lpszAppLauncherName;
+        LPSTR		lpszAppLauncherNameA;
+        LPWSTR      lpszAppLauncherName;
     };
 } DPAPPLICATIONDESC2, *LPDPAPPLICATIONDESC2;
 
@@ -420,19 +420,19 @@ DECLARE_INTERFACE_( IDirectPlayLobby3, IDirectPlayLobby )
 /*
  *  Applications registered with this flag want voice to automatically
  *  be enabled for their application.  All players will be launched into
- *  an 'n'-way voice conference when the application is started.  The 
- *  user will be able to enable this flag for existing non-voice 
+ *  an 'n'-way voice conference when the application is started.  The
+ *  user will be able to enable this flag for existing non-voice
  *  directplay applications.
  */
-#define DPLAPP_AUTOVOICE				0x00000001 
+#define DPLAPP_AUTOVOICE				0x00000001
 
 /*
  * Applications that do their own voice conferencing should register with
- * this flag to avoid allowing the user to enable other voice chat 
+ * this flag to avoid allowing the user to enable other voice chat
  * capabilites during the same session.  This is to avoid users forcing
  * the DPLAPP_AUTOVOICE flag for the application.
  */
-#define DPLAPP_SELFVOICE				0x00000002 
+#define DPLAPP_SELFVOICE				0x00000002
 
 /****************************************************************************
  *
@@ -474,28 +474,28 @@ typedef struct _DPLMSG_SYSTEMMESSAGE
  */
 typedef struct _DPLMSG_SETPROPERTY
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID (DPL_NOCONFIRMATION if no confirmation desired)
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
-	DWORD	dwDataSize;			// Size of data
-	DWORD	dwPropertyData[1];	// Buffer containing data
+    DWORD	dwType;				// Message type
+    DWORD	dwRequestID;		// Request ID (DPL_NOCONFIRMATION if no confirmation desired)
+    GUID	guidPlayer;			// Player GUID
+    GUID	guidPropertyTag;	// Property GUID
+    DWORD	dwDataSize;			// Size of data
+    DWORD	dwPropertyData[1];	// Buffer containing data
 } DPLMSG_SETPROPERTY, FAR *LPDPLMSG_SETPROPERTY;
 
 #define	DPL_NOCONFIRMATION			0
 
 /*
  *  DPLMSG_SETPROPERTYRESPONSE
- *  Standard message returned by a lobby to confirm a 
+ *  Standard message returned by a lobby to confirm a
  *  DPLMSG_SETPROPERTY message.
  */
 typedef struct _DPLMSG_SETPROPERTYRESPONSE
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
-	HRESULT	hr;					// Return Code
+    DWORD	dwType;				// Message type
+    DWORD	dwRequestID;		// Request ID
+    GUID	guidPlayer;			// Player GUID
+    GUID	guidPropertyTag;	// Property GUID
+    HRESULT	hr;					// Return Code
 } DPLMSG_SETPROPERTYRESPONSE, FAR *LPDPLMSG_SETPROPERTYRESPONSE;
 
 /*
@@ -505,10 +505,10 @@ typedef struct _DPLMSG_SETPROPERTYRESPONSE
  */
 typedef struct _DPLMSG_GETPROPERTY
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
+    DWORD	dwType;				// Message type
+    DWORD	dwRequestID;		// Request ID
+    GUID	guidPlayer;			// Player GUID
+    GUID	guidPropertyTag;	// Property GUID
 } DPLMSG_GETPROPERTY, FAR *LPDPLMSG_GETPROPERTY;
 
 /*
@@ -518,13 +518,13 @@ typedef struct _DPLMSG_GETPROPERTY
  */
 typedef struct _DPLMSG_GETPROPERTYRESPONSE
 {
-	DWORD	dwType;				// Message type
-	DWORD	dwRequestID;		// Request ID
-	GUID	guidPlayer;			// Player GUID
-	GUID	guidPropertyTag;	// Property GUID
-	HRESULT	hr;					// Return Code
-	DWORD	dwDataSize;			// Size of data
-	DWORD	dwPropertyData[1];	// Buffer containing data
+    DWORD	dwType;				// Message type
+    DWORD	dwRequestID;		// Request ID
+    GUID	guidPlayer;			// Player GUID
+    GUID	guidPropertyTag;	// Property GUID
+    HRESULT	hr;					// Return Code
+    DWORD	dwDataSize;			// Size of data
+    DWORD	dwPropertyData[1];	// Buffer containing data
 } DPLMSG_GETPROPERTYRESPONSE, FAR *LPDPLMSG_GETPROPERTYRESPONSE;
 
 /*
@@ -613,12 +613,12 @@ typedef struct _DPLMSG_NEWSESSIONHOST
  *
  * Request whether the lobby supports standard.  Lobby with respond with either
  * TRUE or FALSE or may not respond at all.
- * 
+ *
  * Property data is a single BOOL with TRUE or FALSE
  */
 // {762CCDA1-D916-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID(DPLPROPERTY_MessagesSupported, 
-0x762ccda1, 0xd916, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
+DEFINE_GUID(DPLPROPERTY_MessagesSupported,
+            0x762ccda1, 0xd916, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
 /*
  * DPLPROPERTY_LobbyGuid
@@ -629,8 +629,8 @@ DEFINE_GUID(DPLPROPERTY_MessagesSupported,
  * Property data is a single GUID.
  */
 // {F56920A0-D218-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID(DPLPROPERTY_LobbyGuid, 
-0xf56920a0, 0xd218, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
+DEFINE_GUID(DPLPROPERTY_LobbyGuid,
+            0xf56920a0, 0xd218, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
 /*
  * DPLPROPERTY_PlayerGuid
@@ -641,8 +641,8 @@ DEFINE_GUID(DPLPROPERTY_LobbyGuid,
  * Property data is the DPLDATA_PLAYERDATA structure
  */
 // {B4319322-D20D-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID(DPLPROPERTY_PlayerGuid, 
-0xb4319322, 0xd20d, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
+DEFINE_GUID(DPLPROPERTY_PlayerGuid,
+            0xb4319322, 0xd20d, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
 /*
  * DPLDATA_PLAYERGUID
@@ -652,21 +652,21 @@ DEFINE_GUID(DPLPROPERTY_PlayerGuid,
  */
 typedef struct _DPLDATA_PLAYERGUID
 {
-	GUID	guidPlayer;
-	DWORD	dwPlayerFlags;
+    GUID	guidPlayer;
+    DWORD	dwPlayerFlags;
 } DPLDATA_PLAYERGUID, FAR *LPDPLDATA_PLAYERGUID;
 
 /*
  * DPLPROPERTY_PlayerScore
  *
- * Used to send an array of long integers to the lobby indicating the 
+ * Used to send an array of long integers to the lobby indicating the
  * score of a player.
  *
  * Property data is the DPLDATA_PLAYERSCORE structure.
  */
 // {48784000-D219-11d0-BA39-00C04FD7ED67}
-DEFINE_GUID(DPLPROPERTY_PlayerScore, 
-0x48784000, 0xd219, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
+DEFINE_GUID(DPLPROPERTY_PlayerScore,
+            0x48784000, 0xd219, 0x11d0, 0xba, 0x39, 0x0, 0xc0, 0x4f, 0xd7, 0xed, 0x67);
 
 /*
  * DPLDATA_PLAYERSCORE
@@ -676,8 +676,8 @@ DEFINE_GUID(DPLPROPERTY_PlayerScore,
  */
 typedef struct _DPLDATA_PLAYERSCORE
 {
-	DWORD	dwScoreCount;
-	LONG	Score[1];
+    DWORD	dwScoreCount;
+    LONG	Score[1];
 } DPLDATA_PLAYERSCORE, FAR *LPDPLDATA_PLAYERSCORE;
 
 /****************************************************************************
@@ -715,8 +715,8 @@ typedef DPADDRESS FAR *LPDPADDRESS;
  */
 
 // {1318F560-912C-11d0-9DAA-00A0C90A43CB}
-DEFINE_GUID(DPAID_TotalSize, 
-0x1318f560, 0x912c, 0x11d0, 0x9d, 0xaa, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb);
+DEFINE_GUID(DPAID_TotalSize,
+            0x1318f560, 0x912c, 0x11d0, 0x9d, 0xaa, 0x0, 0xa0, 0xc9, 0xa, 0x43, 0xcb);
 
 /*
  * DPAID_ServiceProvider
@@ -726,8 +726,8 @@ DEFINE_GUID(DPAID_TotalSize,
  */
 
 // {07D916C0-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID(DPAID_ServiceProvider, 
-0x7d916c0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_ServiceProvider,
+            0x7d916c0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 /*
  * DPAID_LobbyProvider
@@ -737,8 +737,8 @@ DEFINE_GUID(DPAID_ServiceProvider,
  */
 
 // {59B95640-9667-11d0-A77D-0000F803ABFC}
-DEFINE_GUID(DPAID_LobbyProvider, 
-0x59b95640, 0x9667, 0x11d0, 0xa7, 0x7d, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
+DEFINE_GUID(DPAID_LobbyProvider,
+            0x59b95640, 0x9667, 0x11d0, 0xa7, 0x7d, 0x0, 0x0, 0xf8, 0x3, 0xab, 0xfc);
 
 /*
  * DPAID_Phone and DPAID_PhoneW
@@ -748,12 +748,12 @@ DEFINE_GUID(DPAID_LobbyProvider,
  */
 
 // {78EC89A0-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID(DPAID_Phone, 
-0x78ec89a0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_Phone,
+            0x78ec89a0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 // {BA5A7A70-9DBF-11d0-9CC1-00A0C905425E}
-DEFINE_GUID(DPAID_PhoneW, 
-0xba5a7a70, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_PhoneW,
+            0xba5a7a70, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 /*
  * DPAID_Modem and DPAID_ModemW
@@ -763,12 +763,12 @@ DEFINE_GUID(DPAID_PhoneW,
  */
 
 // {F6DCC200-A2FE-11d0-9C4F-00A0C905425E}
-DEFINE_GUID(DPAID_Modem, 
-0xf6dcc200, 0xa2fe, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_Modem,
+            0xf6dcc200, 0xa2fe, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 // {01FD92E0-A2FF-11d0-9C4F-00A0C905425E}
-DEFINE_GUID(DPAID_ModemW, 
-0x1fd92e0, 0xa2ff, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_ModemW,
+            0x1fd92e0, 0xa2ff, 0x11d0, 0x9c, 0x4f, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 /*
  * DPAID_Inet and DPAID_InetW
@@ -778,12 +778,12 @@ DEFINE_GUID(DPAID_ModemW,
  */
 
 // {C4A54DA0-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID(DPAID_INet, 
-0xc4a54da0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_INet,
+            0xc4a54da0, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 // {E63232A0-9DBF-11d0-9CC1-00A0C905425E}
-DEFINE_GUID(DPAID_INetW, 
-0xe63232a0, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_INetW,
+            0xe63232a0, 0x9dbf, 0x11d0, 0x9c, 0xc1, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 /*
  * DPAID_InetPort
@@ -791,10 +791,10 @@ DEFINE_GUID(DPAID_INetW,
  * Chunk is the port number used for creating the apps TCP and UDP sockets.
  * WORD value (i.e. 47624).
  */
- 
+
 // {E4524541-8EA5-11d1-8A96-006097B01411}
-DEFINE_GUID(DPAID_INetPort, 
-0xe4524541, 0x8ea5, 0x11d1, 0x8a, 0x96, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
+DEFINE_GUID(DPAID_INetPort,
+            0xe4524541, 0x8ea5, 0x11d1, 0x8a, 0x96, 0x0, 0x60, 0x97, 0xb0, 0x14, 0x11);
 
 #ifdef BIGMESSAGEDEFENSE
 #endif
@@ -831,8 +831,8 @@ typedef DPCOMPORTADDRESS FAR *LPDPCOMPORTADDRESS;
  */
 
 // {F2F0CE00-E0AF-11cf-9C4E-00A0C905425E}
-DEFINE_GUID(DPAID_ComPort, 
-0xf2f0ce00, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
+DEFINE_GUID(DPAID_ComPort,
+            0xf2f0ce00, 0xe0af, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 /****************************************************************************
  *

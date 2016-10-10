@@ -15,19 +15,19 @@
 class __CLTraceScope
 {
 public:
-	__CLTraceScope(const char *, const char *, int);
-	__CLTraceScope(const char *, int);
-	~__CLTraceScope();
+    __CLTraceScope(const char *, const char *, int);
+    __CLTraceScope(const char *, int);
+    ~__CLTraceScope();
 
-	void scope(const char *, ...);
-	void ltrace(const char *, ...);
+    void scope(const char *, ...);
+    void ltrace(const char *, ...);
 
 private:
-	const char *spacing();
-	const char *m_scope, *m_file;
-	int m_line;
-	int m_depth;
-	static int s_depth;
+    const char *spacing();
+    const char *m_scope, *m_file;
+    int m_line;
+    int m_depth;
+    static int s_depth;
 //	__CLTraceScope *m_pprev, *m_pnext;
 //	static __CLTraceScope *s_pfirst, *s_plast;
 };

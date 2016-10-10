@@ -11,8 +11,8 @@
 
 // This function will register a component in the Registry.
 // The component calls this function from its DllRegisterServer function.
-HRESULT RegisterServer(HMODULE hModule, 
-                       const CLSID& clsid, 
+HRESULT RegisterServer(HMODULE hModule,
+                       const CLSID& clsid,
                        LPCTSTR szFriendlyName,
                        LPCTSTR szVerIndProgID,
                        LPCTSTR szProgID) ;

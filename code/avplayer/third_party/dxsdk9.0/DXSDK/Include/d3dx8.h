@@ -15,17 +15,17 @@
 
 #ifndef D3DXINLINE
 #ifdef _MSC_VER
-  #if (_MSC_VER >= 1200)
-  #define D3DXINLINE __forceinline
-  #else
-  #define D3DXINLINE __inline
-  #endif
+#if (_MSC_VER >= 1200)
+#define D3DXINLINE __forceinline
 #else
-  #ifdef __cplusplus
-  #define D3DXINLINE inline
-  #else
-  #define D3DXINLINE
-  #endif
+#define D3DXINLINE __inline
+#endif
+#else
+#ifdef __cplusplus
+#define D3DXINLINE inline
+#else
+#define D3DXINLINE
+#endif
 #endif
 #endif
 

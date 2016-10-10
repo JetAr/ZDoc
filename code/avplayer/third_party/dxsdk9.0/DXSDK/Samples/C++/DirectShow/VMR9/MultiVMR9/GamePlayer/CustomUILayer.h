@@ -31,27 +31,27 @@ public:
     // IMultiVMR9UILayer implementation
     STDMETHOD(Initialize)(
         IDirect3DDevice9* pDevice
-        );
+    );
 
     STDMETHOD(ProcessMessage)(
-        UINT msg, 
-        UINT wParam, 
+        UINT msg,
+        UINT wParam,
         LONG lParam
-        );
+    );
 
     STDMETHOD(Render)(
         IDirect3DDevice9 *pDevice
-        );
+    );
 
     // method is called by the render engine during IMultiVMR9RenderEngine::SetUILayer
     STDMETHOD(SetRenderEngineOwner)(
         IMultiVMR9RenderEngine* pRenderEngine
-        );
+    );
 
     // obtain pointer to IMultiVMR9RenderEngine that owns this UI layer
     STDMETHOD(GetRenderEngineOwner)(
         IMultiVMR9RenderEngine** ppRenderEngine
-        );
+    );
 
     HRESULT SetMixer( CGameMixer* pMixer );
     // private methods

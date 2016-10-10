@@ -8,12 +8,12 @@
 
 
 void GetVideoInfoParameters(
-	const VIDEOINFOHEADER *pvih, 
-	PBYTE pbData,
-	DWORD *pdwWidth, 
-	DWORD *pdwHeight, 
-	LONG *plStrideInBytes,
-	BYTE **ppbTop             
+    const VIDEOINFOHEADER *pvih,
+    PBYTE pbData,
+    DWORD *pdwWidth,
+    DWORD *pdwHeight,
+    LONG *plStrideInBytes,
+    BYTE **ppbTop
 );
 
 void OurFillRect(const VIDEOINFOHEADER *pvih, PBYTE pbData, WORD wVal);

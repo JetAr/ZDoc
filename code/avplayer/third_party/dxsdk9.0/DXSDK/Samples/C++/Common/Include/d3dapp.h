@@ -34,7 +34,7 @@ enum APPMSGTYPE { MSG_NONE, MSGERR_APPMUSTEXIT, MSGWARN_SWITCHEDTOREF };
 // Name: class CD3DApplication
 // Desc: A base class for creating sample D3D9 applications. To create a simple
 //       Direct3D application, simply derive this class into a class (such as
-//       class CMyD3DApplication) and override the following functions, as 
+//       class CMyD3DApplication) and override the following functions, as
 //       needed:
 //          OneTimeSceneInit()    - To initialize app data (alloc mem, etc.)
 //          InitDeviceObjects()   - To initialize the 3D scene objects
@@ -68,8 +68,8 @@ protected:
     HRESULT DisplayErrorMsg( HRESULT hr, DWORD dwType );
 
     // Internal functions to manage and render the 3D scene
-    static bool ConfirmDeviceHelper( D3DCAPS9* pCaps, VertexProcessingType vertexProcessingType, 
-		D3DFORMAT adapterFormat, D3DFORMAT backBufferFormat );
+    static bool ConfirmDeviceHelper( D3DCAPS9* pCaps, VertexProcessingType vertexProcessingType,
+                                     D3DFORMAT adapterFormat, D3DFORMAT backBufferFormat );
     void    BuildPresentParamsFromSettings();
     bool    FindBestWindowedMode( bool bRequireHAL, bool bRequireREF );
     bool    FindBestFullscreenMode( bool bRequireHAL, bool bRequireREF );
@@ -116,15 +116,42 @@ protected:
     bool              m_bStartFullscreen;  // Whether to start up the app in fullscreen mode
 
     // Overridable functions for the 3D scene created by the app
-    virtual HRESULT ConfirmDevice(D3DCAPS9*,DWORD,D3DFORMAT,D3DFORMAT) { return S_OK; }
-    virtual HRESULT OneTimeSceneInit()                         { return S_OK; }
-    virtual HRESULT InitDeviceObjects()                        { return S_OK; }
-    virtual HRESULT RestoreDeviceObjects()                     { return S_OK; }
-    virtual HRESULT FrameMove()                                { return S_OK; }
-    virtual HRESULT Render()                                   { return S_OK; }
-    virtual HRESULT InvalidateDeviceObjects()                  { return S_OK; }
-    virtual HRESULT DeleteDeviceObjects()                      { return S_OK; }
-    virtual HRESULT FinalCleanup()                             { return S_OK; }
+    virtual HRESULT ConfirmDevice(D3DCAPS9*,DWORD,D3DFORMAT,D3DFORMAT)
+    {
+        return S_OK;
+    }
+    virtual HRESULT OneTimeSceneInit()
+    {
+        return S_OK;
+    }
+    virtual HRESULT InitDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT RestoreDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT FrameMove()
+    {
+        return S_OK;
+    }
+    virtual HRESULT Render()
+    {
+        return S_OK;
+    }
+    virtual HRESULT InvalidateDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT DeleteDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT FinalCleanup()
+    {
+        return S_OK;
+    }
 
 public:
     // Functions to create, run, pause, and clean up the application

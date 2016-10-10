@@ -23,8 +23,8 @@ extern "C" {
 // IGargleDMOSample's GUID
 //
 // {9AE9B11C-4EF8-42bc-9484-65EA0008964F}
-DEFINE_GUID(IID_IGargleDMOSample, 
-0x9ae9b11c, 0x4ef8, 0x42bc, 0x94, 0x84, 0x65, 0xea, 0x0, 0x8, 0x96, 0x4f);
+DEFINE_GUID(IID_IGargleDMOSample,
+            0x9ae9b11c, 0x4ef8, 0x42bc, 0x94, 0x84, 0x65, 0xea, 0x0, 0x8, 0x96, 0x4f);
 
 typedef struct _GargleFX
 {
@@ -43,7 +43,8 @@ typedef const GargleFX *LPCGargleFX;
 //
 // IGargleDMOSample
 //
-DECLARE_INTERFACE_(IGargleDMOSample, IUnknown) {
+DECLARE_INTERFACE_(IGargleDMOSample, IUnknown)
+{
 
     // IGargleDMOSample methods
     STDMETHOD(SetAllParameters)     (THIS_ LPCGargleFX pcGargleFx) PURE;

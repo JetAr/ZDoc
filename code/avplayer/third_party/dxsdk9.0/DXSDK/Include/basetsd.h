@@ -67,32 +67,32 @@ typedef unsigned int DWORD32, *PDWORD32;
 //
 #if ( 501 < __midl )
 
-    typedef [public] __int3264 INT_PTR, *PINT_PTR;
-    typedef [public] unsigned __int3264 UINT_PTR, *PUINT_PTR;
+typedef [public] __int3264 INT_PTR, *PINT_PTR;
+typedef [public] unsigned __int3264 UINT_PTR, *PUINT_PTR;
 
-    typedef [public] __int3264 LONG_PTR, *PLONG_PTR;
-    typedef [public] unsigned __int3264 ULONG_PTR, *PULONG_PTR;
+typedef [public] __int3264 LONG_PTR, *PLONG_PTR;
+typedef [public] unsigned __int3264 ULONG_PTR, *PULONG_PTR;
 
 #else  // midl64
 // old midl and C++ compiler
 
 #if defined(_WIN64)
-    typedef __int64 INT_PTR, *PINT_PTR;
-    typedef unsigned __int64 UINT_PTR, *PUINT_PTR;
+typedef __int64 INT_PTR, *PINT_PTR;
+typedef unsigned __int64 UINT_PTR, *PUINT_PTR;
 
-    typedef __int64 LONG_PTR, *PLONG_PTR;
-    typedef unsigned __int64 ULONG_PTR, *PULONG_PTR;
+typedef __int64 LONG_PTR, *PLONG_PTR;
+typedef unsigned __int64 ULONG_PTR, *PULONG_PTR;
 
-    #define __int3264   __int64
+#define __int3264   __int64
 
 #else
-    typedef _W64 int INT_PTR, *PINT_PTR;
-    typedef _W64 unsigned int UINT_PTR, *PUINT_PTR;
+typedef _W64 int INT_PTR, *PINT_PTR;
+typedef _W64 unsigned int UINT_PTR, *PUINT_PTR;
 
-    typedef _W64 long LONG_PTR, *PLONG_PTR;
-    typedef _W64 unsigned long ULONG_PTR, *PULONG_PTR;
+typedef _W64 long LONG_PTR, *PLONG_PTR;
+typedef _W64 unsigned long ULONG_PTR, *PULONG_PTR;
 
-    #define __int3264   __int32
+#define __int3264   __int32
 
 #endif
 #endif // midl64
@@ -117,7 +117,7 @@ __inline
 unsigned long
 HandleToULong(
     const void *h
-    )
+)
 {
     return((unsigned long) (ULONG_PTR) h );
 }
@@ -126,7 +126,7 @@ __inline
 long
 HandleToLong(
     const void *h
-    )
+)
 {
     return((long) (LONG_PTR) h );
 }
@@ -135,7 +135,7 @@ __inline
 void *
 ULongToHandle(
     const unsigned long h
-    )
+)
 {
     return((void *) (UINT_PTR) h );
 }
@@ -145,7 +145,7 @@ __inline
 void *
 LongToHandle(
     const long h
-    )
+)
 {
     return((void *) (INT_PTR) h );
 }
@@ -155,7 +155,7 @@ __inline
 unsigned long
 PtrToUlong(
     const void  *p
-    )
+)
 {
     return((unsigned long) (ULONG_PTR) p );
 }
@@ -164,7 +164,7 @@ __inline
 unsigned int
 PtrToUint(
     const void  *p
-    )
+)
 {
     return((unsigned int) (UINT_PTR) p );
 }
@@ -173,7 +173,7 @@ __inline
 unsigned short
 PtrToUshort(
     const void  *p
-    )
+)
 {
     return((unsigned short) (unsigned long) (ULONG_PTR) p );
 }
@@ -182,7 +182,7 @@ __inline
 long
 PtrToLong(
     const void  *p
-    )
+)
 {
     return((long) (LONG_PTR) p );
 }
@@ -191,7 +191,7 @@ __inline
 int
 PtrToInt(
     const void  *p
-    )
+)
 {
     return((int) (INT_PTR) p );
 }
@@ -200,7 +200,7 @@ __inline
 short
 PtrToShort(
     const void  *p
-    )
+)
 {
     return((short) (long) (LONG_PTR) p );
 }
@@ -209,7 +209,7 @@ __inline
 void *
 IntToPtr(
     const int i
-    )
+)
 // Caution: IntToPtr() sign-extends the int value.
 {
     return( (void *)(INT_PTR)i );
@@ -219,7 +219,7 @@ __inline
 void *
 UIntToPtr(
     const unsigned int ui
-    )
+)
 // Caution: UIntToPtr() zero-extends the unsigned int value.
 {
     return( (void *)(UINT_PTR)ui );
@@ -229,7 +229,7 @@ __inline
 void *
 LongToPtr(
     const long l
-    )
+)
 // Caution: LongToPtr() sign-extends the long value.
 {
     return( (void *)(LONG_PTR)l );
@@ -239,7 +239,7 @@ __inline
 void *
 ULongToPtr(
     const unsigned long ul
-    )
+)
 // Caution: ULongToPtr() zero-extends the unsigned long value.
 {
     return( (void *)(ULONG_PTR)ul );

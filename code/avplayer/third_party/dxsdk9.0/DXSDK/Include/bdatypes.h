@@ -35,14 +35,14 @@ typedef struct _BDA_TEMPLATE_CONNECTION
     ULONG   FromNodePinType;
     ULONG   ToNodeType;
     ULONG   ToNodePinType;
-}BDA_TEMPLATE_CONNECTION, *PBDA_TEMPLATE_CONNECTION;
+} BDA_TEMPLATE_CONNECTION, *PBDA_TEMPLATE_CONNECTION;
 
 
 typedef struct _BDA_TEMPLATE_PIN_JOINT
 {
     ULONG   uliTemplateConnection;
     ULONG   ulcInstancesMax;
-}BDA_TEMPLATE_PIN_JOINT, *PBDA_TEMPLATE_PIN_JOINT;
+} BDA_TEMPLATE_PIN_JOINT, *PBDA_TEMPLATE_PIN_JOINT;
 
 
 
@@ -54,7 +54,8 @@ typedef struct _BDA_TEMPLATE_PIN_JOINT
 
 //  In-band Event IDs
 //
-typedef enum {
+typedef enum
+{
     BDA_EVENT_SIGNAL_LOSS = 0,
     BDA_EVENT_SIGNAL_LOCK,
     BDA_EVENT_DATA_START,
@@ -85,7 +86,8 @@ typedef enum {
 //
 //===========================================================================
 
-typedef struct tagKS_BDA_FRAME_INFO {
+typedef struct tagKS_BDA_FRAME_INFO
+{
     ULONG                   ExtendedHeaderSize; // Size of this extended header
     DWORD                   dwFrameFlags;  //
     ULONG                   ulEvent; //
@@ -101,16 +103,19 @@ typedef struct tagKS_BDA_FRAME_INFO {
 //
 // {71985F43-1CA1-11d3-9CC8-00C04F7971E0}
 //
-typedef struct _BDA_ETHERNET_ADDRESS {
+typedef struct _BDA_ETHERNET_ADDRESS
+{
     BYTE    rgbAddress[6];
 } BDA_ETHERNET_ADDRESS, *PBDA_ETHERNET_ADDRESS;
 
-typedef struct _BDA_ETHERNET_ADDRESS_LIST {
+typedef struct _BDA_ETHERNET_ADDRESS_LIST
+{
     ULONG               ulcAddresses;
     BDA_ETHERNET_ADDRESS    rgAddressl[MIN_DIMENSION];
 } BDA_ETHERNET_ADDRESS_LIST, * PBDA_ETHERNET_ADDRESS_LIST;
 
-typedef enum {
+typedef enum
+{
     BDA_PROMISCUOUS_MULTICAST = 0,
     BDA_FILTERED_MULTICAST,
     BDA_NO_MULTICAST
@@ -123,11 +128,13 @@ typedef enum {
 //
 // {71985F44-1CA1-11d3-9CC8-00C04F7971E0}
 //
-typedef struct _BDA_IPv4_ADDRESS {
+typedef struct _BDA_IPv4_ADDRESS
+{
     BYTE    rgbAddress[4];
 } BDA_IPv4_ADDRESS, *PBDA_IPv4_ADDRESS;
 
-typedef struct _BDA_IPv4_ADDRESS_LIST {
+typedef struct _BDA_IPv4_ADDRESS_LIST
+{
     ULONG               ulcAddresses;
     BDA_IPv4_ADDRESS    rgAddressl[MIN_DIMENSION];
 } BDA_IPv4_ADDRESS_LIST, * PBDA_IPv4_ADDRESS_LIST;
@@ -139,11 +146,13 @@ typedef struct _BDA_IPv4_ADDRESS_LIST {
 //
 // {E1785A74-2A23-4fb3-9245-A8F88017EF33}
 //
-typedef struct _BDA_IPv6_ADDRESS {
+typedef struct _BDA_IPv6_ADDRESS
+{
     BYTE    rgbAddress[6];
 } BDA_IPv6_ADDRESS, *PBDA_IPv6_ADDRESS;
 
-typedef struct _BDA_IPv6_ADDRESS_LIST {
+typedef struct _BDA_IPv6_ADDRESS_LIST
+{
     ULONG               ulcAddresses;
     BDA_IPv6_ADDRESS    rgAddressl[MIN_DIMENSION];
 } BDA_IPv6_ADDRESS_LIST, * PBDA_IPv6_ADDRESS_LIST;
@@ -156,7 +165,8 @@ typedef struct _BDA_IPv6_ADDRESS_LIST {
 //
 //  {D2F1644B-B409-11d2-BC69-00A0C9EE9E16}
 //
-typedef enum {
+typedef enum
+{
     BDA_SIGNAL_UNAVAILABLE = 0,
     BDA_SIGNAL_INACTIVE,
     BDA_SIGNAL_ACTIVE
@@ -198,14 +208,14 @@ typedef enum
 typedef struct _BDANODE_DESCRIPTOR
 {
     ULONG               ulBdaNodeType;  // The node type as it is used
-                                        // in the BDA template topology
+    // in the BDA template topology
 
     GUID                guidFunction;   // GUID from BdaMedia.h describing
-                                        // the node's function (e.g.
-                                        // KSNODE_BDA_RF_TUNER)
+    // the node's function (e.g.
+    // KSNODE_BDA_RF_TUNER)
 
     GUID                guidName;       // GUID that can be use to look up
-                                        // a displayable name for the node.
+    // a displayable name for the node.
 } BDANODE_DESCRIPTOR, *PBDANODE_DESCRIPTOR;
 
 
@@ -274,14 +284,16 @@ typedef struct _BDA_TABLE_SECTION
 // From IEnumPIDMap interface
 //---------------------------------------------------------------------
 
-typedef enum {
+typedef enum
+{
     MEDIA_TRANSPORT_PACKET,         //  complete TS packet e.g. pass-through mode
     MEDIA_ELEMENTARY_STREAM,        //  PES payloads; audio/video only
     MEDIA_MPEG2_PSI,                //  PAT, PMT, CAT, Private
     MEDIA_TRANSPORT_PAYLOAD         //  gathered TS packet payloads (PES packets, etc...)
 } MEDIA_SAMPLE_CONTENT ;
 
-typedef struct {
+typedef struct
+{
     ULONG                   ulPID ;
     MEDIA_SAMPLE_CONTENT    MediaSampleContent ;
 } PID_MAP ;
@@ -341,7 +353,8 @@ typedef struct _BDA_PROGRAM_PID_LIST
 //=============================================================
 
 // system type for particular DVB Tuning Space instance
-typedef enum DVBSystemType {
+typedef enum DVBSystemType
+{
     DVB_Cable,
     DVB_Terrestrial,
     DVB_Satellite,
@@ -351,7 +364,8 @@ typedef enum DVBSystemType {
 //
 //  BDA Channel Tune Request
 
-V1_ENUM enum {
+V1_ENUM enum
+{
     BDA_UNDEFINED_CHANNEL = -1,
 };
 
@@ -385,7 +399,8 @@ typedef enum ComponentStatus
 //  BDA MPEG2 Component Type
 //
 // from the MPEG2 specification
-typedef V1_ENUM enum MPEG2StreamType {
+typedef V1_ENUM enum MPEG2StreamType
+{
     BDA_UNITIALIZED_MPEG2STREAMTYPE = -1,
     Reserved1 = 0x0,
     ISO_IEC_11172_2_VIDEO   = Reserved1 + 1,
@@ -414,7 +429,8 @@ typedef V1_ENUM enum MPEG2StreamType {
 //   start with the MPEG2_TRANSPORT_STRIDE structure
 //
 
-typedef struct _MPEG2_TRANSPORT_STRIDE {
+typedef struct _MPEG2_TRANSPORT_STRIDE
+{
     DWORD   dwOffset ;
     DWORD   dwPacketLength ;
     DWORD   dwStride ;
@@ -427,7 +443,8 @@ typedef struct _MPEG2_TRANSPORT_STRIDE {
 //
 // ATSC made AC3 Audio a descriptor instead of
 // defining a user private stream type.
-typedef enum ATSCComponentTypeFlags {
+typedef enum ATSCComponentTypeFlags
+{
     // bit flags for various component type properties
     ATSCCT_AC3 = 0x00000001,
 } ATSCComponentTypeFlags;
@@ -439,7 +456,8 @@ typedef enum ATSCComponentTypeFlags {
 //
 
 
-typedef V1_ENUM enum BinaryConvolutionCodeRate {
+typedef V1_ENUM enum BinaryConvolutionCodeRate
+{
     BDA_BCC_RATE_NOT_SET = -1,
     BDA_BCC_RATE_NOT_DEFINED = 0,
     BDA_BCC_RATE_1_2 = 1,   // 1/2
@@ -453,7 +471,8 @@ typedef V1_ENUM enum BinaryConvolutionCodeRate {
     BDA_BCC_RATE_MAX,
 } BinaryConvolutionCodeRate;
 
-typedef V1_ENUM enum FECMethod {
+typedef V1_ENUM enum FECMethod
+{
     BDA_FEC_METHOD_NOT_SET = -1,
     BDA_FEC_METHOD_NOT_DEFINED = 0,
     BDA_FEC_VITERBI = 1,          // FEC is a Viterbi Binary Convolution.
@@ -461,7 +480,8 @@ typedef V1_ENUM enum FECMethod {
     BDA_FEC_MAX,
 } FECMethod;
 
-typedef V1_ENUM enum ModulationType {
+typedef V1_ENUM enum ModulationType
+{
     BDA_MOD_NOT_SET = -1,
     BDA_MOD_NOT_DEFINED = 0,
     BDA_MOD_16QAM = 1,
@@ -493,7 +513,8 @@ typedef V1_ENUM enum ModulationType {
     BDA_MOD_MAX,
 } ModulationType;
 
-typedef V1_ENUM enum SpectralInversion {
+typedef V1_ENUM enum SpectralInversion
+{
     BDA_SPECTRAL_INVERSION_NOT_SET = -1,
     BDA_SPECTRAL_INVERSION_NOT_DEFINED = 0,
     BDA_SPECTRAL_INVERSION_AUTOMATIC = 1,
@@ -502,7 +523,8 @@ typedef V1_ENUM enum SpectralInversion {
     BDA_SPECTRAL_INVERSION_MAX
 } SpectralInversion;
 
-typedef V1_ENUM enum Polarisation {
+typedef V1_ENUM enum Polarisation
+{
     BDA_POLARISATION_NOT_SET = -1,
     BDA_POLARISATION_NOT_DEFINED = 0,
     BDA_POLARISATION_LINEAR_H = 1, // Linear horizontal polarisation
@@ -512,7 +534,8 @@ typedef V1_ENUM enum Polarisation {
     BDA_POLARISATION_MAX,
 } Polarisation;
 
-typedef V1_ENUM enum GuardInterval {
+typedef V1_ENUM enum GuardInterval
+{
     BDA_GUARD_NOT_SET = -1,
     BDA_GUARD_NOT_DEFINED = 0,
     BDA_GUARD_1_32 = 1, // Guard interval is 1/32
@@ -522,7 +545,8 @@ typedef V1_ENUM enum GuardInterval {
     BDA_GUARD_MAX,
 } GuardInterval;
 
-typedef V1_ENUM enum HierarchyAlpha {
+typedef V1_ENUM enum HierarchyAlpha
+{
     BDA_HALPHA_NOT_SET = -1,
     BDA_HALPHA_NOT_DEFINED = 0,
     BDA_HALPHA_1 = 1, // Hierarchy alpha is 1.
@@ -531,7 +555,8 @@ typedef V1_ENUM enum HierarchyAlpha {
     BDA_HALPHA_MAX,
 } HierarchyAlpha;
 
-typedef V1_ENUM enum TransmissionMode {
+typedef V1_ENUM enum TransmissionMode
+{
     BDA_XMIT_MODE_NOT_SET = -1,
     BDA_XMIT_MODE_NOT_DEFINED = 0,
     BDA_XMIT_MODE_2K = 1, // Transmission uses 1705 carriers (use a 2K FFT)
@@ -560,7 +585,7 @@ typedef V1_ENUM enum TransmissionMode {
 //  Settings for Tuner Frequency Multiplier
 //
 #define BDA_FREQUENCY_MULTIPLIER_NOT_SET        -1
-#define BDA_FREQUENCY_MULTIPLIER_NOT_DEFINED    0 
+#define BDA_FREQUENCY_MULTIPLIER_NOT_DEFINED    0
 
 #endif // not defined _BDATYPES_
 

@@ -64,7 +64,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <boost/asio/read.hpp>
 #endif
 
-#ifdef __OBJC__ 
+#ifdef __OBJC__
 #undef Protocol
 #endif
 
@@ -76,116 +76,168 @@ namespace libtorrent
 {
 
 #if BOOST_VERSION < 103500
-	using ::asio::ip::tcp;
-	using ::asio::ip::udp;
-	using ::asio::async_write;
-	using ::asio::async_read;
+using ::asio::ip::tcp;
+using ::asio::ip::udp;
+using ::asio::async_write;
+using ::asio::async_read;
 
-	typedef ::asio::ip::tcp::socket stream_socket;
-	typedef ::asio::ip::udp::socket datagram_socket;
-	typedef ::asio::ip::tcp::acceptor socket_acceptor;
+typedef ::asio::ip::tcp::socket stream_socket;
+typedef ::asio::ip::udp::socket datagram_socket;
+typedef ::asio::ip::tcp::acceptor socket_acceptor;
 #else
-	using boost::asio::ip::tcp;
-	using boost::asio::ip::udp;
-	using boost::asio::async_write;
-	using boost::asio::async_read;
+using boost::asio::ip::tcp;
+using boost::asio::ip::udp;
+using boost::asio::async_write;
+using boost::asio::async_read;
 
-	typedef boost::asio::ip::tcp::socket stream_socket;
-	typedef boost::asio::ip::udp::socket datagram_socket;
-	typedef boost::asio::ip::tcp::acceptor socket_acceptor;
+typedef boost::asio::ip::tcp::socket stream_socket;
+typedef boost::asio::ip::udp::socket datagram_socket;
+typedef boost::asio::ip::tcp::acceptor socket_acceptor;
 
-	namespace asio = boost::asio;
+namespace asio = boost::asio;
 #endif
 
 #if TORRENT_USE_IPV6
 #ifdef IPV6_V6ONLY
-	struct v6only
-	{
-		v6only(bool enable): m_value(enable) {}
-		template<class Protocol>
-		int level(Protocol const&) const { return IPPROTO_IPV6; }
-		template<class Protocol>
-		int name(Protocol const&) const { return IPV6_V6ONLY; }
-		template<class Protocol>
-		int const* data(Protocol const&) const { return &m_value; }
-		template<class Protocol>
-		size_t size(Protocol const&) const { return sizeof(m_value); }
-		int m_value;
-	};
+struct v6only
+{
+    v6only(bool enable): m_value(enable) {}
+    template<class Protocol>
+    int level(Protocol const&) const
+    {
+        return IPPROTO_IPV6;
+    }
+    template<class Protocol>
+    int name(Protocol const&) const
+    {
+        return IPV6_V6ONLY;
+    }
+    template<class Protocol>
+    int const* data(Protocol const&) const
+    {
+        return &m_value;
+    }
+    template<class Protocol>
+    size_t size(Protocol const&) const
+    {
+        return sizeof(m_value);
+    }
+    int m_value;
+};
 #endif
 #endif
-	
+
 #ifdef TORRENT_WINDOWS
 
 #ifndef IPV6_PROTECTION_LEVEL
 #define IPV6_PROTECTION_LEVEL 30
 #endif
-	struct v6_protection_level
-	{
-		v6_protection_level(int level): m_value(level) {}
-		template<class Protocol>
-		int level(Protocol const&) const { return IPPROTO_IPV6; }
-		template<class Protocol>
-		int name(Protocol const&) const { return IPV6_PROTECTION_LEVEL; }
-		template<class Protocol>
-		int const* data(Protocol const&) const { return &m_value; }
-		template<class Protocol>
-		size_t size(Protocol const&) const { return sizeof(m_value); }
-		int m_value;
-	};
+struct v6_protection_level
+{
+    v6_protection_level(int level): m_value(level) {}
+    template<class Protocol>
+    int level(Protocol const&) const
+    {
+        return IPPROTO_IPV6;
+    }
+    template<class Protocol>
+    int name(Protocol const&) const
+    {
+        return IPV6_PROTECTION_LEVEL;
+    }
+    template<class Protocol>
+    int const* data(Protocol const&) const
+    {
+        return &m_value;
+    }
+    template<class Protocol>
+    size_t size(Protocol const&) const
+    {
+        return sizeof(m_value);
+    }
+    int m_value;
+};
 #endif
 
-	struct type_of_service
-	{
+struct type_of_service
+{
 #ifdef WIN32
-		typedef DWORD tos_t;
+    typedef DWORD tos_t;
 #else
-		typedef int tos_t;
+    typedef int tos_t;
 #endif
-		type_of_service(char val): m_value(val) {}
-		template<class Protocol>
-		int level(Protocol const&) const { return IPPROTO_IP; }
-		template<class Protocol>
-		int name(Protocol const&) const { return IP_TOS; }
-		template<class Protocol>
-		tos_t const* data(Protocol const&) const { return &m_value; }
-		template<class Protocol>
-		size_t size(Protocol const&) const { return sizeof(m_value); }
-		tos_t m_value;
-	};
+    type_of_service(char val): m_value(val) {}
+    template<class Protocol>
+    int level(Protocol const&) const
+    {
+        return IPPROTO_IP;
+    }
+    template<class Protocol>
+    int name(Protocol const&) const
+    {
+        return IP_TOS;
+    }
+    template<class Protocol>
+    tos_t const* data(Protocol const&) const
+    {
+        return &m_value;
+    }
+    template<class Protocol>
+    size_t size(Protocol const&) const
+    {
+        return sizeof(m_value);
+    }
+    tos_t m_value;
+};
 
 #if defined IP_DONTFRAG || defined IP_MTU_DISCOVER || defined IP_DONTFRAGMENT
 #define TORRENT_HAS_DONT_FRAGMENT
 #endif
 
 #ifdef TORRENT_HAS_DONT_FRAGMENT
-	struct dont_fragment
-	{
-		dont_fragment(bool val)
+struct dont_fragment
+{
+    dont_fragment(bool val)
 #ifdef IP_PMTUDISCOVER_DO
-			: m_value(val ? IP_PMTUDISC_DO : IP_PMTUDISC_DONT) {}
+        : m_value(val ? IP_PMTUDISC_DO : IP_PMTUDISC_DONT) {}
 #else
-			: m_value(val) {}
+        :
+        m_value(val) {}
 #endif
-		template<class Protocol>
-		int level(Protocol const&) const { return IPPROTO_IP; }
-		template<class Protocol>
-		int name(Protocol const&) const
+    template<class Protocol>
+    int level(Protocol const&) const
+    {
+        return IPPROTO_IP;
+    }
+    template<class Protocol>
+    int name(Protocol const&) const
 #if defined IP_DONTFRAG
-		{ return IP_DONTFRAG; }
+    {
+        return IP_DONTFRAG;
+    }
 #elif defined IP_MTU_DISCOVER
-		{ return IP_MTU_DISCOVER; }
+    {
+        return IP_MTU_DISCOVER;
+    }
 #elif defined IP_DONTFRAGMENT
-		{ return IP_DONTFRAGMENT; }
+    {
+        return IP_DONTFRAGMENT;
+    }
 #else
-		{}
+    {}
 #endif
-		template<class Protocol>
-		int const* data(Protocol const&) const { return &m_value; }
-		template<class Protocol>
-		size_t size(Protocol const&) const { return sizeof(m_value); }
-		int m_value;
-	};
+    template<class Protocol>
+    int const* data(Protocol const&) const
+    {
+        return &m_value;
+    }
+    template<class Protocol>
+    size_t size(Protocol const&) const
+    {
+        return sizeof(m_value);
+    }
+    int m_value;
+};
 #endif // TORRENT_HAS_DONT_FRAGMENT
 }
 

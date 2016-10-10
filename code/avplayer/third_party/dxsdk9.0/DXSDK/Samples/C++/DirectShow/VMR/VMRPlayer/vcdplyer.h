@@ -15,7 +15,8 @@ enum EMovieMode { MOVIE_NOTOPENED = 0x00,
                   MOVIE_OPENED    = 0x01,
                   MOVIE_PLAYING   = 0x02,
                   MOVIE_STOPPED   = 0x03,
-                  MOVIE_PAUSED    = 0x04 };
+                  MOVIE_PAUSED    = 0x04
+                };
 
 struct IMpegAudioDecoder;
 struct IMpegVideoDecoder;
@@ -41,10 +42,10 @@ private:
     HRESULT FindInterfaceFromFilterGraph(
         REFIID iid, // interface to look for
         LPVOID *lp  // place to return interface pointer in
-        );
+    );
 
 public:
-     CMovie(HWND hwndApplication);
+    CMovie(HWND hwndApplication);
     ~CMovie();
 
     HRESULT         OpenMovie(TCHAR *lpFileName);
@@ -82,7 +83,8 @@ public:
     HRESULT         UpdateAppImage(VMRALPHABITMAP* lpBmpInfo);
     void            SetBorderClr(COLORREF clr);
 
-    void            DisplayModeChanged() {
+    void            DisplayModeChanged()
+    {
         m_Wc->DisplayModeChanged();
     }
 

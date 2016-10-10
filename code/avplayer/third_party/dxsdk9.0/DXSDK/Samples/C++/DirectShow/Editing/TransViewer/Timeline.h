@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------
 // File: Timeline.h
-// 
+//
 // Desc: Defines the CTimeline class
-//      
+//
 // Copyright (c) 2000-2002 Microsoft Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -24,19 +24,19 @@ private:
     CComPtr<IAMTimelineObj> m_pColor1;
     CComPtr<IAMTimelineObj> m_pColor2;
     CComPtr<IAMTimelineObj> m_pTrans;
-    
+
     vector<CLSID>   m_TransList; // holds the list of transitions CLSIDs
 
     REFERENCE_TIME  m_rtClipStop;    // Default time
     REFERENCE_TIME  m_rtTransLength; // Default transition length
 
-   
+
 private:
 
     HRESULT AddCompToGroup(IAMTimelineGroup *pGroup, IAMTimelineComp **ppComp);
     HRESULT AddTrackToComp(IAMTimelineComp *pComp, IAMTimelineTrack **ppTrack);
-    HRESULT AddSourceToTrack(IAMTimelineTrack *pTrack, IAMTimelineObj **ppSourceObj, 
-            int nStretchMode = RESIZEF_PRESERVEASPECTRATIO);
+    HRESULT AddSourceToTrack(IAMTimelineTrack *pTrack, IAMTimelineObj **ppSourceObj,
+                             int nStretchMode = RESIZEF_PRESERVEASPECTRATIO);
 
 
 public:
@@ -80,9 +80,15 @@ public:
         return m_pSetErr->get_ErrorLog(ppLog);
     }
 
-    REFERENCE_TIME GetClipLength() { return m_rtClipStop; }
+    REFERENCE_TIME GetClipLength()
+    {
+        return m_rtClipStop;
+    }
 
-    void SetClipLength(REFERENCE_TIME& rt) { m_rtClipStop = rt; }
+    void SetClipLength(REFERENCE_TIME& rt)
+    {
+        m_rtClipStop = rt;
+    }
 
 };
 

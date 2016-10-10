@@ -109,17 +109,17 @@ DEFINE_GUID(CLSID_CDirect3DRMAnimationSet,  0x4fa35699, 0x623f, 0x11cf, 0xac, 0x
 DEFINE_GUID(CLSID_CDirect3DRMUserVisual,    0x4fa3569a, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMShadow,        0x4fa3569b, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMViewportInterpolator,
-0xde9eaa1, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
+            0xde9eaa1, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMFrameInterpolator,
-0xde9eaa2, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
+            0xde9eaa2, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMMeshInterpolator,
-0xde9eaa3, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
+            0xde9eaa3, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMLightInterpolator,
-0xde9eaa6, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
+            0xde9eaa6, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMMaterialInterpolator,
-0xde9eaa7, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
+            0xde9eaa7, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMTextureInterpolator,
-0xde9eaa8, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
+            0xde9eaa8, 0x3b84, 0x11d0, 0x9b, 0x6d, 0x0, 0x0, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMProgressiveMesh, 0x4516ec40, 0x8f20, 0x11d0, 0x9b, 0x6d, 0x00, 0x00, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(CLSID_CDirect3DRMClippedVisual,   0x5434e72d, 0x6d66, 0x11d1, 0xbb, 0xb, 0x0, 0x0, 0xf8, 0x75, 0x86, 0x5a);
 
@@ -164,7 +164,7 @@ DEFINE_GUID(IID_IDirect3DRMLightArray,      0xeb16cb14, 0xd271, 0x11ce, 0xac, 0x
 DEFINE_GUID(IID_IDirect3DRMPickedArray,     0xeb16cb16, 0xd271, 0x11ce, 0xac, 0x48, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMFaceArray,       0xeb16cb17, 0xd271, 0x11ce, 0xac, 0x48, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMAnimationArray,
-0xd5f1cae0, 0x4bd7, 0x11d1, 0xb9, 0x74, 0x0, 0x60, 0x8, 0x3e, 0x45, 0xf3);
+            0xd5f1cae0, 0x4bd7, 0x11d1, 0xb9, 0x74, 0x0, 0x60, 0x8, 0x3e, 0x45, 0xf3);
 DEFINE_GUID(IID_IDirect3DRMUserVisual,      0x59163de0, 0x6d43, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMShadow,          0xaf359780, 0x6ba3, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMShadow2,         0x86b44e25, 0x9c82, 0x11d1, 0xbb, 0xb, 0x0, 0xa0, 0xc9, 0x81, 0xa0, 0xa6);
@@ -179,22 +179,22 @@ typedef void (__cdecl *D3DRMFRAME3MOVECALLBACK)(LPDIRECT3DRMFRAME3 obj, LPVOID a
 typedef void (__cdecl *D3DRMUPDATECALLBACK)(LPDIRECT3DRMDEVICE obj, LPVOID arg, int, LPD3DRECT);
 typedef void (__cdecl *D3DRMDEVICE3UPDATECALLBACK)(LPDIRECT3DRMDEVICE3 obj, LPVOID arg, int, LPD3DRECT);
 typedef int (__cdecl *D3DRMUSERVISUALCALLBACK)
-    (   LPDIRECT3DRMUSERVISUAL obj, LPVOID arg, D3DRMUSERVISUALREASON reason,
-        LPDIRECT3DRMDEVICE dev, LPDIRECT3DRMVIEWPORT view
-    );
+(   LPDIRECT3DRMUSERVISUAL obj, LPVOID arg, D3DRMUSERVISUALREASON reason,
+    LPDIRECT3DRMDEVICE dev, LPDIRECT3DRMVIEWPORT view
+);
 typedef HRESULT (__cdecl *D3DRMLOADTEXTURECALLBACK)
-    (char *tex_name, void *arg, LPDIRECT3DRMTEXTURE *);
+(char *tex_name, void *arg, LPDIRECT3DRMTEXTURE *);
 typedef HRESULT (__cdecl *D3DRMLOADTEXTURE3CALLBACK)
-    (char *tex_name, void *arg, LPDIRECT3DRMTEXTURE3 *);
+(char *tex_name, void *arg, LPDIRECT3DRMTEXTURE3 *);
 typedef void (__cdecl *D3DRMLOADCALLBACK)
-    (LPDIRECT3DRMOBJECT object, REFIID objectguid, LPVOID arg);
+(LPDIRECT3DRMOBJECT object, REFIID objectguid, LPVOID arg);
 
 typedef HRESULT (__cdecl *D3DRMDOWNSAMPLECALLBACK)
-    (LPDIRECT3DRMTEXTURE3 lpDirect3DRMTexture, LPVOID pArg,
-     LPDIRECTDRAWSURFACE pDDSSrc, LPDIRECTDRAWSURFACE pDDSDst);
+(LPDIRECT3DRMTEXTURE3 lpDirect3DRMTexture, LPVOID pArg,
+ LPDIRECTDRAWSURFACE pDDSSrc, LPDIRECTDRAWSURFACE pDDSDst);
 typedef HRESULT (__cdecl *D3DRMVALIDATIONCALLBACK)
-    (LPDIRECT3DRMTEXTURE3 lpDirect3DRMTexture, LPVOID pArg,
-     DWORD dwFlags, DWORD dwcRects, LPRECT pRects);
+(LPDIRECT3DRMTEXTURE3 lpDirect3DRMTexture, LPVOID pArg,
+ DWORD dwFlags, DWORD dwcRects, LPRECT pRects);
 
 
 typedef struct _D3DRMPICKDESC
@@ -240,8 +240,10 @@ DECLARE_INTERFACE_(IDirect3DRMObject2, IUnknown)
      * IDirect3DRMObject2 methods
      */
     STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK lpFunc, LPVOID pvArg) PURE;
-    STDMETHOD(Clone)(THIS_ LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj) PURE; \
-    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK lpFunc, LPVOID pvArg) PURE; \
+    STDMETHOD(Clone)(THIS_ LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj) PURE;
+    \
+    STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK lpFunc, LPVOID pvArg) PURE;
+    \
     STDMETHOD(GetClientData)(THIS_ DWORD dwID, LPVOID* lplpvData) PURE;
     STDMETHOD(GetDirect3DRM)(THIS_ LPDIRECT3DRM* lplpDirect3DRM) PURE;
     STDMETHOD(GetName)(THIS_ LPDWORD lpdwSize, LPSTR lpName) PURE;
@@ -709,7 +711,7 @@ DECLARE_INTERFACE_(IDirect3DRMFrame3, IDirect3DRMVisual)
     STDMETHOD_(D3DRMSORTMODE, GetSortMode)(THIS) PURE;
     STDMETHOD(GetTexture)(THIS_ LPDIRECT3DRMTEXTURE3 *) PURE;
     STDMETHOD(GetTransform)(THIS_ LPDIRECT3DRMFRAME3 reference,
-                             D3DRMMATRIX4D rmMatrix) PURE;
+                            D3DRMMATRIX4D rmMatrix) PURE;
     STDMETHOD(GetVelocity)(THIS_ LPDIRECT3DRMFRAME3 reference, LPD3DVECTOR return_velocity, BOOL with_rotation) PURE;
     STDMETHOD(GetOrientation)(THIS_ LPDIRECT3DRMFRAME3 reference, LPD3DVECTOR dir, LPD3DVECTOR up) PURE;
     STDMETHOD(GetVisuals)(THIS_ LPDWORD lpdwCount, LPUNKNOWN *) PURE;
@@ -914,27 +916,27 @@ DECLARE_INTERFACE_(IDirect3DRMFace, IDirect3DRMObject)
     /*
      * IDirect3DRMFace methods
      */
-     STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
-     STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
-     STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
-     STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
-     STDMETHOD(SetTexture)(THIS_ LPDIRECT3DRMTEXTURE) PURE;
-     STDMETHOD(SetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE u, D3DVALUE v) PURE;
-     STDMETHOD(SetMaterial)(THIS_ LPDIRECT3DRMMATERIAL) PURE;
-     STDMETHOD(SetTextureTopology)(THIS_ BOOL wrap_u, BOOL wrap_v) PURE;
+    STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
+    STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
+    STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
+    STDMETHOD(SetTexture)(THIS_ LPDIRECT3DRMTEXTURE) PURE;
+    STDMETHOD(SetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE u, D3DVALUE v) PURE;
+    STDMETHOD(SetMaterial)(THIS_ LPDIRECT3DRMMATERIAL) PURE;
+    STDMETHOD(SetTextureTopology)(THIS_ BOOL wrap_u, BOOL wrap_v) PURE;
 
-     STDMETHOD(GetVertex)(THIS_ DWORD index, D3DVECTOR *vertex, D3DVECTOR *normal) PURE;
-     STDMETHOD(GetVertices)(THIS_ DWORD *vertex_count, D3DVECTOR *coords, D3DVECTOR *normals);
-     STDMETHOD(GetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE *u, D3DVALUE *v) PURE;
-     STDMETHOD(GetTextureTopology)(THIS_ BOOL *wrap_u, BOOL *wrap_v) PURE;
-     STDMETHOD(GetNormal)(THIS_ D3DVECTOR *) PURE;
-     STDMETHOD(GetTexture)(THIS_ LPDIRECT3DRMTEXTURE *) PURE;
-     STDMETHOD(GetMaterial)(THIS_ LPDIRECT3DRMMATERIAL *) PURE;
+    STDMETHOD(GetVertex)(THIS_ DWORD index, D3DVECTOR *vertex, D3DVECTOR *normal) PURE;
+    STDMETHOD(GetVertices)(THIS_ DWORD *vertex_count, D3DVECTOR *coords, D3DVECTOR *normals);
+    STDMETHOD(GetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE *u, D3DVALUE *v) PURE;
+    STDMETHOD(GetTextureTopology)(THIS_ BOOL *wrap_u, BOOL *wrap_v) PURE;
+    STDMETHOD(GetNormal)(THIS_ D3DVECTOR *) PURE;
+    STDMETHOD(GetTexture)(THIS_ LPDIRECT3DRMTEXTURE *) PURE;
+    STDMETHOD(GetMaterial)(THIS_ LPDIRECT3DRMMATERIAL *) PURE;
 
-     STDMETHOD_(int, GetVertexCount)(THIS) PURE;
-     STDMETHOD_(int, GetVertexIndex)(THIS_ DWORD which) PURE;
-     STDMETHOD_(int, GetTextureCoordinateIndex)(THIS_ DWORD which) PURE;
-     STDMETHOD_(D3DCOLOR, GetColor)(THIS) PURE;
+    STDMETHOD_(int, GetVertexCount)(THIS) PURE;
+    STDMETHOD_(int, GetVertexIndex)(THIS_ DWORD which) PURE;
+    STDMETHOD_(int, GetTextureCoordinateIndex)(THIS_ DWORD which) PURE;
+    STDMETHOD_(D3DCOLOR, GetColor)(THIS) PURE;
 };
 
 #undef INTERFACE
@@ -948,27 +950,27 @@ DECLARE_INTERFACE_(IDirect3DRMFace2, IDirect3DRMObject)
     /*
      * IDirect3DRMFace methods
      */
-     STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
-     STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
-     STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
-     STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
-     STDMETHOD(SetTexture)(THIS_ LPDIRECT3DRMTEXTURE3) PURE;
-     STDMETHOD(SetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE u, D3DVALUE v) PURE;
-     STDMETHOD(SetMaterial)(THIS_ LPDIRECT3DRMMATERIAL2) PURE;
-     STDMETHOD(SetTextureTopology)(THIS_ BOOL wrap_u, BOOL wrap_v) PURE;
+    STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
+    STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
+    STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
+    STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
+    STDMETHOD(SetTexture)(THIS_ LPDIRECT3DRMTEXTURE3) PURE;
+    STDMETHOD(SetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE u, D3DVALUE v) PURE;
+    STDMETHOD(SetMaterial)(THIS_ LPDIRECT3DRMMATERIAL2) PURE;
+    STDMETHOD(SetTextureTopology)(THIS_ BOOL wrap_u, BOOL wrap_v) PURE;
 
-     STDMETHOD(GetVertex)(THIS_ DWORD index, D3DVECTOR *vertex, D3DVECTOR *normal) PURE;
-     STDMETHOD(GetVertices)(THIS_ DWORD *vertex_count, D3DVECTOR *coords, D3DVECTOR *normals);
-     STDMETHOD(GetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE *u, D3DVALUE *v) PURE;
-     STDMETHOD(GetTextureTopology)(THIS_ BOOL *wrap_u, BOOL *wrap_v) PURE;
-     STDMETHOD(GetNormal)(THIS_ D3DVECTOR *) PURE;
-     STDMETHOD(GetTexture)(THIS_ LPDIRECT3DRMTEXTURE3 *) PURE;
-     STDMETHOD(GetMaterial)(THIS_ LPDIRECT3DRMMATERIAL2 *) PURE;
+    STDMETHOD(GetVertex)(THIS_ DWORD index, D3DVECTOR *vertex, D3DVECTOR *normal) PURE;
+    STDMETHOD(GetVertices)(THIS_ DWORD *vertex_count, D3DVECTOR *coords, D3DVECTOR *normals);
+    STDMETHOD(GetTextureCoordinates)(THIS_ DWORD vertex, D3DVALUE *u, D3DVALUE *v) PURE;
+    STDMETHOD(GetTextureTopology)(THIS_ BOOL *wrap_u, BOOL *wrap_v) PURE;
+    STDMETHOD(GetNormal)(THIS_ D3DVECTOR *) PURE;
+    STDMETHOD(GetTexture)(THIS_ LPDIRECT3DRMTEXTURE3 *) PURE;
+    STDMETHOD(GetMaterial)(THIS_ LPDIRECT3DRMMATERIAL2 *) PURE;
 
-     STDMETHOD_(int, GetVertexCount)(THIS) PURE;
-     STDMETHOD_(int, GetVertexIndex)(THIS_ DWORD which) PURE;
-     STDMETHOD_(int, GetTextureCoordinateIndex)(THIS_ DWORD which) PURE;
-     STDMETHOD_(D3DCOLOR, GetColor)(THIS) PURE;
+    STDMETHOD_(int, GetVertexCount)(THIS) PURE;
+    STDMETHOD_(int, GetVertexIndex)(THIS_ DWORD which) PURE;
+    STDMETHOD_(int, GetTextureCoordinateIndex)(THIS_ DWORD which) PURE;
+    STDMETHOD_(D3DCOLOR, GetColor)(THIS) PURE;
 };
 
 #undef INTERFACE

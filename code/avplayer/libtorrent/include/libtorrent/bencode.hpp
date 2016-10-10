@@ -87,329 +87,335 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	struct TORRENT_EXPORT invalid_encoding: std::exception
-	{
-		virtual const char* what() const throw() { return "invalid bencoding"; }
-	};
+struct TORRENT_EXPORT invalid_encoding: std::exception
+{
+    virtual const char* what() const throw()
+    {
+        return "invalid bencoding";
+    }
+};
 
-	namespace detail
-	{
-		template <class OutIt>
-		int write_string(OutIt& out, const std::string& val)
-		{
-			for (std::string::const_iterator i = val.begin()
-				, end(val.end()); i != end; ++i)
-				*out++ = *i;
-			return int(val.length());
-		}
+namespace detail
+{
+template <class OutIt>
+int write_string(OutIt& out, const std::string& val)
+{
+    for (std::string::const_iterator i = val.begin()
+                                         , end(val.end()); i != end; ++i)
+        *out++ = *i;
+    return int(val.length());
+}
 
-		TORRENT_EXTRA_EXPORT char const* integer_to_str(char* buf, int size, entry::integer_type val);
+TORRENT_EXTRA_EXPORT char const* integer_to_str(char* buf, int size, entry::integer_type val);
 
-		template <class OutIt>
-		int write_integer(OutIt& out, entry::integer_type val)
-		{
-			// the stack allocated buffer for keeping the
-			// decimal representation of the number can
-			// not hold number bigger than this:
-			BOOST_STATIC_ASSERT(sizeof(entry::integer_type) <= 8);
-			char buf[21];
-			int ret = 0;
-			for (char const* str = integer_to_str(buf, 21, val);
-				*str != 0; ++str)
-			{
-				*out = *str;
-				++out;
-				++ret;
-			}
-			return ret;
-		}	
-		
-		template <class OutIt>
-		void write_char(OutIt& out, char c)
-		{
-			*out = c;
-			++out;
-		}
+template <class OutIt>
+int write_integer(OutIt& out, entry::integer_type val)
+{
+    // the stack allocated buffer for keeping the
+    // decimal representation of the number can
+    // not hold number bigger than this:
+    BOOST_STATIC_ASSERT(sizeof(entry::integer_type) <= 8);
+    char buf[21];
+    int ret = 0;
+    for (char const* str = integer_to_str(buf, 21, val);
+            *str != 0; ++str)
+    {
+        *out = *str;
+        ++out;
+        ++ret;
+    }
+    return ret;
+}
 
-		template <class InIt>
-		std::string read_until(InIt& in, InIt end, char end_token, bool& err)
-		{
-			std::string ret;
-			if (in == end)
-			{
-				err = true;
-				return ret;
-			}
-			while (*in != end_token)
-			{
-				ret += *in;
-				++in;
-				if (in == end)
-				{
-					err = true;
-					return ret;
-				}
-			}
-			return ret;
-		}
+template <class OutIt>
+void write_char(OutIt& out, char c)
+{
+    *out = c;
+    ++out;
+}
 
-		template<class InIt>
-		void read_string(InIt& in, InIt end, int len, std::string& str, bool& err)
-		{
-			TORRENT_ASSERT(len >= 0);
-			for (int i = 0; i < len; ++i)
-			{
-				if (in == end)
-				{
-					err = true;
-					return;
-				}
-				str += *in;
-				++in;
-			}
-		}
+template <class InIt>
+std::string read_until(InIt& in, InIt end, char end_token, bool& err)
+{
+    std::string ret;
+    if (in == end)
+    {
+        err = true;
+        return ret;
+    }
+    while (*in != end_token)
+    {
+        ret += *in;
+        ++in;
+        if (in == end)
+        {
+            err = true;
+            return ret;
+        }
+    }
+    return ret;
+}
 
-		// returns the number of bytes written
-		template<class OutIt>
-		int bencode_recursive(OutIt& out, const entry& e)
-		{
-			int ret = 0;
-			switch(e.type())
-			{
-			case entry::int_t:
-				write_char(out, 'i');
-				ret += write_integer(out, e.integer());
-				write_char(out, 'e');
-				ret += 2;
-				break;
-			case entry::string_t:
-				ret += write_integer(out, e.string().length());
-				write_char(out, ':');
-				ret += write_string(out, e.string());
-				ret += 1;
-				break;
-			case entry::list_t:
-				write_char(out, 'l');
-				for (entry::list_type::const_iterator i = e.list().begin(); i != e.list().end(); ++i)
-					ret += bencode_recursive(out, *i);
-				write_char(out, 'e');
-				ret += 2;
-				break;
-			case entry::dictionary_t:
-				write_char(out, 'd');
-				for (entry::dictionary_type::const_iterator i = e.dict().begin();
-					i != e.dict().end(); ++i)
-				{
-					// write key
-					ret += write_integer(out, i->first.length());
-					write_char(out, ':');
-					ret += write_string(out, i->first);
-					// write value
-					ret += bencode_recursive(out, i->second);
-					ret += 1;
-				}
-				write_char(out, 'e');
-				ret += 2;
-				break;
-			default:
-				// trying to encode a structure with uninitialized values!
-				TORRENT_ASSERT_VAL(false, e.type());
-				// do nothing
-				break;
-			}
-			return ret;
-		}
+template<class InIt>
+void read_string(InIt& in, InIt end, int len, std::string& str, bool& err)
+{
+    TORRENT_ASSERT(len >= 0);
+    for (int i = 0; i < len; ++i)
+    {
+        if (in == end)
+        {
+            err = true;
+            return;
+        }
+        str += *in;
+        ++in;
+    }
+}
 
-		template<class InIt>
-		void bdecode_recursive(InIt& in, InIt end, entry& ret, bool& err, int depth)
-		{
-			if (depth >= 100)
-			{
-				err = true;
-				return;
-			}
+// returns the number of bytes written
+template<class OutIt>
+int bencode_recursive(OutIt& out, const entry& e)
+{
+    int ret = 0;
+    switch(e.type())
+    {
+    case entry::int_t:
+        write_char(out, 'i');
+        ret += write_integer(out, e.integer());
+        write_char(out, 'e');
+        ret += 2;
+        break;
+    case entry::string_t:
+        ret += write_integer(out, e.string().length());
+        write_char(out, ':');
+        ret += write_string(out, e.string());
+        ret += 1;
+        break;
+    case entry::list_t:
+        write_char(out, 'l');
+        for (entry::list_type::const_iterator i = e.list().begin(); i != e.list().end(); ++i)
+            ret += bencode_recursive(out, *i);
+        write_char(out, 'e');
+        ret += 2;
+        break;
+    case entry::dictionary_t:
+        write_char(out, 'd');
+        for (entry::dictionary_type::const_iterator i = e.dict().begin();
+                i != e.dict().end(); ++i)
+        {
+            // write key
+            ret += write_integer(out, i->first.length());
+            write_char(out, ':');
+            ret += write_string(out, i->first);
+            // write value
+            ret += bencode_recursive(out, i->second);
+            ret += 1;
+        }
+        write_char(out, 'e');
+        ret += 2;
+        break;
+    default:
+        // trying to encode a structure with uninitialized values!
+        TORRENT_ASSERT_VAL(false, e.type());
+        // do nothing
+        break;
+    }
+    return ret;
+}
 
-			if (in == end)
-			{
-				err = true;
+template<class InIt>
+void bdecode_recursive(InIt& in, InIt end, entry& ret, bool& err, int depth)
+{
+    if (depth >= 100)
+    {
+        err = true;
+        return;
+    }
+
+    if (in == end)
+    {
+        err = true;
 #ifdef TORRENT_DEBUG
-				ret.m_type_queried = false;
+        ret.m_type_queried = false;
 #endif
-				return;
-			}
-			switch (*in)
-			{
+        return;
+    }
+    switch (*in)
+    {
 
-			// ----------------------------------------------
-			// integer
-			case 'i':
-				{
-				++in; // 'i' 
-				std::string val = read_until(in, end, 'e', err);
-				if (err) return;
-				TORRENT_ASSERT(*in == 'e');
-				++in; // 'e' 
-				ret = entry(entry::int_t);
-				char* end_pointer;
-				ret.integer() = strtoll(val.c_str(), &end_pointer, 10);
+    // ----------------------------------------------
+    // integer
+    case 'i':
+    {
+        ++in; // 'i'
+        std::string val = read_until(in, end, 'e', err);
+        if (err) return;
+        TORRENT_ASSERT(*in == 'e');
+        ++in; // 'e'
+        ret = entry(entry::int_t);
+        char* end_pointer;
+        ret.integer() = strtoll(val.c_str(), &end_pointer, 10);
 #ifdef TORRENT_DEBUG
-				ret.m_type_queried = false;
+        ret.m_type_queried = false;
 #endif
-				if (end_pointer == val.c_str())
-				{
-					err = true;
-					return;
-				}
-				} break;
+        if (end_pointer == val.c_str())
+        {
+            err = true;
+            return;
+        }
+    }
+    break;
 
-			// ----------------------------------------------
-			// list
-			case 'l':
-				{
-				ret = entry(entry::list_t);
-				++in; // 'l'
-				while (*in != 'e')
-				{
-					ret.list().push_back(entry());
-					entry& e = ret.list().back();
-					bdecode_recursive(in, end, e, err, depth + 1);
-					if (err)
-					{
+    // ----------------------------------------------
+    // list
+    case 'l':
+    {
+        ret = entry(entry::list_t);
+        ++in; // 'l'
+        while (*in != 'e')
+        {
+            ret.list().push_back(entry());
+            entry& e = ret.list().back();
+            bdecode_recursive(in, end, e, err, depth + 1);
+            if (err)
+            {
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-					if (in == end)
-					{
-						err = true;
+                return;
+            }
+            if (in == end)
+            {
+                err = true;
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-				}
+                return;
+            }
+        }
 #ifdef TORRENT_DEBUG
-				ret.m_type_queried = false;
+        ret.m_type_queried = false;
 #endif
-				TORRENT_ASSERT(*in == 'e');
-				++in; // 'e'
-				} break;
+        TORRENT_ASSERT(*in == 'e');
+        ++in; // 'e'
+    }
+    break;
 
-			// ----------------------------------------------
-			// dictionary
-			case 'd':
-				{
-				ret = entry(entry::dictionary_t);
-				++in; // 'd'
-				while (*in != 'e')
-				{
-					entry key;
-					bdecode_recursive(in, end, key, err, depth + 1);
-					if (err || key.type() != entry::string_t)
-					{	
+    // ----------------------------------------------
+    // dictionary
+    case 'd':
+    {
+        ret = entry(entry::dictionary_t);
+        ++in; // 'd'
+        while (*in != 'e')
+        {
+            entry key;
+            bdecode_recursive(in, end, key, err, depth + 1);
+            if (err || key.type() != entry::string_t)
+            {
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-					entry& e = ret[key.string()];
-					bdecode_recursive(in, end, e, err, depth + 1);
-					if (err)
-					{
+                return;
+            }
+            entry& e = ret[key.string()];
+            bdecode_recursive(in, end, e, err, depth + 1);
+            if (err)
+            {
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-					if (in == end)
-					{
-						err = true;
+                return;
+            }
+            if (in == end)
+            {
+                err = true;
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-				}
+                return;
+            }
+        }
 #ifdef TORRENT_DEBUG
-				ret.m_type_queried = false;
+        ret.m_type_queried = false;
 #endif
-				TORRENT_ASSERT(*in == 'e');
-				++in; // 'e'
-				} break;
+        TORRENT_ASSERT(*in == 'e');
+        ++in; // 'e'
+    }
+    break;
 
-			// ----------------------------------------------
-			// string
-			default:
-				if (is_digit((unsigned char)*in))
-				{
-					std::string len_s = read_until(in, end, ':', err);
-					if (err)
-					{
+    // ----------------------------------------------
+    // string
+    default:
+        if (is_digit((unsigned char)*in))
+        {
+            std::string len_s = read_until(in, end, ':', err);
+            if (err)
+            {
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-					TORRENT_ASSERT(*in == ':');
-					++in; // ':'
-					int len = atoi(len_s.c_str());
-					ret = entry(entry::string_t);
-					read_string(in, end, len, ret.string(), err);
-					if (err)
-					{
+                return;
+            }
+            TORRENT_ASSERT(*in == ':');
+            ++in; // ':'
+            int len = atoi(len_s.c_str());
+            ret = entry(entry::string_t);
+            read_string(in, end, len, ret.string(), err);
+            if (err)
+            {
 #ifdef TORRENT_DEBUG
-						ret.m_type_queried = false;
+                ret.m_type_queried = false;
 #endif
-						return;
-					}
-				}
-				else
-				{
-					err = true;
+                return;
+            }
+        }
+        else
+        {
+            err = true;
 #ifdef TORRENT_DEBUG
-					ret.m_type_queried = false;
+            ret.m_type_queried = false;
 #endif
-					return;
-				}
+            return;
+        }
 #ifdef TORRENT_DEBUG
-				ret.m_type_queried = false;
+        ret.m_type_queried = false;
 #endif
-			}
-		}
-	}
+    }
+}
+}
 
-	template<class OutIt>
-	int bencode(OutIt out, const entry& e)
-	{
-		return detail::bencode_recursive(out, e);
-	}
+template<class OutIt>
+int bencode(OutIt out, const entry& e)
+{
+    return detail::bencode_recursive(out, e);
+}
 
-	template<class InIt>
-	entry bdecode(InIt start, InIt end)
-	{
-		entry e;
-		bool err = false;
-		detail::bdecode_recursive(start, end, e, err, 0);
+template<class InIt>
+entry bdecode(InIt start, InIt end)
+{
+    entry e;
+    bool err = false;
+    detail::bdecode_recursive(start, end, e, err, 0);
 #ifdef TORRENT_DEBUG
-		TORRENT_ASSERT(e.m_type_queried == false);
+    TORRENT_ASSERT(e.m_type_queried == false);
 #endif
-		if (err) return entry();
-		return e;
-	}
+    if (err) return entry();
+    return e;
+}
 
-	template<class InIt>
-	entry bdecode(InIt start, InIt end, int& len)
-	{
-		entry e;
-		bool err = false;
-		InIt s = start;
-		detail::bdecode_recursive(start, end, e, err, 0);
-		len = std::distance(s, start);
-		TORRENT_ASSERT(len >= 0);
-		if (err) return entry();
-		return e;
-	}
+template<class InIt>
+entry bdecode(InIt start, InIt end, int& len)
+{
+    entry e;
+    bool err = false;
+    InIt s = start;
+    detail::bdecode_recursive(start, end, e, err, 0);
+    len = std::distance(s, start);
+    TORRENT_ASSERT(len >= 0);
+    if (err) return entry();
+    return e;
+}
 }
 
 #endif // TORRENT_BENCODE_HPP_INCLUDED

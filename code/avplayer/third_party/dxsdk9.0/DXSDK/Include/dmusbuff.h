@@ -16,8 +16,8 @@
  * Immediately following the header is the event data. The header+data
  * size is rounded to the nearest quadword (8 bytes).
  */
- 
-#include <pshpack4.h>                       /* Do not pad at end - that's where the data is */ 
+
+#include <pshpack4.h>                       /* Do not pad at end - that's where the data is */
 typedef struct _DMUS_EVENTHEADER *LPDMUS_EVENTHEADER;
 typedef struct _DMUS_EVENTHEADER
 {
@@ -31,7 +31,7 @@ typedef struct _DMUS_EVENTHEADER
 #define DMUS_EVENT_STRUCTURED   0x00000001  /* Unstructured data (SysEx, etc.) */
 
 /* The number of bytes to allocate for an event with 'cb' data bytes.
- */ 
+ */
 #define QWORD_ALIGN(x) (((x) + 7) & ~7)
 #define DMUS_EVENT_SIZE(cb) QWORD_ALIGN(sizeof(DMUS_EVENTHEADER) + cb)
 

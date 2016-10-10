@@ -56,118 +56,118 @@ typedef boost::function<void(char const*)> log_callback_t;
 class TORRENT_EXPORT natpmp : public intrusive_ptr_base<natpmp>
 {
 public:
-	natpmp(io_service& ios, address const& listen_interface
-		, portmap_callback_t const& cb
-		, log_callback_t const& lcb);
+    natpmp(io_service& ios, address const& listen_interface
+           , portmap_callback_t const& cb
+           , log_callback_t const& lcb);
 
-	void rebind(address const& listen_interface);
+    void rebind(address const& listen_interface);
 
-	// maps the ports, if a port is set to 0
-	// it will not be mapped
-	enum protocol_type { none = 0, udp = 1, tcp = 2 };
-	int add_mapping(protocol_type p, int external_port, int local_port);
-	void delete_mapping(int mapping_index);
-	bool get_mapping(int mapping_index, int& local_port, int& external_port, int& protocol) const;
+    // maps the ports, if a port is set to 0
+    // it will not be mapped
+    enum protocol_type { none = 0, udp = 1, tcp = 2 };
+    int add_mapping(protocol_type p, int external_port, int local_port);
+    void delete_mapping(int mapping_index);
+    bool get_mapping(int mapping_index, int& local_port, int& external_port, int& protocol) const;
 
-	void close();
+    void close();
 
 private:
-	
-	void update_mapping(int i, mutex::scoped_lock& l);
-	void send_map_request(int i, mutex::scoped_lock& l);
-	void send_get_ip_address_request(mutex::scoped_lock& l);
-	void resend_request(int i, error_code const& e);
-	void on_reply(error_code const& e
-		, std::size_t bytes_transferred);
-	void try_next_mapping(int i, mutex::scoped_lock& l);
-	void update_expiration_timer(mutex::scoped_lock& l);
-	void mapping_expired(error_code const& e, int i);
-	void close_impl(mutex::scoped_lock& l);
 
-	void log(char const* msg, mutex::scoped_lock& l);
-	void disable(error_code const& ec, mutex::scoped_lock& l);
+    void update_mapping(int i, mutex::scoped_lock& l);
+    void send_map_request(int i, mutex::scoped_lock& l);
+    void send_get_ip_address_request(mutex::scoped_lock& l);
+    void resend_request(int i, error_code const& e);
+    void on_reply(error_code const& e
+                  , std::size_t bytes_transferred);
+    void try_next_mapping(int i, mutex::scoped_lock& l);
+    void update_expiration_timer(mutex::scoped_lock& l);
+    void mapping_expired(error_code const& e, int i);
+    void close_impl(mutex::scoped_lock& l);
 
-	struct mapping_t
-	{
-		enum action_t { action_none, action_add, action_delete };
-		mapping_t()
-			: action(action_none)
-			, local_port(0)
-			, external_port(0)
-			, protocol(none)
-			, map_sent(false)
-			, outstanding_request(false)
-		{}
+    void log(char const* msg, mutex::scoped_lock& l);
+    void disable(error_code const& ec, mutex::scoped_lock& l);
 
-		// indicates that the mapping has changed
-		// and needs an update
-		int action;
+    struct mapping_t
+    {
+        enum action_t { action_none, action_add, action_delete };
+        mapping_t()
+            : action(action_none)
+            , local_port(0)
+            , external_port(0)
+            , protocol(none)
+            , map_sent(false)
+            , outstanding_request(false)
+        {}
 
-		// the time the port mapping will expire
-		ptime expires;
+        // indicates that the mapping has changed
+        // and needs an update
+        int action;
 
-		// the local port for this mapping. If this is set
-		// to 0, the mapping is not in use
-		int local_port;
+        // the time the port mapping will expire
+        ptime expires;
 
-		// the external (on the NAT router) port
-		// for the mapping. This is the port we
-		// should announce to others
-		int external_port;
+        // the local port for this mapping. If this is set
+        // to 0, the mapping is not in use
+        int local_port;
 
-		int protocol;
+        // the external (on the NAT router) port
+        // for the mapping. This is the port we
+        // should announce to others
+        int external_port;
 
-		// set to true when the first map request is sent
-		bool map_sent;
+        int protocol;
 
-		// set to true while we're waiting for a response
-		bool outstanding_request;
-	};
+        // set to true when the first map request is sent
+        bool map_sent;
 
-	portmap_callback_t m_callback;
-	log_callback_t m_log_callback;
+        // set to true while we're waiting for a response
+        bool outstanding_request;
+    };
 
-	std::vector<mapping_t> m_mappings;
-	
-	// the endpoint to the nat router
-	udp::endpoint m_nat_endpoint;
+    portmap_callback_t m_callback;
+    log_callback_t m_log_callback;
 
-	// this is the mapping that is currently
-	// being updated. It is -1 in case no
-	// mapping is being updated at the moment
-	int m_currently_mapping;
+    std::vector<mapping_t> m_mappings;
 
-	// current retry count
-	int m_retry_count;
+    // the endpoint to the nat router
+    udp::endpoint m_nat_endpoint;
 
-	// used to receive responses in	
-	char m_response_buffer[16];
+    // this is the mapping that is currently
+    // being updated. It is -1 in case no
+    // mapping is being updated at the moment
+    int m_currently_mapping;
 
-	// router external IP address
-	address m_external_ip;
+    // current retry count
+    int m_retry_count;
 
-	// the endpoint we received the message from
-	udp::endpoint m_remote;
-	
-	// the udp socket used to communicate
-	// with the NAT router
-	datagram_socket m_socket;
+    // used to receive responses in
+    char m_response_buffer[16];
 
-	// used to resend udp packets in case
-	// they time out
-	deadline_timer m_send_timer;
+    // router external IP address
+    address m_external_ip;
 
-	// timer used to refresh mappings
-	deadline_timer m_refresh_timer;
+    // the endpoint we received the message from
+    udp::endpoint m_remote;
 
-	// the mapping index that will expire next
-	int m_next_refresh;
-	
-	bool m_disabled;
+    // the udp socket used to communicate
+    // with the NAT router
+    datagram_socket m_socket;
 
-	bool m_abort;
+    // used to resend udp packets in case
+    // they time out
+    deadline_timer m_send_timer;
 
-	mutable mutex m_mutex;
+    // timer used to refresh mappings
+    deadline_timer m_refresh_timer;
+
+    // the mapping index that will expire next
+    int m_next_refresh;
+
+    bool m_disabled;
+
+    bool m_abort;
+
+    mutable mutex m_mutex;
 };
 
 }

@@ -37,7 +37,8 @@ int main (int argc, char **argv)
     AVDictionaryEntry *tag = NULL;
     int ret;
 
-    if (argc != 2) {
+    if (argc != 2)
+    {
         printf("usage: %s <input_file>\n"
                "example program to demonstrate the use of the libavformat metadata API.\n"
                "\n", argv[0]);

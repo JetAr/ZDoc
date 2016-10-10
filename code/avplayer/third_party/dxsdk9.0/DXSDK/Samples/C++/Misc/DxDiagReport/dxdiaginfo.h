@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 // File: dxdiag.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) 2001 Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ protected:
     HRESULT GetNetworkInfo( NetInfo** ppNetInfo );
     HRESULT GetShowInfo( ShowInfo** ppShowInfo );
     HRESULT GetLogicalDiskInfo( vector<LogicalDisk*>& vLogicalDisks );
-    
+
     HRESULT GetStringValue( IDxDiagContainer* pObject, WCHAR* wstrName, TCHAR* strValue, int nStrLen );
     HRESULT GetUIntValue( IDxDiagContainer* pObject, WCHAR* wstrName, DWORD* pdwValue );
     HRESULT GetIntValue( IDxDiagContainer* pObject, WCHAR* wstrName, LONG* pnValue );

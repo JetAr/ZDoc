@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for videoacc.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IAMVideoAcceleratorNotify_FWD_DEFINED__
 #define __IAMVideoAcceleratorNotify_FWD_DEFINED__
@@ -58,14 +58,14 @@ typedef interface IAMVideoAccelerator IAMVideoAccelerator;
 #include "unknwn.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_videoacc_0000 */
-/* [local] */ 
+/* [local] */
 
 //
 //   The following declarations within the 'if 0' block are dummy typedefs used to make
@@ -108,72 +108,73 @@ extern RPC_IF_HANDLE __MIDL_itf_videoacc_0000_v0_0_s_ifspec;
 #define __IAMVideoAcceleratorNotify_INTERFACE_DEFINED__
 
 /* interface IAMVideoAcceleratorNotify */
-/* [unique][helpstring][uuid][object][local] */ 
+/* [unique][helpstring][uuid][object][local] */
 
 
 EXTERN_C const IID IID_IAMVideoAcceleratorNotify;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("256A6A21-FBAD-11d1-82BF-00A0C9696C8F")
-    IAMVideoAcceleratorNotify : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetUncompSurfacesInfo( 
-            /* [in] */ const GUID *pGuid,
-            /* [out][in] */ LPAMVAUncompBufferInfo pUncompBufferInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetUncompSurfacesInfo( 
-            /* [in] */ DWORD dwActualUncompSurfacesAllocated) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCreateVideoAcceleratorData( 
-            /* [in] */ const GUID *pGuid,
-            /* [out] */ LPDWORD pdwSizeMiscData,
-            /* [out] */ LPVOID *ppMiscData) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("256A6A21-FBAD-11d1-82BF-00A0C9696C8F")
+IAMVideoAcceleratorNotify :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetUncompSurfacesInfo(
+        /* [in] */ const GUID *pGuid,
+        /* [out][in] */ LPAMVAUncompBufferInfo pUncompBufferInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetUncompSurfacesInfo(
+        /* [in] */ DWORD dwActualUncompSurfacesAllocated) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCreateVideoAcceleratorData(
+        /* [in] */ const GUID *pGuid,
+        /* [out] */ LPDWORD pdwSizeMiscData,
+        /* [out] */ LPVOID *ppMiscData) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAMVideoAcceleratorNotifyVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAMVideoAcceleratorNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAMVideoAcceleratorNotify * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAMVideoAcceleratorNotify * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetUncompSurfacesInfo )( 
-            IAMVideoAcceleratorNotify * This,
-            /* [in] */ const GUID *pGuid,
-            /* [out][in] */ LPAMVAUncompBufferInfo pUncompBufferInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetUncompSurfacesInfo )( 
-            IAMVideoAcceleratorNotify * This,
-            /* [in] */ DWORD dwActualUncompSurfacesAllocated);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetCreateVideoAcceleratorData )( 
-            IAMVideoAcceleratorNotify * This,
-            /* [in] */ const GUID *pGuid,
-            /* [out] */ LPDWORD pdwSizeMiscData,
-            /* [out] */ LPVOID *ppMiscData);
-        
-        END_INTERFACE
-    } IAMVideoAcceleratorNotifyVtbl;
+typedef struct IAMVideoAcceleratorNotifyVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAMVideoAcceleratorNotify
-    {
-        CONST_VTBL struct IAMVideoAcceleratorNotifyVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IAMVideoAcceleratorNotify * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IAMVideoAcceleratorNotify * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IAMVideoAcceleratorNotify * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetUncompSurfacesInfo )(
+        IAMVideoAcceleratorNotify * This,
+        /* [in] */ const GUID *pGuid,
+        /* [out][in] */ LPAMVAUncompBufferInfo pUncompBufferInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *SetUncompSurfacesInfo )(
+        IAMVideoAcceleratorNotify * This,
+        /* [in] */ DWORD dwActualUncompSurfacesAllocated);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCreateVideoAcceleratorData )(
+        IAMVideoAcceleratorNotify * This,
+        /* [in] */ const GUID *pGuid,
+        /* [out] */ LPDWORD pdwSizeMiscData,
+        /* [out] */ LPVOID *ppMiscData);
+
+    END_INTERFACE
+} IAMVideoAcceleratorNotifyVtbl;
+
+interface IAMVideoAcceleratorNotify
+{
+    CONST_VTBL struct IAMVideoAcceleratorNotifyVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -204,7 +205,7 @@ EXTERN_C const IID IID_IAMVideoAcceleratorNotify;
 
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAcceleratorNotify_GetUncompSurfacesInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAcceleratorNotify_GetUncompSurfacesInfo_Proxy(
     IAMVideoAcceleratorNotify * This,
     /* [in] */ const GUID *pGuid,
     /* [out][in] */ LPAMVAUncompBufferInfo pUncompBufferInfo);
@@ -217,7 +218,7 @@ void __RPC_STUB IAMVideoAcceleratorNotify_GetUncompSurfacesInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAcceleratorNotify_SetUncompSurfacesInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAcceleratorNotify_SetUncompSurfacesInfo_Proxy(
     IAMVideoAcceleratorNotify * This,
     /* [in] */ DWORD dwActualUncompSurfacesAllocated);
 
@@ -229,7 +230,7 @@ void __RPC_STUB IAMVideoAcceleratorNotify_SetUncompSurfacesInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAcceleratorNotify_GetCreateVideoAcceleratorData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAcceleratorNotify_GetCreateVideoAcceleratorData_Proxy(
     IAMVideoAcceleratorNotify * This,
     /* [in] */ const GUID *pGuid,
     /* [out] */ LPDWORD pdwSizeMiscData,
@@ -251,175 +252,176 @@ void __RPC_STUB IAMVideoAcceleratorNotify_GetCreateVideoAcceleratorData_Stub(
 #define __IAMVideoAccelerator_INTERFACE_DEFINED__
 
 /* interface IAMVideoAccelerator */
-/* [unique][helpstring][uuid][object][local] */ 
+/* [unique][helpstring][uuid][object][local] */
 
 
 EXTERN_C const IID IID_IAMVideoAccelerator;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("256A6A22-FBAD-11d1-82BF-00A0C9696C8F")
-    IAMVideoAccelerator : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetVideoAcceleratorGUIDs( 
-            /* [out][in] */ LPDWORD pdwNumGuidsSupported,
-            /* [out][in] */ LPGUID pGuidsSupported) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetUncompFormatsSupported( 
-            /* [in] */ const GUID *pGuid,
-            /* [out][in] */ LPDWORD pdwNumFormatsSupported,
-            /* [out][in] */ LPDDPIXELFORMAT pFormatsSupported) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInternalMemInfo( 
-            /* [in] */ const GUID *pGuid,
-            /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
-            /* [out][in] */ LPAMVAInternalMemInfo pamvaInternalMemInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCompBufferInfo( 
-            /* [in] */ const GUID *pGuid,
-            /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
-            /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
-            /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInternalCompBufferInfo( 
-            /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
-            /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE BeginFrame( 
-            /* [in] */ const AMVABeginFrameInfo *amvaBeginFrameInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE EndFrame( 
-            /* [in] */ const AMVAEndFrameInfo *pEndFrameInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBuffer( 
-            /* [in] */ DWORD dwTypeIndex,
-            /* [in] */ DWORD dwBufferIndex,
-            /* [in] */ BOOL bReadOnly,
-            /* [out] */ LPVOID *ppBuffer,
-            /* [out] */ LONG *lpStride) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ReleaseBuffer( 
-            /* [in] */ DWORD dwTypeIndex,
-            /* [in] */ DWORD dwBufferIndex) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Execute( 
-            /* [in] */ DWORD dwFunction,
-            /* [in] */ LPVOID lpPrivateInputData,
-            /* [in] */ DWORD cbPrivateInputData,
-            /* [in] */ LPVOID lpPrivateOutputDat,
-            /* [in] */ DWORD cbPrivateOutputData,
-            /* [in] */ DWORD dwNumBuffers,
-            /* [in] */ const AMVABUFFERINFO *pamvaBufferInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE QueryRenderStatus( 
-            /* [in] */ DWORD dwTypeIndex,
-            /* [in] */ DWORD dwBufferIndex,
-            /* [in] */ DWORD dwFlags) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE DisplayFrame( 
-            /* [in] */ DWORD dwFlipToIndex,
-            /* [in] */ IMediaSample *pMediaSample) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("256A6A22-FBAD-11d1-82BF-00A0C9696C8F")
+IAMVideoAccelerator :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetVideoAcceleratorGUIDs(
+        /* [out][in] */ LPDWORD pdwNumGuidsSupported,
+        /* [out][in] */ LPGUID pGuidsSupported) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetUncompFormatsSupported(
+        /* [in] */ const GUID *pGuid,
+        /* [out][in] */ LPDWORD pdwNumFormatsSupported,
+        /* [out][in] */ LPDDPIXELFORMAT pFormatsSupported) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInternalMemInfo(
+        /* [in] */ const GUID *pGuid,
+        /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
+        /* [out][in] */ LPAMVAInternalMemInfo pamvaInternalMemInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCompBufferInfo(
+        /* [in] */ const GUID *pGuid,
+        /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
+        /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
+        /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInternalCompBufferInfo(
+        /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
+        /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE BeginFrame(
+        /* [in] */ const AMVABeginFrameInfo *amvaBeginFrameInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE EndFrame(
+        /* [in] */ const AMVAEndFrameInfo *pEndFrameInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetBuffer(
+        /* [in] */ DWORD dwTypeIndex,
+        /* [in] */ DWORD dwBufferIndex,
+        /* [in] */ BOOL bReadOnly,
+        /* [out] */ LPVOID *ppBuffer,
+        /* [out] */ LONG *lpStride) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ReleaseBuffer(
+        /* [in] */ DWORD dwTypeIndex,
+        /* [in] */ DWORD dwBufferIndex) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Execute(
+        /* [in] */ DWORD dwFunction,
+        /* [in] */ LPVOID lpPrivateInputData,
+        /* [in] */ DWORD cbPrivateInputData,
+        /* [in] */ LPVOID lpPrivateOutputDat,
+        /* [in] */ DWORD cbPrivateOutputData,
+        /* [in] */ DWORD dwNumBuffers,
+        /* [in] */ const AMVABUFFERINFO *pamvaBufferInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE QueryRenderStatus(
+        /* [in] */ DWORD dwTypeIndex,
+        /* [in] */ DWORD dwBufferIndex,
+        /* [in] */ DWORD dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE DisplayFrame(
+        /* [in] */ DWORD dwFlipToIndex,
+        /* [in] */ IMediaSample *pMediaSample) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAMVideoAcceleratorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAMVideoAccelerator * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAMVideoAccelerator * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetVideoAcceleratorGUIDs )( 
-            IAMVideoAccelerator * This,
-            /* [out][in] */ LPDWORD pdwNumGuidsSupported,
-            /* [out][in] */ LPGUID pGuidsSupported);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetUncompFormatsSupported )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ const GUID *pGuid,
-            /* [out][in] */ LPDWORD pdwNumFormatsSupported,
-            /* [out][in] */ LPDDPIXELFORMAT pFormatsSupported);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInternalMemInfo )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ const GUID *pGuid,
-            /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
-            /* [out][in] */ LPAMVAInternalMemInfo pamvaInternalMemInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetCompBufferInfo )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ const GUID *pGuid,
-            /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
-            /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
-            /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInternalCompBufferInfo )( 
-            IAMVideoAccelerator * This,
-            /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
-            /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *BeginFrame )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ const AMVABeginFrameInfo *amvaBeginFrameInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *EndFrame )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ const AMVAEndFrameInfo *pEndFrameInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ DWORD dwTypeIndex,
-            /* [in] */ DWORD dwBufferIndex,
-            /* [in] */ BOOL bReadOnly,
-            /* [out] */ LPVOID *ppBuffer,
-            /* [out] */ LONG *lpStride);
-        
-        HRESULT ( STDMETHODCALLTYPE *ReleaseBuffer )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ DWORD dwTypeIndex,
-            /* [in] */ DWORD dwBufferIndex);
-        
-        HRESULT ( STDMETHODCALLTYPE *Execute )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ DWORD dwFunction,
-            /* [in] */ LPVOID lpPrivateInputData,
-            /* [in] */ DWORD cbPrivateInputData,
-            /* [in] */ LPVOID lpPrivateOutputDat,
-            /* [in] */ DWORD cbPrivateOutputData,
-            /* [in] */ DWORD dwNumBuffers,
-            /* [in] */ const AMVABUFFERINFO *pamvaBufferInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryRenderStatus )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ DWORD dwTypeIndex,
-            /* [in] */ DWORD dwBufferIndex,
-            /* [in] */ DWORD dwFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *DisplayFrame )( 
-            IAMVideoAccelerator * This,
-            /* [in] */ DWORD dwFlipToIndex,
-            /* [in] */ IMediaSample *pMediaSample);
-        
-        END_INTERFACE
-    } IAMVideoAcceleratorVtbl;
+typedef struct IAMVideoAcceleratorVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAMVideoAccelerator
-    {
-        CONST_VTBL struct IAMVideoAcceleratorVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IAMVideoAccelerator * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IAMVideoAccelerator * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IAMVideoAccelerator * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetVideoAcceleratorGUIDs )(
+        IAMVideoAccelerator * This,
+        /* [out][in] */ LPDWORD pdwNumGuidsSupported,
+        /* [out][in] */ LPGUID pGuidsSupported);
+
+    HRESULT ( STDMETHODCALLTYPE *GetUncompFormatsSupported )(
+        IAMVideoAccelerator * This,
+        /* [in] */ const GUID *pGuid,
+        /* [out][in] */ LPDWORD pdwNumFormatsSupported,
+        /* [out][in] */ LPDDPIXELFORMAT pFormatsSupported);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInternalMemInfo )(
+        IAMVideoAccelerator * This,
+        /* [in] */ const GUID *pGuid,
+        /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
+        /* [out][in] */ LPAMVAInternalMemInfo pamvaInternalMemInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCompBufferInfo )(
+        IAMVideoAccelerator * This,
+        /* [in] */ const GUID *pGuid,
+        /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
+        /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
+        /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInternalCompBufferInfo )(
+        IAMVideoAccelerator * This,
+        /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
+        /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *BeginFrame )(
+        IAMVideoAccelerator * This,
+        /* [in] */ const AMVABeginFrameInfo *amvaBeginFrameInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *EndFrame )(
+        IAMVideoAccelerator * This,
+        /* [in] */ const AMVAEndFrameInfo *pEndFrameInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetBuffer )(
+        IAMVideoAccelerator * This,
+        /* [in] */ DWORD dwTypeIndex,
+        /* [in] */ DWORD dwBufferIndex,
+        /* [in] */ BOOL bReadOnly,
+        /* [out] */ LPVOID *ppBuffer,
+        /* [out] */ LONG *lpStride);
+
+    HRESULT ( STDMETHODCALLTYPE *ReleaseBuffer )(
+        IAMVideoAccelerator * This,
+        /* [in] */ DWORD dwTypeIndex,
+        /* [in] */ DWORD dwBufferIndex);
+
+    HRESULT ( STDMETHODCALLTYPE *Execute )(
+        IAMVideoAccelerator * This,
+        /* [in] */ DWORD dwFunction,
+        /* [in] */ LPVOID lpPrivateInputData,
+        /* [in] */ DWORD cbPrivateInputData,
+        /* [in] */ LPVOID lpPrivateOutputDat,
+        /* [in] */ DWORD cbPrivateOutputData,
+        /* [in] */ DWORD dwNumBuffers,
+        /* [in] */ const AMVABUFFERINFO *pamvaBufferInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *QueryRenderStatus )(
+        IAMVideoAccelerator * This,
+        /* [in] */ DWORD dwTypeIndex,
+        /* [in] */ DWORD dwBufferIndex,
+        /* [in] */ DWORD dwFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *DisplayFrame )(
+        IAMVideoAccelerator * This,
+        /* [in] */ DWORD dwFlipToIndex,
+        /* [in] */ IMediaSample *pMediaSample);
+
+    END_INTERFACE
+} IAMVideoAcceleratorVtbl;
+
+interface IAMVideoAccelerator
+{
+    CONST_VTBL struct IAMVideoAcceleratorVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -477,7 +479,7 @@ EXTERN_C const IID IID_IAMVideoAccelerator;
 
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetVideoAcceleratorGUIDs_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetVideoAcceleratorGUIDs_Proxy(
     IAMVideoAccelerator * This,
     /* [out][in] */ LPDWORD pdwNumGuidsSupported,
     /* [out][in] */ LPGUID pGuidsSupported);
@@ -490,7 +492,7 @@ void __RPC_STUB IAMVideoAccelerator_GetVideoAcceleratorGUIDs_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetUncompFormatsSupported_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetUncompFormatsSupported_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ const GUID *pGuid,
     /* [out][in] */ LPDWORD pdwNumFormatsSupported,
@@ -504,7 +506,7 @@ void __RPC_STUB IAMVideoAccelerator_GetUncompFormatsSupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetInternalMemInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetInternalMemInfo_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ const GUID *pGuid,
     /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
@@ -518,7 +520,7 @@ void __RPC_STUB IAMVideoAccelerator_GetInternalMemInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetCompBufferInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetCompBufferInfo_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ const GUID *pGuid,
     /* [in] */ const AMVAUncompDataInfo *pamvaUncompDataInfo,
@@ -533,7 +535,7 @@ void __RPC_STUB IAMVideoAccelerator_GetCompBufferInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetInternalCompBufferInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetInternalCompBufferInfo_Proxy(
     IAMVideoAccelerator * This,
     /* [out][in] */ LPDWORD pdwNumTypesCompBuffers,
     /* [out] */ LPAMVACompBufferInfo pamvaCompBufferInfo);
@@ -546,7 +548,7 @@ void __RPC_STUB IAMVideoAccelerator_GetInternalCompBufferInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_BeginFrame_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_BeginFrame_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ const AMVABeginFrameInfo *amvaBeginFrameInfo);
 
@@ -558,7 +560,7 @@ void __RPC_STUB IAMVideoAccelerator_BeginFrame_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_EndFrame_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_EndFrame_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ const AMVAEndFrameInfo *pEndFrameInfo);
 
@@ -570,7 +572,7 @@ void __RPC_STUB IAMVideoAccelerator_EndFrame_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetBuffer_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_GetBuffer_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ DWORD dwTypeIndex,
     /* [in] */ DWORD dwBufferIndex,
@@ -586,7 +588,7 @@ void __RPC_STUB IAMVideoAccelerator_GetBuffer_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_ReleaseBuffer_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_ReleaseBuffer_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ DWORD dwTypeIndex,
     /* [in] */ DWORD dwBufferIndex);
@@ -599,7 +601,7 @@ void __RPC_STUB IAMVideoAccelerator_ReleaseBuffer_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_Execute_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_Execute_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ DWORD dwFunction,
     /* [in] */ LPVOID lpPrivateInputData,
@@ -617,7 +619,7 @@ void __RPC_STUB IAMVideoAccelerator_Execute_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_QueryRenderStatus_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_QueryRenderStatus_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ DWORD dwTypeIndex,
     /* [in] */ DWORD dwBufferIndex,
@@ -631,7 +633,7 @@ void __RPC_STUB IAMVideoAccelerator_QueryRenderStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_DisplayFrame_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMVideoAccelerator_DisplayFrame_Proxy(
     IAMVideoAccelerator * This,
     /* [in] */ DWORD dwFlipToIndex,
     /* [in] */ IMediaSample *pMediaSample);

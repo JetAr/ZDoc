@@ -36,94 +36,94 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	// returns protocol, auth, hostname, port, path
-	boost::tuple<std::string, std::string, std::string, int, std::string>
-		parse_url_components(std::string url, error_code& ec)
-	{
-		std::string hostname; // hostname only
-		std::string auth; // user:pass
-		std::string protocol; // http or https for instance
-		int port = -1;
+// returns protocol, auth, hostname, port, path
+boost::tuple<std::string, std::string, std::string, int, std::string>
+parse_url_components(std::string url, error_code& ec)
+{
+    std::string hostname; // hostname only
+    std::string auth; // user:pass
+    std::string protocol; // http or https for instance
+    int port = -1;
 
-		std::string::iterator at;
-		std::string::iterator colon;
-		std::string::iterator port_pos;
+    std::string::iterator at;
+    std::string::iterator colon;
+    std::string::iterator port_pos;
 
-		// PARSE URL
-		std::string::iterator start = url.begin();
-		// remove white spaces in front of the url
-		while (start != url.end() && (*start == ' ' || *start == '\t'))
-			++start;
-		std::string::iterator end
-			= std::find(url.begin(), url.end(), ':');
-		protocol.assign(start, end);
+    // PARSE URL
+    std::string::iterator start = url.begin();
+    // remove white spaces in front of the url
+    while (start != url.end() && (*start == ' ' || *start == '\t'))
+        ++start;
+    std::string::iterator end
+        = std::find(url.begin(), url.end(), ':');
+    protocol.assign(start, end);
 
-		if (end == url.end())
-		{
-			ec = errors::unsupported_url_protocol;
-			goto exit;
-		}
-		++end;
-		if (end == url.end() || *end != '/')
-		{
-			ec = errors::unsupported_url_protocol;
-			goto exit;
-		}
-		++end;
-		if (end == url.end() || *end != '/')
-		{
-			ec = errors::unsupported_url_protocol;
-			goto exit;
-		}
-		++end;
-		start = end;
+    if (end == url.end())
+    {
+        ec = errors::unsupported_url_protocol;
+        goto exit;
+    }
+    ++end;
+    if (end == url.end() || *end != '/')
+    {
+        ec = errors::unsupported_url_protocol;
+        goto exit;
+    }
+    ++end;
+    if (end == url.end() || *end != '/')
+    {
+        ec = errors::unsupported_url_protocol;
+        goto exit;
+    }
+    ++end;
+    start = end;
 
-		at = std::find(start, url.end(), '@');
-		colon = std::find(start, url.end(), ':');
-		end = std::find(start, url.end(), '/');
+    at = std::find(start, url.end(), '@');
+    colon = std::find(start, url.end(), ':');
+    end = std::find(start, url.end(), '/');
 
-		if (at != url.end()
-			&& colon != url.end()
-			&& colon < at
-			&& at < end)
-		{
-			auth.assign(start, at);
-			start = at;
-			++start;
-		}
+    if (at != url.end()
+            && colon != url.end()
+            && colon < at
+            && at < end)
+    {
+        auth.assign(start, at);
+        start = at;
+        ++start;
+    }
 
-		// this is for IPv6 addresses
-		if (start != url.end() && *start == '[')
-		{
-			port_pos = std::find(start, url.end(), ']');
-			if (port_pos == url.end())
-			{
-				ec = errors::expected_close_bracket_in_address;
-				goto exit;
-			}
-			port_pos = std::find(port_pos, url.end(), ':');
-		}
-		else
-		{
-			port_pos = std::find(start, url.end(), ':');
-		}
+    // this is for IPv6 addresses
+    if (start != url.end() && *start == '[')
+    {
+        port_pos = std::find(start, url.end(), ']');
+        if (port_pos == url.end())
+        {
+            ec = errors::expected_close_bracket_in_address;
+            goto exit;
+        }
+        port_pos = std::find(port_pos, url.end(), ':');
+    }
+    else
+    {
+        port_pos = std::find(start, url.end(), ':');
+    }
 
-		if (port_pos < end)
-		{
-			hostname.assign(start, port_pos);
-			++port_pos;
-			port = std::atoi(std::string(port_pos, end).c_str());
-		}
-		else
-		{
-			hostname.assign(start, end);
-		}
+    if (port_pos < end)
+    {
+        hostname.assign(start, port_pos);
+        ++port_pos;
+        port = std::atoi(std::string(port_pos, end).c_str());
+    }
+    else
+    {
+        hostname.assign(start, end);
+    }
 
-		start = end;
+    start = end;
 exit:
-		return boost::make_tuple(protocol, auth, hostname, port
-			, std::string(start, url.end()));
-	}
+    return boost::make_tuple(protocol, auth, hostname, port
+                             , std::string(start, url.end()));
+}
 
 }
 

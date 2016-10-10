@@ -46,9 +46,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct torrent_plugin;
-	class torrent;
-	TORRENT_EXPORT boost::shared_ptr<torrent_plugin> create_ut_pex_plugin(torrent*, void*);
+struct torrent_plugin;
+class torrent;
+TORRENT_EXPORT boost::shared_ptr<torrent_plugin> create_ut_pex_plugin(torrent*, void*);
 }
 
 #endif // TORRENT_UT_PEX_EXTENSION_HPP_INCLUDED

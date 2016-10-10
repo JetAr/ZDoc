@@ -43,53 +43,53 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	struct fingerprint
-	{
-		fingerprint(const char* id_string, int major, int minor, int revision, int tag)
-			: major_version(major)
-			, minor_version(minor)
-			, revision_version(revision)
-			, tag_version(tag)
-		{
-			TORRENT_ASSERT(id_string);
-			TORRENT_ASSERT(major >= 0);
-			TORRENT_ASSERT(minor >= 0);
-			TORRENT_ASSERT(revision >= 0);
-			TORRENT_ASSERT(tag >= 0);
-			TORRENT_ASSERT(std::strlen(id_string) == 2);
-			name[0] = id_string[0];
-			name[1] = id_string[1];
-		}
+struct fingerprint
+{
+    fingerprint(const char* id_string, int major, int minor, int revision, int tag)
+        : major_version(major)
+        , minor_version(minor)
+        , revision_version(revision)
+        , tag_version(tag)
+    {
+        TORRENT_ASSERT(id_string);
+        TORRENT_ASSERT(major >= 0);
+        TORRENT_ASSERT(minor >= 0);
+        TORRENT_ASSERT(revision >= 0);
+        TORRENT_ASSERT(tag >= 0);
+        TORRENT_ASSERT(std::strlen(id_string) == 2);
+        name[0] = id_string[0];
+        name[1] = id_string[1];
+    }
 
-		std::string to_string() const
-		{
-			char s[100];
-			snprintf(s, 100, "-%c%c%c%c%c%c-"
-				,  name[0], name[1]
-				, version_to_char(major_version)
-				, version_to_char(minor_version)
-				, version_to_char(revision_version)
-				, version_to_char(tag_version));
-			return s;
-		}
+    std::string to_string() const
+    {
+        char s[100];
+        snprintf(s, 100, "-%c%c%c%c%c%c-"
+                 ,  name[0], name[1]
+                 , version_to_char(major_version)
+                 , version_to_char(minor_version)
+                 , version_to_char(revision_version)
+                 , version_to_char(tag_version));
+        return s;
+    }
 
-		char name[2];
-		int major_version;
-		int minor_version;
-		int revision_version;
-		int tag_version;
+    char name[2];
+    int major_version;
+    int minor_version;
+    int revision_version;
+    int tag_version;
 
-	private:
+private:
 
-		char version_to_char(int v) const
-		{
-			if (v >= 0 && v < 10) return '0' + v;
-			else if (v >= 10) return 'A' + (v - 10);
-			TORRENT_ASSERT(false);
-			return '0';
-		}
+    char version_to_char(int v) const
+    {
+        if (v >= 0 && v < 10) return '0' + v;
+        else if (v >= 10) return 'A' + (v - 10);
+        TORRENT_ASSERT(false);
+        return '0';
+    }
 
-	};
+};
 
 }
 

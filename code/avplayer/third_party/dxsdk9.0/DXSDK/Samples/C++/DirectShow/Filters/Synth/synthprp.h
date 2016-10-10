@@ -7,7 +7,8 @@
 //------------------------------------------------------------------------------
 
 
-class CSynthProperties : public CBasePropertyPage {
+class CSynthProperties : public CBasePropertyPage
+{
 
 public:
 

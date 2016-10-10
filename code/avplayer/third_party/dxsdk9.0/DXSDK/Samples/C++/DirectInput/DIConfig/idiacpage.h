@@ -12,21 +12,22 @@
 #define __IDIACPAGE_H__
 
 
-typedef struct _DICFGPAGECREATESTRUCT {
+typedef struct _DICFGPAGECREATESTRUCT
+{
 
-	DWORD dwSize;
+    DWORD dwSize;
 
-	int nPage;
+    int nPage;
 
-	HWND hParentWnd;
-	RECT rect;
-	HWND hPageWnd;	// out
+    HWND hParentWnd;
+    RECT rect;
+    HWND hPageWnd;	// out
 
-	DIDEVICEINSTANCEW didi;
-	LPDIRECTINPUTDEVICE8W lpDID;
+    DIDEVICEINSTANCEW didi;
+    LPDIRECTINPUTDEVICE8W lpDID;
 
-	CUIGlobals *pUIGlobals;
-	IDIConfigUIFrameWindow *pUIFrame;
+    CUIGlobals *pUIGlobals;
+    IDIConfigUIFrameWindow *pUIFrame;
 
 } DICFGPAGECREATESTRUCT;
 
@@ -35,27 +36,27 @@ class IDIDeviceActionConfigPage : public IUnknown
 {
 public:
 
-	//IUnknown fns
-	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
-	STDMETHOD_(ULONG, AddRef) () PURE;
-	STDMETHOD_(ULONG, Release) () PURE;
+    //IUnknown fns
+    STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
+    STDMETHOD_(ULONG, AddRef) () PURE;
+    STDMETHOD_(ULONG, Release) () PURE;
 
-	//IDirectInputActionConfigPage
-	STDMETHOD (Create) (DICFGPAGECREATESTRUCT *pcs) PURE;
-	STDMETHOD (Show) (LPDIACTIONFORMATW lpDiActFor) PURE;
-	STDMETHOD (Hide) () PURE;
+    //IDirectInputActionConfigPage
+    STDMETHOD (Create) (DICFGPAGECREATESTRUCT *pcs) PURE;
+    STDMETHOD (Show) (LPDIACTIONFORMATW lpDiActFor) PURE;
+    STDMETHOD (Hide) () PURE;
 
-	// layout edit mode
-	STDMETHOD (SetEditLayout) (BOOL bEditLayout) PURE;
+    // layout edit mode
+    STDMETHOD (SetEditLayout) (BOOL bEditLayout) PURE;
 
 
-	// Set the info box text
-	STDMETHOD (SetInfoText) (int iCode) PURE;
+    // Set the info box text
+    STDMETHOD (SetInfoText) (int iCode) PURE;
 
-	// Unacquire and Reacquire the device for page's purposes
-	// (the configwnd needs to do this around SetActionMap() calls)
-	STDMETHOD (Unacquire) () PURE;
-	STDMETHOD (Reacquire) () PURE;
+    // Unacquire and Reacquire the device for page's purposes
+    // (the configwnd needs to do this around SetActionMap() calls)
+    STDMETHOD (Unacquire) () PURE;
+    STDMETHOD (Reacquire) () PURE;
 };
 
 

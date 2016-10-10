@@ -21,7 +21,7 @@ extern "C" {
 //
 // {43D849C0-2FE8-11cf-BCB1-444553540000}
 DEFINE_GUID(IID_INullIPP,
-0x43d849c0, 0x2fe8, 0x11cf, 0xbc, 0xb1, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);
+            0x43d849c0, 0x2fe8, 0x11cf, 0xbc, 0xb1, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);
 //----------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------
@@ -31,21 +31,21 @@ DECLARE_INTERFACE_(INullIPP, IUnknown)
 {
 
     STDMETHOD(put_MediaType) (THIS_
-    				  CMediaType *pmt       /* [in] */	// the media type selected
-				 ) PURE;
+                              CMediaType *pmt       /* [in] */	// the media type selected
+                             ) PURE;
 
     STDMETHOD(get_MediaType) (THIS_
-    				  CMediaType **pmt      /* [out] */	// the media type selected
-				 ) PURE;
+                              CMediaType **pmt      /* [out] */	// the media type selected
+                             ) PURE;
 
     STDMETHOD(get_IPin) (THIS_
-    				  IPin **pPin          /* [out] */	// the source pin
-				 ) PURE;
+                         IPin **pPin          /* [out] */	// the source pin
+                        ) PURE;
 
 
     STDMETHOD(get_State) (THIS_
-    				  FILTER_STATE *state  /* [out] */	// the filter state
-				 ) PURE;
+                          FILTER_STATE *state  /* [out] */	// the filter state
+                         ) PURE;
 
 
 };

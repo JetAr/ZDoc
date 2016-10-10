@@ -15,7 +15,7 @@
 
 
 //-----------------------------------------------------------------------------
-// Classes defined in this header file 
+// Classes defined in this header file
 //-----------------------------------------------------------------------------
 class CDisplay;
 class CSurface;
@@ -56,19 +56,40 @@ public:
     ~CDisplay();
 
     // Access functions
-    HWND                 GetHWnd()           { return m_hWnd; }
-    LPDIRECTDRAW7        GetDirectDraw()     { return m_pDD; }
-    LPDIRECTDRAWSURFACE7 GetFrontBuffer()    { return m_pddsFrontBuffer; }
-    LPDIRECTDRAWSURFACE7 GetBackBuffer()     { return m_pddsBackBuffer; }
-    LPDIRECTDRAWSURFACE7 GetBackBufferLeft() { return m_pddsBackBufferLeft; }
+    HWND                 GetHWnd()
+    {
+        return m_hWnd;
+    }
+    LPDIRECTDRAW7        GetDirectDraw()
+    {
+        return m_pDD;
+    }
+    LPDIRECTDRAWSURFACE7 GetFrontBuffer()
+    {
+        return m_pddsFrontBuffer;
+    }
+    LPDIRECTDRAWSURFACE7 GetBackBuffer()
+    {
+        return m_pddsBackBuffer;
+    }
+    LPDIRECTDRAWSURFACE7 GetBackBufferLeft()
+    {
+        return m_pddsBackBufferLeft;
+    }
 
     // Status functions
-    BOOL    IsWindowed()                     { return m_bWindowed; }
-    BOOL    IsStereo()                       { return m_bStereo; }
+    BOOL    IsWindowed()
+    {
+        return m_bWindowed;
+    }
+    BOOL    IsStereo()
+    {
+        return m_bStereo;
+    }
 
     // Creation/destruction methods
     HRESULT CreateFullScreenDisplay( HWND hWnd, DWORD dwWidth, DWORD dwHeight,
-		                             DWORD dwBPP );
+                                     DWORD dwBPP );
     HRESULT CreateWindowedDisplay( HWND hWnd, DWORD dwWidth, DWORD dwHeight );
     HRESULT InitClipper();
     HRESULT UpdateBounds();
@@ -76,14 +97,14 @@ public:
 
     // Methods to create child objects
     HRESULT CreateSurface( CSurface** ppSurface, DWORD dwWidth,
-		                   DWORD dwHeight );
+                           DWORD dwHeight );
     HRESULT CreateSurfaceFromBitmap( CSurface** ppSurface, TCHAR* strBMP,
-		                             DWORD dwDesiredWidth,
-									 DWORD dwDesiredHeight );
+                                     DWORD dwDesiredWidth,
+                                     DWORD dwDesiredHeight );
     HRESULT CreateSurfaceFromText( CSurface** ppSurface, HFONT hFont,
-		                           TCHAR* strText, 
-								   COLORREF crBackground,
-								   COLORREF crForeground );
+                                   TCHAR* strText,
+                                   COLORREF crBackground,
+                                   COLORREF crForeground );
     HRESULT CreatePaletteFromBitmap( LPDIRECTDRAWPALETTE* ppPalette, const TCHAR* strBMP );
 
     // Display methods
@@ -91,7 +112,7 @@ public:
     HRESULT ColorKeyBlt( DWORD x, DWORD y, LPDIRECTDRAWSURFACE7 pdds,
                          RECT* prc = NULL );
     HRESULT Blt( DWORD x, DWORD y, LPDIRECTDRAWSURFACE7 pdds,
-		         RECT* prc=NULL, DWORD dwFlags=0 );
+                 RECT* prc=NULL, DWORD dwFlags=0 );
     HRESULT Blt( DWORD x, DWORD y, CSurface* pSurface, RECT* prc = NULL );
     HRESULT ShowBitmap( HBITMAP hbm, LPDIRECTDRAWPALETTE pPalette=NULL );
     HRESULT SetPalette( LPDIRECTDRAWPALETTE pPalette );
@@ -112,14 +133,20 @@ class CSurface
     BOOL                 m_bColorKeyed;
 
 public:
-    LPDIRECTDRAWSURFACE7 GetDDrawSurface() { return m_pdds; }
-    BOOL                 IsColorKeyed()    { return m_bColorKeyed; }
+    LPDIRECTDRAWSURFACE7 GetDDrawSurface()
+    {
+        return m_pdds;
+    }
+    BOOL                 IsColorKeyed()
+    {
+        return m_bColorKeyed;
+    }
 
-    HRESULT DrawBitmap( HBITMAP hBMP, DWORD dwBMPOriginX = 0, DWORD dwBMPOriginY = 0, 
-		                DWORD dwBMPWidth = 0, DWORD dwBMPHeight = 0 );
+    HRESULT DrawBitmap( HBITMAP hBMP, DWORD dwBMPOriginX = 0, DWORD dwBMPOriginY = 0,
+                        DWORD dwBMPWidth = 0, DWORD dwBMPHeight = 0 );
     HRESULT DrawBitmap( TCHAR* strBMP, DWORD dwDesiredWidth, DWORD dwDesiredHeight );
     HRESULT DrawText( HFONT hFont, TCHAR* strText, DWORD dwOriginX, DWORD dwOriginY,
-		              COLORREF crBackground, COLORREF crForeground );
+                      COLORREF crBackground, COLORREF crForeground );
 
     HRESULT SetColorKey( DWORD dwColorKey );
     DWORD   ConvertGDIColor( COLORREF dwGDIColor );

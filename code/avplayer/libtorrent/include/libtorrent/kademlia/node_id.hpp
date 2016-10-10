@@ -40,7 +40,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/assert.hpp"
 #include "libtorrent/address.hpp"
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 typedef libtorrent::big_number node_id;
@@ -62,7 +64,8 @@ node_id TORRENT_EXTRA_EXPORT generate_id_impl(address const& ip_, boost::uint32_
 
 bool TORRENT_EXTRA_EXPORT verify_id(node_id const& nid, address const& source_ip);
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif // NODE_ID_HPP
 

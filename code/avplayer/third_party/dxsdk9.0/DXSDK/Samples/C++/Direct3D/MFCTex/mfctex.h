@@ -32,13 +32,13 @@ protected:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CAppDoc)
-    public:
+public:
     //}}AFX_VIRTUAL
 
 // Implementation
     //{{AFX_MSG(CAppDoc)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
+    // NOTE - the ClassWizard will add and remove member functions here.
+    //    DO NOT EDIT what you see in these blocks of generated code !
     //}}AFX_MSG
     DECLARE_MESSAGE_MAP()
 };
@@ -57,7 +57,7 @@ protected:
 public:
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CAppFrameWnd)
-    public:
+public:
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
     //}}AFX_VIRTUAL
 
@@ -81,7 +81,7 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CApp)
-    public:
+public:
     virtual BOOL InitInstance();
     virtual BOOL OnIdle( LONG );
     //}}AFX_VIRTUAL
@@ -144,15 +144,24 @@ private:
     VOID    SetTextureMaps( const TCHAR*, const TCHAR*, const TCHAR* );
 
 public:
-    BOOL IsReady() { return m_bActive; }
-    TCHAR* PstrFrameStats() { return m_strFrameStats; }
-    VOID RenderScene() { Render3DEnvironment(); }
+    BOOL IsReady()
+    {
+        return m_bActive;
+    }
+    TCHAR* PstrFrameStats()
+    {
+        return m_strFrameStats;
+    }
+    VOID RenderScene()
+    {
+        Render3DEnvironment();
+    }
     HRESULT CheckForLostFullscreen();
 
 protected:
     DECLARE_DYNCREATE(CAppForm)
 
-             CAppForm();
+    CAppForm();
     virtual  ~CAppForm();
 public:
     //{{AFX_DATA(CAppForm)

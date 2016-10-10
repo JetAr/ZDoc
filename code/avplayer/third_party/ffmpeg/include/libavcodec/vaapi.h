@@ -47,7 +47,8 @@
  * function call. In any case, they must be valid prior to calling
  * decoding functions.
  */
-struct vaapi_context {
+struct vaapi_context
+{
     /**
      * Window system dependent data
      *

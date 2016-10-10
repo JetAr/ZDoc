@@ -25,7 +25,7 @@ class CAlphaRenderer : public CBaseRenderer
     CAlphaRenderer( IUnknown * pUnk, HRESULT * phr );
     ~CAlphaRenderer( );
     DECLARE_IUNKNOWN
-    
+
     // make sure media type is what we want
     //
     HRESULT CheckMediaType( const CMediaType *pmtIn );
@@ -44,7 +44,7 @@ class CAlphaRenderer : public CBaseRenderer
     HRESULT Inactive();
 
 public:
-     
+
     // only way to make one of these
     //
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);

@@ -15,13 +15,13 @@ extern "C" {
 
 //
 //  DXGetErrorString8
-//  
-//  Desc:  Converts a DirectX HRESULT to a string 
+//
+//  Desc:  Converts a DirectX HRESULT to a string
 //
 //  Args:  HRESULT hr   Can be any error code from
 //                      D3D8 D3DX8 DDRAW DPLAY8 DMUSIC DSOUND DINPUT DSHOW
 //
-//  Return: Converted string 
+//  Return: Converted string
 //
 const char*  WINAPI DXGetErrorString8A(HRESULT hr);
 const WCHAR* WINAPI DXGetErrorString8W(HRESULT hr);
@@ -30,12 +30,12 @@ const WCHAR* WINAPI DXGetErrorString8W(HRESULT hr);
 #define DXGetErrorString8 DXGetErrorString8W
 #else
 #define DXGetErrorString8 DXGetErrorString8A
-#endif 
+#endif
 
 
 //
 //  DXGetErrorDescription8
-//  
+//
 //  Desc:  Returns a string description of a DirectX HRESULT
 //
 //  Args:  HRESULT hr   Can be any error code from
@@ -47,10 +47,10 @@ const char*  WINAPI DXGetErrorDescription8A(HRESULT hr);
 const WCHAR* WINAPI DXGetErrorDescription8W(HRESULT hr);
 
 #ifdef UNICODE
-    #define DXGetErrorDescription8 DXGetErrorDescription8W
+#define DXGetErrorDescription8 DXGetErrorDescription8W
 #else
-    #define DXGetErrorDescription8 DXGetErrorDescription8A
-#endif 
+#define DXGetErrorDescription8 DXGetErrorDescription8A
+#endif
 
 
 //
@@ -58,15 +58,15 @@ const WCHAR* WINAPI DXGetErrorDescription8W(HRESULT hr);
 //
 //  Desc:  Outputs a formatted error message to the debug stream
 //
-//  Args:  CHAR* strFile   The current file, typically passed in using the 
+//  Args:  CHAR* strFile   The current file, typically passed in using the
 //                         __FILE__ macro.
-//         DWORD dwLine    The current line number, typically passed in using the 
+//         DWORD dwLine    The current line number, typically passed in using the
 //                         __LINE__ macro.
 //         HRESULT hr      An HRESULT that will be traced to the debug stream.
 //         CHAR* strMsg    A string that will be traced to the debug stream (may be NULL)
 //         BOOL bPopMsgBox If TRUE, then a message box will popup also containing the passed info.
 //
-//  Return: The hr that was passed in.  
+//  Return: The hr that was passed in.
 //
 HRESULT WINAPI DXTraceA( const char* strFile, DWORD dwLine, HRESULT hr, const char* strMsg, BOOL bPopMsgBox );
 HRESULT WINAPI DXTraceW( const char* strFile, DWORD dwLine, HRESULT hr, const WCHAR* strMsg, BOOL bPopMsgBox );
@@ -75,7 +75,7 @@ HRESULT WINAPI DXTraceW( const char* strFile, DWORD dwLine, HRESULT hr, const WC
 #define DXTrace DXTraceW
 #else
 #define DXTrace DXTraceA
-#endif 
+#endif
 
 
 //

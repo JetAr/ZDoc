@@ -174,7 +174,7 @@ struct MonitorInfo
 
 //-----------------------------------------------------------------------------
 // Name: struct RenderUnit
-// Desc: 
+// Desc:
 //-----------------------------------------------------------------------------
 struct RenderUnit
 {
@@ -200,7 +200,7 @@ struct RenderUnit
 class CD3DScreensaver
 {
 public:
-                    CD3DScreensaver();
+    CD3DScreensaver();
 
     virtual HRESULT Create( HINSTANCE hInstance );
     virtual INT     Run();
@@ -232,7 +232,7 @@ protected:
     HRESULT         CreateSaverWindow();
     HRESULT         BuildDeviceList();
     BOOL            FindDepthStencilFormat( UINT iAdapter, D3DDEVTYPE DeviceType,
-                        D3DFORMAT TargetFormat, D3DFORMAT* pDepthStencilFormat );
+                                            D3DFORMAT TargetFormat, D3DFORMAT* pDepthStencilFormat );
     HRESULT         CheckWindowedFormat( UINT iAdapter, D3DWindowedModeInfo* pD3DWindowedModeInfo );
     HRESULT         CreateFullscreenRenderUnit( RenderUnit* pRenderUnit );
     HRESULT         CreateWindowedRenderUnit( RenderUnit* pRenderUnit );
@@ -248,18 +248,51 @@ protected:
     BOOL            GetBestAdapter( DWORD* piAdapter );
 
     virtual VOID    SetDevice( UINT iDevice )                  { }
-    virtual HRESULT RegisterSoftwareDevice()                   { return S_OK; }
-    virtual HRESULT ConfirmDevice(D3DCAPS9* pCaps, DWORD dwBehavior, 
-                                  D3DFORMAT fmtBackBuffer)     { return S_OK; }
-    virtual HRESULT ConfirmMode( LPDIRECT3DDEVICE9 pd3dDev )   { return S_OK; }
-    virtual HRESULT OneTimeSceneInit()                         { return S_OK; }
-    virtual HRESULT InitDeviceObjects()                        { return S_OK; }
-    virtual HRESULT RestoreDeviceObjects()                     { return S_OK; }
-    virtual HRESULT FrameMove()                                { return S_OK; }
-    virtual HRESULT Render()                                   { return S_OK; }
-    virtual HRESULT InvalidateDeviceObjects()                  { return S_OK; }
-    virtual HRESULT DeleteDeviceObjects()                      { return S_OK; }
-    virtual HRESULT FinalCleanup()                             { return S_OK; }
+    virtual HRESULT RegisterSoftwareDevice()
+    {
+        return S_OK;
+    }
+    virtual HRESULT ConfirmDevice(D3DCAPS9* pCaps, DWORD dwBehavior,
+                                  D3DFORMAT fmtBackBuffer)
+    {
+        return S_OK;
+    }
+    virtual HRESULT ConfirmMode( LPDIRECT3DDEVICE9 pd3dDev )
+    {
+        return S_OK;
+    }
+    virtual HRESULT OneTimeSceneInit()
+    {
+        return S_OK;
+    }
+    virtual HRESULT InitDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT RestoreDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT FrameMove()
+    {
+        return S_OK;
+    }
+    virtual HRESULT Render()
+    {
+        return S_OK;
+    }
+    virtual HRESULT InvalidateDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT DeleteDeviceObjects()
+    {
+        return S_OK;
+    }
+    virtual HRESULT FinalCleanup()
+    {
+        return S_OK;
+    }
 
 protected:
     SaverMode       m_SaverMode;         // sm_config, sm_full, sm_preview, etc.

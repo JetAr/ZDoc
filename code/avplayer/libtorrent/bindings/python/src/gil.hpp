@@ -16,7 +16,7 @@
 struct allow_threading_guard
 {
     allow_threading_guard()
-      : save(PyEval_SaveThread())
+        : save(PyEval_SaveThread())
     {}
 
     ~allow_threading_guard()
@@ -29,23 +29,23 @@ struct allow_threading_guard
 
 struct lock_gil
 {
-  lock_gil()
-    : state(PyGILState_Ensure())
-  {}
+    lock_gil()
+        : state(PyGILState_Ensure())
+    {}
 
-  ~lock_gil()
-  {
-      PyGILState_Release(state);
-  }
+    ~lock_gil()
+    {
+        PyGILState_Release(state);
+    }
 
-  PyGILState_STATE state;
+    PyGILState_STATE state;
 };
 
 template <class F, class R>
 struct allow_threading
 {
     allow_threading(F fn)
-      : fn(fn)
+        : fn(fn)
     {}
 
     template <class A0>
@@ -97,23 +97,23 @@ template <class F>
 struct visitor : boost::python::def_visitor<visitor<F> >
 {
     visitor(F fn)
-      : fn(fn)
+        : fn(fn)
     {}
 
     template <class Class, class Options, class Signature>
     void visit_aux(
         Class& cl, char const* name
-      , Options const& options, Signature const& signature) const
+        , Options const& options, Signature const& signature) const
     {
         typedef typename boost::mpl::at_c<Signature,0>::type return_type;
 
         cl.def(
             name
-          , boost::python::make_function(
+            , boost::python::make_function(
                 allow_threading<F, return_type>(fn)
-              , options.policies()
-              , options.keywords()
-              , signature
+                , options.policies()
+                , options.keywords()
+                , signature
             )
         );
     }
@@ -123,7 +123,7 @@ struct visitor : boost::python::def_visitor<visitor<F> >
     {
         this->visit_aux(
             cl, name, options
-          , boost::python::detail::get_signature(fn, (typename Class::wrapped_type*)0)
+            , boost::python::detail::get_signature(fn, (typename Class::wrapped_type*)0)
         );
     }
 

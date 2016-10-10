@@ -9,19 +9,19 @@
 
 class CKeyProvider : public IServiceProvider
 {
-    public:
-        //
-        // IUnknown interface
-        //
-        STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
-        STDMETHODIMP_(ULONG) AddRef();
-        STDMETHODIMP_(ULONG) Release();
+public:
+    //
+    // IUnknown interface
+    //
+    STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
+    STDMETHODIMP_(ULONG) AddRef();
+    STDMETHODIMP_(ULONG) Release();
 
-        CKeyProvider();
+    CKeyProvider();
 
-        // IServiceProvider
-        STDMETHODIMP QueryService(REFIID siid, REFIID riid, void **ppv);
+    // IServiceProvider
+    STDMETHODIMP QueryService(REFIID siid, REFIID riid, void **ppv);
 
-    private:
-        volatile LONG m_cRef;
+private:
+    volatile LONG m_cRef;
 };

@@ -29,7 +29,7 @@ typedef const GUID *LPCGUID;
 
 /////////////////////////////////////////////////////////////////////////////
 // CCompositeControl
-class ATL_NO_VTABLE CCompositeControl : 
+class ATL_NO_VTABLE CCompositeControl :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<ICompositeControl, &IID_ICompositeControl, &LIBID_CPPVIDEOCONTROLLib>,
     public CComCompositeControl<CCompositeControl>,
@@ -60,11 +60,11 @@ public:
         m_hwndChannelID = NULL;
     }
 
-DECLARE_REGISTRY_RESOURCEID(IDR_COMPOSITECONTROL)
+    DECLARE_REGISTRY_RESOURCEID(IDR_COMPOSITECONTROL)
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CCompositeControl)
+    BEGIN_COM_MAP(CCompositeControl)
     COM_INTERFACE_ENTRY(ICompositeControl)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IViewObjectEx)
@@ -84,21 +84,21 @@ BEGIN_COM_MAP(CCompositeControl)
     COM_INTERFACE_ENTRY(IDataObject)
     COM_INTERFACE_ENTRY(IProvideClassInfo)
     COM_INTERFACE_ENTRY(IProvideClassInfo2)
-END_COM_MAP()
+    END_COM_MAP()
 
-BEGIN_PROP_MAP(CCompositeControl)
+    BEGIN_PROP_MAP(CCompositeControl)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-END_PROP_MAP()
+    END_PROP_MAP()
 
-BEGIN_MSG_MAP(CCompositeControl)
+    BEGIN_MSG_MAP(CCompositeControl)
     CHAIN_MSG_MAP(CComCompositeControl<CCompositeControl>)
     MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
     COMMAND_HANDLER(IDC_CHANNELDOWN, BN_CLICKED, OnClickedChanneldown)
     COMMAND_HANDLER(IDC_CHANNELUP, BN_CLICKED, OnClickedChannelup)
     COMMAND_ID_HANDLER(WM_CLOSE, OnExit)
     MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
-END_MSG_MAP()
+    END_MSG_MAP()
 
 // Handler prototypes:
     LRESULT OnExit(WORD /*wNotifyCode*/, WORD /* wID */, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
@@ -107,9 +107,9 @@ END_MSG_MAP()
 //  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 //  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
-BEGIN_SINK_MAP(CCompositeControl)
+    BEGIN_SINK_MAP(CCompositeControl)
     //Make sure the Event Handlers have __stdcall calling convention
-END_SINK_MAP()
+    END_SINK_MAP()
 
     STDMETHOD(OnAmbientPropertyChange)(DISPID dispid)
     {
@@ -134,12 +134,12 @@ public:
     IATSCTuningSpace * m_pATSCTuningSpace;
     IATSCLocator * m_pATSCLocator;
     HWND m_hwndChannelID;
-    
+
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnClickedChannelup(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnClickedChanneldown(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     HRESULT SetChannel(long lChannel);
     void ShowChannelNumber(long lChannel);
-    
+
 };
 #endif //__COMPOSITECONTROL_H_

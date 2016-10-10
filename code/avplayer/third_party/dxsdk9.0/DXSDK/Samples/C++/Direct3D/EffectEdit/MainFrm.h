@@ -17,22 +17,34 @@ protected:
     bool m_bPreserveLastPaneSize;
 
 public:
-    CMySplitterWnd() { m_bPreserveLastPaneSize = false; }
-    void SetPrev(CSplitterWnd* pWnd) { m_pSplitterWndPrev = pWnd; }
-    void SetNext(CSplitterWnd* pWnd) { m_pSplitterWndNext = pWnd; }
-	virtual void ActivateNext(BOOL bPrev = FALSE);
+    CMySplitterWnd()
+    {
+        m_bPreserveLastPaneSize = false;
+    }
+    void SetPrev(CSplitterWnd* pWnd)
+    {
+        m_pSplitterWndPrev = pWnd;
+    }
+    void SetNext(CSplitterWnd* pWnd)
+    {
+        m_pSplitterWndNext = pWnd;
+    }
+    virtual void ActivateNext(BOOL bPrev = FALSE);
     virtual void RecalcLayout();
-  	virtual void StopTracking(BOOL bAccept);
+    virtual void StopTracking(BOOL bAccept);
 
-    void PreserveLastPaneSize() { m_bPreserveLastPaneSize = true; }
+    void PreserveLastPaneSize()
+    {
+        m_bPreserveLastPaneSize = true;
+    }
 };
 
 class CMainFrame : public CFrameWnd
 {
-	
+
 protected: // create from serialization only
-	CMainFrame();
-	DECLARE_DYNCREATE(CMainFrame)
+    CMainFrame();
+    DECLARE_DYNCREATE(CMainFrame)
 
 // Attributes
 public:
@@ -41,44 +53,44 @@ public:
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
-	public:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	protected:
-	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CMainFrame)
+public:
+    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+protected:
+    virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
+    //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~CMainFrame();
+    virtual ~CMainFrame();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+    virtual void AssertValid() const;
+    virtual void Dump(CDumpContext& dc) const;
 #endif
     void ActivateTextView();
     void ActivateErrorsView();
     void ActivateOptionsView();
-	void SelectLine(int iLine);
+    void SelectLine(int iLine);
     void TextViewUpdateFont();
 
 protected:  // control bar embedded members
-	CStatusBar  m_wndStatusBar;
-	CToolBar    m_wndToolBar;
+    CStatusBar  m_wndStatusBar;
+    CToolBar    m_wndToolBar;
 
 // Generated message map functions
 protected:
-	CMySplitterWnd m_wndSplitterLeft;
-	CMySplitterWnd m_wndSplitterRight;
-	CMySplitterWnd m_wndSplitterMain;
-	//{{AFX_MSG(CMainFrame)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnRender();
-	afx_msg void OnViewChangeDevice();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnClose();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    CMySplitterWnd m_wndSplitterLeft;
+    CMySplitterWnd m_wndSplitterRight;
+    CMySplitterWnd m_wndSplitterMain;
+    //{{AFX_MSG(CMainFrame)
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    afx_msg void OnRender();
+    afx_msg void OnViewChangeDevice();
+    afx_msg void OnSize(UINT nType, int cx, int cy);
+    afx_msg void OnClose();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

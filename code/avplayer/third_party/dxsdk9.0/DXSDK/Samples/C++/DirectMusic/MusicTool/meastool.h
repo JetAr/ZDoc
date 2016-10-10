@@ -16,7 +16,7 @@ typedef enum { eOff, eMeasure, eBeat } EBeatType;
 class CMeasureTool : public IDirectMusicTool
 {
 public:
-	CMeasureTool(HWND hwndParent);
+    CMeasureTool(HWND hwndParent);
     ~CMeasureTool();
 
     HWND        m_hwndParent;
@@ -28,16 +28,16 @@ public:
     virtual STDMETHODIMP_(ULONG) Release();
 
 // IDirectMusicTool
-	HRESULT STDMETHODCALLTYPE Init( IDirectMusicGraph* pGraph );
-	HRESULT STDMETHODCALLTYPE GetMsgDeliveryType( DWORD* pdwDeliveryType );
-	HRESULT STDMETHODCALLTYPE GetMediaTypeArraySize( DWORD* pdwNumElements );
-	HRESULT STDMETHODCALLTYPE GetMediaTypes( DWORD** padwMediaTypes, DWORD dwNumElements) ;
-	HRESULT STDMETHODCALLTYPE ProcessPMsg( IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG );
-	HRESULT STDMETHODCALLTYPE Flush( IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG, REFERENCE_TIME rt );
+    HRESULT STDMETHODCALLTYPE Init( IDirectMusicGraph* pGraph );
+    HRESULT STDMETHODCALLTYPE GetMsgDeliveryType( DWORD* pdwDeliveryType );
+    HRESULT STDMETHODCALLTYPE GetMediaTypeArraySize( DWORD* pdwNumElements );
+    HRESULT STDMETHODCALLTYPE GetMediaTypes( DWORD** padwMediaTypes, DWORD dwNumElements) ;
+    HRESULT STDMETHODCALLTYPE ProcessPMsg( IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG );
+    HRESULT STDMETHODCALLTYPE Flush( IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG, REFERENCE_TIME rt );
     void    Blink(EBeatType);
 
 private:
-	long    m_cRef;			    // Reference counter
+    long    m_cRef;			    // Reference counter
 };
 
 void CALLBACK Unblink(HWND, UINT, UINT_PTR, DWORD);

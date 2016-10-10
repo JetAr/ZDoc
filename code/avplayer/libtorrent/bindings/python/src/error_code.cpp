@@ -39,10 +39,10 @@ using namespace libtorrent;
 void bind_error_code()
 {
     class_<error_code>("error_code")
-        .def(init<>())
-        .def("message", &error_code::message)
-        .def("value", &error_code::value)
-        .def("clear", &error_code::clear)
-        ;
+    .def(init<>())
+    .def("message", &error_code::message)
+    .def("value", &error_code::value)
+    .def("clear", &error_code::clear)
+    ;
 }
 

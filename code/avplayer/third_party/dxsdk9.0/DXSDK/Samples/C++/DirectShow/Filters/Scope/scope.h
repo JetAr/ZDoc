@@ -9,7 +9,7 @@
 
 // { 35919F40-E904-11ce-8A03-00AA006ECB65 }
 DEFINE_GUID(CLSID_Scope,
-0x35919f40, 0xe904, 0x11ce, 0x8a, 0x3, 0x0, 0xaa, 0x0, 0x6e, 0xcb, 0x65);
+            0x35919f40, 0xe904, 0x11ce, 0x8a, 0x3, 0x0, 0xaa, 0x0, 0x6e, 0xcb, 0x65);
 
 class CScopeFilter;
 class CScopeWindow;
@@ -191,9 +191,9 @@ private:
     void ProcessHorizScrollCommands(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
     friend BOOL CALLBACK ScopeDlgProc(HWND hwnd,        // Window handle
-                                    UINT uMsg,          // Message ID
-                                    WPARAM wParam,      // First parameter
-                                    LPARAM lParam);     // Other parameter
+                                      UINT uMsg,          // Message ID
+                                      WPARAM wParam,      // First parameter
+                                      LPARAM lParam);     // Other parameter
 
 public:
 

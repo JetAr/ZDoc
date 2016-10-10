@@ -4,7 +4,7 @@
 // Desc: DirectShow sample code - a simple full screen video playback sample.
 //       Using the Windows XP Video Mixing Renderer, a video is played back in
 //       a full screen exclusive mode.
-//      
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
@@ -15,39 +15,40 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-namespace DShowUtils {
+namespace DShowUtils
+{
 
 //----------------------------------------------------------------------------
 //  VerifyVMR
-// 
+//
 //  Verifies that VMR COM Objects exist on the system
 //
 //  Returns: false if the objects are not instanciatable
 //----------------------------------------------------------------------------
-BOOL 
+BOOL
 VerifyVMR(void);
 
 //----------------------------------------------------------------------------
 //  OpenMediaFile
-// 
+//
 //  Opens a movie file
 //
 //  Parameters:
 //          ownerWindow
 //          pGB - pointer to an initialized graphBuilder interface
-//          openedFileName 
+//          openedFileName
 //                      - the file name that has been opened by the user
 //----------------------------------------------------------------------------
 HRESULT
 OpenMediaFile(
-            HWND            hwndOwner,
-            IGraphBuilder*  pGB,
-            LPTSTR          openedFileName
-    );
+    HWND            hwndOwner,
+    IGraphBuilder*  pGB,
+    LPTSTR          openedFileName
+);
 
 //----------------------------------------------------------------------------
 //  AddVmrToFilterGraph
-// 
+//
 //  creates VMR filter and adds to to the filter graph
 //
 //  Parameters:
@@ -75,26 +76,26 @@ SetRenderingMode( IBaseFilter* pBaseFilter, VMRMode mode );
 
 //----------------------------------------------------------------------------
 //  ConfigureExclusiveMode
-//  
+//
 //  1. Creates the Exclusive Mode Allocator-Presenter
 //  2. Configures the new Allocator-Presenter
-//  
+//
 //  Parameters:
 //              baseFilter -- pointer to the VMR filter
 //              windowlessControl
-//                          --  a pointer that is going to receive the 
+//                          --  a pointer that is going to receive the
 //                              windowless control interface
 //
 //  Return: S_OK or HRESULT of the failed operation
 //----------------------------------------------------------------------------
 HRESULT
-ConfigureExclusiveMode( IBaseFilter*            pBaseFilter,            
+ConfigureExclusiveMode( IBaseFilter*            pBaseFilter,
                         LPDIRECTDRAW7           dd7,
                         LPDIRECTDRAWSURFACE7    primarySurface,
                         DWORD_PTR               userId,
                         HWND                    hwndMain,
                         IVMRWindowlessControl** ppWindowlessControl
-                        );
+                      );
 
 //----------------------------------------------------------------------------
 //  SetAllocatorPresenter
@@ -105,13 +106,13 @@ HRESULT
 SetAllocatorPresenter(  IBaseFilter*            pBaseFilter,
                         IVMRSurfaceAllocator*   pSurfaceAllocator,
                         DWORD_PTR               userId
-                        );
+                     );
 
 //----------------------------------------------------------------------------
 //  INITDDSTRUCT
-//  
+//
 //  Properly initializes direct draw struct
-//  
+//
 //  Parameters:
 //      dd -- directdraw struct
 //
@@ -129,7 +130,7 @@ inline void INITDDSTRUCT(T& dd)
 //  SetVideoPosition
 //
 //  This will set the video position to occupy the entire screen
-//  
+//
 //  Parameters:
 //              pWc -- initialized windowless control
 //              height of the screen
@@ -137,7 +138,7 @@ inline void INITDDSTRUCT(T& dd)
 //
 //  Return: S_OK or HRESULT of the failed operation
 //----------------------------------------------------------------------------
-void SetVideoPosition(IVMRWindowlessControl *pWc, 
+void SetVideoPosition(IVMRWindowlessControl *pWc,
                       DWORD width, DWORD height);
 
 }

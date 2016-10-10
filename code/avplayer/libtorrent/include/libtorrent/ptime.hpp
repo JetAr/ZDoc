@@ -44,8 +44,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	typedef boost::posix_time::ptime ptime;
-	typedef boost::posix_time::time_duration time_duration;
+typedef boost::posix_time::ptime ptime;
+typedef boost::posix_time::time_duration time_duration;
 }
 
 #else // TORRENT_USE_BOOST_DATE_TIME
@@ -54,67 +54,133 @@ namespace libtorrent
 
 namespace libtorrent
 {
-	// libtorrent time_duration type
-	struct time_duration
-	{
-		time_duration() {}
-		time_duration operator/(int rhs) const { return time_duration(diff / rhs); }
-		explicit time_duration(boost::int64_t d) : diff(d) {}
-		time_duration& operator-=(time_duration const& c) { diff -= c.diff; return *this; }
-		time_duration& operator+=(time_duration const& c) { diff += c.diff; return *this; }
-		time_duration& operator*=(int v) { diff *= v; return *this; }
-		time_duration operator+(time_duration const& c) { return time_duration(diff + c.diff); }
-		time_duration operator-(time_duration const& c) { return time_duration(diff - c.diff); }
-		boost::int64_t diff;
-	};
+// libtorrent time_duration type
+struct time_duration
+{
+    time_duration() {}
+    time_duration operator/(int rhs) const
+    {
+        return time_duration(diff / rhs);
+    }
+    explicit time_duration(boost::int64_t d) : diff(d) {}
+    time_duration& operator-=(time_duration const& c)
+    {
+        diff -= c.diff;
+        return *this;
+    }
+    time_duration& operator+=(time_duration const& c)
+    {
+        diff += c.diff;
+        return *this;
+    }
+    time_duration& operator*=(int v)
+    {
+        diff *= v;
+        return *this;
+    }
+    time_duration operator+(time_duration const& c)
+    {
+        return time_duration(diff + c.diff);
+    }
+    time_duration operator-(time_duration const& c)
+    {
+        return time_duration(diff - c.diff);
+    }
+    boost::int64_t diff;
+};
 
-	// libtorrent time type
-	struct ptime
-	{
-		ptime() {}
-		explicit ptime(boost::uint64_t t): time(t) {}
-		ptime& operator+=(time_duration rhs) { time += rhs.diff; return *this; }
-		ptime& operator-=(time_duration rhs) { time -= rhs.diff; return *this; }
-		boost::uint64_t time;
-	};
+// libtorrent time type
+struct ptime
+{
+    ptime() {}
+    explicit ptime(boost::uint64_t t): time(t) {}
+    ptime& operator+=(time_duration rhs)
+    {
+        time += rhs.diff;
+        return *this;
+    }
+    ptime& operator-=(time_duration rhs)
+    {
+        time -= rhs.diff;
+        return *this;
+    }
+    boost::uint64_t time;
+};
 
-	inline bool operator>(ptime lhs, ptime rhs)
-	{ return lhs.time > rhs.time; }
-	inline bool operator>=(ptime lhs, ptime rhs)
-	{ return lhs.time >= rhs.time; }
-	inline bool operator<=(ptime lhs, ptime rhs)
-	{ return lhs.time <= rhs.time; }
-	inline bool operator<(ptime lhs, ptime rhs)
-	{ return lhs.time < rhs.time; }
-	inline bool operator!=(ptime lhs, ptime rhs)
-	{ return lhs.time != rhs.time;}
-	inline bool operator==(ptime lhs, ptime rhs)
-	{ return lhs.time == rhs.time;}
+inline bool operator>(ptime lhs, ptime rhs)
+{
+    return lhs.time > rhs.time;
+}
+inline bool operator>=(ptime lhs, ptime rhs)
+{
+    return lhs.time >= rhs.time;
+}
+inline bool operator<=(ptime lhs, ptime rhs)
+{
+    return lhs.time <= rhs.time;
+}
+inline bool operator<(ptime lhs, ptime rhs)
+{
+    return lhs.time < rhs.time;
+}
+inline bool operator!=(ptime lhs, ptime rhs)
+{
+    return lhs.time != rhs.time;
+}
+inline bool operator==(ptime lhs, ptime rhs)
+{
+    return lhs.time == rhs.time;
+}
 
-	inline bool is_negative(time_duration dt) { return dt.diff < 0; }
-	inline bool operator==(time_duration lhs, time_duration rhs)
-	{ return lhs.diff == rhs.diff; }
-	inline bool operator<(time_duration lhs, time_duration rhs)
-	{ return lhs.diff < rhs.diff; }
-	inline bool operator<=(time_duration lhs, time_duration rhs)
-	{ return lhs.diff <= rhs.diff; }
-	inline bool operator>(time_duration lhs, time_duration rhs)
-	{ return lhs.diff > rhs.diff; }
-	inline bool operator>=(time_duration lhs, time_duration rhs)
-	{ return lhs.diff >= rhs.diff; }
-	inline time_duration operator*(time_duration lhs, int rhs)
-	{ return time_duration(boost::int64_t(lhs.diff * rhs)); }
-	inline time_duration operator*(int lhs, time_duration rhs)
-	{ return time_duration(boost::int64_t(lhs * rhs.diff)); }
+inline bool is_negative(time_duration dt)
+{
+    return dt.diff < 0;
+}
+inline bool operator==(time_duration lhs, time_duration rhs)
+{
+    return lhs.diff == rhs.diff;
+}
+inline bool operator<(time_duration lhs, time_duration rhs)
+{
+    return lhs.diff < rhs.diff;
+}
+inline bool operator<=(time_duration lhs, time_duration rhs)
+{
+    return lhs.diff <= rhs.diff;
+}
+inline bool operator>(time_duration lhs, time_duration rhs)
+{
+    return lhs.diff > rhs.diff;
+}
+inline bool operator>=(time_duration lhs, time_duration rhs)
+{
+    return lhs.diff >= rhs.diff;
+}
+inline time_duration operator*(time_duration lhs, int rhs)
+{
+    return time_duration(boost::int64_t(lhs.diff * rhs));
+}
+inline time_duration operator*(int lhs, time_duration rhs)
+{
+    return time_duration(boost::int64_t(lhs * rhs.diff));
+}
 
-	inline time_duration operator-(ptime lhs, ptime rhs)
-	{ return time_duration(lhs.time - rhs.time); }
-	inline ptime operator+(ptime lhs, time_duration rhs)
-	{ return ptime(lhs.time + rhs.diff); }
-	inline ptime operator+(time_duration lhs, ptime rhs)
-	{ return ptime(rhs.time + lhs.diff); }
-	inline ptime operator-(ptime lhs, time_duration rhs)
-	{ return ptime(lhs.time - rhs.diff); }
+inline time_duration operator-(ptime lhs, ptime rhs)
+{
+    return time_duration(lhs.time - rhs.time);
+}
+inline ptime operator+(ptime lhs, time_duration rhs)
+{
+    return ptime(lhs.time + rhs.diff);
+}
+inline ptime operator+(time_duration lhs, ptime rhs)
+{
+    return ptime(rhs.time + lhs.diff);
+}
+inline ptime operator-(ptime lhs, time_duration rhs)
+{
+    return ptime(lhs.time - rhs.diff);
+}
 
 }
 
@@ -122,14 +188,14 @@ namespace libtorrent
 
 namespace libtorrent
 {
-	TORRENT_EXPORT ptime time_now_hires();
-	TORRENT_EXPORT ptime min_time();
-	TORRENT_EXPORT ptime max_time();
+TORRENT_EXPORT ptime time_now_hires();
+TORRENT_EXPORT ptime min_time();
+TORRENT_EXPORT ptime max_time();
 
-	TORRENT_EXPORT char const* time_now_string();
-	TORRENT_EXPORT std::string log_time();
+TORRENT_EXPORT char const* time_now_string();
+TORRENT_EXPORT std::string log_time();
 
-	TORRENT_EXPORT ptime const& time_now();
+TORRENT_EXPORT ptime const& time_now();
 }
 
 #endif

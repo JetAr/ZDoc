@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: MFCDMOUtil.h
 //
-// Desc: DirectShow sample code - Header for DMO utility functions 
+// Desc: DirectShow sample code - Header for DMO utility functions
 //       used by MFC applications.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -21,8 +21,9 @@ typedef struct _dmo_category_info
 // The DirectShow reference documentation lists a set of DMO categories
 // for which you can enumerate corresponding filters.  See 'Category GUIDs'
 // under 'DirectShow->DirectX Media Objects->DMO Reference' in the SDK docs.
-const DMO_CATEGORY_INFO dmo_categories[] = {
-    
+const DMO_CATEGORY_INFO dmo_categories[] =
+{
+
     &GUID_NULL,                  TEXT("All categories\0"),
     &DMOCATEGORY_AUDIO_DECODER,  TEXT("Audio Decoder\0"),
     &DMOCATEGORY_AUDIO_EFFECT,   TEXT("Audio Effect\0"),
@@ -48,6 +49,6 @@ const DMO_CATEGORY_INFO dmo_categories[] = {
 HRESULT EnumDMOsToList(IEnumDMO *pEnumCat, CListBox& ListFilters, int& nFilters);
 HRESULT AddDMOsToList(const GUID *clsid, CListBox& ListFilters, BOOL bIncludeKeyed);
 
-void DisplayDMOTypeInfo(const GUID *pCLSID, 
+void DisplayDMOTypeInfo(const GUID *pCLSID,
                         ULONG& ulNumInputsSupplied,  CListBox& ListInputTypes,
                         ULONG& ulNumOutputsSupplied, CListBox& ListOutputTypes);

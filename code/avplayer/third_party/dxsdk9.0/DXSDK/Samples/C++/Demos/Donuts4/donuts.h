@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // File: Donuts.h
 //
-// Desc: Donuts 4 game.  Uses Direct3D, DirectMusic, DirectSound, DirectInput 
+// Desc: Donuts 4 game.  Uses Direct3D, DirectMusic, DirectSound, DirectInput
 //
 // Copyright (C) Microsoft Corporation. All Rights Reserved.
 //-----------------------------------------------------------------------------
@@ -19,21 +19,21 @@
 
 // States the app can be in
 enum APP_STATE_TYPE
-{ 
-    APPSTATE_LOADSPLASH, 
-    APPSTATE_DISPLAYSPLASH, 
-    APPSTATE_ACTIVE, 
-    APPSTATE_WAITFORMUSICEND, 
-    APPSTATE_TRIGGERLEVELSCREEN, 
-    APPSTATE_BEGINLEVELSCREEN, 
-    APPSTATE_DISPLAYLEVELSCREEN, 
-    APPSTATE_BEGINACTIVESCREEN 
+{
+    APPSTATE_LOADSPLASH,
+    APPSTATE_DISPLAYSPLASH,
+    APPSTATE_ACTIVE,
+    APPSTATE_WAITFORMUSICEND,
+    APPSTATE_TRIGGERLEVELSCREEN,
+    APPSTATE_BEGINLEVELSCREEN,
+    APPSTATE_DISPLAYLEVELSCREEN,
+    APPSTATE_BEGINACTIVESCREEN
 };
 
 // Bullet types
 enum BULLET_TYPE
-{ 
-    BULLET_BLASTER=0 
+{
+    BULLET_BLASTER=0
 };
 
 // Object dimensions and fixed properties
@@ -58,17 +58,26 @@ enum BULLET_TYPE
 
 //-----------------------------------------------------------------------------
 // Name: C3DAudioPath
-// Desc: 
+// Desc:
 //-----------------------------------------------------------------------------
 class C3DAudioPath
 {
 public:
-    C3DAudioPath() { m_pPath = NULL; m_pObject = NULL; m_fDistance = FLT_MAX; m_bReplaceSound = FALSE; };
-    ~C3DAudioPath() { SAFE_RELEASE(m_pPath); };
+    C3DAudioPath()
+    {
+        m_pPath = NULL;
+        m_pObject = NULL;
+        m_fDistance = FLT_MAX;
+        m_bReplaceSound = FALSE;
+    };
+    ~C3DAudioPath()
+    {
+        SAFE_RELEASE(m_pPath);
+    };
 
     FLOAT                   m_fDistance;      // Distance, for comparisons
     BOOL                    m_bReplaceSound;  // Set when a sound is swapped or removed from this path.
-    IDirectMusicAudioPath*  m_pPath;          // Audiopath 
+    IDirectMusicAudioPath*  m_pPath;          // Audiopath
     CDisplayObject*         m_pObject;        // Object that this sonifies
 };
 
@@ -115,11 +124,11 @@ struct MODELVERTEX
 inline VOID PlaySoundEffect( CMusicSegment* pSoundEffect, CSoundParameter* pSoundParameter )
 {
     LONG lFrequency;
-    
+
     lFrequency = pSoundParameter->lSampleRateOffset + (LONG)rnd((FLOAT)(-pSoundParameter->lSampleRateDelta),(FLOAT)(pSoundParameter->lSampleRateDelta));
 
     if (pSoundEffect)
-    {   
+    {
         pSoundEffect->Play( DMUS_SEGF_SECONDARY, NULL ); // TODO: update , pSoundParameter->lVolume, lFrequency );
     }
 }
@@ -143,10 +152,10 @@ struct FRECT
 
 
 //-----------------------------------------------------------------------------
-// Name: class CMyApplication 
+// Name: class CMyApplication
 // Desc: Application class.
 //-----------------------------------------------------------------------------
-class CMyApplication 
+class CMyApplication
 {
 public:
     CMyApplication();
@@ -155,12 +164,30 @@ public:
     INT     Run();
     LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-    VOID    SetAppState( DWORD dwAppState ) { m_dwAppState = dwAppState; }
-    DWORD   GetScreenWidth() { return m_dwScreenWidth; }
-    DWORD   GetScreenHeight() { return m_dwScreenHeight; }
-    float   GetAppTime() { return m_fTime; }
-    CPlayerShip* GetPlayerShip() { return m_pShip; }
-    BOOL    IsFullScreen() { return m_bFullScreen; }
+    VOID    SetAppState( DWORD dwAppState )
+    {
+        m_dwAppState = dwAppState;
+    }
+    DWORD   GetScreenWidth()
+    {
+        return m_dwScreenWidth;
+    }
+    DWORD   GetScreenHeight()
+    {
+        return m_dwScreenHeight;
+    }
+    float   GetAppTime()
+    {
+        return m_fTime;
+    }
+    CPlayerShip* GetPlayerShip()
+    {
+        return m_pShip;
+    }
+    BOOL    IsFullScreen()
+    {
+        return m_bFullScreen;
+    }
     HRESULT RenderFrame();
     HRESULT UpdateFarthestAudioPath();
 
@@ -219,7 +246,7 @@ public:
 
     BOOL                m_bDebugMode;
     BOOL                m_bWireMode;
-    BOOL                m_bPaused;    
+    BOOL                m_bPaused;
 
     TCHAR*               m_strAppName;
     HWND                 m_hWndMain;                // Main window
@@ -249,7 +276,7 @@ public:
 
     // Display list and player ship
     CPlayerShip*            m_pShip;                   // Player's display object
-	C3DModel*				m_pShipModel;
+    C3DModel*				m_pShipModel;
 
     // DirectDraw/Direct3D objects
     D3DPRESENT_PARAMETERS   m_d3dpp;
@@ -258,7 +285,7 @@ public:
     LPDIRECT3DVERTEXBUFFER9 m_pSpriteVB;
 
     // Sky
-    CD3DMesh*               m_pSkyDome;                
+    CD3DMesh*               m_pSkyDome;
 
     // DirectMusic objects
     CMusicManager*          m_pMusicManager;           // Class to manage DMusic objects

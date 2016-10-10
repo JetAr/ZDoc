@@ -42,15 +42,17 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <boost/asio/ip/udp.hpp>
 #endif
 
-namespace libtorrent {
-namespace dht {
+namespace libtorrent
+{
+namespace dht
+{
 
 typedef std::vector<char> packet_t;
 /*
 namespace messages
 {
 	enum { ping = 0, find_node = 1, get_peers = 2, announce_peer = 3, error = 4 };
-	char const* const ids[] = { "ping", "find_node", "get_peers", "announce_peer", "error" }; 
+	char const* const ids[] = { "ping", "find_node", "get_peers", "announce_peer", "error" };
 } // namespace messages
 
 struct msg
@@ -78,17 +80,17 @@ struct msg
 	nodes_t nodes;
 
 	peers_t peers;
-	
+
 	// similar to transaction_id but for write operations.
 	std::string write_token;
 
 	// the info has for peer_requests, announce_peer
 	// and responses
 	node_id info_hash;
-	
+
 	// port for announce_peer messages
 	int port;
-	
+
 	// ERROR MESSAGES
 	int error_code;
 	std::string error_msg;
@@ -100,15 +102,16 @@ typedef std::vector<tcp::endpoint> peers_t;
 
 struct msg
 {
-	msg(lazy_entry const& m, udp::endpoint const& ep): message(m), addr(ep) {}
-	// the message
-	lazy_entry const& message;
+    msg(lazy_entry const& m, udp::endpoint const& ep): message(m), addr(ep) {}
+    // the message
+    lazy_entry const& message;
 
-	// the address of the process sending or receiving
-	// the message.
-	udp::endpoint addr;
+    // the address of the process sending or receiving
+    // the message.
+    udp::endpoint addr;
 };
 
-} }
+}
+}
 
 #endif

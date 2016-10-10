@@ -58,7 +58,8 @@
  *
  * @deprecated Use synchronous decoding mode.
  */
-typedef struct {
+typedef struct
+{
     /**
      * The PTS of the frame.
      *
@@ -91,7 +92,8 @@ typedef struct {
  *
  * The application must make it available as AVCodecContext.hwaccel_context.
  */
-struct vda_context {
+struct vda_context
+{
     /**
      * VDA decoder object.
      *

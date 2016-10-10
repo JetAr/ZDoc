@@ -6,7 +6,7 @@
  */
 /* Compiler settings for D:\DXSDK\samples\Multimedia\DirectShowXP\VideoControl\CPPVideoControl\CPPVideoControl.idl:
     Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
+    error checks: allocation ref bounds_check enum stub_data
 */
 //@@MIDL_FILE_HEADING(  )
 
@@ -32,10 +32,10 @@
 #define __CPPVideoControl_h__
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __ICompositeControl_FWD_DEFINED__
 #define __ICompositeControl_FWD_DEFINED__
@@ -60,80 +60,81 @@ typedef struct CompositeControl CompositeControl;
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 #ifndef __ICompositeControl_INTERFACE_DEFINED__
 #define __ICompositeControl_INTERFACE_DEFINED__
 
 /* interface ICompositeControl */
-/* [unique][helpstring][dual][uuid][object] */ 
+/* [unique][helpstring][dual][uuid][object] */
 
 
 EXTERN_C const IID IID_ICompositeControl;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("3E119535-D5AB-4520-B0E1-495B322E2A1A")
-    ICompositeControl : public IDispatch
-    {
-    public:
-    };
-    
+
+MIDL_INTERFACE("3E119535-D5AB-4520-B0E1-495B322E2A1A")
+ICompositeControl :
+public IDispatch
+{
+public:
+};
+
 #else 	/* C style interface */
 
-    typedef struct ICompositeControlVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICompositeControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICompositeControl __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICompositeControl __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICompositeControl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICompositeControl __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICompositeControl __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICompositeControl __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
-        
-        END_INTERFACE
-    } ICompositeControlVtbl;
+typedef struct ICompositeControlVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ICompositeControl
-    {
-        CONST_VTBL struct ICompositeControlVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        ICompositeControl __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        ICompositeControl __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        ICompositeControl __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )(
+        ICompositeControl __RPC_FAR * This,
+        /* [out] */ UINT __RPC_FAR *pctinfo);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )(
+        ICompositeControl __RPC_FAR * This,
+        /* [in] */ UINT iTInfo,
+        /* [in] */ LCID lcid,
+        /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )(
+        ICompositeControl __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+        /* [in] */ UINT cNames,
+        /* [in] */ LCID lcid,
+        /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )(
+        ICompositeControl __RPC_FAR * This,
+        /* [in] */ DISPID dispIdMember,
+        /* [in] */ REFIID riid,
+        /* [in] */ LCID lcid,
+        /* [in] */ WORD wFlags,
+        /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
+        /* [out] */ VARIANT __RPC_FAR *pVarResult,
+        /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
+        /* [out] */ UINT __RPC_FAR *puArgErr);
+
+    END_INTERFACE
+} ICompositeControlVtbl;
+
+interface ICompositeControl
+{
+    CONST_VTBL struct ICompositeControlVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -177,7 +178,7 @@ EXTERN_C const IID IID_ICompositeControl;
 #define __CPPVIDEOCONTROLLib_LIBRARY_DEFINED__
 
 /* library CPPVIDEOCONTROLLib */
-/* [helpstring][version][uuid] */ 
+/* [helpstring][version][uuid] */
 
 
 EXTERN_C const IID LIBID_CPPVIDEOCONTROLLib;
@@ -187,7 +188,7 @@ EXTERN_C const CLSID CLSID_CompositeControl;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("CDDFD429-EDFD-4C72-AE9C-B70FE6955051")
-CompositeControl;
+    CompositeControl;
 #endif
 #endif /* __CPPVIDEOCONTROLLib_LIBRARY_DEFINED__ */
 

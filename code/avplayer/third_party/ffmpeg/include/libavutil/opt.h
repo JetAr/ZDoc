@@ -217,7 +217,8 @@
  * before the file is actually opened.
  */
 
-enum AVOptionType{
+enum AVOptionType
+{
     AV_OPT_TYPE_FLAGS,
     AV_OPT_TYPE_INT,
     AV_OPT_TYPE_INT64,
@@ -246,7 +247,8 @@ enum AVOptionType{
 /**
  * AVOption
  */
-typedef struct AVOption {
+typedef struct AVOption
+{
     const char *name;
 
     /**
@@ -265,7 +267,8 @@ typedef struct AVOption {
     /**
      * the default value for scalar options
      */
-    union {
+    union
+    {
         int64_t i64;
         double dbl;
         const char *str;
@@ -296,7 +299,8 @@ typedef struct AVOption {
 /**
  * A single allowed range of values, or a single allowed value.
  */
-typedef struct AVOptionRange {
+typedef struct AVOptionRange
+{
     const char *str;
     double value_min, value_max;             ///< For string ranges this represents the min/max length, for dimensions this represents the min/max pixel count
     double component_min, component_max;     ///< For string this represents the unicode range for chars, 0-127 limits to ASCII
@@ -306,7 +310,8 @@ typedef struct AVOptionRange {
 /**
  * List of AVOptionRange structs
  */
-typedef struct AVOptionRanges {
+typedef struct AVOptionRanges
+{
     AVOptionRange **range;
     int nb_ranges;
 } AVOptionRanges;
@@ -500,7 +505,8 @@ int av_opt_get_key_value(const char **ropts,
                          unsigned flags,
                          char **rkey, char **rval);
 
-enum {
+enum
+{
 
     /**
      * Accept to parse a value without a key; the key will then be returned

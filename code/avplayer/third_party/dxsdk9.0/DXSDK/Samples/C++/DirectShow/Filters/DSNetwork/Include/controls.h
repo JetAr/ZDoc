@@ -23,161 +23,161 @@ class CControlBase
     HWND    m_hwnd ;
     DWORD   m_id ;
 
-    protected :
+protected :
 
-        CControlBase (
-            HWND    hwnd,
-            DWORD   id
-            ) ;
+    CControlBase (
+        HWND    hwnd,
+        DWORD   id
+    ) ;
 
-    public :
+public :
 
-        HWND
-        GetHwnd (
-            ) ;
+    HWND
+    GetHwnd (
+    ) ;
 
-        DWORD
-        GetId (
-            ) ;
+    DWORD
+    GetId (
+    ) ;
 
-        virtual
-        int
-        ResetContent (
-            ) = 0 ;
+    virtual
+    int
+    ResetContent (
+    ) = 0 ;
 } ;
 
 class CEditControl :
     public CControlBase
 {
-    public :
+public :
 
-        CEditControl (
-            HWND    hwnd,
-            DWORD   id
-            ) ;
+    CEditControl (
+        HWND    hwnd,
+        DWORD   id
+    ) ;
 
-        void
-        SetText (
-            CHAR *
-            ) ;
+    void
+    SetText (
+        CHAR *
+    ) ;
 
-        void
-        SetText (
-            INT val
-            ) ;
+    void
+    SetText (
+        INT val
+    ) ;
 
-        void
-        SetTextW (
-            WCHAR *
-            ) ;
+    void
+    SetTextW (
+        WCHAR *
+    ) ;
 
-        int
-        GetText (
-            CHAR *,
-            int MaxChars
-            ) ;
+    int
+    GetText (
+        CHAR *,
+        int MaxChars
+    ) ;
 
-        int
-        GetText (
-            INT *   val
-            ) ;
+    int
+    GetText (
+        INT *   val
+    ) ;
 
-        int
-        GetTextW (
-            WCHAR *,
-            int MaxChars
-            ) ;
+    int
+    GetTextW (
+        WCHAR *,
+        int MaxChars
+    ) ;
 
-        int
-        ResetContent (
-            ) ;
+    int
+    ResetContent (
+    ) ;
 
-        BOOL
-        IsEmpty (
-            ) ;
+    BOOL
+    IsEmpty (
+    ) ;
 } ;
 
 class CCombobox :
     public CControlBase
 {
-    public :
+public :
 
-        CCombobox (
-            HWND    hwnd,
-            DWORD   id) ;
+    CCombobox (
+        HWND    hwnd,
+        DWORD   id) ;
 
-        int
-        Append (
-            CHAR *
-            ) ;
+    int
+    Append (
+        CHAR *
+    ) ;
 
-        int
-        Append (
-            INT val
-            ) ;
+    int
+    Append (
+        INT val
+    ) ;
 
-        int
-        Insert (
-            CHAR *,
-            int index = 0
-            ) ;
+    int
+    Insert (
+        CHAR *,
+        int index = 0
+    ) ;
 
-        int
-        Insert (
-            INT val,
-            int index = 0
-            ) ;
+    int
+    Insert (
+        INT val,
+        int index = 0
+    ) ;
 
-        int
-        GetText (
-            CHAR *,
-            int MaxChars
-            ) ;
+    int
+    GetText (
+        CHAR *,
+        int MaxChars
+    ) ;
 
-        int
-        GetText (
-            int *
-            ) ;
+    int
+    GetText (
+        int *
+    ) ;
 
-        int
-        ResetContent (
-            ) ;
+    int
+    ResetContent (
+    ) ;
 
-        int
-        Focus (
-            int index = 0
-            ) ;
+    int
+    Focus (
+        int index = 0
+    ) ;
 
-        int
-        SetItemData (
-            DWORD val,
-            int index
-            ) ;
+    int
+    SetItemData (
+        DWORD val,
+        int index
+    ) ;
 
-        int
-        GetCurrentItemData (
-            DWORD *
-            ) ;
+    int
+    GetCurrentItemData (
+        DWORD *
+    ) ;
 
-        int
-        GetItemData (
-            DWORD *,
-            int index
-            ) ;
+    int
+    GetItemData (
+        DWORD *,
+        int index
+    ) ;
 
-        int
-        GetCurrentItemIndex (
-            ) ;
+    int
+    GetCurrentItemIndex (
+    ) ;
 
-        int
-        Find (
-            CHAR *
-            ) ;
+    int
+    Find (
+        CHAR *
+    ) ;
 
-        int
-        FindW (
-            WCHAR *
-            ) ;
+    int
+    FindW (
+        WCHAR *
+    ) ;
 } ;
 
 #endif  // controls_h

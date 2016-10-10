@@ -11,13 +11,13 @@
 
 class CTerrainEngine;
 
-class CHeightMap  
+class CHeightMap
 {
 public:
     CHeightMap( CTerrainEngine* pTerrainEngine, float fWorldOffsetX, float fWorldOffsetZ );
     virtual ~CHeightMap();
 
-    HRESULT Create( int nHeight, int nWidth ); 
+    HRESULT Create( int nHeight, int nWidth );
     HRESULT CreateFromFile( TCHAR* strFileName );
     FLOAT   GetHeightObj( float fObjCoordX, float fObjCoordZ );
 
@@ -29,11 +29,11 @@ public:
     HRESULT SmoothMap();
     HRESULT FinalizeSmooth();
 
-    VOID    CreateSmallHills(); 
+    VOID    CreateSmallHills();
     VOID    CreateMountain();
     VOID    CreateTestMap( FLOAT fHeight );
-    
-protected:   
+
+protected:
     HRESULT SmoothSingleMap();
     VOID    RaiseLand( int iCenterX, int iCenterZ, float fRadius, float fHeight );
 

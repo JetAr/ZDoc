@@ -20,7 +20,7 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CDxtexDoc)
-    public:
+public:
     virtual BOOL OnNewDocument();
     virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
     virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
@@ -31,26 +31,53 @@ public:
 public:
     HRESULT LoadAlphaBmp(CString& strPath);
     VOID GenerateMipMaps(VOID);
-    HRESULT ChangeFormat(LPDIRECT3DBASETEXTURE9 ptexCur, D3DFORMAT fmt, 
+    HRESULT ChangeFormat(LPDIRECT3DBASETEXTURE9 ptexCur, D3DFORMAT fmt,
                          LPDIRECT3DBASETEXTURE9* pptexNew);
     HRESULT Compress(D3DFORMAT fmt, BOOL bSwitchView);
     HRESULT Resize(DWORD dwWidthNew, DWORD dwHeightNew);
     DWORD NumMips(VOID);
-    LPDIRECT3DBASETEXTURE9 PtexOrig(VOID) { return m_ptexOrig; }
-    LPDIRECT3DBASETEXTURE9 PtexNew(VOID) { return m_ptexNew; }
-    DWORD DwWidth(VOID) { return m_dwWidth; }
-    DWORD DwHeight(VOID) { return m_dwHeight; }
-    DWORD DwDepth(VOID) { return m_dwDepth; }
+    LPDIRECT3DBASETEXTURE9 PtexOrig(VOID)
+    {
+        return m_ptexOrig;
+    }
+    LPDIRECT3DBASETEXTURE9 PtexNew(VOID)
+    {
+        return m_ptexNew;
+    }
+    DWORD DwWidth(VOID)
+    {
+        return m_dwWidth;
+    }
+    DWORD DwHeight(VOID)
+    {
+        return m_dwHeight;
+    }
+    DWORD DwDepth(VOID)
+    {
+        return m_dwDepth;
+    }
     DWORD DwDepthAt(LONG lwMip);
-    BOOL TitleModsChanged(VOID) { return m_bTitleModsChanged; }
-    VOID ClearTitleModsChanged(VOID) { m_bTitleModsChanged = FALSE; }
+    BOOL TitleModsChanged(VOID)
+    {
+        return m_bTitleModsChanged;
+    }
+    VOID ClearTitleModsChanged(VOID)
+    {
+        m_bTitleModsChanged = FALSE;
+    }
     virtual ~CDxtexDoc();
     void OpenSubsurface(D3DCUBEMAP_FACES FaceType, LONG lwMip, LONG lwSlice);
     void OpenAlphaSubsurface(D3DCUBEMAP_FACES FaceType, LONG lwMip, LONG lwSlice);
     void OpenCubeFace(D3DCUBEMAP_FACES FaceType);
     void OpenAlphaCubeFace(D3DCUBEMAP_FACES FaceType);
-    BOOL IsCubeMap(VOID) { return (m_dwCubeMapFlags > 0); }
-    BOOL IsVolumeMap(VOID) { return (m_dwDepth > 0); }
+    BOOL IsCubeMap(VOID)
+    {
+        return (m_dwCubeMapFlags > 0);
+    }
+    BOOL IsVolumeMap(VOID)
+    {
+        return (m_dwDepth > 0);
+    }
 #ifdef _DEBUG
     virtual void AssertValid() const;
     virtual void Dump(CDumpContext& dc) const;
@@ -88,12 +115,15 @@ private:
     DWORD m_dwCubeMapFlags;
     BOOL m_bTitleModsChanged;
 
-    CDxtexApp* PDxtexApp(VOID) { return (CDxtexApp*)AfxGetApp(); }
+    CDxtexApp* PDxtexApp(VOID)
+    {
+        return (CDxtexApp*)AfxGetApp();
+    }
     HRESULT LoadAlphaIntoSurface(CString& strPath, LPDIRECT3DSURFACE9 psurf);
     HRESULT LoadVolumeSliceFromSurface(LPDIRECT3DVOLUME9 pVolume, UINT iSlice, LPDIRECT3DSURFACE9 pSurf);
     HRESULT LoadSurfaceFromVolumeSlice(LPDIRECT3DVOLUME9 pVolume, UINT iSlice, LPDIRECT3DSURFACE9 psurf);
-    HRESULT BltAllLevels(D3DCUBEMAP_FACES FaceType, LPDIRECT3DBASETEXTURE9 ptexSrc, 
-        LPDIRECT3DBASETEXTURE9 ptexDest);
+    HRESULT BltAllLevels(D3DCUBEMAP_FACES FaceType, LPDIRECT3DBASETEXTURE9 ptexSrc,
+                         LPDIRECT3DBASETEXTURE9 ptexDest);
     BOOL PromptForBmp(CString* pstrPath);
     D3DFORMAT GetFormat(LPDIRECT3DBASETEXTURE9 ptex);
     HRESULT EnsureAlpha(LPDIRECT3DBASETEXTURE9* pptex);

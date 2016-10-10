@@ -39,139 +39,139 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	void http_stream::name_lookup(error_code const& e, tcp::resolver::iterator i
-		, boost::shared_ptr<handler_type> h)
-	{
-		if (e || i == tcp::resolver::iterator())
-		{
-			(*h)(e);
-			error_code ec;
-			close(ec);
-			return;
-		}
+void http_stream::name_lookup(error_code const& e, tcp::resolver::iterator i
+                              , boost::shared_ptr<handler_type> h)
+{
+    if (e || i == tcp::resolver::iterator())
+    {
+        (*h)(e);
+        error_code ec;
+        close(ec);
+        return;
+    }
 
-		m_sock.async_connect(i->endpoint(), boost::bind(
-			&http_stream::connected, this, _1, h));
-	}
+    m_sock.async_connect(i->endpoint(), boost::bind(
+                             &http_stream::connected, this, _1, h));
+}
 
-	void http_stream::connected(error_code const& e, boost::shared_ptr<handler_type> h)
-	{
-		if (e)
-		{
-			(*h)(e);
-			error_code ec;
-			close(ec);
-			return;
-		}
+void http_stream::connected(error_code const& e, boost::shared_ptr<handler_type> h)
+{
+    if (e)
+    {
+        (*h)(e);
+        error_code ec;
+        close(ec);
+        return;
+    }
 
-		using namespace libtorrent::detail;
+    using namespace libtorrent::detail;
 
-		if (m_no_connect)
-		{
-			std::vector<char>().swap(m_buffer);
-			(*h)(e);
-			return;
-		}
+    if (m_no_connect)
+    {
+        std::vector<char>().swap(m_buffer);
+        (*h)(e);
+        return;
+    }
 
-		// send CONNECT
-		std::back_insert_iterator<std::vector<char> > p(m_buffer);
-		std::string endpoint;
-		if (!m_hostname.empty())
-		{
-			endpoint = m_hostname + ':' + to_string(m_remote_endpoint.port()).elems;
-		}
-		else
-		{
-			endpoint = print_endpoint(m_remote_endpoint);
-		}
-		write_string("CONNECT " + endpoint + " HTTP/1.0\r\n", p);
-		if (!m_user.empty())
-		{
-			write_string("Proxy-Authorization: Basic " + base64encode(
-				m_user + ":" + m_password) + "\r\n", p);
-		}
-		write_string("\r\n", p);
-		async_write(m_sock, asio::buffer(m_buffer)
-			, boost::bind(&http_stream::handshake1, this, _1, h));
-	}
+    // send CONNECT
+    std::back_insert_iterator<std::vector<char> > p(m_buffer);
+    std::string endpoint;
+    if (!m_hostname.empty())
+    {
+        endpoint = m_hostname + ':' + to_string(m_remote_endpoint.port()).elems;
+    }
+    else
+    {
+        endpoint = print_endpoint(m_remote_endpoint);
+    }
+    write_string("CONNECT " + endpoint + " HTTP/1.0\r\n", p);
+    if (!m_user.empty())
+    {
+        write_string("Proxy-Authorization: Basic " + base64encode(
+                         m_user + ":" + m_password) + "\r\n", p);
+    }
+    write_string("\r\n", p);
+    async_write(m_sock, asio::buffer(m_buffer)
+                , boost::bind(&http_stream::handshake1, this, _1, h));
+}
 
-	void http_stream::handshake1(error_code const& e, boost::shared_ptr<handler_type> h)
-	{
-		if (e)
-		{
-			(*h)(e);
-			error_code ec;
-			close(ec);
-			return;
-		}
+void http_stream::handshake1(error_code const& e, boost::shared_ptr<handler_type> h)
+{
+    if (e)
+    {
+        (*h)(e);
+        error_code ec;
+        close(ec);
+        return;
+    }
 
-		// read one byte from the socket
-		m_buffer.resize(1);
-		async_read(m_sock, asio::buffer(m_buffer)
-			, boost::bind(&http_stream::handshake2, this, _1, h));
-	}
+    // read one byte from the socket
+    m_buffer.resize(1);
+    async_read(m_sock, asio::buffer(m_buffer)
+               , boost::bind(&http_stream::handshake2, this, _1, h));
+}
 
-	void http_stream::handshake2(error_code const& e, boost::shared_ptr<handler_type> h)
-	{
-		if (e)
-		{
-			(*h)(e);
-			error_code ec;
-			close(ec);
-			return;
-		}
+void http_stream::handshake2(error_code const& e, boost::shared_ptr<handler_type> h)
+{
+    if (e)
+    {
+        (*h)(e);
+        error_code ec;
+        close(ec);
+        return;
+    }
 
-		int read_pos = m_buffer.size();
-		// look for \n\n and \r\n\r\n
-		// both of which means end of http response header
-		bool found_end = false;
-		if (m_buffer[read_pos - 1] == '\n' && read_pos > 2)
-		{
-			if (m_buffer[read_pos - 2] == '\n')
-			{
-				found_end = true;
-			}
-			else if (read_pos > 4
-				&& m_buffer[read_pos - 2] == '\r'
-				&& m_buffer[read_pos - 3] == '\n'
-				&& m_buffer[read_pos - 4] == '\r')
-			{
-				found_end = true;
-			}
-		}
+    int read_pos = m_buffer.size();
+    // look for \n\n and \r\n\r\n
+    // both of which means end of http response header
+    bool found_end = false;
+    if (m_buffer[read_pos - 1] == '\n' && read_pos > 2)
+    {
+        if (m_buffer[read_pos - 2] == '\n')
+        {
+            found_end = true;
+        }
+        else if (read_pos > 4
+                 && m_buffer[read_pos - 2] == '\r'
+                 && m_buffer[read_pos - 3] == '\n'
+                 && m_buffer[read_pos - 4] == '\r')
+        {
+            found_end = true;
+        }
+    }
 
-		if (found_end)
-		{
-			m_buffer.push_back(0);
-			char* status = std::strchr(&m_buffer[0], ' ');
-			if (status == 0)
-			{
-				(*h)(asio::error::operation_not_supported);
-				error_code ec;
-				close(ec);
-				return;
-			}
+    if (found_end)
+    {
+        m_buffer.push_back(0);
+        char* status = std::strchr(&m_buffer[0], ' ');
+        if (status == 0)
+        {
+            (*h)(asio::error::operation_not_supported);
+            error_code ec;
+            close(ec);
+            return;
+        }
 
-			status++;
-			int code = std::atoi(status);
-			if (code != 200)
-			{
-				(*h)(asio::error::operation_not_supported);
-				error_code ec;
-				close(ec);
-				return;
-			}
+        status++;
+        int code = std::atoi(status);
+        if (code != 200)
+        {
+            (*h)(asio::error::operation_not_supported);
+            error_code ec;
+            close(ec);
+            return;
+        }
 
-			(*h)(e);
-			std::vector<char>().swap(m_buffer);
-			return;
-		}
+        (*h)(e);
+        std::vector<char>().swap(m_buffer);
+        return;
+    }
 
-		// read another byte from the socket
-		m_buffer.resize(read_pos + 1);
-		async_read(m_sock, asio::buffer(&m_buffer[0] + read_pos, 1)
-			, boost::bind(&http_stream::handshake2, this, _1, h));
-	}
+    // read another byte from the socket
+    m_buffer.resize(read_pos + 1);
+    async_read(m_sock, asio::buffer(&m_buffer[0] + read_pos, 1)
+               , boost::bind(&http_stream::handshake2, this, _1, h));
+}
 
 }
 

@@ -38,48 +38,49 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "libtorrent/assert.hpp"
 
-namespace libtorrent {
+namespace libtorrent
+{
 
 // member of peer_connection
 struct TORRENT_EXTRA_EXPORT bandwidth_channel
 {
-	static const int inf = boost::integer_traits<int>::const_max;
+    static const int inf = boost::integer_traits<int>::const_max;
 
-	bandwidth_channel();
+    bandwidth_channel();
 
-	// 0 means infinite
-	void throttle(int limit);
-	int throttle() const
-	{
-		TORRENT_ASSERT_VAL(m_limit < INT_MAX, m_limit);
-		return int(m_limit);
-	}
+    // 0 means infinite
+    void throttle(int limit);
+    int throttle() const
+    {
+        TORRENT_ASSERT_VAL(m_limit < INT_MAX, m_limit);
+        return int(m_limit);
+    }
 
-	int quota_left() const;
-	void update_quota(int dt_milliseconds);
+    int quota_left() const;
+    void update_quota(int dt_milliseconds);
 
-	// this is used when connections disconnect with
-	// some quota left. It's returned to its bandwidth
-	// channels.
-	void return_quota(int amount);
-	void use_quota(int amount);
+    // this is used when connections disconnect with
+    // some quota left. It's returned to its bandwidth
+    // channels.
+    void return_quota(int amount);
+    void use_quota(int amount);
 
-	// used as temporary storage while distributing
-	// bandwidth
-	int tmp;
+    // used as temporary storage while distributing
+    // bandwidth
+    int tmp;
 
-	// this is the number of bytes to distribute this round
-	int distribute_quota;
+    // this is the number of bytes to distribute this round
+    int distribute_quota;
 
 private:
 
-	// this is the amount of bandwidth we have
-	// been assigned without using yet.
-	boost::int64_t m_quota_left;
+    // this is the amount of bandwidth we have
+    // been assigned without using yet.
+    boost::int64_t m_quota_left;
 
-	// the limit is the number of bytes
-	// per second we are allowed to use.
-	boost::int64_t m_limit;
+    // the limit is the number of bytes
+    // per second we are allowed to use.
+    boost::int64_t m_limit;
 };
 
 }

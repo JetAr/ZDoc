@@ -31,17 +31,18 @@ private:
 
     DWORD m_cbBytes;
 
-    struct {
+    struct
+    {
         bool           bValid;
         REFERENCE_TIME rt;
     } m_arTS[4];
 
     REFERENCE_TIME m_rt;
 
-	BYTE m_bGOPData[4];
+    BYTE m_bGOPData[4];
 
     DWORD m_dwTimeCode;
-	DWORD m_dwNextTimeCode;
+    DWORD m_dwNextTimeCode;
 
 public:
     CStreamState()
@@ -56,7 +57,7 @@ public:
 
     REFERENCE_TIME PictureTime(DWORD *pdwTimeCode) const
     {
-		*pdwTimeCode = m_dwTimeCode;
+        *pdwTimeCode = m_dwTimeCode;
         return m_rt;
     }
 };

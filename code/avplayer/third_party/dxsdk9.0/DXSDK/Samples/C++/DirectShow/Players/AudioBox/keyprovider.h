@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 
 //
-// Windows Media 9 Series (code named 'Corona') no longer requires 
+// Windows Media 9 Series (code named 'Corona') no longer requires
 // a stub library.  If using WMF9, we don't need to provide a CKeyProvider
 // implementation, and we don't need to link with the WMStub.lib library.
 //
@@ -15,21 +15,21 @@
 
 class CKeyProvider : public IServiceProvider
 {
-    public:
-        //
-        // IUnknown interface
-        //
-        STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
-        STDMETHODIMP_(ULONG) AddRef();
-        STDMETHODIMP_(ULONG) Release();
+public:
+    //
+    // IUnknown interface
+    //
+    STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
+    STDMETHODIMP_(ULONG) AddRef();
+    STDMETHODIMP_(ULONG) Release();
 
-        CKeyProvider();
+    CKeyProvider();
 
-        // IServiceProvider
-        STDMETHODIMP QueryService(REFIID siid, REFIID riid, void **ppv);
+    // IServiceProvider
+    STDMETHODIMP QueryService(REFIID siid, REFIID riid, void **ppv);
 
-    private:
-        volatile LONG m_cRef;
+private:
+    volatile LONG m_cRef;
 };
 
 #endif

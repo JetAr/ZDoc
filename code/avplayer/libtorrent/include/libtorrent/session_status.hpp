@@ -42,107 +42,107 @@ namespace libtorrent
 
 #ifndef TORRENT_DISABLE_DHT
 
-	struct dht_lookup
-	{
-		char const* type;
-		int outstanding_requests;
-		int timeouts;
-		int responses;
-		int branch_factor;
-		int nodes_left;
-		// the number of seconds ago the
-		// last message was sent that's still
-		// outstanding
-		int last_sent;
-		// the number of outstanding requests
-		// that have exceeded the short timeout
-		// and are considered timed out in the
-		// sense that they increased the branch
-		// factor
-		int first_timeout;
-	};
+struct dht_lookup
+{
+    char const* type;
+    int outstanding_requests;
+    int timeouts;
+    int responses;
+    int branch_factor;
+    int nodes_left;
+    // the number of seconds ago the
+    // last message was sent that's still
+    // outstanding
+    int last_sent;
+    // the number of outstanding requests
+    // that have exceeded the short timeout
+    // and are considered timed out in the
+    // sense that they increased the branch
+    // factor
+    int first_timeout;
+};
 
-	struct dht_routing_bucket
-	{
-		int num_nodes;
-		int num_replacements;
-		// number of seconds since last activity
-		int last_active;
-	};
+struct dht_routing_bucket
+{
+    int num_nodes;
+    int num_replacements;
+    // number of seconds since last activity
+    int last_active;
+};
 
 #endif
 
-	struct utp_status
-	{
-		int num_idle;
-		int num_syn_sent;
-		int num_connected;
-		int num_fin_sent;
-		int num_close_wait;
-	};
+struct utp_status
+{
+    int num_idle;
+    int num_syn_sent;
+    int num_connected;
+    int num_fin_sent;
+    int num_close_wait;
+};
 
-	struct TORRENT_EXPORT session_status
-	{
-		bool has_incoming_connections;
+struct TORRENT_EXPORT session_status
+{
+    bool has_incoming_connections;
 
-		int upload_rate;
-		int download_rate;
-		size_type total_download;
-		size_type total_upload;
+    int upload_rate;
+    int download_rate;
+    size_type total_download;
+    size_type total_upload;
 
-		int payload_upload_rate;
-		int payload_download_rate;
-		size_type total_payload_download;
-		size_type total_payload_upload;
+    int payload_upload_rate;
+    int payload_download_rate;
+    size_type total_payload_download;
+    size_type total_payload_upload;
 
-		int ip_overhead_upload_rate;
-		int ip_overhead_download_rate;
-		size_type total_ip_overhead_download;
-		size_type total_ip_overhead_upload;
+    int ip_overhead_upload_rate;
+    int ip_overhead_download_rate;
+    size_type total_ip_overhead_download;
+    size_type total_ip_overhead_upload;
 
-		int dht_upload_rate;
-		int dht_download_rate;
-		size_type total_dht_download;
-		size_type total_dht_upload;
+    int dht_upload_rate;
+    int dht_download_rate;
+    size_type total_dht_download;
+    size_type total_dht_upload;
 
-		int tracker_upload_rate;
-		int tracker_download_rate;
-		size_type total_tracker_download;
-		size_type total_tracker_upload;
+    int tracker_upload_rate;
+    int tracker_download_rate;
+    size_type total_tracker_download;
+    size_type total_tracker_upload;
 
-		size_type total_redundant_bytes;
-		size_type total_failed_bytes;
+    size_type total_redundant_bytes;
+    size_type total_failed_bytes;
 
-		int num_peers;
-		int num_unchoked;
-		int allowed_upload_slots;
+    int num_peers;
+    int num_unchoked;
+    int allowed_upload_slots;
 
-		int up_bandwidth_queue;
-		int down_bandwidth_queue;
+    int up_bandwidth_queue;
+    int down_bandwidth_queue;
 
-		int up_bandwidth_bytes_queue;
-		int down_bandwidth_bytes_queue;
+    int up_bandwidth_bytes_queue;
+    int down_bandwidth_bytes_queue;
 
-		int optimistic_unchoke_counter;
-		int unchoke_counter;
+    int optimistic_unchoke_counter;
+    int unchoke_counter;
 
-		int disk_write_queue;
-		int disk_read_queue;
+    int disk_write_queue;
+    int disk_read_queue;
 
 #ifndef TORRENT_DISABLE_DHT
-		int dht_nodes;
-		int dht_node_cache;
-		int dht_torrents;
-		size_type dht_global_nodes;
-		std::vector<dht_lookup> active_requests;
-		std::vector<dht_routing_bucket> dht_routing_table;
-		int dht_total_allocations;
+    int dht_nodes;
+    int dht_node_cache;
+    int dht_torrents;
+    size_type dht_global_nodes;
+    std::vector<dht_lookup> active_requests;
+    std::vector<dht_routing_bucket> dht_routing_table;
+    int dht_total_allocations;
 #endif
 
-		utp_status utp_stats;
+    utp_status utp_stats;
 
-		int peerlist_size;
-	};
+    int peerlist_size;
+};
 
 }
 

@@ -2,7 +2,7 @@
 // File: stdafx.h
 //
 // Desc: DirectShow sample code - main header for standard include files
-//      
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 

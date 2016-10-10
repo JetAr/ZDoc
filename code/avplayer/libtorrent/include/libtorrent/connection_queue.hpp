@@ -53,89 +53,98 @@ namespace libtorrent
 class TORRENT_EXTRA_EXPORT connection_queue : public boost::noncopyable
 {
 public:
-	connection_queue(io_service& ios);
+    connection_queue(io_service& ios);
 
-	// if there are no free slots, returns the negative
-	// number of queued up connections
-	int free_slots() const;
+    // if there are no free slots, returns the negative
+    // number of queued up connections
+    int free_slots() const;
 
-	void enqueue(boost::function<void(int)> const& on_connect
-		, boost::function<void()> const& on_timeout
-		, time_duration timeout, int priority = 0);
-	void done(int ticket);
-	void limit(int limit);
-	int limit() const;
-	void close();
-	int size() const { return m_queue.size(); }
-	int num_connecting() const { return m_num_connecting; }
+    void enqueue(boost::function<void(int)> const& on_connect
+                 , boost::function<void()> const& on_timeout
+                 , time_duration timeout, int priority = 0);
+    void done(int ticket);
+    void limit(int limit);
+    int limit() const;
+    void close();
+    int size() const
+    {
+        return m_queue.size();
+    }
+    int num_connecting() const
+    {
+        return m_num_connecting;
+    }
 #if defined TORRENT_ASIO_DEBUGGING
-	float next_timeout() const { return total_milliseconds(m_timer.expires_at() - time_now_hires()) / 1000.f; }
-	float max_timeout() const
-	{
-		ptime max_timeout = min_time();
-		for (std::list<entry>::const_iterator i = m_queue.begin()
-			, end(m_queue.end()); i != end; ++i)
-		{
-			if (!i->connecting) continue;
-			if (i->expires > max_timeout) max_timeout = i->expires;
-		}
-		if (max_timeout == min_time()) return 0.f;
-		return total_milliseconds(max_timeout - time_now_hires()) / 1000.f;
-	}
+    float next_timeout() const
+    {
+        return total_milliseconds(m_timer.expires_at() - time_now_hires()) / 1000.f;
+    }
+    float max_timeout() const
+    {
+        ptime max_timeout = min_time();
+        for (std::list<entry>::const_iterator i = m_queue.begin()
+                , end(m_queue.end()); i != end; ++i)
+        {
+            if (!i->connecting) continue;
+            if (i->expires > max_timeout) max_timeout = i->expires;
+        }
+        if (max_timeout == min_time()) return 0.f;
+        return total_milliseconds(max_timeout - time_now_hires()) / 1000.f;
+    }
 #endif
 
 #if defined TORRENT_DEBUG && !defined TORRENT_DISABLE_INVARIANT_CHECKS
-	void check_invariant() const;
+    void check_invariant() const;
 #endif
 
 private:
 
-	typedef mutex mutex_t;
+    typedef mutex mutex_t;
 
-	void try_connect(mutex_t::scoped_lock& l);
-	void on_timeout(error_code const& e);
-	void on_try_connect();
+    void try_connect(mutex_t::scoped_lock& l);
+    void on_timeout(error_code const& e);
+    void on_try_connect();
 
-	struct entry
-	{
-		entry(): connecting(false), ticket(0), expires(max_time()), priority(0) {}
-		// called when the connection is initiated
-		// this is when the timeout countdown starts
-		boost::function<void(int)> on_connect;
-		// called if done hasn't been called within the timeout
-		// or if the connection queue aborts. This means there
-		// are 3 different interleaves of these function calls:
-		// 1. on_connect
-		// 2. on_connect, on_timeout
-		// 3. on_timeout
-		boost::function<void()> on_timeout;
-		bool connecting;
-		int ticket;
-		ptime expires;
-		time_duration timeout;
-		int priority;
-	};
+    struct entry
+    {
+        entry(): connecting(false), ticket(0), expires(max_time()), priority(0) {}
+        // called when the connection is initiated
+        // this is when the timeout countdown starts
+        boost::function<void(int)> on_connect;
+        // called if done hasn't been called within the timeout
+        // or if the connection queue aborts. This means there
+        // are 3 different interleaves of these function calls:
+        // 1. on_connect
+        // 2. on_connect, on_timeout
+        // 3. on_timeout
+        boost::function<void()> on_timeout;
+        bool connecting;
+        int ticket;
+        ptime expires;
+        time_duration timeout;
+        int priority;
+    };
 
-	std::list<entry> m_queue;
+    std::list<entry> m_queue;
 
-	// the next ticket id a connection will be given
-	int m_next_ticket;
-	int m_num_connecting;
-	int m_half_open_limit;
-	bool m_abort;
+    // the next ticket id a connection will be given
+    int m_next_ticket;
+    int m_num_connecting;
+    int m_half_open_limit;
+    bool m_abort;
 
-	// the number of outstanding timers
-	int m_num_timers;
+    // the number of outstanding timers
+    int m_num_timers;
 
-	deadline_timer m_timer;
+    deadline_timer m_timer;
 
-	mutable mutex_t m_mutex;
+    mutable mutex_t m_mutex;
 
 #ifdef TORRENT_DEBUG
-	bool m_in_timeout_function;
+    bool m_in_timeout_function;
 #endif
 #ifdef TORRENT_CONNECTION_LOGGING
-	std::ofstream m_log;
+    std::ofstream m_log;
 #endif
 };
 

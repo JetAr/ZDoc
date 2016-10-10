@@ -44,10 +44,11 @@ extern "C" {
 #define SDL_PATCHLEVEL		14
 /*@}*/
 
-typedef struct SDL_version {
-	Uint8 major;
-	Uint8 minor;
-	Uint8 patch;
+typedef struct SDL_version
+{
+    Uint8 major;
+    Uint8 minor;
+    Uint8 patch;
 } SDL_version;
 
 /**

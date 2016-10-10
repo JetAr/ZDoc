@@ -34,7 +34,7 @@ struct unicode_from_python
     {
         using libtorrent::wchar_utf8;
         void* storage = ((converter::rvalue_from_python_storage<
-            std::string>*)data)->storage.bytes;
+                          std::string>*)data)->storage.bytes;
 
         if (PyUnicode_Check(x))
         {
@@ -47,8 +47,8 @@ struct unicode_from_python
 #endif
             if (len > -1)
             {
-               assert(len < str.size());
-               str[len] = 0;
+                assert(len < str.size());
+                str[len] = 0;
             }
             else str[str.size()-1] = 0;
 

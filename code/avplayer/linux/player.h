@@ -24,40 +24,43 @@
 #include <avplay.h>
 
 class player
-{	
+{
 public:
-	// 播放控制.
-	void fwd(); //快进
-	void bwd(); //快退
-	
-	// 调节大小.
-	void resize(int, int);
-	// 全屏.
-	void togglefs();
-	
+    // 播放控制.
+    void fwd(); //快进
+    void bwd(); //快退
+
+    // 调节大小.
+    void resize(int, int);
+    // 全屏.
+    void togglefs();
+
 private:
-	bool HasWindow(){return true;};
+    bool HasWindow()
+    {
+        return true;
+    };
 
-	// 播放器相关的函数.
-	void init_file_source(source_context *sc);
-	void init_torrent_source(source_context *sc);
-	void init_audio(ao_context *ao);
-	void init_video(vo_context *vo);
+    // 播放器相关的函数.
+    void init_file_source(source_context *sc);
+    void init_torrent_source(source_context *sc);
+    void init_audio(ao_context *ao);
+    void init_video(vo_context *vo);
 
-	// 实时处理视频渲染的视频数据, 在这里完成比较加字幕, 加水印等操作.
-	static int draw_frame(void *ctx, AVFrame* data, int pix_fmt, double pts);
+    // 实时处理视频渲染的视频数据, 在这里完成比较加字幕, 加水印等操作.
+    static int draw_frame(void *ctx, AVFrame* data, int pix_fmt, double pts);
 
 public:
-	int open(const char *movie, int media_type);
-	bool play(double fact = 0.0f, int index = 0);
-		// 等待播放直到完成.
-	bool wait_for_completion();
+    int open(const char *movie, int media_type);
+    bool play(double fact = 0.0f, int index = 0);
+    // 等待播放直到完成.
+    bool wait_for_completion();
     void close();
 private:
     avplay* m_avplay;
     source_context* m_source;
-	// 媒体文件信息.
-	std::map<std::string, std::string> m_media_list;
+    // 媒体文件信息.
+    std::map<std::string, std::string> m_media_list;
     ao_context* m_audio;
     vo_context* m_video;
     int m_video_width;

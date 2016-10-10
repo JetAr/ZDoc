@@ -12,7 +12,7 @@
 #ifdef FORWARD_DECLS
 
 
-	class CViewSelWnd;
+class CViewSelWnd;
 
 
 #else // FORWARD_DECLS
@@ -24,20 +24,20 @@
 class CViewSelWnd : public CFlexWnd
 {
 public:
-	CViewSelWnd();
-	~CViewSelWnd();
+    CViewSelWnd();
+    ~CViewSelWnd();
 
-	BOOL Go(HWND hParent, int left, int bottom, CDeviceUI *pUI);
+    BOOL Go(HWND hParent, int left, int bottom, CDeviceUI *pUI);
 
 protected:
-	virtual void OnPaint(HDC hDC);
-	virtual void OnMouseOver(POINT point, WPARAM fwKeys);
-	virtual void OnClick(POINT point, WPARAM fwKeys, BOOL bLeft);
-	virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual void OnPaint(HDC hDC);
+    virtual void OnMouseOver(POINT point, WPARAM fwKeys);
+    virtual void OnClick(POINT point, WPARAM fwKeys, BOOL bLeft);
+    virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
-	CDeviceUI *m_pUI;
-	int m_nOver;
+    CDeviceUI *m_pUI;
+    int m_nOver;
 };
 
 

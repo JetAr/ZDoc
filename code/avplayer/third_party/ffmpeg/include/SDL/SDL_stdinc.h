@@ -90,9 +90,10 @@
 
 /** @name Basic data types */
 /*@{*/
-typedef enum {
-	SDL_FALSE = 0,
-	SDL_TRUE  = 1
+typedef enum
+{
+    SDL_FALSE = 0,
+    SDL_TRUE  = 1
 } SDL_bool;
 
 typedef int8_t		Sint8;
@@ -109,9 +110,10 @@ typedef uint64_t	Uint64;
 #endif
 #else
 /* This is really just a hack to prevent the compiler from complaining */
-typedef struct {
-	Uint32 hi;
-	Uint32 lo;
+typedef struct
+{
+    Uint32 hi;
+    Uint32 lo;
 } Uint64, Sint64;
 #endif
 
@@ -143,8 +145,9 @@ SDL_COMPILE_TIME_ASSERT(sint64, sizeof(Sint64) == 8);
 #pragma enumsalwaysint on
 #endif
 
-typedef enum {
-	DUMMY_ENUM_VALUE
+typedef enum
+{
+    DUMMY_ENUM_VALUE
 } SDL_DUMMY_ENUM;
 
 #ifndef __NDS__
@@ -197,11 +200,11 @@ extern DECLSPEC void SDLCALL SDL_free(void *mem);
 # elif defined(__DMC__)
 #  include <stdlib.h>
 # elif defined(__AIX__)
-  #pragma alloca
+#pragma alloca
 # elif defined(__MRC__)
-   void *alloca (unsigned);
+void *alloca (unsigned);
 # else
-   char *alloca ();
+char *alloca ();
 # endif
 #endif
 #ifdef HAVE_ALLOCA
@@ -228,7 +231,7 @@ extern DECLSPEC int SDLCALL SDL_putenv(const char *variable);
 #define SDL_qsort	qsort
 #else
 extern DECLSPEC void SDLCALL SDL_qsort(void *base, size_t nmemb, size_t size,
-           int (*compare)(const void *, const void *));
+                                       int (*compare)(const void *, const void *));
 #endif
 
 #ifdef HAVE_ABS
@@ -584,7 +587,7 @@ extern DECLSPEC int SDLCALL SDL_vsnprintf(char *text, size_t maxlen, const char 
 #endif
 
 /** @name SDL_ICONV Error Codes
- *  The SDL implementation of iconv() returns these error codes 
+ *  The SDL implementation of iconv() returns these error codes
  */
 /*@{*/
 #define SDL_ICONV_ERROR		(size_t)-1

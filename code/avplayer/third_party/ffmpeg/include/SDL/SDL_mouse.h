@@ -38,13 +38,14 @@ extern "C" {
 #endif
 
 typedef struct WMcursor WMcursor;	/**< Implementation dependent */
-typedef struct SDL_Cursor {
-	SDL_Rect area;			/**< The area of the mouse cursor */
-	Sint16 hot_x, hot_y;		/**< The "tip" of the cursor */
-	Uint8 *data;			/**< B/W cursor data */
-	Uint8 *mask;			/**< B/W cursor mask */
-	Uint8 *save[2];			/**< Place to save cursor area */
-	WMcursor *wm_cursor;		/**< Window-manager cursor */
+typedef struct SDL_Cursor
+{
+    SDL_Rect area;			/**< The area of the mouse cursor */
+    Sint16 hot_x, hot_y;		/**< The "tip" of the cursor */
+    Uint8 *data;			/**< B/W cursor data */
+    Uint8 *mask;			/**< B/W cursor mask */
+    Uint8 *save[2];			/**< Place to save cursor area */
+    WMcursor *wm_cursor;		/**< Window-manager cursor */
 } SDL_Cursor;
 
 /* Function prototypes */
@@ -83,11 +84,11 @@ extern DECLSPEC void SDLCALL SDL_WarpMouse(Uint16 x, Uint16 y);
  * Cursors created with this function must be freed with SDL_FreeCursor().
  */
 extern DECLSPEC SDL_Cursor * SDLCALL SDL_CreateCursor
-		(Uint8 *data, Uint8 *mask, int w, int h, int hot_x, int hot_y);
+(Uint8 *data, Uint8 *mask, int w, int h, int hot_x, int hot_y);
 
 /**
  * Set the currently active cursor to the specified one.
- * If the cursor is currently visible, the change will be immediately 
+ * If the cursor is currently visible, the change will be immediately
  * represented on the display.
  */
 extern DECLSPEC void SDLCALL SDL_SetCursor(SDL_Cursor *cursor);

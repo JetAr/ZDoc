@@ -18,7 +18,7 @@
 //       colors. It does not set emissive or specular colors.
 //-----------------------------------------------------------------------------
 VOID D3DUtil_InitMaterial( D3DMATERIAL9& mtrl, FLOAT r=0.0f, FLOAT g=0.0f,
-                                               FLOAT b=0.0f, FLOAT a=1.0f );
+                           FLOAT b=0.0f, FLOAT a=1.0f );
 
 
 //-----------------------------------------------------------------------------
@@ -53,7 +53,7 @@ D3DXMATRIX D3DUtil_GetCubeMapViewMatrix( DWORD dwFace );
 //       position.
 //-----------------------------------------------------------------------------
 D3DXQUATERNION D3DUtil_GetRotationFromCursor( HWND hWnd,
-                                              FLOAT fTrackBallRadius=1.0f );
+        FLOAT fTrackBallRadius=1.0f );
 
 
 //-----------------------------------------------------------------------------
@@ -97,17 +97,35 @@ class CD3DArcBall
 public:
     LRESULT     HandleMouseMessages( HWND, UINT, WPARAM, LPARAM );
 
-    D3DXMATRIX* GetRotationMatrix()         { return &m_matRotation; }
-    D3DXMATRIX* GetRotationDeltaMatrix()    { return &m_matRotationDelta; }
-    D3DXMATRIX* GetTranslationMatrix()      { return &m_matTranslation; }
-    D3DXMATRIX* GetTranslationDeltaMatrix() { return &m_matTranslationDelta; }
-    BOOL        IsBeingDragged()            { return m_bDrag; }
+    D3DXMATRIX* GetRotationMatrix()
+    {
+        return &m_matRotation;
+    }
+    D3DXMATRIX* GetRotationDeltaMatrix()
+    {
+        return &m_matRotationDelta;
+    }
+    D3DXMATRIX* GetTranslationMatrix()
+    {
+        return &m_matTranslation;
+    }
+    D3DXMATRIX* GetTranslationDeltaMatrix()
+    {
+        return &m_matTranslationDelta;
+    }
+    BOOL        IsBeingDragged()
+    {
+        return m_bDrag;
+    }
 
     VOID        SetRadius( FLOAT fRadius );
     VOID        SetWindow( INT w, INT h, FLOAT r=0.9 );
-    VOID        SetRightHanded( BOOL bRightHanded ) { m_bRightHanded = bRightHanded; }
+    VOID        SetRightHanded( BOOL bRightHanded )
+    {
+        m_bRightHanded = bRightHanded;
+    }
 
-                CD3DArcBall();
+    CD3DArcBall();
     VOID        Init();
 };
 
@@ -136,20 +154,56 @@ class CD3DCamera
 
 public:
     // Access functions
-    D3DXVECTOR3 GetEyePt()           { return m_vEyePt; }
-    D3DXVECTOR3 GetLookatPt()        { return m_vLookatPt; }
-    D3DXVECTOR3 GetUpVec()           { return m_vUpVec; }
-    D3DXVECTOR3 GetViewDir()         { return m_vView; }
-    D3DXVECTOR3 GetCross()           { return m_vCross; }
+    D3DXVECTOR3 GetEyePt()
+    {
+        return m_vEyePt;
+    }
+    D3DXVECTOR3 GetLookatPt()
+    {
+        return m_vLookatPt;
+    }
+    D3DXVECTOR3 GetUpVec()
+    {
+        return m_vUpVec;
+    }
+    D3DXVECTOR3 GetViewDir()
+    {
+        return m_vView;
+    }
+    D3DXVECTOR3 GetCross()
+    {
+        return m_vCross;
+    }
 
-    FLOAT       GetFOV()             { return m_fFOV; }
-    FLOAT       GetAspect()          { return m_fAspect; }
-    FLOAT       GetNearPlane()       { return m_fNearPlane; }
-    FLOAT       GetFarPlane()        { return m_fFarPlane; }
+    FLOAT       GetFOV()
+    {
+        return m_fFOV;
+    }
+    FLOAT       GetAspect()
+    {
+        return m_fAspect;
+    }
+    FLOAT       GetNearPlane()
+    {
+        return m_fNearPlane;
+    }
+    FLOAT       GetFarPlane()
+    {
+        return m_fFarPlane;
+    }
 
-    D3DXMATRIX  GetViewMatrix()      { return m_matView; }
-    D3DXMATRIX  GetBillboardMatrix() { return m_matBillboard; }
-    D3DXMATRIX  GetProjMatrix()      { return m_matProj; }
+    D3DXMATRIX  GetViewMatrix()
+    {
+        return m_matView;
+    }
+    D3DXMATRIX  GetBillboardMatrix()
+    {
+        return m_matBillboard;
+    }
+    D3DXMATRIX  GetProjMatrix()
+    {
+        return m_matProj;
+    }
 
     VOID SetViewParams( D3DXVECTOR3 &vEyePt, D3DXVECTOR3& vLookatPt,
                         D3DXVECTOR3& vUpVec );

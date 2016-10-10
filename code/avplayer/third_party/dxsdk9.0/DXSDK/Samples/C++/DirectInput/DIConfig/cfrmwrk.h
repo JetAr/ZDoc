@@ -18,25 +18,25 @@ class CDirectInputActionFramework : public IDirectInputActionFramework
 
 public:
 
-		//IUnknown fns
-	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
-	STDMETHOD_(ULONG, AddRef) ();
-	STDMETHOD_(ULONG, Release) ();
+    //IUnknown fns
+    STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
+    STDMETHOD_(ULONG, AddRef) ();
+    STDMETHOD_(ULONG, Release) ();
 
-	//own fns
-	STDMETHOD (ConfigureDevices) (LPDICONFIGUREDEVICESCALLBACK lpdiCallback,
-	                              LPDICONFIGUREDEVICESPARAMSW  lpdiCDParams,
-	                              DWORD                        dwFlags,
-	                              LPVOID                       pvRefData);
+    //own fns
+    STDMETHOD (ConfigureDevices) (LPDICONFIGUREDEVICESCALLBACK lpdiCallback,
+                                  LPDICONFIGUREDEVICESPARAMSW  lpdiCDParams,
+                                  DWORD                        dwFlags,
+                                  LPVOID                       pvRefData);
 
-	//construction / destruction
-	CDirectInputActionFramework();
-	~CDirectInputActionFramework();
+    //construction / destruction
+    CDirectInputActionFramework();
+    ~CDirectInputActionFramework();
 
 protected:
 
-	//reference count
-	LONG m_cRef;
+    //reference count
+    LONG m_cRef;
 };
 
 #endif // _CFRMWRK_H

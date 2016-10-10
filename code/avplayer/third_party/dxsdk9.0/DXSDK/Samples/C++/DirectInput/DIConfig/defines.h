@@ -28,20 +28,20 @@
 // make sure we have the correct debug flags defined,
 // thus making sure assert actually works with build
 #if defined(DBG) || defined(DEBUG)
-	#ifdef NDEBUG
-		#undef NDEBUG
-	#endif
+#ifdef NDEBUG
+#undef NDEBUG
+#endif
 #else
-	#ifndef NDEBUG
-		#define NDEBUG
-	#endif
+#ifndef NDEBUG
+#define NDEBUG
+#endif
 #endif
 
 // disable tracing if we don't want debug info
 #ifdef NDEBUG
-	#ifndef NTRACE
-		#define NTRACE
-	#endif
+#ifndef NTRACE
+#define NTRACE
+#endif
 #endif
 
 

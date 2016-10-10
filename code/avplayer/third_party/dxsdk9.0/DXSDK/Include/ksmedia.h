@@ -19,7 +19,8 @@ Abstract:
 #if !defined(_KSMEDIA_)
 #define _KSMEDIA_
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY      Property;
     KSMULTIPLE_ITEM MultipleItem;
 } KSMULTIPLE_DATA_PROP, *PKSMULTIPLE_DATA_PROP;
@@ -39,7 +40,8 @@ DEFINE_GUIDSTRUCT("A18C15EC-CE43-11D0-ABE7-00A0C9223196", KSMEDIUMSETID_VPBus);
 DEFINE_GUIDSTRUCT("3A13EB40-30A7-11D0-A5D6-28DB04C10000", KSINTERFACESETID_Media);
 #define KSINTERFACESETID_Media DEFINE_GUIDNAMED(KSINTERFACESETID_Media)
 
-typedef enum {
+typedef enum
+{
     KSINTERFACE_MEDIA_MUSIC,
     KSINTERFACE_MEDIA_WAVE_BUFFERED,
     KSINTERFACE_MEDIA_WAVE_QUEUED
@@ -694,22 +696,25 @@ DEFINE_GUIDSTRUCT("518590a2-a184-11d0-8522-00c04fd9baf3", KSDATAFORMAT_SPECIFIER
 #if !defined( PACK_PRAGMAS_NOT_SUPPORTED )
 #include <pshpack1.h>
 #endif
-typedef struct {
+typedef struct
+{
     KSDATAFORMAT    DataFormat;
     WAVEFORMATEX    WaveFormatEx;
 } KSDATAFORMAT_WAVEFORMATEX, *PKSDATAFORMAT_WAVEFORMATEX;
 
 #ifndef _WAVEFORMATEXTENSIBLE_
 #define _WAVEFORMATEXTENSIBLE_
-typedef struct {
+typedef struct
+{
     WAVEFORMATEX    Format;
-    union {
+    union
+    {
         WORD wValidBitsPerSample;       /* bits of precision  */
         WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
         WORD wReserved;                 /* If neither applies, set to zero. */
     } Samples;
     DWORD           dwChannelMask;      /* which channels are */
-                                        /* present in stream  */
+    /* present in stream  */
     GUID            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
 #endif // !_WAVEFORMATEXTENSIBLE_
@@ -719,14 +724,16 @@ typedef struct {
 #endif // !defined(WAVE_FORMAT_EXTENSIBLE)
 
 // DirectSound buffer description
-typedef struct {
+typedef struct
+{
     ULONG               Flags;
     ULONG               Control;
     WAVEFORMATEX        WaveFormatEx;
 } KSDSOUND_BUFFERDESC, *PKSDSOUND_BUFFERDESC;
 
 // DirectSound format
-typedef struct {
+typedef struct
+{
     KSDATAFORMAT        DataFormat;
     KSDSOUND_BUFFERDESC BufferDesc;
 } KSDATAFORMAT_DSOUND, *PKSDATAFORMAT_DSOUND;
@@ -751,7 +758,8 @@ typedef struct {
 #define KSDSOUND_BUFFER_CTRL_VOLUME         0x00000008
 #define KSDSOUND_BUFFER_CTRL_POSITIONNOTIFY 0x00000010
 
-typedef struct {
+typedef struct
+{
 #if defined(_NTDDK_)
     ULONGLONG        PlayOffset;
     ULONGLONG        WriteOffset;
@@ -765,16 +773,20 @@ typedef struct {
 // DirectSound3D HAL
 
 
-typedef struct _DS3DVECTOR {
-    union {
+typedef struct _DS3DVECTOR
+{
+    union
+    {
         FLOAT x;
         FLOAT dvX;
     };
-    union {
+    union
+    {
         FLOAT y;
         FLOAT dvY;
     };
-    union {
+    union
+    {
         FLOAT z;
         FLOAT dvZ;
     };
@@ -791,7 +803,8 @@ typedef struct _DS3DVECTOR {
 DEFINE_GUIDSTRUCT("437b3414-d060-11d0-8583-00c04fd9baf3",KSPROPSETID_DirectSound3DListener);
 #define KSPROPSETID_DirectSound3DListener DEFINE_GUIDNAMED(KSPROPSETID_DirectSound3DListener)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_DIRECTSOUND3DLISTENER_ALL,
     KSPROPERTY_DIRECTSOUND3DLISTENER_POSITION,
     KSPROPERTY_DIRECTSOUND3DLISTENER_VELOCITY,
@@ -803,7 +816,8 @@ typedef enum {
     KSPROPERTY_DIRECTSOUND3DLISTENER_ALLOCATION
 } KSPROPERTY_DIRECTSOUND3DLISTENER;
 
-typedef struct {
+typedef struct
+{
     DS3DVECTOR  Position;
     DS3DVECTOR  Velocity;
     DS3DVECTOR  OrientFront;
@@ -813,7 +827,8 @@ typedef struct {
     FLOAT       DopplerFactor;
 } KSDS3D_LISTENER_ALL, *PKSDS3D_LISTENER_ALL;
 
-typedef struct {
+typedef struct
+{
     DS3DVECTOR  Front;
     DS3DVECTOR  Top;
 } KSDS3D_LISTENER_ORIENTATION, *PKSDS3D_LISTENER_ORIENTATION;
@@ -829,7 +844,8 @@ DEFINE_GUIDSTRUCT("437b3411-d060-11d0-8583-00c04fd9baf3", KSPROPSETID_DirectSoun
 #define KSPROPSETID_DirectSound3DBuffer DEFINE_GUIDNAMED(KSPROPSETID_DirectSound3DBuffer)
 
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_DIRECTSOUND3DBUFFER_ALL,
     KSPROPERTY_DIRECTSOUND3DBUFFER_POSITION,
     KSPROPERTY_DIRECTSOUND3DBUFFER_VELOCITY,
@@ -842,7 +858,8 @@ typedef enum {
 } KSPROPERTY_DIRECTSOUND3DBUFFER;
 
 
-typedef struct {
+typedef struct
+{
     DS3DVECTOR  Position;
     DS3DVECTOR  Velocity;
     ULONG       InsideConeAngle;
@@ -854,7 +871,8 @@ typedef struct {
     ULONG       Mode;
 } KSDS3D_BUFFER_ALL, *PKSDS3D_BUFFER_ALL;
 
-typedef struct {
+typedef struct
+{
     ULONG  InsideConeAngle;
     ULONG  OutsideConeAngle;
 } KSDS3D_BUFFER_CONE_ANGLES, *PKSDS3D_BUFFER_CONE_ANGLES;
@@ -869,13 +887,14 @@ typedef struct {
 #define KSDSOUND_3D_MODE_HEADRELATIVE    0x00000001
 #define KSDSOUND_3D_MODE_DISABLE         0x00000002
 
-typedef struct {
-   KSDATARANGE              DataRange;
-   ULONG                    MaximumChannels;
-   ULONG                    MinimumBitsPerSample;
-   ULONG                    MaximumBitsPerSample;
-   ULONG                    MinimumSampleFrequency;
-   ULONG                    MaximumSampleFrequency;
+typedef struct
+{
+    KSDATARANGE              DataRange;
+    ULONG                    MaximumChannels;
+    ULONG                    MinimumBitsPerSample;
+    ULONG                    MaximumBitsPerSample;
+    ULONG                    MinimumSampleFrequency;
+    ULONG                    MaximumSampleFrequency;
 } KSDATARANGE_AUDIO, *PKSDATARANGE_AUDIO;
 
 //---------------------------------------------------------------------------
@@ -899,7 +918,8 @@ DEFINE_GUIDSTRUCT("07BA150E-E2B1-11D0-AC17-00A0C9223196", KSPROPSETID_Bibliograp
 #define KSPROPSETID_Bibliographic DEFINE_GUIDNAMED(KSPROPSETID_Bibliographic)
 
 //Repeatable tags contain all entries within the property, each preceeded by length
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BIBLIOGRAPHIC_LEADER = 'RDL ',
     KSPROPERTY_BIBLIOGRAPHIC_LCCN = '010 ',
     KSPROPERTY_BIBLIOGRAPHIC_ISBN = '020 ',
@@ -943,7 +963,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("45FFAAA1-6E1B-11D0-BCF2-444553540000", KSPROPSETID_TopologyNode);
 #define KSPROPSETID_TopologyNode DEFINE_GUIDNAMED(KSPROPSETID_TopologyNode)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_TOPOLOGYNODE_ENABLE = 1,
     KSPROPERTY_TOPOLOGYNODE_RESET
 } KSPROPERTY_TOPOLOGYNODE;
@@ -952,8 +973,8 @@ typedef enum {
 
 #if defined(_NTDDK_)
 typedef NTSTATUS (CALLBACK *PRTAUDIOGETPOSITION)(IN PFILE_OBJECT PinFileObject,
-                                                 OUT PUCHAR *ppPlayPosition,
-                                                 OUT PLONG plOffset);
+        OUT PUCHAR *ppPlayPosition,
+        OUT PLONG plOffset);
 #endif // defined(_NTDDK_)
 
 #define STATIC_KSPROPSETID_RtAudio\
@@ -961,7 +982,8 @@ typedef NTSTATUS (CALLBACK *PRTAUDIOGETPOSITION)(IN PFILE_OBJECT PinFileObject,
 DEFINE_GUIDSTRUCT("A855A48C-2F78-4729-9051-1968746B9EEF", KSPROPSETID_RtAudio);
 #define KSPROPSETID_RtAudio DEFINE_GUIDNAMED(KSPROPSETID_RtAudio)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_RTAUDIO_GETPOSITIONFUNCTION
 } KSPROPERTY_RTAUDIO;
 
@@ -971,7 +993,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("2F2C8DDD-4198-4fac-BA29-61BB05B7DE06", KSPROPSETID_DrmAudioStream);
 #define KSPROPSETID_DrmAudioStream DEFINE_GUIDNAMED(KSPROPSETID_DrmAudioStream)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_DRMAUDIOSTREAM_CONTENTID
 } KSPROPERTY_DRMAUDIOSTREAM;
 
@@ -981,7 +1004,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("45FFAAA0-6E1B-11D0-BCF2-444553540000", KSPROPSETID_Audio);
 #define KSPROPSETID_Audio DEFINE_GUIDNAMED(KSPROPSETID_Audio)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_AUDIO_LATENCY = 1,
     KSPROPERTY_AUDIO_COPY_PROTECTION,
     KSPROPERTY_AUDIO_CHANNEL_CONFIG,
@@ -1034,12 +1058,14 @@ typedef enum {
 #define KSAUDIO_CPU_RESOURCES_NOT_HOST_CPU  0x00000000
 #define KSAUDIO_CPU_RESOURCES_HOST_CPU      0x7FFFFFFF
 
-typedef struct {
+typedef struct
+{
     BOOL    fCopyrighted;
     BOOL    fOriginal;
 } KSAUDIO_COPY_PROTECTION, *PKSAUDIO_COPY_PROTECTION;
 
-typedef struct {
+typedef struct
+{
     LONG    ActiveSpeakerPositions;
 } KSAUDIO_CHANNEL_CONFIG, *PKSAUDIO_CHANNEL_CONFIG;
 
@@ -1094,30 +1120,35 @@ typedef struct {
 #define KSAUDIO_SPEAKER_TOP_MIDDLE          SPEAKER_TOP_CENTER
 #define KSAUDIO_SPEAKER_SUPER_WOOFER        SPEAKER_LOW_FREQUENCY
 
-typedef struct {
+typedef struct
+{
     ULONG   QuietCompression;
     ULONG   LoudCompression;
 } KSAUDIO_DYNAMIC_RANGE, *PKSAUDIO_DYNAMIC_RANGE;
 
-typedef struct {
+typedef struct
+{
     BOOL    Mute;
     LONG    Level;
 } KSAUDIO_MIXLEVEL, *PKSAUDIO_MIXLEVEL;
 
-typedef struct {
+typedef struct
+{
     BOOL    Mute;
     LONG    Minimum;
     LONG    Maximum;
     LONG    Reset;
 } KSAUDIO_MIX_CAPS, *PKSAUDIO_MIX_CAPS;
 
-typedef struct {
+typedef struct
+{
     ULONG               InputChannels;
     ULONG               OutputChannels;
     KSAUDIO_MIX_CAPS    Capabilities[1];
 } KSAUDIO_MIXCAP_TABLE, *PKSAUDIO_MIXCAP_TABLE;
 
-typedef enum {
+typedef enum
+{
     SE_TECH_NONE,
     SE_TECH_ANALOG_DEVICES_PHAT,
     SE_TECH_CREATIVE,
@@ -1141,14 +1172,16 @@ typedef enum {
     SE_TECH_VLSI_TECH
 } SE_TECHNIQUE;
 
-typedef struct {
+typedef struct
+{
     SE_TECHNIQUE    Technique;
     ULONG   Center;
     ULONG   Depth;
     ULONG   Reserved;
 } KSAUDIO_STEREO_ENHANCE, *PKSAUDIO_STEREO_ENHANCE;
 
-typedef enum {              // preferred device index
+typedef enum                // preferred device index
+{
     KSPROPERTY_SYSAUDIO_NORMAL_DEFAULT = 0,
     KSPROPERTY_SYSAUDIO_PLAYBACK_DEFAULT,
     KSPROPERTY_SYSAUDIO_RECORD_DEFAULT,
@@ -1156,7 +1189,8 @@ typedef enum {              // preferred device index
     KSPROPERTY_SYSAUDIO_MIXER_DEFAULT
 } KSPROPERTY_SYSAUDIO_DEFAULT_TYPE;
 
-typedef struct {
+typedef struct
+{
     BOOL                             Enable;
     KSPROPERTY_SYSAUDIO_DEFAULT_TYPE DeviceType;
     ULONG                            Flags;
@@ -1589,14 +1623,16 @@ DEFINE_GUIDSTRUCT("57E24340-FC5B-4612-A562-72B11A29DFAE", KSAUDFNAME_PEAKMETER);
 DEFINE_GUIDSTRUCT("DCEF31EB-D907-11D0-9583-00C04FB925D3", KSMETHODSETID_Wavetable);
 #define KSMETHODSETID_Wavetable DEFINE_GUIDNAMED(KSMETHODSETID_Wavetable)
 
-typedef enum {
+typedef enum
+{
     KSMETHOD_WAVETABLE_WAVE_ALLOC,
     KSMETHOD_WAVETABLE_WAVE_FREE,
     KSMETHOD_WAVETABLE_WAVE_FIND,
     KSMETHOD_WAVETABLE_WAVE_WRITE
 } KSMETHOD_WAVETABLE;
 
-typedef struct {
+typedef struct
+{
     KSIDENTIFIER        Identifier;                     // wave identifier
     ULONG               Size;                           // wave size
     BOOL                Looped;                         // wave looped flag
@@ -1621,7 +1657,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("D7A4AF8B-3DC1-4902-91EA-8A15C90E05B2", KSPROPSETID_Acoustic_Echo_Cancel);
 #define KSPROPSETID_Acoustic_Echo_Cancel DEFINE_GUIDNAMED(KSPROPSETID_Acoustic_Echo_Cancel)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_AEC_NOISE_FILL_ENABLE = 0,
     KSPROPERTY_AEC_STATUS,
     KSPROPERTY_AEC_MODE
@@ -1658,7 +1695,8 @@ DEFINE_GUIDSTRUCT("7432c160-8827-11cf-a102-0020afd156e4", KSMETHODSETID_Wave_Que
 DEFINE_GUIDSTRUCT("924e54b0-630f-11cf-ada7-08003e30494a", KSPROPSETID_Wave);
 #define KSPROPSETID_Wave DEFINE_GUIDNAMED(KSPROPSETID_Wave)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_WAVE_COMPATIBLE_CAPABILITIES,
     KSPROPERTY_WAVE_INPUT_CAPABILITIES,
     KSPROPERTY_WAVE_OUTPUT_CAPABILITIES,
@@ -1668,14 +1706,16 @@ typedef enum {
     KSPROPERTY_WAVE_PAN
 } KSPROPERTY_WAVE;
 
-typedef struct {
+typedef struct
+{
     ULONG        ulDeviceType;
 } KSWAVE_COMPATCAPS, *PKSWAVE_COMPATCAPS;
 
 #define KSWAVE_COMPATCAPS_INPUT                 0x00000000
 #define KSWAVE_COMPATCAPS_OUTPUT                0x00000001
 
-typedef struct {
+typedef struct
+{
     ULONG  MaximumChannelsPerConnection;
     ULONG  MinimumBitsPerSample;
     ULONG  MaximumBitsPerSample;
@@ -1685,7 +1725,8 @@ typedef struct {
     ULONG  ActiveConnections;
 } KSWAVE_INPUT_CAPABILITIES, *PKSWAVE_INPUT_CAPABILITIES;
 
-typedef struct {
+typedef struct
+{
     ULONG  MaximumChannelsPerConnection;
     ULONG  MinimumBitsPerSample;
     ULONG  MaximumBitsPerSample;
@@ -1708,7 +1749,8 @@ typedef struct {
     ULONG  LargestFreeContiguousSampleMemory;
 } KSWAVE_OUTPUT_CAPABILITIES, *PKSWAVE_OUTPUT_CAPABILITIES;
 
-typedef struct {
+typedef struct
+{
     LONG  LeftAttenuation;
     LONG  RightAttenuation;
 } KSWAVE_VOLUME, *PKSWAVE_VOLUME;
@@ -1716,7 +1758,8 @@ typedef struct {
 #define KSWAVE_BUFFER_ATTRIBUTEF_LOOPING   0x00000001
 #define KSWAVE_BUFFER_ATTRIBUTEF_STATIC    0x00000002
 
-typedef struct {
+typedef struct
+{
     ULONG   Attributes;
     ULONG   BufferSize;
     PVOID   BufferAddress;
@@ -1755,19 +1798,21 @@ DEFINE_GUIDSTRUCT("37407736-3620-11D1-85D3-0000F8754380", KSMUSIC_TECHNOLOGY_SWS
 DEFINE_GUIDSTRUCT("8539E660-62E9-11CF-A5D6-28DB04C10000", KSPROPSETID_WaveTable);
 #define KSPROPSETID_WaveTable DEFINE_GUIDNAMED(KSPROPSETID_WaveTable)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_WAVETABLE_LOAD_SAMPLE,
     KSPROPERTY_WAVETABLE_UNLOAD_SAMPLE,
     KSPROPERTY_WAVETABLE_MEMORY,
     KSPROPERTY_WAVETABLE_VERSION
 } KSPROPERTY_WAVETABLE;
 
-typedef struct {
-   KSDATARANGE              DataRange;
-   GUID                     Technology;
-   ULONG                    Channels;
-   ULONG                    Notes;
-   ULONG                    ChannelMask;
+typedef struct
+{
+    KSDATARANGE              DataRange;
+    GUID                     Technology;
+    ULONG                    Channels;
+    ULONG                    Notes;
+    ULONG                    ChannelMask;
 } KSDATARANGE_MUSIC, *PKSDATARANGE_MUSIC;
 
 //===========================================================================
@@ -1777,7 +1822,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("142C1AC0-072A-11D0-A5D6-28DB04C10000", KSEVENTSETID_Cyclic);
 #define KSEVENTSETID_Cyclic DEFINE_GUIDNAMED(KSEVENTSETID_Cyclic)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_CYCLIC_TIME_INTERVAL,
 } KSEVENT_CYCLIC_TIME;
 
@@ -1786,7 +1832,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("3FFEAEA0-2BEE-11CF-A5D6-28DB04C10000", KSPROPSETID_Cyclic);
 #define KSPROPSETID_Cyclic DEFINE_GUIDNAMED(KSPROPSETID_Cyclic)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_CYCLIC_POSITION,
 } KSPROPERTY_CYCLIC;
 
@@ -1796,7 +1843,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("E85E9698-FA2F-11D1-95BD-00C04FB925D3", KSEVENTSETID_AudioControlChange);
 #define KSEVENTSETID_AudioControlChange DEFINE_GUIDNAMED(KSEVENTSETID_AudioControlChange)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_CONTROL_CHANGE,
 } KSEVENT_AUDIO_CONTROL_CHANGE;
 
@@ -1807,11 +1855,13 @@ typedef enum {
 DEFINE_GUIDSTRUCT("4682B940-C6EF-11D0-96D8-00AA0051E51D", KSEVENTSETID_LoopedStreaming);
 #define KSEVENTSETID_LoopedStreaming DEFINE_GUIDNAMED(KSEVENTSETID_LoopedStreaming)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_LOOPEDSTREAMING_POSITION,
 } KSEVENT_LOOPEDSTREAMING;
 
-typedef struct {
+typedef struct
+{
     KSEVENTDATA KsEventData;
 #if defined(_NTDDK_)
     ULONGLONG   Position;
@@ -1827,7 +1877,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("04800320-4491-11D1-A050-405705C10000", KSEVENTSETID_Sysaudio);
 #define KSEVENTSETID_Sysaudio DEFINE_GUIDNAMED(KSEVENTSETID_Sysaudio)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_SYSAUDIO_ADDREMOVE_DEVICE,
     KSEVENT_SYSAUDIO_CHANGE_DEVICE
 } KSEVENT_SYSAUDIO;
@@ -1838,7 +1889,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("CBE3FAA0-CC75-11D0-B465-00001A1818E6", KSPROPSETID_Sysaudio);
 #define KSPROPSETID_Sysaudio DEFINE_GUIDNAMED(KSPROPSETID_Sysaudio)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_SYSAUDIO_DEVICE_COUNT = 1,
     KSPROPERTY_SYSAUDIO_DEVICE_FRIENDLY_NAME,
     KSPROPERTY_SYSAUDIO_DEVICE_INSTANCE,
@@ -1858,13 +1910,15 @@ typedef enum {
     KSPROPERTY_SYSAUDIO_ADDREMOVE_GFX
 } KSPROPERTY_SYSAUDIO;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     GUID PinCategory;
     GUID PinName;
 } SYSAUDIO_CREATE_VIRTUAL_SOURCE, *PSYSAUDIO_CREATE_VIRTUAL_SOURCE;
 
-typedef struct {
+typedef struct
+{
     BOOL        Enable;
     HANDLE      hGfx;
     ULONG       ulOrder;                    // Order of the GFX
@@ -1877,7 +1931,8 @@ typedef struct {
 #define GFX_DEVICETYPE_RENDER     1
 #define GFX_DEVICETYPE_CAPTURE    2
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG PinId;
     ULONG NodeId;
@@ -1885,7 +1940,8 @@ typedef struct {
     ULONG Reserved;
 } SYSAUDIO_SELECT_GRAPH, *PSYSAUDIO_SELECT_GRAPH;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG Flags;
     ULONG DeviceNumber;
@@ -1894,7 +1950,8 @@ typedef struct {
 #define SYSAUDIO_FLAGS_DONT_COMBINE_PINS        0x00000001
 
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG Flags;
     ULONG Index;            // KSPROPERTY_SYSAUDIO_DEFAULT_TYPE
@@ -1907,13 +1964,15 @@ typedef struct {
 DEFINE_GUIDSTRUCT("A3A53220-C6E4-11D0-B465-00001A1818E6", KSPROPSETID_Sysaudio_Pin);
 #define KSPROPSETID_Sysaudio_Pin DEFINE_GUIDNAMED(KSPROPSETID_Sysaudio_Pin)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_SYSAUDIO_TOPOLOGY_CONNECTION_INDEX,
     KSPROPERTY_SYSAUDIO_ATTACH_VIRTUAL_SOURCE,
     KSPROPERTY_SYSAUDIO_PIN_VOLUME_NODE
 } KSPROPERTY_SYSAUDIO_PIN;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY  Property;
     ULONG       MixerPinId;
     ULONG       Reserved;
@@ -1921,26 +1980,30 @@ typedef struct {
 // @@END_DDKSPLIT
 
 //===========================================================================
-typedef struct {
+typedef struct
+{
     KSPROPERTY  Property;
     ULONG       NodeId;
     ULONG       Reserved;
 } KSNODEPROPERTY, *PKSNODEPROPERTY;
 
-typedef struct {
+typedef struct
+{
     KSNODEPROPERTY NodeProperty;
     LONG           Channel;                   // value to get or set
     ULONG          Reserved;
 } KSNODEPROPERTY_AUDIO_CHANNEL, *PKSNODEPROPERTY_AUDIO_CHANNEL;
 
-typedef struct {
+typedef struct
+{
     KSNODEPROPERTY NodeProperty;
     ULONG   DevSpecificId;
     ULONG   DeviceInfo;
     ULONG   Length;
 } KSNODEPROPERTY_AUDIO_DEV_SPECIFIC, *PKSNODEPROPERTY_AUDIO_DEV_SPECIFIC;
 
-typedef struct {
+typedef struct
+{
     KSNODEPROPERTY   NodeProperty;
     PVOID            ListenerId;
 #ifndef _WIN64
@@ -1948,7 +2011,8 @@ typedef struct {
 #endif // _WIN64
 } KSNODEPROPERTY_AUDIO_3D_LISTENER, *PKSNODEPROPERTY_AUDIO_3D_LISTENER;
 
-typedef struct {
+typedef struct
+{
     KSNODEPROPERTY   NodeProperty;
     PVOID            AppContext;
     ULONG            Length;
@@ -1964,7 +2028,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("79A9312E-59AE-43b0-A350-8B05284CAB24", KSPROPSETID_AudioGfx);
 #define KSPROPSETID_AudioGfx DEFINE_GUIDNAMED(KSPROPSETID_AudioGfx)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_AUDIOGFX_RENDERTARGETDEVICEID,
     KSPROPERTY_AUDIOGFX_CAPTURETARGETDEVICEID
 } KSPROPERTY_AUDIOGFX;
@@ -1976,7 +2041,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("5A2FFE80-16B9-11D0-A5D6-28DB04C10000", KSPROPSETID_Linear);
 #define KSPROPSETID_Linear DEFINE_GUIDNAMED(KSPROPSETID_Linear)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_LINEAR_POSITION,
 } KSPROPERTY_LINEAR;
 
@@ -2024,10 +2090,11 @@ DEFINE_GUIDSTRUCT("4995DAF0-9EE6-11D0-A40E-00A0C9223196", KSDATAFORMAT_SUBTYPE_R
 // WARNING! This structure MUST be dword aligned
 // regardless of the number of data bytes.
 
-typedef struct {
+typedef struct
+{
     ULONG   TimeDeltaMs;        // Delta Milliseconds from the previous midiformat
-                                // in the packet. The first midiformat in the packet
-                                // is a delta from the PTS in the KSSTREAM_HEADER.
+    // in the packet. The first midiformat in the packet
+    // is a delta from the PTS in the KSSTREAM_HEADER.
     ULONG   ByteCount;          // Number of bytes of data that follow this struct.
 } KSMUSICFORMAT, *PKSMUSICFORMAT;
 
@@ -2294,7 +2361,8 @@ DEFINE_GUIDSTRUCT("C8E11B60-0CC9-11D0-BD69-003505C103A9", KSPROPSETID_Mpeg2Vid);
 #define  KSPROPSETID_Mpeg2Vid DEFINE_GUIDNAMED( KSPROPSETID_Mpeg2Vid )
 
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_MPEG2VID_MODES,          // available output modes of decoder
     KSPROPERTY_MPEG2VID_CUR_MODE,       // current mode of the decoder
     KSPROPERTY_MPEG2VID_4_3_RECT,       // output coordinates for 4:3 source
@@ -2315,7 +2383,8 @@ typedef enum {
 // the MPEG2Video decoder
 //
 
-typedef struct _KSMPEGVID_RECT {
+typedef struct _KSMPEGVID_RECT
+{
     ULONG StartX;
     ULONG StartY;
     ULONG EndX;
@@ -2374,7 +2443,8 @@ DEFINE_GUIDSTRUCT("e06d80e4-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SPECIFIER
 DEFINE_GUIDSTRUCT("BFABE720-6E1F-11D0-BCF2-444553540000", KSPROPSETID_AC3);
 #define KSPROPSETID_AC3 DEFINE_GUIDNAMED(KSPROPSETID_AC3)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_AC3_ERROR_CONCEALMENT = 1,
     KSPROPERTY_AC3_ALTERNATE_AUDIO,
     KSPROPERTY_AC3_DOWNMIX,
@@ -2384,12 +2454,14 @@ typedef enum {
     KSPROPERTY_AC3_ROOM_TYPE
 } KSPROPERTY_AC3;
 
-typedef struct  {
+typedef struct
+{
     BOOL        fRepeatPreviousBlock;
     BOOL        fErrorInCurrentBlock;
 } KSAC3_ERROR_CONCEALMENT, *PKSAC3_ERROR_CONCEALMENT;
 
-typedef struct {
+typedef struct
+{
     BOOL    fStereo;
     ULONG   DualMode;
 } KSAC3_ALTERNATE_AUDIO, *PKSAC3_ALTERNATE_AUDIO;
@@ -2398,12 +2470,14 @@ typedef struct {
 #define KSAC3_ALTERNATE_AUDIO_2     2
 #define KSAC3_ALTERNATE_AUDIO_BOTH  3
 
-typedef struct {
+typedef struct
+{
     BOOL        fDownMix;
     BOOL        fDolbySurround;
 } KSAC3_DOWNMIX, *PKSAC3_DOWNMIX;
 
-typedef struct {
+typedef struct
+{
     LONG        BitStreamMode;
 } KSAC3_BIT_STREAM_MODE, *PKSAC3_BIT_STREAM_MODE;
 
@@ -2416,11 +2490,13 @@ typedef struct {
 #define KSAC3_SERVICE_EMERGENCY_FLASH       6
 #define KSAC3_SERVICE_VOICE_OVER            7
 
-typedef struct {
+typedef struct
+{
     ULONG   DialogueLevel;
 } KSAC3_DIALOGUE_LEVEL, *PKSAC3_DIALOGUE_LEVEL;
 
-typedef struct {
+typedef struct
+{
     BOOL    fLargeRoom;
 } KSAC3_ROOM_TYPE, *PKSAC3_ROOM_TYPE;
 
@@ -2448,7 +2524,8 @@ DEFINE_GUIDSTRUCT("e06d8034-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_S
 DEFINE_GUIDSTRUCT("6ca6e020-43bd-11d0-bd6a-003505c103a9", KSPROPSETID_AudioDecoderOut);
 #define KSPROPSETID_AudioDecoderOut DEFINE_GUIDNAMED(KSPROPSETID_AudioDecoderOut)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_AUDDECOUT_MODES,         // available output modes of decoder
     KSPROPERTY_AUDDECOUT_CUR_MODE,      // current mode of the decoder
 } KSPROPERTY_AUDDECOUT;
@@ -2474,13 +2551,15 @@ DEFINE_GUIDSTRUCT("e06d802d-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_S
 DEFINE_GUIDSTRUCT("ac390460-43af-11d0-bd6a-003505c103a9", KSPROPSETID_DvdSubPic);
 #define KSPROPSETID_DvdSubPic DEFINE_GUIDNAMED(KSPROPSETID_DvdSubPic)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_DVDSUBPIC_PALETTE,
     KSPROPERTY_DVDSUBPIC_HLI,
     KSPROPERTY_DVDSUBPIC_COMPOSIT_ON,  // TRUE for subpicture is displayed
 } KSPROPERTY_DVDSUBPIC;
 
-typedef struct _KS_DVD_YCrCb {
+typedef struct _KS_DVD_YCrCb
+{
     UCHAR   Reserved;
     UCHAR   Y;
     UCHAR   Cr;
@@ -2490,18 +2569,21 @@ typedef struct _KS_DVD_YCrCb {
 /* The KS_DVD_YUV structure is now superseded by KS_DVD_YCrCb above and is
    here for backward compatibility only */
 
-typedef struct _KS_DVD_YUV {
+typedef struct _KS_DVD_YUV
+{
     UCHAR   Reserved;
     UCHAR   Y;
     UCHAR   V;
     UCHAR   U;
 } KS_DVD_YUV, *PKS_DVD_YUV;
 
-typedef struct _KSPROPERTY_SPPAL {
+typedef struct _KSPROPERTY_SPPAL
+{
     KS_DVD_YUV sppal[16];
 } KSPROPERTY_SPPAL, *PKSPROPERTY_SPPAL;
 
-typedef struct _KS_COLCON {
+typedef struct _KS_COLCON
+{
     UCHAR emph1col:4;
     UCHAR emph2col:4;
     UCHAR backcol:4;
@@ -2513,7 +2595,8 @@ typedef struct _KS_COLCON {
 
 } KS_COLCON, *PKS_COLCON;
 
-typedef struct _KSPROPERTY_SPHLI {
+typedef struct _KSPROPERTY_SPHLI
+{
     USHORT      HLISS;
     USHORT      Reserved;
     ULONG       StartPTM;   // start presentation time in x/90000
@@ -2532,7 +2615,8 @@ typedef BOOL KSPROPERTY_COMPOSIT_ON, *PKSPROPERTY_COMPOSIT_ON;
 DEFINE_GUIDSTRUCT("0E8A0A40-6AEF-11D0-9ED0-00A024CA19B3", KSPROPSETID_CopyProt);
 #define KSPROPSETID_CopyProt DEFINE_GUIDNAMED(KSPROPSETID_CopyProt)
 
-typedef enum {
+typedef enum
+{
 
     KSPROPERTY_DVDCOPY_CHLG_KEY = 0x01,
     KSPROPERTY_DVDCOPY_DVD_KEY1,
@@ -2545,53 +2629,62 @@ typedef enum {
 
 } KSPROPERTY_COPYPROT;
 
-typedef struct _KS_DVDCOPY_CHLGKEY {
+typedef struct _KS_DVDCOPY_CHLGKEY
+{
     BYTE ChlgKey[10];
     BYTE Reserved[2];
 } KS_DVDCOPY_CHLGKEY, *PKS_DVDCOPY_CHLGKEY;
 
-typedef struct _KS_DVDCOPY_BUSKEY {
+typedef struct _KS_DVDCOPY_BUSKEY
+{
     BYTE BusKey[5];
     BYTE Reserved[1];
 } KS_DVDCOPY_BUSKEY, *PKS_DVDCOPY_BUSKEY;
 
 
-typedef struct _KS_DVDCOPY_DISCKEY {
+typedef struct _KS_DVDCOPY_DISCKEY
+{
     BYTE DiscKey[2048];
 } KS_DVDCOPY_DISCKEY, *PKS_DVDCOPY_DISCKEY;
 
-typedef struct _KS_DVDCOPY_REGION {
+typedef struct _KS_DVDCOPY_REGION
+{
     UCHAR   Reserved;
     UCHAR   RegionData;
     UCHAR   Reserved2[2];
 } KS_DVDCOPY_REGION, *PKS_DVDCOPY_REGION;
 
-typedef struct _KS_DVDCOPY_TITLEKEY {
+typedef struct _KS_DVDCOPY_TITLEKEY
+{
     ULONG KeyFlags;
     ULONG ReservedNT[2];
     UCHAR TitleKey[6];
     UCHAR Reserved[2];
 } KS_DVDCOPY_TITLEKEY, *PKS_DVDCOPY_TITLEKEY;
 
-typedef struct _KS_COPY_MACROVISION {
+typedef struct _KS_COPY_MACROVISION
+{
     ULONG MACROVISIONLevel;
 } KS_COPY_MACROVISION, *PKS_COPY_MACROVISION;
 
-typedef struct _KS_DVDCOPY_SET_COPY_STATE {
+typedef struct _KS_DVDCOPY_SET_COPY_STATE
+{
     ULONG DVDCopyState;
 } KS_DVDCOPY_SET_COPY_STATE, *PKS_DVDCOPY_SET_COPY_STATE;
 
-typedef enum {
+typedef enum
+{
     KS_DVDCOPYSTATE_INITIALIZE,         // indicates we are starting a full
-                                        // copy protection sequence.
+    // copy protection sequence.
     KS_DVDCOPYSTATE_INITIALIZE_TITLE,   // indicates we are starting a title
-                                        // key copy protection sequence
+    // key copy protection sequence
     KS_DVDCOPYSTATE_AUTHENTICATION_NOT_REQUIRED,
     KS_DVDCOPYSTATE_AUTHENTICATION_REQUIRED,
     KS_DVDCOPYSTATE_DONE,
 } KS_DVDCOPYSTATE;
 
-typedef enum {
+typedef enum
+{
     KS_MACROVISION_DISABLED,
     KS_MACROVISION_LEVEL1,
     KS_MACROVISION_LEVEL2,
@@ -2734,7 +2827,8 @@ DEFINE_GUIDSTRUCT("f72a76e3-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_SUBTYPE_T
 #define KS_BI_RLE4       2L
 #define KS_BI_BITFIELDS  3L
 
-typedef struct tagKS_RGBQUAD { // rgbq
+typedef struct tagKS_RGBQUAD   // rgbq
+{
     BYTE    rgbBlue;
     BYTE    rgbGreen;
     BYTE    rgbRed;
@@ -2754,23 +2848,25 @@ typedef struct tagKS_RGBQUAD { // rgbq
 #define KS_SIZE_EGA_PALETTE (KS_iEGA_COLORS * sizeof(KS_RGBQUAD))
 #define KS_SIZE_PALETTE (KS_iPALETTE_COLORS * sizeof(KS_RGBQUAD))
 
-typedef struct tagKS_BITMAPINFOHEADER{
-        DWORD      biSize;
-        LONG       biWidth;
-        LONG       biHeight;
-        WORD       biPlanes;
-        WORD       biBitCount;
-        DWORD      biCompression;
-        DWORD      biSizeImage;
-        LONG       biXPelsPerMeter;
-        LONG       biYPelsPerMeter;
-        DWORD      biClrUsed;
-        DWORD      biClrImportant;
+typedef struct tagKS_BITMAPINFOHEADER
+{
+    DWORD      biSize;
+    LONG       biWidth;
+    LONG       biHeight;
+    WORD       biPlanes;
+    WORD       biBitCount;
+    DWORD      biCompression;
+    DWORD      biSizeImage;
+    LONG       biXPelsPerMeter;
+    LONG       biYPelsPerMeter;
+    DWORD      biClrUsed;
+    DWORD      biClrImportant;
 } KS_BITMAPINFOHEADER, *PKS_BITMAPINFOHEADER;
 
 // Used for true colour images that also have a palette
 
-typedef struct tag_KS_TRUECOLORINFO {
+typedef struct tag_KS_TRUECOLORINFO
+{
     DWORD   dwBitMasks[KS_iMASK_COLORS];
     KS_RGBQUAD bmiColors[KS_iPALETTE_COLORS];
 } KS_TRUECOLORINFO, *PKS_TRUECOLORINFO;
@@ -2797,7 +2893,8 @@ typedef LONGLONG REFERENCE_TIME;
 // request that the video be placed in a particular area of the buffers it
 // supplies in which case it will call QueryAccept with a non empty target
 
-typedef struct tagKS_VIDEOINFOHEADER {
+typedef struct tagKS_VIDEOINFOHEADER
+{
 
     RECT                rcSource;          // The bit we really want to use
     RECT                rcTarget;          // Where the video should go
@@ -2814,7 +2911,8 @@ typedef struct tagKS_VIDEOINFOHEADER {
 // has a normal biSize == sizeof(BITMAPINFOHEADER) !
 // !!! WARNING !!!
 
-typedef struct tagKS_VIDEOINFO {
+typedef struct tagKS_VIDEOINFO
+{
 
     RECT            rcSource;          // The bit we really want to use
     RECT            rcTarget;          // Where the video should go
@@ -2824,7 +2922,8 @@ typedef struct tagKS_VIDEOINFO {
 
     KS_BITMAPINFOHEADER bmiHeader;
 
-    union {
+    union
+    {
         KS_RGBQUAD          bmiColors[KS_iPALETTE_COLORS];     // Colour palette
         DWORD               dwBitMasks[KS_iMASK_COLORS];       // True colour masks
         KS_TRUECOLORINFO    TrueColorInfo;                     // Both of the above
@@ -2843,7 +2942,8 @@ typedef struct tagKS_VIDEOINFO {
 
 // VBI
 // Used for NABTS, CC, Intercast, WST
-typedef struct tagKS_VBIINFOHEADER {
+typedef struct tagKS_VBIINFOHEADER
+{
     ULONG       StartLine;              // inclusive
     ULONG       EndLine;                // inclusive
     ULONG       SamplingFrequency;      // Hz.
@@ -2874,7 +2974,8 @@ typedef struct tagKS_VBIINFOHEADER {
 // dwActiveWidth is currently set to 720 for all formats (but could change for HDTV)
 // dwActiveHeight is 483 for NTSC and 575 for PAL/SECAM  (but could change for HDTV)
 
-typedef struct tagKS_AnalogVideoInfo {
+typedef struct tagKS_AnalogVideoInfo
+{
     RECT            rcSource;           // Width max is 720, height varies w/ TransmissionStd
     RECT            rcTarget;           // Where the video should go
     DWORD           dwActiveWidth;      // Always 720 (CCIR-601 active samples per line)
@@ -2889,25 +2990,28 @@ typedef struct tagKS_AnalogVideoInfo {
 #define KS_TVTUNER_CHANGE_BEGIN_TUNE    0x0001L  // Starting a tuning operation
 #define KS_TVTUNER_CHANGE_END_TUNE      0x0002L  // Ending a tuning operation
 
-typedef struct tagKS_TVTUNER_CHANGE_INFO {
-   DWORD                    dwFlags;                // KS_TVTUNER_CHANGE_*
-   DWORD                    dwCountryCode;
-   DWORD                    dwAnalogVideoStandard;  // KS_AnalogVideoStandard
-   DWORD                    dwChannel;
+typedef struct tagKS_TVTUNER_CHANGE_INFO
+{
+    DWORD                    dwFlags;                // KS_TVTUNER_CHANGE_*
+    DWORD                    dwCountryCode;
+    DWORD                    dwAnalogVideoStandard;  // KS_AnalogVideoStandard
+    DWORD                    dwChannel;
 } KS_TVTUNER_CHANGE_INFO, *PKS_TVTUNER_CHANGE_INFO;
 
 //===========================================================================
 // Video format blocks
 //===========================================================================
 
-typedef enum {
+typedef enum
+{
     KS_MPEG2Level_Low,
     KS_MPEG2Level_Main,
     KS_MPEG2Level_High1440,
     KS_MPEG2Level_High
 } KS_MPEG2Level;
 
-typedef enum {
+typedef enum
+{
     KS_MPEG2Profile_Simple,
     KS_MPEG2Profile_Main,
     KS_MPEG2Profile_SNRScalable,
@@ -2932,23 +3036,24 @@ typedef enum {
 
 
 #define KS_MPEG2_DoPanScan           0x00000001  //if set, the MPEG-2 video decoder should crop output image
-                                                //  based on pan-scan vectors in picture_display_extension
-                                                //  and change the picture aspect ratio accordingly.
+//  based on pan-scan vectors in picture_display_extension
+//  and change the picture aspect ratio accordingly.
 #define KS_MPEG2_DVDLine21Field1     0x00000002  //if set, the MPEG-2 decoder must be able to produce an output
-                                                //  pin for DVD style closed caption data found in GOP layer of field 1
+//  pin for DVD style closed caption data found in GOP layer of field 1
 #define KS_MPEG2_DVDLine21Field2     0x00000004  //if set, the MPEG-2 decoder must be able to produce an output
-                                                //  pin for DVD style closed caption data found in GOP layer of field 2
+//  pin for DVD style closed caption data found in GOP layer of field 2
 #define KS_MPEG2_SourceIsLetterboxed 0x00000008  //if set, indicates that black bars have been encoded in the top
-                                                //  and bottom of the video.
+//  and bottom of the video.
 #define KS_MPEG2_FilmCameraMode      0x00000010  //if set, indicates "film mode" used for 625/50 content.  If cleared,
-                                                //  indicates that "camera mode" was used.
+//  indicates that "camera mode" was used.
 #define KS_MPEG2_LetterboxAnalogOut  0x00000020  //if set and this stream is sent to an analog output, it should
-                        //  be letterboxed.  Streams sent to VGA should be letterboxed only by renderers.
+//  be letterboxed.  Streams sent to VGA should be letterboxed only by renderers.
 #define KS_MPEG2_DSS_UserData        0x00000040  //if set, the MPEG-2 decoder must process DSS style user data
 #define KS_MPEG2_DVB_UserData        0x00000080  //if set, the MPEG-2 decoder must process DVB style user data
 #define KS_MPEG2_27MhzTimebase       0x00000100  //if set, the PTS,DTS timestamps advance at 27MHz rather than 90KHz
 
-typedef struct tagKS_VIDEOINFOHEADER2 {
+typedef struct tagKS_VIDEOINFOHEADER2
+{
     RECT                rcSource;
     RECT                rcTarget;
     DWORD               dwBitRate;
@@ -2963,7 +3068,8 @@ typedef struct tagKS_VIDEOINFOHEADER2 {
     KS_BITMAPINFOHEADER bmiHeader;
 } KS_VIDEOINFOHEADER2, *PKS_VIDEOINFOHEADER2;
 
-typedef struct tagKS_MPEG1VIDEOINFO {
+typedef struct tagKS_MPEG1VIDEOINFO
+{
     KS_VIDEOINFOHEADER hdr; // Compatible with VIDEOINFO
     DWORD dwStartTimeCode; // 25-bit Group of pictures time code at start of data
     DWORD cbSequenceHeader; // Length in bytes of bSequenceHeader
@@ -2974,7 +3080,8 @@ typedef struct tagKS_MPEG1VIDEOINFO {
 #define KS_SIZE_MPEG1VIDEOINFO(pv) (FIELD_OFFSET(KS_MPEG1VIDEOINFO, bSequenceHeader[0]) + (pv)->cbSequenceHeader)
 #define KS_MPEG1_SEQUENCE_INFO(pv) ((const BYTE *)(pv)->bSequenceHeader)
 
-typedef struct tagKS_MPEGVIDEOINFO2 {
+typedef struct tagKS_MPEGVIDEOINFO2
+{
     KS_VIDEOINFOHEADER2 hdr;
     DWORD               dwStartTimeCode;        //  ?? not used for DVD ??
     DWORD               cbSequenceHeader;       // is 0 for DVD (no sequence header)
@@ -2982,8 +3089,8 @@ typedef struct tagKS_MPEGVIDEOINFO2 {
     DWORD               dwLevel;                // use enum MPEG2Level
     DWORD               dwFlags;                // use AMMPEG2_* defines.  Reject connection if undefined bits are not 0
     DWORD               bSequenceHeader[1];     // DWORD instead of Byte for alignment purposes
-                                                //   For MPEG-2, if a sequence_header is included, the sequence_extension
-                                                //   should also be included
+    //   For MPEG-2, if a sequence_header is included, the sequence_extension
+    //   should also be included
 } KS_MPEGVIDEOINFO2, *PKS_MPEGVIDEOINFO2;
 
 
@@ -2997,7 +3104,8 @@ typedef struct tagKS_MPEGVIDEOINFO2 {
 //if set, the PTS,DTS timestamps advance at 27MHz rather than 90KHz
 #define KS_MPEGAUDIOINFO_27MhzTimebase      0x00000001
 
-typedef struct tagKS_MPEAUDIOINFO {
+typedef struct tagKS_MPEAUDIOINFO
+{
     DWORD               dwFlags;            // use KS_MPEGAUDIOINFO_* defines.  Reject connection if undefined bits are not 0
     DWORD               dwReserved1;        // must be 0; reject connection otherwise
     DWORD               dwReserved2;        // must be 0; reject connection otherwise
@@ -3008,32 +3116,37 @@ typedef struct tagKS_MPEAUDIOINFO {
 // Video DATAFORMATs
 //===========================================================================
 
-typedef struct tagKS_DATAFORMAT_VIDEOINFOHEADER {
+typedef struct tagKS_DATAFORMAT_VIDEOINFOHEADER
+{
     KSDATAFORMAT            DataFormat;
     KS_VIDEOINFOHEADER      VideoInfoHeader;
 } KS_DATAFORMAT_VIDEOINFOHEADER, *PKS_DATAFORMAT_VIDEOINFOHEADER;
 
-typedef struct tagKS_DATAFORMAT_VIDEOINFOHEADER2 {
+typedef struct tagKS_DATAFORMAT_VIDEOINFOHEADER2
+{
     KSDATAFORMAT            DataFormat;
     KS_VIDEOINFOHEADER2     VideoInfoHeader2;
 } KS_DATAFORMAT_VIDEOINFOHEADER2, *PKS_DATAFORMAT_VIDEOINFOHEADER2;
 
-typedef struct tagKS_DATAFORMAT_VIDEOINFO_PALETTE {
+typedef struct tagKS_DATAFORMAT_VIDEOINFO_PALETTE
+{
     KSDATAFORMAT            DataFormat;
     KS_VIDEOINFO            VideoInfo;
 } KS_DATAFORMAT_VIDEOINFO_PALETTE, *PKS_DATAFORMAT_VIDEOINFO_PALETTE;
 
-typedef struct tagKS_DATAFORMAT_VBIINFOHEADER {
+typedef struct tagKS_DATAFORMAT_VBIINFOHEADER
+{
     KSDATAFORMAT            DataFormat;
     KS_VBIINFOHEADER        VBIInfoHeader;
 } KS_DATAFORMAT_VBIINFOHEADER, *PKS_DATAFORMAT_VBIINFOHEADER;
 
-typedef struct  _KS_VIDEO_STREAM_CONFIG_CAPS  {
+typedef struct  _KS_VIDEO_STREAM_CONFIG_CAPS
+{
     GUID guid;                  // will be MEDIATYPE_Video
     ULONG VideoStandard;        // logical OR of all AnalogVideoStandards
-                                // supported
+    // supported
     SIZE InputSize;             // the inherent size of the incoming signal
-                                // (every pixel unique)
+    // (every pixel unique)
     SIZE MinCroppingSize;       // smallest rcSrc cropping rect allowed
     SIZE MaxCroppingSize;       // largest rcSrc cropping rect allowed
     int CropGranularityX;       // granularity of cropping size
@@ -3058,27 +3171,30 @@ typedef struct  _KS_VIDEO_STREAM_CONFIG_CAPS  {
 // Video DATARANGEs
 //===========================================================================
 
-typedef struct tagKS_DATARANGE_VIDEO {
-   KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
-   KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VIDEOINFOHEADER           VideoInfoHeader;        // default format
+typedef struct tagKS_DATARANGE_VIDEO
+{
+    KSDATARANGE                  DataRange;
+    BOOL                         bFixedSizeSamples;      // all samples same size?
+    BOOL                         bTemporalCompression;   // all I frames?
+    DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
+    DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
+    KS_VIDEOINFOHEADER           VideoInfoHeader;        // default format
 } KS_DATARANGE_VIDEO, *PKS_DATARANGE_VIDEO;
 
-typedef struct tagKS_DATARANGE_VIDEO2 {
-   KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
-   KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VIDEOINFOHEADER2          VideoInfoHeader;        // default format
+typedef struct tagKS_DATARANGE_VIDEO2
+{
+    KSDATARANGE                  DataRange;
+    BOOL                         bFixedSizeSamples;      // all samples same size?
+    BOOL                         bTemporalCompression;   // all I frames?
+    DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
+    DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
+    KS_VIDEOINFOHEADER2          VideoInfoHeader;        // default format
 } KS_DATARANGE_VIDEO2, *PKS_DATARANGE_VIDEO2;
 
-typedef struct tagKS_DATARANGE_MPEG1_VIDEO {
+typedef struct tagKS_DATARANGE_MPEG1_VIDEO
+{
     KSDATARANGE DataRange;
     BOOL bFixedSizeSamples; // all samples same size?
     BOOL bTemporalCompression; // all I frames?
@@ -3088,39 +3204,43 @@ typedef struct tagKS_DATARANGE_MPEG1_VIDEO {
     KS_MPEG1VIDEOINFO VideoInfoHeader; // default format
 } KS_DATARANGE_MPEG1_VIDEO, *PKS_DATARANGE_MPEG1_VIDEO;
 
-typedef struct tagKS_DATARANGE_MPEG2_VIDEO {
-   KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
-   KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_MPEGVIDEOINFO2            VideoInfoHeader;        // default format
+typedef struct tagKS_DATARANGE_MPEG2_VIDEO
+{
+    KSDATARANGE                  DataRange;
+    BOOL                         bFixedSizeSamples;      // all samples same size?
+    BOOL                         bTemporalCompression;   // all I frames?
+    DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
+    DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
+    KS_MPEGVIDEOINFO2            VideoInfoHeader;        // default format
 } KS_DATARANGE_MPEG2_VIDEO, *PKS_DATARANGE_MPEG2_VIDEO;
 
-typedef struct tagKS_DATARANGE_VIDEO_PALETTE {
-   KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
-   KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VIDEOINFO                 VideoInfo;              // default format
+typedef struct tagKS_DATARANGE_VIDEO_PALETTE
+{
+    KSDATARANGE                  DataRange;
+    BOOL                         bFixedSizeSamples;      // all samples same size?
+    BOOL                         bTemporalCompression;   // all I frames?
+    DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
+    DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
+    KS_VIDEOINFO                 VideoInfo;              // default format
 } KS_DATARANGE_VIDEO_PALETTE, *PKS_DATARANGE_VIDEO_PALETTE;
 
-typedef struct tagKS_DATARANGE_VIDEO_VBI {
-   KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
-   KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VBIINFOHEADER             VBIInfoHeader;          // default format
+typedef struct tagKS_DATARANGE_VIDEO_VBI
+{
+    KSDATARANGE                  DataRange;
+    BOOL                         bFixedSizeSamples;      // all samples same size?
+    BOOL                         bTemporalCompression;   // all I frames?
+    DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
+    DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
+    KS_VBIINFOHEADER             VBIInfoHeader;          // default format
 } KS_DATARANGE_VIDEO_VBI, *PKS_DATARANGE_VIDEO_VBI;
 
-typedef struct tagKS_DATARANGE_ANALOGVIDEO {
-   KSDATARANGE                  DataRange;
-   KS_ANALOGVIDEOINFO           AnalogVideoInfo;
+typedef struct tagKS_DATARANGE_ANALOGVIDEO
+{
+    KSDATARANGE                  DataRange;
+    KS_ANALOGVIDEOINFO           AnalogVideoInfo;
 } KS_DATARANGE_ANALOGVIDEO, *PKS_DATARANGE_ANALOGVIDEO;
 
 //===========================================================================
@@ -3154,11 +3274,13 @@ typedef struct tagKS_DATARANGE_ANALOGVIDEO {
 DEFINE_GUIDSTRUCT("F162C607-7B35-496f-AD7F-2DCA3B46B718", KSPROPSETID_VBICAP_PROPERTIES);
 #define KSPROPSETID_VBICAP_PROPERTIES DEFINE_GUIDNAMED(KSPROPSETID_VBICAP_PROPERTIES)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VBICAP_PROPERTIES_PROTECTION = 0x01,
 } KSPROPERTY_VBICAP;
 
-typedef struct _VBICAP_PROPERTIES_PROTECTION_S {
+typedef struct _VBICAP_PROPERTIES_PROTECTION_S
+{
     KSPROPERTY Property;
     ULONG      StreamIndex;                     // Index of stream
     ULONG      Status;
@@ -3230,7 +3352,8 @@ DEFINE_GUIDSTRUCT("E757BCA1-39AC-11d1-A9F5-00C04FBBDE8F", KSDATAFORMAT_SUBTYPE_N
 #define NABTS_PAYLOAD_PER_LINE          28
 #define NABTS_BYTES_PER_LINE            36
 
-typedef struct _NABTSFEC_BUFFER {
+typedef struct _NABTSFEC_BUFFER
+{
     ULONG       dataSize;
     USHORT      groupID;
     USHORT      Reserved;
@@ -3246,7 +3369,8 @@ typedef struct _NABTSFEC_BUFFER {
 DEFINE_GUIDSTRUCT("cafeb0ca-8715-11d0-bd6a-0035c0edbabe", KSPROPSETID_VBICodecFiltering);
 #define KSPROPSETID_VBICodecFiltering DEFINE_GUIDNAMED(KSPROPSETID_VBICodecFiltering)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VBICODECFILTERING_SCANLINES_REQUESTED_BIT_ARRAY = 0x01,
     KSPROPERTY_VBICODECFILTERING_SCANLINES_DISCOVERED_BIT_ARRAY,
     KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,
@@ -3254,15 +3378,18 @@ typedef enum {
     KSPROPERTY_VBICODECFILTERING_STATISTICS,
 } KSPROPERTY_VBICODECFILTERING;
 
-typedef struct _VBICODECFILTERING_SCANLINES {
+typedef struct _VBICODECFILTERING_SCANLINES
+{
     DWORD   DwordBitArray[32];      // An array of scanline bits 0..1024(32*32)
 } VBICODECFILTERING_SCANLINES, *PVBICODECFILTERING_SCANLINES;
 
-typedef struct _VBICODECFILTERING_NABTS_SUBSTREAMS {
+typedef struct _VBICODECFILTERING_NABTS_SUBSTREAMS
+{
     DWORD   SubstreamMask[128];   // An array of 4096 bits (one for each NABTS GroupID)
 } VBICODECFILTERING_NABTS_SUBSTREAMS, *PVBICODECFILTERING_NABTS_SUBSTREAMS;
 
-typedef struct _VBICODECFILTERING_CC_SUBSTREAMS {
+typedef struct _VBICODECFILTERING_CC_SUBSTREAMS
+{
     DWORD   SubstreamMask;        // An array of 32 bits (see KS_CC_SUBSTREAM *)
 } VBICODECFILTERING_CC_SUBSTREAMS, *PVBICODECFILTERING_CC_SUBSTREAMS;
 
@@ -3293,12 +3420,14 @@ typedef struct _VBICODECFILTERING_CC_SUBSTREAMS {
 ///////////////////////////////////////////////////////////////////
 
 #define CC_MAX_HW_DECODE_LINES 12
-typedef struct _CC_BYTE_PAIR {
+typedef struct _CC_BYTE_PAIR
+{
     BYTE        Decoded[2];
     USHORT      Reserved;
 } CC_BYTE_PAIR, *PCC_BYTE_PAIR;
 
-typedef struct _CC_HW_FIELD {
+typedef struct _CC_HW_FIELD
+{
     VBICODECFILTERING_SCANLINES  ScanlinesRequested;
     ULONG                        fieldFlags;    // KS_VBI_FLAG_FIELD1,2
     LONGLONG                     PictureNumber;
@@ -3313,13 +3442,15 @@ typedef struct _CC_HW_FIELD {
 #if !defined( PACK_PRAGMAS_NOT_SUPPORTED )
 #include <pshpack1.h>
 #endif
-typedef struct _NABTS_BUFFER_LINE {
+typedef struct _NABTS_BUFFER_LINE
+{
     BYTE                            Confidence;
     BYTE                            Bytes[NABTS_BYTES_PER_LINE];
 } NABTS_BUFFER_LINE, *PNABTS_BUFFER_LINE;
 
 #define NABTS_BUFFER_PICTURENUMBER_SUPPORT 1
-typedef struct _NABTS_BUFFER {
+typedef struct _NABTS_BUFFER
+{
     VBICODECFILTERING_SCANLINES     ScanlinesRequested;
     LONGLONG                        PictureNumber;
     NABTS_BUFFER_LINE               NabtsLines[MAX_NABTS_VBI_LINES_PER_FIELD];
@@ -3338,12 +3469,14 @@ typedef struct _NABTS_BUFFER {
 #define MAX_WST_VBI_LINES_PER_FIELD   17
 #define WST_BYTES_PER_LINE            42
 
-typedef struct _WST_BUFFER_LINE {
+typedef struct _WST_BUFFER_LINE
+{
     BYTE                            Confidence;
     BYTE                            Bytes[WST_BYTES_PER_LINE];
 } WST_BUFFER_LINE, *PWST_BUFFER_LINE;
 
-typedef struct _WST_BUFFER {
+typedef struct _WST_BUFFER
+{
     VBICODECFILTERING_SCANLINES        ScanlinesRequested;
     WST_BUFFER_LINE                    WstLines[MAX_WST_VBI_LINES_PER_FIELD];
 } WST_BUFFER, *PWST_BUFFER;
@@ -3352,7 +3485,8 @@ typedef struct _WST_BUFFER {
 // Common codec statistics
 //
 
-typedef struct _VBICODECFILTERING_STATISTICS_COMMON {
+typedef struct _VBICODECFILTERING_STATISTICS_COMMON
+{
     DWORD   InputSRBsProcessed;         // upstream SRBs received
     DWORD   OutputSRBsProcessed;        // downstream SRBs sent
     DWORD   SRBsIgnored;                // SRBs ignored due to no requests
@@ -3369,7 +3503,8 @@ typedef struct _VBICODECFILTERING_STATISTICS_COMMON {
     DWORD   BytesOutput;                // Bytes sent downstream
 } VBICODECFILTERING_STATISTICS_COMMON, *PVBICODECFILTERING_STATISTICS_COMMON;
 
-typedef struct _VBICODECFILTERING_STATISTICS_COMMON_PIN {
+typedef struct _VBICODECFILTERING_STATISTICS_COMMON_PIN
+{
     DWORD   SRBsProcessed;              // SRBs sent/received
     DWORD   SRBsIgnored;                // SRBs ignored due to filtering
     DWORD   SRBsMissing;                // SRBs not sent/received
@@ -3384,7 +3519,8 @@ typedef struct _VBICODECFILTERING_STATISTICS_COMMON_PIN {
 // Codec-specific statistics - NABTS
 //
 
-typedef struct _VBICODECFILTERING_STATISTICS_NABTS {
+typedef struct _VBICODECFILTERING_STATISTICS_NABTS
+{
     VBICODECFILTERING_STATISTICS_COMMON Common; // Generic VBI statistics
     DWORD   FECBundleBadLines;          // Un-FEC-correctable lines
     DWORD   FECQueueOverflows;          // Number of times FEC queue overflowed
@@ -3393,10 +3529,11 @@ typedef struct _VBICODECFILTERING_STATISTICS_NABTS {
     DWORD   BundlesProcessed;           // Bundles received from FEC
     DWORD   BundlesSent2IP;             // Bundles sent to IP driver
     DWORD   FilteredLines;              // Lines processed and then dropped
-                                        // because no one was interested
+    // because no one was interested
 } VBICODECFILTERING_STATISTICS_NABTS, *PVBICODECFILTERING_STATISTICS_NABTS;
 
-typedef struct _VBICODECFILTERING_STATISTICS_NABTS_PIN {
+typedef struct _VBICODECFILTERING_STATISTICS_NABTS_PIN
+{
     VBICODECFILTERING_STATISTICS_COMMON_PIN Common;// Generic VBI pin statistics
 } VBICODECFILTERING_STATISTICS_NABTS_PIN, *PVBICODECFILTERING_STATISTICS_NABTS_PIN;
 
@@ -3404,12 +3541,14 @@ typedef struct _VBICODECFILTERING_STATISTICS_NABTS_PIN {
 // Codec-specific statistics - Closed Caption
 //
 
-typedef struct _VBICODECFILTERING_STATISTICS_CC {
+typedef struct _VBICODECFILTERING_STATISTICS_CC
+{
     VBICODECFILTERING_STATISTICS_COMMON Common; // Generic VBI statistics
 } VBICODECFILTERING_STATISTICS_CC, *PVBICODECFILTERING_STATISTICS_CC;
 
 
-typedef struct _VBICODECFILTERING_STATISTICS_CC_PIN {
+typedef struct _VBICODECFILTERING_STATISTICS_CC_PIN
+{
     VBICODECFILTERING_STATISTICS_COMMON_PIN Common;// Generic VBI pin statistics
 } VBICODECFILTERING_STATISTICS_CC_PIN, *PVBICODECFILTERING_STATISTICS_CC_PIN;
 
@@ -3417,11 +3556,13 @@ typedef struct _VBICODECFILTERING_STATISTICS_CC_PIN {
 // Codec-specific statistics - Closed Caption
 //
 
-typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT {
+typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT
+{
     VBICODECFILTERING_STATISTICS_COMMON Common; // Generic VBI statistics
 } VBICODECFILTERING_STATISTICS_TELETEXT, *PVBICODECFILTERING_STATISTICS_TELETEXT;
 
-typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT_PIN {
+typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT_PIN
+{
     VBICODECFILTERING_STATISTICS_COMMON_PIN Common;// Generic VBI pin statistics
 } VBICODECFILTERING_STATISTICS_TELETEXT_PIN, *PVBICODECFILTERING_STATISTICS_TELETEXT_PIN;
 
@@ -3432,7 +3573,8 @@ typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT_PIN {
 // *** Most codecs support this property
 //    KSPROPERTY_VBICODECFILTERING_SCANLINES_REQUESTED_BIT_ARRAY
 //    KSPROPERTY_VBICODECFILTERING_SCANLINES_DISCOVERED_BIT_ARRAY,
-typedef struct {
+typedef struct
+{
     KSPROPERTY                          Property;
     VBICODECFILTERING_SCANLINES         Scanlines;
 } KSPROPERTY_VBICODECFILTERING_SCANLINES_S, *PKSPROPERTY_VBICODECFILTERING_SCANLINES_S;
@@ -3440,7 +3582,8 @@ typedef struct {
 // *** NABTS codecs support this property
 //    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,
 //    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY,
-typedef struct {
+typedef struct
+{
     KSPROPERTY                          Property;
     VBICODECFILTERING_NABTS_SUBSTREAMS  Substreams;
 } KSPROPERTY_VBICODECFILTERING_NABTS_SUBSTREAMS_S, *PKSPROPERTY_VBICODECFILTERING_NABTS_SUBSTREAMS_S;
@@ -3448,31 +3591,36 @@ typedef struct {
 // *** Closed captioning codecs support this property
 //    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,
 //    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY,
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_CC_SUBSTREAMS         Substreams;
 } KSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS_S, *PKSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS_S;
 
 // *** Most codecs support these versions of the global and pin properties
 //    KSPROPERTY_VBICODECFILTERING_STATISTICS
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_COMMON     Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_COMMON_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_COMMON_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_COMMON_PIN Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_COMMON_PIN_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_COMMON_PIN_S;
 
 // *** NABTS codecs support this version of the global and pin properties
 //    KSPROPERTY_VBICODECFILTERING_STATISTICS
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_NABTS      Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_NABTS_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_NABTS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_NABTS_PIN  Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_NABTS_PIN_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_NABTS_PIN_S;
@@ -3480,12 +3628,14 @@ typedef struct {
 // *** Closed captioning codecs support this version of the global and pin properties
 //    KSPROPERTY_VBICODECFILTERING_STATISTICS
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_CC         Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_CC_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_CC_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_CC_PIN     Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_CC_PIN_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_CC_PIN_S;
@@ -3581,7 +3731,8 @@ DEFINE_GUIDSTRUCT("FB6C428C-0353-11d1-905F-0000C0CC16BA", PINNAME_VIDEO_VIDEOPOR
 #define KS_VIDEO_FLAG_P_FRAME    0x0010L
 #define KS_VIDEO_FLAG_B_FRAME    0x0020L
 
-typedef struct tagKS_FRAME_INFO {
+typedef struct tagKS_FRAME_INFO
+{
     ULONG                   ExtendedHeaderSize; // Size of this extended header
     DWORD                   dwFrameFlags;       // Field1, Field2, or Frame
     LONGLONG                PictureNumber;
@@ -3612,7 +3763,8 @@ typedef struct tagKS_FRAME_INFO {
 #define KS_VBI_FLAG_TVTUNER_CHANGE       0x0010L // TvTunerChangeInfo is valid
 #define KS_VBI_FLAG_VBIINFOHEADER_CHANGE 0x0020L // VBIInfoHeader is valid
 
-typedef struct tagKS_VBI_FRAME_INFO {
+typedef struct tagKS_VBI_FRAME_INFO
+{
     ULONG                   ExtendedHeaderSize; // Size of this extended header
     DWORD                   dwFrameFlags;  // Field1, Field2, or Frame; & etc
     LONGLONG                PictureNumber; // Test only?
@@ -3659,7 +3811,7 @@ typedef enum
     KS_AnalogVideo_SECAM_L1 = 0x00080000,
 
     KS_AnalogVideo_PAL_N_COMBO
-                            = 0x00100000
+        = 0x00100000
 } KS_AnalogVideoStandard;
 
 #define KS_AnalogVideo_NTSC_Mask  0x00000007
@@ -3679,31 +3831,35 @@ typedef enum
     0x53171960, 0x148e, 0x11d2, 0x99, 0x79, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("53171960-148E-11d2-9979-0000C0CC16BA", PROPSETID_ALLOCATOR_CONTROL);
 #define PROPSETID_ALLOCATOR_CONTROL DEFINE_GUIDNAMED(PROPSETID_ALLOCATOR_CONTROL)
-typedef enum {
+typedef enum
+{
     KSPROPERTY_ALLOCATOR_CONTROL_HONOR_COUNT,      // R O (will allocate exactly this number of buffers)
     KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE,     // R O (return 2 DWORDs specifying surface size)
     // W I (informn a capture driver whether interleave capture is possible or
     //      not - a value of 1 means that interleaved capture is supported)
     KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS,
- 
+
     // R O (if value == 1, then the ovmixer will turn on the DDVP_INTERLEAVE
     //      flag thus allowing interleaved capture of the video)
     KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE,
 } KSPROPERTY_ALLOCATOR_CONTROL;
 
-typedef struct {
+typedef struct
+{
     //KSPROPERTY Property;
     ULONG	CX;
-	ULONG	CY;
-} KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE_S, *PKSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE_S; 
- 
-typedef struct {
+    ULONG	CY;
+} KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE_S, *PKSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE_S;
+
+typedef struct
+{
     //KSPROPERTY Property;
     ULONG	InterleavedCapSupported;
 } KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS_S, *PKSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS_S;
 
- 
-typedef struct {
+
+typedef struct
+{
     //KSPROPERTY Property;
     ULONG	InterleavedCapPossible;
 } KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE_S, *PKSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE_S;
@@ -3715,7 +3871,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("C6E13360-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_VIDEOPROCAMP);
 #define PROPSETID_VIDCAP_VIDEOPROCAMP DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOPROCAMP)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS,            // RW O
     KSPROPERTY_VIDEOPROCAMP_CONTRAST,              // RW O
     KSPROPERTY_VIDEOPROCAMP_HUE,                   // RW O
@@ -3728,7 +3885,8 @@ typedef enum {
     KSPROPERTY_VIDEOPROCAMP_GAIN,                  // RW O
 } KSPROPERTY_VIDCAP_VIDEOPROCAMP;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     LONG   Value;                       // Value to set or get
     ULONG  Flags;                       // KSPROPERTY_VIDEOPROCAMP_FLAGS_*
@@ -3745,7 +3903,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("6a2e0605-28e4-11d0-a18c-00a0c9118956", PROPSETID_TUNER);
 #define PROPSETID_TUNER DEFINE_GUIDNAMED(PROPSETID_TUNER)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_TUNER_CAPS,              // R  -overall device capabilities
     KSPROPERTY_TUNER_MODE_CAPS,         // R  -capabilities in this mode
     KSPROPERTY_TUNER_MODE,              // RW -set a mode (TV, FM, AM, DSS)
@@ -3756,7 +3915,8 @@ typedef enum {
     KSPROPERTY_TUNER_IF_MEDIUM          // R O-Medium for IF or Transport Pin
 } KSPROPERTY_TUNER;
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_TUNER_MODE_TV            = 0X0001,
     KSPROPERTY_TUNER_MODE_FM_RADIO      = 0X0002,
     KSPROPERTY_TUNER_MODE_AM_RADIO      = 0X0004,
@@ -3772,19 +3932,22 @@ typedef enum {
 // FINE:    (slow) do an exhaustive search for the best signal
 // COARSE:  (fast) use larger frequency jumps to just determine if any signal
 
-typedef enum {
+typedef enum
+{
     KS_TUNER_TUNING_EXACT = 1,        // No fine tuning
     KS_TUNER_TUNING_FINE,             // Fine grained search
     KS_TUNER_TUNING_COARSE,           // Coarse search
-}KS_TUNER_TUNING_FLAGS;
+} KS_TUNER_TUNING_FLAGS;
 
-typedef enum {
+typedef enum
+{
     KS_TUNER_STRATEGY_PLL             = 0X01, // Tune by PLL offset
     KS_TUNER_STRATEGY_SIGNAL_STRENGTH = 0X02, // Tune by signal strength
     KS_TUNER_STRATEGY_DRIVER_TUNES    = 0X04, // Driver does fine tuning
-}KS_TUNER_STRATEGY;
+} KS_TUNER_STRATEGY;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  ModesSupported;              // KS_PROPERTY_TUNER_MODES_*
     KSPIN_MEDIUM VideoMedium;           // GUID_NULL (no pin), or GUID
@@ -3792,12 +3955,14 @@ typedef struct {
     KSPIN_MEDIUM RadioAudioMedium;      // GUID_NULL (no pin), or GUID
 } KSPROPERTY_TUNER_CAPS_S, *PKSPROPERTY_TUNER_CAPS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     KSPIN_MEDIUM IFMedium;              // GUID_NULL (no pin), or GUID
 } KSPROPERTY_TUNER_IF_MEDIUM_S, *PKSPROPERTY_TUNER_IF_MEDIUM_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  Mode;                        // IN: KSPROPERTY_TUNER_MODE
     ULONG  StandardsSupported;          // KS_AnalogVideo_* (if TV or DSS)
@@ -3809,12 +3974,14 @@ typedef struct {
     ULONG  Strategy;                    // KS_TUNER_STRATEGY
 } KSPROPERTY_TUNER_MODE_CAPS_S, *PKSPROPERTY_TUNER_MODE_CAPS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  Mode;                        // IN: KSPROPERTY_TUNER_MODE
 } KSPROPERTY_TUNER_MODE_S, *PKSPROPERTY_TUNER_MODE_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  Frequency;                   // Hz
     ULONG  LastFrequency;               // Hz (last known good)
@@ -3825,17 +3992,20 @@ typedef struct {
     ULONG  Country;                     // VBI decoders
 } KSPROPERTY_TUNER_FREQUENCY_S, *PKSPROPERTY_TUNER_FREQUENCY_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  Standard;                    // KS_AnalogVideo_*
 } KSPROPERTY_TUNER_STANDARD_S, *PKSPROPERTY_TUNER_STANDARD_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  InputIndex;                  // 0 to (n-1) inputs
 } KSPROPERTY_TUNER_INPUT_S, *PKSPROPERTY_TUNER_INPUT_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  CurrentFrequency;            // Hz
     ULONG  PLLOffset;                   // if Strategy.KS_TUNER_STRATEGY_PLL
@@ -3848,7 +4018,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("6a2e0606-28e4-11d0-a18c-00a0c9118956", EVENTSETID_TUNER);
 #define EVENTSETID_TUNER DEFINE_GUIDNAMED(EVENTSETID_TUNER)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_TUNER_CHANGED
 } KSEVENT_TUNER;
 
@@ -3860,14 +4031,16 @@ typedef enum {
 DEFINE_GUIDSTRUCT("6a2e0610-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_VIDEOENCODER);
 #define PROPSETID_VIDCAP_VIDEOENCODER DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOENCODER)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VIDEOENCODER_CAPS,                       // R
     KSPROPERTY_VIDEOENCODER_STANDARD,                   // RW
     KSPROPERTY_VIDEOENCODER_COPYPROTECTION,             // RW O
     KSPROPERTY_VIDEOENCODER_CC_ENABLE,                  // RW O
 } KSPROPERTY_VIDCAP_VIDEOENCODER;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     LONG       Value;                   // value to get or set
     ULONG      Flags;                   //
@@ -3881,7 +4054,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("C6E13350-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_VIDEODECODER);
 #define PROPSETID_VIDCAP_VIDEODECODER DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEODECODER)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VIDEODECODER_CAPS,                       // R
     KSPROPERTY_VIDEODECODER_STANDARD,                   // RW
     KSPROPERTY_VIDEODECODER_STATUS,                     // R
@@ -3889,13 +4063,15 @@ typedef enum {
     KSPROPERTY_VIDEODECODER_VCR_TIMING,                 // RW O
 } KSPROPERTY_VIDCAP_VIDEODECODER;
 
-typedef enum {
+typedef enum
+{
     KS_VIDEODECODER_FLAGS_CAN_DISABLE_OUTPUT  = 0X0001, // VP Output can tri-stae
     KS_VIDEODECODER_FLAGS_CAN_USE_VCR_LOCKING = 0X0002, // VCR PLL timings
     KS_VIDEODECODER_FLAGS_CAN_INDICATE_LOCKED = 0X0004, // Can indicate valid signal
-}KS_VIDEODECODER_FLAGS;
+} KS_VIDEODECODER_FLAGS;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      StandardsSupported;      // KS_AnalogVideo_*
     ULONG      Capabilities;            // KS_VIDEODECODER_FLAGS_*
@@ -3903,13 +4079,15 @@ typedef struct {
     ULONG      HSyncPerVSync;           // Number of HSync Pulses per VSync
 } KSPROPERTY_VIDEODECODER_CAPS_S, *PKSPROPERTY_VIDEODECODER_CAPS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      NumberOfLines;           // 525 or 625 lines detected
     ULONG      SignalLocked;            // TRUE if signal is locked
 } KSPROPERTY_VIDEODECODER_STATUS_S, *PKSPROPERTY_VIDEODECODER_STATUS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      Value;                   // Get or set a value
 } KSPROPERTY_VIDEODECODER_S, *PKSPROPERTY_VIDEODECODER_S;
@@ -3919,7 +4097,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("6a2e0621-28e4-11d0-a18c-00a0c9118956", EVENTSETID_VIDEODECODER);
 #define EVENTSETID_VIDEODECODER DEFINE_GUIDNAMED(EVENTSETID_VIDEODECODER)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_VIDEODECODER_CHANGED
 } KSEVENT_VIDEODECODER;
 
@@ -3930,7 +4109,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("C6E13370-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_CAMERACONTROL);
 #define PROPSETID_VIDCAP_CAMERACONTROL DEFINE_GUIDNAMED(PROPSETID_VIDCAP_CAMERACONTROL)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_CAMERACONTROL_PAN,                       // RW O
     KSPROPERTY_CAMERACONTROL_TILT,                      // RW O
     KSPROPERTY_CAMERACONTROL_ROLL,                      // RW O
@@ -3940,7 +4120,8 @@ typedef enum {
     KSPROPERTY_CAMERACONTROL_FOCUS,                     // RW O
 } KSPROPERTY_VIDCAP_CAMERACONTROL;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     LONG       Value;                   // value to get or set
     ULONG      Flags;                   // KSPROPERTY_CAMERACONTROL_FLAGS_*
@@ -3960,7 +4141,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("B5730A90-1A2C-11cf-8C23-00AA006B6814", PROPSETID_EXT_DEVICE);
 #define PROPSETID_EXT_DEVICE DEFINE_GUIDNAMED(PROPSETID_EXT_DEVICE)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_EXTDEVICE_ID,                // R
     KSPROPERTY_EXTDEVICE_VERSION,           // R
     KSPROPERTY_EXTDEVICE_POWER_STATE,       // RW
@@ -3968,7 +4150,8 @@ typedef enum {
     KSPROPERTY_EXTDEVICE_CAPABILITIES,      // R
 } KSPROPERTY_EXTDEVICE;
 
-typedef struct tagDEVCAPS{
+typedef struct tagDEVCAPS
+{
     LONG CanRecord;
     LONG CanRecordStrobe;
     LONG HasAudio;
@@ -3991,12 +4174,14 @@ typedef struct tagDEVCAPS{
     LONG AudioIn;
     LONG Calibrate;
     LONG SeekType;
-    LONG SimulatedHardware;        
+    LONG SimulatedHardware;
 } DEVCAPS, *PDEVCAPS;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
-    union {
+    union
+    {
         DEVCAPS  Capabilities;          // Device capabilities
         ULONG    DevPort;               // 1394, USB, etc.
         ULONG    PowerState;            // On, standby or off
@@ -4012,8 +4197,9 @@ typedef struct {
 DEFINE_GUIDSTRUCT("A03CD5F0-3045-11cf-8C44-00AA006B6814", PROPSETID_EXT_TRANSPORT);
 #define PROPSETID_EXT_TRANSPORT DEFINE_GUIDNAMED(PROPSETID_EXT_TRANSPORT)
 
-typedef enum {
-    KSPROPERTY_EXTXPORT_CAPABILITIES,       // (R)  Transport specific capability 
+typedef enum
+{
+    KSPROPERTY_EXTXPORT_CAPABILITIES,       // (R)  Transport specific capability
     KSPROPERTY_EXTXPORT_INPUT_SIGNAL_MODE,  // (RW) Input signal: e.g. dvsd/NTSC/PAL, dvsl/NTSC/PAL, MPEG2-TS etc
     KSPROPERTY_EXTXPORT_OUTPUT_SIGNAL_MODE, // (RW) Output signal: e.g. dvsd/NTSC/PAL, dvsl/NTSC/PAL, MPEG2-TS etc
     KSPROPERTY_EXTXPORT_LOAD_MEDIUM,        // (RW) Eject, open tray, close tray
@@ -4026,7 +4212,8 @@ typedef enum {
     KSPROPERTY_RAW_AVC_CMD,                 // (RW) Issue a raw AVC commnad
 } KSPROPERTY_EXTXPORT;
 
-typedef struct tagTRANSPORTSTATUS{
+typedef struct tagTRANSPORTSTATUS
+{
     LONG Mode;
     LONG LastError;
     LONG RecordInhibit;
@@ -4042,7 +4229,8 @@ typedef struct tagTRANSPORTSTATUS{
     LONG NotifyOn;
 } TRANSPORTSTATUS, *PTRANSPORTSTATUS;
 
-typedef struct tagTRANSPORTBASICPARMS{
+typedef struct tagTRANSPORTBASICPARMS
+{
     LONG TimeFormat;
     LONG TimeReference;
     LONG Superimpose;
@@ -4075,12 +4263,14 @@ typedef struct tagTRANSPORTBASICPARMS{
     LONG TimerStopTime;
 } TRANSPORTBASICPARMS, *PTRANSPORTBASICPARMS;
 
-typedef struct tagTRANSPORTVIDEOPARMS{
+typedef struct tagTRANSPORTVIDEOPARMS
+{
     LONG OutputMode;
     LONG Input;
 } TRANSPORTVIDEOPARMS, *PTRANSPORTVIDEOPARMS;
 
-typedef struct tagTRANSPORTAUDIOPARMS{
+typedef struct tagTRANSPORTAUDIOPARMS
+{
     LONG EnableOutput;
     LONG EnableRecord;
     LONG EnableSelsync;
@@ -4088,39 +4278,45 @@ typedef struct tagTRANSPORTAUDIOPARMS{
     LONG MonitorSource;
 } TRANSPORTAUDIOPARMS, *PTRANSPORTAUDIOPARMS;
 
-typedef struct {
-    BOOL  MediaPresent;      
-    ULONG MediaType;         
-    BOOL  RecordInhibit;    
+typedef struct
+{
+    BOOL  MediaPresent;
+    ULONG MediaType;
+    BOOL  RecordInhibit;
 } MEDIUM_INFO, *PMEDIUM_INFO;
 
-typedef struct {
-    ULONG Mode;              
+typedef struct
+{
+    ULONG Mode;
     ULONG State;
 } TRANSPORT_STATE, *PTRANSPORT_STATE;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
-    union {    
+    union
+    {
         ULONG      Capabilities;
         ULONG      SignalMode;
         ULONG      LoadMedium;
         MEDIUM_INFO MediumInfo;
         TRANSPORT_STATE XPrtState;
-        struct {
-          BYTE frame;        
-          BYTE second;
-          BYTE minute;
-          BYTE hour;
+        struct
+        {
+            BYTE frame;
+            BYTE second;
+            BYTE minute;
+            BYTE hour;
         } Timecode;
-        DWORD dwTimecode;            
-        DWORD dwAbsTrackNumber;      
-        struct {
+        DWORD dwTimecode;
+        DWORD dwAbsTrackNumber;
+        struct
+        {
             ULONG   PayloadSize;
-            BYTE    Payload[512];  
-        } RawAVC;                    
+            BYTE    Payload[512];
+        } RawAVC;
     } u;
-     
+
 } KSPROPERTY_EXTXPORT_S, *PKSPROPERTY_EXTXPORT_S;
 
 //===========================================================================
@@ -4130,7 +4326,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("9B496CE1-811B-11cf-8C77-00AA006B6814", PROPSETID_TIMECODE_READER);
 #define PROPSETID_TIMECODE_READER DEFINE_GUIDNAMED(PROPSETID_TIMECODE_READER)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_TIMECODE_READER,  // (R) Timecode for the current tape position
     KSPROPERTY_ATN_READER,       // (R) Absolute track number for the current tape position
     KSPROPERTY_RTC_READER,       // (R) Relative time counter for the current tape position
@@ -4138,17 +4335,20 @@ typedef enum {
 
 #ifndef TIMECODE_DEFINED
 #define TIMECODE_DEFINED
-typedef union _timecode {
-    struct {
+typedef union _timecode
+{
+    struct
+    {
         WORD   wFrameRate;
         WORD   wFrameFract;
         DWORD  dwFrames;
-        };
+    };
     DWORDLONG  qw;
 } TIMECODE;
 typedef TIMECODE *PTIMECODE;
 
-typedef struct tagTIMECODE_SAMPLE {
+typedef struct tagTIMECODE_SAMPLE
+{
     LONGLONG qwTick;
     TIMECODE timecode;
     DWORD dwUser;
@@ -4159,7 +4359,8 @@ typedef TIMECODE_SAMPLE *PTIMECODE_SAMPLE;
 
 #endif /* TIMECODE_DEFINED */
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     TIMECODE_SAMPLE TimecodeSamp;
 } KSPROPERTY_TIMECODE_S, *PKSPROPERTY_TIMECODE_S;
@@ -4172,8 +4373,9 @@ typedef struct {
 DEFINE_GUIDSTRUCT("109c7988-b3cb-11d2-b48e-006097b3391b", KSEVENTSETID_EXTDEV_Command);
 #define KSEVENTSETID_EXTDEV_Command DEFINE_GUIDNAMED(KSEVENTSETID_EXTDEV_Command)
 
-typedef enum {
-    KSEVENT_EXTDEV_COMMAND_NOTIFY_INTERIM_READY,     // Final response is ready for notify command 
+typedef enum
+{
+    KSEVENT_EXTDEV_COMMAND_NOTIFY_INTERIM_READY,     // Final response is ready for notify command
     KSEVENT_EXTDEV_COMMAND_CONTROL_INTERIM_READY,    // Final response is ready for control command.
     KSEVENT_EXTDEV_COMMAND_BUSRESET,                 // A bus reset has occured.
     KSEVENT_EXTDEV_TIMECODE_UPDATE,                  // Timecode has changed.
@@ -4191,20 +4393,23 @@ typedef enum {
 DEFINE_GUIDSTRUCT("6a2e0640-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_CROSSBAR);
 #define PROPSETID_VIDCAP_CROSSBAR DEFINE_GUIDNAMED(PROPSETID_VIDCAP_CROSSBAR)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_CROSSBAR_CAPS,                     // R
     KSPROPERTY_CROSSBAR_PININFO,                  // R
     KSPROPERTY_CROSSBAR_CAN_ROUTE,                // R
     KSPROPERTY_CROSSBAR_ROUTE,                    // RW
 } KSPROPERTY_VIDCAP_CROSSBAR;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  NumberOfInputs;      // the number of audio and video input pins
     ULONG  NumberOfOutputs;     // the number of audio and video output pins
 } KSPROPERTY_CROSSBAR_CAPS_S, *PKSPROPERTY_CROSSBAR_CAPS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     KSPIN_DATAFLOW Direction;     // KSPIN_DATAFLOW_IN or KSPIN_DATAFLOW_OUT?
     ULONG  Index;                 // Which pin to return data for?
@@ -4213,7 +4418,8 @@ typedef struct {
     KSPIN_MEDIUM  Medium;         // Identifies the hardware connection
 } KSPROPERTY_CROSSBAR_PININFO_S, *PKSPROPERTY_CROSSBAR_PININFO_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG  IndexInputPin;        // Zero based index of the input pin
     ULONG  IndexOutputPin;       // Zero based index of the output pin
@@ -4225,12 +4431,14 @@ typedef struct {
 DEFINE_GUIDSTRUCT("6a2e0641-28e4-11d0-a18c-00a0c9118956", EVENTSETID_CROSSBAR);
 #define EVENTSETID_CROSSBAR DEFINE_GUIDNAMED(EVENTSETID_CROSSBAR)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_CROSSBAR_CHANGED
 } KSEVENT_CROSSBAR;
 
 // The following IDs should match the AM equivalents
-typedef enum {
+typedef enum
+{
     KS_PhysConn_Video_Tuner = 1,
     KS_PhysConn_Video_Composite,
     KS_PhysConn_Video_SVideo,
@@ -4266,7 +4474,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("6a2e0650-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_TVAUDIO);
 #define PROPSETID_VIDCAP_TVAUDIO DEFINE_GUIDNAMED(PROPSETID_VIDCAP_TVAUDIO)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_TVAUDIO_CAPS,                            // R
     KSPROPERTY_TVAUDIO_MODE,                            // RW
     KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES        // R
@@ -4278,14 +4487,16 @@ typedef enum {
 #define KS_TVAUDIO_MODE_LANG_B         0x0020          // 2nd avail language
 #define KS_TVAUDIO_MODE_LANG_C         0x0040          // 3rd avail language
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      Capabilities;             // Bitmask of KS_TVAUDIO_MODE_*
     KSPIN_MEDIUM InputMedium;
     KSPIN_MEDIUM OutputMedium;
 } KSPROPERTY_TVAUDIO_CAPS_S, *PKSPROPERTY_TVAUDIO_CAPS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      Mode;                     // KS_TVAUDIO_MODE_*
 } KSPROPERTY_TVAUDIO_S, *PKSPROPERTY_TVAUDIO_S;
@@ -4296,7 +4507,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("6a2e0651-28e4-11d0-a18c-00a0c9118956", KSEVENTSETID_VIDCAP_TVAUDIO);
 #define KSEVENTSETID_VIDCAP_TVAUDIO DEFINE_GUIDNAMED(KSEVENTSETID_VIDCAP_TVAUDIO)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_TVAUDIO_CHANGED,
 } KSEVENT_TVAUDIO;
 
@@ -4306,7 +4518,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("C6E13343-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_VIDEOCOMPRESSION);
 #define PROPSETID_VIDCAP_VIDEOCOMPRESSION DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOCOMPRESSION)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VIDEOCOMPRESSION_GETINFO,              // R
     KSPROPERTY_VIDEOCOMPRESSION_KEYFRAME_RATE,        // RW
     KSPROPERTY_VIDEOCOMPRESSION_PFRAMES_PER_KEYFRAME, // RW
@@ -4316,7 +4529,8 @@ typedef enum {
     KSPROPERTY_VIDEOCOMPRESSION_WINDOWSIZE,           // RW
 } KSPROPERTY_VIDCAP_VIDEOCOMPRESSION;
 
-typedef enum {
+typedef enum
+{
     KS_CompressionCaps_CanQuality = 1,
     KS_CompressionCaps_CanCrunch = 2,
     KS_CompressionCaps_CanKeyFrame = 4,
@@ -4324,7 +4538,8 @@ typedef enum {
     KS_CompressionCaps_CanWindow = 0x10,
 } KS_CompressionCaps;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     // Note, no VersionString!
     // Note, no DescriptionString!
@@ -4336,7 +4551,8 @@ typedef struct {
     LONG       Capabilities;            // KS_CompressionCaps_*
 } KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S, *PKSPROPERTY_VIDEOCOMPRESSION_GETINFO_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      StreamIndex;             // zero based index of stream
     LONG       Value;                   // value to get or set
@@ -4354,7 +4570,8 @@ DEFINE_GUIDSTRUCT("e436eb7f-524f-11ce-9f53-0020af0ba770", KSDATAFORMAT_SUBTYPE_O
 DEFINE_GUIDSTRUCT("490EA5CF-7681-11D1-A21C-00A0C9223196", KSPROPSETID_OverlayUpdate);
 #define KSPROPSETID_OverlayUpdate DEFINE_GUIDNAMED(KSPROPSETID_OverlayUpdate)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_OVERLAYUPDATE_INTERESTS,
     KSPROPERTY_OVERLAYUPDATE_CLIPLIST = 0x1,
     KSPROPERTY_OVERLAYUPDATE_PALETTE = 0x2,
@@ -4364,7 +4581,8 @@ typedef enum {
     KSPROPERTY_OVERLAYUPDATE_COLORREF = 0x10000000
 } KSPROPERTY_OVERLAYUPDATE;
 
-typedef struct {
+typedef struct
+{
     ULONG   PelsWidth;
     ULONG   PelsHeight;
     ULONG   BitsPerPel;
@@ -4439,14 +4657,16 @@ typedef struct {
 DEFINE_GUIDSTRUCT("6a2e0670-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_VIDEOCONTROL);
 #define PROPSETID_VIDCAP_VIDEOCONTROL DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOCONTROL)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VIDEOCONTROL_CAPS,               // R
     KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE,  // R O
     KSPROPERTY_VIDEOCONTROL_FRAME_RATES,        // R O
     KSPROPERTY_VIDEOCONTROL_MODE,               // RWO
 } KSPROPERTY_VIDCAP_VIDEOCONTROL;
 
-typedef enum {
+typedef enum
+{
     KS_VideoControlFlag_FlipHorizontal        = 0x0001,
     KS_VideoControlFlag_FlipVertical          = 0x0002,
     KS_Obsolete_VideoControlFlag_ExternalTriggerEnable = 0x0010,    // ***WARNING *** Flag msimatch with DSHOW.
@@ -4455,19 +4675,22 @@ typedef enum {
     KS_VideoControlFlag_Trigger                      = 0x0008,
 } KS_VideoControlFlags;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      StreamIndex;
     ULONG      VideoControlCaps;                // KS_VideoControlFlags_*
 } KSPROPERTY_VIDEOCONTROL_CAPS_S, *PKSPROPERTY_VIDEOCONTROL_CAPS_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      StreamIndex;
     LONG       Mode;                            // KS_VideoControlFlags_*
 } KSPROPERTY_VIDEOCONTROL_MODE_S, *PKSPROPERTY_VIDEOCONTROL_MODE_S;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      StreamIndex;                     // Index of stream
     ULONG      RangeIndex;                      // Index of range
@@ -4477,7 +4700,8 @@ typedef struct {
 } KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S, *PKSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S;
 
 // KSPROPERTY_VIDEOCONTROL_FRAME_RATES returns a list of available frame rates in 100 nS units
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     ULONG      StreamIndex;                     // Index of stream
     ULONG      RangeIndex;                      // Index of range
@@ -4490,11 +4714,13 @@ typedef struct {
 DEFINE_GUIDSTRUCT("C6E13344-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_DROPPEDFRAMES);
 #define PROPSETID_VIDCAP_DROPPEDFRAMES DEFINE_GUIDNAMED(PROPSETID_VIDCAP_DROPPEDFRAMES)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_DROPPEDFRAMES_CURRENT            // R
 } KSPROPERTY_VIDCAP_DROPPEDFRAMES;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY Property;
     LONGLONG   PictureNumber;                   // Current Picture Number
     LONGLONG   DropCount;                       // Count of frames dropped
@@ -4516,7 +4742,8 @@ DEFINE_GUIDSTRUCT("ec529b00-1a1f-11d1-bad9-00609744111a", KSPROPSETID_VPVBIConfi
 
 // Both of the above property sets use the same list of properties below
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_VPCONFIG_NUMCONNECTINFO,
     KSPROPERTY_VPCONFIG_GETCONNECTINFO,
     KSPROPERTY_VPCONFIG_SETCONNECTINFO,
@@ -4546,18 +4773,21 @@ DEFINE_GUIDSTRUCT("b9f8ac3e-0f71-11d2-b72c-00c04fb6bd3d", CLSID_KsIBasicAudioInt
 
 #if defined(__IVPType__)
 
-typedef struct {
+typedef struct
+{
     AMVPSIZE    Size;
     DWORD       MaxPixelsPerSecond;
     DWORD       Reserved;
 } KSVPMAXPIXELRATE, *PKSVPMAXPIXELRATE;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY      Property;
     AMVPSIZE        Size;
 } KSVPSIZE_PROP, *PKSVPSIZE_PROP;
 
-typedef struct {
+typedef struct
+{
     DWORD   dwPitch;
     DWORD   dwXOrigin;
     DWORD   dwYOrigin;
@@ -4584,32 +4814,32 @@ typedef struct _DDPIXELFORMAT
     DWORD       dwFourCC;               // (FOURCC code)
     union
     {
-    DWORD   dwRGBBitCount;          // how many bits per pixel (BD_1,2,4,8,16,24,32)
-    DWORD   dwYUVBitCount;          // how many bits per pixel (BD_4,8,16,24,32)
-    DWORD   dwZBufferBitDepth;      // how many bits for z buffers (BD_8,16,24,32)
-    DWORD   dwAlphaBitDepth;        // how many bits for alpha channels (BD_1,2,4,8)
+        DWORD   dwRGBBitCount;          // how many bits per pixel (BD_1,2,4,8,16,24,32)
+        DWORD   dwYUVBitCount;          // how many bits per pixel (BD_4,8,16,24,32)
+        DWORD   dwZBufferBitDepth;      // how many bits for z buffers (BD_8,16,24,32)
+        DWORD   dwAlphaBitDepth;        // how many bits for alpha channels (BD_1,2,4,8)
     };
     union
     {
-    DWORD   dwRBitMask;             // mask for red bit
-    DWORD   dwYBitMask;             // mask for Y bits
+        DWORD   dwRBitMask;             // mask for red bit
+        DWORD   dwYBitMask;             // mask for Y bits
     };
     union
     {
-    DWORD   dwGBitMask;             // mask for green bits
-    DWORD   dwUBitMask;             // mask for U bits
+        DWORD   dwGBitMask;             // mask for green bits
+        DWORD   dwUBitMask;             // mask for U bits
     };
     union
     {
-    DWORD   dwBBitMask;             // mask for blue bits
-    DWORD   dwVBitMask;             // mask for V bits
+        DWORD   dwBBitMask;             // mask for blue bits
+        DWORD   dwVBitMask;             // mask for V bits
     };
     union
     {
-    DWORD   dwRGBAlphaBitMask;      // mask for alpha channel
-    DWORD   dwYUVAlphaBitMask;      // mask for alpha channel
-    DWORD   dwRGBZBitMask;          // mask for Z channel
-    DWORD   dwYUVZBitMask;          // mask for Z channel
+        DWORD   dwRGBAlphaBitMask;      // mask for alpha channel
+        DWORD   dwYUVAlphaBitMask;      // mask for alpha channel
+        DWORD   dwRGBZBitMask;          // mask for Z channel
+        DWORD   dwYUVZBitMask;          // mask for Z channel
     };
 } DDPIXELFORMAT, * LPDDPIXELFORMAT;
 
@@ -4625,7 +4855,8 @@ typedef struct _DDPIXELFORMAT
 
 #if !defined(__DVP_INCLUDED__)
 
-typedef struct _DDVIDEOPORTCONNECT {
+typedef struct _DDVIDEOPORTCONNECT
+{
     DWORD dwSize;           // size of the DDVIDEOPORTCONNECT structure
     DWORD dwPortWidth;      // Width of the video port
     GUID  guidTypeID;       // Description of video port connection
@@ -4711,18 +4942,21 @@ typedef struct tagKS_AMVPSIZE   // AMVPSIZE
 // End of VPType.h header info
 //==========================================================================
 
-typedef struct {
+typedef struct
+{
     KS_AMVPSIZE     Size;
     DWORD           MaxPixelsPerSecond;
     DWORD           Reserved;
 } KSVPMAXPIXELRATE, *PKSVPMAXPIXELRATE;
 
-typedef struct {
+typedef struct
+{
     KSPROPERTY      Property;
     KS_AMVPSIZE     Size;
 } KSVPSIZE_PROP, *PKSVPSIZE_PROP;
 
-typedef struct {
+typedef struct
+{
     DWORD   dwPitch;
     DWORD   dwXOrigin;
     DWORD   dwYOrigin;
@@ -4738,7 +4972,8 @@ typedef struct {
 DEFINE_GUIDSTRUCT("20c5598e-d3c8-11d0-8dfc-00c04fd7c08b", KSEVENTSETID_VPNotify);
 #define KSEVENTSETID_VPNotify DEFINE_GUIDNAMED(KSEVENTSETID_VPNotify)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_VPNOTIFY_FORMATCHANGE,
 } KSEVENT_VPNOTIFY;
 
@@ -4750,7 +4985,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("DB47DE20-F628-11d1-BA41-00A0C90D2B05", KSEVENTSETID_VIDCAPTOSTI);
 #define KSEVENTSETID_VIDCAPNotify DEFINE_GUIDNAMED(KSEVENTSETID_VIDCAPTOSTI)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_VIDCAPTOSTI_EXT_TRIGGER,
 } KSEVENT_VIDCAPTOSTI;
 
@@ -4763,7 +4999,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("ec529b01-1a1f-11d1-bad9-00609744111a", KSEVENTSETID_VPVBINotify);
 #define KSEVENTSETID_VPVBINotify DEFINE_GUIDNAMED(KSEVENTSETID_VPVBINotify)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_VPVBINOTIFY_FORMATCHANGE,
 } KSEVENT_VPVBINOTIFY;
 
@@ -4787,7 +5024,8 @@ DEFINE_GUIDSTRUCT("6e8d4a22-310c-11d0-b79a-00aa003767a7", KSDATAFORMAT_SUBTYPE_L
 DEFINE_GUIDSTRUCT("6e8d4a23-310c-11d0-b79a-00aa003767a7", KSDATAFORMAT_SUBTYPE_Line21_GOPPacket);
 #define KSDATAFORMAT_SUBTYPE_Line21_GOPPacket DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_Line21_GOPPacket)
 
-typedef struct _KSGOP_USERDATA {
+typedef struct _KSGOP_USERDATA
+{
     ULONG sc;
     ULONG reserved1;
     BYTE cFields;
@@ -4817,14 +5055,16 @@ DEFINE_GUIDSTRUCT("ed0b916a-044d-11d1-aa78-00c04fc31d60", KSDATAFORMAT_TYPE_DVD_
 
 DEFINE_GUIDSTRUCT("A503C5C0-1D1D-11D1-AD80-444553540000", KSPROPSETID_TSRateChange);
 #define KSPROPSETID_TSRateChange DEFINE_GUIDNAMED(KSPROPSETID_TSRateChange)
-typedef enum {
+typedef enum
+{
     KS_AM_RATE_SimpleRateChange=1,  // rw, use KS_AM_SimpleRateChange
     KS_AM_RATE_ExactRateChange=2,   // rw, use KS_AM_ExactRateChange
     KS_AM_RATE_MaxFullDataRate=3,   // r, use KS_AM_MaxFullDataRate
     KS_AM_RATE_Step=4               // w, use KS_AM_Step
 } KS_AM_PROPERTY_TS_RATE_CHANGE;
 
-typedef struct {
+typedef struct
+{
     // this is the simplest mechanism to set a time stamp rate change on
     // a filter (simplest for the person setting the rate change, harder
     // for the filter doing the rate change).
@@ -4832,7 +5072,8 @@ typedef struct {
     LONG        Rate;       //new rate * 10000 (decimal)
 } KS_AM_SimpleRateChange, *PKS_AM_SimpleRateChange;
 
-typedef struct {
+typedef struct
+{
     REFERENCE_TIME  OutputZeroTime; //input TS that maps to zero output TS
     LONG        Rate;       //new rate * 10000 (decimal)
 } KS_AM_ExactRateChange, *PKS_AM_ExactRateChange;
@@ -4899,12 +5140,12 @@ DEFINE_GUIDSTRUCT("6A577E92-83E1-4113-ADC2-4FCEC32F83A1", CODECAPI_ALLSETTINGS )
 #define CODECAPI_ALLSETTINGS DEFINE_GUIDNAMED(CODECAPI_ALLSETTINGS )
 
 #define STATIC_CODECAPI_SUPPORTSEVENTS \
-    0x0581af97, 0x7693, 0x4dbd, 0x9d, 0xca, 0x3f, 0x9e, 0xbd, 0x65, 0x85, 0xa1 
+    0x0581af97, 0x7693, 0x4dbd, 0x9d, 0xca, 0x3f, 0x9e, 0xbd, 0x65, 0x85, 0xa1
 DEFINE_GUIDSTRUCT("0581AF97-7693-4DBD-9DCA-3F9EBD6585A1", CODECAPI_SUPPORTSEVENTS );
 #define CODECAPI_SUPPORTSEVENTS DEFINE_GUIDNAMED(CODECAPI_SUPPORTSEVENTS )
 
 #define STATIC_CODECAPI_CURRENTCHANGELIST \
-    0x1cb14e83, 0x7d72, 0x4657, 0x83, 0xfd, 0x47, 0xa2, 0xc5, 0xb9, 0xd1, 0x3d 
+    0x1cb14e83, 0x7d72, 0x4657, 0x83, 0xfd, 0x47, 0xa2, 0xc5, 0xb9, 0xd1, 0x3d
 DEFINE_GUIDSTRUCT("1CB14E83-7D72-4657-83FD-47A2C5B9D13D", CODECAPI_CURRENTCHANGELIST );
 #define CODECAPI_CURRENTCHANGELIST DEFINE_GUIDNAMED(CODECAPI_CURRENTCHANGELIST )
 
@@ -4913,7 +5154,8 @@ DEFINE_GUIDSTRUCT("1CB14E83-7D72-4657-83FD-47A2C5B9D13D", CODECAPI_CURRENTCHANGE
 #ifndef __ENCODER_API_DEFINES__
 #define __ENCODER_API_DEFINES__
 
-typedef enum {
+typedef enum
+{
 
     //
     // Bit rate used for encoding is constant
@@ -4922,15 +5164,15 @@ typedef enum {
 
     //
     // Bit rate used for encoding is variable with the specified bitrate used
-    // as a guaranteed average over a specified window.  The default window 
+    // as a guaranteed average over a specified window.  The default window
     // size is considered to be 5 minutes.
     //
     VariableBitRateAverage,
 
     //
     // Bit rate used for encoding is variable with the specified bitrate used
-    // as an average with a peak not to exceed the specified peak bitrate over 
-    // a specified window.  The default window size is considered to be 500ms 
+    // as an average with a peak not to exceed the specified peak bitrate over
+    // a specified window.  The default window size is considered to be 500ms
     // (classically one GOP).
     //
     VariableBitRatePeak

@@ -29,9 +29,9 @@
 #else
 #include <process.h>
 typedef unsigned (__stdcall *PTHREAD_START) (void *);
-#define chBEGINTHREADEX(psa, cbStack, pfnStartAddr, pvParam, fdwCreate, pdwThreadID) ((HANDLE) _beginthreadex( (void *) (psa), (unsigned) (cbStack), (PTHREAD_START) (pfnStartAddr), (void *) (pvParam), (unsigned) (fdwCreate), (unsigned *) (pdwThreadID))) 
+#define chBEGINTHREADEX(psa, cbStack, pfnStartAddr, pvParam, fdwCreate, pdwThreadID) ((HANDLE) _beginthreadex( (void *) (psa), (unsigned) (cbStack), (PTHREAD_START) (pfnStartAddr), (void *) (pvParam), (unsigned) (fdwCreate), (unsigned *) (pdwThreadID)))
 #endif // UNDER_CE
- 
+
 #ifdef _WIN64
 #define SI_HEXVAL TEXT("0x%x")
 #else
@@ -56,7 +56,7 @@ typedef unsigned (__stdcall *PTHREAD_START) (void *);
 #define SI_REFRESH_TIMER                1
 
 // Message type IDs
-#define SI_MSGID_PLAYERINFO     0xDD01             
+#define SI_MSGID_PLAYERINFO     0xDD01
 #define SI_MSGID_GROUPINFO      0xDD02
 
 #define SI_ASYNC_CONTEXT        ((VOID*)0xDD00)
@@ -96,7 +96,7 @@ class CSIPlayer
 public:
     // Constructors/Destructors
     CSIPlayer( DPNID dpnid );
-    
+
     // Member variables
     DPNID id;              // Unique DPNID value
     BOOL  bIsHost;         // Host flag
@@ -118,10 +118,13 @@ public:
     // Constructors/Destructors
     CSIGroup( DPNID dpnid );
     ~CSIGroup();
-   
+
     HRESULT AddMember( DPNID id );
     HRESULT RemoveMember( DPNID id );
-    BOOL    IsMember( DPNID id ) { return pMembers->Contains( &id ); }
+    BOOL    IsMember( DPNID id )
+    {
+        return pMembers->Contains( &id );
+    }
 
     // Member variables
     DPNID       id;                  // Unique DPNID value
@@ -144,14 +147,26 @@ public:
     ~CMessageList();
 
     // Accessor methods
-    DWORD   GetNumOfMessages() { return m_dwNumMessages; }
-    BOOL    IsFull() { return m_dwNumMessages == SI_MAX_MESSAGES; }
+    DWORD   GetNumOfMessages()
+    {
+        return m_dwNumMessages;
+    }
+    BOOL    IsFull()
+    {
+        return m_dwNumMessages == SI_MAX_MESSAGES;
+    }
     TCHAR*  GetMessage( DWORD dwMessageNum );
     TCHAR*  AddMessage( TCHAR* strMessage );
 
     // Critical section access
-    VOID Lock() { EnterCriticalSection( &m_csLock ); }
-    VOID Unlock() { LeaveCriticalSection( &m_csLock ); }
+    VOID Lock()
+    {
+        EnterCriticalSection( &m_csLock );
+    }
+    VOID Unlock()
+    {
+        LeaveCriticalSection( &m_csLock );
+    }
 
 private:
     DWORD m_dwStartIndex;   // Starting index in the circular array
@@ -180,7 +195,7 @@ public:
 
     // DirectPlay message handler
     BOOL    MessageHandler( DWORD dwMessageId, PVOID pMsgBuffer );
-    
+
     // Dialog display
     HRESULT ShowDialog( HWND hParent );
 
@@ -188,7 +203,7 @@ private:
     // Private initialization
     VOID    Initialize();
     HRESULT InitializeLocalPlayer( DPNID idLocal );
-    
+
     // Accessor methods
     CSIPlayer* FindPlayer( DPNID id );
     CSIGroup*  FindGroup( DPNID id );
@@ -208,49 +223,61 @@ private:
     HRESULT OnDpInfoChange( DPNID dpnid );
 
     // Network communication methods
-    HRESULT SendPlayerInfoToAll( DPNID idPlayer ) { return SendPlayerInfoToPlayer( idPlayer, DPNID_ALL_PLAYERS_GROUP ); }
+    HRESULT SendPlayerInfoToAll( DPNID idPlayer )
+    {
+        return SendPlayerInfoToPlayer( idPlayer, DPNID_ALL_PLAYERS_GROUP );
+    }
     HRESULT SendPlayerInfoToPlayer( DPNID idPlayer, DPNID idTarget );
-    
-    HRESULT SendGroupInfoToAll( DPNID idGroup ) { return SendGroupInfoToPlayer( idGroup, DPNID_ALL_PLAYERS_GROUP ); }
+
+    HRESULT SendGroupInfoToAll( DPNID idGroup )
+    {
+        return SendGroupInfoToPlayer( idGroup, DPNID_ALL_PLAYERS_GROUP );
+    }
     HRESULT SendGroupInfoToPlayer( DPNID idGroup, DPNID idTarget );
 
     HRESULT SynchronizeWithPlayer( DPNID idPlayer );
 
     HRESULT RefreshPlayerInfo( DPNID idPlayer );
     HRESULT RefreshGroupInfo( DPNID idGroup );
-    
+
     // DirectPlay helper functions
     HRESULT GetDpPlayerInfo( DPNID dpnid, DPN_PLAYER_INFO** ppPlayerInfo );
     HRESULT GetDpGroupInfo( DPNID dpnid, DPN_GROUP_INFO** ppGroupInfo );
     HRESULT GetDpAppDesc( DPN_APPLICATION_DESC** ppAppDesc );
-    
+
     // Message pump and dialog procedures
     static  INT_PTR CALLBACK StaticDlgProcMain( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static  INT_PTR CALLBACK StaticDlgProcPlayers( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static  INT_PTR CALLBACK StaticDlgProcMessages( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    
+
     static  DWORD WINAPI StaticDialogThread( void* pvRef );
-     
+
     INT_PTR CALLBACK DlgProcMain( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
     INT_PTR CALLBACK DlgProcPlayers( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
     INT_PTR CALLBACK DlgProcMessages( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
     // Dialog UI methods
     VOID    PaintDialog( HWND hDlg );
-    
+
     HRESULT DisplayPlayer( DPNID idPlayer, HWND hDlg );
     HRESULT DisplayGroup( DPNID idGroup, HWND hDlg );
-    
+
     HRESULT PrintPlayerInfo( HWND hWndEdit, CSIPlayer* pPlayer );
     HRESULT PrintGroupInfo( HWND hWndEdit, CSIGroup* pGroup );
 
     // Thread synchronization
-    VOID    Lock() { EnterCriticalSection( &m_csLock ); }
-    VOID    Unlock() { LeaveCriticalSection( &m_csLock ); }
+    VOID    Lock()
+    {
+        EnterCriticalSection( &m_csLock );
+    }
+    VOID    Unlock()
+    {
+        LeaveCriticalSection( &m_csLock );
+    }
 
     // Helper functions
     static  HRESULT SelectListboxItem( HWND hListBox, DWORD dwData, const TCHAR* strItem );
-    static  VOID    SafeDestroyThread( LPHANDLE phThread );  
+    static  VOID    SafeDestroyThread( LPHANDLE phThread );
 
     // Private member variables
     CArrayList*        m_pPlayers;    // List of players
@@ -258,7 +285,7 @@ private:
 
     CMessageList m_DPlayMessages;     // List of received DirectPlay message strings
     CMessageList m_AppMessages;       // List of received Application messages
- 
+
     IDirectPlay8Peer*   m_pPeer;      // Interface for peers
     IDirectPlay8Client* m_pClient;    // Interface for clients
     IDirectPlay8Server* m_pServer;    // Interface for servers
@@ -267,11 +294,11 @@ private:
 
     DPNID  m_dpnidLocal;              // DPNID for local player
     DPNID  m_dpnidHost;               // DPNID for host player
-    
+
     HWND   m_hDlg;                    // Dialog window handle
     BOOL   m_bDlgValid;               // Invalid flag
     HANDLE m_hDlgThread;              // Thread handle
-    
+
     HWND   m_hDlgParent;              // Parent window handle
     HWND   m_hDlgPlayers;             // Players window handle
     HWND   m_hDlgMessages;            // Messages window handle

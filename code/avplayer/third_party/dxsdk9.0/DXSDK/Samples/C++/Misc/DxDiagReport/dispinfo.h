@@ -6,12 +6,12 @@
 #ifndef DISPINFO_H
 #define DISPINFO_H
 
-struct DxDiag_DXVA_DeinterlaceCaps 
+struct DxDiag_DXVA_DeinterlaceCaps
 {
-    TCHAR szD3DInputFormat[100];    
-    TCHAR szD3DOutputFormat[100];    
-    TCHAR szGuid[100];    
-    TCHAR szCaps[100];    
+    TCHAR szD3DInputFormat[100];
+    TCHAR szD3DOutputFormat[100];
+    TCHAR szGuid[100];
+    TCHAR szCaps[100];
     DWORD dwNumPreviousOutputFrames;
     DWORD dwNumForwardRefSamples;
     DWORD dwNumBackwardRefSamples;
@@ -72,7 +72,7 @@ struct DisplayInfo
     TCHAR m_szRevisionId[50];
     DWORD m_dwWHQLLevel;
     TCHAR m_szDeviceIdentifier[100];
-    TCHAR m_szDriverSignDate[50]; 
+    TCHAR m_szDriverSignDate[50];
 
     BOOL m_bNoHardware;
     BOOL m_bDDAccelerationEnabled;
@@ -80,21 +80,21 @@ struct DisplayInfo
     BOOL m_b3DAccelerationEnabled;
     BOOL m_bAGPEnabled;
     BOOL m_bAGPExists;
-    BOOL m_bAGPExistenceValid; 
+    BOOL m_bAGPExistenceValid;
 
     TCHAR m_szDXVAModes[100];
 
     vector<DxDiag_DXVA_DeinterlaceCaps*> m_vDXVACaps;
-    
-    TCHAR m_szDDStatusLocalized[100]; 
-    TCHAR m_szDDStatusEnglish[100]; 
-    TCHAR m_szD3DStatusLocalized[100]; 
-    TCHAR m_szD3DStatusEnglish[100]; 
-    TCHAR m_szAGPStatusLocalized[100]; 
-    TCHAR m_szAGPStatusEnglish[100]; 
 
-    TCHAR m_szNotesLocalized[3000]; 
-    TCHAR m_szNotesEnglish[3000]; 
+    TCHAR m_szDDStatusLocalized[100];
+    TCHAR m_szDDStatusEnglish[100];
+    TCHAR m_szD3DStatusLocalized[100];
+    TCHAR m_szD3DStatusEnglish[100];
+    TCHAR m_szAGPStatusLocalized[100];
+    TCHAR m_szAGPStatusEnglish[100];
+
+    TCHAR m_szNotesLocalized[3000];
+    TCHAR m_szNotesEnglish[3000];
     TCHAR m_szRegHelpText[3000];
 
     TCHAR m_szTestResultDDLocalized[3000];

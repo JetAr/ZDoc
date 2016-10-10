@@ -34,7 +34,7 @@ HRESULT App_Render( LPDIRECT3DDEVICE7 pd3dDevice );
 //
 //	Implementation of Direct3D background of the video window
 //----------------------------------------------------------------------------
-class CSparkle 
+class CSparkle
 {
 
 private:
@@ -43,10 +43,10 @@ private:
     LPDIRECTDRAW7               m_lpDDObj;
 
 public:
- 
-    CSparkle(LPDIRECTDRAW7 lpDDObj) : 
+
+    CSparkle(LPDIRECTDRAW7 lpDDObj) :
         m_lpDDObj(lpDDObj), m_pD3DHelper(NULL), m_lpRenderTarget(NULL) {}
-    
+
     HRESULT InitializeSparkle()
     {
         HRESULT hr = S_OK;
@@ -75,13 +75,16 @@ public:
         // out of video memory. (A more sophisticated app should handle this.)
         //
         hr = m_lpDDObj->CreateSurface(&ddsd, &m_lpRenderTarget, NULL);
-        if (hr != DD_OK) {
+        if (hr != DD_OK)
+        {
             return hr;
         }
 
         m_pD3DHelper = new CD3DHelper(m_lpRenderTarget, &hr);
-        if (!m_pD3DHelper || FAILED(hr)) {
-            if (!m_pD3DHelper) {
+        if (!m_pD3DHelper || FAILED(hr))
+        {
+            if (!m_pD3DHelper)
+            {
                 hr = E_OUTOFMEMORY;
             }
             return hr;
@@ -105,7 +108,7 @@ public:
         //Render the scene
         if (FAILED(App_Render( m_pD3DHelper->GetD3DDevice())))
             return E_FAIL;
-        
+
         return S_OK;
     }
 
@@ -118,4 +121,4 @@ public:
     {
         return m_lpRenderTarget;
     }
-};   
+};

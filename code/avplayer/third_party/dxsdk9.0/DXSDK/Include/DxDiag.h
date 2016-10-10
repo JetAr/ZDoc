@@ -40,7 +40,7 @@ extern "C" {
 
 // {A65B8071-3BFE-4213-9A5B-491DA4461CA7}
 DEFINE_GUID(CLSID_DxDiagProvider,
-0xA65B8071, 0x3BFE, 0x4213, 0x9A, 0x5B, 0x49, 0x1D, 0xA4, 0x46, 0x1C, 0xA7);
+            0xA65B8071, 0x3BFE, 0x4213, 0x9A, 0x5B, 0x49, 0x1D, 0xA4, 0x46, 0x1C, 0xA7);
 
 
 /****************************************************************************
@@ -51,11 +51,11 @@ DEFINE_GUID(CLSID_DxDiagProvider,
 
 // {9C6B4CB0-23F8-49CC-A3ED-45A55000A6D2}
 DEFINE_GUID(IID_IDxDiagProvider,
-0x9C6B4CB0, 0x23F8, 0x49CC, 0xA3, 0xED, 0x45, 0xA5, 0x50, 0x00, 0xA6, 0xD2);
+            0x9C6B4CB0, 0x23F8, 0x49CC, 0xA3, 0xED, 0x45, 0xA5, 0x50, 0x00, 0xA6, 0xD2);
 
 // {0x7D0F462F-0x4064-0x4862-BC7F-933E5058C10F}
 DEFINE_GUID(IID_IDxDiagContainer,
-0x7D0F462F, 0x4064, 0x4862, 0xBC, 0x7F, 0x93, 0x3E, 0x50, 0x58, 0xC1, 0x0F);
+            0x7D0F462F, 0x4064, 0x4862, 0xBC, 0x7F, 0x93, 0x3E, 0x50, 0x58, 0xC1, 0x0F);
 
 
 /****************************************************************************
@@ -77,13 +77,13 @@ typedef struct IDxDiagContainer *LPDXDIAGCONTAINER, *PDXDIAGCONTAINER;
 
 typedef struct _DXDIAG_INIT_PARAMS
 {
-    DWORD   dwSize;                 // Size of this structure. 
-    DWORD   dwDxDiagHeaderVersion;  // Pass in DXDIAG_DX9_SDK_VERSION.  This verifies 
-                                    // the header and dll are correctly matched.
-    BOOL    bAllowWHQLChecks;       // If true, allow dxdiag to check if drivers are 
-                                    // digital signed as logo'd by WHQL which may 
-                                    // connect via internet to update WHQL certificates.
-    VOID*   pReserved;              // Reserved. Must be NULL. 
+    DWORD   dwSize;                 // Size of this structure.
+    DWORD   dwDxDiagHeaderVersion;  // Pass in DXDIAG_DX9_SDK_VERSION.  This verifies
+    // the header and dll are correctly matched.
+    BOOL    bAllowWHQLChecks;       // If true, allow dxdiag to check if drivers are
+    // digital signed as logo'd by WHQL which may
+    // connect via internet to update WHQL certificates.
+    VOID*   pReserved;              // Reserved. Must be NULL.
 } DXDIAG_INIT_PARAMS;
 
 
@@ -104,9 +104,9 @@ DECLARE_INTERFACE_(IDxDiagProvider,IUnknown)
     STDMETHOD(QueryInterface)               (THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)                (THIS) PURE;
     STDMETHOD_(ULONG,Release)               (THIS) PURE;
-    
+
     /*** IDxDiagProvider methods ***/
-    STDMETHOD(Initialize)                   (THIS_ DXDIAG_INIT_PARAMS* pParams) PURE; 
+    STDMETHOD(Initialize)                   (THIS_ DXDIAG_INIT_PARAMS* pParams) PURE;
     STDMETHOD(GetRootContainer)             (THIS_ IDxDiagContainer **ppInstance) PURE;
 };
 
@@ -122,11 +122,11 @@ DECLARE_INTERFACE_(IDxDiagContainer,IUnknown)
     STDMETHOD(QueryInterface)               (THIS_ REFIID riid, LPVOID *ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)                (THIS) PURE;
     STDMETHOD_(ULONG,Release)               (THIS) PURE;
-    
+
     /*** IDxDiagContainer methods ***/
     STDMETHOD(GetNumberOfChildContainers)   (THIS_ DWORD *pdwCount) PURE;
     STDMETHOD(EnumChildContainerNames)      (THIS_ DWORD dwIndex, LPWSTR pwszContainer, DWORD cchContainer) PURE;
-    STDMETHOD(GetChildContainer)            (THIS_ LPCWSTR pwszContainer, IDxDiagContainer **ppInstance) PURE;  
+    STDMETHOD(GetChildContainer)            (THIS_ LPCWSTR pwszContainer, IDxDiagContainer **ppInstance) PURE;
     STDMETHOD(GetNumberOfProps)             (THIS_ DWORD *pdwCount) PURE;
     STDMETHOD(EnumPropNames)                (THIS_ DWORD dwIndex, LPWSTR pwszPropName, DWORD cchPropName) PURE;
     STDMETHOD(GetProp)                      (THIS_ LPCWSTR pwszPropName, VARIANT *pvarProp) PURE;

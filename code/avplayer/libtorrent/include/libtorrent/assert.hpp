@@ -56,7 +56,7 @@ TORRENT_EXPORT void print_backtrace(char* out, int len, int max_depth = 0);
 #endif
 
 TORRENT_EXPORT void assert_fail(const char* expr, int line, char const* file
-	, char const* function, char const* val);
+                                , char const* function, char const* val);
 
 #define TORRENT_ASSERT(x) do { if (x) {} else assert_fail(#x, __LINE__, __FILE__, __PRETTY_FUNCTION__, 0); } while (false)
 #if TORRENT_USE_IOSTREAM

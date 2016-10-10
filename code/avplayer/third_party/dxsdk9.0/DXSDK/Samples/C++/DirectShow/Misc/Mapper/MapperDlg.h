@@ -75,11 +75,11 @@ class CMapperDlg : public CDialog
 {
 // Construction
 public:
-	CMapperDlg(CWnd* pParent = NULL);	// standard constructor
+    CMapperDlg(CWnd* pParent = NULL);	// standard constructor
 
     void FillMajorTypes(CListBox& m_List);
     void FillSubType(CListBox& m_List, CListBox& m_ListMinor);
-    void EnableSecondTypePair(CListBox& m_ListMajor, 
+    void EnableSecondTypePair(CListBox& m_ListMajor,
                               CListBox& m_ListMajor2, CListBox& m_ListMinor2);
     void SetDefaults();
 
@@ -95,60 +95,60 @@ public:
 
 
 // Dialog Data
-	//{{AFX_DATA(CMapperDlg)
-	enum { IDD = IDD_MAPPER_DIALOG };
-	CButton	m_bSearch;
-	CButton	m_bClear;
-	CStatic	m_StrNumFilters;
-	CButton	m_bIsRenderer;
-	CButton	m_bAtLeastOneOutputPin;
-	CButton	m_bAtLeastOneInputPin;
-	CButton	m_bExactMatch;
-	CListBox	m_ListOutputMinor2;
-	CListBox	m_ListOutputMinor;
-	CListBox	m_ListOutputMajor2;
-	CListBox	m_ListOutputMajor;
-	CListBox	m_ListInputMinor2;
-	CListBox	m_ListInputMinor;
-	CListBox	m_ListInputMajor2;
-	CListBox	m_ListInputMajor;
-	CComboBox	m_ComboMerit;
-	CComboBox	m_ComboOutputCat;
-	CComboBox	m_ComboInputCat;
-	CListBox	m_ListFilters;
-	//}}AFX_DATA
+    //{{AFX_DATA(CMapperDlg)
+    enum { IDD = IDD_MAPPER_DIALOG };
+    CButton	m_bSearch;
+    CButton	m_bClear;
+    CStatic	m_StrNumFilters;
+    CButton	m_bIsRenderer;
+    CButton	m_bAtLeastOneOutputPin;
+    CButton	m_bAtLeastOneInputPin;
+    CButton	m_bExactMatch;
+    CListBox	m_ListOutputMinor2;
+    CListBox	m_ListOutputMinor;
+    CListBox	m_ListOutputMajor2;
+    CListBox	m_ListOutputMajor;
+    CListBox	m_ListInputMinor2;
+    CListBox	m_ListInputMinor;
+    CListBox	m_ListInputMajor2;
+    CListBox	m_ListInputMajor;
+    CComboBox	m_ComboMerit;
+    CComboBox	m_ComboOutputCat;
+    CComboBox	m_ComboInputCat;
+    CListBox	m_ListFilters;
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMapperDlg)
-	public:
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CMapperDlg)
+public:
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	HICON m_hIcon;
+    HICON m_hIcon;
 
     IFilterMapper2 *m_pMapper;
     CToolTipCtrl   *m_pToolTip;
 
-	// Generated message map functions
-	//{{AFX_MSG(CMapperDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnClose();
-	afx_msg void OnDestroy();
-	afx_msg void OnButtonSearch();
-	afx_msg void OnSelchangeListInputMajor();
-	afx_msg void OnSelchangeListOutputMajor();
-	afx_msg void OnSelchangeListInputMajor2();
-	afx_msg void OnSelchangeListOutputMajor2();
-	afx_msg void OnButtonClear();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CMapperDlg)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+    afx_msg void OnPaint();
+    afx_msg HCURSOR OnQueryDragIcon();
+    afx_msg void OnClose();
+    afx_msg void OnDestroy();
+    afx_msg void OnButtonSearch();
+    afx_msg void OnSelchangeListInputMajor();
+    afx_msg void OnSelchangeListOutputMajor();
+    afx_msg void OnSelchangeListInputMajor2();
+    afx_msg void OnSelchangeListOutputMajor2();
+    afx_msg void OnButtonClear();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

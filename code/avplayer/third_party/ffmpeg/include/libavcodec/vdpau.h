@@ -68,7 +68,8 @@
  * picture parameter, bitstream information etc which are passed
  * between the FFmpeg decoder and its clients.
  */
-struct vdpau_render_state {
+struct vdpau_render_state
+{
     VdpVideoSurface surface; ///< Used as rendered surface, never changed.
 
     int state; ///< Holds FF_VDPAU_STATE_* values.
@@ -81,7 +82,8 @@ struct vdpau_render_state {
     VdpBitstreamBuffer *bitstream_buffers;
 
     /** picture parameter information for all supported codecs */
-    union VdpPictureInfo {
+    union VdpPictureInfo
+    {
         VdpPictureInfoH264        h264;
         VdpPictureInfoMPEG1Or2    mpeg;
         VdpPictureInfoVC1          vc1;

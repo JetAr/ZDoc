@@ -25,7 +25,8 @@
 #include "avfilter.h"
 #include "libavutil/log.h"
 
-typedef struct AVFilterGraph {
+typedef struct AVFilterGraph
+{
     const AVClass *av_class;
     unsigned filter_count;
     AVFilterContext **filters;
@@ -95,7 +96,8 @@ int avfilter_graph_create_filter(AVFilterContext **filt_ctx, AVFilter *filt,
  */
 void avfilter_graph_set_auto_convert(AVFilterGraph *graph, unsigned flags);
 
-enum {
+enum
+{
     AVFILTER_AUTO_CONVERT_ALL  =  0, /**< all automatic conversions enabled */
     AVFILTER_AUTO_CONVERT_NONE = -1, /**< all automatic conversions disabled */
 };
@@ -124,7 +126,8 @@ void avfilter_graph_free(AVFilterGraph **graph);
  * This struct specifies, per each not connected pad contained in the graph, the
  * filter context and the pad index required for establishing a link.
  */
-typedef struct AVFilterInOut {
+typedef struct AVFilterInOut
+{
     /** unique name for this input/output in the list */
     char *name;
 

@@ -10,7 +10,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -99,7 +99,7 @@ extern "C" {
 #define ASN1_ITEM_start(itname) \
 	const ASN1_ITEM * itname##_it(void) \
 	{ \
-		static const ASN1_ITEM local_it = { 
+		static const ASN1_ITEM local_it = {
 
 #define ASN1_ITEM_end(itname) \
 		}; \
@@ -112,7 +112,7 @@ extern "C" {
 /* Macros to aid ASN1 template writing */
 
 #define ASN1_ITEM_TEMPLATE(tname) \
-	static const ASN1_TEMPLATE tname##_item_tt 
+	static const ASN1_TEMPLATE tname##_item_tt
 
 #define ASN1_ITEM_TEMPLATE_END(tname) \
 	;\
@@ -128,7 +128,7 @@ extern "C" {
 
 
 /* This is a ASN1 type which just embeds a template */
- 
+
 /* This pair helps declare a SEQUENCE. We can do:
  *
  * 	ASN1_SEQUENCE(stname) = {
@@ -150,7 +150,7 @@ extern "C" {
  */
 
 #define ASN1_SEQUENCE(tname) \
-	static const ASN1_TEMPLATE tname##_seq_tt[] 
+	static const ASN1_TEMPLATE tname##_seq_tt[]
 
 #define ASN1_SEQUENCE_END(stname) ASN1_SEQUENCE_END_name(stname, stname)
 
@@ -247,14 +247,14 @@ extern "C" {
  *			ASN1_SOMEOTHER *opt2;
  *		} value;
  *	} chname;
- *	
+ *
  *	the name of the selector must be 'type'.
  * 	to use an alternative selector name use the
  *      ASN1_CHOICE_END_selector() version.
  */
 
 #define ASN1_CHOICE(tname) \
-	static const ASN1_TEMPLATE tname##_ch_tt[] 
+	static const ASN1_TEMPLATE tname##_ch_tt[]
 
 #define ASN1_CHOICE_cb(tname, cb) \
 	static const ASN1_AUX tname##_aux = {NULL, 0, 0, 0, cb, 0}; \
@@ -394,7 +394,7 @@ extern "C" {
 /* Macros for the ASN1_ADB structure */
 
 #define ASN1_ADB(name) \
-	static const ASN1_ADB_TABLE name##_adbtbl[] 
+	static const ASN1_ADB_TABLE name##_adbtbl[]
 
 #ifndef OPENSSL_EXPORT_VAR_AS_FUNCTION
 
@@ -435,7 +435,7 @@ extern "C" {
 #define ADB_ENTRY(val, template) {val, template}
 
 #define ASN1_ADB_TEMPLATE(name) \
-	static const ASN1_TEMPLATE name##_tt 
+	static const ASN1_TEMPLATE name##_tt
 
 /* This is the ASN1 template structure that defines
  * a wrapper round the actual type. It determines the
@@ -443,14 +443,15 @@ extern "C" {
  * various flags such as OPTIONAL and the field name.
  */
 
-struct ASN1_TEMPLATE_st {
-unsigned long flags;		/* Various flags */
-long tag;			/* tag, not used if no tagging */
-unsigned long offset;		/* Offset of this field in structure */
+struct ASN1_TEMPLATE_st
+{
+    unsigned long flags;		/* Various flags */
+    long tag;			/* tag, not used if no tagging */
+    unsigned long offset;		/* Offset of this field in structure */
 #ifndef NO_ASN1_FIELD_NAMES
-const char *field_name;		/* Field name */
+    const char *field_name;		/* Field name */
 #endif
-ASN1_ITEM_EXP *item;		/* Relevant ASN1_ITEM or ASN1_ADB */
+    ASN1_ITEM_EXP *item;		/* Relevant ASN1_ITEM or ASN1_ADB */
 };
 
 /* Macro to extract ASN1_ITEM and ASN1_ADB pointer from ASN1_TEMPLATE */
@@ -461,19 +462,21 @@ ASN1_ITEM_EXP *item;		/* Relevant ASN1_ITEM or ASN1_ADB */
 typedef struct ASN1_ADB_TABLE_st ASN1_ADB_TABLE;
 typedef struct ASN1_ADB_st ASN1_ADB;
 
-struct ASN1_ADB_st {
-	unsigned long flags;	/* Various flags */
-	unsigned long offset;	/* Offset of selector field */
-	STACK_OF(ASN1_ADB_TABLE) **app_items; /* Application defined items */
-	const ASN1_ADB_TABLE *tbl;	/* Table of possible types */
-	long tblcount;		/* Number of entries in tbl */
-	const ASN1_TEMPLATE *default_tt;  /* Type to use if no match */
-	const ASN1_TEMPLATE *null_tt;  /* Type to use if selector is NULL */
+struct ASN1_ADB_st
+{
+    unsigned long flags;	/* Various flags */
+    unsigned long offset;	/* Offset of selector field */
+    STACK_OF(ASN1_ADB_TABLE) **app_items; /* Application defined items */
+    const ASN1_ADB_TABLE *tbl;	/* Table of possible types */
+    long tblcount;		/* Number of entries in tbl */
+    const ASN1_TEMPLATE *default_tt;  /* Type to use if no match */
+    const ASN1_TEMPLATE *null_tt;  /* Type to use if selector is NULL */
 };
 
-struct ASN1_ADB_TABLE_st {
-	long value;		/* NID for an object or value for an int */
-	const ASN1_TEMPLATE tt;		/* item for this value */
+struct ASN1_ADB_TABLE_st
+{
+    long value;		/* NID for an object or value for an int */
+    const ASN1_TEMPLATE tt;		/* item for this value */
 };
 
 /* template flags */
@@ -519,17 +522,17 @@ struct ASN1_ADB_TABLE_st {
 
 /* If tagging is in force these determine the
  * type of tag to use. Otherwise the tag is
- * determined by the underlying type. These 
+ * determined by the underlying type. These
  * values reflect the actual octet format.
  */
 
-/* Universal tag */ 
+/* Universal tag */
 #define ASN1_TFLG_UNIVERSAL	(0x0<<6)
-/* Application tag */ 
+/* Application tag */
 #define ASN1_TFLG_APPLICATION	(0x1<<6)
-/* Context specific tag */ 
+/* Context specific tag */
 #define ASN1_TFLG_CONTEXT	(0x2<<6)
-/* Private tag */ 
+/* Private tag */
 #define ASN1_TFLG_PRIVATE	(0x3<<6)
 
 #define ASN1_TFLG_TAG_CLASS	(0x3<<6)
@@ -565,15 +568,16 @@ struct ASN1_ADB_TABLE_st {
 
 /* This is the actual ASN1 item itself */
 
-struct ASN1_ITEM_st {
-char itype;			/* The item type, primitive, SEQUENCE, CHOICE or extern */
-long utype;			/* underlying type */
-const ASN1_TEMPLATE *templates;	/* If SEQUENCE or CHOICE this contains the contents */
-long tcount;			/* Number of templates if SEQUENCE or CHOICE */
-const void *funcs;		/* functions that handle this type */
-long size;			/* Structure size (usually)*/
+struct ASN1_ITEM_st
+{
+    char itype;			/* The item type, primitive, SEQUENCE, CHOICE or extern */
+    long utype;			/* underlying type */
+    const ASN1_TEMPLATE *templates;	/* If SEQUENCE or CHOICE this contains the contents */
+    long tcount;			/* Number of templates if SEQUENCE or CHOICE */
+    const void *funcs;		/* functions that handle this type */
+    long size;			/* Structure size (usually)*/
 #ifndef NO_ASN1_FIELD_NAMES
-const char *sname;		/* Structure name */
+    const char *sname;		/* Structure name */
 #endif
 };
 
@@ -583,7 +587,7 @@ const char *sname;		/* Structure name */
  * For PRIMITIVE types the underlying type
  * determines the behaviour if items is NULL.
  *
- * Otherwise templates must contain a single 
+ * Otherwise templates must contain a single
  * template and the type is treated in the
  * same way as the type specified in the template.
  *
@@ -597,7 +601,7 @@ const char *sname;		/* Structure name */
  * selector.
  *
  * The 'funcs' field is used for application
- * specific functions. 
+ * specific functions.
  *
  * For COMPAT types the funcs field gives a
  * set of functions that handle this type, this
@@ -640,13 +644,14 @@ const char *sname;		/* Structure name */
  * like CHOICE
  */
 
-struct ASN1_TLC_st{
-	char valid;	/* Values below are valid */
-	int ret;	/* return value */
-	long plen;	/* length */
-	int ptag;	/* class value */
-	int pclass;	/* class value */
-	int hdrlen;	/* header length */
+struct ASN1_TLC_st
+{
+    char valid;	/* Values below are valid */
+    int ret;	/* return value */
+    long plen;	/* length */
+    int ptag;	/* class value */
+    int pclass;	/* class value */
+    int hdrlen;	/* header length */
 };
 
 /* Typedefs for ASN1 function pointers */
@@ -657,46 +662,49 @@ typedef ASN1_VALUE * ASN1_d2i_func(ASN1_VALUE **a, const unsigned char ** in, lo
 typedef int ASN1_i2d_func(ASN1_VALUE * a, unsigned char **in);
 
 typedef int ASN1_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len, const ASN1_ITEM *it,
-					int tag, int aclass, char opt, ASN1_TLC *ctx);
+                        int tag, int aclass, char opt, ASN1_TLC *ctx);
 
 typedef int ASN1_ex_i2d(ASN1_VALUE **pval, unsigned char **out, const ASN1_ITEM *it, int tag, int aclass);
 typedef int ASN1_ex_new_func(ASN1_VALUE **pval, const ASN1_ITEM *it);
 typedef void ASN1_ex_free_func(ASN1_VALUE **pval, const ASN1_ITEM *it);
 
-typedef int ASN1_ex_print_func(BIO *out, ASN1_VALUE **pval, 
-						int indent, const char *fname, 
-						const ASN1_PCTX *pctx);
+typedef int ASN1_ex_print_func(BIO *out, ASN1_VALUE **pval,
+                               int indent, const char *fname,
+                               const ASN1_PCTX *pctx);
 
 typedef int ASN1_primitive_i2c(ASN1_VALUE **pval, unsigned char *cont, int *putype, const ASN1_ITEM *it);
 typedef int ASN1_primitive_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len, int utype, char *free_cont, const ASN1_ITEM *it);
 typedef int ASN1_primitive_print(BIO *out, ASN1_VALUE **pval, const ASN1_ITEM *it, int indent, const ASN1_PCTX *pctx);
 
-typedef struct ASN1_COMPAT_FUNCS_st {
-	ASN1_new_func *asn1_new;
-	ASN1_free_func *asn1_free;
-	ASN1_d2i_func *asn1_d2i;
-	ASN1_i2d_func *asn1_i2d;
+typedef struct ASN1_COMPAT_FUNCS_st
+{
+    ASN1_new_func *asn1_new;
+    ASN1_free_func *asn1_free;
+    ASN1_d2i_func *asn1_d2i;
+    ASN1_i2d_func *asn1_i2d;
 } ASN1_COMPAT_FUNCS;
 
-typedef struct ASN1_EXTERN_FUNCS_st {
-	void *app_data;
-	ASN1_ex_new_func *asn1_ex_new;
-	ASN1_ex_free_func *asn1_ex_free;
-	ASN1_ex_free_func *asn1_ex_clear;
-	ASN1_ex_d2i *asn1_ex_d2i;
-	ASN1_ex_i2d *asn1_ex_i2d;
-	ASN1_ex_print_func *asn1_ex_print;
+typedef struct ASN1_EXTERN_FUNCS_st
+{
+    void *app_data;
+    ASN1_ex_new_func *asn1_ex_new;
+    ASN1_ex_free_func *asn1_ex_free;
+    ASN1_ex_free_func *asn1_ex_clear;
+    ASN1_ex_d2i *asn1_ex_d2i;
+    ASN1_ex_i2d *asn1_ex_i2d;
+    ASN1_ex_print_func *asn1_ex_print;
 } ASN1_EXTERN_FUNCS;
 
-typedef struct ASN1_PRIMITIVE_FUNCS_st {
-	void *app_data;
-	unsigned long flags;
-	ASN1_ex_new_func *prim_new;
-	ASN1_ex_free_func *prim_free;
-	ASN1_ex_free_func *prim_clear;
-	ASN1_primitive_c2i *prim_c2i;
-	ASN1_primitive_i2c *prim_i2c;
-	ASN1_primitive_print *prim_print;
+typedef struct ASN1_PRIMITIVE_FUNCS_st
+{
+    void *app_data;
+    unsigned long flags;
+    ASN1_ex_new_func *prim_new;
+    ASN1_ex_free_func *prim_free;
+    ASN1_ex_free_func *prim_clear;
+    ASN1_primitive_c2i *prim_c2i;
+    ASN1_primitive_i2c *prim_i2c;
+    ASN1_primitive_print *prim_print;
 } ASN1_PRIMITIVE_FUNCS;
 
 /* This is the ASN1_AUX structure: it handles various
@@ -709,7 +717,7 @@ typedef struct ASN1_PRIMITIVE_FUNCS_st {
  * used. This is most useful where the supplied routines
  * *almost* do the right thing but need some extra help
  * at a few points. If the callback returns zero then
- * it is assumed a fatal error has occurred and the 
+ * it is assumed a fatal error has occurred and the
  * main operation should be abandoned.
  *
  * If major changes in the default behaviour are required
@@ -717,32 +725,35 @@ typedef struct ASN1_PRIMITIVE_FUNCS_st {
  */
 
 typedef int ASN1_aux_cb(int operation, ASN1_VALUE **in, const ASN1_ITEM *it,
-				void *exarg);
+                        void *exarg);
 
-typedef struct ASN1_AUX_st {
-	void *app_data;
-	int flags;
-	int ref_offset;		/* Offset of reference value */
-	int ref_lock;		/* Lock type to use */
-	ASN1_aux_cb *asn1_cb;
-	int enc_offset;		/* Offset of ASN1_ENCODING structure */
+typedef struct ASN1_AUX_st
+{
+    void *app_data;
+    int flags;
+    int ref_offset;		/* Offset of reference value */
+    int ref_lock;		/* Lock type to use */
+    ASN1_aux_cb *asn1_cb;
+    int enc_offset;		/* Offset of ASN1_ENCODING structure */
 } ASN1_AUX;
 
 /* For print related callbacks exarg points to this structure */
-typedef struct ASN1_PRINT_ARG_st {
-	BIO *out;
-	int indent;
-	const ASN1_PCTX *pctx;
+typedef struct ASN1_PRINT_ARG_st
+{
+    BIO *out;
+    int indent;
+    const ASN1_PCTX *pctx;
 } ASN1_PRINT_ARG;
 
 /* For streaming related callbacks exarg points to this structure */
-typedef struct ASN1_STREAM_ARG_st {
-	/* BIO to stream through */
-	BIO *out;
-	/* BIO with filters appended */
-	BIO *ndef_bio;
-	/* Streaming I/O boundary */
-	unsigned char **boundary;
+typedef struct ASN1_STREAM_ARG_st
+{
+    /* BIO to stream through */
+    BIO *out;
+    /* BIO with filters appended */
+    BIO *ndef_bio;
+    /* Streaming I/O boundary */
+    unsigned char **boundary;
 } ASN1_STREAM_ARG;
 
 /* Flags in ASN1_AUX */
@@ -863,13 +874,13 @@ typedef struct ASN1_STREAM_ARG_st {
 	int i2d_##fname(stname *a, unsigned char **out) \
 	{ \
 		return ASN1_item_i2d((ASN1_VALUE *)a, out, ASN1_ITEM_rptr(itname));\
-	} 
+	}
 
 #define IMPLEMENT_ASN1_NDEF_FUNCTION(stname) \
 	int i2d_##stname##_NDEF(stname *a, unsigned char **out) \
 	{ \
 		return ASN1_item_ndef_i2d((ASN1_VALUE *)a, out, ASN1_ITEM_rptr(stname));\
-	} 
+	}
 
 /* This includes evil casts to remove const: they will go away when full
  * ASN1 constification is done.
@@ -882,7 +893,7 @@ typedef struct ASN1_STREAM_ARG_st {
 	int i2d_##fname(const stname *a, unsigned char **out) \
 	{ \
 		return ASN1_item_i2d((ASN1_VALUE *)a, out, ASN1_ITEM_rptr(itname));\
-	} 
+	}
 
 #define IMPLEMENT_ASN1_DUP_FUNCTION(stname) \
 	stname * stname##_dup(stname *x) \
@@ -899,7 +910,7 @@ typedef struct ASN1_STREAM_ARG_st {
 	{ \
 		return ASN1_item_print(out, (ASN1_VALUE *)x, indent, \
 			ASN1_ITEM_rptr(itname), pctx); \
-	} 
+	}
 
 #define IMPLEMENT_ASN1_FUNCTIONS_const(name) \
 		IMPLEMENT_ASN1_FUNCTIONS_const_fname(name, name, name)
@@ -931,7 +942,7 @@ int ASN1_primitive_new(ASN1_VALUE **pval, const ASN1_ITEM *it);
 void ASN1_template_free(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt);
 int ASN1_template_d2i(ASN1_VALUE **pval, const unsigned char **in, long len, const ASN1_TEMPLATE *tt);
 int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len, const ASN1_ITEM *it,
-				int tag, int aclass, char opt, ASN1_TLC *ctx);
+                     int tag, int aclass, char opt, ASN1_TLC *ctx);
 
 int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out, const ASN1_ITEM *it, int tag, int aclass);
 int ASN1_template_i2d(ASN1_VALUE **pval, unsigned char **out, const ASN1_TEMPLATE *tt);

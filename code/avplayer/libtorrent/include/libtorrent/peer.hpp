@@ -40,22 +40,22 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	struct TORRENT_EXTRA_EXPORT peer_entry
-	{
-		std::string ip;
-		int port;
-		peer_id pid;
+struct TORRENT_EXTRA_EXPORT peer_entry
+{
+    std::string ip;
+    int port;
+    peer_id pid;
 
-		bool operator==(const peer_entry& p) const
-		{
-			return pid == p.pid;
-		}
+    bool operator==(const peer_entry& p) const
+    {
+        return pid == p.pid;
+    }
 
-		bool operator<(const peer_entry& p) const
-		{
-			return pid < p.pid;
-		}
-	};
+    bool operator<(const peer_entry& p) const
+    {
+        return pid < p.pid;
+    }
+};
 
 }
 

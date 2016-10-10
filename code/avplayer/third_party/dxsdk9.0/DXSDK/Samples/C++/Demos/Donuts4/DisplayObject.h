@@ -10,9 +10,9 @@
 // Desc: Game object types
 //-----------------------------------------------------------------------------
 enum OBJECT_TYPE
-{ 
-    OBJ_ENEMY, 
-    OBJ_PLAYER, 
+{
+    OBJ_ENEMY,
+    OBJ_PLAYER,
     OBJ_BULLET,
     OBJ_PARTICLE,
     OBJ_SPRITE
@@ -25,7 +25,7 @@ class CDisplayObject
 public:
     CDisplayObject( const OBJECT_TYPE ObjectType );
     virtual ~CDisplayObject(void);
-    
+
     virtual HRESULT OneTimeSceneInit();
     virtual HRESULT InitDeviceObjects();
     virtual HRESULT RestoreDeviceObjects();

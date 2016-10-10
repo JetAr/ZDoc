@@ -30,19 +30,19 @@
 // V_HWNDOPT(hwnd)						 - An optional window handle
 //
 // For handling different versions of structures:
-// 
+//
 // V_STRUCTPTR_READ_VER(ptr,ver)         - Begin a struct version block for read access
-//                                         At the end, 'ver' will contain the 
+//                                         At the end, 'ver' will contain the
 //                                         discovered version of the struct
 // V_STRUCTPTR_READ_VER_CASE(base,ver)   - Test struct against version ver of
-//                                         type 'base'. 
+//                                         type 'base'.
 // V_STRUCTPTR_READ_VER_END(base,ptr)    - End a struct version block
 //
 // V_STRUCTPTR_WRITE_VER(ptr,ver)        - Struct version block for write access
 // V_STRUCTPTR_WRITE_VER_CASE(base,ver)
 // V_STRUCTPTR_WRITE_VER_END(base,ptr)
 //
-// The struct version block expects type names of a base type followed by a 
+// The struct version block expects type names of a base type followed by a
 // numeric version, such as
 //
 // typedef struct { } FOO7;
@@ -55,7 +55,7 @@
 // Since Windows headers are compiled by default with 8-byte alignment, adding
 // one DWORD may not cause the size of the structure to change. If this happens
 // you will get a 'case label already used' error on one of the VER_CASE macros.
-// If this happens, you can get around it by adding a dwReserved field to the 
+// If this happens, you can get around it by adding a dwReserved field to the
 // end of the struct to force the padding.
 //
 // 'optional' means the pointer is allowed to be NULL by the interface specification.
@@ -101,11 +101,11 @@
 #ifdef RIP_BREAK
 #define _RIP_BREAK DebugBreak();
 #else
-#define _RIP_BREAK 
+#define _RIP_BREAK
 #endif
 
 #define V_INAME(x) \
-    static const char __szValidateInterfaceName[] = #x;                       
+    static const char __szValidateInterfaceName[] = #x;
 
 #define RIP_E_POINTER(ptr) \
 {   Trace(-1, "%s: Invalid pointer " #ptr "\n", __szValidateInterfaceName); \
@@ -121,23 +121,23 @@
 {	Trace(-1, "%s: Invalid handle " #h "\n", __szValidateInterfaceName); \
     _RIP_BREAK \
 	return E_HANDLE; }
-    
+
 #define RIP_W_INVALIDSIZE(ptr) \
 {   Trace(-1, "%s: " #ptr "->dwSize matches no known structure size. Defaulting to oldest structure.\n", \
     __szValidateInterfaceName); \
     _RIP_BREAK \
     }
-    
+
 #define RIP_E_INVALIDSIZE(ptr) \
 {   Trace(-1, "%s: " #ptr "->dwSize is too small\n", __szValidateInterfaceName); \
     _RIP_BREAK \
     return E_INVALIDARG; }
-    
+
 #define RIP_E_BLOCKVSDWSIZE(ptr) \
 {   Trace(-1, "%s: " #ptr " does not point to as much memory as " #ptr "->dwSize indicates\n", \
     __szValidateInterfaceName); \
     _RIP_BREAK \
-    return E_INVALIDARG; }    
+    return E_INVALIDARG; }
 
 // NOTE: The DebugBreak() not in #ifdef is intentional - this is something that
 // must be fixed in our code, not an app-generated error.
@@ -235,7 +235,7 @@
 {   if (punk && IsBadReadPtr(punk, sizeof(IUnknown)))   RIP_E_POINTER(ptr); \
     if (punk) return CLASS_E_NOAGGREGATION; }
 
-// Validate an incoming interface pointer. 
+// Validate an incoming interface pointer.
 //
 struct _V_GENERIC_INTERFACE
 {
@@ -251,7 +251,7 @@ struct _V_GENERIC_INTERFACE
 #define V_INTERFACE_OPT(ptr) \
 {   if (ptr) V_INTERFACE(ptr); }
 
-// Validation for a reference to a GUID, which we only ever read. 
+// Validation for a reference to a GUID, which we only ever read.
 //
 #define V_REFGUID(ref) \
 {   if (IsBadReadPtr((void*)&ref, sizeof(GUID)))        RIP_E_POINTER((void*)&ref); }
@@ -259,10 +259,10 @@ struct _V_GENERIC_INTERFACE
 // Validation for a window handle
 //
 #define V_HWND(h) \
-{	if (!IsWindow(h))									RIP_E_HANDLE(h); }	
+{	if (!IsWindow(h))									RIP_E_HANDLE(h); }
 
 #define V_HWND_OPT(h) \
-{	if (h) if (!IsWindow(h))							RIP_E_HANDLE(h); }	
+{	if (h) if (!IsWindow(h))							RIP_E_HANDLE(h); }
 
 // Validation for multiple sized structs based on version
 //
@@ -271,12 +271,12 @@ struct _V_GENERIC_INTERFACE
     if (IsBadReadPtr(ptr, sizeof(DWORD)))               RIP_E_BLOCKVSDWSIZE(ptr); \
     if (IsBadReadPtr(ptr, (ptr)->dwSize))               RIP_E_BLOCKVSDWSIZE(ptr); \
     switch ((ptr)->dwSize) {
-    
+
 #define V_STRUCTPTR_READ_VER_CASE(basetype,ver) \
     case sizeof(basetype##ver) : \
     V_ASSERT(offsetof(basetype##ver, dwSize) == 0); \
     *pdw = ver; break;
-    
+
 #define V_STRUCTPTR_READ_VER_END(basetype,ptr) \
     default : if ((ptr)->dwSize > sizeof(basetype##7)) \
     { RIP_W_INVALIDSIZE(ptr); } else \
@@ -288,12 +288,12 @@ struct _V_GENERIC_INTERFACE
     if (IsBadReadPtr(ptr, sizeof(DWORD)))               RIP_E_BLOCKVSDWSIZE(ptr); \
     if (IsBadWritePtr(ptr, (ptr)->dwSize))              RIP_E_BLOCKVSDWSIZE(ptr); \
     switch ((ptr)->dwSize) {
-    
+
 #define V_STRUCTPTR_WRITE_VER_CASE(basetype,ver) \
     case sizeof(basetype##ver) : \
         V_ASSERT(offsetof(basetype##ver, dwSize) == 0); \
         *pdw = ver; break;
-    
+
 #define V_STRUCTPTR_WRITE_VER_END(basetype,ptr) \
     default : if ((ptr)->dwSize > sizeof(basetype##7)) \
     { RIP_W_INVALIDSIZE(ptr); } else \

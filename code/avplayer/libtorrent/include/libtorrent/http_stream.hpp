@@ -38,85 +38,89 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace libtorrent {
+namespace libtorrent
+{
 
 class http_stream : public proxy_base
 {
 public:
 
-	explicit http_stream(io_service& io_service)
-		: proxy_base(io_service)
-		, m_no_connect(false)
-	{}
+    explicit http_stream(io_service& io_service)
+        : proxy_base(io_service)
+        , m_no_connect(false)
+    {}
 
-	void set_no_connect(bool c) { m_no_connect = c; }
+    void set_no_connect(bool c)
+    {
+        m_no_connect = c;
+    }
 
-	void set_username(std::string const& user
-		, std::string const& password)
-	{
-		m_user = user;
-		m_password = password;
-	}
+    void set_username(std::string const& user
+                      , std::string const& password)
+    {
+        m_user = user;
+        m_password = password;
+    }
 
-	void set_dst_name(std::string const& host)
-	{
-		m_dst_name = host;
-	}
+    void set_dst_name(std::string const& host)
+    {
+        m_dst_name = host;
+    }
 
-	void close(error_code& ec)
-	{
-		m_dst_name.clear();
-		proxy_base::close(ec);
-	}
+    void close(error_code& ec)
+    {
+        m_dst_name.clear();
+        proxy_base::close(ec);
+    }
 
 #ifndef BOOST_NO_EXCEPTIONS
-	void close()
-	{
-		m_dst_name.clear();
-		proxy_base::close();
-	}
+    void close()
+    {
+        m_dst_name.clear();
+        proxy_base::close();
+    }
 #endif
 
-	typedef boost::function<void(error_code const&)> handler_type;
+    typedef boost::function<void(error_code const&)> handler_type;
 
-	template <class Handler>
-	void async_connect(endpoint_type const& endpoint, Handler const& handler)
-	{
-		m_remote_endpoint = endpoint;
+    template <class Handler>
+    void async_connect(endpoint_type const& endpoint, Handler const& handler)
+    {
+        m_remote_endpoint = endpoint;
 
-		// the connect is split up in the following steps:
-		// 1. resolve name of proxy server
-		// 2. connect to proxy server
-		// 3. send HTTP CONNECT method and possibly username+password
-		// 4. read CONNECT response
+        // the connect is split up in the following steps:
+        // 1. resolve name of proxy server
+        // 2. connect to proxy server
+        // 3. send HTTP CONNECT method and possibly username+password
+        // 4. read CONNECT response
 
-		// to avoid unnecessary copying of the handler,
-		// store it in a shared_ptr
-		boost::shared_ptr<handler_type> h(new handler_type(handler));
+        // to avoid unnecessary copying of the handler,
+        // store it in a shared_ptr
+        boost::shared_ptr<handler_type> h(new handler_type(handler));
 
-		tcp::resolver::query q(m_hostname, to_string(m_port).elems);
-		m_resolver.async_resolve(q, boost::bind(
-			&http_stream::name_lookup, this, _1, _2, h));
-	}
+        tcp::resolver::query q(m_hostname, to_string(m_port).elems);
+        m_resolver.async_resolve(q, boost::bind(
+                                     &http_stream::name_lookup, this, _1, _2, h));
+    }
 
 private:
 
-	void name_lookup(error_code const& e, tcp::resolver::iterator i
-		, boost::shared_ptr<handler_type> h);
-	void connected(error_code const& e, boost::shared_ptr<handler_type> h);
-	void handshake1(error_code const& e, boost::shared_ptr<handler_type> h);
-	void handshake2(error_code const& e, boost::shared_ptr<handler_type> h);
+    void name_lookup(error_code const& e, tcp::resolver::iterator i
+                     , boost::shared_ptr<handler_type> h);
+    void connected(error_code const& e, boost::shared_ptr<handler_type> h);
+    void handshake1(error_code const& e, boost::shared_ptr<handler_type> h);
+    void handshake2(error_code const& e, boost::shared_ptr<handler_type> h);
 
-	// send and receive buffer
-	std::vector<char> m_buffer;
-	// proxy authentication
-	std::string m_user;
-	std::string m_password;
-	std::string m_dst_name;
+    // send and receive buffer
+    std::vector<char> m_buffer;
+    // proxy authentication
+    std::string m_user;
+    std::string m_password;
+    std::string m_dst_name;
 
-	// this is true if the connection is HTTP based and
-	// want to talk directly to the proxy
-	bool m_no_connect;
+    // this is true if the connection is HTTP based and
+    // want to talk directly to the proxy
+    bool m_no_connect;
 };
 
 }

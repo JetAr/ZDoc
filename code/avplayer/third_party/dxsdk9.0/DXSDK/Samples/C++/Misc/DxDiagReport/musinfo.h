@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 // File: musinfo.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) 2001 Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -27,13 +27,13 @@ struct MusicPort
 struct MusicInfo
 {
     BOOL m_bDMusicInstalled;
-    TCHAR m_szGMFilePath[MAX_PATH]; 
+    TCHAR m_szGMFilePath[MAX_PATH];
     TCHAR m_szGMFileVersion[100];
     BOOL m_bAccelerationEnabled;
     BOOL m_bAccelerationExists;
-    
-    TCHAR m_szNotesLocalized[3000]; 
-    TCHAR m_szNotesEnglish[3000]; 
+
+    TCHAR m_szNotesLocalized[3000];
+    TCHAR m_szNotesEnglish[3000];
     TCHAR m_szRegHelpText[3000];
     TCHAR m_szTestResultLocalized[3000];
     TCHAR m_szTestResultEnglish[3000];

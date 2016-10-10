@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // File: Profile.h
 //
-// Desc: Class to read an ini file and store the information in a 
+// Desc: Class to read an ini file and store the information in a
 //       global struct for easy access.
 //
 // Copyright (C) Microsoft Corporation. All Rights Reserved.
@@ -22,8 +22,8 @@ enum ENEMY_ATTACK_TYPE { EAT_None=1 };
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CZoneStyleParameter
 {
@@ -41,8 +41,8 @@ public:
     DWORD aLayerColor[MAX_SOURCE_TEXTURES];
     FLOAT aLayerHeight[MAX_SOURCE_TEXTURES];
     FLOAT aLayerTile[MAX_SOURCE_TEXTURES];
-    FLOAT aLayerRandomness[MAX_SOURCE_TEXTURES];  
-    FLOAT fLayerBlendFactor[MAX_SOURCE_TEXTURES]; 
+    FLOAT aLayerRandomness[MAX_SOURCE_TEXTURES];
+    FLOAT fLayerBlendFactor[MAX_SOURCE_TEXTURES];
     BOOL  bSaveMedia;
 };
 
@@ -50,8 +50,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CSkyParameter
 {
@@ -73,8 +73,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CSoundParameter
 {
@@ -93,8 +93,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CLightParameter
 {
@@ -109,8 +109,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class C3DSoundParameter : public CSoundParameter
 {
@@ -123,8 +123,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CBulletParameter : public CSoundParameter
 {
@@ -154,8 +154,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CShipParameter
 {
@@ -182,8 +182,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CThemeStyle
 {
@@ -199,7 +199,7 @@ public:
 
     DWORD           nNumZoneStyles;
     CZoneStyleParameter* aZoneStyles;
-    
+
     int      nNumLights;
     CLightParameter* aLights;
 
@@ -209,8 +209,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CEnemyStyle
 {
@@ -244,8 +244,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CProfile
 {
@@ -257,7 +257,7 @@ public:
     VOID GetProfile( LPCTSTR szIniName );
 
 protected:
-    TCHAR m_szIniName[MAX_PATH]; 
+    TCHAR m_szIniName[MAX_PATH];
     VOID GetSoundParameters(TCHAR* szSection, CSoundParameter* pSoundParam);
     VOID Get3DSoundParameters(TCHAR* szSection, C3DSoundParameter * p3DSoundParam);
     VOID GetBulletParameters(TCHAR* szSection, CBulletParameter* pBulletParam);
@@ -303,7 +303,7 @@ public:
     float    fChangeGunRecharge;
     D3DVALUE flDistanceFactor;
     D3DVALUE flRolloffFactor;
-    D3DVALUE flDopplerFactor;    
+    D3DVALUE flDopplerFactor;
     long     nNumEnemiesPerLevelScale;
     long     nNumEnemiesBase;
     FLOAT    fFOV;
@@ -321,7 +321,7 @@ public:
     FLOAT    fRenderDist;
     FLOAT    fZFarDist;
     FLOAT    fFogStart;
-    FLOAT    fFogEnd;  
+    FLOAT    fFogEnd;
 
     int      nNumThemes;
     CThemeStyle* aThemes;

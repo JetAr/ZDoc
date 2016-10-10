@@ -15,7 +15,7 @@
 #define IDC_SEARCH_CHECK                11010
 #define IDC_LOBBYCONNECTCANCEL          11011
 #define IDC_WAIT_TEXT                   11012
-#define IDC_MIGRATE_HOST                11013 
+#define IDC_MIGRATE_HOST                11013
 #define IDI_MAIN                        11014
 #define IDC_IP_ADDRESS                  11015
 #define IDC_SIGNING_FAST                11016
@@ -24,5 +24,5 @@
 #define IDC_LOCAL_PORT_TEXT             11019
 #define IDC_USE_DPNSVR                  11020
 #define IDC_REMOTE_PORT                 11021
-#define IDC_REMOTE_HOSTNAME             11022                  
+#define IDC_REMOTE_HOSTNAME             11022
 

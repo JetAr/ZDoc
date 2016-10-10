@@ -14,7 +14,7 @@ struct optional_to_python
     optional_to_python()
     {
         boost::python::to_python_converter<
-            boost::optional<T>, optional_to_python<T>
+        boost::optional<T>, optional_to_python<T>
         >();
     }
 

@@ -39,7 +39,8 @@ __inline void INITDDSTRUCT(T& dd)
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -52,7 +53,8 @@ __inline void RELEASE( T* &p )
 //-----------------------------------------------------------------------------
 // Custom vertex types for rendering text
 //-----------------------------------------------------------------------------
-struct FONT2DVERTEX {
+struct FONT2DVERTEX
+{
     D3DXVECTOR4 p;
     DWORD color;
     FLOAT tu, tv;

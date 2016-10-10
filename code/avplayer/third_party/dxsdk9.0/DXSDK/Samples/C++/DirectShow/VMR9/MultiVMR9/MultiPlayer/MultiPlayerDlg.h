@@ -12,13 +12,13 @@
 #include "MultiGraphSession.h"
 
 
-const int g_nButtons = 6;    
+const int g_nButtons = 6;
 
 // CMultiPlayerSession
 class CMultiPlayerSession
     : public CMultigraphSession
 {
-public: 
+public:
     HRESULT Initialize();
     HRESULT Terminate();
 };
@@ -34,7 +34,7 @@ public:
 // Dialog Data
     enum { IDD = IDD_DEFAULTMULTIPLAYER_DIALOG };
 
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 // Implementation
@@ -62,7 +62,7 @@ private:
 private:
     // data
     CMultiPlayerSession*        m_pSession;
-    DWORD                       m_dwSourceCounter; 
+    DWORD                       m_dwSourceCounter;
     DWORD                       m_dwTotalSources;   // total number of sources attached to the wizard
     UINT_PTR                    m_nTimer;           // timer tag
 

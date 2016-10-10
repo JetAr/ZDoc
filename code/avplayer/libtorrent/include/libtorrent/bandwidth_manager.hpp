@@ -52,59 +52,60 @@ POSSIBILITY OF SUCH DAMAGE.
 using boost::intrusive_ptr;
 
 
-namespace libtorrent {
+namespace libtorrent
+{
 
 struct TORRENT_EXTRA_EXPORT bandwidth_manager
 {
-	bandwidth_manager(int channel
+    bandwidth_manager(int channel
 #ifdef TORRENT_VERBOSE_BANDWIDTH_LIMIT
-		, bool log = false
-#endif		
-		);
+                      , bool log = false
+#endif
+                     );
 
-	void close();
+    void close();
 
 #if defined TORRENT_DEBUG || TORRENT_RELEASE_ASSERTS
-	bool is_queued(bandwidth_socket const* peer) const;
+    bool is_queued(bandwidth_socket const* peer) const;
 #endif
 
-	int queue_size() const;
-	int queued_bytes() const;
-	
-	// non prioritized means that, if there's a line for bandwidth,
-	// others will cut in front of the non-prioritized peers.
-	// this is used by web seeds
-	// returns the number of bytes to assign to the peer, or 0
-	// if the peer's 'assign_bandwidth' callback will be called later
-	int request_bandwidth(intrusive_ptr<bandwidth_socket> const& peer
-		, int blk, int priority
-		, bandwidth_channel* chan1 = 0
-		, bandwidth_channel* chan2 = 0
-		, bandwidth_channel* chan3 = 0
-		, bandwidth_channel* chan4 = 0
-		, bandwidth_channel* chan5 = 0);
+    int queue_size() const;
+    int queued_bytes() const;
+
+    // non prioritized means that, if there's a line for bandwidth,
+    // others will cut in front of the non-prioritized peers.
+    // this is used by web seeds
+    // returns the number of bytes to assign to the peer, or 0
+    // if the peer's 'assign_bandwidth' callback will be called later
+    int request_bandwidth(intrusive_ptr<bandwidth_socket> const& peer
+                          , int blk, int priority
+                          , bandwidth_channel* chan1 = 0
+                                  , bandwidth_channel* chan2 = 0
+                                          , bandwidth_channel* chan3 = 0
+                                                  , bandwidth_channel* chan4 = 0
+                                                          , bandwidth_channel* chan5 = 0);
 
 #ifdef TORRENT_DEBUG
-	void check_invariant() const;
+    void check_invariant() const;
 #endif
 
-	void update_quotas(time_duration const& dt);
+    void update_quotas(time_duration const& dt);
 
-	// these are the consumers that want bandwidth
-	typedef std::vector<bw_request> queue_t;
-	queue_t m_queue;
-	// the number of bytes all the requests in queue are for
-	int m_queued_bytes;
+    // these are the consumers that want bandwidth
+    typedef std::vector<bw_request> queue_t;
+    queue_t m_queue;
+    // the number of bytes all the requests in queue are for
+    int m_queued_bytes;
 
-	// this is the channel within the consumers
-	// that bandwidth is assigned to (upload or download)
-	int m_channel;
+    // this is the channel within the consumers
+    // that bandwidth is assigned to (upload or download)
+    int m_channel;
 
-	bool m_abort;
+    bool m_abort;
 
 #ifdef TORRENT_VERBOSE_BANDWIDTH_LIMIT
-	std::ofstream m_log;
-	ptime m_start;
+    std::ofstream m_log;
+    ptime m_start;
 #endif
 };
 

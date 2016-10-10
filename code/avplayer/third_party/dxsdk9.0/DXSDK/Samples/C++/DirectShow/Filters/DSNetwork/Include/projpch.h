@@ -32,7 +32,7 @@
 typedef unsigned int    SOCKET;
 
 // Include before Windows.h to prevent inclusion of Winsock.h
-#include <winsock2.h>   
+#include <winsock2.h>
 
 
 #include <streams.h>
@@ -56,6 +56,9 @@ typedef unsigned int    SOCKET;
 #define RELEASE_AND_CLEAR(p)        if (p) { (p) -> Release () ; (p) = NULL ; }
 #define DELETE_RESET(p)             { delete (p) ; (p) = NULL ; }
 
-template <class T> T Min (T a, T b) { return (a < b ? a : b) ; }
+template <class T> T Min (T a, T b)
+{
+    return (a < b ? a : b) ;
+}
 
 #endif  __projpch_h

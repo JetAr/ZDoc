@@ -48,77 +48,86 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 #if BOOST_VERSION >= 103500
-	namespace asio = boost::asio;
+namespace asio = boost::asio;
 #endif
-	struct TORRENT_EXTRA_EXPORT chained_buffer
-	{
-		chained_buffer(): m_bytes(0), m_capacity(0)
-		{
+struct TORRENT_EXTRA_EXPORT chained_buffer
+{
+    chained_buffer(): m_bytes(0), m_capacity(0)
+    {
 #if defined TORRENT_DEBUG || TORRENT_RELEASE_ASSERTS
-			m_destructed = false;
+        m_destructed = false;
 #endif
-		}
+    }
 
-		struct buffer_t
-		{
-			boost::function<void(char*)> free; // destructs the buffer
-			char* buf; // the first byte of the buffer
-			int size; // the total size of the buffer
+    struct buffer_t
+    {
+        boost::function<void(char*)> free; // destructs the buffer
+        char* buf; // the first byte of the buffer
+        int size; // the total size of the buffer
 
-			char* start; // the first byte to send/receive in the buffer
-			int used_size; // this is the number of bytes to send/receive
-		};
+        char* start; // the first byte to send/receive in the buffer
+        int used_size; // this is the number of bytes to send/receive
+    };
 
-		bool empty() const { return m_bytes == 0; }
-		int size() const { return m_bytes; }
-		int capacity() const { return m_capacity; }
+    bool empty() const
+    {
+        return m_bytes == 0;
+    }
+    int size() const
+    {
+        return m_bytes;
+    }
+    int capacity() const
+    {
+        return m_capacity;
+    }
 
-		void pop_front(int bytes_to_pop);
+    void pop_front(int bytes_to_pop);
 
-		void append_buffer(char* buffer, int s, int used_size
-			, boost::function<void(char*)> const& destructor);
+    void append_buffer(char* buffer, int s, int used_size
+                       , boost::function<void(char*)> const& destructor);
 
-		// returns the number of bytes available at the
-		// end of the last chained buffer.
-		int space_in_last_buffer();
+    // returns the number of bytes available at the
+    // end of the last chained buffer.
+    int space_in_last_buffer();
 
-		// tries to copy the given buffer to the end of the
-		// last chained buffer. If there's not enough room
-		// it returns false
-		char* append(char const* buf, int s);
+    // tries to copy the given buffer to the end of the
+    // last chained buffer. If there's not enough room
+    // it returns false
+    char* append(char const* buf, int s);
 
-		// tries to allocate memory from the end
-		// of the last buffer. If there isn't
-		// enough room, returns 0
-		char* allocate_appendix(int s);
+    // tries to allocate memory from the end
+    // of the last buffer. If there isn't
+    // enough room, returns 0
+    char* allocate_appendix(int s);
 
-		std::list<asio::const_buffer> const& build_iovec(int to_send);
+    std::list<asio::const_buffer> const& build_iovec(int to_send);
 
-		~chained_buffer();
+    ~chained_buffer();
 
-	private:
+private:
 
-		// this is the list of all the buffers we want to
-		// send
-		std::list<buffer_t> m_vec;
+    // this is the list of all the buffers we want to
+    // send
+    std::list<buffer_t> m_vec;
 
-		// this is the number of bytes in the send buf.
-		// this will always be equal to the sum of the
-		// size of all buffers in vec
-		int m_bytes;
+    // this is the number of bytes in the send buf.
+    // this will always be equal to the sum of the
+    // size of all buffers in vec
+    int m_bytes;
 
-		// the total size of all buffers in the chain
-		// including unused space
-		int m_capacity;
+    // the total size of all buffers in the chain
+    // including unused space
+    int m_capacity;
 
-		// this is the vector of buffers used when
-		// invoking the async write call
-		std::list<asio::const_buffer> m_tmp_vec;
+    // this is the vector of buffers used when
+    // invoking the async write call
+    std::list<asio::const_buffer> m_tmp_vec;
 
 #if defined TORRENT_DEBUG || TORRENT_RELEASE_ASSERTS
-		bool m_destructed;
+    bool m_destructed;
 #endif
-	};	
+};
 }
 
 #endif

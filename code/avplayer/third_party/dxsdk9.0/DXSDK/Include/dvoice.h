@@ -28,16 +28,16 @@ extern "C" {
 
 
 // {B9F3EB85-B781-4ac1-8D90-93A05EE37D7D}
-DEFINE_GUID(CLSID_DirectPlayVoiceClient, 
-0xb9f3eb85, 0xb781, 0x4ac1, 0x8d, 0x90, 0x93, 0xa0, 0x5e, 0xe3, 0x7d, 0x7d);
+DEFINE_GUID(CLSID_DirectPlayVoiceClient,
+            0xb9f3eb85, 0xb781, 0x4ac1, 0x8d, 0x90, 0x93, 0xa0, 0x5e, 0xe3, 0x7d, 0x7d);
 
 // {D3F5B8E6-9B78-4a4c-94EA-CA2397B663D3}
-DEFINE_GUID(CLSID_DirectPlayVoiceServer, 
-0xd3f5b8e6, 0x9b78, 0x4a4c, 0x94, 0xea, 0xca, 0x23, 0x97, 0xb6, 0x63, 0xd3);
+DEFINE_GUID(CLSID_DirectPlayVoiceServer,
+            0xd3f5b8e6, 0x9b78, 0x4a4c, 0x94, 0xea, 0xca, 0x23, 0x97, 0xb6, 0x63, 0xd3);
 
 // {0F0F094B-B01C-4091-A14D-DD0CD807711A}
-DEFINE_GUID(CLSID_DirectPlayVoiceTest, 
-0xf0f094b, 0xb01c, 0x4091, 0xa1, 0x4d, 0xdd, 0xc, 0xd8, 0x7, 0x71, 0x1a);
+DEFINE_GUID(CLSID_DirectPlayVoiceTest,
+            0xf0f094b, 0xb01c, 0x4091, 0xa1, 0x4d, 0xdd, 0xc, 0xd8, 0x7, 0x71, 0x1a);
 
 /****************************************************************************
  *
@@ -47,16 +47,16 @@ DEFINE_GUID(CLSID_DirectPlayVoiceTest,
 
 
 // {1DFDC8EA-BCF7-41d6-B295-AB64B3B23306}
-DEFINE_GUID(IID_IDirectPlayVoiceClient, 
-0x1dfdc8ea, 0xbcf7, 0x41d6, 0xb2, 0x95, 0xab, 0x64, 0xb3, 0xb2, 0x33, 0x6);
+DEFINE_GUID(IID_IDirectPlayVoiceClient,
+            0x1dfdc8ea, 0xbcf7, 0x41d6, 0xb2, 0x95, 0xab, 0x64, 0xb3, 0xb2, 0x33, 0x6);
 
 // {FAA1C173-0468-43b6-8A2A-EA8A4F2076C9}
-DEFINE_GUID(IID_IDirectPlayVoiceServer, 
-0xfaa1c173, 0x468, 0x43b6, 0x8a, 0x2a, 0xea, 0x8a, 0x4f, 0x20, 0x76, 0xc9);
+DEFINE_GUID(IID_IDirectPlayVoiceServer,
+            0xfaa1c173, 0x468, 0x43b6, 0x8a, 0x2a, 0xea, 0x8a, 0x4f, 0x20, 0x76, 0xc9);
 
 // {D26AF734-208B-41da-8224-E0CE79810BE1}
 DEFINE_GUID(IID_IDirectPlayVoiceTest,
-0xd26af734, 0x208b, 0x41da, 0x82, 0x24, 0xe0, 0xce, 0x79, 0x81, 0xb, 0xe1);
+            0xd26af734, 0x208b, 0x41da, 0x82, 0x24, 0xe0, 0xce, 0x79, 0x81, 0xb, 0xe1);
 
 /****************************************************************************
  *
@@ -68,43 +68,43 @@ DEFINE_GUID(IID_IDirectPlayVoiceTest,
 //
 // {699B52C1-A885-46a8-A308-97172419ADC7}
 DEFINE_GUID(DPVCTGUID_ADPCM,
-0x699b52c1, 0xa885, 0x46a8, 0xa3, 0x8, 0x97, 0x17, 0x24, 0x19, 0xad, 0xc7);
+            0x699b52c1, 0xa885, 0x46a8, 0xa3, 0x8, 0x97, 0x17, 0x24, 0x19, 0xad, 0xc7);
 
 // Microsoft GSM 6.10 13 kbit/s
 //
 // {24768C60-5A0D-11d3-9BE4-525400D985E7}
 DEFINE_GUID(DPVCTGUID_GSM,
-0x24768c60, 0x5a0d, 0x11d3, 0x9b, 0xe4, 0x52, 0x54, 0x0, 0xd9, 0x85, 0xe7);
+            0x24768c60, 0x5a0d, 0x11d3, 0x9b, 0xe4, 0x52, 0x54, 0x0, 0xd9, 0x85, 0xe7);
 
 // MS-PCM 64 kbit/s
-// 
+//
 // {8DE12FD4-7CB3-48ce-A7E8-9C47A22E8AC5}
 DEFINE_GUID(DPVCTGUID_NONE,
-0x8de12fd4, 0x7cb3, 0x48ce, 0xa7, 0xe8, 0x9c, 0x47, 0xa2, 0x2e, 0x8a, 0xc5);
+            0x8de12fd4, 0x7cb3, 0x48ce, 0xa7, 0xe8, 0x9c, 0x47, 0xa2, 0x2e, 0x8a, 0xc5);
 
 // Voxware SC03 3.2kbit/s
 //
 // {7D82A29B-2242-4f82-8F39-5D1153DF3E41}
 DEFINE_GUID(DPVCTGUID_SC03,
-0x7d82a29b, 0x2242, 0x4f82, 0x8f, 0x39, 0x5d, 0x11, 0x53, 0xdf, 0x3e, 0x41);
+            0x7d82a29b, 0x2242, 0x4f82, 0x8f, 0x39, 0x5d, 0x11, 0x53, 0xdf, 0x3e, 0x41);
 
 // Voxware SC06 6.4kbit/s
 //
 // {53DEF900-7168-4633-B47F-D143916A13C7}
 DEFINE_GUID(DPVCTGUID_SC06,
-0x53def900, 0x7168, 0x4633, 0xb4, 0x7f, 0xd1, 0x43, 0x91, 0x6a, 0x13, 0xc7);
+            0x53def900, 0x7168, 0x4633, 0xb4, 0x7f, 0xd1, 0x43, 0x91, 0x6a, 0x13, 0xc7);
 
 // TrueSpeech(TM) 8.6 kbit/s
 //
 // {D7954361-5A0B-11d3-9BE4-525400D985E7}
 DEFINE_GUID(DPVCTGUID_TRUESPEECH,
-0xd7954361, 0x5a0b, 0x11d3, 0x9b, 0xe4, 0x52, 0x54, 0x0, 0xd9, 0x85, 0xe7);
+            0xd7954361, 0x5a0b, 0x11d3, 0x9b, 0xe4, 0x52, 0x54, 0x0, 0xd9, 0x85, 0xe7);
 
 // Voxware VR12 1.4kbit/s
 //
 // {FE44A9FE-8ED4-48bf-9D66-1B1ADFF9FF6D}
 DEFINE_GUID(DPVCTGUID_VR12,
-0xfe44a9fe, 0x8ed4, 0x48bf, 0x9d, 0x66, 0x1b, 0x1a, 0xdf, 0xf9, 0xff, 0x6d);
+            0xfe44a9fe, 0x8ed4, 0x48bf, 0x9d, 0x66, 0x1b, 0x1a, 0xdf, 0xf9, 0xff, 0x6d);
 
 // Define the default compression type
 #define DPVCTGUID_DEFAULT	DPVCTGUID_SC03
@@ -181,7 +181,7 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 #define DVBUFFERAGGRESSIVENESS_MAX          0x00000064
 #define DVBUFFERAGGRESSIVENESS_DEFAULT      0x00000000
 
-// 
+//
 // Buffer Quality Value Ranges
 //
 #define DVBUFFERQUALITY_MIN                 0x00000001
@@ -205,7 +205,7 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 //
 #define DVID_REMAINING          0xFFFFFFFF
 
-// 
+//
 // Input level range
 //
 #define DVINPUTLEVEL_MIN                    0x00000000
@@ -231,7 +231,7 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 #define DVTHRESHOLD_MAX                   0x00000063	// 99 decimal
 
 //
-// Threshold field is not used 
+// Threshold field is not used
 //
 #define DVTHRESHOLD_UNUSED                0xFFFFFFFE
 
@@ -250,7 +250,7 @@ typedef DWORD DVID, *LPDVID, *PDVID;
  ****************************************************************************/
 
 
-// 
+//
 // Enable automatic adjustment of the recording volume
 //
 #define DVCLIENTCONFIG_AUTORECORDVOLUME     0x00000008
@@ -260,37 +260,37 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 //
 #define DVCLIENTCONFIG_AUTOVOICEACTIVATED   0x00000020
 
-// 
+//
 // Enable echo suppression
 //
 #define DVCLIENTCONFIG_ECHOSUPPRESSION      0x08000000
 
-// 
+//
 // Voice Activation manual mode
 //
 #define DVCLIENTCONFIG_MANUALVOICEACTIVATED 0x00000004
 
-// 
+//
 // Only playback voices that have buffers created for them
 //
 #define DVCLIENTCONFIG_MUTEGLOBAL           0x00000010
 
-// 
+//
 // Mute the playback
 //
 #define DVCLIENTCONFIG_PLAYBACKMUTE         0x00000002
 
 //
-// Mute the recording 
+// Mute the recording
 //
 #define DVCLIENTCONFIG_RECORDMUTE           0x00000001
 
-// 
+//
 // Complete the operation before returning
 //
 #define DVFLAGS_SYNC                        0x00000001
 
-// 
+//
 // Just check to see if wizard has been run, and if so what it's results were
 //
 #define DVFLAGS_QUERYONLY                   0x00000002
@@ -300,7 +300,7 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 //
 #define DVFLAGS_NOHOSTMIGRATE               0x00000008
 
-// 
+//
 // Allow the back button to be enabled in the wizard
 //
 #define DVFLAGS_ALLOWBACK                   0x00000010
@@ -310,13 +310,13 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 //
 #define DVSESSION_NOHOSTMIGRATION           0x00000001
 
-// 
+//
 // Server controlled targetting
 //
 #define DVSESSION_SERVERCONTROLTARGET       0x00000002
 
 //
-// Use DirectSound Normal Mode instead of priority 
+// Use DirectSound Normal Mode instead of priority
 //
 #define DVSOUNDCONFIG_NORMALMODE            0x00000001
 
@@ -325,29 +325,29 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 //
 #define DVSOUNDCONFIG_AUTOSELECT            0x00000002
 
-// 
+//
 // Run in half duplex mode
 //
 #define DVSOUNDCONFIG_HALFDUPLEX            0x00000004
 
-// 
+//
 // No volume controls are available for the recording device
 //
 #define DVSOUNDCONFIG_NORECVOLAVAILABLE     0x00000010
 
-// 
+//
 // Disable capture sharing
 //
 #define DVSOUNDCONFIG_NOFOCUS               0x20000000
 
-// 
+//
 // Set system conversion quality to high
 //
 #define DVSOUNDCONFIG_SETCONVERSIONQUALITY	0x00000008
 
 //
 // Enable strict focus mode
-// 
+//
 #define DVSOUNDCONFIG_STRICTFOCUS           0x40000000
 
 //
@@ -355,7 +355,7 @@ typedef DWORD DVID, *LPDVID, *PDVID;
 //
 #define DVPLAYERCAPS_HALFDUPLEX             0x00000001
 
-// 
+//
 // Specifies that player is the local player
 //
 #define DVPLAYERCAPS_LOCAL                  0x00000002
@@ -385,7 +385,7 @@ typedef struct
 {
     DWORD   dwSize;                 // Size of this structure
     DWORD   dwFlags;                // Flags for client config (DVCLIENTCONFIG_...)
-    LONG    lRecordVolume;          // Recording volume 
+    LONG    lRecordVolume;          // Recording volume
     LONG    lPlaybackVolume;        // Playback volume
     DWORD   dwThreshold;          // Voice Activation Threshold
     DWORD   dwBufferQuality;        // Buffer quality
@@ -421,7 +421,7 @@ typedef struct
     DWORD   dwBufferAggressiveness; // Buffer aggresiveness
 } DVSESSIONDESC, *LPDVSESSIONDESC, *PDVSESSIONDESC;
 
-// 
+//
 // DirectPlayVoice Client Sound Device Configuration
 // (Connect / GetSoundDeviceConfig)
 //
@@ -458,7 +458,7 @@ typedef struct
 //
 // A new player has entered the voice session
 // (DVMSGID_CREATEVOICEPLAYER)
-// 
+//
 typedef struct
 {
     DWORD   dwSize;                         // Size of this structure
@@ -488,16 +488,16 @@ typedef struct
     HRESULT hrResult;                       // Result of the Disconnect() call
 } DVMSG_DISCONNECTRESULT, *LPDVMSG_DISCONNECTRESULT, *PDVMSG_DISCONNECTRESULT;
 
-// 
+//
 // The voice session host has migrated.
-// (DVMSGID_HOSTMIGRATED) 
+// (DVMSGID_HOSTMIGRATED)
 //
 typedef struct
 {
     DWORD                   dwSize;         // Size of this structure
     DVID                    dvidNewHostID;  // DVID of the player who is now the host
     LPDIRECTPLAYVOICESERVER pdvServerInterface;
-                                            // Pointer to the new host object (if local player is now host)
+    // Pointer to the new host object (if local player is now host)
 } DVMSG_HOSTMIGRATED, *LPDVMSG_HOSTMIGRATED, *PDVMSG_HOSTMIGRATED;
 
 //
@@ -518,9 +518,9 @@ typedef struct
 //
 typedef struct
 {
-	DWORD				dwSize;             // Size of this structure
-	PVOID				pvContext;			// Context value to be passed to Initialize() of new host object
-	PDVMESSAGEHANDLER	pMessageHandler;	// Message handler to be used by new host object
+    DWORD				dwSize;             // Size of this structure
+    PVOID				pvContext;			// Context value to be passed to Initialize() of new host object
+    PDVMESSAGEHANDLER	pMessageHandler;	// Message handler to be used by new host object
 } DVMSG_LOCALHOSTSETUP, *LPDVMSG_LOCALHOSTSETUP, *PDVMSG_LOCALHOSTSETUP;
 
 //
@@ -548,14 +548,14 @@ typedef struct
     PVOID	pvPlayerContext;                // Context value for the player
 } DVMSG_PLAYEROUTPUTLEVEL, *LPDVMSG_PLAYEROUTPUTLEVEL, *PDVMSG_PLAYEROUTPUTLEVEL;
 
-// 
+//
 // An audio stream from the specified player has started playing back on the local client.
 // (DVMSGID_PLAYERVOICESTART).
 //
 typedef struct
 {
     DWORD   dwSize;                         // Size of this structure
-    DVID    dvidSourcePlayerID;             // DVID of the Player 
+    DVID    dvidSourcePlayerID;             // DVID of the Player
     PVOID	pvPlayerContext;                // Context value for this player
 } DVMSG_PLAYERVOICESTART, *LPDVMSG_PLAYERVOICESTART, *PDVMSG_PLAYERVOICESTART;
 
@@ -570,7 +570,7 @@ typedef struct
     PVOID	pvPlayerContext;                // Context value for this player
 } DVMSG_PLAYERVOICESTOP, *LPDVMSG_PLAYERVOICESTOP, *PDVMSG_PLAYERVOICESTOP;
 
-// 
+//
 // Transmission has started on the local machine
 // (DVMSGID_RECORDSTART)
 //
@@ -581,10 +581,10 @@ typedef struct
     PVOID	pvLocalPlayerContext;           // Context value for the local player
 } DVMSG_RECORDSTART, *LPDVMSG_RECORDSTART, *PDVMSG_RECORDSTART;
 
-// 
+//
 // Transmission has stopped on the local machine
 // (DVMSGID_RECORDSTOP)
-// 
+//
 typedef struct
 {
     DWORD   dwSize;                         // Size of this structure
@@ -592,7 +592,7 @@ typedef struct
     PVOID	pvLocalPlayerContext;           // Context value for the local player
 } DVMSG_RECORDSTOP, *LPDVMSG_RECORDSTOP, *PDVMSG_RECORDSTOP;
 
-// 
+//
 // The voice session has been lost
 // (DVMSGID_SESSIONLOST)
 //
@@ -609,7 +609,7 @@ typedef struct
 typedef struct
 {
     DWORD   dwSize;                         // Size of this structure
-    DWORD   dwNumTargets;                   // # of targets 
+    DWORD   dwNumTargets;                   // # of targets
     PDVID   pdvidTargets;                   // An array of DVIDs specifying the current targets
 } DVMSG_SETTARGETS, *LPDVMSG_SETTARGETS, *PDVMSG_SETTARGETS;
 
@@ -621,11 +621,11 @@ typedef struct
  ****************************************************************************/
 
 /*
- * 
- * This function is no longer supported.  It is recommended that CoCreateInstance be used to create 
- * DirectPlay voice objects.  
  *
- * extern HRESULT WINAPI DirectPlayVoiceCreate( const GUID * pcIID, void **ppvInterface, IUnknown *pUnknown); 
+ * This function is no longer supported.  It is recommended that CoCreateInstance be used to create
+ * DirectPlay voice objects.
+ *
+ * extern HRESULT WINAPI DirectPlayVoiceCreate( const GUID * pcIID, void **ppvInterface, IUnknown *pUnknown);
  *
  */
 
@@ -691,7 +691,7 @@ DECLARE_INTERFACE_( IDirectPlayVoiceTest, IUnknown )
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
     /*** IDirectPlayVoiceTest methods ***/
-    STDMETHOD_(HRESULT, CheckAudioSetup) (THIS_ const GUID *,  const GUID * , HWND, DWORD ) PURE;
+    STDMETHOD_(HRESULT, CheckAudioSetup) (THIS_ const GUID *,  const GUID *, HWND, DWORD ) PURE;
 };
 
 #if !defined(__cplusplus) || defined(CINTERFACE)

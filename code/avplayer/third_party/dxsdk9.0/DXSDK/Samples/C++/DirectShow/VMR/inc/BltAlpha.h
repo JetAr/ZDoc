@@ -21,7 +21,8 @@ __inline void INITDDSTRUCT(T& dd)
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -29,7 +30,7 @@ __inline void RELEASE( T* &p )
 #endif
 
 #ifndef CHECK_HR
-    #define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
+#define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
 #endif
 
 
@@ -62,7 +63,7 @@ private:
     IsSurfaceBlendable(
         DDSURFACEDESC2& ddsd,
         BYTE fAlpha
-        )
+    )
     {
         //
         // Is the blend really a blend ?
@@ -75,7 +76,8 @@ private:
         //
         // Is the surface already a D3D texture ?
         //
-        if (ddsd.ddsCaps.dwCaps & DDSCAPS_TEXTURE) {
+        if (ddsd.ddsCaps.dwCaps & DDSCAPS_TEXTURE)
+        {
             return true;
         }
 
@@ -99,11 +101,11 @@ private:
     HRESULT MirrorSourceSurface(
         LPDIRECTDRAWSURFACE7 lpDDS,
         DDSURFACEDESC2& ddsd
-        )
+    )
     {
         HRESULT hr = DD_OK;
         DWORD dwMirrorBitDepth = 0;
-        DDSURFACEDESC2 ddsdMirror={0};
+        DDSURFACEDESC2 ddsdMirror= {0};
 
 
         //
@@ -121,52 +123,63 @@ private:
         m_lpDDMirror = NULL;
 
         if (ddsd.ddpfPixelFormat.dwFlags == DDPF_FOURCC ||
-            ddsd.ddpfPixelFormat.dwRGBBitCount == 32) {
+                ddsd.ddpfPixelFormat.dwRGBBitCount == 32)
+        {
 
             if (ddsd.dwWidth > m_ddsdM32.dwWidth ||
-                ddsd.dwHeight > m_ddsdM32.dwHeight) {
+                    ddsd.dwHeight > m_ddsdM32.dwHeight)
+            {
 
                 RELEASE(m_lpDDM32);
             }
 
-            if (!m_lpDDM32) {
+            if (!m_lpDDM32)
+            {
                 dwMirrorBitDepth = 32;
             }
-            else {
+            else
+            {
                 m_lpDDMirror = m_lpDDM32;
                 ddsdMirror = m_ddsdM32;
             }
         }
-        else if (ddsd.ddpfPixelFormat.dwRGBBitCount == 16) {
+        else if (ddsd.ddpfPixelFormat.dwRGBBitCount == 16)
+        {
 
             if (ddsd.dwWidth > m_ddsdM16.dwWidth ||
-                ddsd.dwHeight > m_ddsdM16.dwHeight) {
+                    ddsd.dwHeight > m_ddsdM16.dwHeight)
+            {
 
                 RELEASE(m_lpDDM16);
             }
 
-            if (!m_lpDDM16) {
+            if (!m_lpDDM16)
+            {
                 dwMirrorBitDepth = 16;
             }
-            else {
+            else
+            {
                 m_lpDDMirror = m_lpDDM16;
                 ddsdMirror = m_ddsdM16;
             }
         }
-        else {
+        else
+        {
 
             // I'm not supporting RGB24 or RGB8 !
             return E_INVALIDARG;
         }
 
-        if (!m_lpDDMirror) {
+        if (!m_lpDDMirror)
+        {
 
             INITDDSTRUCT(ddsdMirror);
             ddsdMirror.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
             ddsdMirror.ddpfPixelFormat.dwFlags = DDPF_RGB;
             ddsdMirror.ddpfPixelFormat.dwRGBBitCount = dwMirrorBitDepth;
 
-            switch (dwMirrorBitDepth) {
+            switch (dwMirrorBitDepth)
+            {
             case 16:
                 ddsdMirror.ddpfPixelFormat.dwRBitMask = 0x0000F800;
                 ddsdMirror.ddpfPixelFormat.dwGBitMask = 0x000007E0;
@@ -183,33 +196,39 @@ private:
             ddsdMirror.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_TEXTURE;
             ddsdMirror.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS | DDSD_PIXELFORMAT;
 
-            if (m_fPowerOf2) {
+            if (m_fPowerOf2)
+            {
 
                 for (ddsdMirror.dwWidth = 1;
-                     ddsd.dwWidth > ddsdMirror.dwWidth;
-                     ddsdMirror.dwWidth <<= 1);
+                        ddsd.dwWidth > ddsdMirror.dwWidth;
+                        ddsdMirror.dwWidth <<= 1);
 
                 for (ddsdMirror.dwHeight = 1;
-                     ddsd.dwHeight > ddsdMirror.dwHeight;
-                     ddsdMirror.dwHeight <<= 1);
+                        ddsd.dwHeight > ddsdMirror.dwHeight;
+                        ddsdMirror.dwHeight <<= 1);
             }
-            else {
+            else
+            {
                 ddsdMirror.dwWidth = ddsd.dwWidth;
                 ddsdMirror.dwHeight = ddsd.dwHeight;
             }
 
-            if (m_fSquare) {
+            if (m_fSquare)
+            {
 
-                if (ddsdMirror.dwHeight > ddsdMirror.dwWidth) {
+                if (ddsdMirror.dwHeight > ddsdMirror.dwWidth)
+                {
                     ddsdMirror.dwWidth = ddsdMirror.dwHeight;
                 }
 
-                if (ddsdMirror.dwWidth > ddsdMirror.dwHeight) {
+                if (ddsdMirror.dwWidth > ddsdMirror.dwHeight)
+                {
                     ddsdMirror.dwHeight = ddsdMirror.dwWidth;
                 }
             }
 
-            __try {
+            __try
+            {
 
                 // Attempt to create the surface with theses settings
                 CHECK_HR(hr = m_pDD->CreateSurface(&ddsdMirror, &m_lpDDMirror, NULL));
@@ -217,7 +236,8 @@ private:
                 INITDDSTRUCT(ddsdMirror);
                 CHECK_HR(hr =  m_lpDDMirror->GetSurfaceDesc(&ddsdMirror));
 
-                switch (dwMirrorBitDepth) {
+                switch (dwMirrorBitDepth)
+                {
                 case 16:
                     m_ddsdM16 = ddsdMirror;
                     m_lpDDM16 = m_lpDDMirror;
@@ -229,16 +249,20 @@ private:
                     break;
                 }
 
-            } __finally {}
+            }
+            __finally {}
         }
 
-        if (hr == DD_OK) {
+        if (hr == DD_OK)
+        {
 
-            __try {
+            __try
+            {
                 RECT rc = {0, 0, ddsd.dwWidth, ddsd.dwHeight};
                 CHECK_HR(hr = m_lpDDMirror->Blt(&rc, lpDDS, &rc, DDBLT_WAIT, NULL));
                 ddsd = ddsdMirror;
-            } __finally {}
+            }
+            __finally {}
         }
 
         return hr;
@@ -274,47 +298,58 @@ public:
 
         HRESULT hr;
         hr = lpDDSDst->GetDDInterface((LPVOID *)&m_pDD);
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             m_pDD = NULL;
             *phr = hr;
         }
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
             hr = m_pDD->QueryInterface(IID_IDirect3D7, (LPVOID *)&m_pD3D);
-            if (FAILED(hr)) {
+            if (FAILED(hr))
+            {
                 m_pD3D = NULL;
                 *phr = hr;
             }
         }
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
             hr = m_pD3D->CreateDevice(IID_IDirect3DHALDevice,
                                       lpDDSDst,
                                       &m_pD3DDevice);
-            if (FAILED(hr)) {
+            if (FAILED(hr))
+            {
                 m_pD3DDevice = NULL;
                 *phr = hr;
             }
-            else {
+            else
+            {
                 m_lpDDBackBuffer = lpDDSDst;
                 m_lpDDBackBuffer->AddRef();
             }
         }
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             D3DDEVICEDESC7 ddDesc;
-            if (DD_OK == m_pD3DDevice->GetCaps(&ddDesc)) {
+            if (DD_OK == m_pD3DDevice->GetCaps(&ddDesc))
+            {
 
-                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_POW2) {
+                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_POW2)
+                {
                     m_fPowerOf2 = true;
                 }
 
-                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_SQUAREONLY) {
+                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_SQUAREONLY)
+                {
                     m_fSquare = true;
                 }
             }
-            else {
+            else
+            {
                 *phr = hr;
             }
         }
@@ -325,23 +360,26 @@ public:
              LPDIRECTDRAWSURFACE7 lpDDSSrc,
              RECT* lpSrc,
              BYTE  bAlpha
-             )
+            )
     {
         HRESULT hr=S_OK;
-        DDSURFACEDESC2 ddsd={0};
+        DDSURFACEDESC2 ddsd= {0};
 
-        struct {
+        struct
+        {
             float x, y, z, rhw;
             D3DCOLOR clr;
             float tu, tv;
         } pVertices[4];
 
-        __try {
+        __try
+        {
 
             INITDDSTRUCT(ddsd);
             CHECK_HR(hr = lpDDSSrc->GetSurfaceDesc(&ddsd));
 
-            if (!IsSurfaceBlendable(ddsd, bAlpha)) {
+            if (!IsSurfaceBlendable(ddsd, bAlpha))
+            {
                 CHECK_HR(hr = MirrorSourceSurface(lpDDSSrc, ddsd));
                 lpDDSSrc = m_lpDDMirror;
             }
@@ -421,22 +459,26 @@ public:
             //
             CHECK_HR(hr = m_pD3DDevice->BeginScene());
             CHECK_HR(hr = m_pD3DDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-                                                    D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1,
-                                                    pVertices, 4, D3DDP_WAIT));
+                          D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+                          pVertices, 4, D3DDP_WAIT));
             CHECK_HR(hr = m_pD3DDevice->EndScene());
 
-        } __finally {
+        }
+        __finally
+        {
             m_pD3DDevice->SetTexture(0, NULL);
         }
 
         return hr;
     }
 
-    bool TextureSquare() {
+    bool TextureSquare()
+    {
         return  m_fSquare;
     }
 
-    bool TexturePower2() {
+    bool TexturePower2()
+    {
         return  m_fPowerOf2;
     }
 };

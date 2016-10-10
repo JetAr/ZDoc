@@ -25,19 +25,19 @@ extern "C"
 {
     typedef BOOL (/* WINUSERAPI */ WINAPI *PUnregisterDeviceNotification)(
         IN HDEVNOTIFY Handle
-        );
+    );
 
     typedef HDEVNOTIFY (/* WINUSERAPI */ WINAPI *PRegisterDeviceNotificationA)(
         IN HANDLE hRecipient,
         IN LPVOID NotificationFilter,
         IN DWORD Flags
-        );
+    );
 
     typedef HDEVNOTIFY (/* WINUSERAPI */ WINAPI *PRegisterDeviceNotificationW)(
         IN HANDLE hRecipient,
         IN LPVOID NotificationFilter,
         IN DWORD Flags
-        );
+    );
 }
 
 #ifdef UNICODE
@@ -48,7 +48,8 @@ extern "C"
 
 #if (WINVER < 0x0500)
 
-typedef struct _DEV_BROADCAST_DEVICEINTERFACE_A {
+typedef struct _DEV_BROADCAST_DEVICEINTERFACE_A
+{
     DWORD       dbcc_size;
     DWORD       dbcc_devicetype;
     DWORD       dbcc_reserved;
@@ -56,7 +57,8 @@ typedef struct _DEV_BROADCAST_DEVICEINTERFACE_A {
     char        dbcc_name[1];
 } DEV_BROADCAST_DEVICEINTERFACE_A, *PDEV_BROADCAST_DEVICEINTERFACE_A;
 
-typedef struct _DEV_BROADCAST_DEVICEINTERFACE_W {
+typedef struct _DEV_BROADCAST_DEVICEINTERFACE_W
+{
     DWORD       dbcc_size;
     DWORD       dbcc_devicetype;
     DWORD       dbcc_reserved;

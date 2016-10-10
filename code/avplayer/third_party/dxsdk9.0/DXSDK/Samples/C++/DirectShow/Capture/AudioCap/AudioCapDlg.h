@@ -34,7 +34,7 @@ class CAudioCapDlg : public CDialog
 {
 // Construction
 public:
-	CAudioCapDlg(CWnd* pParent = NULL);	// standard constructor
+    CAudioCapDlg(CWnd* pParent = NULL);	// standard constructor
 
     HRESULT FillLists(void);
     void ClearLists(void);
@@ -62,37 +62,37 @@ public:
     void Say(TCHAR *szMsg);
 
 // Dialog Data
-	//{{AFX_DATA(CAudioCapDlg)
-	enum { IDD = IDD_AUDIOCAP_DIALOG };
-	CStatic	m_strStatus;
-	CButton	m_btnMono;
-	CButton	m_btn8BIT;
-	CButton	m_btn11KHZ;
-	CButton	m_btnPause;
-	CButton	m_btnStop;
-	CButton	m_btnPlay;
-	CListBox	m_ListFilterOutputs;
-	CListBox	m_ListFilterInputs;
-	CButton	m_btnRecord;
-	CButton	m_btnProperties;
-	CListBox	m_ListInputs;
-	CListBox	m_ListInputPins;
-	CListBox	m_ListFilters;
-	CEdit	m_StrFilename;
-	CButton	m_CheckWriteFile;
-	CButton	m_CheckAudition;
-	//}}AFX_DATA
+    //{{AFX_DATA(CAudioCapDlg)
+    enum { IDD = IDD_AUDIOCAP_DIALOG };
+    CStatic	m_strStatus;
+    CButton	m_btnMono;
+    CButton	m_btn8BIT;
+    CButton	m_btn11KHZ;
+    CButton	m_btnPause;
+    CButton	m_btnStop;
+    CButton	m_btnPlay;
+    CListBox	m_ListFilterOutputs;
+    CListBox	m_ListFilterInputs;
+    CButton	m_btnRecord;
+    CButton	m_btnProperties;
+    CListBox	m_ListInputs;
+    CListBox	m_ListInputPins;
+    CListBox	m_ListFilters;
+    CEdit	m_StrFilename;
+    CButton	m_CheckWriteFile;
+    CButton	m_CheckAudition;
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAudioCapDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAudioCapDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	HICON m_hIcon;
+    HICON m_hIcon;
     BOOL m_bPausedRecording;
     IGraphBuilder *m_pGB, *m_pGBPlayback;
     IMediaControl *m_pMC, *m_pMCPlayback;
@@ -103,26 +103,26 @@ protected:
     IBaseFilter *m_pInputDevice, *m_pRenderer, *m_pFileWriter,
                 *m_pSplitter,    *m_pWAVDest;
 
-	// Generated message map functions
-	//{{AFX_MSG(CAudioCapDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnClose();
-	afx_msg void OnButtonFile();
-	afx_msg void OnSelchangeListInputDevices();
-	afx_msg void OnSelchangeListFilters();
-	afx_msg void OnButtonClear();
-	afx_msg void OnSelchangeListInputPins();
-	afx_msg void OnButtonProperties();
-	afx_msg void OnButtonPlay();
-	afx_msg void OnButtonPause();
-	afx_msg void OnButtonStop();
-	afx_msg void OnButtonRecord();
-	afx_msg void OnDestroy();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CAudioCapDlg)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+    afx_msg void OnPaint();
+    afx_msg HCURSOR OnQueryDragIcon();
+    afx_msg void OnClose();
+    afx_msg void OnButtonFile();
+    afx_msg void OnSelchangeListInputDevices();
+    afx_msg void OnSelchangeListFilters();
+    afx_msg void OnButtonClear();
+    afx_msg void OnSelchangeListInputPins();
+    afx_msg void OnButtonProperties();
+    afx_msg void OnButtonPlay();
+    afx_msg void OnButtonPause();
+    afx_msg void OnButtonStop();
+    afx_msg void OnButtonRecord();
+    afx_msg void OnDestroy();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

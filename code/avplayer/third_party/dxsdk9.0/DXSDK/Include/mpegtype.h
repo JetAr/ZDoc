@@ -58,59 +58,60 @@ typedef struct tagAM_MPEGSYSTEMTYPE
 #define AM_MPEG_AUDIO_DUAL_LEFT  1
 #define AM_MPEG_AUDIO_DUAL_RIGHT 2
 
-DECLARE_INTERFACE_(IMpegAudioDecoder, IUnknown) {
+DECLARE_INTERFACE_(IMpegAudioDecoder, IUnknown)
+{
 
     STDMETHOD(get_FrequencyDivider) (THIS_
-                           unsigned long *pDivider   /* [out] */
-                           ) PURE;
+                                     unsigned long *pDivider   /* [out] */
+                                    ) PURE;
 
     STDMETHOD(put_FrequencyDivider) (THIS_
-                           unsigned long Divider     /* [in] */
-                           ) PURE;
+                                     unsigned long Divider     /* [in] */
+                                    ) PURE;
 
     STDMETHOD(get_DecoderAccuracy) (THIS_
-                           unsigned long *pAccuracy  /* [out] */
-                           ) PURE;
+                                    unsigned long *pAccuracy  /* [out] */
+                                   ) PURE;
 
     STDMETHOD(put_DecoderAccuracy) (THIS_
-                           unsigned long Accuracy    /* [in] */
-                           ) PURE;
+                                    unsigned long Accuracy    /* [in] */
+                                   ) PURE;
 
     STDMETHOD(get_Stereo) (THIS_
                            unsigned long *pStereo    /* [out] */
-                           ) PURE;
+                          ) PURE;
 
     STDMETHOD(put_Stereo) (THIS_
                            unsigned long Stereo      /* [in] */
-                           ) PURE;
+                          ) PURE;
 
     STDMETHOD(get_DecoderWordSize) (THIS_
-                           unsigned long *pWordSize  /* [out] */
-                           ) PURE;
+                                    unsigned long *pWordSize  /* [out] */
+                                   ) PURE;
 
     STDMETHOD(put_DecoderWordSize) (THIS_
-                           unsigned long WordSize    /* [in] */
-                           ) PURE;
+                                    unsigned long WordSize    /* [in] */
+                                   ) PURE;
 
     STDMETHOD(get_IntegerDecode) (THIS_
-                           unsigned long *pIntDecode /* [out] */
-                           ) PURE;
+                                  unsigned long *pIntDecode /* [out] */
+                                 ) PURE;
 
     STDMETHOD(put_IntegerDecode) (THIS_
-                           unsigned long IntDecode   /* [in] */
-                           ) PURE;
+                                  unsigned long IntDecode   /* [in] */
+                                 ) PURE;
 
     STDMETHOD(get_DualMode) (THIS_
-                           unsigned long *pIntDecode /* [out] */
-                           ) PURE;
+                             unsigned long *pIntDecode /* [out] */
+                            ) PURE;
 
     STDMETHOD(put_DualMode) (THIS_
-                           unsigned long IntDecode   /* [in] */
-                           ) PURE;
+                             unsigned long IntDecode   /* [in] */
+                            ) PURE;
 
     STDMETHOD(get_AudioFormat) (THIS_
-                           MPEG1WAVEFORMAT *lpFmt    /* [out] */
-                           ) PURE;
+                                MPEG1WAVEFORMAT *lpFmt    /* [out] */
+                               ) PURE;
 };
 
 #ifdef __cplusplus

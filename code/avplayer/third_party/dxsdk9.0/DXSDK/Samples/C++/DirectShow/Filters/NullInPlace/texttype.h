@@ -8,7 +8,8 @@
 //------------------------------------------------------------------------------
 
 
-class CTextMediaType : public CMediaType {
+class CTextMediaType : public CMediaType
+{
 
 public:
 
@@ -33,7 +34,7 @@ private:
     // Convert this CLSID into a meaningful string
 
     void CLSID2String(LPTSTR szBuffer,
-                       UINT iLength,
-                       const GUID* pGuid);
+                      UINT iLength,
+                      const GUID* pGuid);
 };
 

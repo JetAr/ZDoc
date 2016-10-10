@@ -38,137 +38,137 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace
 {
-	enum
-	{
-		FTEXT = 0x01,
-		FHCRC = 0x02,
-		FEXTRA = 0x04,
-		FNAME = 0x08,
-		FCOMMENT = 0x10,
-		FRESERVED = 0xe0,
+enum
+{
+    FTEXT = 0x01,
+    FHCRC = 0x02,
+    FEXTRA = 0x04,
+    FNAME = 0x08,
+    FCOMMENT = 0x10,
+    FRESERVED = 0xe0,
 
-		GZIP_MAGIC0 = 0x1f,
-		GZIP_MAGIC1 = 0x8b
-	};
+    GZIP_MAGIC0 = 0x1f,
+    GZIP_MAGIC1 = 0x8b
+};
 
 }
 
 namespace libtorrent
 {
-	// returns -1 if gzip header is invalid or the header size in bytes
-	int gzip_header(const char* buf, int size)
-	{
-		TORRENT_ASSERT(buf != 0);
+// returns -1 if gzip header is invalid or the header size in bytes
+int gzip_header(const char* buf, int size)
+{
+    TORRENT_ASSERT(buf != 0);
 
-		const unsigned char* buffer = reinterpret_cast<const unsigned char*>(buf);
-		const int total_size = size;
+    const unsigned char* buffer = reinterpret_cast<const unsigned char*>(buf);
+    const int total_size = size;
 
-		// The zip header cannot be shorter than 10 bytes
-		if (size < 10 || buf == 0) return -1;
+    // The zip header cannot be shorter than 10 bytes
+    if (size < 10 || buf == 0) return -1;
 
-		// check the magic header of gzip
-		if ((buffer[0] != GZIP_MAGIC0) || (buffer[1] != GZIP_MAGIC1)) return -1;
+    // check the magic header of gzip
+    if ((buffer[0] != GZIP_MAGIC0) || (buffer[1] != GZIP_MAGIC1)) return -1;
 
-		int method = buffer[2];
-		int flags = buffer[3];
+    int method = buffer[2];
+    int flags = buffer[3];
 
-		// check for reserved flag and make sure it's compressed with the correct metod
-		if (method != 8 || (flags & FRESERVED) != 0) return -1;
+    // check for reserved flag and make sure it's compressed with the correct metod
+    if (method != 8 || (flags & FRESERVED) != 0) return -1;
 
-		// skip time, xflags, OS code
-		size -= 10;
-		buffer += 10;
+    // skip time, xflags, OS code
+    size -= 10;
+    buffer += 10;
 
-		if (flags & FEXTRA)
-		{
-			int extra_len;
+    if (flags & FEXTRA)
+    {
+        int extra_len;
 
-			if (size < 2) return -1;
+        if (size < 2) return -1;
 
-			extra_len = (buffer[1] << 8) | buffer[0];
+        extra_len = (buffer[1] << 8) | buffer[0];
 
-			if (size < (extra_len+2)) return -1;
-			size -= (extra_len + 2);
-			buffer += (extra_len + 2);
-		}
+        if (size < (extra_len+2)) return -1;
+        size -= (extra_len + 2);
+        buffer += (extra_len + 2);
+    }
 
-		if (flags & FNAME)
-		{
-			while (size && *buffer)
-			{
-				--size;
-				++buffer;
-			}
-			if (!size || *buffer) return -1;
+    if (flags & FNAME)
+    {
+        while (size && *buffer)
+        {
+            --size;
+            ++buffer;
+        }
+        if (!size || *buffer) return -1;
 
-			--size;
-			++buffer;
-		}
+        --size;
+        ++buffer;
+    }
 
-		if (flags & FCOMMENT)
-		{
-			while (size && *buffer)
-			{
-				--size;
-				++buffer;
-			}
-			if (!size || *buffer) return -1;
+    if (flags & FCOMMENT)
+    {
+        while (size && *buffer)
+        {
+            --size;
+            ++buffer;
+        }
+        if (!size || *buffer) return -1;
 
-			--size;
-			++buffer;
-		}
+        --size;
+        ++buffer;
+    }
 
-		if (flags & FHCRC)
-		{
-			if (size < 2) return -1;
+    if (flags & FHCRC)
+    {
+        if (size < 2) return -1;
 
-			size -= 2;
+        size -= 2;
 //			buffer += 2;
-		}
+    }
 
-		return total_size - size;
-	}
+    return total_size - size;
+}
 
-	bool inflate_gzip(
-		char const* in
-		, int size
-		, std::vector<char>& buffer
-		, int maximum_size
-		, std::string& error)
-	{
-		TORRENT_ASSERT(maximum_size > 0);
+bool inflate_gzip(
+    char const* in
+    , int size
+    , std::vector<char>& buffer
+    , int maximum_size
+    , std::string& error)
+{
+    TORRENT_ASSERT(maximum_size > 0);
 
-		int header_len = gzip_header(in, size);
-		if (header_len < 0)
-		{
-			error = "invalid gzip header";
-			return true;
-		}
+    int header_len = gzip_header(in, size);
+    if (header_len < 0)
+    {
+        error = "invalid gzip header";
+        return true;
+    }
 
-		// start off with one kilobyte and grow
-		// if needed
-		buffer.resize(maximum_size);
+    // start off with one kilobyte and grow
+    // if needed
+    buffer.resize(maximum_size);
 
-		boost::uint32_t destlen = buffer.size();
-		boost::uint32_t srclen = size - header_len;
-		in += header_len;
-		int ret = puff((unsigned char*)&buffer[0], &destlen, (unsigned char*)in, &srclen);
+    boost::uint32_t destlen = buffer.size();
+    boost::uint32_t srclen = size - header_len;
+    in += header_len;
+    int ret = puff((unsigned char*)&buffer[0], &destlen, (unsigned char*)in, &srclen);
 
-		if (ret == -1)
-		{
-			error = "inflated data too big";
-			return true;
-		}
+    if (ret == -1)
+    {
+        error = "inflated data too big";
+        return true;
+    }
 
-		buffer.resize(destlen);
+    buffer.resize(destlen);
 
-		if (ret != 0)
-		{
-			error = "error while inflating data";
-			return true;
-		}
-		return false;
-	}
+    if (ret != 0)
+    {
+        error = "error while inflating data";
+        return true;
+    }
+    return false;
+}
 
 }
 

@@ -34,7 +34,8 @@
 
 typedef float FFTSample;
 
-typedef struct FFTComplex {
+typedef struct FFTComplex
+{
     FFTSample re, im;
 } FFTComplex;
 
@@ -68,7 +69,8 @@ void av_mdct_end(FFTContext *s);
 
 /* Real Discrete Fourier Transform */
 
-enum RDFTransformType {
+enum RDFTransformType
+{
     DFT_R2C,
     IDFT_C2R,
     IDFT_R2C,
@@ -90,7 +92,8 @@ void av_rdft_end(RDFTContext *s);
 
 typedef struct DCTContext DCTContext;
 
-enum DCTTransformType {
+enum DCTTransformType
+{
     DCT_II = 0,
     DCT_III,
     DCT_I,

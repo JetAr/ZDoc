@@ -45,8 +45,8 @@
 //   on input and output from the shader.
 //
 // D3DXSHADER_PACKMATRIX_COLUMNMAJOR
-//   Unless explicitly specified, matrices will be packed in column-major 
-//   order on input and output from the shader.  This is generally more 
+//   Unless explicitly specified, matrices will be packed in column-major
+//   order on input and output from the shader.  This is generally more
 //   efficient, since it allows vector-matrix multiplication to be performed
 //   using a series of dot-products.
 //----------------------------------------------------------------------------
@@ -228,7 +228,7 @@ typedef interface ID3DXConstantTable *LPD3DXCONSTANTTABLE;
 
 // {9DCA3190-38B9-4fc3-92E3-39C6DDFB358B}
 DEFINE_GUID( IID_ID3DXConstantTable,
-0x9dca3190, 0x38b9, 0x4fc3, 0x92, 0xe3, 0x39, 0xc6, 0xdd, 0xfb, 0x35, 0x8b);
+             0x9dca3190, 0x38b9, 0x4fc3, 0x92, 0xe3, 0x39, 0xc6, 0xdd, 0xfb, 0x35, 0x8b);
 
 
 #undef INTERFACE
@@ -283,7 +283,7 @@ DECLARE_INTERFACE_(ID3DXConstantTable, ID3DXBuffer)
 
 // {D59D3777-C973-4a3c-B4B0-2A62CD3D8B40}
 DEFINE_GUID(IID_ID3DXFragmentLinker,
-0xd59d3777, 0xc973, 0x4a3c, 0xb4, 0xb0, 0x2a, 0x62, 0xcd, 0x3d, 0x8b, 0x40);
+            0xd59d3777, 0xc973, 0x4a3c, 0xb4, 0xb0, 0x2a, 0x62, 0xcd, 0x3d, 0x8b, 0x40);
 
 
 DECLARE_INTERFACE_(ID3DXFragmentLinker, IUnknown)
@@ -406,22 +406,22 @@ extern "C" {
 
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromFileA(
-        LPCSTR                          pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXAssembleShaderFromFileA(
+    LPCSTR                          pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromFileW(
-        LPCWSTR                         pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXAssembleShaderFromFileW(
+    LPCWSTR                         pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 #ifdef UNICODE
 #define D3DXAssembleShaderFromFile D3DXAssembleShaderFromFileW
@@ -431,24 +431,24 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromResourceA(
-        HMODULE                         hSrcModule,
-        LPCSTR                          pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXAssembleShaderFromResourceA(
+    HMODULE                         hSrcModule,
+    LPCSTR                          pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromResourceW(
-        HMODULE                         hSrcModule,
-        LPCWSTR                         pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXAssembleShaderFromResourceW(
+    HMODULE                         hSrcModule,
+    LPCWSTR                         pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 #ifdef UNICODE
 #define D3DXAssembleShaderFromResource D3DXAssembleShaderFromResourceW
@@ -458,14 +458,14 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXAssembleShader(
-        LPCSTR                          pSrcData,
-        UINT                            SrcDataLen,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXAssembleShader(
+    LPCSTR                          pSrcData,
+    UINT                            SrcDataLen,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 
 
@@ -495,7 +495,7 @@ HRESULT WINAPI
 //      Name of the entrypoint function where execution should begin.
 //  pTarget
 //      Instruction set to be used when generating code.  Currently supported
-//      targets are "vs_1_1", "vs_2_0", "vs_2_sw", "ps_1_1", "ps_1_2", "ps_1_3", 
+//      targets are "vs_1_1", "vs_2_0", "vs_2_sw", "ps_1_1", "ps_1_2", "ps_1_3",
 //      "ps_1_4", "ps_2_0", "ps_2_sw", "tx_1_0"
 //  Flags
 //      See D3DXSHADER_xxx flags.
@@ -515,28 +515,28 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXCompileShaderFromFileA(
-        LPCSTR                          pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        LPCSTR                          pFunctionName,
-        LPCSTR                          pTarget,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable);
+D3DXCompileShaderFromFileA(
+    LPCSTR                          pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    LPCSTR                          pFunctionName,
+    LPCSTR                          pTarget,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs,
+    LPD3DXCONSTANTTABLE*            ppConstantTable);
 
 HRESULT WINAPI
-    D3DXCompileShaderFromFileW(
-        LPCWSTR                         pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        LPCSTR                          pFunctionName,
-        LPCSTR                          pTarget,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable);
+D3DXCompileShaderFromFileW(
+    LPCWSTR                         pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    LPCSTR                          pFunctionName,
+    LPCSTR                          pTarget,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs,
+    LPD3DXCONSTANTTABLE*            ppConstantTable);
 
 #ifdef UNICODE
 #define D3DXCompileShaderFromFile D3DXCompileShaderFromFileW
@@ -546,30 +546,30 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCompileShaderFromResourceA(
-        HMODULE                         hSrcModule,
-        LPCSTR                          pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        LPCSTR                          pFunctionName,
-        LPCSTR                          pTarget,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable);
+D3DXCompileShaderFromResourceA(
+    HMODULE                         hSrcModule,
+    LPCSTR                          pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    LPCSTR                          pFunctionName,
+    LPCSTR                          pTarget,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs,
+    LPD3DXCONSTANTTABLE*            ppConstantTable);
 
 HRESULT WINAPI
-    D3DXCompileShaderFromResourceW(
-        HMODULE                         hSrcModule,
-        LPCWSTR                         pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        LPCSTR                          pFunctionName,
-        LPCSTR                          pTarget,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable);
+D3DXCompileShaderFromResourceW(
+    HMODULE                         hSrcModule,
+    LPCWSTR                         pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    LPCSTR                          pFunctionName,
+    LPCSTR                          pTarget,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs,
+    LPD3DXCONSTANTTABLE*            ppConstantTable);
 
 #ifdef UNICODE
 #define D3DXCompileShaderFromResource D3DXCompileShaderFromResourceW
@@ -579,17 +579,17 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCompileShader(
-        LPCSTR                          pSrcData,
-        UINT                            SrcDataLen,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        LPCSTR                          pFunctionName,
-        LPCSTR                          pTarget,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable);
+D3DXCompileShader(
+    LPCSTR                          pSrcData,
+    UINT                            SrcDataLen,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    LPCSTR                          pFunctionName,
+    LPCSTR                          pTarget,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs,
+    LPD3DXCONSTANTTABLE*            ppConstantTable);
 
 //----------------------------------------------------------------------------
 // D3DXFindShaderComment:
@@ -611,11 +611,11 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXFindShaderComment(
-        CONST DWORD*                    pFunction,
-        DWORD                           FourCC,
-        LPCVOID*                        ppData,
-        UINT*                           pSizeInBytes);
+D3DXFindShaderComment(
+    CONST DWORD*                    pFunction,
+    DWORD                           FourCC,
+    LPCVOID*                        ppData,
+    UINT*                           pSizeInBytes);
 
 
 //----------------------------------------------------------------------------
@@ -636,16 +636,16 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXGetShaderInputSemantics(
-        CONST DWORD*                    pFunction,
-        D3DXSEMANTIC*                   pSemantics,
-        UINT*                           pCount);
+D3DXGetShaderInputSemantics(
+    CONST DWORD*                    pFunction,
+    D3DXSEMANTIC*                   pSemantics,
+    UINT*                           pCount);
 
 HRESULT WINAPI
-    D3DXGetShaderOutputSemantics(
-        CONST DWORD*                    pFunction,
-        D3DXSEMANTIC*                   pSemantics,
-        UINT*                           pCount);
+D3DXGetShaderOutputSemantics(
+    CONST DWORD*                    pFunction,
+    D3DXSEMANTIC*                   pSemantics,
+    UINT*                           pCount);
 
 
 //----------------------------------------------------------------------------
@@ -665,10 +665,10 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXGetShaderSamplers(
-        CONST DWORD*                    pFunction,
-        LPCSTR*                         pSamplers,
-        UINT*                           pCount);
+D3DXGetShaderSamplers(
+    CONST DWORD*                    pFunction,
+    LPCSTR*                         pSamplers,
+    UINT*                           pCount);
 
 
 //----------------------------------------------------------------------------
@@ -689,9 +689,9 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXGetShaderConstantTable(
-        CONST DWORD*                    pFunction,
-        LPD3DXCONSTANTTABLE*            ppConstantTable);
+D3DXGetShaderConstantTable(
+    CONST DWORD*                    pFunction,
+    LPD3DXCONSTANTTABLE*            ppConstantTable);
 
 
 //----------------------------------------------------------------------------
@@ -709,9 +709,9 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXGetShaderDebugInfo(
-        CONST DWORD*                    pFunction,
-        LPD3DXBUFFER*                   ppDebugInfo);
+D3DXGetShaderDebugInfo(
+    CONST DWORD*                    pFunction,
+    LPD3DXBUFFER*                   ppDebugInfo);
 
 
 
@@ -752,21 +752,21 @@ HRESULT WINAPI
 
 HRESULT WINAPI
 D3DXGatherFragmentsFromFileA(
-        LPCSTR                          pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+    LPCSTR                          pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 HRESULT WINAPI
 D3DXGatherFragmentsFromFileW(
-        LPCWSTR                         pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+    LPCWSTR                         pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 #ifdef UNICODE
 #define D3DXGatherFragmentsFromFile D3DXGatherFragmentsFromFileW
@@ -775,24 +775,24 @@ D3DXGatherFragmentsFromFileW(
 #endif
 
 HRESULT WINAPI
-    D3DXGatherFragmentsFromResourceA(
-        HMODULE                         hSrcModule,
-        LPCSTR                          pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXGatherFragmentsFromResourceA(
+    HMODULE                         hSrcModule,
+    LPCSTR                          pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 HRESULT WINAPI
-    D3DXGatherFragmentsFromResourceW(
-        HMODULE                         hSrcModule,
-        LPCWSTR                         pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXGatherFragmentsFromResourceW(
+    HMODULE                         hSrcModule,
+    LPCWSTR                         pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 #ifdef UNICODE
 #define D3DXGatherFragmentsFromResource D3DXGatherFragmentsFromResourceW
@@ -802,14 +802,14 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXGatherFragments(
-        LPCSTR                          pSrcData,
-        UINT                            SrcDataLen,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs);
+D3DXGatherFragments(
+    LPCSTR                          pSrcData,
+    UINT                            SrcDataLen,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXBUFFER*                   ppShader,
+    LPD3DXBUFFER*                   ppErrorMsgs);
 
 typedef ID3DXFragmentLinker *LPD3DXFRAGMENTLINKER;
 
@@ -817,7 +817,7 @@ typedef ID3DXFragmentLinker *LPD3DXFRAGMENTLINKER;
 //----------------------------------------------------------------------------
 // D3DXCreateFragmentLinker:
 // -------------------------
-// Creates a fragment linker with a given cache size.  The interface returned 
+// Creates a fragment linker with a given cache size.  The interface returned
 // can be used to link together shader fragments.  (both HLSL & ASM fragements)
 //
 // Parameters:
@@ -831,10 +831,10 @@ typedef ID3DXFragmentLinker *LPD3DXFRAGMENTLINKER;
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXCreateFragmentLinker(
-        LPDIRECT3DDEVICE9               pDevice,
-        UINT                            ShaderCacheSize,
-        LPD3DXFRAGMENTLINKER*           ppFragmentLinker);
+D3DXCreateFragmentLinker(
+    LPDIRECT3DDEVICE9               pDevice,
+    UINT                            ShaderCacheSize,
+    LPD3DXFRAGMENTLINKER*           ppFragmentLinker);
 
 
 

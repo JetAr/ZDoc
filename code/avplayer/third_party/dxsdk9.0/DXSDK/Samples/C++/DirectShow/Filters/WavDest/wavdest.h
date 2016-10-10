@@ -24,7 +24,7 @@ class CWavDestFilter : public CTransformFilter
 public:
 
     DECLARE_IUNKNOWN;
-  
+
     CWavDestFilter(LPUNKNOWN pUnk, HRESULT *pHr);
     ~CWavDestFilter();
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *pHr);
@@ -42,7 +42,10 @@ public:
     HRESULT StartStreaming();
     HRESULT StopStreaming();
 
-    HRESULT CompleteConnect(PIN_DIRECTION direction,IPin *pReceivePin) { return S_OK; }
+    HRESULT CompleteConnect(PIN_DIRECTION direction,IPin *pReceivePin)
+    {
+        return S_OK;
+    }
 
 private:
 

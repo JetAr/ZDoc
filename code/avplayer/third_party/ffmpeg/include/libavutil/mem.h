@@ -40,36 +40,36 @@
 
 
 #if defined(__INTEL_COMPILER) && __INTEL_COMPILER < 1110 || defined(__SUNPRO_C)
-    #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
-    #define DECLARE_ASM_CONST(n,t,v)    const t __attribute__ ((aligned (n))) v
+#define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
+#define DECLARE_ASM_CONST(n,t,v)    const t __attribute__ ((aligned (n))) v
 #elif defined(__TI_COMPILER_VERSION__)
-    #define DECLARE_ALIGNED(n,t,v)                      \
+#define DECLARE_ALIGNED(n,t,v)                      \
         AV_PRAGMA(DATA_ALIGN(v,n))                      \
         t __attribute__((aligned(n))) v
-    #define DECLARE_ASM_CONST(n,t,v)                    \
+#define DECLARE_ASM_CONST(n,t,v)                    \
         AV_PRAGMA(DATA_ALIGN(v,n))                      \
         static const t __attribute__((aligned(n))) v
 #elif defined(__GNUC__)
-    #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
-    #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (n))) v
+#define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
+#define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (n))) v
 #elif defined(_MSC_VER)
-    #define DECLARE_ALIGNED(n,t,v)      __declspec(align(n)) t v
-    #define DECLARE_ASM_CONST(n,t,v)    __declspec(align(n)) static const t v
+#define DECLARE_ALIGNED(n,t,v)      __declspec(align(n)) t v
+#define DECLARE_ASM_CONST(n,t,v)    __declspec(align(n)) static const t v
 #else
-    #define DECLARE_ALIGNED(n,t,v)      t v
-    #define DECLARE_ASM_CONST(n,t,v)    static const t v
+#define DECLARE_ALIGNED(n,t,v)      t v
+#define DECLARE_ASM_CONST(n,t,v)    static const t v
 #endif
 
 #if AV_GCC_VERSION_AT_LEAST(3,1)
-    #define av_malloc_attrib __attribute__((__malloc__))
+#define av_malloc_attrib __attribute__((__malloc__))
 #else
-    #define av_malloc_attrib
+#define av_malloc_attrib
 #endif
 
 #if AV_GCC_VERSION_AT_LEAST(4,3)
-    #define av_alloc_size(...) __attribute__((alloc_size(__VA_ARGS__)))
+#define av_alloc_size(...) __attribute__((alloc_size(__VA_ARGS__)))
 #else
-    #define av_alloc_size(...)
+#define av_alloc_size(...)
 #endif
 
 /**

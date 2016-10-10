@@ -26,14 +26,16 @@ class CNetworkReceiverFilter ;
 
 class CNetReceiver
 {
-    enum {
+    enum
+    {
         MAX_READ_PENDS  = 10,   //  we pend reads asychronously, up to this
-                                //   number
+        //   number
         PULSE_MILLIS    = 100   //  worker thread times out periodically to
-                                //   perform housekeeping work
+                          //   perform housekeeping work
     } ;
 
-    enum {
+    enum
+    {
         EVENT_STOP,
         EVENT_GET_BLOCK,
         EVENT_COUNT         //  always last
@@ -48,81 +50,87 @@ class CNetReceiver
     CNetworkReceiverFilter *    m_pRecvFilter ;             //  back pointer to host
     CRITICAL_SECTION            m_crt ;                     //  crit sect
 
-    void Lock_ ()               { EnterCriticalSection (& m_crt) ; }
-    void Unlock_ ()             { LeaveCriticalSection (& m_crt) ; }
+    void Lock_ ()
+    {
+        EnterCriticalSection (& m_crt) ;
+    }
+    void Unlock_ ()
+    {
+        LeaveCriticalSection (& m_crt) ;
+    }
 
     HRESULT
     JoinMulticast_ (
         IN  ULONG   ulIP,           //  IP; class d; network order
         IN  USHORT  usPort,         //  port; network order
         IN  ULONG   ulNIC           //  network interface; network order
-        ) ;
+    ) ;
 
     void
     LeaveMulticast_ (
-        ) ;
+    ) ;
 
     void
     PendReads_ (
         IN  DWORD   dwBufferWaitMax = 0
-        ) ;
+    ) ;
 
-    public :
+public :
 
-        CNetReceiver (
-            IN  CBufferPool *               pBufferPool,
-            IN  CNetworkReceiverFilter *    pRecvFilter,
-            OUT HRESULT *                   phr
-            ) ;
+    CNetReceiver (
+        IN  CBufferPool *               pBufferPool,
+        IN  CNetworkReceiverFilter *    pRecvFilter,
+        OUT HRESULT *                   phr
+    ) ;
 
-        ~CNetReceiver (
-            ) ;
+    ~CNetReceiver (
+    ) ;
 
-        //  synchronous call to join the multicast and start the thread
-        HRESULT
-        Activate (
-            IN  ULONG   ulIP,           //  IP; class d; network order
-            IN  USHORT  usPort,         //  port; network order
-            IN  ULONG   ulNIC           //  network interface; network order
-            ) ;
+    //  synchronous call to join the multicast and start the thread
+    HRESULT
+    Activate (
+        IN  ULONG   ulIP,           //  IP; class d; network order
+        IN  USHORT  usPort,         //  port; network order
+        IN  ULONG   ulNIC           //  network interface; network order
+    ) ;
 
-        //  synchronous call to stop the thread and leave the multicast
-        HRESULT
-        Stop (
-            ) ;
+    //  synchronous call to stop the thread and leave the multicast
+    HRESULT
+    Stop (
+    ) ;
 
-        //  handles the receiver-specific read completion
-        void
-        ReadCompletion (
-            IN  CBuffer *,
-            IN  DWORD
-            ) ;
+    //  handles the receiver-specific read completion
+    void
+    ReadCompletion (
+        IN  CBuffer *,
+        IN  DWORD
+    ) ;
 
-        //  entry point for an async read completion
-        static
-        void
-        CALLBACK
-        AsyncCompletionCallback (
-            IN  DWORD           dwError,
-            IN  DWORD           dwBytesReceived,
-            IN  LPWSAOVERLAPPED pOverlapped,
-            IN  DWORD           dwFlags
-            ) ;
+    //  entry point for an async read completion
+    static
+    void
+    CALLBACK
+    AsyncCompletionCallback (
+        IN  DWORD           dwError,
+        IN  DWORD           dwBytesReceived,
+        IN  LPWSAOVERLAPPED pOverlapped,
+        IN  DWORD           dwFlags
+    ) ;
 
-        void
-        ThreadProc (
-            ) ;
+    void
+    ThreadProc (
+    ) ;
 
-        static
-        DWORD
-        WINAPI
-        ThreadEntry (
-            IN  LPVOID  pv
-            )
-        {
-            (reinterpret_cast <CNetReceiver *> (pv)) -> ThreadProc () ;
-            return EXIT_SUCCESS ;
-        }
+    static
+    DWORD
+    WINAPI
+    ThreadEntry (
+        IN  LPVOID  pv
+    )
+    {
+        (reinterpret_cast <CNetReceiver *> (pv)) -> ThreadProc () ;
+        return EXIT_SUCCESS ;
+    }
 } ;
 
 #endif  //  __netrecv_h

@@ -53,42 +53,42 @@ class CBlenderDlg : public CDialog
 {
 // Construction
 public:
-	CBlenderDlg(CWnd* pParent = NULL);	// standard constructor
+    CBlenderDlg(CWnd* pParent = NULL);	// standard constructor
 
     HRESULT PrepareMedia(LPTSTR lpszMovie);
     HRESULT InitDirectShow(void);
     HRESULT FreeDirectShow(void);
     HRESULT HandleGraphEvent(void);
-	HRESULT UpdatePinAlpha(int nStreamID);
-	HRESULT UpdatePinPos(int nStreamID);
-	HRESULT RepaintVideo(void);
+    HRESULT UpdatePinAlpha(int nStreamID);
+    HRESULT UpdatePinPos(int nStreamID);
+    HRESULT RepaintVideo(void);
 
-	HRESULT WaitForState(OAFilterState fsReq);
-	HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
-	void RemoveGraphFromRot(DWORD pdwRegister);
+    HRESULT WaitForState(OAFilterState fsReq);
+    HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
+    void RemoveGraphFromRot(DWORD pdwRegister);
 
     void ResetDirectShow(void);
     void CenterVideo(void);
-	void MoveVideoWindow(void);
-	BOOL GetClipFileName(LPTSTR szName);
-	BOOL VerifyVMR9(void);
-	HRESULT InitializeVideo(void);
-	HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9);
-	HRESULT DisplayFileDuration(void);
-	void UpdatePosition(void);
+    void MoveVideoWindow(void);
+    BOOL GetClipFileName(LPTSTR szName);
+    BOOL VerifyVMR9(void);
+    HRESULT InitializeVideo(void);
+    HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9);
+    HRESULT DisplayFileDuration(void);
+    void UpdatePosition(void);
 
-	void Msg(TCHAR *szFormat, ...);
-	void RetailOutput(TCHAR *tszErr, ...);
+    void Msg(TCHAR *szFormat, ...);
+    void RetailOutput(TCHAR *tszErr, ...);
 
-	void InitStreamParams(void);
-	void InitButtons(void);
-	void InitControls(void);
-	void EnableControls(BOOL bEnable);
-	void SetSliders(void);
-	void HandleHorizontalTrackbar(WPARAM wParam, LPARAM lParam);
-	void HandleVerticalTrackbar(WPARAM wParam, LPARAM lParam);
-	void StartTimer(void);
-	void StopTimer(void);
+    void InitStreamParams(void);
+    void InitButtons(void);
+    void InitControls(void);
+    void EnableControls(BOOL bEnable);
+    void SetSliders(void);
+    void HandleHorizontalTrackbar(WPARAM wParam, LPARAM lParam);
+    void HandleVerticalTrackbar(WPARAM wParam, LPARAM lParam);
+    void StartTimer(void);
+    void StopTimer(void);
     void DisplayCoordinates(int nStreamID, VMR9NormalizedRect& r);
     void DisplayAlpha(int nStreamID);
 
@@ -99,61 +99,61 @@ public:
 
 
 // Dialog Data
-	//{{AFX_DATA(CBlenderDlg)
-	enum { IDD = IDD_BLENDER_DIALOG };
-	CStatic	m_StrPosition;
-	CStatic	m_StrDuration;
-	CButton	m_ButtonStop;
-	CButton	m_ButtonPause;
-	CButton	m_ButtonPlay;
-	CStatic	m_Screen;
-	//}}AFX_DATA
+    //{{AFX_DATA(CBlenderDlg)
+    enum { IDD = IDD_BLENDER_DIALOG };
+    CStatic	m_StrPosition;
+    CStatic	m_StrDuration;
+    CButton	m_ButtonStop;
+    CButton	m_ButtonPause;
+    CButton	m_ButtonPlay;
+    CStatic	m_Screen;
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CBlenderDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CBlenderDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	HICON m_hIcon;
+    HICON m_hIcon;
 
-	DWORD m_dwGraphRegister;
-	HWND m_hwndScreen;
+    DWORD m_dwGraphRegister;
+    HWND m_hwndScreen;
     UINT_PTR g_wTimerID;
 
-	IGraphBuilder *pGB;
-	IMediaSeeking *pMS;
-	IMediaControl *pMC;
-	IMediaEventEx *pME;
-	IVMRWindowlessControl9 *pWC;
+    IGraphBuilder *pGB;
+    IMediaSeeking *pMS;
+    IMediaControl *pMC;
+    IMediaEventEx *pME;
+    IVMRWindowlessControl9 *pWC;
     IVMRMixerControl9 *pMix;
 
-	TCHAR m_szFile1[MAX_PATH], m_szFile2[MAX_PATH];
+    TCHAR m_szFile1[MAX_PATH], m_szFile2[MAX_PATH];
 
-	// Generated message map functions
-	//{{AFX_MSG(CBlenderDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnButtonStream1();
-	afx_msg void OnButtonStream2();
-	afx_msg void OnStop();
-	afx_msg void OnPause();
-	afx_msg void OnPlay();
-	afx_msg void OnClose();
-	afx_msg void OnDestroy();
-	afx_msg void OnTimer(UINT nIDEvent);
-	afx_msg void OnCheckFlip();
-	afx_msg void OnCheckMirror();
-	afx_msg void OnCheckFlip2();
-	afx_msg void OnCheckMirror2();
-	afx_msg void OnButtonAbout();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CBlenderDlg)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+    afx_msg void OnPaint();
+    afx_msg HCURSOR OnQueryDragIcon();
+    afx_msg void OnButtonStream1();
+    afx_msg void OnButtonStream2();
+    afx_msg void OnStop();
+    afx_msg void OnPause();
+    afx_msg void OnPlay();
+    afx_msg void OnClose();
+    afx_msg void OnDestroy();
+    afx_msg void OnTimer(UINT nIDEvent);
+    afx_msg void OnCheckFlip();
+    afx_msg void OnCheckMirror();
+    afx_msg void OnCheckFlip2();
+    afx_msg void OnCheckMirror2();
+    afx_msg void OnButtonAbout();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

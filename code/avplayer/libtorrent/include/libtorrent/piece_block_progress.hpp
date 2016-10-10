@@ -37,20 +37,20 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct TORRENT_EXPORT piece_block_progress
-	{
-		// the piece and block index
-		// determines exactly which
-		// part of the torrent that
-		// is currently being downloaded
-		int piece_index;
-		int block_index;
-		// the number of bytes we have received
-		// of this block
-		int bytes_downloaded;
-		// the number of bytes in the block
-		int full_block_bytes;
-	};
+struct TORRENT_EXPORT piece_block_progress
+{
+    // the piece and block index
+    // determines exactly which
+    // part of the torrent that
+    // is currently being downloaded
+    int piece_index;
+    int block_index;
+    // the number of bytes we have received
+    // of this block
+    int bytes_downloaded;
+    // the number of bytes in the block
+    int full_block_bytes;
+};
 }
 
 #endif // TORRENT_PIECE_BLOCK_PROGRESS_HPP_INCLUDED

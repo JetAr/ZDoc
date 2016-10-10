@@ -37,7 +37,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <libtorrent/kademlia/node_id.hpp>
 #include <libtorrent/kademlia/find_data.hpp>
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 class routing_table;
@@ -46,34 +48,35 @@ class rpc_manager;
 class refresh : public find_data
 {
 public:
-	typedef find_data::nodes_callback done_callback;
+    typedef find_data::nodes_callback done_callback;
 
-	refresh(node_impl& node, node_id target
-		, done_callback const& callback);
+    refresh(node_impl& node, node_id target
+            , done_callback const& callback);
 
-	virtual char const* name() const;
+    virtual char const* name() const;
 
 protected:
 
-	observer_ptr new_observer(void* ptr, udp::endpoint const& ep, node_id const& id);
-	virtual bool invoke(observer_ptr o);
+    observer_ptr new_observer(void* ptr, udp::endpoint const& ep, node_id const& id);
+    virtual bool invoke(observer_ptr o);
 };
 
 class bootstrap : public refresh
 {
 public:
-	bootstrap(node_impl& node, node_id target
-		, done_callback const& callback);
+    bootstrap(node_impl& node, node_id target
+              , done_callback const& callback);
 
-	virtual char const* name() const;
+    virtual char const* name() const;
 
 protected:
 
-	virtual void done();
+    virtual void done();
 
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif // REFRESH_050324_HPP
 

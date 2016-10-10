@@ -1,8 +1,8 @@
 ﻿//----------------------------------------------------------------------------
 // File: terrainengine.h
 //
-// Desc: Class that owns all the terrian mesh objects and all 
-//       the game objects. 
+// Desc: Class that owns all the terrian mesh objects and all
+//       the game objects.
 //
 // Copyright (C) Microsoft Corporation. All Rights Reserved.
 //-----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ struct CULLINFO
 };
 
 
-class CTerrainEngine  
+class CTerrainEngine
 {
 public:
     struct MESH_NODE
@@ -50,7 +50,7 @@ public:
     };
 
     struct VIEW_NODE
-    {        
+    {
         bool        bValid;
         bool        bVisited;
         bool        bInView;
@@ -93,20 +93,26 @@ public:
 
     HRESULT RenderRadar( LPDIRECT3DTEXTURE9 pRadarTexture, LPDIRECT3DTEXTURE9 pTempRadarTexture );
     void    DrawDotOnBuffer( int nCenterX, int nCenterY, D3DLOCKED_RECT* plockedRect, D3DSURFACE_DESC* pdesc, WORD wColor );
-    
+
     HRESULT HandleNearbyObjects( const float fElapsedTime, CDisplayObject* pObject1, int iX, int iZ );
-    
+
     HRESULT ClearStrayObjects();
     HRESULT AddDisplayObject( CDisplayObject* pObject );
     HRESULT RemoveDisplayObject( CDisplayObject* pObject );
-    DWORD   GetObjectCount() { return m_dwObjectCount; }
-    DWORD   GetEnemyCount() { return m_dwEnemyCount; }
+    DWORD   GetObjectCount()
+    {
+        return m_dwObjectCount;
+    }
+    DWORD   GetEnemyCount()
+    {
+        return m_dwEnemyCount;
+    }
 
     DWORD               m_dwObjectCount;           // How many objects are in the world
     DWORD               m_dwEnemyCount;            // How many enemies are in the world
     MESH_NODE*          m_MeshArray;
     LONG                m_dwWorldWidth;
-    LONG                m_dwWorldHeight;  
+    LONG                m_dwWorldHeight;
     D3DFORMAT           m_fmtTexture;
     DWORD               m_dwVertsRendered;
     DWORD               m_dwNumZonesInView;

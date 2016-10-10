@@ -24,7 +24,7 @@
 
 //----------------------------------------------------------------------------
 //  VerifyVMR9
-// 
+//
 //  Verifies that VMR9 COM objects exist on the system and that the VMR9
 //  can be instantiated.
 //
@@ -48,26 +48,26 @@ BOOL VerifyVMR9(void)
     }
     else
     {
-        MessageBox(NULL, 
-            TEXT("This application requires the Video Mixing Renderer, which is present\r\n")
-            TEXT("only on DirectX 9 systems with hardware video acceleration enabled.\r\n\r\n")
+        MessageBox(NULL,
+                   TEXT("This application requires the Video Mixing Renderer, which is present\r\n")
+                   TEXT("only on DirectX 9 systems with hardware video acceleration enabled.\r\n\r\n")
 
-            TEXT("The Video Mixing Renderer (VMR9) is not enabled when viewing a \r\n")
-            TEXT("remote Windows XP machine through a Remote Desktop session.\r\n")
-            TEXT("You can run VMR-enabled applications only on your local machine.\r\n\r\n")
+                   TEXT("The Video Mixing Renderer (VMR9) is not enabled when viewing a \r\n")
+                   TEXT("remote Windows XP machine through a Remote Desktop session.\r\n")
+                   TEXT("You can run VMR-enabled applications only on your local machine.\r\n\r\n")
 
-            TEXT("To verify that hardware acceleration is enabled on a Windows XP\r\n")
-            TEXT("system, follow these steps:\r\n")
-            TEXT("-----------------------------------------------------------------------\r\n")
-            TEXT(" - Open 'Display Properties' in the Control Panel\r\n")
-            TEXT(" - Click the 'Settings' tab\r\n")
-            TEXT(" - Click on the 'Advanced' button at the bottom of the page\r\n")
-            TEXT(" - Click on the 'Troubleshooting' tab in the window that appears\r\n")
-            TEXT(" - Verify that the 'Hardware Acceleration' slider is at the rightmost position\r\n")
+                   TEXT("To verify that hardware acceleration is enabled on a Windows XP\r\n")
+                   TEXT("system, follow these steps:\r\n")
+                   TEXT("-----------------------------------------------------------------------\r\n")
+                   TEXT(" - Open 'Display Properties' in the Control Panel\r\n")
+                   TEXT(" - Click the 'Settings' tab\r\n")
+                   TEXT(" - Click on the 'Advanced' button at the bottom of the page\r\n")
+                   TEXT(" - Click on the 'Troubleshooting' tab in the window that appears\r\n")
+                   TEXT(" - Verify that the 'Hardware Acceleration' slider is at the rightmost position\r\n")
 
-            TEXT("\r\nThis sample will now exit."),
+                   TEXT("\r\nThis sample will now exit."),
 
-            TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
+                   TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
 
         return FALSE;
     }
@@ -85,8 +85,8 @@ BOOL IsWindowsMediaFile(WCHAR *lpszFile)
     _tcslwr(szFilename);
 
     if (_tcsstr(szFilename, TEXT(".asf")) ||
-        _tcsstr(szFilename, TEXT(".wma")) ||
-        _tcsstr(szFilename, TEXT(".wmv")))
+            _tcsstr(szFilename, TEXT(".wma")) ||
+            _tcsstr(szFilename, TEXT(".wmv")))
         return TRUE;
     else
         return FALSE;
@@ -143,7 +143,7 @@ HRESULT GetUnconnectedPin(
 }
 
 
-HRESULT RenderFileToVMR9(IGraphBuilder *pGB, WCHAR *wFileName, 
+HRESULT RenderFileToVMR9(IGraphBuilder *pGB, WCHAR *wFileName,
                          IBaseFilter *pRenderer, BOOL bRenderAudio=TRUE)
 {
     HRESULT hr=S_OK;
@@ -188,13 +188,13 @@ HRESULT RenderFileToVMR9(IGraphBuilder *pGB, WCHAR *wFileName,
     if (bRenderAudio)
     {
         // Because we will be rendering with the RENDERTOEXISTINGRENDERERS flag,
-        // we need to create an audio renderer and add it to the graph.  
+        // we need to create an audio renderer and add it to the graph.
         // Create an instance of the DirectSound renderer (for each media file).
         //
         // Note that if the system has no sound card (or if the card is disabled),
         // then creating the DirectShow renderer will fail.  In that case,
         // handle the failure quietly.
-        if (SUCCEEDED(CoCreateInstance(CLSID_DSoundRender, NULL, CLSCTX_INPROC_SERVER, 
+        if (SUCCEEDED(CoCreateInstance(CLSID_DSoundRender, NULL, CLSCTX_INPROC_SERVER,
                                        IID_IBaseFilter, (void **)&pAudioRenderer)))
         {
             // The audio renderer was successfully created, so add it to the graph
@@ -206,14 +206,14 @@ HRESULT RenderFileToVMR9(IGraphBuilder *pGB, WCHAR *wFileName,
     // multifile graph with the non-default VMR9 renderer
     JIF(pGB->QueryInterface(IID_IFilterGraph2, (void **)&pFG));
 
-    // Render the output pin, using the VMR9 as the specified renderer.  This is 
+    // Render the output pin, using the VMR9 as the specified renderer.  This is
     // necessary in case the GraphBuilder needs to insert a Color Space convertor,
     // or if multiple filters insist on using multiple allocators.
     // The audio renderer will also be used, if the media file contains audio.
     JIF(pFG->RenderEx(pOutputPin, AM_RENDEREX_RENDERTOEXISTINGRENDERERS, NULL));
 
-    // If this media file does not contain an audio stream, then the 
-    // audio renderer that we created will be unconnected.  If left in the 
+    // If this media file does not contain an audio stream, then the
+    // audio renderer that we created will be unconnected.  If left in the
     // graph, it could interfere with rate changes and timing.
     // Therefore, if the audio renderer is unconnected, remove it from the graph.
     if (pAudioRenderer != NULL)

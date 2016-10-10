@@ -11,7 +11,8 @@
 
 
 
-class CTransEffectBase {
+class CTransEffectBase
+{
 
 public:
 

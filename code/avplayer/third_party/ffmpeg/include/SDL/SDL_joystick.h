@@ -149,7 +149,7 @@ extern DECLSPEC Sint16 SDLCALL SDL_JoystickGetAxis(SDL_Joystick *joystick, int a
 #define SDL_HAT_LEFTDOWN	(SDL_HAT_LEFT|SDL_HAT_DOWN)
 /*@}*/
 
-/** 
+/**
  *  Get the current state of a POV hat on a joystick
  *
  *  @param[in] hat The hat indices start at index 0.

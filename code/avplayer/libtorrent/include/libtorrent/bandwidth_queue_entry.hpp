@@ -37,32 +37,33 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/bandwidth_limit.hpp"
 #include "libtorrent/bandwidth_socket.hpp"
 
-namespace libtorrent {
+namespace libtorrent
+{
 
 struct TORRENT_EXTRA_EXPORT bw_request
 {
-	bw_request(boost::intrusive_ptr<bandwidth_socket> const& pe
-		, int blk, int prio);
+    bw_request(boost::intrusive_ptr<bandwidth_socket> const& pe
+               , int blk, int prio);
 
-	boost::intrusive_ptr<bandwidth_socket> peer;
-	// 1 is normal prio
-	int priority;
-	// the number of bytes assigned to this request so far
-	int assigned;
-	// once assigned reaches this, we dispatch the request function
-	int request_size;
+    boost::intrusive_ptr<bandwidth_socket> peer;
+    // 1 is normal prio
+    int priority;
+    // the number of bytes assigned to this request so far
+    int assigned;
+    // once assigned reaches this, we dispatch the request function
+    int request_size;
 
-	// the max number of rounds for this request to survive
-	// this ensures that requests gets responses at very low
-	// rate limits, when the requested size would take a long
-	// time to satisfy
-	int ttl;
+    // the max number of rounds for this request to survive
+    // this ensures that requests gets responses at very low
+    // rate limits, when the requested size would take a long
+    // time to satisfy
+    int ttl;
 
-	// loops over the bandwidth channels and assigns bandwidth
-	// from the most limiting one
-	int assign_bandwidth();
+    // loops over the bandwidth channels and assigns bandwidth
+    // from the most limiting one
+    int assign_bandwidth();
 
-	bandwidth_channel* channel[5];
+    bandwidth_channel* channel[5];
 };
 
 }

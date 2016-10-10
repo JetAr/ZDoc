@@ -59,8 +59,8 @@ protected:
     BOOL m_bDoGetDC;                // Should this window get a DC
     bool m_bDoPostToDestroy;        // Use PostMessage to destroy
     CCritSec m_PaletteLock;         // This lock protects m_hPalette.
-                                    // It should be held anytime the
-                                    // program use the value of m_hPalette.
+    // It should be held anytime the
+    // program use the value of m_hPalette.
 
     // Maps windows message procedure into C++ methods
     friend LRESULT CALLBACK WndProc(HWND hwnd,      // Window handle
@@ -110,7 +110,9 @@ public:
     void UnlockPaletteLock();
 
     virtual BOOL PossiblyEatMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-	    { return FALSE; };
+    {
+        return FALSE;
+    };
 
     // Access our window information
 
@@ -121,9 +123,9 @@ public:
     HDC GetMemoryHDC();
     HDC GetWindowHDC();
 
-    #ifdef DEBUG
+#ifdef DEBUG
     HPALETTE GetPalette();
-    #endif // DEBUG
+#endif // DEBUG
 
     // This is the window procedure the derived object should override
 
@@ -135,9 +137,9 @@ public:
     // Must be overriden to return class and window styles
 
     virtual LPTSTR GetClassWindowStyles(
-                            DWORD *pClassStyles,          // Class styles
-                            DWORD *pWindowStyles,         // Window styles
-                            DWORD *pWindowStylesEx) PURE; // Extended styles
+        DWORD *pClassStyles,          // Class styles
+        DWORD *pWindowStyles,         // Window styles
+        DWORD *pWindowStylesEx) PURE; // Extended styles
 };
 
 
@@ -212,13 +214,15 @@ public:
 
     // Called when we are about to draw an image
 
-    void NotifyStartDraw() {
+    void NotifyStartDraw()
+    {
         MSR_START(m_perfidRenderTime);
     };
 
     // Called when we complete an image rendering
 
-    void NotifyEndDraw() {
+    void NotifyEndDraw()
+    {
         MSR_STOP(m_perfidRenderTime);
     };
 };
@@ -228,7 +232,8 @@ public:
 // samples we create from our allocator will have a DIBSECTION allocated to
 // them. When we receive the sample we know we can BitBlt straight to an HDC
 
-typedef struct tagDIBDATA {
+typedef struct tagDIBDATA
+{
 
     LONG        PaletteVersion;     // Current palette version in use
     DIBSECTION  DibSection;         // Details of DIB section allocated

@@ -36,87 +36,90 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	template<int v1, int v2>
-	struct max { enum { value = v1>v2?v1:v2 }; };
+template<int v1, int v2>
+struct max
+{
+    enum { value = v1>v2?v1:v2 };
+};
 
-	template<int v1, int v2, int v3>
-	struct max3
-	{
-		enum
-		{
-			temp = max<v1,v2>::value,
-			value = max<temp, v3>::value
-		};
-	};
+template<int v1, int v2, int v3>
+struct max3
+{
+    enum
+    {
+        temp = max<v1,v2>::value,
+        value = max<temp, v3>::value
+    };
+};
 
-	template<int v1, int v2, int v3, int v4>
-	struct max4
-	{
-		enum
-		{
-			temp1 = max<v1,v2>::value,
-			temp2 = max<v3,v4>::value,
-			value = max<temp1, temp2>::value
-		};
-	};
+template<int v1, int v2, int v3, int v4>
+struct max4
+{
+    enum
+    {
+        temp1 = max<v1,v2>::value,
+        temp2 = max<v3,v4>::value,
+        value = max<temp1, temp2>::value
+    };
+};
 
-	template<int v1, int v2, int v3, int v4, int v5>
-	struct max5
-	{
-		enum
-		{
-			temp = max4<v1,v2, v3, v4>::value,
-			value = max<temp, v5>::value
-		};
-	};
+template<int v1, int v2, int v3, int v4, int v5>
+struct max5
+{
+    enum
+    {
+        temp = max4<v1,v2, v3, v4>::value,
+        value = max<temp, v5>::value
+    };
+};
 
-	template<int v1, int v2, int v3, int v4, int v5, int v6>
-	struct max6
-	{
-		enum
-		{
-			temp1 = max<v1,v2>::value,
-			temp2 = max<v3,v4>::value,
-			temp3 = max<v5,v6>::value,
-			value = max3<temp1, temp2, temp3>::value
-		};
-	};
+template<int v1, int v2, int v3, int v4, int v5, int v6>
+struct max6
+{
+    enum
+    {
+        temp1 = max<v1,v2>::value,
+        temp2 = max<v3,v4>::value,
+        temp3 = max<v5,v6>::value,
+        value = max3<temp1, temp2, temp3>::value
+    };
+};
 
-	template<int v1, int v2, int v3, int v4, int v5, int v6, int v7>
-	struct max7
-	{
-		enum
-		{
-			temp1 = max<v1,v2>::value,
-			temp2 = max<v3,v4>::value,
-			temp3 = max3<v5,v6,v7>::value,
-			value = max3<temp1, temp2, temp3>::value
-		};
-	};
+template<int v1, int v2, int v3, int v4, int v5, int v6, int v7>
+struct max7
+{
+    enum
+    {
+        temp1 = max<v1,v2>::value,
+        temp2 = max<v3,v4>::value,
+        temp3 = max3<v5,v6,v7>::value,
+        value = max3<temp1, temp2, temp3>::value
+    };
+};
 
-	template<int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8>
-	struct max8
-	{
-		enum
-		{
-			temp1 = max<v1,v2>::value,
-			temp2 = max3<v3,v4,v5>::value,
-			temp3 = max3<v6,v7,v8>::value,
-			value = max3<temp1, temp2, temp3>::value
-		};
-	};
+template<int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8>
+struct max8
+{
+    enum
+    {
+        temp1 = max<v1,v2>::value,
+        temp2 = max3<v3,v4,v5>::value,
+        temp3 = max3<v6,v7,v8>::value,
+        value = max3<temp1, temp2, temp3>::value
+    };
+};
 
-	template<int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8, int v9>
-	struct max9
-	{
-		enum
-		{
-			temp1 = max3<v1,v2, v3>::value,
-			temp2 = max3<v4,v5,v6>::value,
-			temp3 = max3<v7,v8,v9>::value,
-			value = max3<temp1, temp2, temp3>::value
-		};
-	};
+template<int v1, int v2, int v3, int v4, int v5, int v6, int v7, int v8, int v9>
+struct max9
+{
+    enum
+    {
+        temp1 = max3<v1,v2, v3>::value,
+        temp2 = max3<v4,v5,v6>::value,
+        temp3 = max3<v7,v8,v9>::value,
+        value = max3<temp1, temp2, temp3>::value
+    };
+};
 }
 
 #endif

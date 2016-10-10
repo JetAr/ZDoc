@@ -18,8 +18,8 @@
 #define MAX_THREAD_WAIT     60000
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #include "NetAbstract.h"
 
@@ -29,8 +29,8 @@ interface IDirectPlay8Server;
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CDPlay8Server : public IOutboundServer
 {
@@ -39,7 +39,10 @@ public:
 
     HRESULT Start(DWORD dwNumSPThreads);
     void    Shutdown();
-    void    SetServer( INetServer* pServer ) { m_pServer = pServer; };
+    void    SetServer( INetServer* pServer )
+    {
+        m_pServer = pServer;
+    };
 
     DWORD   GetNumSPThreads();
     void    SetNumSPThreads(DWORD dwNumSPThreads);

@@ -35,181 +35,182 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/assert.hpp"
 #include "libtorrent/invariant_check.hpp"
 
-namespace libtorrent {
+namespace libtorrent
+{
 
-	bool compare_less_wrap(boost::uint32_t lhs, boost::uint32_t rhs
-		, boost::uint32_t mask);
+bool compare_less_wrap(boost::uint32_t lhs, boost::uint32_t rhs
+                       , boost::uint32_t mask);
 
-	packet_buffer::packet_buffer()
-		: m_storage(0)
-		, m_capacity(0)
-		, m_size(0)
-		, m_first(0)
-		, m_last(0)
-	{}
+packet_buffer::packet_buffer()
+    : m_storage(0)
+    , m_capacity(0)
+    , m_size(0)
+    , m_first(0)
+    , m_last(0)
+{}
 
 #if defined TORRENT_DEBUG && !defined TORRENT_DISABLE_INVARIANT_CHECKS
-	void packet_buffer::check_invariant() const
-	{
-		int count = 0;
-		for (int i = 0; i < int(m_capacity); ++i)
-		{
-			count += m_storage[i] ? 1 : 0;
-		}
-		TORRENT_ASSERT(count == int(m_size));
-	}
+void packet_buffer::check_invariant() const
+{
+    int count = 0;
+    for (int i = 0; i < int(m_capacity); ++i)
+    {
+        count += m_storage[i] ? 1 : 0;
+    }
+    TORRENT_ASSERT(count == int(m_size));
+}
 #endif
 
-	packet_buffer::~packet_buffer()
-	{
-		free(m_storage);
-	}
+packet_buffer::~packet_buffer()
+{
+    free(m_storage);
+}
 
-	void* packet_buffer::insert(index_type idx, void* value)
-	{
-		INVARIANT_CHECK;
+void* packet_buffer::insert(index_type idx, void* value)
+{
+    INVARIANT_CHECK;
 
-		TORRENT_ASSERT_VAL(idx <= 0xffff, idx);
-		// you're not allowed to insert NULLs!
-		TORRENT_ASSERT(value);
+    TORRENT_ASSERT_VAL(idx <= 0xffff, idx);
+    // you're not allowed to insert NULLs!
+    TORRENT_ASSERT(value);
 
-		if (value == 0) return remove(idx);
+    if (value == 0) return remove(idx);
 
-		if (m_size != 0)
-		{
-			if (compare_less_wrap(idx, m_first, 0xffff))
-			{
-				// Index comes before m_first. If we have room, we can simply
-				// adjust m_first backward.
+    if (m_size != 0)
+    {
+        if (compare_less_wrap(idx, m_first, 0xffff))
+        {
+            // Index comes before m_first. If we have room, we can simply
+            // adjust m_first backward.
 
-				std::size_t free_space = 0;
+            std::size_t free_space = 0;
 
-				for (index_type i = (m_first - 1) & (m_capacity - 1);
-						i != (m_first & (m_capacity - 1)); i = (i - 1) & (m_capacity - 1))
-				{
-					if (m_storage[i & (m_capacity - 1)])
-						break;
-					++free_space;
-				}
+            for (index_type i = (m_first - 1) & (m_capacity - 1);
+                    i != (m_first & (m_capacity - 1)); i = (i - 1) & (m_capacity - 1))
+            {
+                if (m_storage[i & (m_capacity - 1)])
+                    break;
+                ++free_space;
+            }
 
-				if (((m_first - idx) & 0xffff) > free_space)
-					reserve(((m_first - idx) & 0xffff) + m_capacity - free_space);
+            if (((m_first - idx) & 0xffff) > free_space)
+                reserve(((m_first - idx) & 0xffff) + m_capacity - free_space);
 
-				m_first = idx;
-			}
-			else if (idx >= m_first + m_capacity)
-			{
-				reserve(idx - m_first + 1);
-			}
-			else if (idx < m_first)
-			{
-				// We have wrapped.
-				if (idx >= ((m_first + m_capacity) & 0xffff) && m_capacity < 0xffff)
-				{
-					reserve(m_capacity + (idx + 1 - ((m_first + m_capacity) & 0xffff)));
-				}
-			}
-			if (compare_less_wrap(m_last, (idx + 1) & 0xffff, 0xffff))
-				m_last = (idx + 1) & 0xffff;
-		}
-		else
-		{
-			m_first = idx;
-			m_last = (idx + 1) & 0xffff;
-		}
+            m_first = idx;
+        }
+        else if (idx >= m_first + m_capacity)
+        {
+            reserve(idx - m_first + 1);
+        }
+        else if (idx < m_first)
+        {
+            // We have wrapped.
+            if (idx >= ((m_first + m_capacity) & 0xffff) && m_capacity < 0xffff)
+            {
+                reserve(m_capacity + (idx + 1 - ((m_first + m_capacity) & 0xffff)));
+            }
+        }
+        if (compare_less_wrap(m_last, (idx + 1) & 0xffff, 0xffff))
+            m_last = (idx + 1) & 0xffff;
+    }
+    else
+    {
+        m_first = idx;
+        m_last = (idx + 1) & 0xffff;
+    }
 
-		if (m_capacity == 0) reserve(16);
+    if (m_capacity == 0) reserve(16);
 
-		void* old_value = m_storage[idx & (m_capacity - 1)];
-		m_storage[idx & (m_capacity - 1)] = value;
+    void* old_value = m_storage[idx & (m_capacity - 1)];
+    m_storage[idx & (m_capacity - 1)] = value;
 
-		if (m_size == 0) m_first = idx;
-		// if we're just replacing an old value, the number
-		// of elements in the buffer doesn't actually increase
-		if (old_value == 0) ++m_size;
+    if (m_size == 0) m_first = idx;
+    // if we're just replacing an old value, the number
+    // of elements in the buffer doesn't actually increase
+    if (old_value == 0) ++m_size;
 
-		TORRENT_ASSERT_VAL(m_first <= 0xffff, m_first);
-		return old_value;
-	}
+    TORRENT_ASSERT_VAL(m_first <= 0xffff, m_first);
+    return old_value;
+}
 
-	void* packet_buffer::at(index_type idx) const
-	{
-		INVARIANT_CHECK;
-		if (idx >= m_first + m_capacity)
-			return 0;
+void* packet_buffer::at(index_type idx) const
+{
+    INVARIANT_CHECK;
+    if (idx >= m_first + m_capacity)
+        return 0;
 
-		if (compare_less_wrap(idx, m_first, 0xffff))
-		{
-			return 0;
-		}
+    if (compare_less_wrap(idx, m_first, 0xffff))
+    {
+        return 0;
+    }
 
-		const int mask = (m_capacity - 1);
-		return m_storage[idx & mask];
-	}
+    const int mask = (m_capacity - 1);
+    return m_storage[idx & mask];
+}
 
-	void packet_buffer::reserve(std::size_t size)
-	{
-		INVARIANT_CHECK;
-		TORRENT_ASSERT_VAL(size <= 0xffff, size);
-		std::size_t new_size = m_capacity == 0 ? 16 : m_capacity;
+void packet_buffer::reserve(std::size_t size)
+{
+    INVARIANT_CHECK;
+    TORRENT_ASSERT_VAL(size <= 0xffff, size);
+    std::size_t new_size = m_capacity == 0 ? 16 : m_capacity;
 
-		while (new_size < size)
-			new_size <<= 1;
+    while (new_size < size)
+        new_size <<= 1;
 
-		void** new_storage = (void**)malloc(sizeof(void*) * new_size);
+    void** new_storage = (void**)malloc(sizeof(void*) * new_size);
 
-		for (index_type i = 0; i < new_size; ++i)
-			new_storage[i] = 0;
+    for (index_type i = 0; i < new_size; ++i)
+        new_storage[i] = 0;
 
-		for (index_type i = m_first; i < (m_first + m_capacity); ++i)
-			new_storage[i & (new_size - 1)] = m_storage[i & (m_capacity - 1)];
+    for (index_type i = m_first; i < (m_first + m_capacity); ++i)
+        new_storage[i & (new_size - 1)] = m_storage[i & (m_capacity - 1)];
 
-		free(m_storage);
+    free(m_storage);
 
-		m_storage = new_storage;
-		m_capacity = new_size;
-	}
+    m_storage = new_storage;
+    m_capacity = new_size;
+}
 
-	void* packet_buffer::remove(index_type idx)
-	{
-		INVARIANT_CHECK;
-		// TODO: use compare_less_wrap for this comparison as well
-		if (idx >= m_first + m_capacity)
-			return 0;
+void* packet_buffer::remove(index_type idx)
+{
+    INVARIANT_CHECK;
+    // TODO: use compare_less_wrap for this comparison as well
+    if (idx >= m_first + m_capacity)
+        return 0;
 
-		if (compare_less_wrap(idx, m_first, 0xffff))
-			return 0;
+    if (compare_less_wrap(idx, m_first, 0xffff))
+        return 0;
 
-		const int mask = (m_capacity - 1);
-		void* old_value = m_storage[idx & mask];
-		m_storage[idx & mask] = 0;
+    const int mask = (m_capacity - 1);
+    void* old_value = m_storage[idx & mask];
+    m_storage[idx & mask] = 0;
 
-		if (old_value)
-		{
-			--m_size;
-			if (m_size == 0) m_last = m_first;
-		}
+    if (old_value)
+    {
+        --m_size;
+        if (m_size == 0) m_last = m_first;
+    }
 
-		if (idx == m_first && m_size != 0)
-		{
-			++m_first;
-			for (boost::uint32_t i = 0; i < m_capacity; ++i, ++m_first)
-				if (m_storage[m_first & mask]) break;
-			m_first &= 0xffff;
-		}
+    if (idx == m_first && m_size != 0)
+    {
+        ++m_first;
+        for (boost::uint32_t i = 0; i < m_capacity; ++i, ++m_first)
+            if (m_storage[m_first & mask]) break;
+        m_first &= 0xffff;
+    }
 
-		if (((idx + 1) & 0xffff) == m_last && m_size != 0)
-		{
-			--m_last;
-			for (boost::uint32_t i = 0; i < m_capacity; ++i, --m_last)
-				if (m_storage[m_last & mask]) break;
-			++m_last;
-			m_last &= 0xffff;
-		}
+    if (((idx + 1) & 0xffff) == m_last && m_size != 0)
+    {
+        --m_last;
+        for (boost::uint32_t i = 0; i < m_capacity; ++i, --m_last)
+            if (m_storage[m_last & mask]) break;
+        ++m_last;
+        m_last &= 0xffff;
+    }
 
-		TORRENT_ASSERT_VAL(m_first <= 0xffff, m_first);
-		return old_value;
-	}
+    TORRENT_ASSERT_VAL(m_first <= 0xffff, m_first);
+    return old_value;
+}
 
 }
 

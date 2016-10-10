@@ -15,8 +15,8 @@ class CMazeApp;
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CConsoleGraphics : public IMazeGraphics
 {
@@ -25,11 +25,14 @@ public:
     ~CConsoleGraphics();
 
     // From IMazeGraphics
-    virtual VOID        Init( CMazeApp* pMazeApp, CDPlay8Client* pDP8Client, CMazeClient* pMazeClient ); 
+    virtual VOID        Init( CMazeApp* pMazeApp, CDPlay8Client* pDP8Client, CMazeClient* pMazeClient );
     virtual HRESULT     Create( HINSTANCE hInstance );
     virtual INT         Run();
     virtual VOID        HandleOutputMsg( EnumLineType enumLineType, TCHAR* strLine );
-    virtual BOOL        IsPreview() { return FALSE; };
+    virtual BOOL        IsPreview()
+    {
+        return FALSE;
+    };
     virtual void        Shutdown();
 
     CMazeApp*           m_pMazeApp;
@@ -51,10 +54,10 @@ protected:
     BOOL ParseCommandLine();
 
     CONSOLE_SCREEN_BUFFER_INFO m_SavedConsoleInfo;
-    
-	MazeConfig*          m_pConfig;
-    
-	BOOL   m_bQuitThread;
+
+    MazeConfig*          m_pConfig;
+
+    BOOL   m_bQuitThread;
     DWORD  m_dwNextOutput;
     HANDLE m_hStdOut;
     DWORD  m_dwNumCmdLines;

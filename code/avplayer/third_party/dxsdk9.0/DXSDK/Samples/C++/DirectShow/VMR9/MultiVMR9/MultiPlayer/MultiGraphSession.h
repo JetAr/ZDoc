@@ -27,8 +27,14 @@ public:
     // get functions
     CVMR9Subgraph*   GetSubgraph(  DWORD_PTR dwID  );
     int              GetFrameRate();
-    int              GetSize(){ return (int)(m_sources.size()); }
-    HWND             GetWindow(){ return m_hwndVideo; }
+    int              GetSize()
+    {
+        return (int)(m_sources.size());
+    }
+    HWND             GetWindow()
+    {
+        return m_hwndVideo;
+    }
 
 
     IMultiVMR9Wizard* GetWizard( );
@@ -44,18 +50,18 @@ public:
 
     // video window processing
     static LRESULT CALLBACK VideoWndProc(
-                                        HWND hwnd,      // handle to window
-                                        UINT uMsg,      // message identifier
-                                        WPARAM wParam,  // first message parameter
-                                        LPARAM lParam   // second message parameter
-                                        );
+        HWND hwnd,      // handle to window
+        UINT uMsg,      // message identifier
+        WPARAM wParam,  // first message parameter
+        LPARAM lParam   // second message parameter
+    );
 
     // private methods
 protected:
 
     HRESULT CreateVideoWindow_(UINT Width, UINT Height, DWORD dwStyle);
 
-    // private data 
+    // private data
 protected:
     list<CVMR9Subgraph*>        m_sources;
     IMultiVMR9Wizard*           m_pWizard;

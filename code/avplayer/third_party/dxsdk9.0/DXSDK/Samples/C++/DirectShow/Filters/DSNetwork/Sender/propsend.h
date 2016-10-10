@@ -45,60 +45,60 @@ class CNetSendProp :
     //  called when the "save" button is pressed
     HRESULT
     OnSave_ (
-        ) ;
+    ) ;
 
     //  refreshes the property page contents with valid properties
     void
     Refresh_ (
-        ) ;
+    ) ;
 
-    public :
+public :
 
-        CNetSendProp (
-            IN  TCHAR *     pClassName,
-            IN  IUnknown *  pIUnknown,
-            IN  REFCLSID    rclsid,
-            OUT HRESULT *   pHr
-            ) ;
+    CNetSendProp (
+        IN  TCHAR *     pClassName,
+        IN  IUnknown *  pIUnknown,
+        IN  REFCLSID    rclsid,
+        OUT HRESULT *   pHr
+    ) ;
 
-        HRESULT
-        OnActivate (
-            ) ;
+    HRESULT
+    OnActivate (
+    ) ;
 
-        HRESULT
-        OnApplyChanges (
-            ) ;
+    HRESULT
+    OnApplyChanges (
+    ) ;
 
-        HRESULT
-        OnConnect (
-            IN  IUnknown *  pIUnknown
-            ) ;
+    HRESULT
+    OnConnect (
+        IN  IUnknown *  pIUnknown
+    ) ;
 
-        HRESULT
-        OnDeactivate (
-            ) ;
+    HRESULT
+    OnDeactivate (
+    ) ;
 
-        HRESULT
-        OnDisconnect (
-            ) ;
+    HRESULT
+    OnDisconnect (
+    ) ;
 
-        BOOL
-        OnReceiveMessage (
-            IN  HWND    hwnd,
-            IN  UINT    uMsg,
-            IN  WPARAM  wParam,
-            IN  LPARAM  lParam
-            ) ;
+    BOOL
+    OnReceiveMessage (
+        IN  HWND    hwnd,
+        IN  UINT    uMsg,
+        IN  WPARAM  wParam,
+        IN  LPARAM  lParam
+    ) ;
 
-        DECLARE_IUNKNOWN ;
+    DECLARE_IUNKNOWN ;
 
-        static
-        CUnknown *
-        WINAPI
-        CreateInstance (
-            IN  IUnknown *  pIUnknown,
-            IN  HRESULT *   pHr
-            ) ;
+    static
+    CUnknown *
+    WINAPI
+    CreateInstance (
+        IN  IUnknown *  pIUnknown,
+        IN  HRESULT *   pHr
+    ) ;
 } ;
 
 #endif  //  __propsend_h

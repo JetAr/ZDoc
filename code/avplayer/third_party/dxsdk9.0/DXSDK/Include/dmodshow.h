@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for dmodshow.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IDMOWrapperFilter_FWD_DEFINED__
 #define __IDMOWrapperFilter_FWD_DEFINED__
@@ -54,14 +54,14 @@ typedef interface IDMOWrapperFilter IDMOWrapperFilter;
 #include "mediaobj.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_dmodshow_0000 */
-/* [local] */ 
+/* [local] */
 
 DEFINE_GUID(CLSID_DMOWrapperFilter, 0x94297043,0xbd82,0x4dfd,0xb0,0xde,0x81,0x77,0x73,0x9c,0x6d,0x20);
 DEFINE_GUID(CLSID_DMOFilterCategory,0xbcd5796c,0xbd52,0x4d30,0xab,0x76,0x70,0xf9,0x75,0xb8,0x91,0x99);
@@ -74,54 +74,55 @@ extern RPC_IF_HANDLE __MIDL_itf_dmodshow_0000_v0_0_s_ifspec;
 #define __IDMOWrapperFilter_INTERFACE_DEFINED__
 
 /* interface IDMOWrapperFilter */
-/* [uuid][object] */ 
+/* [uuid][object] */
 
 
 EXTERN_C const IID IID_IDMOWrapperFilter;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("52d6f586-9f0f-4824-8fc8-e32ca04930c2")
-    IDMOWrapperFilter : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Init( 
-            REFCLSID clsidDMO,
-            REFCLSID catDMO) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("52d6f586-9f0f-4824-8fc8-e32ca04930c2")
+IDMOWrapperFilter :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE Init(
+        REFCLSID clsidDMO,
+        REFCLSID catDMO) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IDMOWrapperFilterVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IDMOWrapperFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IDMOWrapperFilter * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IDMOWrapperFilter * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *Init )( 
-            IDMOWrapperFilter * This,
-            REFCLSID clsidDMO,
-            REFCLSID catDMO);
-        
-        END_INTERFACE
-    } IDMOWrapperFilterVtbl;
+typedef struct IDMOWrapperFilterVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IDMOWrapperFilter
-    {
-        CONST_VTBL struct IDMOWrapperFilterVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IDMOWrapperFilter * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IDMOWrapperFilter * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IDMOWrapperFilter * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Init )(
+        IDMOWrapperFilter * This,
+        REFCLSID clsidDMO,
+        REFCLSID catDMO);
+
+    END_INTERFACE
+} IDMOWrapperFilterVtbl;
+
+interface IDMOWrapperFilter
+{
+    CONST_VTBL struct IDMOWrapperFilterVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -146,7 +147,7 @@ EXTERN_C const IID IID_IDMOWrapperFilter;
 
 
 
-HRESULT STDMETHODCALLTYPE IDMOWrapperFilter_Init_Proxy( 
+HRESULT STDMETHODCALLTYPE IDMOWrapperFilter_Init_Proxy(
     IDMOWrapperFilter * This,
     REFCLSID clsidDMO,
     REFCLSID catDMO);

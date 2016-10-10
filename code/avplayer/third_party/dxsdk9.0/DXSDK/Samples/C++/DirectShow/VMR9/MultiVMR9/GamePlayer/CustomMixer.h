@@ -43,12 +43,12 @@ public:
     // IMultiVMR9MixerControl: methods we override
     STDMETHOD(Compose)(
         void* lpParam
-        );
+    );
 
     STDMETHOD(Render)(
         IDirect3DDevice9 *pDevice,
         void* lpParam
-        );
+    );
 
     STDMETHOD(AddVideoSource)(
         DWORD_PTR dwID,
@@ -56,82 +56,100 @@ public:
         LONG lImageHeight,
         LONG lTextureWidth,
         LONG lTextureHeight
-        );
+    );
 
     STDMETHOD(DeleteVideoSource)(
         DWORD_PTR dwID
-        );
+    );
 
     STDMETHOD(SetRenderEngineOwner)(
         IMultiVMR9RenderEngine* pRenderEngine
-        );
+    );
 
     STDMETHOD(GetRenderEngineOwner)(
         IMultiVMR9RenderEngine** ppRenderEngine
-        );
+    );
 
     STDMETHOD(Initialize)(
         IDirect3DDevice9 *pDevice
-        );
+    );
 
     // IMultiVMR9MixerControl: methods we do not implement (i.e. we do not need)
     STDMETHOD(GetOutputRect)(
         DWORD_PTR dwID,
         NORMALIZEDRECT* lpNormRect
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
     STDMETHOD(GetIdealOutputRect)(
         DWORD_PTR dwID,
         DWORD dwWidth,
         DWORD dwHeight,
         NORMALIZEDRECT* lpNormRect
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
     STDMETHOD(SetOutputRect)(
         DWORD_PTR dwID,
         NORMALIZEDRECT* lpNormRect
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
 
     STDMETHOD(GetZOrder)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         DWORD *pdwZ
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
 
     STDMETHOD(SetZOrder)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         DWORD pdwZ
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
 
     STDMETHOD(GetBackgroundColor)(
         COLORREF* pColor
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
 
     STDMETHOD(SetBackgroundColor)(
         COLORREF Color
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
     STDMETHOD(GetAlpha)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         float* pAlpha
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
     STDMETHOD(SetAlpha)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         float Alpha
-        )
-    { return E_NOTIMPL; }
+    )
+    {
+        return E_NOTIMPL;
+    }
 
     // class-specific public methods
 
@@ -141,68 +159,68 @@ public:
 
 private:
     // subclasses
-        class CMovie
+    class CMovie
+    {
+    public:
+        CMovie( DWORD_PTR dwID,
+                LONG lImageWidth,
+                LONG lImageHeight,
+                LONG lTextureWidth,
+                LONG lTextureHeight);
+        // data
+        DWORD_PTR       m_dwID;
+        float           m_fY;
+        float           m_fZ;
+        float           m_fU;
+        float           m_fV;
+    };
+
+    class CFrame
+    {
+    public:
+        CFrame( );
+        HRESULT Calculate( int n, D3DVECTOR& v0, CMovie* pMovie );
+        HRESULT CalculateInFocus( CMovie* pMovie );
+        HRESULT Render(
+            IDirect3DDevice9 *pDevice,
+            IDirect3DTexture9* pTexture);
+        void FlipToEnd( int N);
+        void MoveY( float Shift );
+
+        struct SpotVertex
         {
-        public:
-            CMovie( DWORD_PTR dwID, 
-                    LONG lImageWidth, 
-                    LONG lImageHeight, 
-                    LONG lTextureWidth, 
-                    LONG lTextureHeight);
-            // data
-            DWORD_PTR       m_dwID;
-            float           m_fY; 
-            float           m_fZ;
-            float           m_fU;
-            float           m_fV;
+            D3DVECTOR Pos;
         };
 
-        class CFrame
+        struct Vertex
         {
-        public:
-            CFrame( );
-            HRESULT Calculate( int n, D3DVECTOR& v0, CMovie* pMovie );
-            HRESULT CalculateInFocus( CMovie* pMovie );
-            HRESULT Render( 
-                IDirect3DDevice9 *pDevice, 
-                IDirect3DTexture9* pTexture);
-            void FlipToEnd( int N);
-            void MoveY( float Shift );
+            D3DVECTOR Pos;
+            D3DCOLOR  color;
+            float     tu;
+            float     tv;
+        };
 
-            struct SpotVertex
-            {
-                D3DVECTOR Pos;
-            };
+        struct FrameVertex
+        {
+            D3DVECTOR Pos;
+            D3DCOLOR  color;
+        };
 
-            struct Vertex
-            {
-                D3DVECTOR Pos;
-                D3DCOLOR  color;
-                float     tu;
-                float     tv;
-            };
-
-            struct FrameVertex
-            {
-                D3DVECTOR Pos;
-                D3DCOLOR  color;
-            };
-
-            // data
-            DWORD_PTR           m_dwID;
-            struct SpotVertex   m_S[4];
-            struct Vertex       m_V[4];
-            struct FrameVertex  m_F[10];
-        };// class CFrame
+        // data
+        DWORD_PTR           m_dwID;
+        struct SpotVertex   m_S[4];
+        struct Vertex       m_V[4];
+        struct FrameVertex  m_F[10];
+    };// class CFrame
 
 private:
     // class-specific private methods
-        void Clean_();
+    void Clean_();
 
     // data
 public:
 
-    private:
+private:
     CCritSec            m_ObjectLock;       // this object has to be thread-safe
     BOOL                m_bAnimate;
     CD3DFont*           m_pFont;

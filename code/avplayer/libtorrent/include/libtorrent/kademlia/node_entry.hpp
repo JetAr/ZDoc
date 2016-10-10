@@ -38,71 +38,101 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/address.hpp"
 #include "libtorrent/union_endpoint.hpp"
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 struct node_entry
 {
-	node_entry(node_id const& id_, udp::endpoint ep, int roundtriptime = 0xffff, bool pinged = false)
-		: endpoint(ep)
-		, timeout_count(pinged ? 0 : 0xff)
-		, rtt(roundtriptime)
-		, id(id_)
-	{
+    node_entry(node_id const& id_, udp::endpoint ep, int roundtriptime = 0xffff, bool pinged = false)
+        : endpoint(ep)
+        , timeout_count(pinged ? 0 : 0xff)
+        , rtt(roundtriptime)
+        , id(id_)
+    {
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
-		first_seen = time_now();
+        first_seen = time_now();
 #endif
-	}
+    }
 
-	node_entry(udp::endpoint ep)
-		: endpoint(ep)
-		, timeout_count(0xff)
-		, rtt(0xffff)
-		, id(0)
-	{
+    node_entry(udp::endpoint ep)
+        : endpoint(ep)
+        , timeout_count(0xff)
+        , rtt(0xffff)
+        , id(0)
+    {
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
-		first_seen = time_now();
+        first_seen = time_now();
 #endif
-	}
+    }
 
-	node_entry()
-		: timeout_count(0xff)
-		, rtt(0xffff)
-		, id(0)
-	{
+    node_entry()
+        : timeout_count(0xff)
+        , rtt(0xffff)
+        , id(0)
+    {
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
-		first_seen = time_now();
+        first_seen = time_now();
 #endif
-	}
-	
-	bool pinged() const { return timeout_count != 0xff; }
-	void set_pinged() { if (timeout_count == 0xff) timeout_count = 0; }
-	void timed_out() { if (pinged() && timeout_count < 0xfe) ++timeout_count; }
-	int fail_count() const { return pinged() ? timeout_count : 0; }
-	void reset_fail_count() { if (pinged()) timeout_count = 0; }
-	udp::endpoint ep() const { return udp::endpoint(endpoint); }
-	bool confirmed() const { return timeout_count == 0; }
-	void update_rtt(int new_rtt)
-	{
-		if (rtt == 0xffff) rtt = new_rtt;
-		else rtt = int(rtt) / 3 + int(new_rtt) * 2 / 3;
-	}
-	address addr() const { return endpoint.address(); }
-	int port() const { return endpoint.port; }
+    }
 
-	union_endpoint endpoint;
-	// the number of times this node has failed to
-	// respond in a row
-	boost::uint8_t timeout_count;
-	// the average RTT of this node
-	boost::uint16_t rtt;
-	node_id id;
+    bool pinged() const
+    {
+        return timeout_count != 0xff;
+    }
+    void set_pinged()
+    {
+        if (timeout_count == 0xff) timeout_count = 0;
+    }
+    void timed_out()
+    {
+        if (pinged() && timeout_count < 0xfe) ++timeout_count;
+    }
+    int fail_count() const
+    {
+        return pinged() ? timeout_count : 0;
+    }
+    void reset_fail_count()
+    {
+        if (pinged()) timeout_count = 0;
+    }
+    udp::endpoint ep() const
+    {
+        return udp::endpoint(endpoint);
+    }
+    bool confirmed() const
+    {
+        return timeout_count == 0;
+    }
+    void update_rtt(int new_rtt)
+    {
+        if (rtt == 0xffff) rtt = new_rtt;
+        else rtt = int(rtt) / 3 + int(new_rtt) * 2 / 3;
+    }
+    address addr() const
+    {
+        return endpoint.address();
+    }
+    int port() const
+    {
+        return endpoint.port;
+    }
+
+    union_endpoint endpoint;
+    // the number of times this node has failed to
+    // respond in a row
+    boost::uint8_t timeout_count;
+    // the average RTT of this node
+    boost::uint16_t rtt;
+    node_id id;
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
-	ptime first_seen;
+    ptime first_seen;
 #endif
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif
 

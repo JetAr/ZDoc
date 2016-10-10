@@ -39,95 +39,95 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	struct union_endpoint
-	{
-		union_endpoint(tcp::endpoint const& ep)
-		{
-			*this = ep;
-		}
+struct union_endpoint
+{
+    union_endpoint(tcp::endpoint const& ep)
+    {
+        *this = ep;
+    }
 
-		union_endpoint(udp::endpoint const& ep)
-		{
-			*this = ep;
-		}
+    union_endpoint(udp::endpoint const& ep)
+    {
+        *this = ep;
+    }
 
-		union_endpoint()
-		{
-			*this = tcp::endpoint();
-		}
+    union_endpoint()
+    {
+        *this = tcp::endpoint();
+    }
 
-		union_endpoint& operator=(udp::endpoint const& ep)
-		{
+    union_endpoint& operator=(udp::endpoint const& ep)
+    {
 #if TORRENT_USE_IPV6
-			v4 = ep.address().is_v4();
-			if (v4)
-				addr.v4 = ep.address().to_v4().to_bytes();
-			else
-				addr.v6 = ep.address().to_v6().to_bytes();
+        v4 = ep.address().is_v4();
+        if (v4)
+            addr.v4 = ep.address().to_v4().to_bytes();
+        else
+            addr.v6 = ep.address().to_v6().to_bytes();
 #else
-			addr.v4 = ep.address().to_v4().to_bytes();
+        addr.v4 = ep.address().to_v4().to_bytes();
 #endif
-			port = ep.port();
-			return *this;
-		}
+        port = ep.port();
+        return *this;
+    }
 
-		operator udp::endpoint() const
-		{
+    operator udp::endpoint() const
+    {
 #if TORRENT_USE_IPV6
-			if (v4) return udp::endpoint(address_v4(addr.v4), port);
-			else return udp::endpoint(address_v6(addr.v6), port);
+        if (v4) return udp::endpoint(address_v4(addr.v4), port);
+        else return udp::endpoint(address_v6(addr.v6), port);
 #else
-			return udp::endpoint(address_v4(addr.v4), port);
+        return udp::endpoint(address_v4(addr.v4), port);
 #endif
-		}
+    }
 
-		union_endpoint& operator=(tcp::endpoint const& ep)
-		{
+    union_endpoint& operator=(tcp::endpoint const& ep)
+    {
 #if TORRENT_USE_IPV6
-			v4 = ep.address().is_v4();
-			if (v4)
-				addr.v4 = ep.address().to_v4().to_bytes();
-			else
-				addr.v6 = ep.address().to_v6().to_bytes();
+        v4 = ep.address().is_v4();
+        if (v4)
+            addr.v4 = ep.address().to_v4().to_bytes();
+        else
+            addr.v6 = ep.address().to_v6().to_bytes();
 #else
-			addr.v4 = ep.address().to_v4().to_bytes();
+        addr.v4 = ep.address().to_v4().to_bytes();
 #endif
-			port = ep.port();
-			return *this;
-		}
+        port = ep.port();
+        return *this;
+    }
 
-		libtorrent::address address() const
-		{
+    libtorrent::address address() const
+    {
 #if TORRENT_USE_IPV6
-			if (v4) return address_v4(addr.v4);
-			else return address_v6(addr.v6);
+        if (v4) return address_v4(addr.v4);
+        else return address_v6(addr.v6);
 #else
-			return address_v4(addr.v4);
+        return address_v4(addr.v4);
 #endif
-		}
+    }
 
-		operator tcp::endpoint() const
-		{
+    operator tcp::endpoint() const
+    {
 #if TORRENT_USE_IPV6
-			if (v4) return tcp::endpoint(address_v4(addr.v4), port);
-			else return tcp::endpoint(address_v6(addr.v6), port);
+        if (v4) return tcp::endpoint(address_v4(addr.v4), port);
+        else return tcp::endpoint(address_v6(addr.v6), port);
 #else
-			return tcp::endpoint(address_v4(addr.v4), port);
+        return tcp::endpoint(address_v4(addr.v4), port);
 #endif
-		}
+    }
 
-		TORRENT_UNION addr_t
-		{
-			address_v4::bytes_type v4;
+    TORRENT_UNION addr_t
+    {
+        address_v4::bytes_type v4;
 #if TORRENT_USE_IPV6
-			address_v6::bytes_type v6;
+        address_v6::bytes_type v6;
 #endif
-		} addr;
-		boost::uint16_t port;
+    } addr;
+    boost::uint16_t port;
 #if TORRENT_USE_IPV6
-		bool v4:1;
+    bool v4:1;
 #endif
-	};	
+};
 }
 
 #endif

@@ -41,251 +41,314 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct TORRENT_EXPORT bitfield
-	{
-		bitfield(): m_bytes(0), m_size(0), m_own(false) {}
-		bitfield(int bits): m_bytes(0), m_size(0), m_own(false)
-		{ resize(bits); }
-		bitfield(int bits, bool val): m_bytes(0), m_size(0), m_own(false)
-		{ resize(bits, val); }
-		bitfield(char const* b, int bits): m_bytes(0), m_size(0), m_own(false)
-		{ assign(b, bits); }
-		bitfield(bitfield const& rhs): m_bytes(0), m_size(0), m_own(false)
-		{ assign(rhs.bytes(), rhs.size()); }
+struct TORRENT_EXPORT bitfield
+{
+    bitfield(): m_bytes(0), m_size(0), m_own(false) {}
+    bitfield(int bits): m_bytes(0), m_size(0), m_own(false)
+    {
+        resize(bits);
+    }
+    bitfield(int bits, bool val): m_bytes(0), m_size(0), m_own(false)
+    {
+        resize(bits, val);
+    }
+    bitfield(char const* b, int bits): m_bytes(0), m_size(0), m_own(false)
+    {
+        assign(b, bits);
+    }
+    bitfield(bitfield const& rhs): m_bytes(0), m_size(0), m_own(false)
+    {
+        assign(rhs.bytes(), rhs.size());
+    }
 
-		void borrow_bytes(char* b, int bits)
-		{
-			dealloc();
-			m_bytes = (unsigned char*)b;
-			m_size = bits;
-			m_own = false;
-		}
-		~bitfield() { dealloc(); }
+    void borrow_bytes(char* b, int bits)
+    {
+        dealloc();
+        m_bytes = (unsigned char*)b;
+        m_size = bits;
+        m_own = false;
+    }
+    ~bitfield()
+    {
+        dealloc();
+    }
 
-		void assign(char const* b, int bits)
-		{ resize(bits); std::memcpy(m_bytes, b, (bits + 7) / 8); clear_trailing_bits(); }
+    void assign(char const* b, int bits)
+    {
+        resize(bits);
+        std::memcpy(m_bytes, b, (bits + 7) / 8);
+        clear_trailing_bits();
+    }
 
-		bool operator[](int index) const
-		{ return get_bit(index); }
+    bool operator[](int index) const
+    {
+        return get_bit(index);
+    }
 
-		bool get_bit(int index) const
-		{
-			TORRENT_ASSERT(index >= 0);
-			TORRENT_ASSERT(index < m_size);
-			return (m_bytes[index / 8] & (0x80 >> (index & 7))) != 0;
-		}
-		
-		void clear_bit(int index)
-		{
-			TORRENT_ASSERT(index >= 0);
-			TORRENT_ASSERT(index < m_size);
-			m_bytes[index / 8] &= ~(0x80 >> (index & 7));
-		}
+    bool get_bit(int index) const
+    {
+        TORRENT_ASSERT(index >= 0);
+        TORRENT_ASSERT(index < m_size);
+        return (m_bytes[index / 8] & (0x80 >> (index & 7))) != 0;
+    }
 
-		// returns true if all bits in the bitfield are set
-		bool all_set() const
-		{
-			const int num_words = m_size / 32;
-			const int num_bytes = m_size / 8;
-			boost::uint32_t* bits = (boost::uint32_t*)m_bytes;
-			for (int i = 0; i < num_words; ++i)
-			{
-				if (bits[i] != 0xffffffff) return false;
-			}
+    void clear_bit(int index)
+    {
+        TORRENT_ASSERT(index >= 0);
+        TORRENT_ASSERT(index < m_size);
+        m_bytes[index / 8] &= ~(0x80 >> (index & 7));
+    }
 
-			for (int i = num_words * 4; i < num_bytes; ++i)
-			{
-				if (m_bytes[i] != 0xff) return false;
-			}
-			int rest = m_size - num_bytes * 8;
-			boost::uint8_t mask = 0xff << (8-rest);
-			if (rest > 0 && (m_bytes[num_bytes] & mask) != mask)
-				return false;
-			return true;
-		}
+    // returns true if all bits in the bitfield are set
+    bool all_set() const
+    {
+        const int num_words = m_size / 32;
+        const int num_bytes = m_size / 8;
+        boost::uint32_t* bits = (boost::uint32_t*)m_bytes;
+        for (int i = 0; i < num_words; ++i)
+        {
+            if (bits[i] != 0xffffffff) return false;
+        }
 
-		void set_bit(int index)
-		{
-			TORRENT_ASSERT(index >= 0);
-			TORRENT_ASSERT(index < m_size);
-			m_bytes[index / 8] |= (0x80 >> (index & 7));
-		}
+        for (int i = num_words * 4; i < num_bytes; ++i)
+        {
+            if (m_bytes[i] != 0xff) return false;
+        }
+        int rest = m_size - num_bytes * 8;
+        boost::uint8_t mask = 0xff << (8-rest);
+        if (rest > 0 && (m_bytes[num_bytes] & mask) != mask)
+            return false;
+        return true;
+    }
 
-		std::size_t size() const { return m_size; }
-		bool empty() const { return m_size == 0; }
+    void set_bit(int index)
+    {
+        TORRENT_ASSERT(index >= 0);
+        TORRENT_ASSERT(index < m_size);
+        m_bytes[index / 8] |= (0x80 >> (index & 7));
+    }
 
-		char const* bytes() const { return (char*)m_bytes; }
+    std::size_t size() const
+    {
+        return m_size;
+    }
+    bool empty() const
+    {
+        return m_size == 0;
+    }
 
-		bitfield& operator=(bitfield const& rhs)
-		{
-			assign(rhs.bytes(), rhs.size());
-			return *this;
-		}
+    char const* bytes() const
+    {
+        return (char*)m_bytes;
+    }
 
-		int count() const
-		{
-			// 0000, 0001, 0010, 0011, 0100, 0101, 0110, 0111,
-			// 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111
-			const static char num_bits[] =
-			{
-				0, 1, 1, 2, 1, 2, 2, 3,
-				1, 2, 2, 3, 2, 3, 3, 4
-			};
+    bitfield& operator=(bitfield const& rhs)
+    {
+        assign(rhs.bytes(), rhs.size());
+        return *this;
+    }
 
-			int ret = 0;
-			const int num_bytes = m_size / 8;
-			for (int i = 0; i < num_bytes; ++i)
-			{
-				ret += num_bits[m_bytes[i] & 0xf] + num_bits[m_bytes[i] >> 4];
-			}
+    int count() const
+    {
+        // 0000, 0001, 0010, 0011, 0100, 0101, 0110, 0111,
+        // 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111
+        const static char num_bits[] =
+        {
+            0, 1, 1, 2, 1, 2, 2, 3,
+            1, 2, 2, 3, 2, 3, 3, 4
+        };
 
-			int rest = m_size - num_bytes * 8;
-			for (int i = 0; i < rest; ++i)
-			{
-				ret += (m_bytes[num_bytes] >> (7-i)) & 1;
-			}
-			TORRENT_ASSERT(ret <= m_size);
-			TORRENT_ASSERT(ret >= 0);
-			return ret;
-		}
+        int ret = 0;
+        const int num_bytes = m_size / 8;
+        for (int i = 0; i < num_bytes; ++i)
+        {
+            ret += num_bits[m_bytes[i] & 0xf] + num_bits[m_bytes[i] >> 4];
+        }
 
-		struct const_iterator
-		{
-		friend struct bitfield;
+        int rest = m_size - num_bytes * 8;
+        for (int i = 0; i < rest; ++i)
+        {
+            ret += (m_bytes[num_bytes] >> (7-i)) & 1;
+        }
+        TORRENT_ASSERT(ret <= m_size);
+        TORRENT_ASSERT(ret >= 0);
+        return ret;
+    }
 
-			typedef bool value_type;
-			typedef ptrdiff_t difference_type;
-			typedef bool const* pointer;
-			typedef bool& reference;
-			typedef std::forward_iterator_tag iterator_category;
+    struct const_iterator
+    {
+        friend struct bitfield;
 
-			bool operator*() { return (*byte & bit) != 0; }
-			const_iterator& operator++() { inc(); return *this; }
-			const_iterator operator++(int)
-			{ const_iterator ret(*this); inc(); return ret; }
-			const_iterator& operator--() { dec(); return *this; }
-			const_iterator operator--(int)
-			{ const_iterator ret(*this); dec(); return ret; }
+        typedef bool value_type;
+        typedef ptrdiff_t difference_type;
+        typedef bool const* pointer;
+        typedef bool& reference;
+        typedef std::forward_iterator_tag iterator_category;
 
-			const_iterator(): byte(0), bit(0x80) {}
-			bool operator==(const_iterator const& rhs) const
-			{ return byte == rhs.byte && bit == rhs.bit; }
+        bool operator*()
+        {
+            return (*byte & bit) != 0;
+        }
+        const_iterator& operator++()
+        {
+            inc();
+            return *this;
+        }
+        const_iterator operator++(int)
+        {
+            const_iterator ret(*this);
+            inc();
+            return ret;
+        }
+        const_iterator& operator--()
+        {
+            dec();
+            return *this;
+        }
+        const_iterator operator--(int)
+        {
+            const_iterator ret(*this);
+            dec();
+            return ret;
+        }
 
-			bool operator!=(const_iterator const& rhs) const
-			{ return byte != rhs.byte || bit != rhs.bit; }
+        const_iterator(): byte(0), bit(0x80) {}
+        bool operator==(const_iterator const& rhs) const
+        {
+            return byte == rhs.byte && bit == rhs.bit;
+        }
 
-		private:
-			void inc()
-			{
-				TORRENT_ASSERT(byte);
-				if (bit == 0x01)
-				{
-					bit = 0x80;
-					++byte;
-				}
-				else
-				{
-					bit >>= 1;
-				}
-			}
-			void dec()
-			{
-				TORRENT_ASSERT(byte);
-				if (bit == 0x80)
-				{
-					bit = 0x01;
-					--byte;
-				}
-				else
-				{
-					bit <<= 1;
-				}
-			}
-			const_iterator(unsigned char const* ptr, int offset)
-				: byte(ptr), bit(0x80 >> offset) {}
-			unsigned char const* byte;
-			int bit;
-		};
+        bool operator!=(const_iterator const& rhs) const
+        {
+            return byte != rhs.byte || bit != rhs.bit;
+        }
 
-		const_iterator begin() const { return const_iterator(m_bytes, 0); }
-		const_iterator end() const { return const_iterator(m_bytes + m_size / 8, m_size & 7); }
+    private:
+        void inc()
+        {
+            TORRENT_ASSERT(byte);
+            if (bit == 0x01)
+            {
+                bit = 0x80;
+                ++byte;
+            }
+            else
+            {
+                bit >>= 1;
+            }
+        }
+        void dec()
+        {
+            TORRENT_ASSERT(byte);
+            if (bit == 0x80)
+            {
+                bit = 0x01;
+                --byte;
+            }
+            else
+            {
+                bit <<= 1;
+            }
+        }
+        const_iterator(unsigned char const* ptr, int offset)
+            : byte(ptr), bit(0x80 >> offset) {}
+        unsigned char const* byte;
+        int bit;
+    };
 
-		void resize(int bits, bool val)
-		{
-			int s = m_size;
-			int b = m_size & 7;
-			resize(bits);
-			if (s >= m_size) return;
-			int old_size_bytes = (s + 7) / 8;
-			int new_size_bytes = (m_size + 7) / 8;
-			if (val)
-			{
-				if (old_size_bytes && b) m_bytes[old_size_bytes - 1] |= (0xff >> b);
-				if (old_size_bytes < new_size_bytes)
-					std::memset(m_bytes + old_size_bytes, 0xff, new_size_bytes - old_size_bytes);
-				clear_trailing_bits();
-			}
-			else
-			{
-				if (old_size_bytes < new_size_bytes)
-					std::memset(m_bytes + old_size_bytes, 0x00, new_size_bytes - old_size_bytes);
-			}
-		}
+    const_iterator begin() const
+    {
+        return const_iterator(m_bytes, 0);
+    }
+    const_iterator end() const
+    {
+        return const_iterator(m_bytes + m_size / 8, m_size & 7);
+    }
 
-		void set_all()
-		{
-			std::memset(m_bytes, 0xff, (m_size + 7) / 8);
-			clear_trailing_bits();
-		}
+    void resize(int bits, bool val)
+    {
+        int s = m_size;
+        int b = m_size & 7;
+        resize(bits);
+        if (s >= m_size) return;
+        int old_size_bytes = (s + 7) / 8;
+        int new_size_bytes = (m_size + 7) / 8;
+        if (val)
+        {
+            if (old_size_bytes && b) m_bytes[old_size_bytes - 1] |= (0xff >> b);
+            if (old_size_bytes < new_size_bytes)
+                std::memset(m_bytes + old_size_bytes, 0xff, new_size_bytes - old_size_bytes);
+            clear_trailing_bits();
+        }
+        else
+        {
+            if (old_size_bytes < new_size_bytes)
+                std::memset(m_bytes + old_size_bytes, 0x00, new_size_bytes - old_size_bytes);
+        }
+    }
 
-		void clear_all()
-		{
-			std::memset(m_bytes, 0x00, (m_size + 7) / 8);
-		}
-	
-		void resize(int bits)
-		{
-			TORRENT_ASSERT(bits >= 0);
-			const int b = (bits + 7) / 8;
-			if (m_bytes)
-			{
-				if (m_own)
-				{
-					m_bytes = (unsigned char*)std::realloc(m_bytes, b);
-					m_own = true;
-				}
-				else if (bits > m_size)
-				{
-					unsigned char* tmp = (unsigned char*)std::malloc(b);
-					std::memcpy(tmp, m_bytes, (std::min)(int(m_size + 7)/ 8, b));
-					m_bytes = tmp;
-					m_own = true;
-				}
-			}
-			else if (bits > 0)
-			{
-				m_bytes = (unsigned char*)std::malloc(b);
-				m_own = true;
-			}
-			m_size = bits;
-			clear_trailing_bits();
-		}
+    void set_all()
+    {
+        std::memset(m_bytes, 0xff, (m_size + 7) / 8);
+        clear_trailing_bits();
+    }
 
-		void free() { dealloc(); m_size = 0; }
+    void clear_all()
+    {
+        std::memset(m_bytes, 0x00, (m_size + 7) / 8);
+    }
 
-	private:
+    void resize(int bits)
+    {
+        TORRENT_ASSERT(bits >= 0);
+        const int b = (bits + 7) / 8;
+        if (m_bytes)
+        {
+            if (m_own)
+            {
+                m_bytes = (unsigned char*)std::realloc(m_bytes, b);
+                m_own = true;
+            }
+            else if (bits > m_size)
+            {
+                unsigned char* tmp = (unsigned char*)std::malloc(b);
+                std::memcpy(tmp, m_bytes, (std::min)(int(m_size + 7)/ 8, b));
+                m_bytes = tmp;
+                m_own = true;
+            }
+        }
+        else if (bits > 0)
+        {
+            m_bytes = (unsigned char*)std::malloc(b);
+            m_own = true;
+        }
+        m_size = bits;
+        clear_trailing_bits();
+    }
 
-		void clear_trailing_bits()
-		{
-			// clear the tail bits in the last byte
-			if (m_size & 7) m_bytes[(m_size + 7) / 8 - 1] &= 0xff << (8 - (m_size & 7));
-		}
+    void free()
+    {
+        dealloc();
+        m_size = 0;
+    }
 
-		void dealloc() { if (m_own) std::free(m_bytes); m_bytes = 0; }
-		unsigned char* m_bytes;
-		int m_size:31; // in bits
-		bool m_own:1;
-	};
+private:
+
+    void clear_trailing_bits()
+    {
+        // clear the tail bits in the last byte
+        if (m_size & 7) m_bytes[(m_size + 7) / 8 - 1] &= 0xff << (8 - (m_size & 7));
+    }
+
+    void dealloc()
+    {
+        if (m_own) std::free(m_bytes);
+        m_bytes = 0;
+    }
+    unsigned char* m_bytes;
+    int m_size:31; // in bits
+    bool m_own:1;
+};
 
 }
 

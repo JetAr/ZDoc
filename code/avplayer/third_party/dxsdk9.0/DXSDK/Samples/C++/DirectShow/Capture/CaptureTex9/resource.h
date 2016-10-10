@@ -2,7 +2,7 @@
 // File: Resource.h
 //
 // Desc: DirectShow sample code - resource constants
-//       
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //-----------------------------------------------------------------------------
 

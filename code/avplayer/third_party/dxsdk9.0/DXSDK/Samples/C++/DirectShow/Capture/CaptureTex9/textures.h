@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------------
 // File: Textures.h
 //
-// Desc: DirectShow sample code - header file for DirectShow/Direct3D9 video 
+// Desc: DirectShow sample code - header file for DirectShow/Direct3D9 video
 //       texturing
-//       
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //-----------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ void Msg(TCHAR *szFormat, ...);
 HRESULT CaptureVideo(IBaseFilter *pRenderer);
 HRESULT FindCaptureDevice(IBaseFilter ** ppSrcFilter);
 
-HRESULT AddToROT(IUnknown *pUnkGraph); 
+HRESULT AddToROT(IUnknown *pUnkGraph);
 void RemoveFromROT(void);
 
 
@@ -64,7 +64,7 @@ private:
     HRESULT SetupMatrices();
     HRESULT SetupLights();
     HRESULT CalculateVertices();
-    
+
     // DirectShow related
     HRESULT InitDShowTextureRenderer();
     HRESULT CaptureVideo(IBaseFilter *pRenderer);
@@ -90,18 +90,18 @@ private:
     CComPtr<IMediaControl>          m_pMC;          // Media Control
     CComPtr<IMediaEvent>            m_pME;          // Media Event
 
-    FLOAT                   m_HAR;          // ratio of allocated width for m_pTexture to the 
-                                            // actual width of the image it holds
-    FLOAT                   m_VAR;          // ratio of allocated height for m_pTexture to the 
-                                            // actual height of the image it holds
+    FLOAT                   m_HAR;          // ratio of allocated width for m_pTexture to the
+    // actual width of the image it holds
+    FLOAT                   m_VAR;          // ratio of allocated height for m_pTexture to the
+    // actual height of the image it holds
 
     UINT                    m_Width;        // actual image size
     UINT                    m_Height;
 
     D3DFORMAT               m_TextureFormat; // format of the texture we draw
 
-    DWORD                   m_dwStartTime;  // start time for animation, 
-                                            // animation current time = timeGetTime() - m_dwStartTime;
+    DWORD                   m_dwStartTime;  // start time for animation,
+    // animation current time = timeGetTime() - m_dwStartTime;
 
     D3DCOLOR                m_d3dcolorBackground; // background color
 

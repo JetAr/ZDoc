@@ -11,13 +11,17 @@
 #define __USEFULDI_H__
 
 
-struct DIDEVOBJSTRUCT {
-	DIDEVOBJSTRUCT() : nObjects(0), pdoi(NULL) {}
-	~DIDEVOBJSTRUCT() {if (pdoi != NULL) free(pdoi);}
-	DWORD GetTypeFromObjID(DWORD);
-	int nObjects;
-	DIDEVICEOBJECTINSTANCEW *pdoi;
-	int n;
+struct DIDEVOBJSTRUCT
+{
+    DIDEVOBJSTRUCT() : nObjects(0), pdoi(NULL) {}
+    ~DIDEVOBJSTRUCT()
+    {
+        if (pdoi != NULL) free(pdoi);
+    }
+    DWORD GetTypeFromObjID(DWORD);
+    int nObjects;
+    DIDEVICEOBJECTINSTANCEW *pdoi;
+    int n;
 };
 HRESULT FillDIDeviceObjectStruct(DIDEVOBJSTRUCT &os, LPDIRECTINPUTDEVICE8W pDID);
 

@@ -30,8 +30,8 @@ typedef interface ID3DXBuffer ID3DXBuffer;
 typedef interface ID3DXBuffer *LPD3DXBUFFER;
 
 // {932E6A7E-C68E-45dd-A7BF-53D19C86DB1F}
-DEFINE_GUID(IID_ID3DXBuffer, 
-0x932e6a7e, 0xc68e, 0x45dd, 0xa7, 0xbf, 0x53, 0xd1, 0x9c, 0x86, 0xdb, 0x1f);
+DEFINE_GUID(IID_ID3DXBuffer,
+            0x932e6a7e, 0xc68e, 0x45dd, 0xa7, 0xbf, 0x53, 0xd1, 0x9c, 0x86, 0xdb, 0x1f);
 
 #undef INTERFACE
 #define INTERFACE ID3DXBuffer
@@ -61,8 +61,8 @@ DECLARE_INTERFACE_(ID3DXBuffer, IUnknown)
 //    is called outside of Begin/End, it will call Begin and End for you.
 //
 // DrawText -
-//    Draws formatted text on a D3D device.  Some parameters are 
-//    surprisingly similar to those of GDI's DrawText function.  See GDI 
+//    Draws formatted text on a D3D device.  Some parameters are
+//    surprisingly similar to those of GDI's DrawText function.  See GDI
 //    documentation for a detailed description of these parameters.
 //
 // End -
@@ -80,8 +80,8 @@ typedef interface ID3DXFont *LPD3DXFONT;
 
 
 // {89FAD6A5-024D-49af-8FE7-F51123B85E25}
-DEFINE_GUID( IID_ID3DXFont, 
-0x89fad6a5, 0x24d, 0x49af, 0x8f, 0xe7, 0xf5, 0x11, 0x23, 0xb8, 0x5e, 0x25);
+DEFINE_GUID( IID_ID3DXFont,
+             0x89fad6a5, 0x24d, 0x49af, 0x8f, 0xe7, 0xf5, 0x11, 0x23, 0xb8, 0x5e, 0x25);
 
 
 #undef INTERFACE
@@ -121,17 +121,17 @@ extern "C" {
 #endif //__cplusplus
 
 HRESULT WINAPI
-    D3DXCreateFont(
-        LPDIRECT3DDEVICE8   pDevice,
-        HFONT               hFont,
-        LPD3DXFONT*         ppFont);
+D3DXCreateFont(
+    LPDIRECT3DDEVICE8   pDevice,
+    HFONT               hFont,
+    LPD3DXFONT*         ppFont);
 
 
 HRESULT WINAPI
-    D3DXCreateFontIndirect(
-        LPDIRECT3DDEVICE8   pDevice,
-        CONST LOGFONT*      pLogFont,
-        LPD3DXFONT*         ppFont);
+D3DXCreateFontIndirect(
+    LPDIRECT3DDEVICE8   pDevice,
+    CONST LOGFONT*      pLogFont,
+    LPD3DXFONT*         ppFont);
 
 #ifdef __cplusplus
 }
@@ -145,15 +145,15 @@ HRESULT WINAPI
 // ------------
 // This object intends to provide an easy way to drawing sprites using D3D.
 //
-// Begin - 
+// Begin -
 //    Prepares device for drawing sprites
 //
 // Draw, DrawAffine, DrawTransform -
 //    Draws a sprite in screen-space.  Before transformation, the sprite is
-//    the size of SrcRect, with its top-left corner at the origin (0,0).  
+//    the size of SrcRect, with its top-left corner at the origin (0,0).
 //    The color and alpha channels are modulated by Color.
 //
-// End - 
+// End -
 //     Restores device state to how it was when Begin was called.
 //
 // OnLostDevice, OnResetDevice -
@@ -167,8 +167,8 @@ typedef interface ID3DXSprite *LPD3DXSPRITE;
 
 
 // {13D69D15-F9B0-4e0f-B39E-C91EB33F6CE7}
-DEFINE_GUID( IID_ID3DXSprite, 
-0x13d69d15, 0xf9b0, 0x4e0f, 0xb3, 0x9e, 0xc9, 0x1e, 0xb3, 0x3f, 0x6c, 0xe7);
+DEFINE_GUID( IID_ID3DXSprite,
+             0x13d69d15, 0xf9b0, 0x4e0f, 0xb3, 0x9e, 0xc9, 0x1e, 0xb3, 0x3f, 0x6c, 0xe7);
 
 
 #undef INTERFACE
@@ -186,14 +186,14 @@ DECLARE_INTERFACE_(ID3DXSprite, IUnknown)
 
     STDMETHOD(Begin)(THIS) PURE;
 
-    STDMETHOD(Draw)(THIS_ LPDIRECT3DTEXTURE8  pSrcTexture, 
-        CONST RECT* pSrcRect, CONST D3DXVECTOR2* pScaling, 
-        CONST D3DXVECTOR2* pRotationCenter, FLOAT Rotation, 
-        CONST D3DXVECTOR2* pTranslation, D3DCOLOR Color) PURE;
+    STDMETHOD(Draw)(THIS_ LPDIRECT3DTEXTURE8  pSrcTexture,
+                    CONST RECT* pSrcRect, CONST D3DXVECTOR2* pScaling,
+                    CONST D3DXVECTOR2* pRotationCenter, FLOAT Rotation,
+                    CONST D3DXVECTOR2* pTranslation, D3DCOLOR Color) PURE;
 
-    STDMETHOD(DrawTransform)(THIS_ LPDIRECT3DTEXTURE8 pSrcTexture, 
-        CONST RECT* pSrcRect, CONST D3DXMATRIX* pTransform, 
-        D3DCOLOR Color) PURE;
+    STDMETHOD(DrawTransform)(THIS_ LPDIRECT3DTEXTURE8 pSrcTexture,
+                             CONST RECT* pSrcRect, CONST D3DXMATRIX* pTransform,
+                             D3DCOLOR Color) PURE;
 
     STDMETHOD(End)(THIS) PURE;
 
@@ -208,9 +208,9 @@ extern "C" {
 
 
 HRESULT WINAPI
-    D3DXCreateSprite(
-        LPDIRECT3DDEVICE8   pDevice,
-        LPD3DXSPRITE*       ppSprite);
+D3DXCreateSprite(
+    LPDIRECT3DDEVICE8   pDevice,
+    LPD3DXSPRITE*       ppSprite);
 
 #ifdef __cplusplus
 }
@@ -222,14 +222,14 @@ HRESULT WINAPI
 ///////////////////////////////////////////////////////////////////////////
 // ID3DXRenderToSurface:
 // ---------------------
-// This object abstracts rendering to surfaces.  These surfaces do not 
+// This object abstracts rendering to surfaces.  These surfaces do not
 // necessarily need to be render targets.  If they are not, a compatible
 // render target is used, and the result copied into surface at end scene.
 //
 // BeginScene, EndScene -
 //    Call BeginScene() and EndScene() at the beginning and ending of your
-//    scene.  These calls will setup and restore render targets, viewports, 
-//    etc.. 
+//    scene.  These calls will setup and restore render targets, viewports,
+//    etc..
 //
 // OnLostDevice, OnResetDevice -
 //    Call OnLostDevice() on this object before calling Reset() on the
@@ -253,8 +253,8 @@ typedef interface ID3DXRenderToSurface *LPD3DXRENDERTOSURFACE;
 
 
 // {82DF5B90-E34E-496e-AC1C-62117A6A5913}
-DEFINE_GUID( IID_ID3DXRenderToSurface, 
-0x82df5b90, 0xe34e, 0x496e, 0xac, 0x1c, 0x62, 0x11, 0x7a, 0x6a, 0x59, 0x13);
+DEFINE_GUID( IID_ID3DXRenderToSurface,
+             0x82df5b90, 0xe34e, 0x496e, 0xac, 0x1c, 0x62, 0x11, 0x7a, 0x6a, 0x59, 0x13);
 
 
 #undef INTERFACE
@@ -284,14 +284,14 @@ extern "C" {
 #endif //__cplusplus
 
 HRESULT WINAPI
-    D3DXCreateRenderToSurface(
-        LPDIRECT3DDEVICE8       pDevice,
-        UINT                    Width,
-        UINT                    Height,
-        D3DFORMAT               Format,
-        BOOL                    DepthStencil,
-        D3DFORMAT               DepthStencilFormat,
-        LPD3DXRENDERTOSURFACE*  ppRenderToSurface);
+D3DXCreateRenderToSurface(
+    LPDIRECT3DDEVICE8       pDevice,
+    UINT                    Width,
+    UINT                    Height,
+    D3DFORMAT               Format,
+    BOOL                    DepthStencil,
+    D3DFORMAT               DepthStencilFormat,
+    LPD3DXRENDERTOSURFACE*  ppRenderToSurface);
 
 #ifdef __cplusplus
 }
@@ -302,8 +302,8 @@ HRESULT WINAPI
 ///////////////////////////////////////////////////////////////////////////
 // ID3DXRenderToEnvMap:
 // --------------------
-// This object abstracts rendering to environment maps.  These surfaces 
-// do not necessarily need to be render targets.  If they are not, a 
+// This object abstracts rendering to environment maps.  These surfaces
+// do not necessarily need to be render targets.  If they are not, a
 // compatible render target is used, and the result copied into the
 // environment map at end scene.
 //
@@ -313,8 +313,8 @@ HRESULT WINAPI
 //    the resulting environment map.
 //
 // Face -
-//    Call this function to initiate the drawing of each face.  For each 
-//    environment map, you will call this six times.. once for each face 
+//    Call this function to initiate the drawing of each face.  For each
+//    environment map, you will call this six times.. once for each face
 //    in D3DCUBEMAP_FACES.
 //
 // End -
@@ -340,8 +340,8 @@ typedef interface ID3DXRenderToEnvMap ID3DXRenderToEnvMap;
 typedef interface ID3DXRenderToEnvMap *LPD3DXRenderToEnvMap;
 
 // {4E42C623-9451-44b7-8C86-ABCCDE5D52C8}
-DEFINE_GUID( IID_ID3DXRenderToEnvMap, 
-0x4e42c623, 0x9451, 0x44b7, 0x8c, 0x86, 0xab, 0xcc, 0xde, 0x5d, 0x52, 0xc8);
+DEFINE_GUID( IID_ID3DXRenderToEnvMap,
+             0x4e42c623, 0x9451, 0x44b7, 0x8c, 0x86, 0xab, 0xcc, 0xde, 0x5d, 0x52, 0xc8);
 
 
 #undef INTERFACE
@@ -358,19 +358,19 @@ DECLARE_INTERFACE_(ID3DXRenderToEnvMap, IUnknown)
     STDMETHOD(GetDevice)(THIS_ LPDIRECT3DDEVICE8* ppDevice) PURE;
     STDMETHOD(GetDesc)(THIS_ D3DXRTE_DESC* pDesc) PURE;
 
-    STDMETHOD(BeginCube)(THIS_ 
-        LPDIRECT3DCUBETEXTURE8 pCubeTex) PURE;
+    STDMETHOD(BeginCube)(THIS_
+                         LPDIRECT3DCUBETEXTURE8 pCubeTex) PURE;
 
     STDMETHOD(BeginSphere)(THIS_
-        LPDIRECT3DTEXTURE8 pTex) PURE;
+                           LPDIRECT3DTEXTURE8 pTex) PURE;
 
-    STDMETHOD(BeginHemisphere)(THIS_ 
-        LPDIRECT3DTEXTURE8 pTexZPos,
-        LPDIRECT3DTEXTURE8 pTexZNeg) PURE;
+    STDMETHOD(BeginHemisphere)(THIS_
+                               LPDIRECT3DTEXTURE8 pTexZPos,
+                               LPDIRECT3DTEXTURE8 pTexZNeg) PURE;
 
-    STDMETHOD(BeginParabolic)(THIS_ 
-        LPDIRECT3DTEXTURE8 pTexZPos,
-        LPDIRECT3DTEXTURE8 pTexZNeg) PURE;
+    STDMETHOD(BeginParabolic)(THIS_
+                              LPDIRECT3DTEXTURE8 pTexZPos,
+                              LPDIRECT3DTEXTURE8 pTexZNeg) PURE;
 
     STDMETHOD(Face)(THIS_ D3DCUBEMAP_FACES Face) PURE;
     STDMETHOD(End)(THIS) PURE;
@@ -385,13 +385,13 @@ extern "C" {
 #endif //__cplusplus
 
 HRESULT WINAPI
-    D3DXCreateRenderToEnvMap(
-        LPDIRECT3DDEVICE8       pDevice,
-        UINT                    Size,
-        D3DFORMAT               Format,
-        BOOL                    DepthStencil,
-        D3DFORMAT               DepthStencilFormat,
-        LPD3DXRenderToEnvMap*   ppRenderToEnvMap);
+D3DXCreateRenderToEnvMap(
+    LPDIRECT3DDEVICE8       pDevice,
+    UINT                    Size,
+    D3DFORMAT               Format,
+    BOOL                    DepthStencil,
+    D3DFORMAT               DepthStencilFormat,
+    LPD3DXRenderToEnvMap*   ppRenderToEnvMap);
 
 #ifdef __cplusplus
 }
@@ -427,7 +427,7 @@ extern "C" {
 //-------------------------------------------------------------------------
 // D3DXAssembleShader:
 // -------------------
-// Assembles an ascii description of a vertex or pixel shader into 
+// Assembles an ascii description of a vertex or pixel shader into
 // binary form.
 //
 // Parameters:
@@ -452,20 +452,20 @@ extern "C" {
 //-------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromFileA(
-        LPCSTR                pSrcFile,
-        DWORD                 Flags,
-        LPD3DXBUFFER*         ppConstants,
-        LPD3DXBUFFER*         ppCompiledShader,
-        LPD3DXBUFFER*         ppCompilationErrors);
+D3DXAssembleShaderFromFileA(
+    LPCSTR                pSrcFile,
+    DWORD                 Flags,
+    LPD3DXBUFFER*         ppConstants,
+    LPD3DXBUFFER*         ppCompiledShader,
+    LPD3DXBUFFER*         ppCompilationErrors);
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromFileW(
-        LPCWSTR               pSrcFile,
-        DWORD                 Flags,
-        LPD3DXBUFFER*         ppConstants,
-        LPD3DXBUFFER*         ppCompiledShader,
-        LPD3DXBUFFER*         ppCompilationErrors);
+D3DXAssembleShaderFromFileW(
+    LPCWSTR               pSrcFile,
+    DWORD                 Flags,
+    LPD3DXBUFFER*         ppConstants,
+    LPD3DXBUFFER*         ppCompiledShader,
+    LPD3DXBUFFER*         ppCompilationErrors);
 
 #ifdef UNICODE
 #define D3DXAssembleShaderFromFile D3DXAssembleShaderFromFileW
@@ -474,22 +474,22 @@ HRESULT WINAPI
 #endif
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromResourceA(
-        HMODULE               hSrcModule,
-        LPCSTR                pSrcResource,
-        DWORD                 Flags,
-        LPD3DXBUFFER*         ppConstants,
-        LPD3DXBUFFER*         ppCompiledShader,
-        LPD3DXBUFFER*         ppCompilationErrors);
+D3DXAssembleShaderFromResourceA(
+    HMODULE               hSrcModule,
+    LPCSTR                pSrcResource,
+    DWORD                 Flags,
+    LPD3DXBUFFER*         ppConstants,
+    LPD3DXBUFFER*         ppCompiledShader,
+    LPD3DXBUFFER*         ppCompilationErrors);
 
 HRESULT WINAPI
-    D3DXAssembleShaderFromResourceW(
-        HMODULE               hSrcModule,
-        LPCWSTR               pSrcResource,
-        DWORD                 Flags,
-        LPD3DXBUFFER*         ppConstants,
-        LPD3DXBUFFER*         ppCompiledShader,
-        LPD3DXBUFFER*         ppCompilationErrors);
+D3DXAssembleShaderFromResourceW(
+    HMODULE               hSrcModule,
+    LPCWSTR               pSrcResource,
+    DWORD                 Flags,
+    LPD3DXBUFFER*         ppConstants,
+    LPD3DXBUFFER*         ppCompiledShader,
+    LPD3DXBUFFER*         ppCompilationErrors);
 
 #ifdef UNICODE
 #define D3DXAssembleShaderFromResource D3DXAssembleShaderFromResourceW
@@ -498,13 +498,13 @@ HRESULT WINAPI
 #endif
 
 HRESULT WINAPI
-    D3DXAssembleShader(
-        LPCVOID               pSrcData,
-        UINT                  SrcDataLen,
-        DWORD                 Flags,
-        LPD3DXBUFFER*         ppConstants,
-        LPD3DXBUFFER*         ppCompiledShader,
-        LPD3DXBUFFER*         ppCompilationErrors);
+D3DXAssembleShader(
+    LPCVOID               pSrcData,
+    UINT                  SrcDataLen,
+    DWORD                 Flags,
+    LPD3DXBUFFER*         ppConstants,
+    LPD3DXBUFFER*         ppCompiledShader,
+    LPD3DXBUFFER*         ppCompilationErrors);
 
 
 #ifdef __cplusplus
@@ -537,16 +537,16 @@ extern "C" {
 //      length will be truncated to fit.
 //-------------------------------------------------------------------------
 HRESULT WINAPI
-    D3DXGetErrorStringA(
-        HRESULT             hr,
-        LPSTR               pBuffer,
-        UINT                BufferLen);
+D3DXGetErrorStringA(
+    HRESULT             hr,
+    LPSTR               pBuffer,
+    UINT                BufferLen);
 
 HRESULT WINAPI
-    D3DXGetErrorStringW(
-        HRESULT             hr,
-        LPWSTR              pBuffer,
-        UINT                BufferLen);
+D3DXGetErrorStringW(
+    HRESULT             hr,
+    LPWSTR              pBuffer,
+    UINT                BufferLen);
 
 #ifdef UNICODE
 #define D3DXGetErrorString D3DXGetErrorStringW

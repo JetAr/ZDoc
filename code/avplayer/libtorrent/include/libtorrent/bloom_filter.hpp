@@ -41,39 +41,53 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	TORRENT_EXTRA_EXPORT void set_bits(boost::uint8_t const* b, boost::uint8_t* bits, int len);
-	TORRENT_EXTRA_EXPORT bool has_bits(boost::uint8_t const* b, boost::uint8_t const* bits, int len);
-	TORRENT_EXTRA_EXPORT int count_zero_bits(boost::uint8_t const* bits, int len);
+TORRENT_EXTRA_EXPORT void set_bits(boost::uint8_t const* b, boost::uint8_t* bits, int len);
+TORRENT_EXTRA_EXPORT bool has_bits(boost::uint8_t const* b, boost::uint8_t const* bits, int len);
+TORRENT_EXTRA_EXPORT int count_zero_bits(boost::uint8_t const* bits, int len);
 
-	template <int N>
-	struct bloom_filter
-	{
-		bool find(sha1_hash const& k) const
-		{ return has_bits(&k[0], bits, N); }
+template <int N>
+struct bloom_filter
+{
+    bool find(sha1_hash const& k) const
+    {
+        return has_bits(&k[0], bits, N);
+    }
 
-		void set(sha1_hash const& k)
-		{ set_bits(&k[0], bits, N); }
+    void set(sha1_hash const& k)
+    {
+        set_bits(&k[0], bits, N);
+    }
 
-		std::string to_string() const
-		{ return std::string((char const*)&bits[0], N); }
+    std::string to_string() const
+    {
+        return std::string((char const*)&bits[0], N);
+    }
 
-		void from_string(char const* str)
-		{ memcpy(bits, str, N); }
+    void from_string(char const* str)
+    {
+        memcpy(bits, str, N);
+    }
 
-		void clear() { memset(bits, 0, N); }
+    void clear()
+    {
+        memset(bits, 0, N);
+    }
 
-		float size() const
-		{
-			const int c = (std::min)(count_zero_bits(bits, N), (N * 8) - 1);
-			const int m = N * 8;
-			return ::log(c / float(m)) / (2.f * ::log(1.f - 1.f/m));
-		}
+    float size() const
+    {
+        const int c = (std::min)(count_zero_bits(bits, N), (N * 8) - 1);
+        const int m = N * 8;
+        return ::log(c / float(m)) / (2.f * ::log(1.f - 1.f/m));
+    }
 
-		bloom_filter() { clear(); }
+    bloom_filter()
+    {
+        clear();
+    }
 
-	private:
-		boost::uint8_t bits[N];
-	};
+private:
+    boost::uint8_t bits[N];
+};
 
 }
 

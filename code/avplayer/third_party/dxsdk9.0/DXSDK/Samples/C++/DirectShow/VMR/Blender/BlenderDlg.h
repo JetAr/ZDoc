@@ -101,7 +101,7 @@ public:
 
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CBlenderDlg)
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
     //}}AFX_VIRTUAL

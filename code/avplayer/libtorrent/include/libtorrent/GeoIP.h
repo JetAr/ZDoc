@@ -36,66 +36,73 @@ extern "C" {
 #define MAX_RECORD_LENGTH 4
 #define NUM_DB_TYPES 20
 
-typedef struct GeoIPTag {
-  FILE *GeoIPDatabase;
-  char *file_path;
-	unsigned char *cache;
-	unsigned char *index_cache;
-	unsigned int *databaseSegments;
-	char databaseType;
-	time_t mtime;
-	int flags;
-	off_t	size;
-	char record_length;
-	int charset; /* 0 iso-8859-1 1 utf8 */
-	int record_iter; /* used in GeoIP_next_record */
-	int netmask; /* netmask of last lookup - set using depth in _GeoIP_seek_record */
+typedef struct GeoIPTag
+{
+    FILE *GeoIPDatabase;
+    char *file_path;
+    unsigned char *cache;
+    unsigned char *index_cache;
+    unsigned int *databaseSegments;
+    char databaseType;
+    time_t mtime;
+    int flags;
+    off_t	size;
+    char record_length;
+    int charset; /* 0 iso-8859-1 1 utf8 */
+    int record_iter; /* used in GeoIP_next_record */
+    int netmask; /* netmask of last lookup - set using depth in _GeoIP_seek_record */
 } GeoIP;
 
 
-typedef enum {
-	GEOIP_CHARSET_ISO_8859_1 = 0,
-	GEOIP_CHARSET_UTF8       = 1
+typedef enum
+{
+    GEOIP_CHARSET_ISO_8859_1 = 0,
+    GEOIP_CHARSET_UTF8       = 1
 } GeoIPCharset;
 
-typedef struct GeoIPRegionTag {
-	char country_code[3];
-	char region[3];
+typedef struct GeoIPRegionTag
+{
+    char country_code[3];
+    char region[3];
 } GeoIPRegion;
 
-typedef enum {
-	GEOIP_STANDARD = 0,
-	GEOIP_MEMORY_CACHE = 1,
-	GEOIP_CHECK_CACHE = 2,
-	GEOIP_INDEX_CACHE = 4,
-	GEOIP_MMAP_CACHE = 8
+typedef enum
+{
+    GEOIP_STANDARD = 0,
+    GEOIP_MEMORY_CACHE = 1,
+    GEOIP_CHECK_CACHE = 2,
+    GEOIP_INDEX_CACHE = 4,
+    GEOIP_MMAP_CACHE = 8
 } GeoIPOptions;
 
-typedef enum {
-	GEOIP_COUNTRY_EDITION     = 1,
-	GEOIP_REGION_EDITION_REV0 = 7,
-	GEOIP_CITY_EDITION_REV0   = 6,
-	GEOIP_ORG_EDITION         = 5,
-	GEOIP_ISP_EDITION         = 4,
-	GEOIP_CITY_EDITION_REV1   = 2,
-	GEOIP_REGION_EDITION_REV1 = 3,
-	GEOIP_PROXY_EDITION       = 8,
-	GEOIP_ASNUM_EDITION       = 9,
-	GEOIP_NETSPEED_EDITION    = 10,
-	GEOIP_DOMAIN_EDITION      = 11
+typedef enum
+{
+    GEOIP_COUNTRY_EDITION     = 1,
+    GEOIP_REGION_EDITION_REV0 = 7,
+    GEOIP_CITY_EDITION_REV0   = 6,
+    GEOIP_ORG_EDITION         = 5,
+    GEOIP_ISP_EDITION         = 4,
+    GEOIP_CITY_EDITION_REV1   = 2,
+    GEOIP_REGION_EDITION_REV1 = 3,
+    GEOIP_PROXY_EDITION       = 8,
+    GEOIP_ASNUM_EDITION       = 9,
+    GEOIP_NETSPEED_EDITION    = 10,
+    GEOIP_DOMAIN_EDITION      = 11
 } GeoIPDBTypes;
 
-typedef enum {
-	GEOIP_ANON_PROXY = 1,
-	GEOIP_HTTP_X_FORWARDED_FOR_PROXY = 2,
-	GEOIP_HTTP_CLIENT_IP_PROXY = 3
+typedef enum
+{
+    GEOIP_ANON_PROXY = 1,
+    GEOIP_HTTP_X_FORWARDED_FOR_PROXY = 2,
+    GEOIP_HTTP_CLIENT_IP_PROXY = 3
 } GeoIPProxyTypes;
 
-typedef enum {
-	GEOIP_UNKNOWN_SPEED = 0,
-	GEOIP_DIALUP_SPEED = 1,
-	GEOIP_CABLEDSL_SPEED = 2,
-	GEOIP_CORPORATE_SPEED = 3
+typedef enum
+{
+    GEOIP_UNKNOWN_SPEED = 0,
+    GEOIP_DIALUP_SPEED = 1,
+    GEOIP_CABLEDSL_SPEED = 2,
+    GEOIP_CORPORATE_SPEED = 3
 } GeoIPNetspeedValues;
 
 extern char **GeoIPDBFileName;

@@ -12,16 +12,18 @@ extern "C" {
 #define WHIRLPOOL_BBLOCK	512
 #define WHIRLPOOL_COUNTER	(256/8)
 
-typedef struct	{
-	union	{
-		unsigned char	c[WHIRLPOOL_DIGEST_LENGTH];
-		/* double q is here to ensure 64-bit alignment */
-		double		q[WHIRLPOOL_DIGEST_LENGTH/sizeof(double)];
-		}	H;
-	unsigned char	data[WHIRLPOOL_BBLOCK/8];
-	unsigned int	bitoff;
-	size_t		bitlen[WHIRLPOOL_COUNTER/sizeof(size_t)];
-	} WHIRLPOOL_CTX;
+typedef struct
+{
+    union
+    {
+        unsigned char	c[WHIRLPOOL_DIGEST_LENGTH];
+        /* double q is here to ensure 64-bit alignment */
+        double		q[WHIRLPOOL_DIGEST_LENGTH/sizeof(double)];
+    }	H;
+    unsigned char	data[WHIRLPOOL_BBLOCK/8];
+    unsigned int	bitoff;
+    size_t		bitlen[WHIRLPOOL_COUNTER/sizeof(size_t)];
+} WHIRLPOOL_CTX;
 
 #ifndef OPENSSL_NO_WHIRLPOOL
 #ifdef OPENSSL_FIPS

@@ -13,24 +13,25 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace libyk {
+namespace libyk
+{
 
 class youku_impl : public boost::noncopyable
 {
 public:
-	youku_impl(void);
-	virtual ~youku_impl(void);
+    youku_impl(void);
+    virtual ~youku_impl(void);
 
 public:
-	// 解析优酷视频url.
-	bool parse_url(const std::string &url);
-	// 解析url中的视频文件.
-	bool parse_video_files(std::vector<std::string> &videos, const std::string &password = "");
+    // 解析优酷视频url.
+    bool parse_url(const std::string &url);
+    // 解析url中的视频文件.
+    bool parse_video_files(std::vector<std::string> &videos, const std::string &password = "");
 
 private:
-	std::string m_vid;
-	boost::asio::io_service m_io_service;
-	avhttp::http_stream m_http_stream;
+    std::string m_vid;
+    boost::asio::io_service m_io_service;
+    avhttp::http_stream m_http_stream;
 };
 
 }

@@ -5,21 +5,21 @@
  * This package is an SSL implementation written
  * by Eric Young (eay@cryptsoft.com).
  * The implementation was written so as to conform with Netscapes SSL.
- * 
+ *
  * This library is free for commercial and non-commercial use as long as
  * the following conditions are aheared to.  The following conditions
  * apply to all code found in this distribution, be it the RC4, RSA,
  * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
  * included with this distribution is covered by the same copyright terms
  * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- * 
+ *
  * Copyright remains Eric Young's, and as such any Copyright notices in
  * the code are not to be removed.
  * If this package is used in a product, Eric Young should be given attribution
  * as the author of the parts of the library used.
  * This can be in the form of a textual message at program startup or
  * in documentation (online or textual) provided with the package.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -34,10 +34,10 @@
  *     Eric Young (eay@cryptsoft.com)"
  *    The word 'cryptographic' can be left out if the rouines from the library
  *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from 
+ * 4. If you include any Windows specific code (or a derivative thereof) from
  *    the apps directory (application code) you must include an acknowledgement:
  *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- * 
+ *
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
@@ -143,7 +143,7 @@ extern "C" {
 #define BIO_CTRL_DGRAM_CONNECT       31  /* BIO dgram special */
 #define BIO_CTRL_DGRAM_SET_CONNECTED 32  /* allow for an externally
 					  * connected socket to be
-					  * passed in */ 
+					  * passed in */
 #define BIO_CTRL_DGRAM_SET_RECV_TIMEOUT 33 /* setsockopt, essentially */
 #define BIO_CTRL_DGRAM_GET_RECV_TIMEOUT 34 /* getsockopt, essentially */
 #define BIO_CTRL_DGRAM_SET_SEND_TIMEOUT 35 /* setsockopt, essentially */
@@ -151,7 +151,7 @@ extern "C" {
 
 #define BIO_CTRL_DGRAM_GET_RECV_TIMER_EXP 37 /* flag whether the last */
 #define BIO_CTRL_DGRAM_GET_SEND_TIMER_EXP 38 /* I/O operation tiemd out */
-					
+
 /* #ifdef IP_MTU_DISCOVER */
 #define BIO_CTRL_DGRAM_MTU_DISCOVER       39 /* set DF bit on egress packets */
 /* #endif */
@@ -257,7 +257,7 @@ void BIO_clear_flags(BIO *b, int flags);
 
 /* The next three are used in conjunction with the
  * BIO_should_io_special() condition.  After this returns true,
- * BIO *BIO_get_retry_BIO(BIO *bio, int *reason); will walk the BIO 
+ * BIO *BIO_get_retry_BIO(BIO *bio, int *reason); will walk the BIO
  * stack and return the 'reason' for the special and the offending BIO.
  * Given a BIO, BIO_get_retry_reason(bio) will return the code. */
 /* Returned from the SSL bio when the certificate retrieval code had an error */
@@ -283,8 +283,8 @@ void BIO_clear_flags(BIO *b, int flags);
 #define BIO_cb_post(a)	((a)&BIO_CB_RETURN)
 
 long (*BIO_get_callback(const BIO *b)) (struct bio_st *,int,const char *,int, long,long);
-void BIO_set_callback(BIO *b, 
-	long (*callback)(struct bio_st *,int,const char *,int, long,long));
+void BIO_set_callback(BIO *b,
+                      long (*callback)(struct bio_st *,int,const char *,int, long,long));
 char *BIO_get_callback_arg(const BIO *b);
 void BIO_set_callback_arg(BIO *b, char *arg);
 
@@ -294,66 +294,66 @@ int BIO_method_type(const BIO *b);
 typedef void bio_info_cb(struct bio_st *, int, const char *, int, long, long);
 
 typedef struct bio_method_st
-	{
-	int type;
-	const char *name;
-	int (*bwrite)(BIO *, const char *, int);
-	int (*bread)(BIO *, char *, int);
-	int (*bputs)(BIO *, const char *);
-	int (*bgets)(BIO *, char *, int);
-	long (*ctrl)(BIO *, int, long, void *);
-	int (*create)(BIO *);
-	int (*destroy)(BIO *);
-        long (*callback_ctrl)(BIO *, int, bio_info_cb *);
-	} BIO_METHOD;
+{
+    int type;
+    const char *name;
+    int (*bwrite)(BIO *, const char *, int);
+    int (*bread)(BIO *, char *, int);
+    int (*bputs)(BIO *, const char *);
+    int (*bgets)(BIO *, char *, int);
+    long (*ctrl)(BIO *, int, long, void *);
+    int (*create)(BIO *);
+    int (*destroy)(BIO *);
+    long (*callback_ctrl)(BIO *, int, bio_info_cb *);
+} BIO_METHOD;
 
 struct bio_st
-	{
-	BIO_METHOD *method;
-	/* bio, mode, argp, argi, argl, ret */
-	long (*callback)(struct bio_st *,int,const char *,int, long,long);
-	char *cb_arg; /* first argument for the callback */
+{
+    BIO_METHOD *method;
+    /* bio, mode, argp, argi, argl, ret */
+    long (*callback)(struct bio_st *,int,const char *,int, long,long);
+    char *cb_arg; /* first argument for the callback */
 
-	int init;
-	int shutdown;
-	int flags;	/* extra storage */
-	int retry_reason;
-	int num;
-	void *ptr;
-	struct bio_st *next_bio;	/* used by filter BIOs */
-	struct bio_st *prev_bio;	/* used by filter BIOs */
-	int references;
-	unsigned long num_read;
-	unsigned long num_write;
+    int init;
+    int shutdown;
+    int flags;	/* extra storage */
+    int retry_reason;
+    int num;
+    void *ptr;
+    struct bio_st *next_bio;	/* used by filter BIOs */
+    struct bio_st *prev_bio;	/* used by filter BIOs */
+    int references;
+    unsigned long num_read;
+    unsigned long num_write;
 
-	CRYPTO_EX_DATA ex_data;
-	};
+    CRYPTO_EX_DATA ex_data;
+};
 
 DECLARE_STACK_OF(BIO)
 
 typedef struct bio_f_buffer_ctx_struct
-	{
-	/* Buffers are setup like this:
-	 *
-	 * <---------------------- size ----------------------->
-	 * +---------------------------------------------------+
-	 * | consumed | remaining          | free space        |
-	 * +---------------------------------------------------+
-	 * <-- off --><------- len ------->
-	 */
+{
+    /* Buffers are setup like this:
+     *
+     * <---------------------- size ----------------------->
+     * +---------------------------------------------------+
+     * | consumed | remaining          | free space        |
+     * +---------------------------------------------------+
+     * <-- off --><------- len ------->
+     */
 
-	/* BIO *bio; */ /* this is now in the BIO struct */
-	int ibuf_size;	/* how big is the input buffer */
-	int obuf_size;	/* how big is the output buffer */
+    /* BIO *bio; */ /* this is now in the BIO struct */
+    int ibuf_size;	/* how big is the input buffer */
+    int obuf_size;	/* how big is the output buffer */
 
-	char *ibuf;		/* the char array */
-	int ibuf_len;		/* how many bytes are in it */
-	int ibuf_off;		/* write/read offset */
+    char *ibuf;		/* the char array */
+    int ibuf_len;		/* how many bytes are in it */
+    int ibuf_off;		/* write/read offset */
 
-	char *obuf;		/* the char array */
-	int obuf_len;		/* how many bytes are in it */
-	int obuf_off;		/* write/read offset */
-	} BIO_F_BUFFER_CTX;
+    char *obuf;		/* the char array */
+    int obuf_len;		/* how many bytes are in it */
+    int obuf_off;		/* write/read offset */
+} BIO_F_BUFFER_CTX;
 
 /* Prefix and suffix callback in ASN1 BIO */
 typedef int asn1_ps_func(BIO *b, unsigned char **pbuf, int *plen, void *parg);
@@ -361,29 +361,29 @@ typedef int asn1_ps_func(BIO *b, unsigned char **pbuf, int *plen, void *parg);
 #ifndef OPENSSL_NO_SCTP
 /* SCTP parameter structs */
 struct bio_dgram_sctp_sndinfo
-	{
-	uint16_t snd_sid;
-	uint16_t snd_flags;
-	uint32_t snd_ppid;
-	uint32_t snd_context;
-	};
+{
+    uint16_t snd_sid;
+    uint16_t snd_flags;
+    uint32_t snd_ppid;
+    uint32_t snd_context;
+};
 
 struct bio_dgram_sctp_rcvinfo
-	{
-	uint16_t rcv_sid;
-	uint16_t rcv_ssn;
-	uint16_t rcv_flags;
-	uint32_t rcv_ppid;
-	uint32_t rcv_tsn;
-	uint32_t rcv_cumtsn;
-	uint32_t rcv_context;
-	};
+{
+    uint16_t rcv_sid;
+    uint16_t rcv_ssn;
+    uint16_t rcv_flags;
+    uint32_t rcv_ppid;
+    uint32_t rcv_tsn;
+    uint32_t rcv_cumtsn;
+    uint32_t rcv_context;
+};
 
 struct bio_dgram_sctp_prinfo
-	{
-	uint16_t pr_policy;
-	uint32_t pr_value;
-	};
+{
+    uint16_t pr_policy;
+    uint32_t pr_value;
+};
 #endif
 
 /* connect BIO stuff */
@@ -614,19 +614,19 @@ int BIO_ctrl_reset_read_request(BIO *b);
 int BIO_set_ex_data(BIO *bio,int idx,void *data);
 void *BIO_get_ex_data(BIO *bio,int idx);
 int BIO_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
-	CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
+                         CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
 unsigned long BIO_number_read(BIO *bio);
 unsigned long BIO_number_written(BIO *bio);
 
 /* For BIO_f_asn1() */
 int BIO_asn1_set_prefix(BIO *b, asn1_ps_func *prefix,
-					asn1_ps_func *prefix_free);
+                        asn1_ps_func *prefix_free);
 int BIO_asn1_get_prefix(BIO *b, asn1_ps_func **pprefix,
-					asn1_ps_func **pprefix_free);
+                        asn1_ps_func **pprefix_free);
 int BIO_asn1_set_suffix(BIO *b, asn1_ps_func *suffix,
-					asn1_ps_func *suffix_free);
+                        asn1_ps_func *suffix_free);
 int BIO_asn1_get_suffix(BIO *b, asn1_ps_func **psuffix,
-					asn1_ps_func **psuffix_free);
+                        asn1_ps_func **psuffix_free);
 
 # ifndef OPENSSL_NO_FP_API
 BIO_METHOD *BIO_s_file(void );
@@ -662,7 +662,7 @@ int BIO_nwrite0(BIO *bio, char **buf);
 int BIO_nwrite(BIO *bio, char **buf, int num);
 
 long BIO_debug_callback(BIO *bio,int cmd,const char *argp,int argi,
-	long argl,long ret);
+                        long argl,long ret);
 
 BIO_METHOD *BIO_s_mem(void);
 BIO *BIO_new_mem_buf(void *buf, int len);
@@ -697,9 +697,9 @@ int BIO_dgram_non_fatal_error(int error);
 int BIO_fd_should_retry(int i);
 int BIO_fd_non_fatal_error(int error);
 int BIO_dump_cb(int (*cb)(const void *data, size_t len, void *u),
-		void *u, const char *s, int len);
+                void *u, const char *s, int len);
 int BIO_dump_indent_cb(int (*cb)(const void *data, size_t len, void *u),
-		       void *u, const char *s, int len, int indent);
+                       void *u, const char *s, int len, int indent);
 int BIO_dump(BIO *b,const char *bytes,int len);
 int BIO_dump_indent(BIO *b,const char *bytes,int len,int indent);
 #ifndef OPENSSL_NO_FP_API
@@ -742,7 +742,7 @@ BIO *BIO_new_connect(char *host_port);
 BIO *BIO_new_accept(char *host_port);
 
 int BIO_new_bio_pair(BIO **bio1, size_t writebuf1,
-	BIO **bio2, size_t writebuf2);
+                     BIO **bio2, size_t writebuf2);
 /* If successful, returns 1 and in *bio1, *bio2 two BIO pair endpoints.
  * Otherwise returns 0 and sets *bio1 and *bio2 to NULL.
  * Size 0 uses default value.
@@ -758,13 +758,13 @@ void BIO_copy_next_retry(BIO *b);
 #  define __bio_h__attr__(x)
 #endif
 int BIO_printf(BIO *bio, const char *format, ...)
-	__bio_h__attr__((__format__(__printf__,2,3)));
+__bio_h__attr__((__format__(__printf__,2,3)));
 int BIO_vprintf(BIO *bio, const char *format, va_list args)
-	__bio_h__attr__((__format__(__printf__,2,0)));
+__bio_h__attr__((__format__(__printf__,2,0)));
 int BIO_snprintf(char *buf, size_t n, const char *format, ...)
-	__bio_h__attr__((__format__(__printf__,3,4)));
+__bio_h__attr__((__format__(__printf__,3,4)));
 int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
-	__bio_h__attr__((__format__(__printf__,3,0)));
+__bio_h__attr__((__format__(__printf__,3,0)));
 #undef __bio_h__attr__
 
 /* BEGIN ERROR CODES */

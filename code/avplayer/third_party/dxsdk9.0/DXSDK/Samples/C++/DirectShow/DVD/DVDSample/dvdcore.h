@@ -39,10 +39,10 @@ class CKaraokeDlg;
 //------------------------------------------------------------------------------
 
 // DirectShow Graph state
-enum GRAPH_STATE 
+enum GRAPH_STATE
 {
-    Uninitialized = 0, 
-    Graph_Stopped1, // stopped without reset 
+    Uninitialized = 0,
+    Graph_Stopped1, // stopped without reset
     Graph_Stopped2, // stopped with reset
     Nav_Stopped,
     Playing,
@@ -66,7 +66,11 @@ public:
     virtual void UpdateStatus(void) { } // used to tell the app that time or location changed
     virtual void Prohibited(void) { } // used to notify the app that an operation was prohibited
     virtual void Exit(void) { } // used to notify the app that the playback window was closed
-    virtual RECT GetAppWindow(void) { RECT r = {0,0,0,0}; return r; }
+    virtual RECT GetAppWindow(void)
+    {
+        RECT r = {0,0,0,0};
+        return r;
+    }
 
 protected:
 //private:
@@ -91,101 +95,116 @@ class CDvdCore : public IDvdCallback
     friend CKaraokeDlg;
 
 public:
-	bool GetSPAttributes( void );
-	bool GetVideoAttributes( void );
-	bool GetAudioAttributes( void );
-	bool GetDvdText( void );
-	bool PlayTime(DVD_HMSF_TIMECODE time);
-	bool PlayChapterInTitle(ULONG ulTitle, ULONG ulChapter);
-	bool PlayChapter(ULONG ulChap);
-	bool FrameStep(void);
-	bool SetParentalLevel(ULONG ulLevel);
-	bool RestoreBookmark();
-	bool SaveBookmark(void);
-	bool SetVideoWindowTitle(TCHAR * pszTitle);
-	bool EnableCaptions(bool bOn);
-	bool TitleMenu(void);
-	bool ToggleFullScreen( void );
-	bool RootMenu(void);
-	bool Pause(void);
-	bool FastForward(void);
-	bool Rewind(void);
-	bool Stop(void);
-	bool PrevChapter(void);
-	bool NextChapter(void);
-	bool Init();
-	bool SetDirectory(TCHAR * szDirectory);
+    bool GetSPAttributes( void );
+    bool GetVideoAttributes( void );
+    bool GetAudioAttributes( void );
+    bool GetDvdText( void );
+    bool PlayTime(DVD_HMSF_TIMECODE time);
+    bool PlayChapterInTitle(ULONG ulTitle, ULONG ulChapter);
+    bool PlayChapter(ULONG ulChap);
+    bool FrameStep(void);
+    bool SetParentalLevel(ULONG ulLevel);
+    bool RestoreBookmark();
+    bool SaveBookmark(void);
+    bool SetVideoWindowTitle(TCHAR * pszTitle);
+    bool EnableCaptions(bool bOn);
+    bool TitleMenu(void);
+    bool ToggleFullScreen( void );
+    bool RootMenu(void);
+    bool Pause(void);
+    bool FastForward(void);
+    bool Rewind(void);
+    bool Stop(void);
+    bool PrevChapter(void);
+    bool NextChapter(void);
+    bool Init();
+    bool SetDirectory(TCHAR * szDirectory);
 
-	ULONG GetParentalLevel(void);
-	HRESULT Play();
+    ULONG GetParentalLevel(void);
+    HRESULT Play();
 
-	explicit CDvdCore(HINSTANCE hInstance, IDvdCallback * pIDC = NULL);
-	virtual ~CDvdCore();
+    explicit CDvdCore(HINSTANCE hInstance, IDvdCallback * pIDC = NULL);
+    virtual ~CDvdCore();
 
-    static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, 
-        LPARAM lParam);
+    static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam,
+                                    LPARAM lParam);
 
-	LRESULT OnKeyEvent(WPARAM wParam, LPARAM lParam);
+    LRESULT OnKeyEvent(WPARAM wParam, LPARAM lParam);
 
-    inline GRAPH_STATE GetState(void) { return m_eState; }
-    inline DVD_HMSF_TIMECODE & GetTime(void) { return m_CurTime; }
-    inline ULONG GetTitle(void) { return m_ulCurTitle; }
-    inline ULONG GetChapter(void) { return m_ulCurChapter; }
+    inline GRAPH_STATE GetState(void)
+    {
+        return m_eState;
+    }
+    inline DVD_HMSF_TIMECODE & GetTime(void)
+    {
+        return m_CurTime;
+    }
+    inline ULONG GetTitle(void)
+    {
+        return m_ulCurTitle;
+    }
+    inline ULONG GetChapter(void)
+    {
+        return m_ulCurChapter;
+    }
 
 private:
-	LRESULT OnClose( void );
-	LRESULT OnMouseEvent(UINT uMessage, WPARAM wParam, LPARAM lParam);
-	LRESULT OnDvdEvent(UINT uMessage, WPARAM wParam, LPARAM lParam);
-	LRESULT OnMouseTimer(WPARAM wParam, LPARAM lParam);
-	LRESULT OnSize(WPARAM wParam, LPARAM lParam);
+    LRESULT OnClose( void );
+    LRESULT OnMouseEvent(UINT uMessage, WPARAM wParam, LPARAM lParam);
+    LRESULT OnDvdEvent(UINT uMessage, WPARAM wParam, LPARAM lParam);
+    LRESULT OnMouseTimer(WPARAM wParam, LPARAM lParam);
+    LRESULT OnSize(WPARAM wParam, LPARAM lParam);
 
-	void UnInitMessageSink();
-	void ShowMouseCursor(bool bShow);
-	void ReleaseInterfaces();
+    void UnInitMessageSink();
+    void ShowMouseCursor(bool bShow);
+    void ReleaseInterfaces();
     void UpdateStatus(void); // this will be am empty implementation to allow us to call
-                             // m_pCallback without checking for NULL
+    // m_pCallback without checking for NULL
 
-	bool DoesFileExist(PTSTR pszFile);
-	bool GetDriveLetter(TCHAR * pszDrive);
-	bool ChangeDvdRegion(void);
-	bool StopFullScreen(void);
-	bool StartFullScreen(void);
-	bool SetPlaybackOptions(void);
-	bool InitMessageSink(void);
-	bool BuildGraph();
+    bool DoesFileExist(PTSTR pszFile);
+    bool GetDriveLetter(TCHAR * pszDrive);
+    bool ChangeDvdRegion(void);
+    bool StopFullScreen(void);
+    bool StartFullScreen(void);
+    bool SetPlaybackOptions(void);
+    bool InitMessageSink(void);
+    bool BuildGraph();
 
-	DWORD GetStatusText(AM_DVD_RENDERSTATUS *pStatus, PTSTR pszStatusText, DWORD dwMaxText);
-    inline void SetState(GRAPH_STATE state) { m_eState = state; };
-	RECT GetPlaybackWindowRect( void );
+    DWORD GetStatusText(AM_DVD_RENDERSTATUS *pStatus, PTSTR pszStatusText, DWORD dwMaxText);
+    inline void SetState(GRAPH_STATE state)
+    {
+        m_eState = state;
+    };
+    RECT GetPlaybackWindowRect( void );
 
-	ULONG m_ulCurChapter;           // track the current chapter number
-	ULONG m_ulCurTitle;             // track the current title number
-	DVD_HMSF_TIMECODE m_CurTime;    // track the current playback time
-	IDvdCallback * m_pCallback;     // pointer to some class implementing the IDvdCallback interface
-	bool m_bMenuOn;                 // we are in a menu
-	bool m_bFirstPlay;              // Used to track if this is the first time we're playing or not
-	bool m_bFullScreenOn;           // used to track if we are in fullscreen mode or not
-	RECT m_RectOrigVideo;           // used to store the original video rectangle during fullscreen playback
+    ULONG m_ulCurChapter;           // track the current chapter number
+    ULONG m_ulCurTitle;             // track the current title number
+    DVD_HMSF_TIMECODE m_CurTime;    // track the current playback time
+    IDvdCallback * m_pCallback;     // pointer to some class implementing the IDvdCallback interface
+    bool m_bMenuOn;                 // we are in a menu
+    bool m_bFirstPlay;              // Used to track if this is the first time we're playing or not
+    bool m_bFullScreenOn;           // used to track if we are in fullscreen mode or not
+    RECT m_RectOrigVideo;           // used to store the original video rectangle during fullscreen playback
     LONG m_lOrigStyle ;             // original video window style bits (before fullscreen)
     LONG m_lOrigStyleEx ;           // original video window extended style bits (.....)
     HHOOK m_hMouseHook ;            // hook handle for mouse messages in fullscreen mode
     DWORD m_dwMouseMoveTime ;       // last time the mouse moved (in milliseconds)
     int   m_iMouseShowCount ;       // ShowCursor() returned mouse state
-	HWND m_hWnd;                    // the hWnd for our container window
-	bool m_bStillOn;                // used to track if there is a still frame on or not
-	HINSTANCE m_hInstance;          // the hInstance of the calling program
+    HWND m_hWnd;                    // the hWnd for our container window
+    bool m_bStillOn;                // used to track if there is a still frame on or not
+    HINSTANCE m_hInstance;          // the hInstance of the calling program
     IAMLine21Decoder * m_pIL21Dec;  // IAMLine21Decoder interface
-	IGraphBuilder * m_pGraph;       // IGraphBuilder interface
-	IVideoWindow * m_pIVW;          // IVideoWindow interface
-	IMediaEventEx * m_pIME;         // IMediaEventEx interface
-	IMediaControl * m_pIMC;         // IMediaControl interface
-	IDvdControl2 * m_pIDvdC2;       // IDvdControl2 interface
-	IDvdInfo2 * m_pIDvdI2;          // IDvdInfo2 interface
-	IDvdGraphBuilder * m_pIDvdGB;   // IDvdGraphBuilder interface
-	DWORD m_dwRenderFlags;          // the flags used to render the graph.  May be used to set different flags.
-	TCHAR m_szDiscPath[MAX_PATH];   // may be used to set the initial disc path
+    IGraphBuilder * m_pGraph;       // IGraphBuilder interface
+    IVideoWindow * m_pIVW;          // IVideoWindow interface
+    IMediaEventEx * m_pIME;         // IMediaEventEx interface
+    IMediaControl * m_pIMC;         // IMediaControl interface
+    IDvdControl2 * m_pIDvdC2;       // IDvdControl2 interface
+    IDvdInfo2 * m_pIDvdI2;          // IDvdInfo2 interface
+    IDvdGraphBuilder * m_pIDvdGB;   // IDvdGraphBuilder interface
+    DWORD m_dwRenderFlags;          // the flags used to render the graph.  May be used to set different flags.
+    TCHAR m_szDiscPath[MAX_PATH];   // may be used to set the initial disc path
     GRAPH_STATE m_eState;           // the state of our current graph
-	bool m_bMessageSink;			// did we set up the message sink?
+    bool m_bMessageSink;			// did we set up the message sink?
 };
 
 //------------------------------------------------------------------------------
@@ -203,27 +222,27 @@ private:
 // the application is being compiled with the headers from Visual C++ 6.0.
 ///////////////////////////////////////////////////////////////////////////
 #ifndef GetWindowLongPtr
-  #define GetWindowLongPtrA   GetWindowLongA
-  #define GetWindowLongPtrW   GetWindowLongW
-  #ifdef UNICODE
-    #define GetWindowLongPtr  GetWindowLongPtrW
-  #else
-    #define GetWindowLongPtr  GetWindowLongPtrA
-  #endif // !UNICODE
+#define GetWindowLongPtrA   GetWindowLongA
+#define GetWindowLongPtrW   GetWindowLongW
+#ifdef UNICODE
+#define GetWindowLongPtr  GetWindowLongPtrW
+#else
+#define GetWindowLongPtr  GetWindowLongPtrA
+#endif // !UNICODE
 #endif // !GetWindowLongPtr
 
 #ifndef SetWindowLongPtr
-  #define SetWindowLongPtrA   SetWindowLongA
-  #define SetWindowLongPtrW   SetWindowLongW
-  #ifdef UNICODE
-    #define SetWindowLongPtr  SetWindowLongPtrW
-  #else
-    #define SetWindowLongPtr  SetWindowLongPtrA
-  #endif // !UNICODE
+#define SetWindowLongPtrA   SetWindowLongA
+#define SetWindowLongPtrW   SetWindowLongW
+#ifdef UNICODE
+#define SetWindowLongPtr  SetWindowLongPtrW
+#else
+#define SetWindowLongPtr  SetWindowLongPtrA
+#endif // !UNICODE
 #endif // !SetWindowLongPtr
 
 #ifndef GWLP_USERDATA
-  #define GWLP_USERDATA       (-21)
+#define GWLP_USERDATA       (-21)
 #endif
 ///////////////////////////////////////////////////////////////////////////
 // End Platform SDK definitions

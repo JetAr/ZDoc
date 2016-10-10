@@ -5,21 +5,21 @@
  * This package is an SSL implementation written
  * by Eric Young (eay@cryptsoft.com).
  * The implementation was written so as to conform with Netscapes SSL.
- * 
+ *
  * This library is free for commercial and non-commercial use as long as
  * the following conditions are aheared to.  The following conditions
  * apply to all code found in this distribution, be it the RC4, RSA,
  * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
  * included with this distribution is covered by the same copyright terms
  * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- * 
+ *
  * Copyright remains Eric Young's, and as such any Copyright notices in
  * the code are not to be removed.
  * If this package is used in a product, Eric Young should be given attribution
  * as the author of the parts of the library used.
  * This can be in the form of a textual message at program startup or
  * in documentation (online or textual) provided with the package.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -34,10 +34,10 @@
  *     Eric Young (eay@cryptsoft.com)"
  *    The word 'cryptographic' can be left out if the rouines from the library
  *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from 
+ * 4. If you include any Windows specific code (or a derivative thereof) from
  *    the apps directory (application code) you must include an acknowledgement:
  *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- * 
+ *
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
@@ -121,64 +121,64 @@ extern "C" {
 /* typedef struct dsa_method DSA_METHOD; */
 
 typedef struct DSA_SIG_st
-	{
-	BIGNUM *r;
-	BIGNUM *s;
-	} DSA_SIG;
+{
+    BIGNUM *r;
+    BIGNUM *s;
+} DSA_SIG;
 
 struct dsa_method
-	{
-	const char *name;
-	DSA_SIG * (*dsa_do_sign)(const unsigned char *dgst, int dlen, DSA *dsa);
-	int (*dsa_sign_setup)(DSA *dsa, BN_CTX *ctx_in, BIGNUM **kinvp,
-								BIGNUM **rp);
-	int (*dsa_do_verify)(const unsigned char *dgst, int dgst_len,
-			     DSA_SIG *sig, DSA *dsa);
-	int (*dsa_mod_exp)(DSA *dsa, BIGNUM *rr, BIGNUM *a1, BIGNUM *p1,
-			BIGNUM *a2, BIGNUM *p2, BIGNUM *m, BN_CTX *ctx,
-			BN_MONT_CTX *in_mont);
-	int (*bn_mod_exp)(DSA *dsa, BIGNUM *r, BIGNUM *a, const BIGNUM *p,
-				const BIGNUM *m, BN_CTX *ctx,
-				BN_MONT_CTX *m_ctx); /* Can be null */
-	int (*init)(DSA *dsa);
-	int (*finish)(DSA *dsa);
-	int flags;
-	char *app_data;
-	/* If this is non-NULL, it is used to generate DSA parameters */
-	int (*dsa_paramgen)(DSA *dsa, int bits,
-			const unsigned char *seed, int seed_len,
-			int *counter_ret, unsigned long *h_ret,
-			BN_GENCB *cb);
-	/* If this is non-NULL, it is used to generate DSA keys */
-	int (*dsa_keygen)(DSA *dsa);
-	};
+{
+    const char *name;
+    DSA_SIG * (*dsa_do_sign)(const unsigned char *dgst, int dlen, DSA *dsa);
+    int (*dsa_sign_setup)(DSA *dsa, BN_CTX *ctx_in, BIGNUM **kinvp,
+                          BIGNUM **rp);
+    int (*dsa_do_verify)(const unsigned char *dgst, int dgst_len,
+                         DSA_SIG *sig, DSA *dsa);
+    int (*dsa_mod_exp)(DSA *dsa, BIGNUM *rr, BIGNUM *a1, BIGNUM *p1,
+                       BIGNUM *a2, BIGNUM *p2, BIGNUM *m, BN_CTX *ctx,
+                       BN_MONT_CTX *in_mont);
+    int (*bn_mod_exp)(DSA *dsa, BIGNUM *r, BIGNUM *a, const BIGNUM *p,
+                      const BIGNUM *m, BN_CTX *ctx,
+                      BN_MONT_CTX *m_ctx); /* Can be null */
+    int (*init)(DSA *dsa);
+    int (*finish)(DSA *dsa);
+    int flags;
+    char *app_data;
+    /* If this is non-NULL, it is used to generate DSA parameters */
+    int (*dsa_paramgen)(DSA *dsa, int bits,
+                        const unsigned char *seed, int seed_len,
+                        int *counter_ret, unsigned long *h_ret,
+                        BN_GENCB *cb);
+    /* If this is non-NULL, it is used to generate DSA keys */
+    int (*dsa_keygen)(DSA *dsa);
+};
 
 struct dsa_st
-	{
-	/* This first variable is used to pick up errors where
-	 * a DSA is passed instead of of a EVP_PKEY */
-	int pad;
-	long version;
-	int write_params;
-	BIGNUM *p;
-	BIGNUM *q;	/* == 20 */
-	BIGNUM *g;
+{
+    /* This first variable is used to pick up errors where
+     * a DSA is passed instead of of a EVP_PKEY */
+    int pad;
+    long version;
+    int write_params;
+    BIGNUM *p;
+    BIGNUM *q;	/* == 20 */
+    BIGNUM *g;
 
-	BIGNUM *pub_key;  /* y public key */
-	BIGNUM *priv_key; /* x private key */
+    BIGNUM *pub_key;  /* y public key */
+    BIGNUM *priv_key; /* x private key */
 
-	BIGNUM *kinv;	/* Signing pre-calc */
-	BIGNUM *r;	/* Signing pre-calc */
+    BIGNUM *kinv;	/* Signing pre-calc */
+    BIGNUM *r;	/* Signing pre-calc */
 
-	int flags;
-	/* Normally used to cache montgomery values */
-	BN_MONT_CTX *method_mont_p;
-	int references;
-	CRYPTO_EX_DATA ex_data;
-	const DSA_METHOD *meth;
-	/* functional reference if 'meth' is ENGINE-provided */
-	ENGINE *engine;
-	};
+    int flags;
+    /* Normally used to cache montgomery values */
+    BN_MONT_CTX *method_mont_p;
+    int references;
+    CRYPTO_EX_DATA ex_data;
+    const DSA_METHOD *meth;
+    /* functional reference if 'meth' is ENGINE-provided */
+    ENGINE *engine;
+};
 
 #define d2i_DSAparams_fp(fp,x) (DSA *)ASN1_d2i_fp((char *(*)())DSA_new, \
 		(char *(*)())d2i_DSAparams,(fp),(unsigned char **)(x))
@@ -196,7 +196,7 @@ DSA_SIG * d2i_DSA_SIG(DSA_SIG **v, const unsigned char **pp, long length);
 
 DSA_SIG * DSA_do_sign(const unsigned char *dgst,int dlen,DSA *dsa);
 int	DSA_do_verify(const unsigned char *dgst,int dgst_len,
-		      DSA_SIG *sig,DSA *dsa);
+                  DSA_SIG *sig,DSA *dsa);
 
 const DSA_METHOD *DSA_OpenSSL(void);
 
@@ -210,14 +210,14 @@ void	DSA_free (DSA *r);
 /* "up" the DSA object's reference count */
 int	DSA_up_ref(DSA *r);
 int	DSA_size(const DSA *);
-	/* next 4 return -1 on error */
+/* next 4 return -1 on error */
 int	DSA_sign_setup( DSA *dsa,BN_CTX *ctx_in,BIGNUM **kinvp,BIGNUM **rp);
 int	DSA_sign(int type,const unsigned char *dgst,int dlen,
-		unsigned char *sig, unsigned int *siglen, DSA *dsa);
+             unsigned char *sig, unsigned int *siglen, DSA *dsa);
 int	DSA_verify(int type,const unsigned char *dgst,int dgst_len,
-		const unsigned char *sigbuf, int siglen, DSA *dsa);
+               const unsigned char *sigbuf, int siglen, DSA *dsa);
 int DSA_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
-	     CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
+                         CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
 int DSA_set_ex_data(DSA *d, int idx, void *arg);
 void *DSA_get_ex_data(DSA *d, int idx);
 
@@ -228,15 +228,15 @@ DSA * 	d2i_DSAparams(DSA **a, const unsigned char **pp, long length);
 /* Deprecated version */
 #ifndef OPENSSL_NO_DEPRECATED
 DSA *	DSA_generate_parameters(int bits,
-		unsigned char *seed,int seed_len,
-		int *counter_ret, unsigned long *h_ret,void
-		(*callback)(int, int, void *),void *cb_arg);
+                                unsigned char *seed,int seed_len,
+                                int *counter_ret, unsigned long *h_ret,void
+                                (*callback)(int, int, void *),void *cb_arg);
 #endif /* !defined(OPENSSL_NO_DEPRECATED) */
 
 /* New version */
 int	DSA_generate_parameters_ex(DSA *dsa, int bits,
-		const unsigned char *seed,int seed_len,
-		int *counter_ret, unsigned long *h_ret, BN_GENCB *cb);
+                               const unsigned char *seed,int seed_len,
+                               int *counter_ret, unsigned long *h_ret, BN_GENCB *cb);
 
 int	DSA_generate_key(DSA *a);
 int	i2d_DSAPublicKey(const DSA *a, unsigned char **pp);

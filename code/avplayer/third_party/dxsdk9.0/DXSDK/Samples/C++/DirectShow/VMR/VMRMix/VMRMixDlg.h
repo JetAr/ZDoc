@@ -23,8 +23,14 @@ class CVMRMixDlg : public CDialog
 public:
     HRESULT RunDemonstration();
     bool GetMediaSettings();
-    bool IsFullScreen(){ return m_bFullScreen;};
-    bool IsBitmapToUse(){ return m_bUseBitmap;};
+    bool IsFullScreen()
+    {
+        return m_bFullScreen;
+    };
+    bool IsBitmapToUse()
+    {
+        return m_bUseBitmap;
+    };
     CVMRMixDlg(CWnd* pParent = NULL);   // standard constructor
 
     typedef enum eState
@@ -49,7 +55,7 @@ public:
 
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CVMRMixDlg)
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual void PostNcDestroy();
     //}}AFX_VIRTUAL

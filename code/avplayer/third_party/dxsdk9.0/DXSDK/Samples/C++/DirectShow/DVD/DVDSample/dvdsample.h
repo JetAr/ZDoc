@@ -19,7 +19,7 @@ class CApp;
 extern CApp g_App;
 class CSPLangDlg;
 class CAudioLangDlg;
-class CDVDLanguages; 
+class CDVDLanguages;
 class CAngleDlg;
 class CKaraokeDlg;
 
@@ -37,41 +37,44 @@ class CApp : public IDvdCallback
     friend CKaraokeDlg;
 
 public:
-	CApp();
-	virtual ~CApp();
+    CApp();
+    virtual ~CApp();
 
-	void Prohibited( void );
+    void Prohibited( void );
     void Exit( void );
-	void SetAppValues(HINSTANCE hInst, PTSTR szAppName, int iAppTitleResId);
+    void SetAppValues(HINSTANCE hInst, PTSTR szAppName, int iAppTitleResId);
     void UpdateStatus(void); // to implement the IDvdCallback interface requirements
 
-	static BOOL CALLBACK SelectParentalLevel(HWND hDlg, UINT message, 
-                                             WPARAM wParam, LPARAM lParam);
-	bool InitInstance(int nCmdShow);
-	RECT GetAppWindow(void);
+    static BOOL CALLBACK SelectParentalLevel(HWND hDlg, UINT message,
+            WPARAM wParam, LPARAM lParam);
+    bool InitInstance(int nCmdShow);
+    RECT GetAppWindow(void);
 
-    inline const TCHAR * GetAppName(void) const { return m_szAppName; };
+    inline const TCHAR * GetAppName(void) const
+    {
+        return m_szAppName;
+    };
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) ;
 
 private:
-	LRESULT MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam);
+    LRESULT MenuProc(HWND hWnd, WPARAM wParam, LPARAM lParam);
     LRESULT KeyProc(WPARAM wParam, LPARAM lParam);
-	LRESULT ToolTipProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+    LRESULT ToolTipProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	void DrawStatus(HDC hDC);
-	bool OnSelectDisc(void);
-	int MakeParentLevelList(HWND hDlg, int iListID);
+    void DrawStatus(HDC hDC);
+    bool OnSelectDisc(void);
+    int MakeParentLevelList(HWND hDlg, int iListID);
 
-	DWORD               m_dwProhibitedTime;
-	HWND                m_hwndToolBar;
-	CDVDLanguages *     m_pLangLookup;
-	bool                m_bFullScreenOn;
-	bool                m_bCaptionsOn;
-	CDvdCore *          m_pDvdCore;
-	HWND                m_hWnd;
+    DWORD               m_dwProhibitedTime;
+    HWND                m_hwndToolBar;
+    CDVDLanguages *     m_pLangLookup;
+    bool                m_bFullScreenOn;
+    bool                m_bCaptionsOn;
+    CDvdCore *          m_pDvdCore;
+    HWND                m_hWnd;
     TCHAR               m_szAppName[50] ;   // internal name of the app
-	TCHAR               m_szAppTitle[50];   // title bar text
-	HINSTANCE           m_hInstance;
+    TCHAR               m_szAppTitle[50];   // title bar text
+    HINSTANCE           m_hInstance;
     CParentLevels *     m_pParentLevels;
 };
 
@@ -79,18 +82,27 @@ private:
 //------------------------------------------------------------------------------
 // Name: class CParentLevels
 // Desc: This is a class to wrap the viewing level numbers and names.
-//       This makes it easy to add viewing level definitions or change them 
+//       This makes it easy to add viewing level definitions or change them
 //       to those of another country, for example.
 //------------------------------------------------------------------------------
 const int LEVELS = 6;
-class CParentLevels 
+class CParentLevels
 {
 public:
     CParentLevels() ;
 
-    int     GetCount(void)   { return m_iCount ; } ;
-    int     GetValue(int i)  { return m_aiValues[i] ; } ;
-    LPCTSTR GetName(int i)   { return m_alpszNames[i] ; } ;
+    int     GetCount(void)
+    {
+        return m_iCount ;
+    } ;
+    int     GetValue(int i)
+    {
+        return m_aiValues[i] ;
+    } ;
+    LPCTSTR GetName(int i)
+    {
+        return m_alpszNames[i] ;
+    } ;
 
 private:
     LPCTSTR   m_alpszNames[LEVELS] ;
@@ -105,7 +117,7 @@ private:
 //       We have only 10 languages from ISO 639 as a sample. It can be extended to
 //       include any other language in ISO 639.
 //------------------------------------------------------------------------------
-class CDVDLanguages 
+class CDVDLanguages
 {
 public:
     CDVDLanguages() ;
@@ -128,7 +140,7 @@ private:
 #endif
 
 #ifndef DbgInitialise
-#define DbgInitialise(x) 
+#define DbgInitialise(x)
 #endif
 
 #ifndef DbgTerminate

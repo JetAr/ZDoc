@@ -4,7 +4,7 @@
 // Desc: DirectShow sample code - a simple full screen video playback sample.
 //       Using the Windows XP Video Mixing Renderer, a video is played back in
 //       a full screen exclusive mode.
-//      
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
@@ -15,7 +15,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-namespace Helpers {
+namespace Helpers
+{
 
 //-----------------------------------------------------------------------------------------
 //  Function:   hresultNameLookup
@@ -27,7 +28,7 @@ const TCHAR * hresultNameLookup(HRESULT hres);
 
 //----------------------------------------------------------------------------
 //  FindMediaFile
-// 
+//
 //  Provides FileOpen dialog to select media file or processes command line
 //
 //  Parameters:
@@ -35,25 +36,26 @@ const TCHAR * hresultNameLookup(HRESULT hres);
 //          owner - owner window
 //          achFoundFile    - path to the file to play // pass MAX_PATH
 //
-//  Return: true if success 
+//  Return: true if success
 //----------------------------------------------------------------------------
 bool FindMediaFile(HINSTANCE hInstance, HWND hwndOwner, LPTSTR achFoundFile);
 
 //----------------------------------------------------------------------------
 //  Release the object and set the reference to null
-//  this is preferred to a MACRO definition because this will also 
+//  this is preferred to a MACRO definition because this will also
 //  check the type of an object
-// 
+//
 //
 //  Parameters:
 //      p - reference to a pointer of a type T
 //
-//  Return: 
+//  Return:
 //----------------------------------------------------------------------------
 template<typename T>
 inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }

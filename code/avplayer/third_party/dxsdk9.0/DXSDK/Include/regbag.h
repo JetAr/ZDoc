@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for regbag.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __ICreatePropBagOnRegKey_FWD_DEFINED__
 #define __ICreatePropBagOnRegKey_FWD_DEFINED__
@@ -54,14 +54,14 @@ typedef interface ICreatePropBagOnRegKey ICreatePropBagOnRegKey;
 #include "ocidl.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_regbag_0000 */
-/* [local] */ 
+/* [local] */
 
 //+-------------------------------------------------------------------------
 //
@@ -79,62 +79,63 @@ extern RPC_IF_HANDLE __MIDL_itf_regbag_0000_v0_0_s_ifspec;
 #define __ICreatePropBagOnRegKey_INTERFACE_DEFINED__
 
 /* interface ICreatePropBagOnRegKey */
-/* [local][unique][helpstring][uuid][restricted][hidden][object] */ 
+/* [local][unique][helpstring][uuid][restricted][hidden][object] */
 
 
 EXTERN_C const IID IID_ICreatePropBagOnRegKey;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("8A674B48-1F63-11d3-B64C-00C04F79498E")
-    ICreatePropBagOnRegKey : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ HKEY hkey,
-            /* [in] */ LPCOLESTR subkey,
-            /* [in] */ DWORD ulOptions,
-            /* [in] */ DWORD samDesired,
-            REFIID iid,
-            /* [out] */ LPVOID *ppBag) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("8A674B48-1F63-11d3-B64C-00C04F79498E")
+ICreatePropBagOnRegKey :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE Create(
+        /* [in] */ HKEY hkey,
+        /* [in] */ LPCOLESTR subkey,
+        /* [in] */ DWORD ulOptions,
+        /* [in] */ DWORD samDesired,
+        REFIID iid,
+        /* [out] */ LPVOID *ppBag) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ICreatePropBagOnRegKeyVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ICreatePropBagOnRegKey * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ICreatePropBagOnRegKey * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            ICreatePropBagOnRegKey * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *Create )( 
-            ICreatePropBagOnRegKey * This,
-            /* [in] */ HKEY hkey,
-            /* [in] */ LPCOLESTR subkey,
-            /* [in] */ DWORD ulOptions,
-            /* [in] */ DWORD samDesired,
-            REFIID iid,
-            /* [out] */ LPVOID *ppBag);
-        
-        END_INTERFACE
-    } ICreatePropBagOnRegKeyVtbl;
+typedef struct ICreatePropBagOnRegKeyVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ICreatePropBagOnRegKey
-    {
-        CONST_VTBL struct ICreatePropBagOnRegKeyVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        ICreatePropBagOnRegKey * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        ICreatePropBagOnRegKey * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        ICreatePropBagOnRegKey * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Create )(
+        ICreatePropBagOnRegKey * This,
+        /* [in] */ HKEY hkey,
+        /* [in] */ LPCOLESTR subkey,
+        /* [in] */ DWORD ulOptions,
+        /* [in] */ DWORD samDesired,
+        REFIID iid,
+        /* [out] */ LPVOID *ppBag);
+
+    END_INTERFACE
+} ICreatePropBagOnRegKeyVtbl;
+
+interface ICreatePropBagOnRegKey
+{
+    CONST_VTBL struct ICreatePropBagOnRegKeyVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -159,7 +160,7 @@ EXTERN_C const IID IID_ICreatePropBagOnRegKey;
 
 
 
-HRESULT STDMETHODCALLTYPE ICreatePropBagOnRegKey_Create_Proxy( 
+HRESULT STDMETHODCALLTYPE ICreatePropBagOnRegKey_Create_Proxy(
     ICreatePropBagOnRegKey * This,
     /* [in] */ HKEY hkey,
     /* [in] */ LPCOLESTR subkey,

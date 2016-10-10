@@ -47,22 +47,22 @@ VideoCdWndProc(
     UINT message,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 VideoCd_OnClose(
     HWND hwnd
-    );
+);
 
 BOOL
 VideoCd_OnQueryEndSession(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnDestroy(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnClick(
@@ -82,24 +82,24 @@ VideoCd_OnCommand(
     int id,
     HWND hwndCtl,
     UINT codeNotify
-    );
+);
 
 void
 VideoCd_OnPaint(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnTimer(
     HWND hwnd,
     UINT id
-    );
+);
 
 BOOL
 VideoCd_OnCreate(
     HWND hwnd,
     LPCREATESTRUCT lpCreateStruct
-    );
+);
 
 void
 VideoCd_OnSize(
@@ -107,7 +107,7 @@ VideoCd_OnSize(
     UINT state,
     int cx,
     int cy
-    );
+);
 
 void
 VideoCd_OnKeyUp(
@@ -116,7 +116,7 @@ VideoCd_OnKeyUp(
     BOOL fDown,
     int cRepeat,
     UINT flags
-    );
+);
 
 void
 VideoCd_OnHScroll(
@@ -124,19 +124,19 @@ VideoCd_OnHScroll(
     HWND hwndCtl,
     UINT code,
     int pos
-    );
+);
 
 void
 VideoCd_OnUser(
     HWND hwnd,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 VideoCd_OnSysColorChange(
     HWND hwnd
-    );
+);
 
 void
 VideoCd_OnMenuSelect(
@@ -145,7 +145,7 @@ VideoCd_OnMenuSelect(
     int item,
     HMENU hmenuPopup,
     UINT flags
-    );
+);
 
 void
 VideoCd_OnInitMenuPopup(
@@ -153,7 +153,7 @@ VideoCd_OnInitMenuPopup(
     HMENU hMenu,
     UINT item,
     BOOL fSystemMenu
-    );
+);
 
 #ifdef WM_NOTIFY
 LRESULT
@@ -161,19 +161,19 @@ VideoCd_OnNotify(
     HWND hwnd,
     int idFrom,
     NMHDR FAR* pnmhdr
-    );
+);
 #endif
 
 
 void
 VideoCd_OnGraphNotify(
     int stream
-    );
+);
 
 void
 SetPlayButtonsEnableState(
     void
-    );
+);
 
 
 /* -------------------------------------------------------------------------
@@ -183,53 +183,53 @@ SetPlayButtonsEnableState(
 BOOL
 VcdPlayerSetLog(
     void
-    );
+);
 
 BOOL
 VcdPlayerSetPerfLogFile(
     void
-    );
+);
 
 BOOL
 VcdPlayerOpenCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerCloseCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerPlayCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerStopCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerPauseCmd(
     void
-    );
+);
 
 BOOL
 VcdPlayerPauseCmd(
     void
-    );
+);
 
 void
 VcdPlayerSeekCmd(
     REFTIME rtSeekBy
-    );
+);
 
 BOOL
 ProcessOpen(
     TCHAR *achFileName,
     BOOL bPlay = FALSE
-    );
+);
 
 
 /* -------------------------------------------------------------------------

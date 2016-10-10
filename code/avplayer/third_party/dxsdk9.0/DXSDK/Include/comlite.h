@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: COMLite.h
 //
-// Desc: This header file is to provide a migration path for users of 
+// Desc: This header file is to provide a migration path for users of
 //       ActiveMovie betas 1 and 2.
 //
 // Copyright (c) 1992-2001, Microsoft Corporation.  All rights reserved.

@@ -10,16 +10,16 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #include "NetAbstract.h"
 
 struct MazeConfig;
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class   CDPlay8Client : public IOutboundClient
 {
@@ -31,15 +31,36 @@ public:
     void        Shutdown();
     HRESULT     StartSessionEnum( const TCHAR* ipaddress );
     HRESULT     StopSessionEnum();
-    DWORD       GetNumSessions() const { return m_dwNumSessions; };
-    const TCHAR* GetSessionName( DWORD num ) const { return m_szSessionNames[num]; };
-    DWORD       GetSessionMaxPlayers( DWORD num ) const { return m_Sessions[num].dwMaxPlayers; };
-    DWORD       GetSessionCurrentPlayers( DWORD num ) const { return m_Sessions[num].dwCurrentPlayers; };
-    GUID        GetSessionGUID( DWORD num ) const { return m_Sessions[num].guidInstance; };
+    DWORD       GetNumSessions() const
+    {
+        return m_dwNumSessions;
+    };
+    const TCHAR* GetSessionName( DWORD num ) const
+    {
+        return m_szSessionNames[num];
+    };
+    DWORD       GetSessionMaxPlayers( DWORD num ) const
+    {
+        return m_Sessions[num].dwMaxPlayers;
+    };
+    DWORD       GetSessionCurrentPlayers( DWORD num ) const
+    {
+        return m_Sessions[num].dwCurrentPlayers;
+    };
+    GUID        GetSessionGUID( DWORD num ) const
+    {
+        return m_Sessions[num].guidInstance;
+    };
     HRESULT     JoinSession( DWORD num );
-    void        SetClient( INetClient* pclient ) { m_pClient = pclient; };
-    IOutboundClient* GetOutboundClient() const { return ((IOutboundClient*)this); };
-    
+    void        SetClient( INetClient* pclient )
+    {
+        m_pClient = pclient;
+    };
+    IOutboundClient* GetOutboundClient() const
+    {
+        return ((IOutboundClient*)this);
+    };
+
     DWORD       GetNumSPThreads();
     void        SetNumSPThreads(DWORD dwNumSPThreads);
 
@@ -50,8 +71,14 @@ public:
     virtual HRESULT     SendPacket( void* pData, DWORD dwSize, BOOL bGuaranteed, DWORD dwTimeout );
     virtual DWORD       GetThroughputBPS();
     virtual DWORD       GetRoundTripLatencyMS();
-    virtual BOOL        IsSessionLost() { return m_bSessionLost; };
-    virtual DWORD       GetSessionLostReason() { return m_dwSessionLostReason; };
+    virtual BOOL        IsSessionLost()
+    {
+        return m_bSessionLost;
+    };
+    virtual DWORD       GetSessionLostReason()
+    {
+        return m_dwSessionLostReason;
+    };
     virtual HRESULT     GetConnectionInfo( TCHAR* strConnectionInfo, DWORD dwBufLength );
 
 protected:
@@ -62,7 +89,7 @@ protected:
     DWORD               m_dwSessionLostReason;
     FLOAT               m_fThroughputBPS;
     DWORD               m_dwThroughputBytes;
-    
+
     CRITICAL_SECTION    m_csThreadCountLock;
     WORD                m_wActiveThreadCount;
     WORD                m_wMaxThreadCount;
@@ -73,7 +100,7 @@ protected:
     // Configuration info.
     MazeConfig*         m_MazeConfig;
 
-    // Connection info 
+    // Connection info
     FLOAT               m_fLastUpdateConnectInfoTime;
     DPN_CONNECTION_INFO m_dpnConnectionInfo;
     DWORD               m_dwHighPriMessages, m_dwHighPriBytes;

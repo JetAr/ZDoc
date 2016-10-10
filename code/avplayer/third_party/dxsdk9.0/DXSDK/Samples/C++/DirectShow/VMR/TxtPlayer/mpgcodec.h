@@ -8,7 +8,8 @@
 
 #include <mpegtype.h>   // IMpegAudioDecoder
 
-typedef struct {
+typedef struct
+{
     LONG           lWidth;             //  Native Width in pixels
     LONG           lHeight;            //  Native Height in pixels
     LONG           lvbv;               //  vbv
@@ -74,7 +75,8 @@ typedef struct {
 //
 // Structure to describe the caps of the mpeg video decoder.
 //
-typedef struct {
+typedef struct
+{
     DWORD   VideoMaxBitRate;
 } MPEG_VIDEO_DECODER_CAPS;
 
@@ -82,7 +84,8 @@ typedef struct {
 //
 // IMpegVideoDecoder
 //
-DECLARE_INTERFACE_(IMpegVideoDecoder, IUnknown) {
+DECLARE_INTERFACE_(IMpegVideoDecoder, IUnknown)
+{
 
     STDMETHOD(get_CurrentDecoderOption)
     ( THIS_

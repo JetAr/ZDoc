@@ -38,37 +38,37 @@ class CNetSender
     WSADATA             m_wsaData ;                 //  used during initialization
     struct sockaddr_in  m_saddrDest ;
 
-    public :
+public :
 
-        CNetSender (
-            IN  DWORD       dwMaxIOBufferLength,
-            OUT HRESULT *   phr
-            ) ;
+    CNetSender (
+        IN  DWORD       dwMaxIOBufferLength,
+        OUT HRESULT *   phr
+    ) ;
 
-        ~CNetSender (
-            ) ;
+    ~CNetSender (
+    ) ;
 
-        //  joins a multicast
-        HRESULT
-        JoinMulticast (
-            IN  ULONG   ulIP,
-            IN  USHORT  usPort,
-            IN  ULONG   ulNIC,
-            IN  ULONG   ulTTL = 1
-            ) ;
+    //  joins a multicast
+    HRESULT
+    JoinMulticast (
+        IN  ULONG   ulIP,
+        IN  USHORT  usPort,
+        IN  ULONG   ulNIC,
+        IN  ULONG   ulTTL = 1
+    ) ;
 
-        //  leaves the multicast; can safely be called if we're not part of
-        //  a multicast
-        HRESULT
-        LeaveMulticast (
-            ) ;
+    //  leaves the multicast; can safely be called if we're not part of
+    //  a multicast
+    HRESULT
+    LeaveMulticast (
+    ) ;
 
-        //  send; synchronous operation
-        HRESULT
-        Send (
-            IN  BYTE *  pbBuffer,
-            IN  DWORD   dwLength
-            ) ;
+    //  send; synchronous operation
+    HRESULT
+    Send (
+        IN  BYTE *  pbBuffer,
+        IN  DWORD   dwLength
+    ) ;
 } ;
 
 #endif  //  __netsend_h

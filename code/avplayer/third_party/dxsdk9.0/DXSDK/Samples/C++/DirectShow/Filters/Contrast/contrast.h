@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: Contrast.h
 //
-// Desc: DirectShow sample code - class definition for simple 
+// Desc: DirectShow sample code - class definition for simple
 //       contrast-adjusting transform filter.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -12,8 +12,8 @@ const signed char MaxContrastLevel = 127;
 const signed char MinContrastLevel = -127;
 
 class CContrast : public CTransformFilter,
-                  public IContrast,
-                  public ISpecifyPropertyPages
+    public IContrast,
+    public ISpecifyPropertyPages
 {
 
 public:
@@ -63,10 +63,10 @@ private:
     const signed char m_DefaultContrastLevel;
 
     // The current level to set the palette to
-    signed char m_ContrastLevel;    
+    signed char m_ContrastLevel;
 
     // The level the last frame's palette was set at
-    signed char m_PrevLevel;        
+    signed char m_PrevLevel;
 
     // The number of buffers to request on the output allocator
     const long m_lBufferRequest;

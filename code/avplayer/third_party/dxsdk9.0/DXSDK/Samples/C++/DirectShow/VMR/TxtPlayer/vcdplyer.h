@@ -20,7 +20,8 @@ enum EMovieMode { MOVIE_NOTOPENED = 0x00,
                   MOVIE_OPENED    = 0x01,
                   MOVIE_PLAYING   = 0x02,
                   MOVIE_STOPPED   = 0x03,
-                  MOVIE_PAUSED    = 0x04 };
+                  MOVIE_PAUSED    = 0x04
+                };
 
 #define GRID_CY 24
 #define GRID_CX 40
@@ -29,9 +30,11 @@ struct IMpegAudioDecoder;
 struct IMpegVideoDecoder;
 struct IQualProp;
 
-typedef struct {
+typedef struct
+{
     BITMAPINFOHEADER    bmiHeader;
-    union {
+    union
+    {
         RGBQUAD         bmiColors[iPALETTE_COLORS];
         DWORD           dwBitMasks[iMASK_COLORS];
         TRUECOLORINFO   TrueColorInfo;
@@ -65,33 +68,33 @@ private:
     HRESULT RenderAppImage(LPDIRECT3DDEVICE7 pd3dDevice, LPDIRECTDRAWSURFACE7 pDDSBlend, BYTE alpha);
 
     HRESULT AllocateSurfaceWorker(
-                                    DWORD dwFlags,
-                                    LPBITMAPINFOHEADER lpHdr,
-                                    LPDDPIXELFORMAT lpPixFmt,
-                                    LPSIZE lpAspectRatio,
-                                    DWORD dwMinBackBuffers,
-                                    DWORD dwMaxBackBuffers,
-                                    DWORD* lpdwBackBuffer,
-                                    LPDIRECTDRAWSURFACE7* lplpSurface,
-                                    DDSURFACEDESC2* pddsdDisplay    );
+        DWORD dwFlags,
+        LPBITMAPINFOHEADER lpHdr,
+        LPDDPIXELFORMAT lpPixFmt,
+        LPSIZE lpAspectRatio,
+        DWORD dwMinBackBuffers,
+        DWORD dwMaxBackBuffers,
+        DWORD* lpdwBackBuffer,
+        LPDIRECTDRAWSURFACE7* lplpSurface,
+        DDSURFACEDESC2* pddsdDisplay    );
     HRESULT AllocateOverlaySurface(
-                        LPDIRECTDRAWSURFACE7* lplpSurf,
-                        DWORD dwFlags,
-                        DDSURFACEDESC2* pddsd,
-                        DWORD dwMinBuffers,
-                        DWORD dwMaxBuffers,
-                        DWORD* lpdwBuffer
-                        );
+        LPDIRECTDRAWSURFACE7* lplpSurf,
+        DWORD dwFlags,
+        DDSURFACEDESC2* pddsd,
+        DWORD dwMinBuffers,
+        DWORD dwMaxBuffers,
+        DWORD* lpdwBuffer
+    );
 
     HRESULT AllocateOffscreenSurface(
-                                    LPDIRECTDRAWSURFACE7* lplpSurf,
-                                    DWORD dwFlags,
-                                    DDSURFACEDESC2* pddsd,
-                                    DWORD dwMinBuffers,
-                                    DWORD dwMaxBuffers,
-                                    DWORD* lpdwBuffer,
-                                    BOOL fAllowBackBuffer
-                                    );
+        LPDIRECTDRAWSURFACE7* lplpSurf,
+        DWORD dwFlags,
+        DDSURFACEDESC2* pddsd,
+        DWORD dwMinBuffers,
+        DWORD dwMaxBuffers,
+        DWORD* lpdwBuffer,
+        BOOL fAllowBackBuffer
+    );
 
     HRESULT DDARGB32SurfaceInit(
         LPDIRECTDRAWSURFACE7* lplpDDS,
@@ -138,10 +141,10 @@ private:
     HRESULT FindInterfaceFromFilterGraph(
         REFIID iid, // interface to look for
         LPVOID *lp  // place to return interface pointer in
-        );
+    );
 
 public:
-     CMovie(HWND hwndApplication);
+    CMovie(HWND hwndApplication);
     ~CMovie();
 
     DECLARE_IUNKNOWN
@@ -190,7 +193,8 @@ public:
     BOOL            RepaintVideo(HWND hwnd, HDC hdc);
     BOOL            SetAppText(char* sz);
 
-    LPDIRECTDRAWSURFACE7 GetAppImage() {
+    LPDIRECTDRAWSURFACE7 GetAppImage()
+    {
         return m_lpDDAppImage;
     }
 

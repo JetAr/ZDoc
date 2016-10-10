@@ -35,14 +35,17 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "libtorrent/address.hpp"
 
-namespace libtorrent { namespace dht
+namespace libtorrent
 {
-	struct dht_observer
-	{
-		virtual void set_external_address(address const& addr
-			, address const& source) = 0;
-	};
-}}
+namespace dht
+{
+struct dht_observer
+{
+    virtual void set_external_address(address const& addr
+                                      , address const& source) = 0;
+};
+}
+}
 
 #endif
 

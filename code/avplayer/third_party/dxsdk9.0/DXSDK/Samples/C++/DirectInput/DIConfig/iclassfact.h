@@ -14,21 +14,21 @@ class CFactory : public IClassFactory
 {
 public:
 
-	//IUnknown
-	STDMETHOD (QueryInterface) (REFIID riid, LPVOID* ppv);
-	STDMETHOD_(ULONG, AddRef) ();
-	STDMETHOD_(ULONG, Release) ();
+    //IUnknown
+    STDMETHOD (QueryInterface) (REFIID riid, LPVOID* ppv);
+    STDMETHOD_(ULONG, AddRef) ();
+    STDMETHOD_(ULONG, Release) ();
 
-	//IClassFactory
-	STDMETHOD (CreateInstance) (IUnknown* pUnkOuter, REFIID riid, LPVOID* ppv);
-	STDMETHOD (LockServer) (BOOL bLock);
+    //IClassFactory
+    STDMETHOD (CreateInstance) (IUnknown* pUnkOuter, REFIID riid, LPVOID* ppv);
+    STDMETHOD (LockServer) (BOOL bLock);
 
-	//constructor/destructor
-	CFactory();
-	~CFactory();
+    //constructor/destructor
+    CFactory();
+    ~CFactory();
 
 protected:
-	LONG m_cRef;
+    LONG m_cRef;
 };
 
 

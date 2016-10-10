@@ -30,10 +30,10 @@ struct time_duration_to_python
     static PyObject* convert(boost::posix_time::time_duration const& d)
     {
         object result = datetime_timedelta(
-            0 // days
-          , 0 // seconds
-          , d.total_microseconds()
-        );
+                            0 // days
+                            , 0 // seconds
+                            , d.total_microseconds()
+                        );
 
         return incref(result.ptr());
     }
@@ -47,13 +47,13 @@ struct ptime_to_python
         boost::posix_time::time_duration td = pt.time_of_day();
 
         object result = datetime_datetime(
-            (int)date.year()
-          , (int)date.month()
-          , (int)date.day()
-          , td.hours()
-          , td.minutes()
-          , td.seconds()
-        );
+                            (int)date.year()
+                            , (int)date.month()
+                            , (int)date.day()
+                            , td.hours()
+                            , td.minutes()
+                            , td.seconds()
+                        );
 
         return incref(result.ptr());
     }
@@ -67,13 +67,13 @@ void bind_datetime()
     datetime_datetime = datetime["datetime"];
 
     to_python_converter<
-        boost::posix_time::time_duration
-      , time_duration_to_python
+    boost::posix_time::time_duration
+    , time_duration_to_python
     >();
 
     to_python_converter<
-        boost::posix_time::ptime
-      , ptime_to_python
+    boost::posix_time::ptime
+    , ptime_to_python
     >();
 
     optional_to_python<boost::posix_time::ptime>();

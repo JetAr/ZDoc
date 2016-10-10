@@ -13,7 +13,7 @@
  */
 /* Compiler settings for fil_data.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
+    error checks: allocation ref bounds_check enum stub_data
 */
 //@@MIDL_FILE_HEADING(  )
 
@@ -39,10 +39,10 @@
 #define __fil_data_h__
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IAMFilterData_FWD_DEFINED__
 #define __IAMFilterData_FWD_DEFINED__
@@ -55,10 +55,10 @@ typedef interface IAMFilterData IAMFilterData;
 #include "strmif.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 /* interface __MIDL_itf_fil_data_0000 */
-/* [local] */ 
+/* [local] */
 
 
 
@@ -70,67 +70,68 @@ extern RPC_IF_HANDLE __MIDL_itf_fil_data_0000_v0_0_s_ifspec;
 #define __IAMFilterData_INTERFACE_DEFINED__
 
 /* interface IAMFilterData */
-/* [unique][uuid][object] */ 
+/* [unique][uuid][object] */
 
 
 EXTERN_C const IID IID_IAMFilterData;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("97f7c4d4-547b-4a5f-8332-536430ad2e4d")
-    IAMFilterData : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE ParseFilterData( 
-            /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-            /* [in] */ ULONG cb,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateFilterData( 
-            /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("97f7c4d4-547b-4a5f-8332-536430ad2e4d")
+IAMFilterData :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE ParseFilterData(
+        /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
+        /* [in] */ ULONG cb,
+        /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateFilterData(
+        /* [in] */ REGFILTER2 __RPC_FAR *prf2,
+        /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+        /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAMFilterDataVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAMFilterData __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAMFilterData __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAMFilterData __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseFilterData )( 
-            IAMFilterData __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-            /* [in] */ ULONG cb,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFilterData )( 
-            IAMFilterData __RPC_FAR * This,
-            /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-            /* [out] */ ULONG __RPC_FAR *pcb);
-        
-        END_INTERFACE
-    } IAMFilterDataVtbl;
+typedef struct IAMFilterDataVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAMFilterData
-    {
-        CONST_VTBL struct IAMFilterDataVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        IAMFilterData __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        IAMFilterData __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        IAMFilterData __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseFilterData )(
+        IAMFilterData __RPC_FAR * This,
+        /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
+        /* [in] */ ULONG cb,
+        /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFilterData )(
+        IAMFilterData __RPC_FAR * This,
+        /* [in] */ REGFILTER2 __RPC_FAR *prf2,
+        /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+        /* [out] */ ULONG __RPC_FAR *pcb);
+
+    END_INTERFACE
+} IAMFilterDataVtbl;
+
+interface IAMFilterData
+{
+    CONST_VTBL struct IAMFilterDataVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -158,7 +159,7 @@ EXTERN_C const IID IID_IAMFilterData;
 
 
 
-HRESULT STDMETHODCALLTYPE IAMFilterData_ParseFilterData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMFilterData_ParseFilterData_Proxy(
     IAMFilterData __RPC_FAR * This,
     /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
     /* [in] */ ULONG cb,
@@ -172,7 +173,7 @@ void __RPC_STUB IAMFilterData_ParseFilterData_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAMFilterData_CreateFilterData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAMFilterData_CreateFilterData_Proxy(
     IAMFilterData __RPC_FAR * This,
     /* [in] */ REGFILTER2 __RPC_FAR *prf2,
     /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,

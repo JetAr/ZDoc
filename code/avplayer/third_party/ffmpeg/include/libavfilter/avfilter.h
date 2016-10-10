@@ -74,7 +74,8 @@ typedef struct AVFilterFormats AVFilterFormats;
  * should not store pointers to this structure directly, but instead use the
  * AVFilterBufferRef structure below.
  */
-typedef struct AVFilterBuffer {
+typedef struct AVFilterBuffer
+{
     uint8_t *data[8];           ///< buffer data for each plane/channel
 
     /**
@@ -124,7 +125,8 @@ typedef struct AVFilterBuffer {
  * AVFilterBufferRef is common to different media formats, audio specific
  * per reference properties must be separated out.
  */
-typedef struct AVFilterBufferRefAudioProps {
+typedef struct AVFilterBufferRefAudioProps
+{
     uint64_t channel_layout;    ///< channel layout of audio buffer
     int nb_samples;             ///< number of audio samples per channel
     int sample_rate;            ///< audio buffer sample rate
@@ -136,7 +138,8 @@ typedef struct AVFilterBufferRefAudioProps {
  * AVFilterBufferRef is common to different media formats, video specific
  * per reference properties must be separated out.
  */
-typedef struct AVFilterBufferRefVideoProps {
+typedef struct AVFilterBufferRefVideoProps
+{
     int w;                      ///< image width
     int h;                      ///< image height
     AVRational sample_aspect_ratio; ///< sample aspect ratio
@@ -157,7 +160,8 @@ typedef struct AVFilterBufferRefVideoProps {
  *
  * TODO: add anything necessary for frame reordering
  */
-typedef struct AVFilterBufferRef {
+typedef struct AVFilterBufferRef
+{
     AVFilterBuffer *buf;        ///< the buffer that this is a reference to
     uint8_t *data[8];           ///< picture/audio data for each plane
     /**
@@ -249,7 +253,8 @@ int avfilter_ref_get_channels(AVFilterBufferRef *ref);
  * to access the name and type fields; there should be no need to access
  * any other fields from outside of libavfilter.
  */
-struct AVFilterPad {
+struct AVFilterPad
+{
     /**
      * Pad name. The name is unique among inputs and among outputs, but an
      * input may have the same name as an output. This may be NULL if this
@@ -410,7 +415,8 @@ enum AVMediaType avfilter_pad_get_type(AVFilterPad *pads, int pad_idx);
  * Filter definition. This defines the pads a filter contains, and all the
  * callback functions used to interact with the filter.
  */
-typedef struct AVFilter {
+typedef struct AVFilter
+{
     const char *name;         ///< filter name
 
     /**
@@ -480,7 +486,8 @@ typedef struct AVFilter {
 } AVFilter;
 
 /** An instance of a filter */
-struct AVFilterContext {
+struct AVFilterContext
+{
     const AVClass *av_class;        ///< needed for av_log()
 
     AVFilter *filter;               ///< the AVFilter of which this is an instance
@@ -513,7 +520,8 @@ struct AVFilterContext {
  * which have been negotiated and agreed upon between the filter, such as
  * image dimensions, format, etc.
  */
-struct AVFilterLink {
+struct AVFilterLink
+{
     AVFilterContext *src;       ///< source filter
     AVFilterPad *srcpad;        ///< output pad on the source filter
 
@@ -577,7 +585,8 @@ struct AVFilterLink {
     int request_samples;
 
     /** stage of the initialization of the link properties (dimensions, etc) */
-    enum {
+    enum
+    {
         AVLINK_UNINIT = 0,      ///< not started
         AVLINK_STARTINIT,       ///< started, but incomplete
         AVLINK_INIT             ///< complete
@@ -714,7 +723,7 @@ int avfilter_config_links(AVFilterContext *filter);
  */
 AVFilterBufferRef *
 avfilter_get_video_buffer_ref_from_arrays(uint8_t * const data[4], const int linesize[4], int perms,
-                                          int w, int h, enum AVPixelFormat format);
+        int w, int h, enum AVPixelFormat format);
 
 /**
  * Create an audio buffer reference wrapped around an already
@@ -731,11 +740,11 @@ avfilter_get_video_buffer_ref_from_arrays(uint8_t * const data[4], const int lin
  * @param channel_layout the channel layout of the buffer
  */
 AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_arrays(uint8_t **data,
-                                                             int linesize,
-                                                             int perms,
-                                                             int nb_samples,
-                                                             enum AVSampleFormat sample_fmt,
-                                                             uint64_t channel_layout);
+        int linesize,
+        int perms,
+        int nb_samples,
+        enum AVSampleFormat sample_fmt,
+        uint64_t channel_layout);
 /**
  * Create an audio buffer reference wrapped around an already
  * allocated samples buffer.
@@ -750,12 +759,12 @@ AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_arrays(uint8_t **data,
  *                       must be either 0 or consistent with channels
  */
 AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_arrays_channels(uint8_t **data,
-                                                                      int linesize,
-                                                                      int perms,
-                                                                      int nb_samples,
-                                                                      enum AVSampleFormat sample_fmt,
-                                                                      int channels,
-                                                                      uint64_t channel_layout);
+        int linesize,
+        int perms,
+        int nb_samples,
+        enum AVSampleFormat sample_fmt,
+        int channels,
+        uint64_t channel_layout);
 
 
 

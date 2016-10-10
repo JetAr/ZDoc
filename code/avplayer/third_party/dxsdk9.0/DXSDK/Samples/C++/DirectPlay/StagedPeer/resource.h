@@ -26,7 +26,7 @@
 #define IDC_SEARCH_CHECK                11010
 #define IDC_LOBBYCONNECTCANCEL          11011
 #define IDC_WAIT_TEXT                   11012
-#define IDC_MIGRATE_HOST                11013 
+#define IDC_MIGRATE_HOST                11013
 #define IDI_MAIN                        11014
 #define IDC_IP_ADDRESS                  11015
 #define IDC_SIGNING_FAST                11016
@@ -72,7 +72,7 @@
 #define IDC_SLOT_TXT_P10                21310
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        107

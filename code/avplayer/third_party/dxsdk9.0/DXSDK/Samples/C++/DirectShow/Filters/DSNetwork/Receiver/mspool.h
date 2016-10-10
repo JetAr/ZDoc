@@ -57,174 +57,174 @@ class CTSMediaSample :
 
     void
     ResetMS_ (
-        ) ;
+    ) ;
 
-    public :
+public :
 
-        LIST_ENTRY  m_ListEntry ;
+    LIST_ENTRY  m_ListEntry ;
 
-        CTSMediaSample (
-            IN  CTSMediaSamplePool *
-            ) ;
+    CTSMediaSample (
+        IN  CTSMediaSamplePool *
+    ) ;
 
-        ~CTSMediaSample (
-            ) ;
+    ~CTSMediaSample (
+    ) ;
 
-        //  -------------------------------------------------------------------
-        //  init
+    //  -------------------------------------------------------------------
+    //  init
 
-        HRESULT
-        Init (
-            IN  CBuffer *           pBuffer,
-            IN  BYTE *              pbPayload,
-            IN  int                 iPayloadLength,
-            IN  LONGLONG *          pllMediaStart,
-            IN  LONGLONG *          pllMediaEnd,
-            IN  REFERENCE_TIME *    prtStart,
-            IN  REFERENCE_TIME *    prtEnd,
-            IN  DWORD               dwMediaSampleFlags
-            ) ;
+    HRESULT
+    Init (
+        IN  CBuffer *           pBuffer,
+        IN  BYTE *              pbPayload,
+        IN  int                 iPayloadLength,
+        IN  LONGLONG *          pllMediaStart,
+        IN  LONGLONG *          pllMediaEnd,
+        IN  REFERENCE_TIME *    prtStart,
+        IN  REFERENCE_TIME *    prtEnd,
+        IN  DWORD               dwMediaSampleFlags
+    ) ;
 
-        //  -------------------------------------------------------------------
-        //  IUnknown methods
+    //  -------------------------------------------------------------------
+    //  IUnknown methods
 
-        STDMETHODIMP
-        QueryInterface (
-            IN  REFIID  riid,
-            OUT void ** ppv
-            ) ;
+    STDMETHODIMP
+    QueryInterface (
+        IN  REFIID  riid,
+        OUT void ** ppv
+    ) ;
 
-        STDMETHODIMP_(ULONG)
-        AddRef (
-            ) ;
+    STDMETHODIMP_(ULONG)
+    AddRef (
+    ) ;
 
-        STDMETHODIMP_(ULONG)
-        Release (
-            ) ;
+    STDMETHODIMP_(ULONG)
+    Release (
+    ) ;
 
-        //  -------------------------------------------------------------------
-        //  IMediaSample methods
+    //  -------------------------------------------------------------------
+    //  IMediaSample methods
 
-        // get me a read/write pointer to this buffer's memory. I will actually
-        // want to use sizeUsed bytes.
-        STDMETHODIMP
-        GetPointer (
-            OUT BYTE ** ppBuffer
-            ) ;
+    // get me a read/write pointer to this buffer's memory. I will actually
+    // want to use sizeUsed bytes.
+    STDMETHODIMP
+    GetPointer (
+        OUT BYTE ** ppBuffer
+    ) ;
 
-        // return the size in bytes of the buffer data area
-        STDMETHODIMP_(LONG)
-        GetSize (
-            ) ;
+    // return the size in bytes of the buffer data area
+    STDMETHODIMP_(LONG)
+    GetSize (
+    ) ;
 
-        // get the stream time at which this sample should start and finish.
-        STDMETHODIMP
-        GetTime (
-    	    OUT REFERENCE_TIME * pTimeStart,	// put time here
-	        OUT REFERENCE_TIME * pTimeEnd
-            ) ;
+    // get the stream time at which this sample should start and finish.
+    STDMETHODIMP
+    GetTime (
+        OUT REFERENCE_TIME * pTimeStart,	// put time here
+        OUT REFERENCE_TIME * pTimeEnd
+    ) ;
 
-        // Set the stream time at which this sample should start and finish.
-        // pTimeStart==pTimeEnd==NULL will invalidate the time stamps in
-        // this sample
-        STDMETHODIMP
-        SetTime (
-    	    IN  REFERENCE_TIME * pTimeStart,	// put time here
-	        IN  REFERENCE_TIME * pTimeEnd
-            ) ;
+    // Set the stream time at which this sample should start and finish.
+    // pTimeStart==pTimeEnd==NULL will invalidate the time stamps in
+    // this sample
+    STDMETHODIMP
+    SetTime (
+        IN  REFERENCE_TIME * pTimeStart,	// put time here
+        IN  REFERENCE_TIME * pTimeEnd
+    ) ;
 
-        // sync-point property. If true, then the beginning of this
-        // sample is a sync-point. (note that if AM_MEDIA_TYPE.bTemporalCompression
-        // is false then all samples are sync points). A filter can start
-        // a stream at any sync point.  S_FALSE if not sync-point, S_OK if true.
+    // sync-point property. If true, then the beginning of this
+    // sample is a sync-point. (note that if AM_MEDIA_TYPE.bTemporalCompression
+    // is false then all samples are sync points). A filter can start
+    // a stream at any sync point.  S_FALSE if not sync-point, S_OK if true.
 
-        STDMETHODIMP
-        IsSyncPoint (
-            ) ;
+    STDMETHODIMP
+    IsSyncPoint (
+    ) ;
 
-        STDMETHODIMP
-        SetSyncPoint (
-            IN  BOOL bIsSyncPoint
-            ) ;
+    STDMETHODIMP
+    SetSyncPoint (
+        IN  BOOL bIsSyncPoint
+    ) ;
 
-        // preroll property.  If true, this sample is for preroll only and
-        // shouldn't be displayed.
-        STDMETHODIMP
-        IsPreroll (
-            ) ;
+    // preroll property.  If true, this sample is for preroll only and
+    // shouldn't be displayed.
+    STDMETHODIMP
+    IsPreroll (
+    ) ;
 
-        STDMETHODIMP
-        SetPreroll (
-            BOOL bIsPreroll
-            ) ;
+    STDMETHODIMP
+    SetPreroll (
+        BOOL bIsPreroll
+    ) ;
 
-        STDMETHODIMP_(LONG)
-        GetActualDataLength (
-            ) ;
+    STDMETHODIMP_(LONG)
+    GetActualDataLength (
+    ) ;
 
-        STDMETHODIMP
-        SetActualDataLength (
-            IN  long
-            ) ;
+    STDMETHODIMP
+    SetActualDataLength (
+        IN  long
+    ) ;
 
-        // these allow for limited format changes in band - if no format change
-        // has been made when you receive a sample GetMediaType will return S_FALSE
+    // these allow for limited format changes in band - if no format change
+    // has been made when you receive a sample GetMediaType will return S_FALSE
 
-        STDMETHODIMP
-        GetMediaType (
-            AM_MEDIA_TYPE ** ppMediaType
-            ) ;
+    STDMETHODIMP
+    GetMediaType (
+        AM_MEDIA_TYPE ** ppMediaType
+    ) ;
 
-        STDMETHODIMP
-        SetMediaType(
-            AM_MEDIA_TYPE * pMediaType
-            ) ;
+    STDMETHODIMP
+    SetMediaType(
+        AM_MEDIA_TYPE * pMediaType
+    ) ;
 
-        // returns S_OK if there is a discontinuity in the data (this frame is
-        // not a continuation of the previous stream of data
-        // - there has been a seek or some dropped samples).
-        STDMETHODIMP
-        IsDiscontinuity (
-            ) ;
+    // returns S_OK if there is a discontinuity in the data (this frame is
+    // not a continuation of the previous stream of data
+    // - there has been a seek or some dropped samples).
+    STDMETHODIMP
+    IsDiscontinuity (
+    ) ;
 
-        // set the discontinuity property - TRUE if this sample is not a
-        // continuation, but a new sample after a seek or a dropped sample.
-        STDMETHODIMP
-        SetDiscontinuity (
-            BOOL bDiscontinuity
-            ) ;
+    // set the discontinuity property - TRUE if this sample is not a
+    // continuation, but a new sample after a seek or a dropped sample.
+    STDMETHODIMP
+    SetDiscontinuity (
+        BOOL bDiscontinuity
+    ) ;
 
-        // get the media times for this sample
-        STDMETHODIMP
-        GetMediaTime (
-    	    OUT LONGLONG * pTimeStart,
-	        OUT LONGLONG * pTimeEnd
-            ) ;
+    // get the media times for this sample
+    STDMETHODIMP
+    GetMediaTime (
+        OUT LONGLONG * pTimeStart,
+        OUT LONGLONG * pTimeEnd
+    ) ;
 
-        // Set the media times for this sample
-        // pTimeStart==pTimeEnd==NULL will invalidate the media time stamps in
-        // this sample
-        STDMETHODIMP
-        SetMediaTime (
-    	    IN  LONGLONG * pTimeStart,
-	        IN  LONGLONG * pTimeEnd
-            ) ;
+    // Set the media times for this sample
+    // pTimeStart==pTimeEnd==NULL will invalidate the media time stamps in
+    // this sample
+    STDMETHODIMP
+    SetMediaTime (
+        IN  LONGLONG * pTimeStart,
+        IN  LONGLONG * pTimeEnd
+    ) ;
 
-        //  -------------------------------------------------------------------
-        //  IMediaSample methods
+    //  -------------------------------------------------------------------
+    //  IMediaSample methods
 
-        // Set and get properties (IMediaSample2)
-        STDMETHODIMP
-        GetProperties (
-            IN  DWORD   cbProperties,
-            OUT BYTE *  pbProperties
-            ) ;
+    // Set and get properties (IMediaSample2)
+    STDMETHODIMP
+    GetProperties (
+        IN  DWORD   cbProperties,
+        OUT BYTE *  pbProperties
+    ) ;
 
-        STDMETHODIMP
-        SetProperties (
-            IN  DWORD           cbProperties,
-            IN  const BYTE *    pbProperties
-            ) ;
+    STDMETHODIMP
+    SetProperties (
+        IN  DWORD           cbProperties,
+        IN  const BYTE *    pbProperties
+    ) ;
 } ;
 
 class CTSMediaSamplePool
@@ -235,8 +235,14 @@ class CTSMediaSamplePool
     CRITICAL_SECTION            m_crt ;
     HANDLE                      m_hEvent ;
 
-    void Lock_ ()       { EnterCriticalSection (& m_crt) ; }
-    void Unlock_ ()     { LeaveCriticalSection (& m_crt) ; }
+    void Lock_ ()
+    {
+        EnterCriticalSection (& m_crt) ;
+    }
+    void Unlock_ ()
+    {
+        LeaveCriticalSection (& m_crt) ;
+    }
 
     HRESULT
     GetMediaSample_ (
@@ -249,83 +255,83 @@ class CTSMediaSamplePool
         IN  REFERENCE_TIME *    prtEnd,
         IN  DWORD               dwMediaSampleFlags,
         OUT IMediaSample2 **    ppMS
-        ) ;
+    ) ;
 
-    public :
+public :
 
-        CTSMediaSamplePool (
-            IN  DWORD                       dwPoolSize,
-            IN  CNetworkReceiverFilter *    pHostingFilter,
-            OUT HRESULT *                   phr
-            ) ;
+    CTSMediaSamplePool (
+        IN  DWORD                       dwPoolSize,
+        IN  CNetworkReceiverFilter *    pHostingFilter,
+        OUT HRESULT *                   phr
+    ) ;
 
-        ~CTSMediaSamplePool (
-            ) ;
+    ~CTSMediaSamplePool (
+    ) ;
 
-        DWORD
-        GetPoolSize (
-            )
-        {
-            return m_dwPoolSize ;
-        }
+    DWORD
+    GetPoolSize (
+    )
+    {
+        return m_dwPoolSize ;
+    }
 
-        void
-        RecycleMS (
-            IN  CTSMediaSample *
-            ) ;
+    void
+    RecycleMS (
+        IN  CTSMediaSample *
+    ) ;
 
-        //  synchronous
-        HRESULT
-        GetMediaSampleSynchronous (
-            IN  CBuffer *           pBuffer,
-            IN  BYTE *              pbPayload,
-            IN  int                 iPayloadLength,
-            IN  LONGLONG *          pllMediaStart,
-            IN  LONGLONG *          pllMediaEnd,
-            IN  REFERENCE_TIME *    prtStart,
-            IN  REFERENCE_TIME *    prtEnd,
-            IN  DWORD               dwMediaSampleFlags,
-            OUT IMediaSample2 **    ppMS
-            )
-        {
-            return GetMediaSample_ (
-                        pBuffer,
-                        pbPayload,
-                        iPayloadLength,
-                        pllMediaStart,
-                        pllMediaEnd,
-                        prtStart,
-                        prtEnd,
-                        dwMediaSampleFlags,
-                        ppMS
-                        ) ;
-        }
+    //  synchronous
+    HRESULT
+    GetMediaSampleSynchronous (
+        IN  CBuffer *           pBuffer,
+        IN  BYTE *              pbPayload,
+        IN  int                 iPayloadLength,
+        IN  LONGLONG *          pllMediaStart,
+        IN  LONGLONG *          pllMediaEnd,
+        IN  REFERENCE_TIME *    prtStart,
+        IN  REFERENCE_TIME *    prtEnd,
+        IN  DWORD               dwMediaSampleFlags,
+        OUT IMediaSample2 **    ppMS
+    )
+    {
+        return GetMediaSample_ (
+                   pBuffer,
+                   pbPayload,
+                   iPayloadLength,
+                   pllMediaStart,
+                   pllMediaEnd,
+                   prtStart,
+                   prtEnd,
+                   dwMediaSampleFlags,
+                   ppMS
+               ) ;
+    }
 
-        HRESULT
-        GetMediaSampleSynchronous (
-            IN  CBuffer *           pBuffer,
-            IN  BYTE *              pbPayload,
-            IN  int                 iPayloadLength,
-            OUT IMediaSample2 **    ppMS
-            )
-        {
-            LONGLONG        llMediaStart ;
-            LONGLONG        llMediaEnd ;
-            REFERENCE_TIME  rtStart ;
-            REFERENCE_TIME  rtEnd ;
+    HRESULT
+    GetMediaSampleSynchronous (
+        IN  CBuffer *           pBuffer,
+        IN  BYTE *              pbPayload,
+        IN  int                 iPayloadLength,
+        OUT IMediaSample2 **    ppMS
+    )
+    {
+        LONGLONG        llMediaStart ;
+        LONGLONG        llMediaEnd ;
+        REFERENCE_TIME  rtStart ;
+        REFERENCE_TIME  rtEnd ;
 
-            return GetMediaSample_ (
-                        pBuffer,
-                        pbPayload,
-                        iPayloadLength,
-                        & llMediaStart,     //  dummy
-                        & llMediaEnd,       //  dummy
-                        & rtStart,          //  dummy
-                        & rtEnd,            //  dummy
-                        0,                  //  no flags (no dummy param gets used)
-                        ppMS
-                        ) ;
-        }
+        return GetMediaSample_ (
+                   pBuffer,
+                   pbPayload,
+                   iPayloadLength,
+                   & llMediaStart,     //  dummy
+                   & llMediaEnd,       //  dummy
+                   & rtStart,          //  dummy
+                   & rtEnd,            //  dummy
+                   0,                  //  no flags (no dummy param gets used)
+                   ppMS
+               ) ;
+    }
 } ;
 
 #endif  //  __mspool_h

@@ -10,14 +10,14 @@
 //
 // Function prototypes for DirectShow applications
 //
-HRESULT GetPin(IBaseFilter * pFilter, PIN_DIRECTION dirrequired, 
+HRESULT GetPin(IBaseFilter * pFilter, PIN_DIRECTION dirrequired,
                int iNum, IPin **ppPin);
-    
-HRESULT FindOtherSplitterPin(IPin *pPinIn, GUID guid, 
-               int nStream, IPin **ppSplitPin);
-    
+
+HRESULT FindOtherSplitterPin(IPin *pPinIn, GUID guid,
+                             int nStream, IPin **ppSplitPin);
+
 HRESULT SeekNextFrame(IMediaSeeking * pSeeking, double FPS, long Frame );
-    
+
 IPin * GetInPin ( IBaseFilter *pFilter, int Num );
 IPin * GetOutPin( IBaseFilter *pFilter, int Num );
 

@@ -30,7 +30,8 @@
  * @{
  */
 
-typedef struct AVXTEA {
+typedef struct AVXTEA
+{
     uint32_t key[16];
 } AVXTEA;
 

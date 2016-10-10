@@ -110,7 +110,7 @@ DEFINE_GUID(GUID_Unknown, 0xA36D02F3,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54
 
 DEFINE_GUID(GUID_SysMouse,   0x6F1D2B60,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysKeyboard,0x6F1D2B61,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
-DEFINE_GUID(GUID_Joystick   ,0x6F1D2B70,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
+DEFINE_GUID(GUID_Joystick,0x6F1D2B70,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysMouseEm, 0x6F1D2B80,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysMouseEm2,0x6F1D2B81,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysKeyboardEm, 0x6F1D2B82,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -172,18 +172,21 @@ DEFINE_GUID(GUID_CustomForce,   0x13541C2B,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC
 #define DI_FFNOMINALMAX             10000
 #define DI_SECONDS                  1000000
 
-typedef struct DICONSTANTFORCE {
+typedef struct DICONSTANTFORCE
+{
     LONG  lMagnitude;
 } DICONSTANTFORCE, *LPDICONSTANTFORCE;
 typedef const DICONSTANTFORCE *LPCDICONSTANTFORCE;
 
-typedef struct DIRAMPFORCE {
+typedef struct DIRAMPFORCE
+{
     LONG  lStart;
     LONG  lEnd;
 } DIRAMPFORCE, *LPDIRAMPFORCE;
 typedef const DIRAMPFORCE *LPCDIRAMPFORCE;
 
-typedef struct DIPERIODIC {
+typedef struct DIPERIODIC
+{
     DWORD dwMagnitude;
     LONG  lOffset;
     DWORD dwPhase;
@@ -191,7 +194,8 @@ typedef struct DIPERIODIC {
 } DIPERIODIC, *LPDIPERIODIC;
 typedef const DIPERIODIC *LPCDIPERIODIC;
 
-typedef struct DICONDITION {
+typedef struct DICONDITION
+{
     LONG  lOffset;
     LONG  lPositiveCoefficient;
     LONG  lNegativeCoefficient;
@@ -201,7 +205,8 @@ typedef struct DICONDITION {
 } DICONDITION, *LPDICONDITION;
 typedef const DICONDITION *LPCDICONDITION;
 
-typedef struct DICUSTOMFORCE {
+typedef struct DICUSTOMFORCE
+{
     DWORD cChannels;
     DWORD dwSamplePeriod;
     DWORD cSamples;
@@ -210,7 +215,8 @@ typedef struct DICUSTOMFORCE {
 typedef const DICUSTOMFORCE *LPCDICUSTOMFORCE;
 
 
-typedef struct DIENVELOPE {
+typedef struct DIENVELOPE
+{
     DWORD dwSize;                   /* sizeof(DIENVELOPE)   */
     DWORD dwAttackLevel;
     DWORD dwAttackTime;             /* Microseconds         */
@@ -221,7 +227,8 @@ typedef const DIENVELOPE *LPCDIENVELOPE;
 
 
 /* This structure is defined for DirectX 5.0 compatibility */
-typedef struct DIEFFECT_DX5 {
+typedef struct DIEFFECT_DX5
+{
     DWORD dwSize;                   /* sizeof(DIEFFECT_DX5) */
     DWORD dwFlags;                  /* DIEFF_*              */
     DWORD dwDuration;               /* Microseconds         */
@@ -238,7 +245,8 @@ typedef struct DIEFFECT_DX5 {
 } DIEFFECT_DX5, *LPDIEFFECT_DX5;
 typedef const DIEFFECT_DX5 *LPCDIEFFECT_DX5;
 
-typedef struct DIEFFECT {
+typedef struct DIEFFECT
+{
     DWORD dwSize;                   /* sizeof(DIEFFECT)     */
     DWORD dwFlags;                  /* DIEFF_*              */
     DWORD dwDuration;               /* Microseconds         */
@@ -263,14 +271,15 @@ typedef const DIEFFECT *LPCDIEFFECT;
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
 #ifndef DIJ_RINGZERO
-typedef struct DIFILEEFFECT{
+typedef struct DIFILEEFFECT
+{
     DWORD       dwSize;
     GUID        GuidEffect;
     LPCDIEFFECT lpDiEffect;
     CHAR        szFriendlyName[MAX_PATH];
-}DIFILEEFFECT, *LPDIFILEEFFECT;
+} DIFILEEFFECT, *LPDIFILEEFFECT;
 typedef const DIFILEEFFECT *LPCDIFILEEFFECT;
-typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT , LPVOID);
+typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT, LPVOID);
 #endif /* DIJ_RINGZERO */
 #endif /* DIRECTINPUT_VERSION >= 0x0700 */
 
@@ -307,7 +316,8 @@ typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT , LPVO
 #define DIEGES_PLAYING              0x00000001
 #define DIEGES_EMULATED             0x00000002
 
-typedef struct DIEFFESCAPE {
+typedef struct DIEFFESCAPE
+{
     DWORD   dwSize;
     DWORD   dwCommand;
     LPVOID  lpvInBuffer;
@@ -518,7 +528,8 @@ typedef struct IDirectInputEffect *LPDIRECTINPUTEFFECT;
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 /* This structure is defined for DirectX 3.0 compatibility */
-typedef struct DIDEVCAPS_DX3 {
+typedef struct DIDEVCAPS_DX3
+{
     DWORD   dwSize;
     DWORD   dwFlags;
     DWORD   dwDevType;
@@ -528,7 +539,8 @@ typedef struct DIDEVCAPS_DX3 {
 } DIDEVCAPS_DX3, *LPDIDEVCAPS_DX3;
 #endif /* DIRECTINPUT_VERSION >= 0x0500 */
 
-typedef struct DIDEVCAPS {
+typedef struct DIDEVCAPS
+{
     DWORD   dwSize;
     DWORD   dwFlags;
     DWORD   dwDevType;
@@ -601,7 +613,8 @@ typedef struct DIDEVCAPS {
 
 #ifndef DIJ_RINGZERO
 
-typedef struct _DIOBJECTDATAFORMAT {
+typedef struct _DIOBJECTDATAFORMAT
+{
     const GUID *pguid;
     DWORD   dwOfs;
     DWORD   dwType;
@@ -609,7 +622,8 @@ typedef struct _DIOBJECTDATAFORMAT {
 } DIOBJECTDATAFORMAT, *LPDIOBJECTDATAFORMAT;
 typedef const DIOBJECTDATAFORMAT *LPCDIOBJECTDATAFORMAT;
 
-typedef struct _DIDATAFORMAT {
+typedef struct _DIDATAFORMAT
+{
     DWORD   dwSize;
     DWORD   dwObjSize;
     DWORD   dwFlags;
@@ -625,17 +639,17 @@ typedef const DIDATAFORMAT *LPCDIDATAFORMAT;
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern const DIDATAFORMAT c_dfDIMouse;
+    extern const DIDATAFORMAT c_dfDIMouse;
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
-extern const DIDATAFORMAT c_dfDIMouse2;
+    extern const DIDATAFORMAT c_dfDIMouse2;
 #endif /* DIRECTINPUT_VERSION >= 0x0700 */
 
-extern const DIDATAFORMAT c_dfDIKeyboard;
+    extern const DIDATAFORMAT c_dfDIKeyboard;
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-extern const DIDATAFORMAT c_dfDIJoystick;
-extern const DIDATAFORMAT c_dfDIJoystick2;
+    extern const DIDATAFORMAT c_dfDIJoystick;
+    extern const DIDATAFORMAT c_dfDIJoystick2;
 #endif /* DIRECTINPUT_VERSION >= 0x0500 */
 
 #ifdef __cplusplus
@@ -645,26 +659,30 @@ extern const DIDATAFORMAT c_dfDIJoystick2;
 
 #if DIRECTINPUT_VERSION > 0x0700
 
-typedef struct _DIACTIONA {
-                UINT_PTR    uAppData;
-                DWORD       dwSemantic;
+typedef struct _DIACTIONA
+{
+    UINT_PTR    uAppData;
+    DWORD       dwSemantic;
     OPTIONAL    DWORD       dwFlags;
-    OPTIONAL    union {
-                    LPCSTR      lptszActionName;
-                    UINT        uResIdString;
-                };
+    OPTIONAL    union
+    {
+        LPCSTR      lptszActionName;
+        UINT        uResIdString;
+    };
     OPTIONAL    GUID        guidInstance;
     OPTIONAL    DWORD       dwObjID;
     OPTIONAL    DWORD       dwHow;
 } DIACTIONA, *LPDIACTIONA ;
-typedef struct _DIACTIONW {
-                UINT_PTR    uAppData;
-                DWORD       dwSemantic;
+typedef struct _DIACTIONW
+{
+    UINT_PTR    uAppData;
+    DWORD       dwSemantic;
     OPTIONAL    DWORD       dwFlags;
-    OPTIONAL    union {
-                    LPCWSTR     lptszActionName;
-                    UINT        uResIdString;
-                };
+    OPTIONAL    union
+    {
+        LPCWSTR     lptszActionName;
+        UINT        uResIdString;
+    };
     OPTIONAL    GUID        guidInstance;
     OPTIONAL    DWORD       dwObjID;
     OPTIONAL    DWORD       dwHow;
@@ -703,37 +721,39 @@ typedef const DIACTION *LPCDIACTION;
 #define DIAH_DEFAULT            0x00000020
 #define DIAH_ERROR              0x80000000
 
-typedef struct _DIACTIONFORMATA {
-                DWORD       dwSize;
-                DWORD       dwActionSize;
-                DWORD       dwDataSize;
-                DWORD       dwNumActions;
-                LPDIACTIONA rgoAction;
-                GUID        guidActionMap;
-                DWORD       dwGenre;
-                DWORD       dwBufferSize;
+typedef struct _DIACTIONFORMATA
+{
+    DWORD       dwSize;
+    DWORD       dwActionSize;
+    DWORD       dwDataSize;
+    DWORD       dwNumActions;
+    LPDIACTIONA rgoAction;
+    GUID        guidActionMap;
+    DWORD       dwGenre;
+    DWORD       dwBufferSize;
     OPTIONAL    LONG        lAxisMin;
     OPTIONAL    LONG        lAxisMax;
     OPTIONAL    HINSTANCE   hInstString;
-                FILETIME    ftTimeStamp;
-                DWORD       dwCRC;
-                CHAR        tszActionMap[MAX_PATH];
+    FILETIME    ftTimeStamp;
+    DWORD       dwCRC;
+    CHAR        tszActionMap[MAX_PATH];
 } DIACTIONFORMATA, *LPDIACTIONFORMATA;
-typedef struct _DIACTIONFORMATW {
-                DWORD       dwSize;
-                DWORD       dwActionSize;
-                DWORD       dwDataSize;
-                DWORD       dwNumActions;
-                LPDIACTIONW rgoAction;
-                GUID        guidActionMap;
-                DWORD       dwGenre;
-                DWORD       dwBufferSize;
+typedef struct _DIACTIONFORMATW
+{
+    DWORD       dwSize;
+    DWORD       dwActionSize;
+    DWORD       dwDataSize;
+    DWORD       dwNumActions;
+    LPDIACTIONW rgoAction;
+    GUID        guidActionMap;
+    DWORD       dwGenre;
+    DWORD       dwBufferSize;
     OPTIONAL    LONG        lAxisMin;
     OPTIONAL    LONG        lAxisMax;
     OPTIONAL    HINSTANCE   hInstString;
-                FILETIME    ftTimeStamp;
-                DWORD       dwCRC;
-                WCHAR       tszActionMap[MAX_PATH];
+    FILETIME    ftTimeStamp;
+    DWORD       dwCRC;
+    WCHAR       tszActionMap[MAX_PATH];
 } DIACTIONFORMATW, *LPDIACTIONFORMATW;
 #ifdef UNICODE
 typedef DIACTIONFORMATW DIACTIONFORMAT;
@@ -778,7 +798,8 @@ typedef DWORD D3DCOLOR;
 #define D3DCOLOR_DEFINED
 #endif
 
-typedef struct _DICOLORSET{
+typedef struct _DICOLORSET
+{
     DWORD dwSize;
     D3DCOLOR cTextFore;
     D3DCOLOR cTextHighlight;
@@ -792,25 +813,27 @@ typedef struct _DICOLORSET{
 typedef const DICOLORSET *LPCDICOLORSET;
 
 
-typedef struct _DICONFIGUREDEVICESPARAMSA{
-     DWORD             dwSize;
-     DWORD             dwcUsers;
-     LPSTR             lptszUserNames;
-     DWORD             dwcFormats;
-     LPDIACTIONFORMATA lprgFormats;
-     HWND              hwnd;
-     DICOLORSET        dics;
-     IUnknown FAR *    lpUnkDDSTarget;
+typedef struct _DICONFIGUREDEVICESPARAMSA
+{
+    DWORD             dwSize;
+    DWORD             dwcUsers;
+    LPSTR             lptszUserNames;
+    DWORD             dwcFormats;
+    LPDIACTIONFORMATA lprgFormats;
+    HWND              hwnd;
+    DICOLORSET        dics;
+    IUnknown FAR *    lpUnkDDSTarget;
 } DICONFIGUREDEVICESPARAMSA, *LPDICONFIGUREDEVICESPARAMSA;
-typedef struct _DICONFIGUREDEVICESPARAMSW{
-     DWORD             dwSize;
-     DWORD             dwcUsers;
-     LPWSTR            lptszUserNames;
-     DWORD             dwcFormats;
-     LPDIACTIONFORMATW lprgFormats;
-     HWND              hwnd;
-     DICOLORSET        dics;
-     IUnknown FAR *    lpUnkDDSTarget;
+typedef struct _DICONFIGUREDEVICESPARAMSW
+{
+    DWORD             dwSize;
+    DWORD             dwcUsers;
+    LPWSTR            lptszUserNames;
+    DWORD             dwcFormats;
+    LPDIACTIONFORMATW lprgFormats;
+    HWND              hwnd;
+    DICOLORSET        dics;
+    IUnknown FAR *    lpUnkDDSTarget;
 } DICONFIGUREDEVICESPARAMSW, *LPDICONFIGUREDEVICESPARAMSW;
 #ifdef UNICODE
 typedef DICONFIGUREDEVICESPARAMSW DICONFIGUREDEVICESPARAMS;
@@ -841,29 +864,31 @@ typedef const DICONFIGUREDEVICESPARAMS *LPCDICONFIGUREDEVICESPARAMS;
 #define DIDAL_TOPALIGNED    0x00000004
 #define DIDAL_BOTTOMALIGNED 0x00000008
 
-typedef struct _DIDEVICEIMAGEINFOA {
+typedef struct _DIDEVICEIMAGEINFOA
+{
     CHAR        tszImagePath[MAX_PATH];
-    DWORD       dwFlags; 
+    DWORD       dwFlags;
     // These are valid if DIDIFT_OVERLAY is present in dwFlags.
-    DWORD       dwViewID;      
-    RECT        rcOverlay;             
+    DWORD       dwViewID;
+    RECT        rcOverlay;
     DWORD       dwObjID;
     DWORD       dwcValidPts;
-    POINT       rgptCalloutLine[5];  
-    RECT        rcCalloutRect;  
-    DWORD       dwTextAlign;     
+    POINT       rgptCalloutLine[5];
+    RECT        rcCalloutRect;
+    DWORD       dwTextAlign;
 } DIDEVICEIMAGEINFOA, *LPDIDEVICEIMAGEINFOA;
-typedef struct _DIDEVICEIMAGEINFOW {
+typedef struct _DIDEVICEIMAGEINFOW
+{
     WCHAR       tszImagePath[MAX_PATH];
-    DWORD       dwFlags; 
+    DWORD       dwFlags;
     // These are valid if DIDIFT_OVERLAY is present in dwFlags.
-    DWORD       dwViewID;      
-    RECT        rcOverlay;             
+    DWORD       dwViewID;
+    RECT        rcOverlay;
     DWORD       dwObjID;
     DWORD       dwcValidPts;
-    POINT       rgptCalloutLine[5];  
-    RECT        rcCalloutRect;  
-    DWORD       dwTextAlign;     
+    POINT       rgptCalloutLine[5];
+    RECT        rcCalloutRect;
+    DWORD       dwTextAlign;
 } DIDEVICEIMAGEINFOW, *LPDIDEVICEIMAGEINFOW;
 #ifdef UNICODE
 typedef DIDEVICEIMAGEINFOW DIDEVICEIMAGEINFO;
@@ -883,7 +908,8 @@ typedef LPCDIDEVICEIMAGEINFOA LPCDIDEVICEIMAGEINFO;
 #endif // UNICODE
 typedef const DIDEVICEIMAGEINFO *LPCDIDEVICEIMAGEINFO;
 
-typedef struct _DIDEVICEIMAGEINFOHEADERA {
+typedef struct _DIDEVICEIMAGEINFOHEADERA
+{
     DWORD       dwSize;
     DWORD       dwSizeImageInfo;
     DWORD       dwcViews;
@@ -894,7 +920,8 @@ typedef struct _DIDEVICEIMAGEINFOHEADERA {
     DWORD       dwBufferUsed;
     LPDIDEVICEIMAGEINFOA lprgImageInfoArray;
 } DIDEVICEIMAGEINFOHEADERA, *LPDIDEVICEIMAGEINFOHEADERA;
-typedef struct _DIDEVICEIMAGEINFOHEADERW {
+typedef struct _DIDEVICEIMAGEINFOHEADERW
+{
     DWORD       dwSize;
     DWORD       dwSizeImageInfo;
     DWORD       dwcViews;
@@ -928,7 +955,8 @@ typedef const DIDEVICEIMAGEINFOHEADER *LPCDIDEVICEIMAGEINFOHEADER;
 #if(DIRECTINPUT_VERSION >= 0x0500)
 /* These structures are defined for DirectX 3.0 compatibility */
 
-typedef struct DIDEVICEOBJECTINSTANCE_DX3A {
+typedef struct DIDEVICEOBJECTINSTANCE_DX3A
+{
     DWORD   dwSize;
     GUID    guidType;
     DWORD   dwOfs;
@@ -936,7 +964,8 @@ typedef struct DIDEVICEOBJECTINSTANCE_DX3A {
     DWORD   dwFlags;
     CHAR    tszName[MAX_PATH];
 } DIDEVICEOBJECTINSTANCE_DX3A, *LPDIDEVICEOBJECTINSTANCE_DX3A;
-typedef struct DIDEVICEOBJECTINSTANCE_DX3W {
+typedef struct DIDEVICEOBJECTINSTANCE_DX3W
+{
     DWORD   dwSize;
     GUID    guidType;
     DWORD   dwOfs;
@@ -956,7 +985,8 @@ typedef const DIDEVICEOBJECTINSTANCE_DX3W *LPCDIDEVICEOBJECTINSTANCE_DX3W;
 typedef const DIDEVICEOBJECTINSTANCE_DX3  *LPCDIDEVICEOBJECTINSTANCE_DX3;
 #endif /* DIRECTINPUT_VERSION >= 0x0500 */
 
-typedef struct DIDEVICEOBJECTINSTANCEA {
+typedef struct DIDEVICEOBJECTINSTANCEA
+{
     DWORD   dwSize;
     GUID    guidType;
     DWORD   dwOfs;
@@ -975,7 +1005,8 @@ typedef struct DIDEVICEOBJECTINSTANCEA {
     WORD    wReportId;
 #endif /* DIRECTINPUT_VERSION >= 0x0500 */
 } DIDEVICEOBJECTINSTANCEA, *LPDIDEVICEOBJECTINSTANCEA;
-typedef struct DIDEVICEOBJECTINSTANCEW {
+typedef struct DIDEVICEOBJECTINSTANCEW
+{
     DWORD   dwSize;
     GUID    guidType;
     DWORD   dwOfs;
@@ -1027,7 +1058,8 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICEOBJECTSCALLBACKW)(LPCDIDEVICEOBJECTINST
 #define DIDOI_GUIDISUSAGE       0x00010000
 #endif /* DIRECTINPUT_VERSION >= 0x050a */
 
-typedef struct DIPROPHEADER {
+typedef struct DIPROPHEADER
+{
     DWORD   dwSize;
     DWORD   dwHeaderSize;
     DWORD   dwObj;
@@ -1047,21 +1079,24 @@ typedef const DIPROPHEADER *LPCDIPROPHEADER;
                                 (DWORD)MAKELONG(Usage, UsagePage)
 #endif /* DIRECTINPUT_VERSION >= 0x050a */
 
-typedef struct DIPROPDWORD {
+typedef struct DIPROPDWORD
+{
     DIPROPHEADER diph;
     DWORD   dwData;
 } DIPROPDWORD, *LPDIPROPDWORD;
 typedef const DIPROPDWORD *LPCDIPROPDWORD;
 
 #if(DIRECTINPUT_VERSION >= 0x0800)
-typedef struct DIPROPPOINTER {
+typedef struct DIPROPPOINTER
+{
     DIPROPHEADER diph;
     UINT_PTR uData;
 } DIPROPPOINTER, *LPDIPROPPOINTER;
 typedef const DIPROPPOINTER *LPCDIPROPPOINTER;
 #endif /* DIRECTINPUT_VERSION >= 0x0800 */
 
-typedef struct DIPROPRANGE {
+typedef struct DIPROPRANGE
+{
     DIPROPHEADER diph;
     LONG    lMin;
     LONG    lMax;
@@ -1072,7 +1107,8 @@ typedef const DIPROPRANGE *LPCDIPROPRANGE;
 #define DIPROPRANGE_NOMAX       ((LONG)0x7FFFFFFF)
 
 #if(DIRECTINPUT_VERSION >= 0x050a)
-typedef struct DIPROPCAL {
+typedef struct DIPROPCAL
+{
     DIPROPHEADER diph;
     LONG    lMin;
     LONG    lCenter;
@@ -1080,21 +1116,24 @@ typedef struct DIPROPCAL {
 } DIPROPCAL, *LPDIPROPCAL;
 typedef const DIPROPCAL *LPCDIPROPCAL;
 
-typedef struct DIPROPCALPOV {
+typedef struct DIPROPCALPOV
+{
     DIPROPHEADER diph;
     LONG   lMin[5];
     LONG   lMax[5];
 } DIPROPCALPOV, *LPDIPROPCALPOV;
 typedef const DIPROPCALPOV *LPCDIPROPCALPOV;
 
-typedef struct DIPROPGUIDANDPATH {
+typedef struct DIPROPGUIDANDPATH
+{
     DIPROPHEADER diph;
     GUID    guidClass;
     WCHAR   wszPath[MAX_PATH];
 } DIPROPGUIDANDPATH, *LPDIPROPGUIDANDPATH;
 typedef const DIPROPGUIDANDPATH *LPCDIPROPGUIDANDPATH;
 
-typedef struct DIPROPSTRING {
+typedef struct DIPROPSTRING
+{
     DIPROPHEADER diph;
     WCHAR   wsz[MAX_PATH];
 } DIPROPSTRING, *LPDIPROPSTRING;
@@ -1111,7 +1150,8 @@ typedef struct _CPOINT
     DWORD dwLog;  // logical_value / max_logical_value * 10000
 } CPOINT, *PCPOINT;
 
-typedef struct DIPROPCPOINTS {
+typedef struct DIPROPCPOINTS
+{
     DIPROPHEADER diph;
     DWORD  dwCPointsNum;
     CPOINT cp[MAXCPOINTSNUM];
@@ -1195,7 +1235,8 @@ typedef const DIPROPCPOINTS *LPCDIPROPCPOINTS;
 #endif /* DIRECTINPUT_VERSION >= 0x0800 */
 
 
-typedef struct DIDEVICEOBJECTDATA_DX3 {
+typedef struct DIDEVICEOBJECTDATA_DX3
+{
     DWORD       dwOfs;
     DWORD       dwData;
     DWORD       dwTimeStamp;
@@ -1203,7 +1244,8 @@ typedef struct DIDEVICEOBJECTDATA_DX3 {
 } DIDEVICEOBJECTDATA_DX3, *LPDIDEVICEOBJECTDATA_DX3;
 typedef const DIDEVICEOBJECTDATA_DX3 *LPCDIDEVICEOBJECTDATA_DX;
 
-typedef struct DIDEVICEOBJECTDATA {
+typedef struct DIDEVICEOBJECTDATA
+{
     DWORD       dwOfs;
     DWORD       dwData;
     DWORD       dwTimeStamp;
@@ -1227,7 +1269,8 @@ typedef const DIDEVICEOBJECTDATA *LPCDIDEVICEOBJECTDATA;
 #if(DIRECTINPUT_VERSION >= 0x0500)
 /* These structures are defined for DirectX 3.0 compatibility */
 
-typedef struct DIDEVICEINSTANCE_DX3A {
+typedef struct DIDEVICEINSTANCE_DX3A
+{
     DWORD   dwSize;
     GUID    guidInstance;
     GUID    guidProduct;
@@ -1235,7 +1278,8 @@ typedef struct DIDEVICEINSTANCE_DX3A {
     CHAR    tszInstanceName[MAX_PATH];
     CHAR    tszProductName[MAX_PATH];
 } DIDEVICEINSTANCE_DX3A, *LPDIDEVICEINSTANCE_DX3A;
-typedef struct DIDEVICEINSTANCE_DX3W {
+typedef struct DIDEVICEINSTANCE_DX3W
+{
     DWORD   dwSize;
     GUID    guidInstance;
     GUID    guidProduct;
@@ -1255,7 +1299,8 @@ typedef const DIDEVICEINSTANCE_DX3W *LPCDIDEVICEINSTANCE_DX3W;
 typedef const DIDEVICEINSTANCE_DX3  *LPCDIDEVICEINSTANCE_DX3;
 #endif /* DIRECTINPUT_VERSION >= 0x0500 */
 
-typedef struct DIDEVICEINSTANCEA {
+typedef struct DIDEVICEINSTANCEA
+{
     DWORD   dwSize;
     GUID    guidInstance;
     GUID    guidProduct;
@@ -1268,7 +1313,8 @@ typedef struct DIDEVICEINSTANCEA {
     WORD    wUsage;
 #endif /* DIRECTINPUT_VERSION >= 0x0500 */
 } DIDEVICEINSTANCEA, *LPDIDEVICEINSTANCEA;
-typedef struct DIDEVICEINSTANCEW {
+typedef struct DIDEVICEINSTANCEW
+{
     DWORD   dwSize;
     GUID    guidInstance;
     GUID    guidProduct;
@@ -1438,7 +1484,8 @@ typedef struct IDirectInputDevice *LPDIRECTINPUTDEVICE;
 
 #ifndef DIJ_RINGZERO
 
-typedef struct DIEFFECTINFOA {
+typedef struct DIEFFECTINFOA
+{
     DWORD   dwSize;
     GUID    guid;
     DWORD   dwEffType;
@@ -1446,7 +1493,8 @@ typedef struct DIEFFECTINFOA {
     DWORD   dwDynamicParams;
     CHAR    tszName[MAX_PATH];
 } DIEFFECTINFOA, *LPDIEFFECTINFOA;
-typedef struct DIEFFECTINFOW {
+typedef struct DIEFFECTINFOW
+{
     DWORD   dwSize;
     GUID    guid;
     DWORD   dwEffType;
@@ -1984,7 +2032,8 @@ typedef struct IDirectInputDevice8 *LPDIRECTINPUTDEVICE8;
 
 #ifndef DIJ_RINGZERO
 
-typedef struct _DIMOUSESTATE {
+typedef struct _DIMOUSESTATE
+{
     LONG    lX;
     LONG    lY;
     LONG    lZ;
@@ -1992,7 +2041,8 @@ typedef struct _DIMOUSESTATE {
 } DIMOUSESTATE, *LPDIMOUSESTATE;
 
 #if DIRECTINPUT_VERSION >= 0x0700
-typedef struct _DIMOUSESTATE2 {
+typedef struct _DIMOUSESTATE2
+{
     LONG    lX;
     LONG    lY;
     LONG    lZ;
@@ -2208,7 +2258,8 @@ typedef struct _DIMOUSESTATE2 {
 
 #ifndef DIJ_RINGZERO
 
-typedef struct DIJOYSTATE {
+typedef struct DIJOYSTATE
+{
     LONG    lX;                     /* x-axis position              */
     LONG    lY;                     /* y-axis position              */
     LONG    lZ;                     /* z-axis position              */
@@ -2220,7 +2271,8 @@ typedef struct DIJOYSTATE {
     BYTE    rgbButtons[32];         /* 32 buttons                   */
 } DIJOYSTATE, *LPDIJOYSTATE;
 
-typedef struct DIJOYSTATE2 {
+typedef struct DIJOYSTATE2
+{
     LONG    lX;                     /* x-axis position              */
     LONG    lY;                     /* y-axis position              */
     LONG    lZ;                     /* z-axis position              */
@@ -2761,8 +2813,8 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DI_TRUNCATED                    ((HRESULT)0x00000008L)
 
 /*
- *  The settings have been successfully applied but could not be 
- *  persisted. 
+ *  The settings have been successfully applied but could not be
+ *  persisted.
  */
 #define DI_SETTINGSNOTSAVED				((HRESULT)0x0000000BL)
 
@@ -2970,7 +3022,7 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 
 
 /*
- *  A mapper file function failed because reading or writing the user or IHV 
+ *  A mapper file function failed because reading or writing the user or IHV
  *  settings file failed.
  */
 #define DIERR_MAPFILEFAIL               0x8004020BL
@@ -3126,12 +3178,12 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIKEYBOARD_MYCOMPUTER                   0x810004EB    /* My Computer */
 #define DIKEYBOARD_MAIL                         0x810004EC    /* Mail */
 #define DIKEYBOARD_MEDIASELECT                  0x810004ED    /* Media Select */
-  
+
 
 /*--- MOUSE
       Physical Mouse Device             ---*/
 
-#define DIMOUSE_XAXISAB                         (0x82000200 |DIMOFS_X ) /* X Axis-absolute: Some mice natively report absolute coordinates  */ 
+#define DIMOUSE_XAXISAB                         (0x82000200 |DIMOFS_X ) /* X Axis-absolute: Some mice natively report absolute coordinates  */
 #define DIMOUSE_YAXISAB                         (0x82000200 |DIMOFS_Y ) /* Y Axis-absolute: Some mice natively report absolute coordinates */
 #define DIMOUSE_XAXIS                           (0x82000300 |DIMOFS_X ) /* X Axis */
 #define DIMOUSE_YAXIS                           (0x82000300 |DIMOFS_Y ) /* Y Axis */
@@ -3254,7 +3306,7 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIBUTTON_DRIVINGT_DEVICE                0x030044FE /* Show input device and controls */
 #define DIBUTTON_DRIVINGT_PAUSE                 0x030044FC /* Start / Pause / Restart game */
 
-/*--- Flight Simulator - Civilian 
+/*--- Flight Simulator - Civilian
       Plane control is the primary objective  ---*/
 #define DIVIRTUAL_FLYING_CIVILIAN               0x04000000
 #define DIAXIS_FLYINGC_BANK                     0x04008A01 /* Roll ship left / right */
@@ -3282,7 +3334,7 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIBUTTON_FLYINGC_DEVICE                 0x040044FE /* Show input device and controls */
 #define DIBUTTON_FLYINGC_PAUSE                  0x040044FC /* Start / Pause / Restart game */
 
-/*--- Flight Simulator - Military 
+/*--- Flight Simulator - Military
       Aerial combat is the primary objective  ---*/
 #define DIVIRTUAL_FLYING_MILITARY               0x05000000
 #define DIAXIS_FLYINGM_BANK                     0x05008A01 /* Bank - Roll ship left / right */
@@ -3379,7 +3431,7 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIBUTTON_SPACESIM_DEVICE                0x070044FE /* Show input device and controls */
 #define DIBUTTON_SPACESIM_PAUSE                 0x070044FC /* Start / Pause / Restart game */
 
-/*--- Fighting - First Person 
+/*--- Fighting - First Person
       Hand to Hand combat is primary objective  ---*/
 #define DIVIRTUAL_FIGHTING_HAND2HAND            0x08000000
 #define DIAXIS_FIGHTINGH_LATERAL                0x08008201 /* Sidestep left/right */
@@ -4243,42 +4295,42 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 #define DIBUTTON_MECHA_PAUSE                    0x290044FC /* Start / Pause / Restart game */
 
 /*
- *  "ANY" semantics can be used as a last resort to get mappings for actions 
- *  that match nothing in the chosen virtual genre.  These semantics will be 
- *  mapped at a lower priority that virtual genre semantics.  Also, hardware 
- *  vendors will not be able to provide sensible mappings for these unless 
+ *  "ANY" semantics can be used as a last resort to get mappings for actions
+ *  that match nothing in the chosen virtual genre.  These semantics will be
+ *  mapped at a lower priority that virtual genre semantics.  Also, hardware
+ *  vendors will not be able to provide sensible mappings for these unless
  *  they provide application specific mappings.
  */
-#define DIAXIS_ANY_X_1                          0xFF00C201 
-#define DIAXIS_ANY_X_2                          0xFF00C202 
-#define DIAXIS_ANY_Y_1                          0xFF014201 
-#define DIAXIS_ANY_Y_2                          0xFF014202 
-#define DIAXIS_ANY_Z_1                          0xFF01C201 
-#define DIAXIS_ANY_Z_2                          0xFF01C202 
-#define DIAXIS_ANY_R_1                          0xFF024201 
-#define DIAXIS_ANY_R_2                          0xFF024202 
-#define DIAXIS_ANY_U_1                          0xFF02C201 
-#define DIAXIS_ANY_U_2                          0xFF02C202 
-#define DIAXIS_ANY_V_1                          0xFF034201 
-#define DIAXIS_ANY_V_2                          0xFF034202 
-#define DIAXIS_ANY_A_1                          0xFF03C201 
-#define DIAXIS_ANY_A_2                          0xFF03C202 
-#define DIAXIS_ANY_B_1                          0xFF044201 
-#define DIAXIS_ANY_B_2                          0xFF044202 
-#define DIAXIS_ANY_C_1                          0xFF04C201 
-#define DIAXIS_ANY_C_2                          0xFF04C202 
-#define DIAXIS_ANY_S_1                          0xFF054201 
-#define DIAXIS_ANY_S_2                          0xFF054202 
+#define DIAXIS_ANY_X_1                          0xFF00C201
+#define DIAXIS_ANY_X_2                          0xFF00C202
+#define DIAXIS_ANY_Y_1                          0xFF014201
+#define DIAXIS_ANY_Y_2                          0xFF014202
+#define DIAXIS_ANY_Z_1                          0xFF01C201
+#define DIAXIS_ANY_Z_2                          0xFF01C202
+#define DIAXIS_ANY_R_1                          0xFF024201
+#define DIAXIS_ANY_R_2                          0xFF024202
+#define DIAXIS_ANY_U_1                          0xFF02C201
+#define DIAXIS_ANY_U_2                          0xFF02C202
+#define DIAXIS_ANY_V_1                          0xFF034201
+#define DIAXIS_ANY_V_2                          0xFF034202
+#define DIAXIS_ANY_A_1                          0xFF03C201
+#define DIAXIS_ANY_A_2                          0xFF03C202
+#define DIAXIS_ANY_B_1                          0xFF044201
+#define DIAXIS_ANY_B_2                          0xFF044202
+#define DIAXIS_ANY_C_1                          0xFF04C201
+#define DIAXIS_ANY_C_2                          0xFF04C202
+#define DIAXIS_ANY_S_1                          0xFF054201
+#define DIAXIS_ANY_S_2                          0xFF054202
 
-#define DIAXIS_ANY_1                            0xFF004201 
-#define DIAXIS_ANY_2                            0xFF004202 
-#define DIAXIS_ANY_3                            0xFF004203 
-#define DIAXIS_ANY_4                            0xFF004204 
+#define DIAXIS_ANY_1                            0xFF004201
+#define DIAXIS_ANY_2                            0xFF004202
+#define DIAXIS_ANY_3                            0xFF004203
+#define DIAXIS_ANY_4                            0xFF004204
 
-#define DIPOV_ANY_1                             0xFF004601 
-#define DIPOV_ANY_2                             0xFF004602 
-#define DIPOV_ANY_3                             0xFF004603 
-#define DIPOV_ANY_4                             0xFF004604 
+#define DIPOV_ANY_1                             0xFF004601
+#define DIPOV_ANY_2                             0xFF004602
+#define DIPOV_ANY_3                             0xFF004603
+#define DIPOV_ANY_4                             0xFF004604
 
 #define DIBUTTON_ANY(instance)                  ( 0xFF004400 | instance )
 
@@ -4322,13 +4374,13 @@ WINMMAPI MMRESULT WINAPI joyConfigChanged( DWORD dwFlags );
 
 #ifndef DIJ_RINGZERO
 /*
- * Invoke the joystick control panel directly, using the passed window handle 
- * as the parent of the dialog.  This API is only supported for compatibility 
- * purposes; new applications should use the RunControlPanel method of a 
+ * Invoke the joystick control panel directly, using the passed window handle
+ * as the parent of the dialog.  This API is only supported for compatibility
+ * purposes; new applications should use the RunControlPanel method of a
  * device interface for a game controller.
  * The API is called by using the function pointer returned by
- * GetProcAddress( hCPL, TEXT("ShowJoyCPL") ) where hCPL is a HMODULE returned 
- * by LoadLibrary( TEXT("joy.cpl") ).  The typedef is provided to allow 
+ * GetProcAddress( hCPL, TEXT("ShowJoyCPL") ) where hCPL is a HMODULE returned
+ * by LoadLibrary( TEXT("joy.cpl") ).  The typedef is provided to allow
  * declaration and casting of an appropriately typed variable.
  */
 void WINAPI ShowJoyCPL( HWND hWnd );

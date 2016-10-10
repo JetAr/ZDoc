@@ -45,22 +45,22 @@ CubeWndProc(
     UINT message,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 Cube_OnClose(
     HWND hwnd
-    );
+);
 
 BOOL
 Cube_OnQueryEndSession(
     HWND hwnd
-    );
+);
 
 void
 Cube_OnDestroy(
     HWND hwnd
-    );
+);
 
 void
 Cube_OnCommand(
@@ -68,24 +68,24 @@ Cube_OnCommand(
     int id,
     HWND hwndCtl,
     UINT codeNotify
-    );
+);
 
 void
 Cube_OnPaint(
     HWND hwnd
-    );
+);
 
 void
 Cube_OnTimer(
     HWND hwnd,
     UINT id
-    );
+);
 
 BOOL
 Cube_OnCreate(
     HWND hwnd,
     LPCREATESTRUCT lpCreateStruct
-    );
+);
 
 void
 Cube_OnSize(
@@ -93,7 +93,7 @@ Cube_OnSize(
     UINT state,
     int cx,
     int cy
-    );
+);
 
 void
 Cube_OnKeyUp(
@@ -102,7 +102,7 @@ Cube_OnKeyUp(
     BOOL fDown,
     int cRepeat,
     UINT flags
-    );
+);
 
 void
 Cube_OnHScroll(
@@ -110,19 +110,19 @@ Cube_OnHScroll(
     HWND hwndCtl,
     UINT code,
     int pos
-    );
+);
 
 void
 Cube_OnUser(
     HWND hwnd,
     WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 void
 Cube_OnSysColorChange(
     HWND hwnd
-    );
+);
 
 void
 Cube_OnMenuSelect(
@@ -131,7 +131,7 @@ Cube_OnMenuSelect(
     int item,
     HMENU hmenuPopup,
     UINT flags
-    );
+);
 
 void
 Cube_OnInitMenuPopup(
@@ -139,7 +139,7 @@ Cube_OnInitMenuPopup(
     HMENU hMenu,
     UINT item,
     BOOL fSystemMenu
-    );
+);
 
 #ifdef WM_NOTIFY
 LRESULT
@@ -147,18 +147,18 @@ Cube_OnNotify(
     HWND hwnd,
     int idFrom,
     NMHDR FAR* pnmhdr
-    );
+);
 #endif
 
 void
 Cube_OnGraphNotify(
     int stream
-    );
+);
 
 void
 SetPlayButtonsEnableState(
     void
-    );
+);
 
 
 /* -------------------------------------------------------------------------
@@ -168,59 +168,59 @@ SetPlayButtonsEnableState(
 BOOL
 CubeSetLog(
     void
-    );
+);
 
 BOOL
 CubeSetPerfLogFile(
     void
-    );
+);
 
 BOOL
 CubeOpenCmd(
     void
-    );
+);
 
 BOOL
 CubeCloseCmd(
     void
-    );
+);
 
 BOOL
 CubePlayCmd(
     void
-    );
+);
 
 BOOL
 CubeStopCmd(
     void
-    );
+);
 
 BOOL
 CubePauseCmd(
     void
-    );
+);
 
 BOOL
 CubePauseCmd(
     void
-    );
+);
 
 BOOL
 CubeRewindCmd(
     void
-    );
+);
 
 void
 CubeSeekCmd(
     REFTIME rtSeekBy
-    );
+);
 
 void
 ProcessOpen(
     TCHAR achFileName[][MAX_PATH],
     DWORD dwNumFiles,
     BOOL bPlay = FALSE
-    );
+);
 
 
 /* -------------------------------------------------------------------------

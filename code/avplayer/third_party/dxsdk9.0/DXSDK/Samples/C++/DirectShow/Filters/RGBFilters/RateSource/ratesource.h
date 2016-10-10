@@ -11,7 +11,7 @@
 
 extern const AMOVIESETUP_FILTER sudRateSource;
 
-class CRateSource 
+class CRateSource
     : public CSource
 {
 protected:
@@ -33,7 +33,7 @@ private:
     DECLARE_IUNKNOWN
     CRateSource(LPUNKNOWN lpunk, HRESULT *phr);
     ~CRateSource();
-    
+
     STDMETHODIMP NonDelegatingQueryInterface( REFIID riid, void ** ppv );
 
     int GetPinCount();
@@ -43,7 +43,7 @@ private:
 
 // CRateSourceStream manages the data flow from the output pin.
 //
-class CRateSourceStream 
+class CRateSourceStream
     : public CSourceStream
     , public CSourceSeeking
 {
@@ -79,9 +79,9 @@ public:
     HRESULT OnThreadStartPlay( );
 
     // Need to override or we'll get an assert
-    STDMETHODIMP Notify( IBaseFilter * pFilter, Quality q ) 
-    { 
-        return S_OK; 
+    STDMETHODIMP Notify( IBaseFilter * pFilter, Quality q )
+    {
+        return S_OK;
     }
 
     // CSourceSeeking

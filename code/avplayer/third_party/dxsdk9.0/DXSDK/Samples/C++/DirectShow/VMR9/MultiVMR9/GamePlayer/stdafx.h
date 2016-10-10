@@ -53,10 +53,10 @@
 
 // global prototypes
 void DbgMsg( char* szMessage, ... );
-HRESULT FindMediaFile(  TCHAR* achPath, 
-                        DWORD size, 
-                        TCHAR* achShortName, 
-                        LPCTSTR lpResourceName, 
+HRESULT FindMediaFile(  TCHAR* achPath,
+                        DWORD size,
+                        TCHAR* achShortName,
+                        LPCTSTR lpResourceName,
                         LPCTSTR lpResourceType );
 
 #ifndef INVALID_FILE_ATTRIBUTES

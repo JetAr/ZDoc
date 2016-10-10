@@ -12,8 +12,8 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #include "DXUtil.h"
 #include "Maze.h"
@@ -27,7 +27,7 @@
 
 class CMazeApp;
 
-// The MAZE_CLIENT_VERSION should be rev'ed whenever the client exposes 
+// The MAZE_CLIENT_VERSION should be rev'ed whenever the client exposes
 // new functionality that the server expects.  This number is sent to
 // the server so the server can accept or reject the client based on its version.
 #define MAZE_CLIENT_VERSION         107
@@ -35,8 +35,8 @@ class CMazeApp;
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 struct PlayerObject
 {
@@ -55,8 +55,8 @@ struct PlayerObject
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #define MAZE_WIDTH  128
 #define MAZE_HEIGHT 128
@@ -66,8 +66,8 @@ struct PlayerObject
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CMazeClient : public INetClient
 {
@@ -75,14 +75,20 @@ public:
     CMazeClient();
     ~CMazeClient();
 
-    void SetApp( CMazeApp* pMazeApp ) { m_pMazeApp = pMazeApp; };
+    void SetApp( CMazeApp* pMazeApp )
+    {
+        m_pMazeApp = pMazeApp;
+    };
 
     // INetClient
-    virtual HRESULT OnPacket( DWORD from , void* data , DWORD size );
+    virtual HRESULT OnPacket( DWORD from, void* data, DWORD size );
     virtual void    OnSessionLost( DWORD dwReason );
 
     // Connect an outbound network provider
-    void            SetOutboundClient( IOutboundClient* poutnet ) { m_pNet = poutnet; };
+    void            SetOutboundClient( IOutboundClient* poutnet )
+    {
+        m_pNet = poutnet;
+    };
 
     HRESULT         Init( CMazeApp* pMazeApp, IMazeGraphics* pMazeGraphics );
     HRESULT         Reset();
@@ -90,21 +96,52 @@ public:
     void            Update( FLOAT elapsed );
 
     // Lock and unlock the world database
-    void            LockWorld() { m_WorldLock.Enter(); };
-    void            UnlockWorld() { m_WorldLock.Leave(); };
+    void            LockWorld()
+    {
+        m_WorldLock.Enter();
+    };
+    void            UnlockWorld()
+    {
+        m_WorldLock.Leave();
+    };
 
     // Lock and unlock the world database
-    void            SetMazeReady( BOOL bReady ) { if( bReady ) SetEvent( m_hReady ); else ResetEvent( m_hReady ); };
-    BOOL            IsMazeReady() { if( WaitForSingleObject( m_hReady, 0 ) == WAIT_OBJECT_0 ) return TRUE; else return FALSE; };
+    void            SetMazeReady( BOOL bReady )
+    {
+        if( bReady ) SetEvent( m_hReady );
+        else ResetEvent( m_hReady );
+    };
+    BOOL            IsMazeReady()
+    {
+        if( WaitForSingleObject( m_hReady, 0 ) == WAIT_OBJECT_0 ) return TRUE;
+        else return FALSE;
+    };
 
     // Check to see if we have received first Connect Config Packet.
-    void            SetFirstConfig( BOOL bReady ) { if( bReady ) SetEvent( m_hGotFirstConfig ); else ResetEvent( m_hGotFirstConfig ); };
-    BOOL            GotFirstConfig() { if( WaitForSingleObject( m_hGotFirstConfig, 0 ) == WAIT_OBJECT_0 ) return TRUE; else return FALSE; };
+    void            SetFirstConfig( BOOL bReady )
+    {
+        if( bReady ) SetEvent( m_hGotFirstConfig );
+        else ResetEvent( m_hGotFirstConfig );
+    };
+    BOOL            GotFirstConfig()
+    {
+        if( WaitForSingleObject( m_hGotFirstConfig, 0 ) == WAIT_OBJECT_0 ) return TRUE;
+        else return FALSE;
+    };
 
     // Get data useful for the engine (current position, etc. etc.)
-    D3DXVECTOR3     GetCameraPos() const { return m_vCameraPos; };
-    ANGLE           GetCameraYaw() const { return m_aCameraYaw; };
-    DWORD           GetNumPlayerObjects() const { return m_dwNumPlayerObjects; };
+    D3DXVECTOR3     GetCameraPos() const
+    {
+        return m_vCameraPos;
+    };
+    ANGLE           GetCameraYaw() const
+    {
+        return m_aCameraYaw;
+    };
+    DWORD           GetNumPlayerObjects() const
+    {
+        return m_dwNumPlayerObjects;
+    };
 
     // Get first engine PlayerObject is a cell
     // NOTE: The engine must lock the world DB before traversing the cells
@@ -116,17 +153,41 @@ public:
     // Get network stats
     DWORD           GetThroughputBPS();
     DWORD           GetRoundTripLatencyMS();
-    void            GetPlayerStats( DWORD* pdwNumPlayers, DWORD* pdwNumNearbyPlayers ) { m_StatLock.Enter(); *pdwNumPlayers = m_dwNumPlayers; *pdwNumNearbyPlayers = m_dwNumNearbyPlayers; m_StatLock.Leave(); };
-    void            SetPlayerStats( DWORD dwNumPlayers, DWORD dwNumNearbyPlayers )     { m_StatLock.Enter(); m_dwNumPlayers = dwNumPlayers;   m_dwNumNearbyPlayers = dwNumNearbyPlayers;   m_StatLock.Leave(); };
-    DWORD           GetLocalClientID() const { return m_dwLocalClientID; };
+    void            GetPlayerStats( DWORD* pdwNumPlayers, DWORD* pdwNumNearbyPlayers )
+    {
+        m_StatLock.Enter();
+        *pdwNumPlayers = m_dwNumPlayers;
+        *pdwNumNearbyPlayers = m_dwNumNearbyPlayers;
+        m_StatLock.Leave();
+    };
+    void            SetPlayerStats( DWORD dwNumPlayers, DWORD dwNumNearbyPlayers )
+    {
+        m_StatLock.Enter();
+        m_dwNumPlayers = dwNumPlayers;
+        m_dwNumNearbyPlayers = dwNumNearbyPlayers;
+        m_StatLock.Leave();
+    };
+    DWORD           GetLocalClientID() const
+    {
+        return m_dwLocalClientID;
+    };
 
     // Autopilot
     void    EngageAutopilot( BOOL engage );
-    void    SetAutopilot(BOOL engage) { m_bEngageAutopilot = engage; };
-    BOOL    IsAutopilot() const { return m_bAutopilot; };
+    void    SetAutopilot(BOOL engage)
+    {
+        m_bEngageAutopilot = engage;
+    };
+    BOOL    IsAutopilot() const
+    {
+        return m_bAutopilot;
+    };
 
     // Set whether or not we have input focus
-    void    SetInputFocus( BOOL havefocus ) { m_bHaveInputFocus = havefocus; };
+    void    SetInputFocus( BOOL havefocus )
+    {
+        m_bHaveInputFocus = havefocus;
+    };
 
 protected:
     CMazeApp*       m_pMazeApp;
@@ -151,7 +212,7 @@ protected:
 
     BOOL            m_bHaveInputFocus;
 
-    void            SendPacket( ClientPacket* packet , DWORD size , BOOL guaranteed, DWORD dwTimeout );
+    void            SendPacket( ClientPacket* packet, DWORD size, BOOL guaranteed, DWORD dwTimeout );
 
     BOOL            IsValidPackSize( DWORD dwSize );
 
@@ -161,13 +222,13 @@ protected:
     CCriticalSection    m_WorldLock;
     CCriticalSection    m_StatLock;
     HANDLE              m_hReady;
-    
+
 
     // Autopilot stuff
     struct  AutopilotCell
     {
         AutopilotCell() {};
-        AutopilotCell( BYTE X , BYTE Y ) : x(X),y(Y) {};
+        AutopilotCell( BYTE X, BYTE Y ) : x(X),y(Y) {};
         BYTE   x,y;
     };
     SimpleStack<AutopilotCell,MAZE_SIZE>    m_AutopilotStack;
@@ -178,7 +239,7 @@ protected:
     ANGLE           m_aAutopilotTargetAngle;
 
     void            DoAutopilot( FLOAT elapsed );
-    void            DoManualPilot( FLOAT elapsed ); 
+    void            DoManualPilot( FLOAT elapsed );
     void            PickAutopilotTarget();
 
     void    HandlePlayerObjectsInAckPacket( ServerAckPacket* ppacket );

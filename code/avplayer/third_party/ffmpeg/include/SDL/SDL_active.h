@@ -22,7 +22,7 @@
 
 /**
  *  @file SDL_active.h
- *  Include file for SDL application focus event handling 
+ *  Include file for SDL application focus event handling
  */
 
 #ifndef _SDL_active_h
@@ -45,7 +45,7 @@ extern "C" {
 /*@}*/
 
 /* Function prototypes */
-/** 
+/**
  * This function returns the current state of the application, which is a
  * bitwise combination of SDL_APPMOUSEFOCUS, SDL_APPINPUTFOCUS, and
  * SDL_APPACTIVE.  If SDL_APPACTIVE is set, then the user is able to

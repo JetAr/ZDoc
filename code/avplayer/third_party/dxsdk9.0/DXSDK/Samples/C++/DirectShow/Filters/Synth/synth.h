@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: Synth.h
 //
-// Desc: DirectShow sample code - header file for audio signal generator 
+// Desc: DirectShow sample code - header file for audio signal generator
 //       source filter.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -14,12 +14,12 @@
 //CLSID_SynthFilter
 //{79A98DE0-BC00-11ce-AC2E-444553540000}
 DEFINE_GUID(CLSID_SynthFilter,
-0x79a98de0, 0xbc00, 0x11ce, 0xac, 0x2e, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
+            0x79a98de0, 0xbc00, 0x11ce, 0xac, 0x2e, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
 //CLSID_SynthFilterPropertyPage
 //{79A98DE1-BC00-11ce-AC2E-444553540000}
 DEFINE_GUID(CLSID_SynthPropertyPage,
-0x79a98de1, 0xbc00, 0x11ce, 0xac, 0x2e, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
+            0x79a98de1, 0xbc00, 0x11ce, 0xac, 0x2e, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
 const double TWOPI = 6.283185308;
 const int MaxFrequency = 20000;
@@ -30,12 +30,13 @@ const int MinAmplitude = 0;
 const int DefaultSweepStart = DefaultFrequency;
 const int DefaultSweepEnd = 5000;
 const int WaveBufferSize = 16*1024;     // Size of each allocated buffer
-                                        // Originally used to be 2K, but at
-                                        // 44khz/16bit/stereo you would get
-                                        // audio breaks with a transform in the
-                                        // middle.
+// Originally used to be 2K, but at
+// 44khz/16bit/stereo you would get
+// audio breaks with a transform in the
+// middle.
 
-enum Waveforms {
+enum Waveforms
+{
     WAVE_SINE = 0,
     WAVE_SQUARE,
     WAVE_SAWTOOTH,
@@ -54,19 +55,20 @@ class CSynthStream;
 // CAudioSynth
 // -------------------------------------------------------------------------
 
-class CAudioSynth {
+class CAudioSynth
+{
 
 public:
 
     CAudioSynth(
-                CCritSec* pStateLock,
-                int Frequency = DefaultFrequency,
-                int Waveform = WAVE_SINE,
-                int iBitsPerSample = 8,
-                int iChannels = 1,
-                int iSamplesPerSec = 11025,
-                int iAmplitude = 100
-                );
+        CCritSec* pStateLock,
+        int Frequency = DefaultFrequency,
+        int Waveform = WAVE_SINE,
+        int iBitsPerSample = 8,
+        int iChannels = 1,
+        int iSamplesPerSec = 11025,
+        int iAmplitude = 100
+    );
 
     ~CAudioSynth();
 
@@ -103,7 +105,7 @@ private:
     WORD  m_wFormatTag;         // The output format.  This can be PCM audio or MS ADPCM audio.
     DWORD m_dwSamplesPerSec;    // The number of samples produced in one second by the synth filter.
     WORD  m_wBitsPerSample;     // The number of bits in each sample.  This member is only valid if the
-                                // current format is PCM audio.
+    // current format is PCM audio.
 
     int m_iWaveform;            // WAVE_SINE ...
     int m_iFrequency;           // if not using sweep, this is the frequency
@@ -140,9 +142,10 @@ private:
 // CSynthFilter manages filter level stuff
 
 class CSynthFilter :    public ISynth2,
-                        public CPersistStream,
-                        public ISpecifyPropertyPages,
-                        public CDynamicSource {
+    public CPersistStream,
+    public ISpecifyPropertyPages,
+    public CDynamicSource
+{
 
 public:
 
@@ -206,14 +209,18 @@ private:
 // -------------------------------------------------------------------------
 // CSynthStream manages the data flow from the output pin.
 
-class CSynthStream : public CDynamicSourceStream {
+class CSynthStream : public CDynamicSourceStream
+{
 
 public:
 
     CSynthStream(HRESULT *phr, CSynthFilter *pParent, LPCWSTR pPinName);
     ~CSynthStream();
 
-    BOOL ReadyToStop(void) {return FALSE;}
+    BOOL ReadyToStop(void)
+    {
+        return FALSE;
+    }
 
     // stuff an audio buffer with the current format
     HRESULT FillBuffer(IMediaSample *pms);
@@ -239,7 +246,7 @@ private:
 
     // This lock protects: m_dwTempPCMBufferSize, m_hPCMToMSADPCMConversionStream,
     // m_rtSampleTime, m_fFirstSampleDelivered and m_llSampleMediaTimeStart
-    CCritSec    m_cSharedState;     
+    CCritSec    m_cSharedState;
 
     CRefTime     m_rtSampleTime;    // The time to be stamped on each sample
     HACMSTREAM m_hPCMToMSADPCMConversionStream;

@@ -37,5 +37,5 @@ public:
     DWORD               m_dwNumFaces;
 
     D3DXVECTOR3         m_vBoundingVertex[8];
-	LPDIRECT3DVERTEXBUFFER9 m_pBoundingVB;
+    LPDIRECT3DVERTEXBUFFER9 m_pBoundingVB;
 };

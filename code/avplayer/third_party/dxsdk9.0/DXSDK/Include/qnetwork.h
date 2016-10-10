@@ -24,7 +24,7 @@ DEFINE_GUID(IID_IAMNetShowConfig,0xFA2AA8F1L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,0
 
 DECLARE_INTERFACE_(IAMNetShowConfig, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -36,29 +36,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMNetShowConfig methods */
@@ -94,7 +94,7 @@ DEFINE_GUID(IID_IAMChannelInfo,0xFA2AA8F2L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,0x0
 
 DECLARE_INTERFACE_(IAMChannelInfo, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -106,29 +106,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMChannelInfo methods */
@@ -148,7 +148,7 @@ DEFINE_GUID(IID_IAMNetworkStatus,0xFA2AA8F3L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,0
 
 DECLARE_INTERFACE_(IAMNetworkStatus, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -160,29 +160,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMNetworkStatus methods */
@@ -195,7 +195,8 @@ BEGIN_INTERFACE
     STDMETHOD(get_BufferingProgress)(THIS_ long FAR* pBufferingProgress) PURE;
 };
 
-typedef enum {
+typedef enum
+{
     AM_EXSEEK_CANSEEK = 1,
     AM_EXSEEK_CANSCAN = 2,
     AM_EXSEEK_MARKERSEEK = 4,
@@ -213,7 +214,7 @@ DEFINE_GUID(IID_IAMExtendedSeeking,0xFA2AA8F9L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00
 
 DECLARE_INTERFACE_(IAMExtendedSeeking, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -225,29 +226,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMExtendedSeeking methods */
@@ -268,7 +269,7 @@ DEFINE_GUID(IID_IAMNetShowExProps,0xFA2AA8F5L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,
 
 DECLARE_INTERFACE_(IAMNetShowExProps, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -280,29 +281,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMNetShowExProps methods */
@@ -325,7 +326,7 @@ DEFINE_GUID(IID_IAMExtendedErrorInfo,0xFA2AA8F6L,0x8B62,0x11D0,0xA5,0x20,0x00,0x
 
 DECLARE_INTERFACE_(IAMExtendedErrorInfo, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -337,29 +338,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMExtendedErrorInfo methods */
@@ -376,7 +377,7 @@ DEFINE_GUID(IID_IAMMediaContent,0xFA2AA8F4L,0x8B62,0x11D0,0xA5,0x20,0x00,0x00,0x
 
 DECLARE_INTERFACE_(IAMMediaContent, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -388,29 +389,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMMediaContent methods */
@@ -437,7 +438,7 @@ DEFINE_GUID(IID_IAMMediaContent2,0xCE8F78C1L,0x74D9,0x11D2,0xB0,0x9D,0x00,0xA0,0
 
 DECLARE_INTERFACE_(IAMMediaContent2, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -449,29 +450,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMMediaContent2 methods */
@@ -488,7 +489,7 @@ DEFINE_GUID(IID_IAMNetShowPreroll,0xAAE7E4E2L,0x6388,0x11D1,0x8D,0x93,0x00,0x60,
 
 DECLARE_INTERFACE_(IAMNetShowPreroll, IDispatch)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */
@@ -500,29 +501,29 @@ BEGIN_INTERFACE
     STDMETHOD(GetTypeInfoCount)(THIS_ UINT FAR* pctinfo) PURE;
 
     STDMETHOD(GetTypeInfo)(
-      THIS_
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo FAR* FAR* pptinfo) PURE;
+        THIS_
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo FAR* FAR* pptinfo) PURE;
 
     STDMETHOD(GetIDsOfNames)(
-      THIS_
-      REFIID riid,
-      OLECHAR FAR* FAR* rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID FAR* rgdispid) PURE;
+        THIS_
+        REFIID riid,
+        OLECHAR FAR* FAR* rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID FAR* rgdispid) PURE;
 
     STDMETHOD(Invoke)(
-      THIS_
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS FAR* pdispparams,
-      VARIANT FAR* pvarResult,
-      EXCEPINFO FAR* pexcepinfo,
-      UINT FAR* puArgErr) PURE;
+        THIS_
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS FAR* pdispparams,
+        VARIANT FAR* pvarResult,
+        EXCEPINFO FAR* pexcepinfo,
+        UINT FAR* puArgErr) PURE;
 #endif
 
     /* IAMNetShowPreroll methods */
@@ -538,7 +539,7 @@ DEFINE_GUID(IID_IDShowPlugin,0x4746B7C8L,0x700E,0x11D1,0xBE,0xCC,0x00,0xC0,0x4F,
 
 DECLARE_INTERFACE_(IDShowPlugin, IUnknown)
 {
-BEGIN_INTERFACE
+    BEGIN_INTERFACE
 #ifndef NO_BASEINTERFACE_FUNCS
 
     /* IUnknown methods */

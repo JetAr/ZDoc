@@ -12,13 +12,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: Client IDs are 32-bit values that refer to a particular Client. They are 
-//       broken up into two bitfields, one of which can be used into an index 
-//       of a list of Client 'slots', the other bitfield is a "uniqueness" value 
+// Name:
+// Desc: Client IDs are 32-bit values that refer to a particular Client. They are
+//       broken up into two bitfields, one of which can be used into an index
+//       of a list of Client 'slots', the other bitfield is a "uniqueness" value
 //       that is incremented each time a new Client is created. Hence, although
-//       the same slot may be reused by different Clients are different times, 
-//       it's possible to distinguish between the two by comparing uniqueness 
+//       the same slot may be reused by different Clients are different times,
+//       it's possible to distinguish between the two by comparing uniqueness
 //       values (you can just compare the whole 32-bit id).
 //-----------------------------------------------------------------------------
 typedef DWORD   ClientID;
@@ -30,8 +30,8 @@ typedef DWORD   ClientID;
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #include <assert.h>
 #include "Random.h"
@@ -41,14 +41,14 @@ const   BYTE   MAZE_WALL_EAST = (1<<1);
 const   BYTE   MAZE_WALL_SOUTH = (1<<2);
 const   BYTE   MAZE_WALL_WEST = (1<<3);
 const   BYTE   MAZE_WALL_ALL = MAZE_WALL_NORTH|MAZE_WALL_EAST|
-                                MAZE_WALL_SOUTH|MAZE_WALL_WEST;
+                               MAZE_WALL_SOUTH|MAZE_WALL_WEST;
 
 
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 struct  MazeCellRef
 {
@@ -59,8 +59,8 @@ struct  MazeCellRef
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class   CMaze
 {
@@ -68,26 +68,57 @@ public:
     CMaze();
     ~CMaze();
 
-    HRESULT Init( DWORD width , DWORD height , DWORD seed );
+    HRESULT Init( DWORD width, DWORD height, DWORD seed );
     void    Empty();
 
-    DWORD   GetWidth()  const { return m_dwWidth; };
-    DWORD   GetHeight() const { return m_dwHeight; };
-    DWORD   GetSize()   const { return m_dwWidth*m_dwHeight; };
-    BYTE   GetCell( DWORD x , DWORD y )    const { assert(m_pMaze!=NULL); return *(m_pMaze+x+(y*m_dwWidth)); };
-    BOOL    CanGoNorth( DWORD x , DWORD y ) const { return !(GetCell(x,y)&MAZE_WALL_NORTH); };
-    BOOL    CanGoEast( DWORD x , DWORD y )  const { return !(GetCell(x,y)&MAZE_WALL_EAST); };
-    BOOL    CanGoSouth( DWORD x , DWORD y ) const { return !(GetCell(x,y)&MAZE_WALL_SOUTH); };
-    BOOL    CanGoWest( DWORD x , DWORD y )  const { return !(GetCell(x,y)&MAZE_WALL_WEST); };
+    DWORD   GetWidth()  const
+    {
+        return m_dwWidth;
+    };
+    DWORD   GetHeight() const
+    {
+        return m_dwHeight;
+    };
+    DWORD   GetSize()   const
+    {
+        return m_dwWidth*m_dwHeight;
+    };
+    BYTE   GetCell( DWORD x, DWORD y )    const
+    {
+        assert(m_pMaze!=NULL);
+        return *(m_pMaze+x+(y*m_dwWidth));
+    };
+    BOOL    CanGoNorth( DWORD x, DWORD y ) const
+    {
+        return !(GetCell(x,y)&MAZE_WALL_NORTH);
+    };
+    BOOL    CanGoEast( DWORD x, DWORD y )  const
+    {
+        return !(GetCell(x,y)&MAZE_WALL_EAST);
+    };
+    BOOL    CanGoSouth( DWORD x, DWORD y ) const
+    {
+        return !(GetCell(x,y)&MAZE_WALL_SOUTH);
+    };
+    BOOL    CanGoWest( DWORD x, DWORD y )  const
+    {
+        return !(GetCell(x,y)&MAZE_WALL_WEST);
+    };
 
     // Get list of visible cells from the given position. Fills out the list pointed to
     // be plist, and stops if it blows maxlist. Returns number of visible cells
-    DWORD   GetVisibleCells( const D3DXVECTOR2& pos , const D3DXVECTOR2& dir ,
-                             float fov , MazeCellRef* plist , DWORD maxlist );
+    DWORD   GetVisibleCells( const D3DXVECTOR2& pos, const D3DXVECTOR2& dir,
+                             float fov, MazeCellRef* plist, DWORD maxlist );
 
     // Get/set max view distance (used by GetVisibleCells)
-    DWORD   GetMaxView() const { return m_dwMaxView; };
-    void    SetMaxView( DWORD max ) { m_dwMaxView = max; };
+    DWORD   GetMaxView() const
+    {
+        return m_dwMaxView;
+    };
+    void    SetMaxView( DWORD max )
+    {
+        m_dwMaxView = max;
+    };
 
     BYTE*  m_pMaze;
 
@@ -126,8 +157,8 @@ protected:
         DWORD           dwListLen;          // Current length of vis list
     };
 
-    void    RecurseCheckCellVis( VisState& state , DWORD x , DWORD y , D3DXVECTOR2 left , D3DXVECTOR2 right );
-    BYTE   ComputeVisFlags( const D3DXVECTOR2& dir , const D3DXVECTOR2& left , const D3DXVECTOR2& right , const D3DXVECTOR2& offset );
+    void    RecurseCheckCellVis( VisState& state, DWORD x, DWORD y, D3DXVECTOR2 left, D3DXVECTOR2 right );
+    BYTE   ComputeVisFlags( const D3DXVECTOR2& dir, const D3DXVECTOR2& left, const D3DXVECTOR2& right, const D3DXVECTOR2& offset );
 
 private:
     CMaze( const CMaze& );

@@ -12,12 +12,12 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 
 // {C8078137-D0BD-444a-9CF3-4CFB2A0B759E}
-static const GUID StressMazeAppGUID = 
+static const GUID StressMazeAppGUID =
 { 0xc8078137, 0xd0bd, 0x444a, { 0x9c, 0xf3, 0x4c, 0xfb, 0x2a, 0xb, 0x75, 0x9e } };
 
 

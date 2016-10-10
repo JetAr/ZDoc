@@ -37,8 +37,8 @@ BOOL CALLBACK       SelectChannelDlgProc(HWND hDlg, UINT message, WPARAM wParam,
 VOID                ErrorMessageBox(LPTSTR sz,...);
 
 //-----------------------------------------------------------------------------
-// index of tuning spaces 
-enum NETWORK_TYPE 
+// index of tuning spaces
+enum NETWORK_TYPE
 {
     ATSC            = 0x0003
 };

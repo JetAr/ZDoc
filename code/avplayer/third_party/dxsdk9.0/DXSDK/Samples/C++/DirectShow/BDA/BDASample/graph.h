@@ -53,35 +53,35 @@ private:
     HRESULT RenderDemux();
 
     HRESULT LoadFilter(
-        REFCLSID clsid, 
+        REFCLSID clsid,
         IBaseFilter** ppFilter,
-        IBaseFilter* pConnectFilter, 
+        IBaseFilter* pConnectFilter,
         BOOL fIsUpstream
-        );
+    );
 
     HRESULT ConnectFilters(
-        IBaseFilter* pFilterUpstream, 
+        IBaseFilter* pFilterUpstream,
         IBaseFilter* pFilterDownstream
-        );
+    );
 
     HRESULT CreateATSCTuneRequest(
         LONG lPhysicalChannel,
-        LONG lMajorChannel, 
+        LONG lMajorChannel,
         LONG lMinorChannel,
         IATSCChannelTuneRequest**   pTuneRequest
-        );
+    );
 
 public:
     bool            m_fGraphBuilt;
     bool            m_fGraphRunning;
     bool            m_fGraphFailure;
 
-    CBDAFilterGraph();   
+    CBDAFilterGraph();
     ~CBDAFilterGraph();
 
     HRESULT BuildGraph(
         NETWORK_TYPE NetworkType
-        );
+    );
 
     HRESULT RunGraph();
     HRESULT StopGraph();
@@ -89,30 +89,39 @@ public:
 
     HRESULT SetVideoWindow(
         HWND hwndMain
-        );
-    
+    );
+
     HRESULT ChangeChannel(
         LONG lPhysicalChannel,
-        LONG lMajorChannel, 
+        LONG lMajorChannel,
         LONG lMinorChannel
-        );
-    
+    );
+
 
     // Adds/removes a DirectShow filter graph from the Running Object Table,
     // allowing GraphEdit to "spy" on a remote filter graph if enabled.
     HRESULT AddGraphToRot(
-        IUnknown *pUnkGraph, 
+        IUnknown *pUnkGraph,
         DWORD *pdwRegister
-        );
+    );
 
     void RemoveGraphFromRot(
         DWORD pdwRegister
-        );
+    );
 
-    LONG GetMajorChannel ()    { return m_lMajorChannel;    };
-    LONG GetPhysicalChannel () { return m_lPhysicalChannel; };
-    LONG GetMinorChannel ()    { return m_lMinorChannel;    };
- };
- 
- 
+    LONG GetMajorChannel ()
+    {
+        return m_lMajorChannel;
+    };
+    LONG GetPhysicalChannel ()
+    {
+        return m_lPhysicalChannel;
+    };
+    LONG GetMinorChannel ()
+    {
+        return m_lMinorChannel;
+    };
+};
+
+
 #endif // GRAPH_H_INCLUDED_

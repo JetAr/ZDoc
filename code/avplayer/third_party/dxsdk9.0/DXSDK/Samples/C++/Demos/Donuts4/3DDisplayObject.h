@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------
 #pragma once
 
-#define APP_S_NOCOLLIDE   S_FALSE   
+#define APP_S_NOCOLLIDE   S_FALSE
 #define APP_S_COLLIDING   MAKE_HRESULT(0,FACILITY_ITF,0x201)
 
 class C3DDisplayObject : public CDisplayObject
@@ -38,7 +38,7 @@ public:
     VOID    GetViewParams( D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt, D3DXVECTOR3* pvUpVec );
 
 public:
-    DWORD           m_dwStyle; 
+    DWORD           m_dwStyle;
     const C3DModel* m_pModel;
 
 public:
@@ -51,7 +51,7 @@ public:
 
         D3DXVECTOR3     m_vAngularVel;  // Angular Velocity in local coords
         D3DXMATRIX      m_mOrientation;
-        D3DXVECTOR3     m_vAngularMomentum;  
+        D3DXVECTOR3     m_vAngularMomentum;
         D3DXMATRIX      m_mInverseWorldInertiaTensor;
         D3DXQUATERNION  m_qOrientation; // Orientation in world coords
 

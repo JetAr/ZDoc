@@ -10,60 +10,60 @@
 namespace libtorrent
 {
 
-	class invariant_access
-	{
-	public:
-		template<class T>
-		static void check_invariant(T const& self)
-		{
-			self.check_invariant();
-		}
-	};
+class invariant_access
+{
+public:
+    template<class T>
+    static void check_invariant(T const& self)
+    {
+        self.check_invariant();
+    }
+};
 
-	template<class T>
-	void check_invariant(T const& x)
-	{
-		invariant_access::check_invariant(x);
-	}
+template<class T>
+void check_invariant(T const& x)
+{
+    invariant_access::check_invariant(x);
+}
 
-	struct invariant_checker {};
+struct invariant_checker {};
 
-	template<class T>
-	struct invariant_checker_impl : invariant_checker
-	{
-		invariant_checker_impl(T const& self_)
-			: self(self_)
-		{
-			try
-			{
-				check_invariant(self);
-			}
-			catch (...)
-			{
-				TORRENT_ASSERT(false);
-			}
-		}
+template<class T>
+struct invariant_checker_impl : invariant_checker
+{
+    invariant_checker_impl(T const& self_)
+        : self(self_)
+    {
+        try
+        {
+            check_invariant(self);
+        }
+        catch (...)
+        {
+            TORRENT_ASSERT(false);
+        }
+    }
 
-		~invariant_checker_impl()
-		{
-			try
-			{
-				check_invariant(self);
-			}
-			catch (...)
-			{
-				TORRENT_ASSERT(false);
-			}
-		}
+    ~invariant_checker_impl()
+    {
+        try
+        {
+            check_invariant(self);
+        }
+        catch (...)
+        {
+            TORRENT_ASSERT(false);
+        }
+    }
 
-		T const& self;
-	};
+    T const& self;
+};
 
-	template<class T>
-	invariant_checker_impl<T> make_invariant_checker(T const& x)
-	{
-		return invariant_checker_impl<T>(x);
-	}
+template<class T>
+invariant_checker_impl<T> make_invariant_checker(T const& x)
+{
+    return invariant_checker_impl<T>(x);
+}
 }
 
 #if defined TORRENT_DEBUG && !defined TORRENT_DISABLE_INVARIANT_CHECKS

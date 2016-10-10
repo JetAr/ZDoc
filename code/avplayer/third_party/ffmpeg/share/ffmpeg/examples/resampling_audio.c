@@ -34,9 +34,12 @@ static int get_format_from_sample_fmt(const char **fmt,
                                       enum AVSampleFormat sample_fmt)
 {
     int i;
-    struct sample_fmt_entry {
-        enum AVSampleFormat sample_fmt; const char *fmt_be, *fmt_le;
-    } sample_fmt_entries[] = {
+    struct sample_fmt_entry
+    {
+        enum AVSampleFormat sample_fmt;
+        const char *fmt_be, *fmt_le;
+    } sample_fmt_entries[] =
+    {
         { AV_SAMPLE_FMT_U8,  "u8",    "u8"    },
         { AV_SAMPLE_FMT_S16, "s16be", "s16le" },
         { AV_SAMPLE_FMT_S32, "s32be", "s32le" },
@@ -45,9 +48,11 @@ static int get_format_from_sample_fmt(const char **fmt,
     };
     *fmt = NULL;
 
-    for (i = 0; i < FF_ARRAY_ELEMS(sample_fmt_entries); i++) {
+    for (i = 0; i < FF_ARRAY_ELEMS(sample_fmt_entries); i++)
+    {
         struct sample_fmt_entry *entry = &sample_fmt_entries[i];
-        if (sample_fmt == entry->sample_fmt) {
+        if (sample_fmt == entry->sample_fmt)
+        {
             *fmt = AV_NE(entry->fmt_be, entry->fmt_le);
             return 0;
         }
@@ -69,7 +74,8 @@ void fill_samples(double *dst, int nb_samples, int nb_channels, int sample_rate,
     const double c = 2 * M_PI * 440.0;
 
     /* generate sin tone with 440Hz frequency and duplicated channels */
-    for (i = 0; i < nb_samples; i++) {
+    for (i = 0; i < nb_samples; i++)
+    {
         *dstp = sin(c * *t);
         for (j = 1; j < nb_channels; j++)
             dstp[j] = dstp[0];
@@ -79,7 +85,7 @@ void fill_samples(double *dst, int nb_samples, int nb_channels, int sample_rate,
 }
 
 int alloc_samples_array_and_data(uint8_t ***data, int *linesize, int nb_channels,
-                                    int nb_samples, enum AVSampleFormat sample_fmt, int align)
+                                 int nb_samples, enum AVSampleFormat sample_fmt, int align)
 {
     int nb_planes = av_sample_fmt_is_planar(sample_fmt) ? nb_channels : 1;
 
@@ -107,25 +113,28 @@ int main(int argc, char **argv)
     double t;
     int ret;
 
-    if (argc != 2) {
+    if (argc != 2)
+    {
         fprintf(stderr, "Usage: %s output_file\n"
                 "API example program to show how to resample an audio stream with libswresample.\n"
                 "This program generates a series of audio frames, resamples them to a specified "
                 "output format and rate and saves them to an output file named output_file.\n",
-            argv[0]);
+                argv[0]);
         exit(1);
     }
     dst_filename = argv[1];
 
     dst_file = fopen(dst_filename, "wb");
-    if (!dst_file) {
+    if (!dst_file)
+    {
         fprintf(stderr, "Could not open destination file %s\n", dst_filename);
         exit(1);
     }
 
     /* create resampler context */
     swr_ctx = swr_alloc();
-    if (!swr_ctx) {
+    if (!swr_ctx)
+    {
         fprintf(stderr, "Could not allocate resampler context\n");
         ret = AVERROR(ENOMEM);
         goto end;
@@ -141,7 +150,8 @@ int main(int argc, char **argv)
     av_opt_set_sample_fmt(swr_ctx, "out_sample_fmt", dst_sample_fmt, 0);
 
     /* initialize the resampling context */
-    if ((ret = swr_init(swr_ctx)) < 0) {
+    if ((ret = swr_init(swr_ctx)) < 0)
+    {
         fprintf(stderr, "Failed to initialize the resampling context\n");
         goto end;
     }
@@ -151,7 +161,8 @@ int main(int argc, char **argv)
     src_nb_channels = av_get_channel_layout_nb_channels(src_ch_layout);
     ret = alloc_samples_array_and_data(&src_data, &src_linesize, src_nb_channels,
                                        src_nb_samples, src_sample_fmt, 0);
-    if (ret < 0) {
+    if (ret < 0)
+    {
         fprintf(stderr, "Could not allocate source samples\n");
         goto end;
     }
@@ -160,26 +171,29 @@ int main(int argc, char **argv)
      * ensuring that the output buffer will contain at least all the
      * converted input samples */
     max_dst_nb_samples = dst_nb_samples =
-        av_rescale_rnd(src_nb_samples, dst_rate, src_rate, AV_ROUND_UP);
+                             av_rescale_rnd(src_nb_samples, dst_rate, src_rate, AV_ROUND_UP);
 
     /* buffer is going to be directly written to a rawaudio file, no alignment */
     dst_nb_channels = av_get_channel_layout_nb_channels(dst_ch_layout);
     ret = alloc_samples_array_and_data(&dst_data, &dst_linesize, dst_nb_channels,
                                        dst_nb_samples, dst_sample_fmt, 0);
-    if (ret < 0) {
+    if (ret < 0)
+    {
         fprintf(stderr, "Could not allocate destination samples\n");
         goto end;
     }
 
     t = 0;
-    do {
+    do
+    {
         /* generate synthetic audio */
         fill_samples((double *)src_data[0], src_nb_samples, src_nb_channels, src_rate, &t);
 
         /* compute destination number of samples */
         dst_nb_samples = av_rescale_rnd(swr_get_delay(swr_ctx, src_rate) +
                                         src_nb_samples, dst_rate, src_rate, AV_ROUND_UP);
-        if (dst_nb_samples > max_dst_nb_samples) {
+        if (dst_nb_samples > max_dst_nb_samples)
+        {
             av_free(dst_data[0]);
             ret = av_samples_alloc(dst_data, &dst_linesize, dst_nb_channels,
                                    dst_nb_samples, dst_sample_fmt, 1);
@@ -190,15 +204,17 @@ int main(int argc, char **argv)
 
         /* convert to destination format */
         ret = swr_convert(swr_ctx, dst_data, dst_nb_samples, (const uint8_t **)src_data, src_nb_samples);
-        if (ret < 0) {
+        if (ret < 0)
+        {
             fprintf(stderr, "Error while converting\n");
             goto end;
         }
         dst_bufsize = av_samples_get_buffer_size(&dst_linesize, dst_nb_channels,
-                                                 ret, dst_sample_fmt, 1);
+                      ret, dst_sample_fmt, 1);
         printf("t:%f in:%d out:%d\n", t, src_nb_samples, ret);
         fwrite(dst_data[0], 1, dst_bufsize, dst_file);
-    } while (t < 10);
+    }
+    while (t < 10);
 
     if ((ret = get_format_from_sample_fmt(&fmt, dst_sample_fmt)) < 0)
         goto end;

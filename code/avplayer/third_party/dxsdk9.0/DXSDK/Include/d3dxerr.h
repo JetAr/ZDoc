@@ -1,14 +1,14 @@
 ﻿//----------------------------------------------------------------------
-//                                                                      
-//   d3dxerr.h --  0xC code definitions for the D3DX API                
-//                                                                      
-//   Copyright (c) Microsoft Corp. All rights reserved.      
-//                                                                      
+//
+//   d3dxerr.h --  0xC code definitions for the D3DX API
+//
+//   Copyright (c) Microsoft Corp. All rights reserved.
+//
 //----------------------------------------------------------------------
 #ifndef __D3DXERR_H__
 #define __D3DXERR_H__
 
-// 
+//
 //
 //  Values are 32 bit values layed out as follows:
 //
@@ -48,7 +48,7 @@
 // MessageText:
 //
 //  Out of memory.
-// 
+//
 #define D3DXERR_NOMEMORY    ((HRESULT)0xC8770BB8L)
 
 
@@ -58,7 +58,7 @@
 // MessageText:
 //
 //  A NULL pointer was passed as a parameter.
-// 
+//
 #define D3DXERR_NULLPOINTER    ((HRESULT)0xC8770BB9L)
 
 
@@ -68,7 +68,7 @@
 // MessageText:
 //
 //  The Device Index passed in is invalid.
-// 
+//
 #define D3DXERR_INVALIDD3DXDEVICEINDEX    ((HRESULT)0xC8770BBAL)
 
 
@@ -78,7 +78,7 @@
 // MessageText:
 //
 //  DirectDraw has not been created.
-// 
+//
 #define D3DXERR_NODIRECTDRAWAVAILABLE    ((HRESULT)0xC8770BBBL)
 
 
@@ -88,7 +88,7 @@
 // MessageText:
 //
 //  Direct3D has not been created.
-// 
+//
 #define D3DXERR_NODIRECT3DAVAILABLE    ((HRESULT)0xC8770BBCL)
 
 
@@ -98,7 +98,7 @@
 // MessageText:
 //
 //  Direct3D device has not been created.
-// 
+//
 #define D3DXERR_NODIRECT3DDEVICEAVAILABLE    ((HRESULT)0xC8770BBDL)
 
 
@@ -108,7 +108,7 @@
 // MessageText:
 //
 //  Primary surface has not been created.
-// 
+//
 #define D3DXERR_NOPRIMARYAVAILABLE    ((HRESULT)0xC8770BBEL)
 
 
@@ -118,7 +118,7 @@
 // MessageText:
 //
 //  Z buffer has not been created.
-// 
+//
 #define D3DXERR_NOZBUFFERAVAILABLE    ((HRESULT)0xC8770BBFL)
 
 
@@ -128,7 +128,7 @@
 // MessageText:
 //
 //  Backbuffer has not been created.
-// 
+//
 #define D3DXERR_NOBACKBUFFERAVAILABLE    ((HRESULT)0xC8770BC0L)
 
 
@@ -138,7 +138,7 @@
 // MessageText:
 //
 //  Failed to update caps database after changing display mode.
-// 
+//
 #define D3DXERR_COULDNTUPDATECAPS    ((HRESULT)0xC8770BC1L)
 
 
@@ -148,7 +148,7 @@
 // MessageText:
 //
 //  Could not create Z buffer.
-// 
+//
 #define D3DXERR_NOZBUFFER    ((HRESULT)0xC8770BC2L)
 
 
@@ -158,7 +158,7 @@
 // MessageText:
 //
 //  Display mode is not valid.
-// 
+//
 #define D3DXERR_INVALIDMODE    ((HRESULT)0xC8770BC3L)
 
 
@@ -168,7 +168,7 @@
 // MessageText:
 //
 //  One or more of the parameters passed is invalid.
-// 
+//
 #define D3DXERR_INVALIDPARAMETER    ((HRESULT)0xC8770BC4L)
 
 
@@ -178,7 +178,7 @@
 // MessageText:
 //
 //  D3DX failed to initialize itself.
-// 
+//
 #define D3DXERR_INITFAILED    ((HRESULT)0xC8770BC5L)
 
 
@@ -188,7 +188,7 @@
 // MessageText:
 //
 //  D3DX failed to start up.
-// 
+//
 #define D3DXERR_STARTUPFAILED    ((HRESULT)0xC8770BC6L)
 
 
@@ -198,7 +198,7 @@
 // MessageText:
 //
 //  D3DXInitialize() must be called first.
-// 
+//
 #define D3DXERR_D3DXNOTSTARTEDYET    ((HRESULT)0xC8770BC7L)
 
 
@@ -208,7 +208,7 @@
 // MessageText:
 //
 //  D3DX is not initialized yet.
-// 
+//
 #define D3DXERR_NOTINITIALIZED    ((HRESULT)0xC8770BC8L)
 
 
@@ -218,7 +218,7 @@
 // MessageText:
 //
 //  Failed to render text to the surface.
-// 
+//
 #define D3DXERR_FAILEDDRAWTEXT    ((HRESULT)0xC8770BC9L)
 
 
@@ -228,7 +228,7 @@
 // MessageText:
 //
 //  Bad D3DX context.
-// 
+//
 #define D3DXERR_BADD3DXCONTEXT    ((HRESULT)0xC8770BCAL)
 
 
@@ -238,7 +238,7 @@
 // MessageText:
 //
 //  The requested device capabilities are not supported.
-// 
+//
 #define D3DXERR_CAPSNOTSUPPORTED    ((HRESULT)0xC8770BCBL)
 
 
@@ -248,7 +248,7 @@
 // MessageText:
 //
 //  The image file format is unrecognized.
-// 
+//
 #define D3DXERR_UNSUPPORTEDFILEFORMAT    ((HRESULT)0xC8770BCCL)
 
 
@@ -258,7 +258,7 @@
 // MessageText:
 //
 //  The image file loading library error.
-// 
+//
 #define D3DXERR_IFLERROR    ((HRESULT)0xC8770BCDL)
 
 
@@ -268,7 +268,7 @@
 // MessageText:
 //
 //  Could not obtain device caps.
-// 
+//
 #define D3DXERR_FAILEDGETCAPS    ((HRESULT)0xC8770BCEL)
 
 
@@ -278,7 +278,7 @@
 // MessageText:
 //
 //  Resize does not work for full-screen.
-// 
+//
 #define D3DXERR_CANNOTRESIZEFULLSCREEN    ((HRESULT)0xC8770BCFL)
 
 
@@ -288,7 +288,7 @@
 // MessageText:
 //
 //  Resize does not work for non-windowed contexts.
-// 
+//
 #define D3DXERR_CANNOTRESIZENONWINDOWED    ((HRESULT)0xC8770BD0L)
 
 
@@ -298,7 +298,7 @@
 // MessageText:
 //
 //  Front buffer already exists.
-// 
+//
 #define D3DXERR_FRONTBUFFERALREADYEXISTS    ((HRESULT)0xC8770BD1L)
 
 
@@ -308,7 +308,7 @@
 // MessageText:
 //
 //  The app is using the primary in full-screen mode.
-// 
+//
 #define D3DXERR_FULLSCREENPRIMARYEXISTS    ((HRESULT)0xC8770BD2L)
 
 
@@ -318,7 +318,7 @@
 // MessageText:
 //
 //  Could not get device context.
-// 
+//
 #define D3DXERR_GETDCFAILED    ((HRESULT)0xC8770BD3L)
 
 
@@ -328,7 +328,7 @@
 // MessageText:
 //
 //  Could not bitBlt.
-// 
+//
 #define D3DXERR_BITBLTFAILED    ((HRESULT)0xC8770BD4L)
 
 
@@ -338,7 +338,7 @@
 // MessageText:
 //
 //  There is no surface backing up this texture.
-// 
+//
 #define D3DXERR_NOTEXTURE    ((HRESULT)0xC8770BD5L)
 
 
@@ -348,7 +348,7 @@
 // MessageText:
 //
 //  There is no such miplevel for this surface.
-// 
+//
 #define D3DXERR_MIPLEVELABSENT    ((HRESULT)0xC8770BD6L)
 
 
@@ -358,7 +358,7 @@
 // MessageText:
 //
 //  The surface is not paletted.
-// 
+//
 #define D3DXERR_SURFACENOTPALETTED    ((HRESULT)0xC8770BD7L)
 
 
@@ -368,7 +368,7 @@
 // MessageText:
 //
 //  An error occured while enumerating surface formats.
-// 
+//
 #define D3DXERR_ENUMFORMATSFAILED    ((HRESULT)0xC8770BD8L)
 
 
@@ -378,7 +378,7 @@
 // MessageText:
 //
 //  D3DX only supports color depths of 16 bit or greater.
-// 
+//
 #define D3DXERR_COLORDEPTHTOOLOW    ((HRESULT)0xC8770BD9L)
 
 
@@ -388,7 +388,7 @@
 // MessageText:
 //
 //  The file format is invalid.
-// 
+//
 #define D3DXERR_INVALIDFILEFORMAT    ((HRESULT)0xC8770BDAL)
 
 
@@ -398,7 +398,7 @@
 // MessageText:
 //
 //  No suitable match found.
-// 
+//
 #define D3DXERR_NOMATCHFOUND    ((HRESULT)0xC8770BDBL)
 
 

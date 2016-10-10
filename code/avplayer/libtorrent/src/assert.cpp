@@ -51,39 +51,39 @@ POSSIBILITY OF SUCH DAMAGE.
 std::string demangle(char const* name)
 {
 // in case this string comes
-	// this is needed on linux
-	char const* start = strchr(name, '(');
-	if (start != 0)
-	{
-		++start;
-	}
-	else
-	{
-		// this is needed on macos x
-		start = strstr(name, "0x");
-		if (start != 0)
-		{
-			start = strchr(start, ' ');
-			if (start != 0) ++start;
-			else start = name;
-		}
-		else start = name;
-	}
+    // this is needed on linux
+    char const* start = strchr(name, '(');
+    if (start != 0)
+    {
+        ++start;
+    }
+    else
+    {
+        // this is needed on macos x
+        start = strstr(name, "0x");
+        if (start != 0)
+        {
+            start = strchr(start, ' ');
+            if (start != 0) ++start;
+            else start = name;
+        }
+        else start = name;
+    }
 
-	char const* end = strchr(start, '+');
-	if (end) while (*(end-1) == ' ') --end;
+    char const* end = strchr(start, '+');
+    if (end) while (*(end-1) == ' ') --end;
 
-	std::string in;
-	if (end == 0) in.assign(start);
-	else in.assign(start, end);
+    std::string in;
+    if (end == 0) in.assign(start);
+    else in.assign(start, end);
 
-	size_t len;
-	int status;
-	char* unmangled = ::abi::__cxa_demangle(in.c_str(), 0, &len, &status);
-	if (unmangled == 0) return in;
-	std::string ret(unmangled);
-	free(unmangled);
-	return ret;
+    size_t len;
+    int status;
+    char* unmangled = ::abi::__cxa_demangle(in.c_str(), 0, &len, &status);
+    if (unmangled == 0) return in;
+    std::string ret(unmangled);
+    free(unmangled);
+    return ret;
 }
 #elif defined WIN32
 
@@ -93,16 +93,19 @@ std::string demangle(char const* name)
 #include "windows.h"
 #include "dbghelp.h"
 
-std::string demangle(char const* name) 
-{ 
-	char demangled_name[256];
-	if (UnDecorateSymbolName(name, demangled_name, sizeof(demangled_name), UNDNAME_NO_THROW_SIGNATURES) == 0)
-		demangled_name[0] = 0;
-	return demangled_name;
+std::string demangle(char const* name)
+{
+    char demangled_name[256];
+    if (UnDecorateSymbolName(name, demangled_name, sizeof(demangled_name), UNDNAME_NO_THROW_SIGNATURES) == 0)
+        demangled_name[0] = 0;
+    return demangled_name;
 }
 
 #else
-std::string demangle(char const* name) { return name; }
+std::string demangle(char const* name)
+{
+    return name;
+}
 #endif
 
 #include <stdlib.h>
@@ -116,19 +119,19 @@ std::string demangle(char const* name) { return name; }
 
 TORRENT_EXPORT void print_backtrace(char* out, int len, int max_depth)
 {
-	void* stack[50];
-	int size = backtrace(stack, 50);
-	char** symbols = backtrace_symbols(stack, size);
+    void* stack[50];
+    int size = backtrace(stack, 50);
+    char** symbols = backtrace_symbols(stack, size);
 
-	for (int i = 1; i < size && len > 0; ++i)
-	{
-		int ret = snprintf(out, len, "%d: %s\n", i, demangle(symbols[i]).c_str());
-		out += ret;
-		len -= ret;
-		if (i - 1 == max_depth && max_depth > 0) break;
-	}
+    for (int i = 1; i < size && len > 0; ++i)
+    {
+        int ret = snprintf(out, len, "%d: %s\n", i, demangle(symbols[i]).c_str());
+        out += ret;
+        len -= ret;
+        if (i - 1 == max_depth && max_depth > 0) break;
+    }
 
-	free(symbols);
+    free(symbols);
 }
 
 // visual studio 9 and up appears to support this
@@ -145,54 +148,54 @@ TORRENT_EXPORT void print_backtrace(char* out, int len, int max_depth)
 
 TORRENT_EXPORT void print_backtrace(char* out, int len, int max_depth)
 {
-	typedef USHORT (WINAPI *RtlCaptureStackBackTrace_t)(
-		__in ULONG FramesToSkip,
-		__in ULONG FramesToCapture,
-		__out PVOID *BackTrace,
-		__out_opt PULONG BackTraceHash);
+    typedef USHORT (WINAPI *RtlCaptureStackBackTrace_t)(
+        __in ULONG FramesToSkip,
+        __in ULONG FramesToCapture,
+        __out PVOID *BackTrace,
+        __out_opt PULONG BackTraceHash);
 
-	static RtlCaptureStackBackTrace_t RtlCaptureStackBackTrace = 0;
+    static RtlCaptureStackBackTrace_t RtlCaptureStackBackTrace = 0;
 
-	if (RtlCaptureStackBackTrace == 0)
-	{
-		// we don't actually have to free this library, everyone has it loaded
-		HMODULE lib = LoadLibrary(TEXT("kernel32.dll"));
-		RtlCaptureStackBackTrace = (RtlCaptureStackBackTrace_t)GetProcAddress(lib, "RtlCaptureStackBackTrace");
-		if (RtlCaptureStackBackTrace == 0)
-		{
-			out[0] = 0;
-			return;
-		}
-	}
+    if (RtlCaptureStackBackTrace == 0)
+    {
+        // we don't actually have to free this library, everyone has it loaded
+        HMODULE lib = LoadLibrary(TEXT("kernel32.dll"));
+        RtlCaptureStackBackTrace = (RtlCaptureStackBackTrace_t)GetProcAddress(lib, "RtlCaptureStackBackTrace");
+        if (RtlCaptureStackBackTrace == 0)
+        {
+            out[0] = 0;
+            return;
+        }
+    }
 
-	int i;
-	void* stack[50];
-	int size = CaptureStackBackTrace(0, 50, stack, 0);
+    int i;
+    void* stack[50];
+    int size = CaptureStackBackTrace(0, 50, stack, 0);
 
-	SYMBOL_INFO* symbol = (SYMBOL_INFO*)calloc(sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR), 1);
-	symbol->MaxNameLen = MAX_SYM_NAME;
-	symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+    SYMBOL_INFO* symbol = (SYMBOL_INFO*)calloc(sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR), 1);
+    symbol->MaxNameLen = MAX_SYM_NAME;
+    symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 
-	HANDLE p = GetCurrentProcess();
-	static bool sym_initialized = false;
-	if (!sym_initialized)
-	{
-		sym_initialized = true;
-		SymInitialize(p, NULL, true);
-	}
-	for (i = 0; i < size && len > 0; ++i)
-	{
-		int ret;
-		if (SymFromAddr(p, uintptr_t(stack[i]), 0, symbol))
-			ret = snprintf(out, len, "%d: %s\n", i, symbol->Name);
-		else
-			ret = snprintf(out, len, "%d: <unknown>\n", i);
+    HANDLE p = GetCurrentProcess();
+    static bool sym_initialized = false;
+    if (!sym_initialized)
+    {
+        sym_initialized = true;
+        SymInitialize(p, NULL, true);
+    }
+    for (i = 0; i < size && len > 0; ++i)
+    {
+        int ret;
+        if (SymFromAddr(p, uintptr_t(stack[i]), 0, symbol))
+            ret = snprintf(out, len, "%d: %s\n", i, symbol->Name);
+        else
+            ret = snprintf(out, len, "%d: <unknown>\n", i);
 
-		out += ret;
-		len -= ret;
-		if (i == max_depth && max_depth > 0) break;
-	}
-	free(symbol);
+        out += ret;
+        len -= ret;
+        if (i == max_depth && max_depth > 0) break;
+    }
+    free(symbol);
 }
 
 #else
@@ -206,42 +209,42 @@ char const* libtorrent_assert_log = "asserts.log";
 #endif
 
 TORRENT_EXPORT void assert_fail(char const* expr, int line, char const* file
-	, char const* function, char const* value)
+                                , char const* function, char const* value)
 {
 #if TORRENT_PRODUCTION_ASSERTS
-	FILE* out = fopen(libtorrent_assert_log, "a+");
-	if (out == 0) out = stderr;
+    FILE* out = fopen(libtorrent_assert_log, "a+");
+    if (out == 0) out = stderr;
 #else
-	FILE* out = stderr;
+    FILE* out = stderr;
 #endif
 
-	char stack[8192];
-	print_backtrace(stack, sizeof(stack), 0);
+    char stack[8192];
+    print_backtrace(stack, sizeof(stack), 0);
 
-	fprintf(out, "assertion failed. Please file a bugreport at "
-		"http://code.google.com/p/libtorrent/issues\n"
-		"Please include the following information:\n\n"
-		"version: " LIBTORRENT_VERSION "\n"
-		"%s\n"
-		"file: '%s'\n"
-		"line: %d\n"
-		"function: %s\n"
-		"expression: %s\n"
-		"%s%s\n"
-		"stack:\n"
-		"%s\n"
-		, LIBTORRENT_REVISION, file, line, function, expr
-		, value ? value : "", value ? "\n" : ""
-		, stack);
+    fprintf(out, "assertion failed. Please file a bugreport at "
+            "http://code.google.com/p/libtorrent/issues\n"
+            "Please include the following information:\n\n"
+            "version: " LIBTORRENT_VERSION "\n"
+            "%s\n"
+            "file: '%s'\n"
+            "line: %d\n"
+            "function: %s\n"
+            "expression: %s\n"
+            "%s%s\n"
+            "stack:\n"
+            "%s\n"
+            , LIBTORRENT_REVISION, file, line, function, expr
+            , value ? value : "", value ? "\n" : ""
+            , stack);
 
-	// if production asserts are defined, don't abort, just print the error
+    // if production asserts are defined, don't abort, just print the error
 #if TORRENT_PRODUCTION_ASSERTS
-	if (out != stderr) fclose(out);
+    if (out != stderr) fclose(out);
 #else
- 	// send SIGINT to the current process
- 	// to break into the debugger
- 	raise(SIGINT);
- 	abort();
+    // send SIGINT to the current process
+    // to break into the debugger
+    raise(SIGINT);
+    abort();
 #endif
 }
 

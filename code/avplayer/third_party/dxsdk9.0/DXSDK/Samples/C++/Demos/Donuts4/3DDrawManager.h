@@ -13,7 +13,7 @@
 
 //-----------------------------------------------------------------------------
 // Name: class C3DDrawManager
-// Desc: 
+// Desc:
 //-----------------------------------------------------------------------------
 class C3DDrawManager
 {
@@ -23,12 +23,12 @@ private:
         D3DXVECTOR3 p;
         DWORD		c;
     };
-    #define DRAW_LINE_FVF (D3DFVF_XYZ|D3DFVF_DIFFUSE)
+#define DRAW_LINE_FVF (D3DFVF_XYZ|D3DFVF_DIFFUSE)
 
     struct DRAW_POINT
     {
         D3DXVECTOR3 vPos;
-        float       fSize;        
+        float       fSize;
         DWORD       dwColor;
         DWORD       dwID;
         bool        bValid;
@@ -66,7 +66,7 @@ public:
 public:
     DRAW_POINT m_aPtList[MAX_POINTS];
     DRAW_LINE  m_aLineList[MAX_LINES];
-	LPDIRECT3DVERTEXBUFFER9 m_pLineVB;
+    LPDIRECT3DVERTEXBUFFER9 m_pLineVB;
     DWORD      m_dwNumLines;
 
     ID3DXMesh* m_pSphere;

@@ -235,7 +235,8 @@ DECLARE_INTERFACE_(IBaseVideoMixer, IUnknown)
 
 // Used for true colour images that also have a palette
 
-typedef struct tag_TRUECOLORINFO {
+typedef struct tag_TRUECOLORINFO
+{
     DWORD   dwBitMasks[iMASK_COLORS];
     RGBQUAD bmiColors[iPALETTE_COLORS];
 } TRUECOLORINFO;
@@ -255,7 +256,8 @@ typedef struct tag_TRUECOLORINFO {
 // request that the video be placed in a particular area of the buffers it
 // supplies in which case it will call QueryAccept with a non empty target
 
-typedef struct tagVIDEOINFOHEADER {
+typedef struct tagVIDEOINFOHEADER
+{
 
     RECT            rcSource;          // The bit we really want to use
     RECT            rcTarget;          // Where the video should go
@@ -299,7 +301,8 @@ typedef struct tagVIDEOINFOHEADER {
 // has a normal biSize == sizeof(BITMAPINFOHEADER) !
 // !!! WARNING !!!
 
-typedef struct tagVIDEOINFO {
+typedef struct tagVIDEOINFO
+{
 
     RECT            rcSource;          // The bit we really want to use
     RECT            rcTarget;          // Where the video should go
@@ -309,7 +312,8 @@ typedef struct tagVIDEOINFO {
 
     BITMAPINFOHEADER bmiHeader;
 
-    union {
+    union
+    {
         RGBQUAD         bmiColors[iPALETTE_COLORS];     // Colour palette
         DWORD           dwBitMasks[iMASK_COLORS];       // True colour masks
         TRUECOLORINFO   TrueColorInfo;                  // Both of the above
@@ -374,14 +378,15 @@ typedef struct tagVIDEOINFO {
 // quantization matrices associated with the first sequence header in the
 // stream so is a maximum of 140 bytes long.
 
-typedef struct tagMPEG1VIDEOINFO {
+typedef struct tagMPEG1VIDEOINFO
+{
 
     VIDEOINFOHEADER hdr;                    // Compatible with VIDEOINFO
     DWORD           dwStartTimeCode;        // 25-bit Group of pictures time code
-                                            // at start of data
+    // at start of data
     DWORD           cbSequenceHeader;       // Length in bytes of bSequenceHeader
     BYTE            bSequenceHeader[1];     // Sequence header including
-                                            // quantization matrices if any
+    // quantization matrices if any
 } MPEG1VIDEOINFO;
 
 #define MAX_SIZE_MPEG1_SEQUENCE_INFO 140
@@ -397,7 +402,8 @@ typedef struct tagMPEG1VIDEOINFO {
 // dwActiveWidth is currently set to 720 for all formats (but could change for HDTV)
 // dwActiveHeight is 483 for NTSC and 575 for PAL/SECAM  (but could change for HDTV)
 
-typedef struct tagAnalogVideoInfo {
+typedef struct tagAnalogVideoInfo
+{
     RECT            rcSource;           // Width max is 720, height varies w/ TransmissionStd
     RECT            rcTarget;           // Where the video should go
     DWORD           dwActiveWidth;      // Always 720 (CCIR-601 active samples per line)
@@ -408,14 +414,15 @@ typedef struct tagAnalogVideoInfo {
 //
 // AM_KSPROPSETID_FrameStep property set definitions
 //
-typedef enum {
-        //  Step
-	AM_PROPERTY_FRAMESTEP_STEP   = 0x01,
-	AM_PROPERTY_FRAMESTEP_CANCEL = 0x02,
+typedef enum
+{
+    //  Step
+    AM_PROPERTY_FRAMESTEP_STEP   = 0x01,
+    AM_PROPERTY_FRAMESTEP_CANCEL = 0x02,
 
-        //  S_OK for these 2 means we can - S_FALSE if we can't
-        AM_PROPERTY_FRAMESTEP_CANSTEP = 0x03,
-        AM_PROPERTY_FRAMESTEP_CANSTEPMULTIPLE = 0x04
+    //  S_OK for these 2 means we can - S_FALSE if we can't
+    AM_PROPERTY_FRAMESTEP_CANSTEP = 0x03,
+    AM_PROPERTY_FRAMESTEP_CANSTEPMULTIPLE = 0x04
 } AM_PROPERTY_FRAMESTEP;
 
 typedef struct _AM_FRAMESTEP_STEP

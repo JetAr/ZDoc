@@ -1,8 +1,8 @@
 ﻿// ---------------------------------------------------------------------------
 // File: Transviewer.h
-// 
+//
 // Desc: Main include file for the project.
-//      
+//
 // Copyright (c) 2000-2002 Microsoft Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -44,7 +44,10 @@ const long WM_ERRORLOG = WM_APP + 3;   // Sent by the error log object
 struct hresult_exception
 {
     HRESULT hr;
-    hresult_exception(HRESULT hr) { this->hr = hr; }
+    hresult_exception(HRESULT hr)
+    {
+        this->hr = hr;
+    }
 };
 
 

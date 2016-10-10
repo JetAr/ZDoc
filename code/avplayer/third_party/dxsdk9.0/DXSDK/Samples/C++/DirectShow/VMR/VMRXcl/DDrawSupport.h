@@ -16,7 +16,8 @@
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -24,7 +25,7 @@ __inline void RELEASE( T* &p )
 #endif
 
 #ifndef CHECK_HR
-    #define CHECK_HR(expr) if (FAILED(expr)) {        \
+#define CHECK_HR(expr) if (FAILED(expr)) {        \
         DbgLog((LOG_ERROR, 0,                         \
                 TEXT("FAILED: %s\nat Line:%d of %s"), \
                 TEXT(#expr), __LINE__, TEXT(__FILE__) ));__leave; }
@@ -40,7 +41,8 @@ __inline void RELEASE( T* &p )
 //
 //  Class provides basic DDraw functionality
 //----------------------------------------------------------------------------
-class CDDrawObject {
+class CDDrawObject
+{
 
 public:
     CDDrawObject() :
@@ -54,9 +56,18 @@ public:
 
     HRESULT Initialize(HWND hwndApp,  TCHAR *achErrorMsg, UINT uintLen );
     HRESULT Terminate();
-    LPDIRECTDRAW7 GetDDObj() {return m_pDDObject;};
-    LPDIRECTDRAWSURFACE7 GetFB() {return m_pPrimary;};
-    LPDIRECTDRAWSURFACE7 GetBB() {return m_pBackBuff;};
+    LPDIRECTDRAW7 GetDDObj()
+    {
+        return m_pDDObject;
+    };
+    LPDIRECTDRAWSURFACE7 GetFB()
+    {
+        return m_pPrimary;
+    };
+    LPDIRECTDRAWSURFACE7 GetBB()
+    {
+        return m_pBackBuff;
+    };
 
 private:
     HWND                    m_hwndApp;

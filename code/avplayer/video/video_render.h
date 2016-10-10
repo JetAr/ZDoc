@@ -39,27 +39,30 @@
 class video_render
 {
 public:
-   video_render() {}
-   virtual ~video_render() {}
+    video_render() {}
+    virtual ~video_render() {}
 
 public:
-   // 初始render.
-   virtual bool init_render(void* ctx, int w, int h, int pix_fmt) = 0;
+    // 初始render.
+    virtual bool init_render(void* ctx, int w, int h, int pix_fmt) = 0;
 
-   // 渲染一帧.
-   virtual bool render_one_frame(AVFrame* data, int pix_fmt) = 0;
+    // 渲染一帧.
+    virtual bool render_one_frame(AVFrame* data, int pix_fmt) = 0;
 
-   // 调整大小.
-   virtual void re_size(int width, int height) = 0;
+    // 调整大小.
+    virtual void re_size(int width, int height) = 0;
 
-   // 设置宽高比.
-   virtual void aspect_ratio(int srcw, int srch, bool enable_aspect) = 0;
+    // 设置宽高比.
+    virtual void aspect_ratio(int srcw, int srch, bool enable_aspect) = 0;
 
-   // 是否使用overlay模式渲染.
-   virtual bool use_overlay() { return false; }
+    // 是否使用overlay模式渲染.
+    virtual bool use_overlay()
+    {
+        return false;
+    }
 
-   // 撤销render.
-   virtual void destory_render() = 0;
+    // 撤销render.
+    virtual void destory_render() = 0;
 };
 
 #endif // __VIDEO_RENDER_H__

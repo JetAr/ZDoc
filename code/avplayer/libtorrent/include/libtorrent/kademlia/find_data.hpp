@@ -47,7 +47,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <boost/function/function1.hpp>
 #include <boost/function/function2.hpp>
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 typedef std::vector<char> packet_t;
@@ -62,51 +64,60 @@ class node_impl;
 class find_data : public traversal_algorithm
 {
 public:
-	typedef boost::function<void(std::vector<tcp::endpoint> const&)> data_callback;
-	typedef boost::function<void(std::vector<std::pair<node_entry, std::string> > const&, bool)> nodes_callback;
+    typedef boost::function<void(std::vector<tcp::endpoint> const&)> data_callback;
+    typedef boost::function<void(std::vector<std::pair<node_entry, std::string> > const&, bool)> nodes_callback;
 
-	void got_peers(std::vector<tcp::endpoint> const& peers);
-	void got_write_token(node_id const& n, std::string const& write_token)
-	{ m_write_tokens[n] = write_token; }
+    void got_peers(std::vector<tcp::endpoint> const& peers);
+    void got_write_token(node_id const& n, std::string const& write_token)
+    {
+        m_write_tokens[n] = write_token;
+    }
 
-	find_data(node_impl& node, node_id target
-		, data_callback const& dcallback
-		, nodes_callback const& ncallback
-		, bool noseeds);
+    find_data(node_impl& node, node_id target
+              , data_callback const& dcallback
+              , nodes_callback const& ncallback
+              , bool noseeds);
 
-	virtual char const* name() const { return "get_peers"; }
+    virtual char const* name() const
+    {
+        return "get_peers";
+    }
 
-	node_id const target() const { return m_target; }
+    node_id const target() const
+    {
+        return m_target;
+    }
 
 protected:
 
-	void done();
-	observer_ptr new_observer(void* ptr, udp::endpoint const& ep, node_id const& id);
-	virtual bool invoke(observer_ptr o);
+    void done();
+    observer_ptr new_observer(void* ptr, udp::endpoint const& ep, node_id const& id);
+    virtual bool invoke(observer_ptr o);
 
 private:
 
-	data_callback m_data_callback;
-	nodes_callback m_nodes_callback;
-	std::map<node_id, std::string> m_write_tokens;
-	node_id const m_target;
-	bool m_done:1;
-	bool m_got_peers:1;
-	bool m_noseeds:1;
+    data_callback m_data_callback;
+    nodes_callback m_nodes_callback;
+    std::map<node_id, std::string> m_write_tokens;
+    node_id const m_target;
+    bool m_done:1;
+    bool m_got_peers:1;
+    bool m_noseeds:1;
 };
 
 class find_data_observer : public observer
 {
 public:
-	find_data_observer(
-		boost::intrusive_ptr<traversal_algorithm> const& algorithm
-		, udp::endpoint const& ep, node_id const& id)
-		: observer(algorithm, ep, id)
-	{}
-	void reply(msg const&);
+    find_data_observer(
+        boost::intrusive_ptr<traversal_algorithm> const& algorithm
+        , udp::endpoint const& ep, node_id const& id)
+        : observer(algorithm, ep, id)
+    {}
+    void reply(msg const&);
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif // FIND_DATA_050323_HPP
 

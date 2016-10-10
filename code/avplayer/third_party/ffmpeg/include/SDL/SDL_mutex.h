@@ -93,7 +93,7 @@ extern DECLSPEC SDL_sem * SDLCALL SDL_CreateSemaphore(Uint32 initial_value);
 extern DECLSPEC void SDLCALL SDL_DestroySemaphore(SDL_sem *sem);
 
 /**
- * This function suspends the calling thread until the semaphore pointed 
+ * This function suspends the calling thread until the semaphore pointed
  * to by sem has a positive count. It then atomically decreases the semaphore
  * count.
  */

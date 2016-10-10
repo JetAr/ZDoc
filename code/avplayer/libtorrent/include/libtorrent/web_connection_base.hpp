@@ -74,97 +74,102 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	class torrent;
+class torrent;
 
-	namespace detail
-	{
-		struct session_impl;
-	}
+namespace detail
+{
+struct session_impl;
+}
 
-	class TORRENT_EXTRA_EXPORT web_connection_base
-		: public peer_connection
-	{
-	friend class invariant_access;
-	public:
+class TORRENT_EXTRA_EXPORT web_connection_base
+    : public peer_connection
+{
+    friend class invariant_access;
+public:
 
-		// this is the constructor where the we are the active part.
-		// The peer_conenction should handshake and verify that the
-		// other end has the correct id
-		web_connection_base(
-			aux::session_impl& ses
-			, boost::weak_ptr<torrent> t
-			, boost::shared_ptr<socket_type> s
-			, tcp::endpoint const& remote
-			, std::string const& url
-			, policy::peer* peerinfo
-			, std::string const& ext_auth
-			, web_seed_entry::headers_t const& ext_headers);
-		void start();
+    // this is the constructor where the we are the active part.
+    // The peer_conenction should handshake and verify that the
+    // other end has the correct id
+    web_connection_base(
+        aux::session_impl& ses
+        , boost::weak_ptr<torrent> t
+        , boost::shared_ptr<socket_type> s
+        , tcp::endpoint const& remote
+        , std::string const& url
+        , policy::peer* peerinfo
+        , std::string const& ext_auth
+        , web_seed_entry::headers_t const& ext_headers);
+    void start();
 
-		~web_connection_base();
+    ~web_connection_base();
 
-		// called from the main loop when this connection has any
-		// work to do.
-		void on_sent(error_code const& error
-			, std::size_t bytes_transferred);
+    // called from the main loop when this connection has any
+    // work to do.
+    void on_sent(error_code const& error
+                 , std::size_t bytes_transferred);
 
-		virtual std::string const& url() const = 0;
-		
-		bool in_handshake() const;
+    virtual std::string const& url() const = 0;
 
-		// the following functions appends messages
-		// to the send buffer
-		void write_choke() {}
-		void write_unchoke() {}
-		void write_interested() {}
-		void write_not_interested() {}
-		virtual void write_request(peer_request const& r) = 0;
-		void write_cancel(peer_request const& r)
-		{ incoming_reject_request(r); }
-		void write_have(int index) {}
-		void write_piece(peer_request const& r, disk_buffer_holder& buffer) { TORRENT_ASSERT(false); }
-		void write_keepalive() {}
-		void on_connected();
-		void write_reject_request(peer_request const&) {}
-		void write_allow_fast(int) {}
-		void write_suggest(int piece) {}
+    bool in_handshake() const;
+
+    // the following functions appends messages
+    // to the send buffer
+    void write_choke() {}
+    void write_unchoke() {}
+    void write_interested() {}
+    void write_not_interested() {}
+    virtual void write_request(peer_request const& r) = 0;
+    void write_cancel(peer_request const& r)
+    {
+        incoming_reject_request(r);
+    }
+    void write_have(int index) {}
+    void write_piece(peer_request const& r, disk_buffer_holder& buffer)
+    {
+        TORRENT_ASSERT(false);
+    }
+    void write_keepalive() {}
+    void on_connected();
+    void write_reject_request(peer_request const&) {}
+    void write_allow_fast(int) {}
+    void write_suggest(int piece) {}
 
 #if defined TORRENT_DEBUG && !defined TORRENT_DISABLE_INVARIANT_CHECKS
-		void check_invariant() const;
+    void check_invariant() const;
 #endif
 
-		virtual void get_specific_peer_info(peer_info& p) const;
+    virtual void get_specific_peer_info(peer_info& p) const;
 
-	protected:
+protected:
 
-		virtual void add_headers(std::string& request
-			, proxy_settings const& ps, bool using_proxy) const;
+    virtual void add_headers(std::string& request
+                             , proxy_settings const& ps, bool using_proxy) const;
 
-		// this has one entry per bittorrent request
-		std::deque<peer_request> m_requests;
+    // this has one entry per bittorrent request
+    std::deque<peer_request> m_requests;
 
-		std::string m_server_string;
-		http_parser m_parser;
-		std::string m_basic_auth;
-		std::string m_host;
-		int m_port;
-		std::string m_path;
+    std::string m_server_string;
+    http_parser m_parser;
+    std::string m_basic_auth;
+    std::string m_host;
+    int m_port;
+    std::string m_path;
 
-		std::string m_external_auth;
-		web_seed_entry::headers_t m_extra_headers;
-			
-		// the first request will contain a little bit more data
-		// than subsequent ones, things that aren't critical are left
-		// out to save bandwidth.
-		bool m_first_request;
+    std::string m_external_auth;
+    web_seed_entry::headers_t m_extra_headers;
 
-		// true if we're using ssl
-		bool m_ssl;
-				
-		// the number of bytes into the receive buffer where
-		// current read cursor is.
-		int m_body_start;
-	};
+    // the first request will contain a little bit more data
+    // than subsequent ones, things that aren't critical are left
+    // out to save bandwidth.
+    bool m_first_request;
+
+    // true if we're using ssl
+    bool m_ssl;
+
+    // the number of bytes into the receive buffer where
+    // current read cursor is.
+    int m_body_start;
+};
 }
 
 #endif // TORRENT_WEB_CONNECTION_BASE_HPP_INCLUDED

@@ -59,7 +59,7 @@ interface IDirectMusicContainer;
 interface IDirectMusicTool8;
 interface IDirectMusicTrack8;
 interface IDirectMusicAudioPath;
-#ifndef __cplusplus 
+#ifndef __cplusplus
 typedef interface IDirectMusicTrack IDirectMusicTrack;
 typedef interface IDirectMusicPerformance IDirectMusicPerformance;
 typedef interface IDirectMusicPerformance8 IDirectMusicPerformance8;
@@ -117,7 +117,7 @@ typedef enum enumDMUS_SHAPET_TYPES
 }   DMUS_SHAPET_TYPES;
 
 typedef enum enumDMUS_COMPOSEF_FLAGS
-{       
+{
     DMUS_COMPOSEF_NONE              = 0,
     DMUS_COMPOSEF_ALIGN             = 0x1,
     DMUS_COMPOSEF_OVERLAP           = 0x2,
@@ -161,7 +161,7 @@ typedef enum enumDMUS_COMPOSEF_FLAGS
     DWORD               dwGroupID;          /* Track group id */                                 \
     IUnknown*           punkUser;           /* user com pointer, auto released upon PMSG free */
 
-/* every DMUS_PMSG is based off of this structure. The Performance needs 
+/* every DMUS_PMSG is based off of this structure. The Performance needs
    to access these members consistently in every PMSG that goes through it. */
 typedef struct _DMUS_PMSG
 {
@@ -177,7 +177,7 @@ typedef struct _DMUS_PMSG
 #define DMUS_PCHANNEL_BROADCAST_GROUPS  	0xFFFFFFFC  /* A duplicate PMsg is for each Channels Groups in the performance. */
 
 /*  The DMUS_PATH constants are used in conjunction with GetObjectInPath to find a requested
-    interface at a particular stage in the audio path. 
+    interface at a particular stage in the audio path.
 */
 #define DMUS_PATH_SEGMENT          0x1000      /* Get the segment itself (from a segment state.) */
 #define DMUS_PATH_SEGMENT_TRACK    0x1100      /* Look in Track List of Segment. */
@@ -192,17 +192,17 @@ typedef struct _DMUS_PMSG
 #define DMUS_PATH_PORT             0x4000      /* Access the synth. */
 #define DMUS_PATH_BUFFER           0x6000      /* Look in DirectSoundBuffer. */
 #define DMUS_PATH_BUFFER_DMO       0x6100      /* Access a DMO in the buffer. */
-#define DMUS_PATH_MIXIN_BUFFER     0x7000      /* Look in a global mixin buffer. */ 
-#define DMUS_PATH_MIXIN_BUFFER_DMO 0x7100      /* Access a DMO in a global mixin buffer. */ 
-#define DMUS_PATH_PRIMARY_BUFFER   0x8000      /* Access the primary buffer. */ 
+#define DMUS_PATH_MIXIN_BUFFER     0x7000      /* Look in a global mixin buffer. */
+#define DMUS_PATH_MIXIN_BUFFER_DMO 0x7100      /* Access a DMO in a global mixin buffer. */
+#define DMUS_PATH_PRIMARY_BUFFER   0x8000      /* Access the primary buffer. */
 
 /*  To ignore PChannels when calling GetObjectInPath(), use the DMUS_PCHANNEL_ALL constant. */
-#define DMUS_PCHANNEL_ALL           0xFFFFFFFB      
+#define DMUS_PCHANNEL_ALL           0xFFFFFFFB
 
 /*  The DMUS_APATH types are used in conjunction with CreateStandardAudioPath to
     build default path types. _SHARED_ means the same buffer is shared across multiple
     instantiations of the audiopath type. _DYNAMIC_ means a unique buffer is created
-    every time. 
+    every time.
 */
 
 #define DMUS_APATH_SHARED_STEREOPLUSREVERB   1       /* A standard music set up with stereo outs and reverb. */
@@ -241,14 +241,14 @@ typedef enum enumDMUS_PMSGF_FLAGS
 {
     DMUS_PMSGF_REFTIME          = 1,      /* if rtTime is valid */
     DMUS_PMSGF_MUSICTIME        = 2,      /* if mtTime is valid */
-    DMUS_PMSGF_TOOL_IMMEDIATE   = 4,      /* if PMSG should be processed immediately */ 
+    DMUS_PMSGF_TOOL_IMMEDIATE   = 4,      /* if PMSG should be processed immediately */
     DMUS_PMSGF_TOOL_QUEUE       = 8,      /* if PMSG should be processed a little early, at Queue time */
     DMUS_PMSGF_TOOL_ATTIME      = 0x10,   /* if PMSG should be processed at the time stamp */
     DMUS_PMSGF_TOOL_FLUSH       = 0x20,   /* if PMSG is being flushed */
     DMUS_PMSGF_LOCKTOREFTIME    = 0x40,   /* if rtTime can not be overriden by a tempo change. */
     DMUS_PMSGF_DX8              = 0x80    /* if the message has DX8 or later extensions. */
-    /* The values of DMUS_TIME_RESOLVE_FLAGS may also be used inside the */
-    /* DMUS_PMSG's dwFlags member. */
+                                  /* The values of DMUS_TIME_RESOLVE_FLAGS may also be used inside the */
+                                  /* DMUS_PMSG's dwFlags member. */
 } DMUS_PMSGF_FLAGS;
 
 /* DMUS_PMSGT_TYPES fill the DMUS_PMSG's dwType member */
@@ -303,7 +303,7 @@ typedef enum enumDMUS_SEGF_FLAGS
 #define DMUS_SEG_REPEAT_INFINITE    0xFFFFFFFF  /* For IDirectMusicSegment::SetRepeat*/
 #define DMUS_SEG_ALLTRACKS          0x80000000  /* For IDirectMusicSegment::SetParam() and SetTrackConfig() - selects all tracks instead on nth index. */
 #define DMUS_SEG_ANYTRACK           0x80000000  /* For IDirectMusicSegment::GetParam() - checks each track until it finds one that returns data (not DMUS_E_NOT_FOUND.) */
-                                                
+
 
 /* DMUS_TIME_RESOLVE_FLAGS correspond to IDirectMusicPerformance::GetResolvedTime, and can */
 /* also be used interchangeably with the corresponding DMUS_SEGF_FLAGS, since their values */
@@ -404,13 +404,13 @@ typedef enum enumDMUS_PLAYMODE_FLAGS
 /* Fixed. wMusicValue holds final MIDI note value. This is used for drums, sound effects, and sequenced
    notes that should not be transposed by the chord or scale.
 */
-#define DMUS_PLAYMODE_FIXED             0  
+#define DMUS_PLAYMODE_FIXED             0
 /* In fixed to key, the musicvalue is again a fixed MIDI value, but it
-   is transposed on top of the key root. 
+   is transposed on top of the key root.
 */
 #define DMUS_PLAYMODE_FIXEDTOKEY        DMUS_PLAYMODE_KEY_ROOT
 /* In fixed to chord, the musicvalue is also a fixed MIDI value, but it
-   is transposed on top of the chord root. 
+   is transposed on top of the chord root.
 */
 #define DMUS_PLAYMODE_FIXEDTOCHORD      DMUS_PLAYMODE_CHORD_ROOT
 /* In Pedalpoint, the key root is used and the notes only track the intervals in
@@ -420,12 +420,12 @@ typedef enum enumDMUS_PLAYMODE_FLAGS
 #define DMUS_PLAYMODE_PEDALPOINT        (DMUS_PLAYMODE_KEY_ROOT | DMUS_PLAYMODE_SCALE_INTERVALS)
 /* In the Melodic mode, the chord root is used but the notes only track the intervals in
    the scale. The key root and chord intervals are completely ignored. This is useful
-   for melodic lines that play relative to the chord root. 
+   for melodic lines that play relative to the chord root.
 */
 #define DMUS_PLAYMODE_MELODIC           (DMUS_PLAYMODE_CHORD_ROOT | DMUS_PLAYMODE_SCALE_INTERVALS)
-/* Normal chord mode is the prevalent playback mode. 
-   The notes track the intervals in the chord, which is based on the chord root. 
-   If there is a scale component to the MusicValue, the additional intervals 
+/* Normal chord mode is the prevalent playback mode.
+   The notes track the intervals in the chord, which is based on the chord root.
+   If there is a scale component to the MusicValue, the additional intervals
    are pulled from the scale and added.
    If the chord does not have an interval to match the chord component of
    the MusicValue, the note is silent.
@@ -563,20 +563,20 @@ typedef struct _DMUS_CURVE_PMSG
 
 typedef enum enumDMUS_CURVE_FLAGS
 {
-    DMUS_CURVE_RESET = 1,            /* When set, the nResetValue must be sent when the 
+    DMUS_CURVE_RESET = 1,            /* When set, the nResetValue must be sent when the
                                         time is reached or an invalidate occurs because
                                         of a transition. If not set, the curve stays
                                         permanently stuck at the new value. */
-    DMUS_CURVE_START_FROM_CURRENT = 2/* Ignore Start, start the curve at the current value. 
+    DMUS_CURVE_START_FROM_CURRENT = 2/* Ignore Start, start the curve at the current value.
                                         This only works for volume, expression, and pitchbend. */
 } DMUS_CURVE_FLAGS;
 
 
-#define DMUS_CURVE_RESET    1        
+#define DMUS_CURVE_RESET    1
 
 /* Curve shapes */
 enum
-{ 
+{
     DMUS_CURVES_LINEAR  = 0,
     DMUS_CURVES_INSTANT = 1,
     DMUS_CURVES_EXP     = 2,
@@ -602,7 +602,7 @@ typedef struct _DMUS_TIMESIG_PMSG
     /* the beat, and the grid resolution. */
     BYTE    bBeatsPerMeasure;       /* beats per measure (top of time sig) */
     BYTE    bBeat;                  /* what note receives the beat (bottom of time sig.) */
-                                    /* we can assume that 0 means 256th note */
+    /* we can assume that 0 means 256th note */
     WORD    wGridsPerBeat;          /* grids per beat */
 } DMUS_TIMESIG_PMSG;
 
@@ -648,9 +648,9 @@ typedef struct _DMUS_WAVE_PMSG
     /* begin DMUS_PMSG_PART */
     DMUS_PMSG_PART
     /* end DMUS_PMSG_PART */
-    
+
     REFERENCE_TIME rtStartOffset;   /* How far into the wave to start, in reference time units only. */
-    REFERENCE_TIME rtDuration;      /* Duration of the wave, in either reference time or music time. */  
+    REFERENCE_TIME rtDuration;      /* Duration of the wave, in either reference time or music time. */
     long    lOffset;                /* Offset from actual time to logical time, in music or ref time. */
     long    lVolume;		        /* Initial volume, in 100ths of a dB. */
     long    lPitch;			        /* Initial pitch, in 100ths of a semitone. */
@@ -660,7 +660,7 @@ typedef struct _DMUS_WAVE_PMSG
 #define DMUS_WAVEF_OFF           1       /* If wave is playing and this is the off message. */
 #define DMUS_WAVEF_STREAMING     2       /* If wave is streaming. */
 #define DMUS_WAVEF_NOINVALIDATE  4       /* Don't invalidate this wave. */
-#define DMUS_WAVEF_NOPREROLL     8       /* Don't preroll any wave data. */   
+#define DMUS_WAVEF_NOPREROLL     8       /* Don't preroll any wave data. */
 #define DMUS_WAVEF_IGNORELOOPS   0x20    /* Ignore segment looping. */
 
 /* DMUS_LYRIC_PMSG */
@@ -669,7 +669,7 @@ typedef struct _DMUS_LYRIC_PMSG
     /* begin DMUS_PMSG_PART */
     DMUS_PMSG_PART
     /* end DMUS_PMSG_PART */
-    
+
     WCHAR    wszString[1];      /* null-terminated Unicode lyric string (structure is actually larger than size 1) */
 } DMUS_LYRIC_PMSG;
 
@@ -677,10 +677,11 @@ typedef struct _DMUS_LYRIC_PMSG
 #define DMUS_MAX_CATEGORY       64         /* Maximum object category name length. */
 #define DMUS_MAX_FILENAME       MAX_PATH
 
-typedef struct _DMUS_VERSION {
-  DWORD    dwVersionMS;
-  DWORD    dwVersionLS;
-}DMUS_VERSION, FAR *LPDMUS_VERSION;
+typedef struct _DMUS_VERSION
+{
+    DWORD    dwVersionMS;
+    DWORD    dwVersionLS;
+} DMUS_VERSION, FAR *LPDMUS_VERSION;
 
 /* Time Signature structure, used by IDirectMusicStyle */
 /* Also used as a parameter for GetParam() and SetParam */
@@ -689,22 +690,22 @@ typedef struct _DMUS_TIMESIGNATURE
     MUSIC_TIME mtTime;
     BYTE    bBeatsPerMeasure;       /* beats per measure (top of time sig) */
     BYTE    bBeat;                  /* what note receives the beat (bottom of time sig.) */
-                                    /* we can assume that 0 means 256th note */
+    /* we can assume that 0 means 256th note */
     WORD    wGridsPerBeat;          /* grids per beat */
 } DMUS_TIMESIGNATURE;
 
 typedef struct _DMUS_VALID_START_PARAM
 {
-    MUSIC_TIME mtTime;                      /* Time of the first legal start 
-                                               point after (or including) the requested time. 
+    MUSIC_TIME mtTime;                      /* Time of the first legal start
+                                               point after (or including) the requested time.
                                                This is a returned value.
                                                Time format is the relative offset from requested time. */
 } DMUS_VALID_START_PARAM;
 
 typedef struct _DMUS_PLAY_MARKER_PARAM
 {
-    MUSIC_TIME mtTime;                      /* Time of the first legal segment play 
-                                               marker before (or including) the requested time. 
+    MUSIC_TIME mtTime;                      /* Time of the first legal segment play
+                                               marker before (or including) the requested time.
                                                This is a returned value.
                                                Time format is the relative offset from requested time. */
 } DMUS_PLAY_MARKER_PARAM;
@@ -792,7 +793,7 @@ typedef struct _DMUS_COMMAND_PARAM
 
 typedef struct _DMUS_COMMAND_PARAM_2
 {
-	MUSIC_TIME mtTime;
+    MUSIC_TIME mtTime;
     BYTE bCommand;
     BYTE bGrooveLevel;
     BYTE bGrooveRange;
@@ -819,8 +820,8 @@ DECLARE_INTERFACE_(IDirectMusicBand, IUnknown)
 
     /* IDirectMusicBand */
     STDMETHOD(CreateSegment)        (THIS_ IDirectMusicSegment** ppSegment) PURE;
-    STDMETHOD(Download)             (THIS_ IDirectMusicPerformance* pPerformance) PURE;     
-    STDMETHOD(Unload)               (THIS_ IDirectMusicPerformance* pPerformance) PURE;     
+    STDMETHOD(Download)             (THIS_ IDirectMusicPerformance* pPerformance) PURE;
+    STDMETHOD(Unload)               (THIS_ IDirectMusicPerformance* pPerformance) PURE;
 };
 
 typedef IDirectMusicBand IDirectMusicBand8;
@@ -839,8 +840,8 @@ DECLARE_INTERFACE_(IDirectMusicObject, IUnknown)
     /* IDirectMusicObject */
     STDMETHOD(GetDescriptor)        (THIS_ LPDMUS_OBJECTDESC pDesc) PURE;
     STDMETHOD(SetDescriptor)        (THIS_ LPDMUS_OBJECTDESC pDesc) PURE;
-    STDMETHOD(ParseDescriptor)      (THIS_ LPSTREAM pStream, 
-                                           LPDMUS_OBJECTDESC pDesc) PURE;
+    STDMETHOD(ParseDescriptor)      (THIS_ LPSTREAM pStream,
+                                     LPDMUS_OBJECTDESC pDesc) PURE;
 };
 
 typedef IDirectMusicObject IDirectMusicObject8;
@@ -858,24 +859,24 @@ DECLARE_INTERFACE_(IDirectMusicLoader, IUnknown)
 
     /* IDirectMusicLoader */
     STDMETHOD(GetObject)            (THIS_ LPDMUS_OBJECTDESC pDesc,
-                                           REFIID riid,
-                                           LPVOID FAR *ppv) PURE;
+                                     REFIID riid,
+                                     LPVOID FAR *ppv) PURE;
     STDMETHOD(SetObject)            (THIS_ LPDMUS_OBJECTDESC pDesc) PURE;
-    STDMETHOD(SetSearchDirectory)   (THIS_ REFGUID rguidClass, 
-                                           WCHAR *pwzPath, 
-                                           BOOL fClear) PURE;
-    STDMETHOD(ScanDirectory)        (THIS_ REFGUID rguidClass, 
-                                           WCHAR *pwzFileExtension, 
-                                           WCHAR *pwzScanFileName) PURE;
+    STDMETHOD(SetSearchDirectory)   (THIS_ REFGUID rguidClass,
+                                     WCHAR *pwzPath,
+                                     BOOL fClear) PURE;
+    STDMETHOD(ScanDirectory)        (THIS_ REFGUID rguidClass,
+                                     WCHAR *pwzFileExtension,
+                                     WCHAR *pwzScanFileName) PURE;
     STDMETHOD(CacheObject)          (THIS_ IDirectMusicObject * pObject) PURE;
     STDMETHOD(ReleaseObject)        (THIS_ IDirectMusicObject * pObject) PURE;
     STDMETHOD(ClearCache)           (THIS_ REFGUID rguidClass) PURE;
-    STDMETHOD(EnableCache)          (THIS_ REFGUID rguidClass, 
-                                           BOOL fEnable) PURE;
-    STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass, 
-                                           DWORD dwIndex, 
-                                           LPDMUS_OBJECTDESC pDesc) PURE;
-};                                  
+    STDMETHOD(EnableCache)          (THIS_ REFGUID rguidClass,
+                                     BOOL fEnable) PURE;
+    STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass,
+                                     DWORD dwIndex,
+                                     LPDMUS_OBJECTDESC pDesc) PURE;
+};
 
 /*////////////////////////////////////////////////////////////////////
 // IDirectMusicLoader8 */
@@ -890,31 +891,31 @@ DECLARE_INTERFACE_(IDirectMusicLoader8, IDirectMusicLoader)
 
     /* IDirectMusicLoader */
     STDMETHOD(GetObject)            (THIS_ LPDMUS_OBJECTDESC pDesc,
-                                           REFIID riid,
-                                           LPVOID FAR *ppv) PURE;
+                                     REFIID riid,
+                                     LPVOID FAR *ppv) PURE;
     STDMETHOD(SetObject)            (THIS_ LPDMUS_OBJECTDESC pDesc) PURE;
-    STDMETHOD(SetSearchDirectory)   (THIS_ REFGUID rguidClass, 
-                                           WCHAR *pwzPath, 
-                                           BOOL fClear) PURE;
-    STDMETHOD(ScanDirectory)        (THIS_ REFGUID rguidClass, 
-                                           WCHAR *pwzFileExtension, 
-                                           WCHAR *pwzScanFileName) PURE;
+    STDMETHOD(SetSearchDirectory)   (THIS_ REFGUID rguidClass,
+                                     WCHAR *pwzPath,
+                                     BOOL fClear) PURE;
+    STDMETHOD(ScanDirectory)        (THIS_ REFGUID rguidClass,
+                                     WCHAR *pwzFileExtension,
+                                     WCHAR *pwzScanFileName) PURE;
     STDMETHOD(CacheObject)          (THIS_ IDirectMusicObject * pObject) PURE;
     STDMETHOD(ReleaseObject)        (THIS_ IDirectMusicObject * pObject) PURE;
     STDMETHOD(ClearCache)           (THIS_ REFGUID rguidClass) PURE;
-    STDMETHOD(EnableCache)          (THIS_ REFGUID rguidClass, 
-                                           BOOL fEnable) PURE;
-    STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass, 
-                                           DWORD dwIndex, 
-                                           LPDMUS_OBJECTDESC pDesc) PURE;
+    STDMETHOD(EnableCache)          (THIS_ REFGUID rguidClass,
+                                     BOOL fEnable) PURE;
+    STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass,
+                                     DWORD dwIndex,
+                                     LPDMUS_OBJECTDESC pDesc) PURE;
 
     /* IDirectMusicLoader8 */
     STDMETHOD_(void, CollectGarbage)                (THIS) PURE;
     STDMETHOD(ReleaseObjectByUnknown)               (THIS_ IUnknown *pObject) PURE;
-    STDMETHOD(LoadObjectFromFile)                   (THIS_ REFGUID rguidClassID, 
-                                                           REFIID iidInterfaceID, 
-                                                           WCHAR *pwzFilePath, 
-                                                           void ** ppObject) PURE;
+    STDMETHOD(LoadObjectFromFile)                   (THIS_ REFGUID rguidClassID,
+            REFIID iidInterfaceID,
+            WCHAR *pwzFilePath,
+            void ** ppObject) PURE;
 };
 
 /*  Stream object supports IDirectMusicGetLoader interface to access loader while file parsing. */
@@ -952,44 +953,44 @@ DECLARE_INTERFACE_(IDirectMusicSegment, IUnknown)
     STDMETHOD(SetRepeats)               (THIS_ DWORD  dwRepeats) PURE;
     STDMETHOD(GetDefaultResolution)     (THIS_ DWORD* pdwResolution) PURE;
     STDMETHOD(SetDefaultResolution)     (THIS_ DWORD  dwResolution) PURE;
-    STDMETHOD(GetTrack)                 (THIS_ REFGUID rguidType, 
-                                               DWORD dwGroupBits, 
-                                               DWORD dwIndex, 
-                                               IDirectMusicTrack** ppTrack) PURE;
-    STDMETHOD(GetTrackGroup)            (THIS_ IDirectMusicTrack* pTrack, 
-                                               DWORD* pdwGroupBits) PURE;
-    STDMETHOD(InsertTrack)              (THIS_ IDirectMusicTrack* pTrack, 
-                                               DWORD dwGroupBits) PURE;
+    STDMETHOD(GetTrack)                 (THIS_ REFGUID rguidType,
+                                         DWORD dwGroupBits,
+                                         DWORD dwIndex,
+                                         IDirectMusicTrack** ppTrack) PURE;
+    STDMETHOD(GetTrackGroup)            (THIS_ IDirectMusicTrack* pTrack,
+                                         DWORD* pdwGroupBits) PURE;
+    STDMETHOD(InsertTrack)              (THIS_ IDirectMusicTrack* pTrack,
+                                         DWORD dwGroupBits) PURE;
     STDMETHOD(RemoveTrack)              (THIS_ IDirectMusicTrack* pTrack) PURE;
-    STDMETHOD(InitPlay)                 (THIS_ IDirectMusicSegmentState** ppSegState, 
-                                               IDirectMusicPerformance* pPerformance,
-                                               DWORD dwFlags) PURE;
+    STDMETHOD(InitPlay)                 (THIS_ IDirectMusicSegmentState** ppSegState,
+                                         IDirectMusicPerformance* pPerformance,
+                                         DWORD dwFlags) PURE;
     STDMETHOD(GetGraph)                 (THIS_ IDirectMusicGraph** ppGraph) PURE;
     STDMETHOD(SetGraph)                 (THIS_ IDirectMusicGraph* pGraph) PURE;
     STDMETHOD(AddNotificationType)      (THIS_ REFGUID rguidNotificationType) PURE;
     STDMETHOD(RemoveNotificationType)   (THIS_ REFGUID rguidNotificationType) PURE;
-    STDMETHOD(GetParam)                 (THIS_ REFGUID rguidType, 
-                                               DWORD dwGroupBits, 
-                                               DWORD dwIndex, 
-                                               MUSIC_TIME mtTime, 
-                                               MUSIC_TIME* pmtNext, 
-                                               void* pParam) PURE; 
-    STDMETHOD(SetParam)                 (THIS_ REFGUID rguidType, 
-                                               DWORD dwGroupBits, 
-                                               DWORD dwIndex, 
-                                               MUSIC_TIME mtTime, 
-                                               void* pParam) PURE;
-    STDMETHOD(Clone)                    (THIS_ MUSIC_TIME mtStart, 
-                                               MUSIC_TIME mtEnd, 
-                                               IDirectMusicSegment** ppSegment) PURE;
+    STDMETHOD(GetParam)                 (THIS_ REFGUID rguidType,
+                                         DWORD dwGroupBits,
+                                         DWORD dwIndex,
+                                         MUSIC_TIME mtTime,
+                                         MUSIC_TIME* pmtNext,
+                                         void* pParam) PURE;
+    STDMETHOD(SetParam)                 (THIS_ REFGUID rguidType,
+                                         DWORD dwGroupBits,
+                                         DWORD dwIndex,
+                                         MUSIC_TIME mtTime,
+                                         void* pParam) PURE;
+    STDMETHOD(Clone)                    (THIS_ MUSIC_TIME mtStart,
+                                         MUSIC_TIME mtEnd,
+                                         IDirectMusicSegment** ppSegment) PURE;
     STDMETHOD(SetStartPoint)            (THIS_ MUSIC_TIME mtStart) PURE;
     STDMETHOD(GetStartPoint)            (THIS_ MUSIC_TIME* pmtStart) PURE;
-    STDMETHOD(SetLoopPoints)            (THIS_ MUSIC_TIME mtStart, 
-                                               MUSIC_TIME mtEnd) PURE;
-    STDMETHOD(GetLoopPoints)            (THIS_ MUSIC_TIME* pmtStart, 
-                                               MUSIC_TIME* pmtEnd) PURE;
-    STDMETHOD(SetPChannelsUsed)         (THIS_ DWORD dwNumPChannels, 
-                                               DWORD* paPChannels) PURE;
+    STDMETHOD(SetLoopPoints)            (THIS_ MUSIC_TIME mtStart,
+                                         MUSIC_TIME mtEnd) PURE;
+    STDMETHOD(GetLoopPoints)            (THIS_ MUSIC_TIME* pmtStart,
+                                         MUSIC_TIME* pmtEnd) PURE;
+    STDMETHOD(SetPChannelsUsed)         (THIS_ DWORD dwNumPChannels,
+                                         DWORD* paPChannels) PURE;
 };
 
 /*////////////////////////////////////////////////////////////////////
@@ -1010,55 +1011,55 @@ DECLARE_INTERFACE_(IDirectMusicSegment8, IDirectMusicSegment)
     STDMETHOD(SetRepeats)               (THIS_ DWORD  dwRepeats) PURE;
     STDMETHOD(GetDefaultResolution)     (THIS_ DWORD* pdwResolution) PURE;
     STDMETHOD(SetDefaultResolution)     (THIS_ DWORD  dwResolution) PURE;
-    STDMETHOD(GetTrack)                 (THIS_ REFGUID rguidType, 
-                                               DWORD dwGroupBits, 
-                                               DWORD dwIndex, 
-                                               IDirectMusicTrack** ppTrack) PURE;
-    STDMETHOD(GetTrackGroup)            (THIS_ IDirectMusicTrack* pTrack, 
-                                               DWORD* pdwGroupBits) PURE;
-    STDMETHOD(InsertTrack)              (THIS_ IDirectMusicTrack* pTrack, 
-                                               DWORD dwGroupBits) PURE;
+    STDMETHOD(GetTrack)                 (THIS_ REFGUID rguidType,
+                                         DWORD dwGroupBits,
+                                         DWORD dwIndex,
+                                         IDirectMusicTrack** ppTrack) PURE;
+    STDMETHOD(GetTrackGroup)            (THIS_ IDirectMusicTrack* pTrack,
+                                         DWORD* pdwGroupBits) PURE;
+    STDMETHOD(InsertTrack)              (THIS_ IDirectMusicTrack* pTrack,
+                                         DWORD dwGroupBits) PURE;
     STDMETHOD(RemoveTrack)              (THIS_ IDirectMusicTrack* pTrack) PURE;
-    STDMETHOD(InitPlay)                 (THIS_ IDirectMusicSegmentState** ppSegState, 
-                                               IDirectMusicPerformance* pPerformance,
-                                               DWORD dwFlags) PURE;
+    STDMETHOD(InitPlay)                 (THIS_ IDirectMusicSegmentState** ppSegState,
+                                         IDirectMusicPerformance* pPerformance,
+                                         DWORD dwFlags) PURE;
     STDMETHOD(GetGraph)                 (THIS_ IDirectMusicGraph** ppGraph) PURE;
     STDMETHOD(SetGraph)                 (THIS_ IDirectMusicGraph* pGraph) PURE;
     STDMETHOD(AddNotificationType)      (THIS_ REFGUID rguidNotificationType) PURE;
     STDMETHOD(RemoveNotificationType)   (THIS_ REFGUID rguidNotificationType) PURE;
-    STDMETHOD(GetParam)                 (THIS_ REFGUID rguidType, 
-                                               DWORD dwGroupBits, 
-                                               DWORD dwIndex, 
-                                               MUSIC_TIME mtTime, 
-                                               MUSIC_TIME* pmtNext, 
-                                               void* pParam) PURE; 
-    STDMETHOD(SetParam)                 (THIS_ REFGUID rguidType, 
-                                               DWORD dwGroupBits, 
-                                               DWORD dwIndex, 
-                                               MUSIC_TIME mtTime, 
-                                               void* pParam) PURE;
-    STDMETHOD(Clone)                    (THIS_ MUSIC_TIME mtStart, 
-                                               MUSIC_TIME mtEnd, 
-                                               IDirectMusicSegment** ppSegment) PURE;
+    STDMETHOD(GetParam)                 (THIS_ REFGUID rguidType,
+                                         DWORD dwGroupBits,
+                                         DWORD dwIndex,
+                                         MUSIC_TIME mtTime,
+                                         MUSIC_TIME* pmtNext,
+                                         void* pParam) PURE;
+    STDMETHOD(SetParam)                 (THIS_ REFGUID rguidType,
+                                         DWORD dwGroupBits,
+                                         DWORD dwIndex,
+                                         MUSIC_TIME mtTime,
+                                         void* pParam) PURE;
+    STDMETHOD(Clone)                    (THIS_ MUSIC_TIME mtStart,
+                                         MUSIC_TIME mtEnd,
+                                         IDirectMusicSegment** ppSegment) PURE;
     STDMETHOD(SetStartPoint)            (THIS_ MUSIC_TIME mtStart) PURE;
     STDMETHOD(GetStartPoint)            (THIS_ MUSIC_TIME* pmtStart) PURE;
-    STDMETHOD(SetLoopPoints)            (THIS_ MUSIC_TIME mtStart, 
-                                               MUSIC_TIME mtEnd) PURE;
-    STDMETHOD(GetLoopPoints)            (THIS_ MUSIC_TIME* pmtStart, 
-                                               MUSIC_TIME* pmtEnd) PURE;
-    STDMETHOD(SetPChannelsUsed)         (THIS_ DWORD dwNumPChannels, 
-                                               DWORD* paPChannels) PURE;
+    STDMETHOD(SetLoopPoints)            (THIS_ MUSIC_TIME mtStart,
+                                         MUSIC_TIME mtEnd) PURE;
+    STDMETHOD(GetLoopPoints)            (THIS_ MUSIC_TIME* pmtStart,
+                                         MUSIC_TIME* pmtEnd) PURE;
+    STDMETHOD(SetPChannelsUsed)         (THIS_ DWORD dwNumPChannels,
+                                         DWORD* paPChannels) PURE;
     /*  IDirectMusicSegment8 */
     STDMETHOD(SetTrackConfig)           (THIS_ REFGUID rguidTrackClassID,   /* Class ID of the type of track on which to set the configuration flags. */
-                                               DWORD dwGroupBits,           /* Group bits. */
-                                               DWORD dwIndex,               /* Nth track (or DMUS_SEG_ALLTRACKS) that matches class id and group id. */
-                                               DWORD dwFlagsOn,             /* DMUS_TRACKCONFIG_ flags to enable. */
-                                               DWORD dwFlagsOff) PURE;      /* DMUS_TRACKCONFIG_ flags to disable. */
+                                         DWORD dwGroupBits,           /* Group bits. */
+                                         DWORD dwIndex,               /* Nth track (or DMUS_SEG_ALLTRACKS) that matches class id and group id. */
+                                         DWORD dwFlagsOn,             /* DMUS_TRACKCONFIG_ flags to enable. */
+                                         DWORD dwFlagsOff) PURE;      /* DMUS_TRACKCONFIG_ flags to disable. */
     STDMETHOD(GetAudioPathConfig)       (THIS_ IUnknown ** ppAudioPathConfig) PURE;
     STDMETHOD(Compose)                  (THIS_ MUSIC_TIME mtTime,
-                                               IDirectMusicSegment* pFromSegment,
-                                               IDirectMusicSegment* pToSegment,
-                                               IDirectMusicSegment** ppComposedSegment) PURE;
+                                         IDirectMusicSegment* pFromSegment,
+                                         IDirectMusicSegment* pToSegment,
+                                         IDirectMusicSegment** ppComposedSegment) PURE;
     STDMETHOD(Download)                 (THIS_ IUnknown *pAudioPath) PURE;
     STDMETHOD(Unload)                   (THIS_ IUnknown *pAudioPath) PURE;
 };
@@ -1102,17 +1103,17 @@ DECLARE_INTERFACE_(IDirectMusicSegmentState8, IDirectMusicSegmentState)
 
     /* IDirectMusicSegmentState8 */
     STDMETHOD(SetTrackConfig)       (THIS_ REFGUID rguidTrackClassID,   /* Class ID of the type of track on which to set the configuration flags. */
-                                           DWORD dwGroupBits,           /* Group bits. */
-                                           DWORD dwIndex,               /* Nth track (or DMUS_SEG_ALLTRACKS) that matches class id and group id. */
-                                           DWORD dwFlagsOn,             /* DMUS_TRACKCONFIG_ flags to enable. */
-                                           DWORD dwFlagsOff) PURE;      /* DMUS_TRACKCONFIG_ flags to disable. */
+                                     DWORD dwGroupBits,           /* Group bits. */
+                                     DWORD dwIndex,               /* Nth track (or DMUS_SEG_ALLTRACKS) that matches class id and group id. */
+                                     DWORD dwFlagsOn,             /* DMUS_TRACKCONFIG_ flags to enable. */
+                                     DWORD dwFlagsOff) PURE;      /* DMUS_TRACKCONFIG_ flags to disable. */
     STDMETHOD(GetObjectInPath)      (THIS_ DWORD dwPChannel,    /* PChannel to search. */
-                                           DWORD dwStage,       /* Which stage in the path. */
-                                           DWORD dwBuffer,      /* Which buffer to address, if more than one. */
-                                           REFGUID guidObject,  /* ClassID of object. */
-                                           DWORD dwIndex,       /* Which object of that class. */
-                                           REFGUID iidInterface,/* Requested COM interface. */
-                                           void ** ppObject) PURE; /* Pointer to interface. */
+                                     DWORD dwStage,       /* Which stage in the path. */
+                                     DWORD dwBuffer,      /* Which buffer to address, if more than one. */
+                                     REFGUID guidObject,  /* ClassID of object. */
+                                     DWORD dwIndex,       /* Which object of that class. */
+                                     REFGUID iidInterface,/* Requested COM interface. */
+                                     void ** ppObject) PURE; /* Pointer to interface. */
 };
 
 /*////////////////////////////////////////////////////////////////////
@@ -1128,17 +1129,17 @@ DECLARE_INTERFACE_(IDirectMusicAudioPath, IUnknown)
 
     /*  IDirectMusicAudioPath */
     STDMETHOD(GetObjectInPath)      (THIS_ DWORD dwPChannel,    /* PChannel to search. */
-                                           DWORD dwStage,       /* Which stage in the path. */
-                                           DWORD dwBuffer,      /* Which buffer to address, if more than one. */
-                                           REFGUID guidObject,  /* ClassID of object. */
-                                           DWORD dwIndex,       /* Which object of that class. */
-                                           REFGUID iidInterface,/* Requested COM interface. */
-                                           void ** ppObject) PURE; /* Pointer to interface. */
+                                     DWORD dwStage,       /* Which stage in the path. */
+                                     DWORD dwBuffer,      /* Which buffer to address, if more than one. */
+                                     REFGUID guidObject,  /* ClassID of object. */
+                                     DWORD dwIndex,       /* Which object of that class. */
+                                     REFGUID iidInterface,/* Requested COM interface. */
+                                     void ** ppObject) PURE; /* Pointer to interface. */
     STDMETHOD(Activate)             (THIS_ BOOL fActivate) PURE;/* True to activate, False to deactivate. */
     STDMETHOD(SetVolume)            (THIS_ long lVolume,        /* Gain, in 100ths of a dB. This must be negative (0 represents full volume.) */
-                                           DWORD dwDuration) PURE;/* Duration of volume ramp in  milliseconds. Note that 0 is more efficient. */
+                                     DWORD dwDuration) PURE;/* Duration of volume ramp in  milliseconds. Note that 0 is more efficient. */
     STDMETHOD(ConvertPChannel)      (THIS_ DWORD dwPChannelIn,   /* Pchannel of source. */
-                                           DWORD *pdwPChannelOut) PURE; /* Equivalent pchannel on performance. */
+                                     DWORD *pdwPChannelOut) PURE; /* Equivalent pchannel on performance. */
 };
 
 typedef IDirectMusicAudioPath IDirectMusicAudioPath8;
@@ -1156,110 +1157,110 @@ DECLARE_INTERFACE_(IDirectMusicPerformance, IUnknown)
 
     /*  IDirectMusicPerformance */
     STDMETHOD(Init)                 (THIS_ IDirectMusic** ppDirectMusic,
-                                           LPDIRECTSOUND pDirectSound,
-                                           HWND hWnd) PURE;
-    STDMETHOD(PlaySegment)          (THIS_ IDirectMusicSegment* pSegment, 
-                                           DWORD dwFlags, 
-                                           __int64 i64StartTime, 
-                                           IDirectMusicSegmentState** ppSegmentState) PURE;
-    STDMETHOD(Stop)                 (THIS_ IDirectMusicSegment* pSegment, 
-                                           IDirectMusicSegmentState* pSegmentState, 
-                                           MUSIC_TIME mtTime, 
-                                           DWORD dwFlags) PURE;
-    STDMETHOD(GetSegmentState)      (THIS_ IDirectMusicSegmentState** ppSegmentState, 
-                                           MUSIC_TIME mtTime) PURE;
+                                     LPDIRECTSOUND pDirectSound,
+                                     HWND hWnd) PURE;
+    STDMETHOD(PlaySegment)          (THIS_ IDirectMusicSegment* pSegment,
+                                     DWORD dwFlags,
+                                     __int64 i64StartTime,
+                                     IDirectMusicSegmentState** ppSegmentState) PURE;
+    STDMETHOD(Stop)                 (THIS_ IDirectMusicSegment* pSegment,
+                                     IDirectMusicSegmentState* pSegmentState,
+                                     MUSIC_TIME mtTime,
+                                     DWORD dwFlags) PURE;
+    STDMETHOD(GetSegmentState)      (THIS_ IDirectMusicSegmentState** ppSegmentState,
+                                     MUSIC_TIME mtTime) PURE;
     STDMETHOD(SetPrepareTime)       (THIS_ DWORD dwMilliSeconds) PURE;
     STDMETHOD(GetPrepareTime)       (THIS_ DWORD* pdwMilliSeconds) PURE;
     STDMETHOD(SetBumperLength)      (THIS_ DWORD dwMilliSeconds) PURE;
     STDMETHOD(GetBumperLength)      (THIS_ DWORD* pdwMilliSeconds) PURE;
     STDMETHOD(SendPMsg)             (THIS_ DMUS_PMSG* pPMSG) PURE;
-    STDMETHOD(MusicToReferenceTime) (THIS_ MUSIC_TIME mtTime, 
-                                           REFERENCE_TIME* prtTime) PURE;
-    STDMETHOD(ReferenceToMusicTime) (THIS_ REFERENCE_TIME rtTime, 
-                                           MUSIC_TIME* pmtTime) PURE;
-    STDMETHOD(IsPlaying)            (THIS_ IDirectMusicSegment* pSegment, 
-                                           IDirectMusicSegmentState* pSegState) PURE;
-    STDMETHOD(GetTime)              (THIS_ REFERENCE_TIME* prtNow, 
-                                           MUSIC_TIME* pmtNow) PURE;
-    STDMETHOD(AllocPMsg)            (THIS_ ULONG cb, 
-                                           DMUS_PMSG** ppPMSG) PURE;
+    STDMETHOD(MusicToReferenceTime) (THIS_ MUSIC_TIME mtTime,
+                                     REFERENCE_TIME* prtTime) PURE;
+    STDMETHOD(ReferenceToMusicTime) (THIS_ REFERENCE_TIME rtTime,
+                                     MUSIC_TIME* pmtTime) PURE;
+    STDMETHOD(IsPlaying)            (THIS_ IDirectMusicSegment* pSegment,
+                                     IDirectMusicSegmentState* pSegState) PURE;
+    STDMETHOD(GetTime)              (THIS_ REFERENCE_TIME* prtNow,
+                                     MUSIC_TIME* pmtNow) PURE;
+    STDMETHOD(AllocPMsg)            (THIS_ ULONG cb,
+                                     DMUS_PMSG** ppPMSG) PURE;
     STDMETHOD(FreePMsg)             (THIS_ DMUS_PMSG* pPMSG) PURE;
     STDMETHOD(GetGraph)             (THIS_ IDirectMusicGraph** ppGraph) PURE;
     STDMETHOD(SetGraph)             (THIS_ IDirectMusicGraph* pGraph) PURE;
-    STDMETHOD(SetNotificationHandle)(THIS_ HANDLE hNotification, 
-                                           REFERENCE_TIME rtMinimum) PURE;
+    STDMETHOD(SetNotificationHandle)(THIS_ HANDLE hNotification,
+                                     REFERENCE_TIME rtMinimum) PURE;
     STDMETHOD(GetNotificationPMsg)  (THIS_ DMUS_NOTIFICATION_PMSG** ppNotificationPMsg) PURE;
     STDMETHOD(AddNotificationType)  (THIS_ REFGUID rguidNotificationType) PURE;
     STDMETHOD(RemoveNotificationType)(THIS_ REFGUID rguidNotificationType) PURE;
     STDMETHOD(AddPort)              (THIS_ IDirectMusicPort* pPort) PURE;
     STDMETHOD(RemovePort)           (THIS_ IDirectMusicPort* pPort ) PURE;
-    STDMETHOD(AssignPChannelBlock)  (THIS_ DWORD dwBlockNum, 
-                                           IDirectMusicPort* pPort, 
-                                           DWORD dwGroup ) PURE;
-    STDMETHOD(AssignPChannel)       (THIS_ DWORD dwPChannel, 
-                                           IDirectMusicPort* pPort, 
-                                           DWORD dwGroup, 
-                                           DWORD dwMChannel ) PURE;
-    STDMETHOD(PChannelInfo)         (THIS_ DWORD dwPChannel, 
-                                           IDirectMusicPort** ppPort, 
-                                           DWORD* pdwGroup, 
-                                           DWORD* pdwMChannel ) PURE;
-    STDMETHOD(DownloadInstrument)   (THIS_ IDirectMusicInstrument* pInst, 
-                                           DWORD dwPChannel, 
-                                           IDirectMusicDownloadedInstrument** ppDownInst, 
-                                           DMUS_NOTERANGE* pNoteRanges, 
-                                           DWORD dwNumNoteRanges, 
-                                           IDirectMusicPort** ppPort, 
-                                           DWORD* pdwGroup, 
-                                           DWORD* pdwMChannel ) PURE;
-    STDMETHOD(Invalidate)           (THIS_ MUSIC_TIME mtTime, 
-                                           DWORD dwFlags) PURE;
-    STDMETHOD(GetParam)             (THIS_ REFGUID rguidType, 
-                                           DWORD dwGroupBits, 
-                                           DWORD dwIndex, 
-                                           MUSIC_TIME mtTime, 
-                                           MUSIC_TIME* pmtNext, 
-                                           void* pParam) PURE; 
-    STDMETHOD(SetParam)             (THIS_ REFGUID rguidType, 
-                                           DWORD dwGroupBits, 
-                                           DWORD dwIndex, 
-                                           MUSIC_TIME mtTime, 
-                                           void* pParam) PURE;
-    STDMETHOD(GetGlobalParam)       (THIS_ REFGUID rguidType, 
-                                           void* pParam, 
-                                           DWORD dwSize) PURE;
-    STDMETHOD(SetGlobalParam)       (THIS_ REFGUID rguidType, 
-                                           void* pParam, 
-                                           DWORD dwSize) PURE;
+    STDMETHOD(AssignPChannelBlock)  (THIS_ DWORD dwBlockNum,
+                                     IDirectMusicPort* pPort,
+                                     DWORD dwGroup ) PURE;
+    STDMETHOD(AssignPChannel)       (THIS_ DWORD dwPChannel,
+                                     IDirectMusicPort* pPort,
+                                     DWORD dwGroup,
+                                     DWORD dwMChannel ) PURE;
+    STDMETHOD(PChannelInfo)         (THIS_ DWORD dwPChannel,
+                                     IDirectMusicPort** ppPort,
+                                     DWORD* pdwGroup,
+                                     DWORD* pdwMChannel ) PURE;
+    STDMETHOD(DownloadInstrument)   (THIS_ IDirectMusicInstrument* pInst,
+                                     DWORD dwPChannel,
+                                     IDirectMusicDownloadedInstrument** ppDownInst,
+                                     DMUS_NOTERANGE* pNoteRanges,
+                                     DWORD dwNumNoteRanges,
+                                     IDirectMusicPort** ppPort,
+                                     DWORD* pdwGroup,
+                                     DWORD* pdwMChannel ) PURE;
+    STDMETHOD(Invalidate)           (THIS_ MUSIC_TIME mtTime,
+                                     DWORD dwFlags) PURE;
+    STDMETHOD(GetParam)             (THIS_ REFGUID rguidType,
+                                     DWORD dwGroupBits,
+                                     DWORD dwIndex,
+                                     MUSIC_TIME mtTime,
+                                     MUSIC_TIME* pmtNext,
+                                     void* pParam) PURE;
+    STDMETHOD(SetParam)             (THIS_ REFGUID rguidType,
+                                     DWORD dwGroupBits,
+                                     DWORD dwIndex,
+                                     MUSIC_TIME mtTime,
+                                     void* pParam) PURE;
+    STDMETHOD(GetGlobalParam)       (THIS_ REFGUID rguidType,
+                                     void* pParam,
+                                     DWORD dwSize) PURE;
+    STDMETHOD(SetGlobalParam)       (THIS_ REFGUID rguidType,
+                                     void* pParam,
+                                     DWORD dwSize) PURE;
     STDMETHOD(GetLatencyTime)       (THIS_ REFERENCE_TIME* prtTime) PURE;
     STDMETHOD(GetQueueTime)         (THIS_ REFERENCE_TIME* prtTime) PURE;
     STDMETHOD(AdjustTime)           (THIS_ REFERENCE_TIME rtAmount) PURE;
     STDMETHOD(CloseDown)            (THIS) PURE;
     STDMETHOD(GetResolvedTime)      (THIS_ REFERENCE_TIME rtTime,
-                                           REFERENCE_TIME* prtResolved,
-                                           DWORD dwTimeResolveFlags) PURE;
+                                     REFERENCE_TIME* prtResolved,
+                                     DWORD dwTimeResolveFlags) PURE;
     STDMETHOD(MIDIToMusic)          (THIS_ BYTE bMIDIValue,
-                                           DMUS_CHORD_KEY* pChord,
-                                           BYTE bPlayMode,
-                                           BYTE bChordLevel,
-                                           WORD *pwMusicValue) PURE;
+                                     DMUS_CHORD_KEY* pChord,
+                                     BYTE bPlayMode,
+                                     BYTE bChordLevel,
+                                     WORD *pwMusicValue) PURE;
     STDMETHOD(MusicToMIDI)          (THIS_ WORD wMusicValue,
-                                           DMUS_CHORD_KEY* pChord,
-                                           BYTE bPlayMode,
-                                           BYTE bChordLevel,
-                                           BYTE *pbMIDIValue) PURE;
+                                     DMUS_CHORD_KEY* pChord,
+                                     BYTE bPlayMode,
+                                     BYTE bChordLevel,
+                                     BYTE *pbMIDIValue) PURE;
     STDMETHOD(TimeToRhythm)         (THIS_ MUSIC_TIME mtTime,
-                                           DMUS_TIMESIGNATURE *pTimeSig,
-                                           WORD *pwMeasure,
-                                           BYTE *pbBeat,
-                                           BYTE *pbGrid,
-                                           short *pnOffset) PURE;
+                                     DMUS_TIMESIGNATURE *pTimeSig,
+                                     WORD *pwMeasure,
+                                     BYTE *pbBeat,
+                                     BYTE *pbGrid,
+                                     short *pnOffset) PURE;
     STDMETHOD(RhythmToTime)         (THIS_ WORD wMeasure,
-                                           BYTE bBeat,
-                                           BYTE bGrid,
-                                           short nOffset,
-                                           DMUS_TIMESIGNATURE *pTimeSig,
-                                           MUSIC_TIME *pmtTime) PURE;                                        
+                                     BYTE bBeat,
+                                     BYTE bGrid,
+                                     short nOffset,
+                                     DMUS_TIMESIGNATURE *pTimeSig,
+                                     MUSIC_TIME *pmtTime) PURE;
 };
 
 /*////////////////////////////////////////////////////////////////////
@@ -1275,147 +1276,147 @@ DECLARE_INTERFACE_(IDirectMusicPerformance8, IDirectMusicPerformance)
 
     /*  IDirectMusicPerformance */
     STDMETHOD(Init)                 (THIS_ IDirectMusic** ppDirectMusic,
-                                           LPDIRECTSOUND pDirectSound,
-                                           HWND hWnd) PURE;
-    STDMETHOD(PlaySegment)          (THIS_ IDirectMusicSegment* pSegment, 
-                                           DWORD dwFlags, 
-                                           __int64 i64StartTime, 
-                                           IDirectMusicSegmentState** ppSegmentState) PURE;
-    STDMETHOD(Stop)                 (THIS_ IDirectMusicSegment* pSegment, 
-                                           IDirectMusicSegmentState* pSegmentState, 
-                                           MUSIC_TIME mtTime, 
-                                           DWORD dwFlags) PURE;
-    STDMETHOD(GetSegmentState)      (THIS_ IDirectMusicSegmentState** ppSegmentState, 
-                                           MUSIC_TIME mtTime) PURE;
+                                     LPDIRECTSOUND pDirectSound,
+                                     HWND hWnd) PURE;
+    STDMETHOD(PlaySegment)          (THIS_ IDirectMusicSegment* pSegment,
+                                     DWORD dwFlags,
+                                     __int64 i64StartTime,
+                                     IDirectMusicSegmentState** ppSegmentState) PURE;
+    STDMETHOD(Stop)                 (THIS_ IDirectMusicSegment* pSegment,
+                                     IDirectMusicSegmentState* pSegmentState,
+                                     MUSIC_TIME mtTime,
+                                     DWORD dwFlags) PURE;
+    STDMETHOD(GetSegmentState)      (THIS_ IDirectMusicSegmentState** ppSegmentState,
+                                     MUSIC_TIME mtTime) PURE;
     STDMETHOD(SetPrepareTime)       (THIS_ DWORD dwMilliSeconds) PURE;
     STDMETHOD(GetPrepareTime)       (THIS_ DWORD* pdwMilliSeconds) PURE;
     STDMETHOD(SetBumperLength)      (THIS_ DWORD dwMilliSeconds) PURE;
     STDMETHOD(GetBumperLength)      (THIS_ DWORD* pdwMilliSeconds) PURE;
     STDMETHOD(SendPMsg)             (THIS_ DMUS_PMSG* pPMSG) PURE;
-    STDMETHOD(MusicToReferenceTime) (THIS_ MUSIC_TIME mtTime, 
-                                           REFERENCE_TIME* prtTime) PURE;
-    STDMETHOD(ReferenceToMusicTime) (THIS_ REFERENCE_TIME rtTime, 
-                                           MUSIC_TIME* pmtTime) PURE;
-    STDMETHOD(IsPlaying)            (THIS_ IDirectMusicSegment* pSegment, 
-                                           IDirectMusicSegmentState* pSegState) PURE;
-    STDMETHOD(GetTime)              (THIS_ REFERENCE_TIME* prtNow, 
-                                           MUSIC_TIME* pmtNow) PURE;
-    STDMETHOD(AllocPMsg)            (THIS_ ULONG cb, 
-                                           DMUS_PMSG** ppPMSG) PURE;
+    STDMETHOD(MusicToReferenceTime) (THIS_ MUSIC_TIME mtTime,
+                                     REFERENCE_TIME* prtTime) PURE;
+    STDMETHOD(ReferenceToMusicTime) (THIS_ REFERENCE_TIME rtTime,
+                                     MUSIC_TIME* pmtTime) PURE;
+    STDMETHOD(IsPlaying)            (THIS_ IDirectMusicSegment* pSegment,
+                                     IDirectMusicSegmentState* pSegState) PURE;
+    STDMETHOD(GetTime)              (THIS_ REFERENCE_TIME* prtNow,
+                                     MUSIC_TIME* pmtNow) PURE;
+    STDMETHOD(AllocPMsg)            (THIS_ ULONG cb,
+                                     DMUS_PMSG** ppPMSG) PURE;
     STDMETHOD(FreePMsg)             (THIS_ DMUS_PMSG* pPMSG) PURE;
     STDMETHOD(GetGraph)             (THIS_ IDirectMusicGraph** ppGraph) PURE;
     STDMETHOD(SetGraph)             (THIS_ IDirectMusicGraph* pGraph) PURE;
-    STDMETHOD(SetNotificationHandle)(THIS_ HANDLE hNotification, 
-                                           REFERENCE_TIME rtMinimum) PURE;
+    STDMETHOD(SetNotificationHandle)(THIS_ HANDLE hNotification,
+                                     REFERENCE_TIME rtMinimum) PURE;
     STDMETHOD(GetNotificationPMsg)  (THIS_ DMUS_NOTIFICATION_PMSG** ppNotificationPMsg) PURE;
     STDMETHOD(AddNotificationType)  (THIS_ REFGUID rguidNotificationType) PURE;
     STDMETHOD(RemoveNotificationType)(THIS_ REFGUID rguidNotificationType) PURE;
     STDMETHOD(AddPort)              (THIS_ IDirectMusicPort* pPort) PURE;
     STDMETHOD(RemovePort)           (THIS_ IDirectMusicPort* pPort ) PURE;
-    STDMETHOD(AssignPChannelBlock)  (THIS_ DWORD dwBlockNum, 
-                                           IDirectMusicPort* pPort, 
-                                           DWORD dwGroup ) PURE;
-    STDMETHOD(AssignPChannel)       (THIS_ DWORD dwPChannel, 
-                                           IDirectMusicPort* pPort, 
-                                           DWORD dwGroup, 
-                                           DWORD dwMChannel ) PURE;
-    STDMETHOD(PChannelInfo)         (THIS_ DWORD dwPChannel, 
-                                           IDirectMusicPort** ppPort, 
-                                           DWORD* pdwGroup, 
-                                           DWORD* pdwMChannel ) PURE;
-    STDMETHOD(DownloadInstrument)   (THIS_ IDirectMusicInstrument* pInst, 
-                                           DWORD dwPChannel, 
-                                           IDirectMusicDownloadedInstrument** ppDownInst, 
-                                           DMUS_NOTERANGE* pNoteRanges, 
-                                           DWORD dwNumNoteRanges, 
-                                           IDirectMusicPort** ppPort, 
-                                           DWORD* pdwGroup, 
-                                           DWORD* pdwMChannel ) PURE;
-    STDMETHOD(Invalidate)           (THIS_ MUSIC_TIME mtTime, 
-                                           DWORD dwFlags) PURE;
-    STDMETHOD(GetParam)             (THIS_ REFGUID rguidType, 
-                                           DWORD dwGroupBits, 
-                                           DWORD dwIndex, 
-                                           MUSIC_TIME mtTime, 
-                                           MUSIC_TIME* pmtNext, 
-                                           void* pParam) PURE; 
-    STDMETHOD(SetParam)             (THIS_ REFGUID rguidType, 
-                                           DWORD dwGroupBits, 
-                                           DWORD dwIndex, 
-                                           MUSIC_TIME mtTime, 
-                                           void* pParam) PURE;
-    STDMETHOD(GetGlobalParam)       (THIS_ REFGUID rguidType, 
-                                           void* pParam, 
-                                           DWORD dwSize) PURE;
-    STDMETHOD(SetGlobalParam)       (THIS_ REFGUID rguidType, 
-                                           void* pParam, 
-                                           DWORD dwSize) PURE;
+    STDMETHOD(AssignPChannelBlock)  (THIS_ DWORD dwBlockNum,
+                                     IDirectMusicPort* pPort,
+                                     DWORD dwGroup ) PURE;
+    STDMETHOD(AssignPChannel)       (THIS_ DWORD dwPChannel,
+                                     IDirectMusicPort* pPort,
+                                     DWORD dwGroup,
+                                     DWORD dwMChannel ) PURE;
+    STDMETHOD(PChannelInfo)         (THIS_ DWORD dwPChannel,
+                                     IDirectMusicPort** ppPort,
+                                     DWORD* pdwGroup,
+                                     DWORD* pdwMChannel ) PURE;
+    STDMETHOD(DownloadInstrument)   (THIS_ IDirectMusicInstrument* pInst,
+                                     DWORD dwPChannel,
+                                     IDirectMusicDownloadedInstrument** ppDownInst,
+                                     DMUS_NOTERANGE* pNoteRanges,
+                                     DWORD dwNumNoteRanges,
+                                     IDirectMusicPort** ppPort,
+                                     DWORD* pdwGroup,
+                                     DWORD* pdwMChannel ) PURE;
+    STDMETHOD(Invalidate)           (THIS_ MUSIC_TIME mtTime,
+                                     DWORD dwFlags) PURE;
+    STDMETHOD(GetParam)             (THIS_ REFGUID rguidType,
+                                     DWORD dwGroupBits,
+                                     DWORD dwIndex,
+                                     MUSIC_TIME mtTime,
+                                     MUSIC_TIME* pmtNext,
+                                     void* pParam) PURE;
+    STDMETHOD(SetParam)             (THIS_ REFGUID rguidType,
+                                     DWORD dwGroupBits,
+                                     DWORD dwIndex,
+                                     MUSIC_TIME mtTime,
+                                     void* pParam) PURE;
+    STDMETHOD(GetGlobalParam)       (THIS_ REFGUID rguidType,
+                                     void* pParam,
+                                     DWORD dwSize) PURE;
+    STDMETHOD(SetGlobalParam)       (THIS_ REFGUID rguidType,
+                                     void* pParam,
+                                     DWORD dwSize) PURE;
     STDMETHOD(GetLatencyTime)       (THIS_ REFERENCE_TIME* prtTime) PURE;
     STDMETHOD(GetQueueTime)         (THIS_ REFERENCE_TIME* prtTime) PURE;
     STDMETHOD(AdjustTime)           (THIS_ REFERENCE_TIME rtAmount) PURE;
     STDMETHOD(CloseDown)            (THIS) PURE;
     STDMETHOD(GetResolvedTime)      (THIS_ REFERENCE_TIME rtTime,
-                                           REFERENCE_TIME* prtResolved,
-                                           DWORD dwTimeResolveFlags) PURE;
+                                     REFERENCE_TIME* prtResolved,
+                                     DWORD dwTimeResolveFlags) PURE;
     STDMETHOD(MIDIToMusic)          (THIS_ BYTE bMIDIValue,
-                                           DMUS_CHORD_KEY* pChord,
-                                           BYTE bPlayMode,
-                                           BYTE bChordLevel,
-                                           WORD *pwMusicValue) PURE;
+                                     DMUS_CHORD_KEY* pChord,
+                                     BYTE bPlayMode,
+                                     BYTE bChordLevel,
+                                     WORD *pwMusicValue) PURE;
     STDMETHOD(MusicToMIDI)          (THIS_ WORD wMusicValue,
-                                           DMUS_CHORD_KEY* pChord,
-                                           BYTE bPlayMode,
-                                           BYTE bChordLevel,
-                                           BYTE *pbMIDIValue) PURE;
+                                     DMUS_CHORD_KEY* pChord,
+                                     BYTE bPlayMode,
+                                     BYTE bChordLevel,
+                                     BYTE *pbMIDIValue) PURE;
     STDMETHOD(TimeToRhythm)         (THIS_ MUSIC_TIME mtTime,
-                                           DMUS_TIMESIGNATURE *pTimeSig,
-                                           WORD *pwMeasure,
-                                           BYTE *pbBeat,
-                                           BYTE *pbGrid,
-                                           short *pnOffset) PURE;
+                                     DMUS_TIMESIGNATURE *pTimeSig,
+                                     WORD *pwMeasure,
+                                     BYTE *pbBeat,
+                                     BYTE *pbGrid,
+                                     short *pnOffset) PURE;
     STDMETHOD(RhythmToTime)         (THIS_ WORD wMeasure,
-                                           BYTE bBeat,
-                                           BYTE bGrid,
-                                           short nOffset,
-                                           DMUS_TIMESIGNATURE *pTimeSig,
-                                           MUSIC_TIME *pmtTime) PURE;  
+                                     BYTE bBeat,
+                                     BYTE bGrid,
+                                     short nOffset,
+                                     DMUS_TIMESIGNATURE *pTimeSig,
+                                     MUSIC_TIME *pmtTime) PURE;
     /*  IDirectMusicPerformance8 */
     STDMETHOD(InitAudio)            (THIS_ IDirectMusic** ppDirectMusic,            /* Optional DMusic pointer. */
-                                           IDirectSound** ppDirectSound,            /* Optional DSound pointer. */
-                                           HWND hWnd,                               /* HWND for DSound. */
-                                           DWORD dwDefaultPathType,                 /* Requested default audio path type, also optional. */
-                                           DWORD dwPChannelCount,                   /* Number of PChannels, if default audio path to be created. */
-                                           DWORD dwFlags,                           /* DMUS_AUDIOF flags, if no pParams structure. */
-                                           DMUS_AUDIOPARAMS *pParams) PURE;         /* Optional initialization structure, defining required voices, buffers, etc. */
+                                     IDirectSound** ppDirectSound,            /* Optional DSound pointer. */
+                                     HWND hWnd,                               /* HWND for DSound. */
+                                     DWORD dwDefaultPathType,                 /* Requested default audio path type, also optional. */
+                                     DWORD dwPChannelCount,                   /* Number of PChannels, if default audio path to be created. */
+                                     DWORD dwFlags,                           /* DMUS_AUDIOF flags, if no pParams structure. */
+                                     DMUS_AUDIOPARAMS *pParams) PURE;         /* Optional initialization structure, defining required voices, buffers, etc. */
     STDMETHOD(PlaySegmentEx)        (THIS_ IUnknown* pSource,                       /* Segment to play. */
-                                           WCHAR *pwzSegmentName,                   /* Not supported in DX8. */
-                                           IUnknown* pTransition,                   /* Optional template segment to compose transition with. */
-                                           DWORD dwFlags,                           /* DMUS_SEGF_ flags. */ 
-                                           __int64 i64StartTime,                    /* Time to start playback. */
-                                           IDirectMusicSegmentState** ppSegmentState, /* Returned Segment State. */
-                                           IUnknown *pFrom,                         /* Optional segmentstate or audiopath to replace. */
-                                           IUnknown *pAudioPath) PURE;              /* Optional audioPath to play on. */
-    STDMETHOD(StopEx)               (THIS_ IUnknown *pObjectToStop,                 /* Segstate, AudioPath, or Segment. */ 
-                                           __int64 i64StopTime, 
-                                           DWORD dwFlags) PURE;
+                                     WCHAR *pwzSegmentName,                   /* Not supported in DX8. */
+                                     IUnknown* pTransition,                   /* Optional template segment to compose transition with. */
+                                     DWORD dwFlags,                           /* DMUS_SEGF_ flags. */
+                                     __int64 i64StartTime,                    /* Time to start playback. */
+                                     IDirectMusicSegmentState** ppSegmentState, /* Returned Segment State. */
+                                     IUnknown *pFrom,                         /* Optional segmentstate or audiopath to replace. */
+                                     IUnknown *pAudioPath) PURE;              /* Optional audioPath to play on. */
+    STDMETHOD(StopEx)               (THIS_ IUnknown *pObjectToStop,                 /* Segstate, AudioPath, or Segment. */
+                                     __int64 i64StopTime,
+                                     DWORD dwFlags) PURE;
     STDMETHOD(ClonePMsg)            (THIS_ DMUS_PMSG* pSourcePMSG,
-                                           DMUS_PMSG** ppCopyPMSG) PURE;
+                                     DMUS_PMSG** ppCopyPMSG) PURE;
     STDMETHOD(CreateAudioPath)      (THIS_ IUnknown *pSourceConfig,                 /* Source configuration, from AudioPathConfig file. */
-                                           BOOL fActivate,                          /* TRUE to activate on creation. */
-                                           IDirectMusicAudioPath **ppNewPath) PURE; /* Returns created audiopath. */                                           
+                                     BOOL fActivate,                          /* TRUE to activate on creation. */
+                                     IDirectMusicAudioPath **ppNewPath) PURE; /* Returns created audiopath. */
     STDMETHOD(CreateStandardAudioPath)(THIS_ DWORD dwType,                          /* Type of path to create. */
-                                           DWORD dwPChannelCount,                   /* How many PChannels to allocate for it. */
-                                           BOOL fActivate,                          /* TRUE to activate on creation. */
-                                           IDirectMusicAudioPath **ppNewPath) PURE; /* Returns created audiopath. */
+                                       DWORD dwPChannelCount,                   /* How many PChannels to allocate for it. */
+                                       BOOL fActivate,                          /* TRUE to activate on creation. */
+                                       IDirectMusicAudioPath **ppNewPath) PURE; /* Returns created audiopath. */
     STDMETHOD(SetDefaultAudioPath)  (THIS_ IDirectMusicAudioPath *pAudioPath) PURE;
     STDMETHOD(GetDefaultAudioPath)  (THIS_ IDirectMusicAudioPath **ppAudioPath) PURE;
     STDMETHOD(GetParamEx)           (THIS_ REFGUID rguidType,                       /* GetParam command ID. */
-                                           DWORD dwTrackID,                         /* Virtual track ID of caller. */
-                                           DWORD dwGroupBits,                       /* Group bits of caller. */
-                                           DWORD dwIndex,                           /* Index to Nth parameter. */
-                                           MUSIC_TIME mtTime,                       /* Time of requested parameter. */
-                                           MUSIC_TIME* pmtNext,                     /* Returned delta to next parameter. */
-                                           void* pParam) PURE;                      /* Data structure to fill with parameter. */
+                                     DWORD dwTrackID,                         /* Virtual track ID of caller. */
+                                     DWORD dwGroupBits,                       /* Group bits of caller. */
+                                     DWORD dwIndex,                           /* Index to Nth parameter. */
+                                     MUSIC_TIME mtTime,                       /* Time of requested parameter. */
+                                     MUSIC_TIME* pmtNext,                     /* Returned delta to next parameter. */
+                                     void* pParam) PURE;                      /* Data structure to fill with parameter. */
 };
 
 
@@ -1433,12 +1434,12 @@ DECLARE_INTERFACE_(IDirectMusicGraph, IUnknown)
 
     /*  IDirectMusicGraph */
     STDMETHOD(StampPMsg)            (THIS_ DMUS_PMSG* pPMSG) PURE;
-    STDMETHOD(InsertTool)           (THIS_ IDirectMusicTool* pTool, 
-                                           DWORD* pdwPChannels, 
-                                           DWORD cPChannels, 
-                                           LONG lIndex) PURE;
-    STDMETHOD(GetTool)              (THIS_ DWORD dwIndex, 
-                                           IDirectMusicTool** ppTool) PURE;
+    STDMETHOD(InsertTool)           (THIS_ IDirectMusicTool* pTool,
+                                     DWORD* pdwPChannels,
+                                     DWORD cPChannels,
+                                     LONG lIndex) PURE;
+    STDMETHOD(GetTool)              (THIS_ DWORD dwIndex,
+                                     IDirectMusicTool** ppTool) PURE;
     STDMETHOD(RemoveTool)           (THIS_ IDirectMusicTool* pTool) PURE;
 };
 
@@ -1457,25 +1458,25 @@ DECLARE_INTERFACE_(IDirectMusicStyle, IUnknown)
     STDMETHOD_(ULONG,Release)         (THIS) PURE;
 
     /*  IDirectMusicStyle */
-    STDMETHOD(GetBand)                (THIS_ WCHAR* pwszName, 
-                                             IDirectMusicBand** ppBand) PURE;
-    STDMETHOD(EnumBand)               (THIS_ DWORD dwIndex, 
-                                             WCHAR *pwszName) PURE;
+    STDMETHOD(GetBand)                (THIS_ WCHAR* pwszName,
+                                       IDirectMusicBand** ppBand) PURE;
+    STDMETHOD(EnumBand)               (THIS_ DWORD dwIndex,
+                                       WCHAR *pwszName) PURE;
     STDMETHOD(GetDefaultBand)         (THIS_ IDirectMusicBand** ppBand) PURE;
-    STDMETHOD(EnumMotif)              (THIS_ DWORD dwIndex, 
-                                             WCHAR* pwszName) PURE;
-    STDMETHOD(GetMotif)               (THIS_ WCHAR* pwszName, 
-                                             IDirectMusicSegment** ppSegment) PURE;
+    STDMETHOD(EnumMotif)              (THIS_ DWORD dwIndex,
+                                       WCHAR* pwszName) PURE;
+    STDMETHOD(GetMotif)               (THIS_ WCHAR* pwszName,
+                                       IDirectMusicSegment** ppSegment) PURE;
     STDMETHOD(GetDefaultChordMap)     (THIS_ IDirectMusicChordMap** ppChordMap) PURE;
-    STDMETHOD(EnumChordMap)           (THIS_ DWORD dwIndex, 
-                                             WCHAR *pwszName) PURE;
-    STDMETHOD(GetChordMap)            (THIS_ WCHAR* pwszName, 
-                                             IDirectMusicChordMap** ppChordMap) PURE;
+    STDMETHOD(EnumChordMap)           (THIS_ DWORD dwIndex,
+                                       WCHAR *pwszName) PURE;
+    STDMETHOD(GetChordMap)            (THIS_ WCHAR* pwszName,
+                                       IDirectMusicChordMap** ppChordMap) PURE;
     STDMETHOD(GetTimeSignature)       (THIS_ DMUS_TIMESIGNATURE* pTimeSig) PURE;
-    STDMETHOD(GetEmbellishmentLength) (THIS_ DWORD dwType, 
-                                             DWORD dwLevel, 
-                                             DWORD* pdwMin, 
-                                             DWORD* pdwMax) PURE;
+    STDMETHOD(GetEmbellishmentLength) (THIS_ DWORD dwType,
+                                       DWORD dwLevel,
+                                       DWORD* pdwMin,
+                                       DWORD* pdwMax) PURE;
     STDMETHOD(GetTempo)               (THIS_ double* pTempo) PURE;
 };
 
@@ -1491,31 +1492,31 @@ DECLARE_INTERFACE_(IDirectMusicStyle8, IDirectMusicStyle)
     STDMETHOD_(ULONG,Release)               (THIS) PURE;
 
     /*  IDirectMusicStyle */
-    STDMETHOD(GetBand)                (THIS_ WCHAR* pwszName, 
-                                             IDirectMusicBand** ppBand) PURE;
-    STDMETHOD(EnumBand)               (THIS_ DWORD dwIndex, 
-                                             WCHAR *pwszName) PURE;
+    STDMETHOD(GetBand)                (THIS_ WCHAR* pwszName,
+                                       IDirectMusicBand** ppBand) PURE;
+    STDMETHOD(EnumBand)               (THIS_ DWORD dwIndex,
+                                       WCHAR *pwszName) PURE;
     STDMETHOD(GetDefaultBand)         (THIS_ IDirectMusicBand** ppBand) PURE;
-    STDMETHOD(EnumMotif)              (THIS_ DWORD dwIndex, 
-                                             WCHAR* pwszName) PURE;
-    STDMETHOD(GetMotif)               (THIS_ WCHAR* pwszName, 
-                                             IDirectMusicSegment** ppSegment) PURE;
+    STDMETHOD(EnumMotif)              (THIS_ DWORD dwIndex,
+                                       WCHAR* pwszName) PURE;
+    STDMETHOD(GetMotif)               (THIS_ WCHAR* pwszName,
+                                       IDirectMusicSegment** ppSegment) PURE;
     STDMETHOD(GetDefaultChordMap)     (THIS_ IDirectMusicChordMap** ppChordMap) PURE;
-    STDMETHOD(EnumChordMap)           (THIS_ DWORD dwIndex, 
-                                             WCHAR *pwszName) PURE;
-    STDMETHOD(GetChordMap)            (THIS_ WCHAR* pwszName, 
-                                             IDirectMusicChordMap** ppChordMap) PURE;
+    STDMETHOD(EnumChordMap)           (THIS_ DWORD dwIndex,
+                                       WCHAR *pwszName) PURE;
+    STDMETHOD(GetChordMap)            (THIS_ WCHAR* pwszName,
+                                       IDirectMusicChordMap** ppChordMap) PURE;
     STDMETHOD(GetTimeSignature)       (THIS_ DMUS_TIMESIGNATURE* pTimeSig) PURE;
-    STDMETHOD(GetEmbellishmentLength) (THIS_ DWORD dwType, 
-                                             DWORD dwLevel, 
-                                             DWORD* pdwMin, 
-                                             DWORD* pdwMax) PURE;
+    STDMETHOD(GetEmbellishmentLength) (THIS_ DWORD dwType,
+                                       DWORD dwLevel,
+                                       DWORD* pdwMin,
+                                       DWORD* pdwMax) PURE;
     STDMETHOD(GetTempo)               (THIS_ double* pTempo) PURE;
 
     /*  IDirectMusicStyle8 */
-    STDMETHOD(EnumPattern)            (THIS_ DWORD dwIndex, 
-                                             DWORD dwPatternType,
-                                             WCHAR* pwszName) PURE;
+    STDMETHOD(EnumPattern)            (THIS_ DWORD dwIndex,
+                                       DWORD dwPatternType,
+                                       WCHAR* pwszName) PURE;
 };
 
 /*/////////////////////////////////////////////////////////////////////
@@ -1547,43 +1548,43 @@ DECLARE_INTERFACE_(IDirectMusicComposer, IUnknown)
     STDMETHOD_(ULONG,Release)               (THIS) PURE;
 
     /*  IDirectMusicComposer */
-    STDMETHOD(ComposeSegmentFromTemplate)   (THIS_ IDirectMusicStyle* pStyle, 
-                                                   IDirectMusicSegment* pTemplate, 
-                                                   WORD wActivity, 
-                                                   IDirectMusicChordMap* pChordMap, 
-                                                   IDirectMusicSegment** ppSegment) PURE;
-    STDMETHOD(ComposeSegmentFromShape)      (THIS_ IDirectMusicStyle* pStyle, 
-                                                   WORD wNumMeasures, 
-                                                   WORD wShape, 
-                                                   WORD wActivity, 
-                                                   BOOL fIntro, 
-                                                   BOOL fEnd, 
-                                                   IDirectMusicChordMap* pChordMap, 
-                                                   IDirectMusicSegment** ppSegment ) PURE;
-    STDMETHOD(ComposeTransition)            (THIS_ IDirectMusicSegment* pFromSeg, 
-                                                   IDirectMusicSegment* pToSeg, 
-                                                   MUSIC_TIME mtTime, 
-                                                   WORD wCommand, 
-                                                   DWORD dwFlags, 
-                                                   IDirectMusicChordMap* pChordMap, 
-                                                   IDirectMusicSegment** ppTransSeg) PURE;
-    STDMETHOD(AutoTransition)               (THIS_ IDirectMusicPerformance* pPerformance, 
-                                                   IDirectMusicSegment* pToSeg, 
-                                                   WORD wCommand, 
-                                                   DWORD dwFlags, 
-                                                   IDirectMusicChordMap* pChordMap, 
-                                                   IDirectMusicSegment** ppTransSeg, 
-                                                   IDirectMusicSegmentState** ppToSegState, 
-                                                   IDirectMusicSegmentState** ppTransSegState) PURE;
-    STDMETHOD(ComposeTemplateFromShape)     (THIS_ WORD wNumMeasures, 
-                                                   WORD wShape, 
-                                                   BOOL fIntro, 
-                                                   BOOL fEnd, 
-                                                   WORD wEndLength, 
-                                                   IDirectMusicSegment** ppTemplate) PURE;
-    STDMETHOD(ChangeChordMap)            (THIS_ IDirectMusicSegment* pSegment, 
-                                                   BOOL fTrackScale, 
-                                                   IDirectMusicChordMap* pChordMap) PURE;
+    STDMETHOD(ComposeSegmentFromTemplate)   (THIS_ IDirectMusicStyle* pStyle,
+            IDirectMusicSegment* pTemplate,
+            WORD wActivity,
+            IDirectMusicChordMap* pChordMap,
+            IDirectMusicSegment** ppSegment) PURE;
+    STDMETHOD(ComposeSegmentFromShape)      (THIS_ IDirectMusicStyle* pStyle,
+            WORD wNumMeasures,
+            WORD wShape,
+            WORD wActivity,
+            BOOL fIntro,
+            BOOL fEnd,
+            IDirectMusicChordMap* pChordMap,
+            IDirectMusicSegment** ppSegment ) PURE;
+    STDMETHOD(ComposeTransition)            (THIS_ IDirectMusicSegment* pFromSeg,
+            IDirectMusicSegment* pToSeg,
+            MUSIC_TIME mtTime,
+            WORD wCommand,
+            DWORD dwFlags,
+            IDirectMusicChordMap* pChordMap,
+            IDirectMusicSegment** ppTransSeg) PURE;
+    STDMETHOD(AutoTransition)               (THIS_ IDirectMusicPerformance* pPerformance,
+            IDirectMusicSegment* pToSeg,
+            WORD wCommand,
+            DWORD dwFlags,
+            IDirectMusicChordMap* pChordMap,
+            IDirectMusicSegment** ppTransSeg,
+            IDirectMusicSegmentState** ppToSegState,
+            IDirectMusicSegmentState** ppTransSegState) PURE;
+    STDMETHOD(ComposeTemplateFromShape)     (THIS_ WORD wNumMeasures,
+            WORD wShape,
+            BOOL fIntro,
+            BOOL fEnd,
+            WORD wEndLength,
+            IDirectMusicSegment** ppTemplate) PURE;
+    STDMETHOD(ChangeChordMap)            (THIS_ IDirectMusicSegment* pSegment,
+                                          BOOL fTrackScale,
+                                          IDirectMusicChordMap* pChordMap) PURE;
 };
 
 typedef IDirectMusicComposer IDirectMusicComposer8;
@@ -1602,15 +1603,15 @@ DECLARE_INTERFACE_(IDirectMusicPatternTrack, IUnknown)
 
     /*  IDirectMusicPatternTrack */
     STDMETHOD(CreateSegment)             (THIS_ IDirectMusicStyle* pStyle,
-                                                IDirectMusicSegment** ppSegment) PURE;
+                                          IDirectMusicSegment** ppSegment) PURE;
     STDMETHOD(SetVariation)              (THIS_ IDirectMusicSegmentState* pSegState,
-                                                DWORD dwVariationFlags,
-                                                DWORD dwPart) PURE;
+                                          DWORD dwVariationFlags,
+                                          DWORD dwPart) PURE;
     STDMETHOD(SetPatternByName)          (THIS_ IDirectMusicSegmentState* pSegState,
-                                                WCHAR* wszName,
-                                                IDirectMusicStyle* pStyle,
-                                                DWORD dwPatternType,
-                                                DWORD* pdwLength) PURE;
+                                          WCHAR* wszName,
+                                          IDirectMusicStyle* pStyle,
+                                          DWORD dwPatternType,
+                                          DWORD* pdwLength) PURE;
 };
 
 typedef IDirectMusicPatternTrack IDirectMusicPatternTrack8;
@@ -1629,33 +1630,33 @@ DECLARE_INTERFACE_(IDirectMusicScript, IUnknown)
 
     /*  IDirectMusicScript */
     STDMETHOD(Init)                     (THIS_ IDirectMusicPerformance *pPerformance,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(CallRoutine)              (THIS_ WCHAR *pwszRoutineName,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(SetVariableVariant)       (THIS_ WCHAR *pwszVariableName,
-                                               VARIANT varValue,
-                                               BOOL fSetRef,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         VARIANT varValue,
+                                         BOOL fSetRef,
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(GetVariableVariant)       (THIS_ WCHAR *pwszVariableName,
-                                               VARIANT *pvarValue,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         VARIANT *pvarValue,
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(SetVariableNumber)        (THIS_ WCHAR *pwszVariableName,
-                                               LONG lValue,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         LONG lValue,
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(GetVariableNumber)        (THIS_ WCHAR *pwszVariableName,
-                                               LONG *plValue,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         LONG *plValue,
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(SetVariableObject)        (THIS_ WCHAR *pwszVariableName,
-                                               IUnknown *punkValue,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+                                         IUnknown *punkValue,
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
     STDMETHOD(GetVariableObject)        (THIS_ WCHAR *pwszVariableName,
-                                               REFIID riid,
-                                               LPVOID FAR *ppv,
-                                               DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
-    STDMETHOD(EnumRoutine)              (THIS_ DWORD dwIndex, 
-                                               WCHAR *pwszName) PURE;
-    STDMETHOD(EnumVariable)             (THIS_ DWORD dwIndex, 
-                                               WCHAR *pwszName) PURE;
+                                         REFIID riid,
+                                         LPVOID FAR *ppv,
+                                         DMUS_SCRIPT_ERRORINFO *pErrorInfo) PURE;
+    STDMETHOD(EnumRoutine)              (THIS_ DWORD dwIndex,
+                                         WCHAR *pwszName) PURE;
+    STDMETHOD(EnumVariable)             (THIS_ DWORD dwIndex,
+                                         WCHAR *pwszName) PURE;
 };
 
 typedef IDirectMusicScript IDirectMusicScript8;
@@ -1673,10 +1674,10 @@ DECLARE_INTERFACE_(IDirectMusicContainer, IUnknown)
     STDMETHOD_(ULONG,Release)               (THIS) PURE;
 
     /*  IDirectMusicContainer */
-    STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass, 
-                                           DWORD dwIndex, 
-                                           LPDMUS_OBJECTDESC pDesc,
-                                           WCHAR *pwszAlias) PURE;
+    STDMETHOD(EnumObject)           (THIS_ REFGUID rguidClass,
+                                     DWORD dwIndex,
+                                     LPDMUS_OBJECTDESC pDesc,
+                                     WCHAR *pwszAlias) PURE;
 };
 
 typedef IDirectMusicContainer IDirectMusicContainer8;
@@ -1791,8 +1792,8 @@ DEFINE_GUID(GUID_EnableTimeSig, 0x45fc707c, 0x1db4, 0x11d2, 0xbc, 0xac, 0x0, 0xa
 DEFINE_GUID(GUID_DisableTempo, 0x45fc707d, 0x1db4, 0x11d2, 0xbc, 0xac, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xeb);
 DEFINE_GUID(GUID_EnableTempo, 0x45fc707e, 0x1db4, 0x11d2, 0xbc, 0xac, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xeb);
 
-/* Used in SetParam calls for pattern-based tracks.  A nonzero value seeds the random number 
-generator for variation selection; a value of zero reverts to the default behavior of 
+/* Used in SetParam calls for pattern-based tracks.  A nonzero value seeds the random number
+generator for variation selection; a value of zero reverts to the default behavior of
 getting the seed from the system clock.
 */
 DEFINE_GUID(GUID_SeedVariations, 0x65b76fa5, 0xff37, 0x11d2, 0x81, 0x4e, 0x0, 0xc0, 0x4f, 0xa3, 0x6e, 0x58);

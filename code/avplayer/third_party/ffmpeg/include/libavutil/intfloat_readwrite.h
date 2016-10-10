@@ -25,7 +25,8 @@
 #include "attributes.h"
 
 /* IEEE 80 bits extended float */
-typedef struct AVExtFloat  {
+typedef struct AVExtFloat
+{
     uint8_t exponent[2];
     uint8_t mantissa[8];
 } AVExtFloat;

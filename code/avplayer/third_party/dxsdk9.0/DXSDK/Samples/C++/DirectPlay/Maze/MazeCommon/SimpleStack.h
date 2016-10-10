@@ -12,10 +12,10 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
-template< class Item , DWORD size > class SimpleStack
+template< class Item, DWORD size > class SimpleStack
 {
 public:
     SimpleStack()

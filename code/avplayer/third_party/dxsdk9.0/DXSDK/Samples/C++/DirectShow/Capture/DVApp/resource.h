@@ -89,27 +89,27 @@
 
 
 
-// Toolbar buttons 
+// Toolbar buttons
 
-TBBUTTON g_rgTbButtons[] = 
-{ 
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},     
+TBBUTTON g_rgTbButtons[] =
+{
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
     {8, IDM_STEP_REV,       TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
     {5, IDM_REW,            TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
     {9, IDM_PLAY_FAST_REV,  TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
-    {0, IDM_PLAY,           TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0}, 
+    {0, IDM_PLAY,           TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
     {6, IDM_PLAY_FAST_FF,   TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
     {4, IDM_FF,             TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
     {7, IDM_STEP_FWD,       TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},   
-    {1, IDM_PAUSE,          TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0}, 
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
+    {1, IDM_PAUSE,          TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
     {2, IDM_STOP,           TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0},
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},   
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
     {3, IDM_RECORD,         TBSTATE_INDETERMINATE, TBSTYLE_BUTTON, 0,0},
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},   
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},   
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},   
-    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},   
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
+    {0, 0,                  TBSTATE_ENABLED, TBSTYLE_SEP,    0,0},
     {10, IDM_SEEKTIMECODE,  TBSTATE_ENABLED, TBSTYLE_BUTTON, 0,0}
 };
 

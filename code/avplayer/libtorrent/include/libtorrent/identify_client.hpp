@@ -50,8 +50,8 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	TORRENT_EXPORT std::string identify_client(const peer_id& p);
-	TORRENT_EXPORT boost::optional<fingerprint> client_fingerprint(peer_id const& p);
+TORRENT_EXPORT std::string identify_client(const peer_id& p);
+TORRENT_EXPORT boost::optional<fingerprint> client_fingerprint(peer_id const& p);
 
 }
 

@@ -17,7 +17,7 @@
 #define IDM_STOP_GRAPH          503
 #define IDM_SELECT_CHANNEL      504
 #define IDM_ABOUT               505
-                                   
+
 // Buttons
 #define IDC_CHANNEL             1001
 #define IDC_SPIN_MAJOR          1002

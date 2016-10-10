@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------------
 // File: Textures.h
 //
-// Desc: DirectShow sample code - header file for DirectShow/Direct3D8 video 
+// Desc: DirectShow sample code - header file for DirectShow/Direct3D8 video
 //       texturing
-//       
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //-----------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ void CheckMovieStatus(void);
 void CleanupDShow(void);
 void Msg(TCHAR *szFormat, ...);
 
-HRESULT AddToROT(IUnknown *pUnkGraph); 
+HRESULT AddToROT(IUnknown *pUnkGraph);
 void RemoveFromROT(void);
 
 //-----------------------------------------------------------------------------

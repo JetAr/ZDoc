@@ -39,14 +39,14 @@ struct AVStream;
 /* 播放器状态. */
 typedef enum play_status
 {
-	inited, playing, paused, completed, stoped
+    inited, playing, paused, completed, stoped
 } play_status;
 
 enum sync_type
 {
-	AV_SYNC_AUDIO_MASTER, /* 默认选择. */
-	AV_SYNC_VIDEO_MASTER, /* 同步到视频时间戳. */
-	AV_SYNC_EXTERNAL_CLOCK, /* 同步到外部时钟. */
+    AV_SYNC_AUDIO_MASTER, /* 默认选择. */
+    AV_SYNC_VIDEO_MASTER, /* 同步到视频时间戳. */
+    AV_SYNC_EXTERNAL_CLOCK, /* 同步到外部时钟. */
 };
 
 /* 用于config_render参数表示所配置的render或source或demux.  */
@@ -64,12 +64,12 @@ enum sync_type
 /* 队列.	*/
 typedef struct _av_queue
 {
-	void *m_first_pkt, *m_last_pkt;
-	int m_size; /* 队列大小.	*/
-	int m_type; /* 队列类型.	*/
-	int abort_request;
-	pthread_mutex_t m_mutex;
-	pthread_cond_t m_cond;
+    void *m_first_pkt, *m_last_pkt;
+    int m_size; /* 队列大小.	*/
+    int m_type; /* 队列类型.	*/
+    int abort_request;
+    pthread_mutex_t m_mutex;
+    pthread_cond_t m_cond;
 } av_queue;
 
 /* 数据源结构分配和释放. */
@@ -93,128 +93,128 @@ EXPORT_API void free_demux_context(demux_context *ctx);
 
 typedef struct avplay
 {
-	/* 文件打开指针. */
-	AVFormatContext *m_format_ctx;
+    /* 文件打开指针. */
+    AVFormatContext *m_format_ctx;
 
-	/* 音视频队列.	*/
-	av_queue m_audio_q;
-	av_queue m_video_q;
-	av_queue m_audio_dq;
-	av_queue m_video_dq;
+    /* 音视频队列.	*/
+    av_queue m_audio_q;
+    av_queue m_video_q;
+    av_queue m_audio_dq;
+    av_queue m_video_dq;
 
-	/* 各解码渲染线程.	*/
-	pthread_t m_audio_dec_thrd;
-	pthread_t m_video_dec_thrd;
-	pthread_t m_audio_render_thrd;
-	pthread_t m_video_render_thrd;
-	pthread_t m_read_pkt_thrd;
+    /* 各解码渲染线程.	*/
+    pthread_t m_audio_dec_thrd;
+    pthread_t m_video_dec_thrd;
+    pthread_t m_audio_render_thrd;
+    pthread_t m_video_render_thrd;
+    pthread_t m_read_pkt_thrd;
 
-	/* 重采样音频指针.	*/
-	struct SwsContext *m_swsctx_video;
-	struct SwrContext *m_swrctx_audio;
-	ReSampleContext *m_resample_ctx;
+    /* 重采样音频指针.	*/
+    struct SwsContext *m_swsctx_video;
+    struct SwrContext *m_swrctx_audio;
+    ReSampleContext *m_resample_ctx;
 
-	/* 音频和视频的AVStream、AVCodecContext指针和index.	*/
-	AVCodecContext *m_audio_ctx;
-	AVCodecContext *m_video_ctx;
-	AVStream *m_audio_st;
-	AVStream *m_video_st;
-	int m_audio_index;
-	int m_video_index;
+    /* 音频和视频的AVStream、AVCodecContext指针和index.	*/
+    AVCodecContext *m_audio_ctx;
+    AVCodecContext *m_video_ctx;
+    AVStream *m_audio_st;
+    AVStream *m_video_st;
+    int m_audio_index;
+    int m_video_index;
 
-	/* 读取数据包占用缓冲大小.	*/
-	long volatile m_pkt_buffer_size;
-	pthread_mutex_t m_buf_size_mtx;
+    /* 读取数据包占用缓冲大小.	*/
+    long volatile m_pkt_buffer_size;
+    pthread_mutex_t m_buf_size_mtx;
 
-	/* 同步类型. */
-	int m_av_sync_type;
+    /* 同步类型. */
+    int m_av_sync_type;
 
-	/*
-	 * 用于计算视频播放时间
-	 * 即:  m_video_current_pts_drift = m_video_current_pts - time();
-	 *      m_video_current_pts是当前播放帧的pts时间, 所以在pts向前推进
-	 *      的同时, time也同样在向前推进, 所以pts_drift基本保存在一个
-	 *      time_base范围内浮动.
-	 * 播放时间 = m_video_current_pts_drift - time()
-	 */
-	double m_video_current_pts_drift;
-	double m_video_current_pts;
+    /*
+     * 用于计算视频播放时间
+     * 即:  m_video_current_pts_drift = m_video_current_pts - time();
+     *      m_video_current_pts是当前播放帧的pts时间, 所以在pts向前推进
+     *      的同时, time也同样在向前推进, 所以pts_drift基本保存在一个
+     *      time_base范围内浮动.
+     * 播放时间 = m_video_current_pts_drift - time()
+     */
+    double m_video_current_pts_drift;
+    double m_video_current_pts;
 
-	/* 以下变量用于计算音视频同步.	*/
-	double m_frame_timer;
-	double m_frame_last_pts;
-	double m_frame_last_duration;
-	double m_frame_last_delay;
-	double m_frame_last_filter_delay;
-	double m_frame_last_dropped_pts;
-	double m_frame_last_returned_time;
-	int64_t m_frame_last_dropped_pos;
-	int64_t m_video_current_pos;
-	int m_drop_frame_num;
+    /* 以下变量用于计算音视频同步.	*/
+    double m_frame_timer;
+    double m_frame_last_pts;
+    double m_frame_last_duration;
+    double m_frame_last_delay;
+    double m_frame_last_filter_delay;
+    double m_frame_last_dropped_pts;
+    double m_frame_last_returned_time;
+    int64_t m_frame_last_dropped_pos;
+    int64_t m_video_current_pos;
+    int m_drop_frame_num;
 
-	/* seek实现. */
-	int m_read_pause_return;
-	int m_seek_req;
-	int m_seek_flags;
-	int64_t m_seek_pos;
-	int64_t m_seek_rel;
-	int m_seek_by_bytes;
-	int m_seeking;
+    /* seek实现. */
+    int m_read_pause_return;
+    int m_seek_req;
+    int m_seek_flags;
+    int64_t m_seek_pos;
+    int64_t m_seek_rel;
+    int m_seek_by_bytes;
+    int m_seeking;
 
-	/* 最后一个解码帧的pts, 解码帧缓冲大小为2, 也就是当前播放帧的下一帧.	*/
-	double m_audio_clock;
-	double m_video_clock;
-	double m_external_clock;
-	double m_external_clock_time;
+    /* 最后一个解码帧的pts, 解码帧缓冲大小为2, 也就是当前播放帧的下一帧.	*/
+    double m_audio_clock;
+    double m_video_clock;
+    double m_external_clock;
+    double m_external_clock_time;
 
-	/* 当前数据源读取器. */
-	source_context *m_source_ctx;
-	AVIOContext *m_avio_ctx;
-	unsigned char *m_io_buffer;
-	/* 用于视频分离的组件. */
-	demux_context *m_demux_context;
-	/* 当前音频渲染器.	*/
-	ao_context *m_ao_ctx;
-	/* 当前视频渲染器. */
-	vo_context *m_vo_ctx;
-	/* 当前音频渲染器是否已经初始化完成, 为1表示完成初始化, 0表示未完成初始化. */
-	int m_ao_inited;
+    /* 当前数据源读取器. */
+    source_context *m_source_ctx;
+    AVIOContext *m_avio_ctx;
+    unsigned char *m_io_buffer;
+    /* 用于视频分离的组件. */
+    demux_context *m_demux_context;
+    /* 当前音频渲染器.	*/
+    ao_context *m_ao_ctx;
+    /* 当前视频渲染器. */
+    vo_context *m_vo_ctx;
+    /* 当前音频渲染器是否已经初始化完成, 为1表示完成初始化, 0表示未完成初始化. */
+    int m_ao_inited;
 
-	/* 当前音频播放buffer大小.	*/
-	uint32_t m_audio_buf_size;
+    /* 当前音频播放buffer大小.	*/
+    uint32_t m_audio_buf_size;
 
-	/* 当前音频已经播放buffer的位置.	*/
-	uint32_t m_audio_buf_index;
-	//z 只是声明了，没有用到。
-	int32_t m_audio_write_buf_size;
-	double m_audio_current_pts_drift;
-	double m_audio_current_pts_last;
+    /* 当前音频已经播放buffer的位置.	*/
+    uint32_t m_audio_buf_index;
+    //z 只是声明了，没有用到。
+    int32_t m_audio_write_buf_size;
+    double m_audio_current_pts_drift;
+    double m_audio_current_pts_last;
 
-	/* 播放状态. */
-	play_status m_play_status;
-	int m_rendering;
+    /* 播放状态. */
+    play_status m_play_status;
+    int m_rendering;
 
-	/* 实时视频输入位率. */
-	int m_enable_calc_video_bite;
-	int m_real_bit_rate;
-	int m_read_bytes[MAX_CALC_SEC]; /* 记录5秒内的字节数. */
-	int m_last_vb_time;
-	int m_vb_index;
+    /* 实时视频输入位率. */
+    int m_enable_calc_video_bite;
+    int m_real_bit_rate;
+    int m_read_bytes[MAX_CALC_SEC]; /* 记录5秒内的字节数. */
+    int m_last_vb_time;
+    int m_vb_index;
 
-	/* 帧率. */
-	int m_enable_calc_frame_rate;
-	int m_real_frame_rate;
-	int m_frame_num[MAX_CALC_SEC]; /* 记录5秒内的帧数. */
-	int m_last_fr_time;
-	int m_fr_index;
+    /* 帧率. */
+    int m_enable_calc_frame_rate;
+    int m_real_frame_rate;
+    int m_frame_num[MAX_CALC_SEC]; /* 记录5秒内的帧数. */
+    int m_last_fr_time;
+    int m_fr_index;
 
-	/* 正在播放的索引, 只用于BT文件播放. */
-	int m_current_play_index;
-	double m_start_time;
-	double m_buffering;
+    /* 正在播放的索引, 只用于BT文件播放. */
+    int m_current_play_index;
+    double m_start_time;
+    double m_buffering;
 
-	/* 停止标志.	*/
-	int m_abort;
+    /* 停止标志.	*/
+    int m_abort;
 
 } avplay;
 
@@ -267,7 +267,7 @@ EXPORT_API int initialize_avplay(avplay *play, const char *file_name, int source
 
 /*
  * The Configure render or source to palyer.
- * @param play pointer to the player. 
+ * @param play pointer to the player.
  * @param param video render or audio render or media_source.
  * @param type Specifies render type, MEDIA_SOURCE or AUDIO_RENDER、 MEDIA_DEMUX、 VIDEO_RENDER.
  * @This function does not return a value.
@@ -275,37 +275,37 @@ EXPORT_API int initialize_avplay(avplay *play, const char *file_name, int source
 EXPORT_API void configure(avplay *play, void *param, int type);
 
 /*
- * The start action player to play. 
- * @param play pointer to the player. 
+ * The start action player to play.
+ * @param play pointer to the player.
  * @param fact at time, percent of duration.
  * @param index Specifies the index of the file to play.
- * @param Returns 0 if successful, or an error value otherwise. 
+ * @param Returns 0 if successful, or an error value otherwise.
  */
 EXPORT_API int av_start(avplay *play, double fact, int index);
 
 /*
  * Wait for playback to complete.
- * @param play pointer to the player. 
+ * @param play pointer to the player.
  * @This function does not return a value.
  */
 EXPORT_API void wait_for_completion(avplay *play);
 
 /*
- * The Stop function stops playing the media. 
- * @param play pointer to the player. 
+ * The Stop function stops playing the media.
+ * @param play pointer to the player.
  * @This function does not return a value.
  */
 EXPORT_API void av_stop(avplay *play);
 
 /*
  * The Pause method pauses the current player.
- * @param play pointer to the player. 
+ * @param play pointer to the player.
  * @This function does not return a value.
  */
 EXPORT_API void av_pause(avplay *play);
 
 /*
- * The Resume function starts the player from the current position, after a Pause function call. 
+ * The Resume function starts the player from the current position, after a Pause function call.
  * @param play pointer to the player.
  * @This function does not return a value.
  */
@@ -356,7 +356,7 @@ EXPORT_API double av_curr_play_time(avplay *play);
 EXPORT_API double av_duration(avplay *play);
 
 /*
- * Destroys an player. 
+ * Destroys an player.
  * @param play pointer to the player.
  * @This function does not return a value.
  */
@@ -423,7 +423,7 @@ EXPORT_API void set_youku_type(avplay *play, int type);
  * @param dcx is height of the target range.
  */
 EXPORT_API void blurring(AVFrame *frame,
-	int fw, int fh, int dx, int dy, int dcx, int dcy);
+                         int fw, int fh, int dx, int dy, int dcx, int dcy);
 
 /*
  * Alpha blend image mixing.
@@ -437,7 +437,7 @@ EXPORT_API void blurring(AVFrame *frame,
  * @param y is the y start coordinates of the target location.
  */
 EXPORT_API void alpha_blend(AVFrame *frame, uint8_t *rgba,
-	int fw, int fh, int rgba_w, int rgba_h, int x, int y);
+                            int fw, int fh, int rgba_w, int rgba_h, int x, int y);
 
 
 /*

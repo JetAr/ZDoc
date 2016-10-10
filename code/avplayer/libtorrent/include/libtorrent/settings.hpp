@@ -38,25 +38,26 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct lazy_entry;
-	class entry;
+struct lazy_entry;
+class entry;
 
-	enum { std_string, character, integer
-		, floating_point, boolean, size_integer
-		, time_integer };
+enum { std_string, character, integer
+, floating_point, boolean, size_integer
+, time_integer
+     };
 
-	// this is used to map struct entries
-	// to names in a bencoded dictionary to
-	// save and load the struct
-	struct bencode_map_entry
-	{
-		char const* name;
-		int offset; // struct offset
-		int type;
-	};
+// this is used to map struct entries
+// to names in a bencoded dictionary to
+// save and load the struct
+struct bencode_map_entry
+{
+    char const* name;
+    int offset; // struct offset
+    int type;
+};
 
-	void load_struct(lazy_entry const& e, void* s, bencode_map_entry const* m, int num);
-	void save_struct(entry& e, void const* s, bencode_map_entry const* m, int num, void const* def = 0);
+void load_struct(lazy_entry const& e, void* s, bencode_map_entry const* m, int num);
+void save_struct(entry& e, void const* s, bencode_map_entry const* m, int num, void const* def = 0);
 }
 
 #endif

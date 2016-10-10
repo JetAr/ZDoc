@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for austream.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IAudioMediaStream_FWD_DEFINED__
 #define __IAudioMediaStream_FWD_DEFINED__
@@ -71,14 +71,14 @@ typedef interface IAudioData IAudioData;
 #include "mmstream.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_austream_0000 */
-/* [local] */ 
+/* [local] */
 
 //
 //   The following declarations within the 'if 0' block are dummy typedefs used to make
@@ -101,99 +101,100 @@ extern RPC_IF_HANDLE __MIDL_itf_austream_0000_v0_0_s_ifspec;
 #define __IAudioMediaStream_INTERFACE_DEFINED__
 
 /* interface IAudioMediaStream */
-/* [unique][uuid][local][object] */ 
+/* [unique][uuid][local][object] */
 
 
 EXTERN_C const IID IID_IAudioMediaStream;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("f7537560-a3be-11d0-8212-00c04fc32c45")
-    IAudioMediaStream : public IMediaStream
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateSample( 
-            /* [in] */ IAudioData *pAudioData,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IAudioStreamSample **ppSample) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("f7537560-a3be-11d0-8212-00c04fc32c45")
+IAudioMediaStream :
+public IMediaStream
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetFormat(
+        /* [out] */ WAVEFORMATEX *pWaveFormatCurrent) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetFormat(
+        /* [in] */ const WAVEFORMATEX *lpWaveFormat) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateSample(
+        /* [in] */ IAudioData *pAudioData,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IAudioStreamSample **ppSample) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAudioMediaStreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAudioMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAudioMediaStream * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAudioMediaStream * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )( 
-            IAudioMediaStream * This,
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
-            IAudioMediaStream * This,
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetSameFormat )( 
-            IAudioMediaStream * This,
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *AllocateSample )( 
-            IAudioMediaStream * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
-        
-        HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )( 
-            IAudioMediaStream * This,
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
-        
-        HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )( 
-            IAudioMediaStream * This,
-            DWORD dwFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
-            IAudioMediaStream * This,
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
-            IAudioMediaStream * This,
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat);
-        
-        HRESULT ( STDMETHODCALLTYPE *CreateSample )( 
-            IAudioMediaStream * This,
-            /* [in] */ IAudioData *pAudioData,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IAudioStreamSample **ppSample);
-        
-        END_INTERFACE
-    } IAudioMediaStreamVtbl;
+typedef struct IAudioMediaStreamVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAudioMediaStream
-    {
-        CONST_VTBL struct IAudioMediaStreamVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IAudioMediaStream * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IAudioMediaStream * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IAudioMediaStream * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )(
+        IAudioMediaStream * This,
+        /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInformation )(
+        IAudioMediaStream * This,
+        /* [out] */ MSPID *pPurposeId,
+        /* [out] */ STREAM_TYPE *pType);
+
+    HRESULT ( STDMETHODCALLTYPE *SetSameFormat )(
+        IAudioMediaStream * This,
+        /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
+        /* [in] */ DWORD dwFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *AllocateSample )(
+        IAudioMediaStream * This,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IStreamSample **ppSample);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )(
+        IAudioMediaStream * This,
+        /* [in] */ IStreamSample *pExistingSample,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IStreamSample **ppNewSample);
+
+    HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )(
+        IAudioMediaStream * This,
+        DWORD dwFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *GetFormat )(
+        IAudioMediaStream * This,
+        /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
+
+    HRESULT ( STDMETHODCALLTYPE *SetFormat )(
+        IAudioMediaStream * This,
+        /* [in] */ const WAVEFORMATEX *lpWaveFormat);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateSample )(
+        IAudioMediaStream * This,
+        /* [in] */ IAudioData *pAudioData,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IAudioStreamSample **ppSample);
+
+    END_INTERFACE
+} IAudioMediaStreamVtbl;
+
+interface IAudioMediaStream
+{
+    CONST_VTBL struct IAudioMediaStreamVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -243,7 +244,7 @@ EXTERN_C const IID IID_IAudioMediaStream;
 
 
 
-HRESULT STDMETHODCALLTYPE IAudioMediaStream_GetFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IAudioMediaStream_GetFormat_Proxy(
     IAudioMediaStream * This,
     /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
 
@@ -255,7 +256,7 @@ void __RPC_STUB IAudioMediaStream_GetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAudioMediaStream_SetFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IAudioMediaStream_SetFormat_Proxy(
     IAudioMediaStream * This,
     /* [in] */ const WAVEFORMATEX *lpWaveFormat);
 
@@ -267,7 +268,7 @@ void __RPC_STUB IAudioMediaStream_SetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAudioMediaStream_CreateSample_Proxy( 
+HRESULT STDMETHODCALLTYPE IAudioMediaStream_CreateSample_Proxy(
     IAudioMediaStream * This,
     /* [in] */ IAudioData *pAudioData,
     /* [in] */ DWORD dwFlags,
@@ -289,79 +290,80 @@ void __RPC_STUB IAudioMediaStream_CreateSample_Stub(
 #define __IAudioStreamSample_INTERFACE_DEFINED__
 
 /* interface IAudioStreamSample */
-/* [unique][uuid][local][object] */ 
+/* [unique][uuid][local][object] */
 
 
 EXTERN_C const IID IID_IAudioStreamSample;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("345fee00-aba5-11d0-8212-00c04fc32c45")
-    IAudioStreamSample : public IStreamSample
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetAudioData( 
-            /* [out] */ IAudioData **ppAudio) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("345fee00-aba5-11d0-8212-00c04fc32c45")
+IAudioStreamSample :
+public IStreamSample
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetAudioData(
+        /* [out] */ IAudioData **ppAudio) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAudioStreamSampleVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAudioStreamSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAudioStreamSample * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAudioStreamSample * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
-            IAudioStreamSample * This,
-            /* [in] */ IMediaStream **ppMediaStream);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )( 
-            IAudioStreamSample * This,
-            /* [out] */ STREAM_TIME *pStartTime,
-            /* [out] */ STREAM_TIME *pEndTime,
-            /* [out] */ STREAM_TIME *pCurrentTime);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )( 
-            IAudioStreamSample * This,
-            /* [in] */ const STREAM_TIME *pStartTime,
-            /* [in] */ const STREAM_TIME *pEndTime);
-        
-        HRESULT ( STDMETHODCALLTYPE *Update )( 
-            IAudioStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hEvent,
-            /* [in] */ PAPCFUNC pfnAPC,
-            /* [in] */ DWORD_PTR dwAPCData);
-        
-        HRESULT ( STDMETHODCALLTYPE *CompletionStatus )( 
-            IAudioStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMilliseconds);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetAudioData )( 
-            IAudioStreamSample * This,
-            /* [out] */ IAudioData **ppAudio);
-        
-        END_INTERFACE
-    } IAudioStreamSampleVtbl;
+typedef struct IAudioStreamSampleVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAudioStreamSample
-    {
-        CONST_VTBL struct IAudioStreamSampleVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IAudioStreamSample * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IAudioStreamSample * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IAudioStreamSample * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMediaStream )(
+        IAudioStreamSample * This,
+        /* [in] */ IMediaStream **ppMediaStream);
+
+    HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )(
+        IAudioStreamSample * This,
+        /* [out] */ STREAM_TIME *pStartTime,
+        /* [out] */ STREAM_TIME *pEndTime,
+        /* [out] */ STREAM_TIME *pCurrentTime);
+
+    HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )(
+        IAudioStreamSample * This,
+        /* [in] */ const STREAM_TIME *pStartTime,
+        /* [in] */ const STREAM_TIME *pEndTime);
+
+    HRESULT ( STDMETHODCALLTYPE *Update )(
+        IAudioStreamSample * This,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ HANDLE hEvent,
+        /* [in] */ PAPCFUNC pfnAPC,
+        /* [in] */ DWORD_PTR dwAPCData);
+
+    HRESULT ( STDMETHODCALLTYPE *CompletionStatus )(
+        IAudioStreamSample * This,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ DWORD dwMilliseconds);
+
+    HRESULT ( STDMETHODCALLTYPE *GetAudioData )(
+        IAudioStreamSample * This,
+        /* [out] */ IAudioData **ppAudio);
+
+    END_INTERFACE
+} IAudioStreamSampleVtbl;
+
+interface IAudioStreamSample
+{
+    CONST_VTBL struct IAudioStreamSampleVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -402,7 +404,7 @@ EXTERN_C const IID IID_IAudioStreamSample;
 
 
 
-HRESULT STDMETHODCALLTYPE IAudioStreamSample_GetAudioData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAudioStreamSample_GetAudioData_Proxy(
     IAudioStreamSample * This,
     /* [out] */ IAudioData **ppAudio);
 
@@ -422,74 +424,75 @@ void __RPC_STUB IAudioStreamSample_GetAudioData_Stub(
 #define __IMemoryData_INTERFACE_DEFINED__
 
 /* interface IMemoryData */
-/* [unique][uuid][local][object] */ 
+/* [unique][uuid][local][object] */
 
 
 EXTERN_C const IID IID_IMemoryData;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("327fc560-af60-11d0-8212-00c04fc32c45")
-    IMemoryData : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE SetBuffer( 
-            /* [in] */ DWORD cbSize,
-            /* [in] */ BYTE *pbData,
-            /* [in] */ DWORD dwFlags) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetActual( 
-            /* [in] */ DWORD cbDataValid) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("327fc560-af60-11d0-8212-00c04fc32c45")
+IMemoryData :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE SetBuffer(
+        /* [in] */ DWORD cbSize,
+        /* [in] */ BYTE *pbData,
+        /* [in] */ DWORD dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInfo(
+        /* [out] */ DWORD *pdwLength,
+        /* [out] */ BYTE **ppbData,
+        /* [out] */ DWORD *pcbActualData) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetActual(
+        /* [in] */ DWORD cbDataValid) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMemoryDataVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMemoryData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMemoryData * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMemoryData * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetBuffer )( 
-            IMemoryData * This,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ BYTE *pbData,
-            /* [in] */ DWORD dwFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
-            IMemoryData * This,
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetActual )( 
-            IMemoryData * This,
-            /* [in] */ DWORD cbDataValid);
-        
-        END_INTERFACE
-    } IMemoryDataVtbl;
+typedef struct IMemoryDataVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMemoryData
-    {
-        CONST_VTBL struct IMemoryDataVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMemoryData * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMemoryData * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMemoryData * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetBuffer )(
+        IMemoryData * This,
+        /* [in] */ DWORD cbSize,
+        /* [in] */ BYTE *pbData,
+        /* [in] */ DWORD dwFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInfo )(
+        IMemoryData * This,
+        /* [out] */ DWORD *pdwLength,
+        /* [out] */ BYTE **ppbData,
+        /* [out] */ DWORD *pcbActualData);
+
+    HRESULT ( STDMETHODCALLTYPE *SetActual )(
+        IMemoryData * This,
+        /* [in] */ DWORD cbDataValid);
+
+    END_INTERFACE
+} IMemoryDataVtbl;
+
+interface IMemoryData
+{
+    CONST_VTBL struct IMemoryDataVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -520,7 +523,7 @@ EXTERN_C const IID IID_IMemoryData;
 
 
 
-HRESULT STDMETHODCALLTYPE IMemoryData_SetBuffer_Proxy( 
+HRESULT STDMETHODCALLTYPE IMemoryData_SetBuffer_Proxy(
     IMemoryData * This,
     /* [in] */ DWORD cbSize,
     /* [in] */ BYTE *pbData,
@@ -534,7 +537,7 @@ void __RPC_STUB IMemoryData_SetBuffer_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMemoryData_GetInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IMemoryData_GetInfo_Proxy(
     IMemoryData * This,
     /* [out] */ DWORD *pdwLength,
     /* [out] */ BYTE **ppbData,
@@ -548,7 +551,7 @@ void __RPC_STUB IMemoryData_GetInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMemoryData_SetActual_Proxy( 
+HRESULT STDMETHODCALLTYPE IMemoryData_SetActual_Proxy(
     IMemoryData * This,
     /* [in] */ DWORD cbDataValid);
 
@@ -568,75 +571,76 @@ void __RPC_STUB IMemoryData_SetActual_Stub(
 #define __IAudioData_INTERFACE_DEFINED__
 
 /* interface IAudioData */
-/* [unique][uuid][local][object] */ 
+/* [unique][uuid][local][object] */
 
 
 EXTERN_C const IID IID_IAudioData;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("54c719c0-af60-11d0-8212-00c04fc32c45")
-    IAudioData : public IMemoryData
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("54c719c0-af60-11d0-8212-00c04fc32c45")
+IAudioData :
+public IMemoryData
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetFormat(
+        /* [out] */ WAVEFORMATEX *pWaveFormatCurrent) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetFormat(
+        /* [in] */ const WAVEFORMATEX *lpWaveFormat) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IAudioDataVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAudioData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAudioData * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAudioData * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetBuffer )( 
-            IAudioData * This,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ BYTE *pbData,
-            /* [in] */ DWORD dwFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
-            IAudioData * This,
-            /* [out] */ DWORD *pdwLength,
-            /* [out] */ BYTE **ppbData,
-            /* [out] */ DWORD *pcbActualData);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetActual )( 
-            IAudioData * This,
-            /* [in] */ DWORD cbDataValid);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
-            IAudioData * This,
-            /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
-            IAudioData * This,
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat);
-        
-        END_INTERFACE
-    } IAudioDataVtbl;
+typedef struct IAudioDataVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IAudioData
-    {
-        CONST_VTBL struct IAudioDataVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IAudioData * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IAudioData * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IAudioData * This);
+
+    HRESULT ( STDMETHODCALLTYPE *SetBuffer )(
+        IAudioData * This,
+        /* [in] */ DWORD cbSize,
+        /* [in] */ BYTE *pbData,
+        /* [in] */ DWORD dwFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInfo )(
+        IAudioData * This,
+        /* [out] */ DWORD *pdwLength,
+        /* [out] */ BYTE **ppbData,
+        /* [out] */ DWORD *pcbActualData);
+
+    HRESULT ( STDMETHODCALLTYPE *SetActual )(
+        IAudioData * This,
+        /* [in] */ DWORD cbDataValid);
+
+    HRESULT ( STDMETHODCALLTYPE *GetFormat )(
+        IAudioData * This,
+        /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
+
+    HRESULT ( STDMETHODCALLTYPE *SetFormat )(
+        IAudioData * This,
+        /* [in] */ const WAVEFORMATEX *lpWaveFormat);
+
+    END_INTERFACE
+} IAudioDataVtbl;
+
+interface IAudioData
+{
+    CONST_VTBL struct IAudioDataVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -674,7 +678,7 @@ EXTERN_C const IID IID_IAudioData;
 
 
 
-HRESULT STDMETHODCALLTYPE IAudioData_GetFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IAudioData_GetFormat_Proxy(
     IAudioData * This,
     /* [out] */ WAVEFORMATEX *pWaveFormatCurrent);
 
@@ -686,7 +690,7 @@ void __RPC_STUB IAudioData_GetFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAudioData_SetFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IAudioData_SetFormat_Proxy(
     IAudioData * This,
     /* [in] */ const WAVEFORMATEX *lpWaveFormat);
 

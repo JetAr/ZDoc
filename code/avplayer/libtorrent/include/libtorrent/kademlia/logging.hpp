@@ -41,96 +41,102 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <fstream>
 #include "libtorrent/ptime.hpp"
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 class log
 {
 public:
-	log(char const* id, std::ostream& stream)
-		: m_id(id)
-		, m_enabled(true)
-		, m_stream(stream)
-	{
-	}
+    log(char const* id, std::ostream& stream)
+        : m_id(id)
+        , m_enabled(true)
+        , m_stream(stream)
+    {
+    }
 
-	char const* id() const
-	{
-		return m_id;
-	}
+    char const* id() const
+    {
+        return m_id;
+    }
 
-	bool enabled() const
-	{
-		return m_enabled;
-	}
+    bool enabled() const
+    {
+        return m_enabled;
+    }
 
-	void enable(bool e)
-	{
-		m_enabled = e;
-	}
-	
-	void flush() { m_stream.flush(); }
+    void enable(bool e)
+    {
+        m_enabled = e;
+    }
 
-	template<class T>
-	log& operator<<(T const& x)
-	{
-		m_stream << x;
-		return *this;
-	}
+    void flush()
+    {
+        m_stream.flush();
+    }
+
+    template<class T>
+    log& operator<<(T const& x)
+    {
+        m_stream << x;
+        return *this;
+    }
 
 private:
-	char const* m_id;
-	bool m_enabled;
-	std::ostream& m_stream;
+    char const* m_id;
+    bool m_enabled;
+    std::ostream& m_stream;
 };
 
 class log_event
 {
 public:
-	log_event(log& log) 
-		: log_(log) 
-	{
-		if (log_.enabled())
-			log_ << time_now_string() << " [" << log.id() << "] ";
-	}
+    log_event(log& log)
+        : log_(log)
+    {
+        if (log_.enabled())
+            log_ << time_now_string() << " [" << log.id() << "] ";
+    }
 
-	~log_event()
-	{
-		if (log_.enabled())
-		{
-			log_ << "\n";
-			log_.flush();
-		}
-	}
+    ~log_event()
+    {
+        if (log_.enabled())
+        {
+            log_ << "\n";
+            log_.flush();
+        }
+    }
 
-	template<class T>
-	log_event& operator<<(T const& x)
-	{
-		log_ << x;
-		return *this;
-	}
+    template<class T>
+    log_event& operator<<(T const& x)
+    {
+        log_ << x;
+        return *this;
+    }
 
-	operator bool() const
-	{
-		return log_.enabled();
-	}
+    operator bool() const
+    {
+        return log_.enabled();
+    }
 
-private:	
-	log& log_;
+private:
+    log& log_;
 };
 
 class inverted_log_event : public log_event
 {
 public:
-	inverted_log_event(log& log) : log_event(log) {}
+    inverted_log_event(log& log) : log_event(log) {}
 
-	operator bool() const
-	{
-		return !log_event::operator bool();
-	}
+    operator bool() const
+    {
+        return !log_event::operator bool();
+    }
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #define TORRENT_DECLARE_LOG(name) \
 	libtorrent::dht::log& name ## _log()

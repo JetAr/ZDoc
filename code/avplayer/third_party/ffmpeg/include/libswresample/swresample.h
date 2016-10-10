@@ -106,7 +106,8 @@
 //TODO use int resample ?
 //long term TODO can we enable this dynamically?
 
-enum SwrDitherType {
+enum SwrDitherType
+{
     SWR_DITHER_NONE = 0,
     SWR_DITHER_RECTANGULAR,
     SWR_DITHER_TRIANGULAR,
@@ -115,14 +116,16 @@ enum SwrDitherType {
 };
 
 /** Resampling Engines */
-enum SwrEngine {
+enum SwrEngine
+{
     SWR_ENGINE_SWR,             /**< SW Resampler */
     SWR_ENGINE_SOXR,            /**< SoX Resampler */
     SWR_ENGINE_NB,              ///< not part of API/ABI
 };
 
 /** Resampling Filter Types */
-enum SwrFilterType {
+enum SwrFilterType
+{
     SWR_FILTER_TYPE_CUBIC,              /**< Cubic */
     SWR_FILTER_TYPE_BLACKMAN_NUTTALL,   /**< Blackman Nuttall Windowed Sinc */
     SWR_FILTER_TYPE_KAISER,             /**< Kaiser Windowed Sinc */
@@ -205,7 +208,7 @@ void swr_free(struct SwrContext **s);
  * @return number of samples output per channel, negative value on error
  */
 int swr_convert(struct SwrContext *s, uint8_t **out, int out_count,
-                                const uint8_t **in , int in_count);
+                const uint8_t **in, int in_count);
 
 /**
  * Convert the next timestamp from input to output

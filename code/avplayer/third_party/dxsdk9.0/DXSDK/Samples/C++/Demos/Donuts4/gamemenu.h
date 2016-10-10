@@ -10,7 +10,7 @@
 
 //-----------------------------------------------------------------------------
 // Name: class CMenuItem
-// Desc: 
+// Desc:
 //-----------------------------------------------------------------------------
 class CMenuItem
 {
@@ -26,7 +26,7 @@ public:
 
 public:
     HRESULT Render( CD3DFont* pFont );
-    
+
     CMenuItem* Add( CMenuItem* );
 
     CMenuItem( TCHAR* strLabel, DWORD dwID );

@@ -23,7 +23,7 @@
 //  Function prototypes
 //
 HRESULT AddGraphFiltersToList (IGraphBuilder *pGB, CListBox& m_ListFilters);
-HRESULT AddFilterPinsToLists  (IGraphBuilder *pGB, CListBox& m_ListFilters, 
+HRESULT AddFilterPinsToLists  (IGraphBuilder *pGB, CListBox& m_ListFilters,
                                CListBox& m_ListPinsInput, CListBox& m_ListPinsOutput);
 
 HRESULT EnumPinsOnFilter (IBaseFilter *pFilter, PIN_DIRECTION PinDir, CListBox& Listbox);
@@ -32,18 +32,18 @@ HRESULT EnumPinsOnFilter (IBaseFilter *pFilter, PIN_DIRECTION PinDir, CListBox& 
 HRESULT EnumFiltersAndMonikersToList(IEnumMoniker *pEnumCat, CListBox& ListFilters);
 HRESULT EnumFiltersAndCLSIDsToList(IEnumMoniker *pEnumCat, CListBox& ListFilters);
 
-HRESULT EnumFiltersWithCLSIDToList(ICreateDevEnum *pSysDevEnum, 
+HRESULT EnumFiltersWithCLSIDToList(ICreateDevEnum *pSysDevEnum,
                                    const GUID *clsid, CListBox& List);
-HRESULT EnumFiltersWithMonikerToList(ICreateDevEnum *pSysDevEnum, 
-                                   const GUID *clsid, CListBox& List);
+HRESULT EnumFiltersWithMonikerToList(ICreateDevEnum *pSysDevEnum,
+                                     const GUID *clsid, CListBox& List);
 
 // Similar to IGraphBuilder::FindFilterByName()
 IBaseFilter *FindFilterFromName(IGraphBuilder *pGB, LPTSTR szNameToFind);
 
 // Listbox add/clear functions that store extra data
-void AddFilterToListWithCLSID  (const TCHAR *szFilterName, 
+void AddFilterToListWithCLSID  (const TCHAR *szFilterName,
                                 const GUID *pCatGuid, CListBox& ListFilters);
-void AddFilterToListWithMoniker(const TCHAR *szFilterName, 
+void AddFilterToListWithMoniker(const TCHAR *szFilterName,
                                 IMoniker *pMoniker, CListBox& ListFilters);
 void ClearFilterListWithCLSID  (CListBox& ListFilters);
 void ClearFilterListWithMoniker(CListBox& ListFilters);

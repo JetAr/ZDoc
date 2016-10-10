@@ -14,44 +14,77 @@
 class utilstr
 {
 public:
-	utilstr() : m_str(NULL), m_len(0) {}
-	~utilstr() {Empty();}
+    utilstr() : m_str(NULL), m_len(0) {}
+    ~utilstr()
+    {
+        Empty();
+    }
 
-	operator LPCTSTR () const {return m_str;}
-	LPCTSTR Get() const {return m_str;}
+    operator LPCTSTR () const
+    {
+        return m_str;
+    }
+    LPCTSTR Get() const
+    {
+        return m_str;
+    }
 
-	const utilstr & operator = (const utilstr &s) {equal(s); return *this;}
-	const utilstr & operator = (LPCTSTR s) {equal(s); return *this;}
-	const utilstr & operator += (const utilstr &s) {add(s); return *this;}
-	const utilstr & operator += (LPCTSTR s) {add(s); return *this;}
+    const utilstr & operator = (const utilstr &s)
+    {
+        equal(s);
+        return *this;
+    }
+    const utilstr & operator = (LPCTSTR s)
+    {
+        equal(s);
+        return *this;
+    }
+    const utilstr & operator += (const utilstr &s)
+    {
+        add(s);
+        return *this;
+    }
+    const utilstr & operator += (LPCTSTR s)
+    {
+        add(s);
+        return *this;
+    }
 
-	LPTSTR Eject();
-	void Empty();
-	bool IsEmpty() const;
-	int GetLength() const;
-	void Format(LPCTSTR format, ...);
+    LPTSTR Eject();
+    void Empty();
+    bool IsEmpty() const;
+    int GetLength() const;
+    void Format(LPCTSTR format, ...);
 
 private:
-	LPTSTR m_str;
-	int m_len;
+    LPTSTR m_str;
+    int m_len;
 
-	void equal(LPCTSTR str);
-	void add(LPCTSTR str);
+    void equal(LPCTSTR str);
+    void add(LPCTSTR str);
 };
 
 template <class T>
-struct rgref {
-	rgref(T *p) : pt(p) {}
+struct rgref
+{
+    rgref(T *p) : pt(p) {}
 
-	T &operator [] (int i) {return pt[i];}
-	const T &operator [] (int i) const {return pt[i];}
+    T &operator [] (int i)
+    {
+        return pt[i];
+    }
+    const T &operator [] (int i) const
+    {
+        return pt[i];
+    }
 
 private:
-	T *pt;
+    T *pt;
 };
 
-struct SPOINT {
-	SPOINT() :
+struct SPOINT
+{
+    SPOINT() :
 #define SPOINT_INITIALIZERS \
 		p(u.p), \
 		s(u.s), \
@@ -60,59 +93,79 @@ struct SPOINT {
 		y(u.p.y), \
 		cx(u.s.cx), \
 		cy(u.s.cy)
-		SPOINT_INITIALIZERS
-	{x = y = 0;}
+        SPOINT_INITIALIZERS
+    {x = y = 0;}
 
-	SPOINT(int, POINT *r) :
-		p(*r),
-		s(*((SIZE *)(void *)r)),
-		a(((int *)(void *)r)),
-		x(r->x),
-		y(r->y),
-		cx(r->x),
-		cy(r->y)
-	{}
+    SPOINT(int, POINT *r) :
+        p(*r),
+        s(*((SIZE *)(void *)r)),
+        a(((int *)(void *)r)),
+        x(r->x),
+        y(r->y),
+        cx(r->x),
+        cy(r->y)
+    {}
 
-	SPOINT(const SPOINT &sp) :
-		SPOINT_INITIALIZERS
-	{p = sp.p;}
+    SPOINT(const SPOINT &sp) :
+        SPOINT_INITIALIZERS
+    {p = sp.p;}
 
-	SPOINT(int b, int c) :
-		SPOINT_INITIALIZERS
-	{x = b; y = c;}
+    SPOINT(int b, int c) :
+        SPOINT_INITIALIZERS
+    {x = b; y = c;}
 
-	SPOINT(const POINT &point) :
-		SPOINT_INITIALIZERS
-	{p = point;}
+    SPOINT(const POINT &point) :
+        SPOINT_INITIALIZERS
+    {p = point;}
 
-	SPOINT(const SIZE &size) :
-		SPOINT_INITIALIZERS
-	{s = size;}
+    SPOINT(const SIZE &size) :
+        SPOINT_INITIALIZERS
+    {s = size;}
 
 #undef SPOINT_INITIALIZERS
 
-	SPOINT operator = (const SPOINT &sp) {p = sp.p; return *this;}
-	SPOINT operator = (const POINT &_p) {p = _p; return *this;}
-	SPOINT operator = (const SIZE &_s) {s = _s; return *this;}
+    SPOINT operator = (const SPOINT &sp)
+    {
+        p = sp.p;
+        return *this;
+    }
+    SPOINT operator = (const POINT &_p)
+    {
+        p = _p;
+        return *this;
+    }
+    SPOINT operator = (const SIZE &_s)
+    {
+        s = _s;
+        return *this;
+    }
 
-	operator POINT () const {return p;}
-	operator SIZE () const {return s;}
+    operator POINT () const
+    {
+        return p;
+    }
+    operator SIZE () const
+    {
+        return s;
+    }
 
-	long &x, &y, &cx, &cy;
-	POINT &p;
-	SIZE &s;
-	rgref<int> a;
+    long &x, &y, &cx, &cy;
+    POINT &p;
+    SIZE &s;
+    rgref<int> a;
 
 private:
-	union {
-		POINT p;
-		SIZE s;
-		int a[2];
-	} u;
+    union
+    {
+        POINT p;
+        SIZE s;
+        int a[2];
+    } u;
 };
 
-struct SRECT {
-	SRECT() :
+struct SRECT
+{
+    SRECT() :
 #define SRECT_INITIALIZERS \
 		a(((int *)(void *)u.a)), \
 		r(u.r), \
@@ -122,41 +175,54 @@ struct SRECT {
 		bottom(u.r.bottom), \
 		ul(0, &u.p.ul), \
 		lr(0, &u.p.lr)
-		SRECT_INITIALIZERS
-	{RECT z = {0,0,0,0}; u.r = z;}
-	
-	SRECT(const SRECT &sr) :
-		SRECT_INITIALIZERS
-	{u.r = sr.r;}
+        SRECT_INITIALIZERS
+    {RECT z = {0,0,0,0}; u.r = z;}
 
-	SRECT(int c, int d, int e, int f) :
-		SRECT_INITIALIZERS
-	{RECT z = {c,d,e,f}; u.r = z;}
+    SRECT(const SRECT &sr) :
+        SRECT_INITIALIZERS
+    {u.r = sr.r;}
 
-	SRECT(const RECT &_r) :
-		SRECT_INITIALIZERS
-	{u.r = _r;}
+    SRECT(int c, int d, int e, int f) :
+        SRECT_INITIALIZERS
+    {RECT z = {c,d,e,f}; u.r = z;}
+
+    SRECT(const RECT &_r) :
+        SRECT_INITIALIZERS
+    {u.r = _r;}
 
 #undef SRECT_INITIALIZERS
 
-	SRECT operator = (const SRECT &sr) {u.r = sr.r; return *this;}
-	SRECT operator = (const RECT &_r) {u.r = _r; return *this;}
+    SRECT operator = (const SRECT &sr)
+    {
+        u.r = sr.r;
+        return *this;
+    }
+    SRECT operator = (const RECT &_r)
+    {
+        u.r = _r;
+        return *this;
+    }
 
-	operator RECT () const {return r;}
+    operator RECT () const
+    {
+        return r;
+    }
 
-	long &left, &top, &right, &bottom;
-	rgref<int> a;
-	RECT &r;
-	SPOINT ul, lr;
+    long &left, &top, &right, &bottom;
+    rgref<int> a;
+    RECT &r;
+    SPOINT ul, lr;
 
 private:
-	union {
-		int a[4];
-		RECT r;
-		struct {
-			POINT ul, lr;
-		} p;
-	} u;
+    union
+    {
+        int a[4];
+        RECT r;
+        struct
+        {
+            POINT ul, lr;
+        } p;
+    } u;
 };
 
 int ConvertVal(int x, int a1, int a2, int b1, int b2);
@@ -171,7 +237,11 @@ int FormattedErrorBox(HINSTANCE, HWND, UINT, UINT, ...);
 int FormattedLastErrorBox(HINSTANCE, HWND, UINT, UINT, DWORD);
 BOOL UserConfirm(HINSTANCE, HWND, UINT, UINT, ...);
 
-struct AFS_FLAG {DWORD value; LPCTSTR name;};
+struct AFS_FLAG
+{
+    DWORD value;
+    LPCTSTR name;
+};
 LPTSTR AllocFlagStr(DWORD value, const AFS_FLAG flag[], DWORD flags);
 
 LPTSTR AllocFileNameNoPath(LPTSTR path);
@@ -205,68 +275,71 @@ int StrLen(LPCSTR s);
 template<class T>
 int GetSuperStringByteSize(const T *str)
 {
-	for (int i = 0;; i++)
-		if (!str[i] && !str[i + 1])
-			return (i + 2) * sizeof(T);
+    for (int i = 0;; i++)
+        if (!str[i] && !str[i + 1])
+            return (i + 2) * sizeof(T);
 }
 
 template<class T>
 T *DupSuperString(const T *str)
 {
-	int s = GetSuperStringByteSize(str);
-	T *ret = (T *)malloc(s);
-	if (ret != NULL)
-	{
-		CopyMemory((void *)ret, (const void *)str, (DWORD)s);
-	}
-	return ret;
+    int s = GetSuperStringByteSize(str);
+    T *ret = (T *)malloc(s);
+    if (ret != NULL)
+    {
+        CopyMemory((void *)ret, (const void *)str, (DWORD)s);
+    }
+    return ret;
 }
 
 template<class T>
 int CountSubStrings(const T *str)
 {
-	int n = 0;
+    int n = 0;
 
-	while (1)
-	{
-		str += StrLen(str) + 1;
+    while (1)
+    {
+        str += StrLen(str) + 1;
 
-		n++;
+        n++;
 
-		if (!*str)
-			return n;
-	}
+        if (!*str)
+            return n;
+    }
 }
 
 template<class T>
 const T *GetSubString(const T *str, int i)
 {
-	int n = 0;
+    int n = 0;
 
-	while (1)
-	{
-		if (n == i)
-			return str;
+    while (1)
+    {
+        if (n == i)
+            return str;
 
-		str += StrLen(str) + 1;
+        str += StrLen(str) + 1;
 
-		n++;
+        n++;
 
-		if (!*str)
-			return NULL;
-	}
+        if (!*str)
+            return NULL;
+    }
 }
 
 template<class T>
 class SetOnFunctionExit
 {
 public:
-	SetOnFunctionExit(T &var, T value) : m_var(var), m_value(value) {}
-	~SetOnFunctionExit() {m_var = m_value;}
+    SetOnFunctionExit(T &var, T value) : m_var(var), m_value(value) {}
+    ~SetOnFunctionExit()
+    {
+        m_var = m_value;
+    }
 
 private:
-	T &m_var;
-	T m_value;
+    T &m_var;
+    T m_value;
 };
 
 

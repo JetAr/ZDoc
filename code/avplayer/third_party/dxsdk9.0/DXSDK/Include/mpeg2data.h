@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for mpeg2data.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -36,7 +36,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IMpeg2Data_FWD_DEFINED__
 #define __IMpeg2Data_FWD_DEFINED__
@@ -98,14 +98,14 @@ typedef struct Mpeg2Data Mpeg2Data;
 #include "bdaiface.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_mpeg2data_0000 */
-/* [local] */ 
+/* [local] */
 
 
 #pragma pack(push)
@@ -182,7 +182,7 @@ extern RPC_IF_HANDLE __MIDL_itf_mpeg2data_0000_v0_0_s_ifspec;
 #define __Mpeg2DataLib_LIBRARY_DEFINED__
 
 /* library Mpeg2DataLib */
-/* [version][uuid] */ 
+/* [version][uuid] */
 
 #pragma once
 
@@ -190,19 +190,19 @@ extern RPC_IF_HANDLE __MIDL_itf_mpeg2data_0000_v0_0_s_ifspec;
 
 #pragma pack(1)
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0001
-    {
+{
     WORD Bits;
-    } 	PID_BITS_MIDL;
+} 	PID_BITS_MIDL;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0002
-    {
+{
     WORD Bits;
-    } 	MPEG_HEADER_BITS_MIDL;
+} 	MPEG_HEADER_BITS_MIDL;
 
 typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0003
-    {
+{
     BYTE Bits;
-    } 	MPEG_HEADER_VERSION_BITS_MIDL;
+} 	MPEG_HEADER_VERSION_BITS_MIDL;
 
 
 #pragma pack(pop)
@@ -212,68 +212,69 @@ typedef BYTE TID;
 
 typedef UINT ClientKey;
 
-typedef /* [public] */ 
+typedef /* [public] */
 enum __MIDL___MIDL_itf_mpeg2data_0000_0004
-    {	MPEG_SECTION_IS_NEXT	= 0,
-	MPEG_SECTION_IS_CURRENT	= 1
-    } 	MPEG_CURRENT_NEXT_BIT;
+{
+    MPEG_SECTION_IS_NEXT	= 0,
+    MPEG_SECTION_IS_CURRENT	= 1
+} 	MPEG_CURRENT_NEXT_BIT;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0005
-    {
+{
     WORD wTidExt;
     WORD wCount;
-    } 	TID_EXTENSION;
+} 	TID_EXTENSION;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0005 *PTID_EXTENSION;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0006
-    {
+{
     TID TableId;
-    union 
-        {
+    union
+    {
         MPEG_HEADER_BITS_MIDL S;
         WORD W;
-        } 	Header;
+    } 	Header;
     BYTE SectionData[ 1 ];
-    } 	SECTION;
+} 	SECTION;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0006 *PSECTION;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0008
-    {
+{
     TID TableId;
-    union 
-        {
+    union
+    {
         MPEG_HEADER_BITS_MIDL S;
         WORD W;
-        } 	Header;
+    } 	Header;
     WORD TableIdExtension;
-    union 
-        {
+    union
+    {
         MPEG_HEADER_VERSION_BITS_MIDL S;
         BYTE B;
-        } 	Version;
+    } 	Version;
     BYTE SectionNumber;
     BYTE LastSectionNumber;
     BYTE RemainingData[ 1 ];
-    } 	LONG_SECTION;
+} 	LONG_SECTION;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0008 *PLONG_SECTION;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0011
-    {
+{
     TID TableId;
-    union 
-        {
+    union
+    {
         MPEG_HEADER_BITS_MIDL S;
         WORD W;
-        } 	Header;
+    } 	Header;
     WORD TableIdExtension;
-    union 
-        {
+    union
+    {
         MPEG_HEADER_VERSION_BITS_MIDL S;
         BYTE B;
-        } 	Version;
+    } 	Version;
     BYTE SectionNumber;
     BYTE LastSectionNumber;
     BYTE ProtocolDiscriminator;
@@ -284,28 +285,28 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0011
     BYTE AdaptationLength;
     WORD MessageLength;
     BYTE RemainingData[ 1 ];
-    } 	DSMCC_SECTION;
+} 	DSMCC_SECTION;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0011 *PDSMCC_SECTION;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0014
-    {
+{
     DWORD dwLength;
     PSECTION pSection;
-    } 	MPEG_RQST_PACKET;
+} 	MPEG_RQST_PACKET;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0014 *PMPEG_RQST_PACKET;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0015
-    {
+{
     WORD wPacketCount;
     PMPEG_RQST_PACKET PacketList[ 1 ];
-    } 	MPEG_PACKET_LIST;
+} 	MPEG_PACKET_LIST;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0015 *PMPEG_PACKET_LIST;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0016
-    {
+{
     BOOL fSpecifyProtocol;
     BYTE Protocol;
     BOOL fSpecifyType;
@@ -321,16 +322,16 @@ typedef /* [public][public][public][public][public][public][public][public][publ
     WORD BlockNumber;
     BOOL fGetModuleCall;
     WORD NumberOfBlocksInModule;
-    } 	DSMCC_FILTER_OPTIONS;
+} 	DSMCC_FILTER_OPTIONS;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0017
-    {
+{
     BOOL fSpecifyEtmId;
     DWORD EtmId;
-    } 	ATSC_FILTER_OPTIONS;
+} 	ATSC_FILTER_OPTIONS;
 
 typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0018
-    {
+{
     BYTE bVersionNumber;
     WORD wFilterSize;
     BOOL fUseRawFilteringBits;
@@ -348,132 +349,134 @@ typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0
     DSMCC_FILTER_OPTIONS Dsmcc;
     BOOL fSpecifyAtscOptions;
     ATSC_FILTER_OPTIONS Atsc;
-    } 	MPEG2_FILTER;
+} 	MPEG2_FILTER;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0018 *PMPEG2_FILTER;
 
 #define MPEG2_FILTER_VERSION_1_SIZE  124
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0019
-    {
+{
     HRESULT hr;
     DWORD dwDataBufferSize;
     DWORD dwSizeOfDataRead;
     BYTE *pDataBuffer;
-    } 	MPEG_STREAM_BUFFER;
+} 	MPEG_STREAM_BUFFER;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0019 *PMPEG_STREAM_BUFFER;
 
 typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0020
-    {
+{
     BYTE Hours;
     BYTE Minutes;
     BYTE Seconds;
-    } 	MPEG_TIME;
+} 	MPEG_TIME;
 
 typedef MPEG_TIME MPEG_DURATION;
 
 typedef /* [public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0021
-    {
+{
     BYTE Date;
     BYTE Month;
     WORD Year;
-    } 	MPEG_DATE;
+} 	MPEG_DATE;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0022
-    {
+{
     MPEG_DATE D;
     MPEG_TIME T;
-    } 	MPEG_DATE_AND_TIME;
+} 	MPEG_DATE_AND_TIME;
 
-typedef /* [public][public][public][public][public][public][public] */ 
+typedef /* [public][public][public][public][public][public][public] */
 enum __MIDL___MIDL_itf_mpeg2data_0000_0023
-    {	MPEG_CONTEXT_BCS_DEMUX	= 0,
-	MPEG_CONTEXT_WINSOCK	= MPEG_CONTEXT_BCS_DEMUX + 1
-    } 	MPEG_CONTEXT_TYPE;
+{
+    MPEG_CONTEXT_BCS_DEMUX	= 0,
+    MPEG_CONTEXT_WINSOCK	= MPEG_CONTEXT_BCS_DEMUX + 1
+} 	MPEG_CONTEXT_TYPE;
 
 typedef /* [public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0024
-    {
+{
     DWORD AVMGraphId;
-    } 	MPEG_BCS_DEMUX;
+} 	MPEG_BCS_DEMUX;
 
 typedef /* [public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0025
-    {
+{
     DWORD AVMGraphId;
-    } 	MPEG_WINSOCK;
+} 	MPEG_WINSOCK;
 
 typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0026
-    {
+{
     MPEG_CONTEXT_TYPE Type;
-    union 
-        {
+    union
+    {
         MPEG_BCS_DEMUX Demux;
         MPEG_WINSOCK Winsock;
-        } 	U;
-    } 	MPEG_CONTEXT;
+    } 	U;
+} 	MPEG_CONTEXT;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0026 *PMPEG_CONTEXT;
 
-typedef /* [public][public][public][public][public] */ 
+typedef /* [public][public][public][public][public] */
 enum __MIDL___MIDL_itf_mpeg2data_0000_0028
-    {	MPEG_RQST_UNKNOWN	= 0,
-	MPEG_RQST_GET_SECTION	= MPEG_RQST_UNKNOWN + 1,
-	MPEG_RQST_GET_SECTION_ASYNC	= MPEG_RQST_GET_SECTION + 1,
-	MPEG_RQST_GET_TABLE	= MPEG_RQST_GET_SECTION_ASYNC + 1,
-	MPEG_RQST_GET_TABLE_ASYNC	= MPEG_RQST_GET_TABLE + 1,
-	MPEG_RQST_GET_SECTIONS_STREAM	= MPEG_RQST_GET_TABLE_ASYNC + 1,
-	MPEG_RQST_GET_PES_STREAM	= MPEG_RQST_GET_SECTIONS_STREAM + 1,
-	MPEG_RQST_GET_TS_STREAM	= MPEG_RQST_GET_PES_STREAM + 1,
-	MPEG_RQST_START_MPE_STREAM	= MPEG_RQST_GET_TS_STREAM + 1
-    } 	MPEG_REQUEST_TYPE;
+{
+    MPEG_RQST_UNKNOWN	= 0,
+    MPEG_RQST_GET_SECTION	= MPEG_RQST_UNKNOWN + 1,
+    MPEG_RQST_GET_SECTION_ASYNC	= MPEG_RQST_GET_SECTION + 1,
+    MPEG_RQST_GET_TABLE	= MPEG_RQST_GET_SECTION_ASYNC + 1,
+    MPEG_RQST_GET_TABLE_ASYNC	= MPEG_RQST_GET_TABLE + 1,
+    MPEG_RQST_GET_SECTIONS_STREAM	= MPEG_RQST_GET_TABLE_ASYNC + 1,
+    MPEG_RQST_GET_PES_STREAM	= MPEG_RQST_GET_SECTIONS_STREAM + 1,
+    MPEG_RQST_GET_TS_STREAM	= MPEG_RQST_GET_PES_STREAM + 1,
+    MPEG_RQST_START_MPE_STREAM	= MPEG_RQST_GET_TS_STREAM + 1
+} 	MPEG_REQUEST_TYPE;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0029
-    {
+{
     MPEG_REQUEST_TYPE Type;
     MPEG_CONTEXT Context;
     PID Pid;
     TID TableId;
     MPEG2_FILTER Filter;
     DWORD Flags;
-    } 	MPEG_SERVICE_REQUEST;
+} 	MPEG_SERVICE_REQUEST;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0029 *PMPEG_SERVICE_REQUEST;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_mpeg2data_0000_0030
-    {
+{
     DWORD IPAddress;
     WORD Port;
-    } 	MPEG_SERVICE_RESPONSE;
+} 	MPEG_SERVICE_RESPONSE;
 
 typedef struct __MIDL___MIDL_itf_mpeg2data_0000_0030 *PMPEG_SERVICE_RESPONSE;
 
 typedef struct _DSMCC_ELEMENT
-    {
+{
     PID pid;
     BYTE bComponentTag;
     DWORD dwCarouselId;
     DWORD dwTransactionId;
     struct _DSMCC_ELEMENT *pNext;
-    } 	DSMCC_ELEMENT;
+} 	DSMCC_ELEMENT;
 
 typedef struct _DSMCC_ELEMENT *PDSMCC_ELEMENT;
 
 typedef struct _MPE_ELEMENT
-    {
+{
     PID pid;
     BYTE bComponentTag;
     struct _MPE_ELEMENT *pNext;
-    } 	MPE_ELEMENT;
+} 	MPE_ELEMENT;
 
 typedef struct _MPE_ELEMENT *PMPE_ELEMENT;
 
 typedef struct _MPEG_STREAM_FILTER
-    {
+{
     WORD wPidValue;
     DWORD dwFilterSize;
     BOOL fCrcEnabled;
     BYTE rgchFilter[ 16 ];
     BYTE rgchMask[ 16 ];
-    } 	MPEG_STREAM_FILTER;
+} 	MPEG_STREAM_FILTER;
 
 
 EXTERN_C const IID LIBID_Mpeg2DataLib;
@@ -482,90 +485,91 @@ EXTERN_C const IID LIBID_Mpeg2DataLib;
 #define __IMpeg2Data_INTERFACE_DEFINED__
 
 /* interface IMpeg2Data */
-/* [unique][uuid][object] */ 
+/* [unique][uuid][object] */
 
 
 EXTERN_C const IID IID_IMpeg2Data;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("9B396D40-F380-4e3c-A514-1A82BF6EBFE6")
-    IMpeg2Data : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetSection( 
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ ISectionList **ppSectionList) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetTable( 
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ ISectionList **ppSectionList) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetStreamOfSections( 
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ HANDLE hDataReadyEvent,
-            /* [out] */ IMpeg2Stream **ppMpegStream) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("9B396D40-F380-4e3c-A514-1A82BF6EBFE6")
+IMpeg2Data :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetSection(
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ DWORD dwTimeout,
+        /* [out] */ ISectionList **ppSectionList) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetTable(
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ DWORD dwTimeout,
+        /* [out] */ ISectionList **ppSectionList) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetStreamOfSections(
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ HANDLE hDataReadyEvent,
+        /* [out] */ IMpeg2Stream **ppMpegStream) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMpeg2DataVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMpeg2Data * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMpeg2Data * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMpeg2Data * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSection )( 
-            IMpeg2Data * This,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ ISectionList **ppSectionList);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTable )( 
-            IMpeg2Data * This,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ ISectionList **ppSectionList);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetStreamOfSections )( 
-            IMpeg2Data * This,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ HANDLE hDataReadyEvent,
-            /* [out] */ IMpeg2Stream **ppMpegStream);
-        
-        END_INTERFACE
-    } IMpeg2DataVtbl;
+typedef struct IMpeg2DataVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMpeg2Data
-    {
-        CONST_VTBL struct IMpeg2DataVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMpeg2Data * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMpeg2Data * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMpeg2Data * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetSection )(
+        IMpeg2Data * This,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ DWORD dwTimeout,
+        /* [out] */ ISectionList **ppSectionList);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTable )(
+        IMpeg2Data * This,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ DWORD dwTimeout,
+        /* [out] */ ISectionList **ppSectionList);
+
+    HRESULT ( STDMETHODCALLTYPE *GetStreamOfSections )(
+        IMpeg2Data * This,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ HANDLE hDataReadyEvent,
+        /* [out] */ IMpeg2Stream **ppMpegStream);
+
+    END_INTERFACE
+} IMpeg2DataVtbl;
+
+interface IMpeg2Data
+{
+    CONST_VTBL struct IMpeg2DataVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -596,7 +600,7 @@ EXTERN_C const IID IID_IMpeg2Data;
 
 
 
-HRESULT STDMETHODCALLTYPE IMpeg2Data_GetSection_Proxy( 
+HRESULT STDMETHODCALLTYPE IMpeg2Data_GetSection_Proxy(
     IMpeg2Data * This,
     /* [in] */ PID pid,
     /* [in] */ TID tid,
@@ -612,7 +616,7 @@ void __RPC_STUB IMpeg2Data_GetSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMpeg2Data_GetTable_Proxy( 
+HRESULT STDMETHODCALLTYPE IMpeg2Data_GetTable_Proxy(
     IMpeg2Data * This,
     /* [in] */ PID pid,
     /* [in] */ TID tid,
@@ -628,7 +632,7 @@ void __RPC_STUB IMpeg2Data_GetTable_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMpeg2Data_GetStreamOfSections_Proxy( 
+HRESULT STDMETHODCALLTYPE IMpeg2Data_GetStreamOfSections_Proxy(
     IMpeg2Data * This,
     /* [in] */ PID pid,
     /* [in] */ TID tid,
@@ -652,110 +656,111 @@ void __RPC_STUB IMpeg2Data_GetStreamOfSections_Stub(
 #define __ISectionList_INTERFACE_DEFINED__
 
 /* interface ISectionList */
-/* [unique][uuid][object] */ 
+/* [unique][uuid][object] */
 
 
 EXTERN_C const IID IID_ISectionList;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("AFEC1EB5-2A64-46c6-BF4B-AE3CCB6AFDB0")
-    ISectionList : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ MPEG_REQUEST_TYPE requestType,
-            /* [in] */ IMpeg2Data *pMpeg2Data,
-            /* [in] */ PMPEG_CONTEXT pContext,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ DWORD timeout,
-            /* [in] */ HANDLE hDoneEvent) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InitializeWithRawSections( 
-            /* [in] */ PMPEG_PACKET_LIST pmplSections) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CancelPendingRequest( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetNumberOfSections( 
-            /* [out] */ WORD *pCount) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSectionData( 
-            /* [in] */ WORD sectionNumber,
-            /* [out] */ DWORD *pdwRawPacketLength,
-            /* [out] */ PSECTION *ppSection) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetProgramIdentifier( 
-            PID *pPid) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetTableIdentifier( 
-            TID *pTableId) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("AFEC1EB5-2A64-46c6-BF4B-AE3CCB6AFDB0")
+ISectionList :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE Initialize(
+        /* [in] */ MPEG_REQUEST_TYPE requestType,
+        /* [in] */ IMpeg2Data *pMpeg2Data,
+        /* [in] */ PMPEG_CONTEXT pContext,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ DWORD timeout,
+        /* [in] */ HANDLE hDoneEvent) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE InitializeWithRawSections(
+        /* [in] */ PMPEG_PACKET_LIST pmplSections) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CancelPendingRequest( void) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetNumberOfSections(
+        /* [out] */ WORD *pCount) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSectionData(
+        /* [in] */ WORD sectionNumber,
+        /* [out] */ DWORD *pdwRawPacketLength,
+        /* [out] */ PSECTION *ppSection) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetProgramIdentifier(
+        PID *pPid) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetTableIdentifier(
+        TID *pTableId) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct ISectionListVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ISectionList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ISectionList * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            ISectionList * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
-            ISectionList * This,
-            /* [in] */ MPEG_REQUEST_TYPE requestType,
-            /* [in] */ IMpeg2Data *pMpeg2Data,
-            /* [in] */ PMPEG_CONTEXT pContext,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ DWORD timeout,
-            /* [in] */ HANDLE hDoneEvent);
-        
-        HRESULT ( STDMETHODCALLTYPE *InitializeWithRawSections )( 
-            ISectionList * This,
-            /* [in] */ PMPEG_PACKET_LIST pmplSections);
-        
-        HRESULT ( STDMETHODCALLTYPE *CancelPendingRequest )( 
-            ISectionList * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetNumberOfSections )( 
-            ISectionList * This,
-            /* [out] */ WORD *pCount);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSectionData )( 
-            ISectionList * This,
-            /* [in] */ WORD sectionNumber,
-            /* [out] */ DWORD *pdwRawPacketLength,
-            /* [out] */ PSECTION *ppSection);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetProgramIdentifier )( 
-            ISectionList * This,
-            PID *pPid);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTableIdentifier )( 
-            ISectionList * This,
-            TID *pTableId);
-        
-        END_INTERFACE
-    } ISectionListVtbl;
+typedef struct ISectionListVtbl
+{
+    BEGIN_INTERFACE
 
-    interface ISectionList
-    {
-        CONST_VTBL struct ISectionListVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        ISectionList * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        ISectionList * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        ISectionList * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Initialize )(
+        ISectionList * This,
+        /* [in] */ MPEG_REQUEST_TYPE requestType,
+        /* [in] */ IMpeg2Data *pMpeg2Data,
+        /* [in] */ PMPEG_CONTEXT pContext,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ DWORD timeout,
+        /* [in] */ HANDLE hDoneEvent);
+
+    HRESULT ( STDMETHODCALLTYPE *InitializeWithRawSections )(
+        ISectionList * This,
+        /* [in] */ PMPEG_PACKET_LIST pmplSections);
+
+    HRESULT ( STDMETHODCALLTYPE *CancelPendingRequest )(
+        ISectionList * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetNumberOfSections )(
+        ISectionList * This,
+        /* [out] */ WORD *pCount);
+
+    HRESULT ( STDMETHODCALLTYPE *GetSectionData )(
+        ISectionList * This,
+        /* [in] */ WORD sectionNumber,
+        /* [out] */ DWORD *pdwRawPacketLength,
+        /* [out] */ PSECTION *ppSection);
+
+    HRESULT ( STDMETHODCALLTYPE *GetProgramIdentifier )(
+        ISectionList * This,
+        PID *pPid);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTableIdentifier )(
+        ISectionList * This,
+        TID *pTableId);
+
+    END_INTERFACE
+} ISectionListVtbl;
+
+interface ISectionList
+{
+    CONST_VTBL struct ISectionListVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -798,7 +803,7 @@ EXTERN_C const IID IID_ISectionList;
 
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_Initialize_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_Initialize_Proxy(
     ISectionList * This,
     /* [in] */ MPEG_REQUEST_TYPE requestType,
     /* [in] */ IMpeg2Data *pMpeg2Data,
@@ -817,7 +822,7 @@ void __RPC_STUB ISectionList_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_InitializeWithRawSections_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_InitializeWithRawSections_Proxy(
     ISectionList * This,
     /* [in] */ PMPEG_PACKET_LIST pmplSections);
 
@@ -829,7 +834,7 @@ void __RPC_STUB ISectionList_InitializeWithRawSections_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_CancelPendingRequest_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_CancelPendingRequest_Proxy(
     ISectionList * This);
 
 
@@ -840,7 +845,7 @@ void __RPC_STUB ISectionList_CancelPendingRequest_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_GetNumberOfSections_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_GetNumberOfSections_Proxy(
     ISectionList * This,
     /* [out] */ WORD *pCount);
 
@@ -852,7 +857,7 @@ void __RPC_STUB ISectionList_GetNumberOfSections_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_GetSectionData_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_GetSectionData_Proxy(
     ISectionList * This,
     /* [in] */ WORD sectionNumber,
     /* [out] */ DWORD *pdwRawPacketLength,
@@ -866,7 +871,7 @@ void __RPC_STUB ISectionList_GetSectionData_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_GetProgramIdentifier_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_GetProgramIdentifier_Proxy(
     ISectionList * This,
     PID *pPid);
 
@@ -878,7 +883,7 @@ void __RPC_STUB ISectionList_GetProgramIdentifier_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE ISectionList_GetTableIdentifier_Proxy( 
+HRESULT STDMETHODCALLTYPE ISectionList_GetTableIdentifier_Proxy(
     ISectionList * This,
     TID *pTableId);
 
@@ -898,71 +903,72 @@ void __RPC_STUB ISectionList_GetTableIdentifier_Stub(
 #define __IMpeg2Stream_INTERFACE_DEFINED__
 
 /* interface IMpeg2Stream */
-/* [unique][uuid][object] */ 
+/* [unique][uuid][object] */
 
 
 EXTERN_C const IID IID_IMpeg2Stream;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("400CC286-32A0-4ce4-9041-39571125A635")
-    IMpeg2Stream : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ MPEG_REQUEST_TYPE requestType,
-            /* [in] */ IMpeg2Data *pMpeg2Data,
-            /* [in] */ PMPEG_CONTEXT pContext,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ HANDLE hDataReadyEvent) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SupplyDataBuffer( 
-            /* [in] */ PMPEG_STREAM_BUFFER pStreamBuffer) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("400CC286-32A0-4ce4-9041-39571125A635")
+IMpeg2Stream :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE Initialize(
+        /* [in] */ MPEG_REQUEST_TYPE requestType,
+        /* [in] */ IMpeg2Data *pMpeg2Data,
+        /* [in] */ PMPEG_CONTEXT pContext,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ HANDLE hDataReadyEvent) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SupplyDataBuffer(
+        /* [in] */ PMPEG_STREAM_BUFFER pStreamBuffer) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMpeg2StreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMpeg2Stream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMpeg2Stream * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMpeg2Stream * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
-            IMpeg2Stream * This,
-            /* [in] */ MPEG_REQUEST_TYPE requestType,
-            /* [in] */ IMpeg2Data *pMpeg2Data,
-            /* [in] */ PMPEG_CONTEXT pContext,
-            /* [in] */ PID pid,
-            /* [in] */ TID tid,
-            /* [in] */ PMPEG2_FILTER pFilter,
-            /* [in] */ HANDLE hDataReadyEvent);
-        
-        HRESULT ( STDMETHODCALLTYPE *SupplyDataBuffer )( 
-            IMpeg2Stream * This,
-            /* [in] */ PMPEG_STREAM_BUFFER pStreamBuffer);
-        
-        END_INTERFACE
-    } IMpeg2StreamVtbl;
+typedef struct IMpeg2StreamVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMpeg2Stream
-    {
-        CONST_VTBL struct IMpeg2StreamVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMpeg2Stream * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMpeg2Stream * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMpeg2Stream * This);
+
+    HRESULT ( STDMETHODCALLTYPE *Initialize )(
+        IMpeg2Stream * This,
+        /* [in] */ MPEG_REQUEST_TYPE requestType,
+        /* [in] */ IMpeg2Data *pMpeg2Data,
+        /* [in] */ PMPEG_CONTEXT pContext,
+        /* [in] */ PID pid,
+        /* [in] */ TID tid,
+        /* [in] */ PMPEG2_FILTER pFilter,
+        /* [in] */ HANDLE hDataReadyEvent);
+
+    HRESULT ( STDMETHODCALLTYPE *SupplyDataBuffer )(
+        IMpeg2Stream * This,
+        /* [in] */ PMPEG_STREAM_BUFFER pStreamBuffer);
+
+    END_INTERFACE
+} IMpeg2StreamVtbl;
+
+interface IMpeg2Stream
+{
+    CONST_VTBL struct IMpeg2StreamVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -990,7 +996,7 @@ EXTERN_C const IID IID_IMpeg2Stream;
 
 
 
-HRESULT STDMETHODCALLTYPE IMpeg2Stream_Initialize_Proxy( 
+HRESULT STDMETHODCALLTYPE IMpeg2Stream_Initialize_Proxy(
     IMpeg2Stream * This,
     /* [in] */ MPEG_REQUEST_TYPE requestType,
     /* [in] */ IMpeg2Data *pMpeg2Data,
@@ -1008,7 +1014,7 @@ void __RPC_STUB IMpeg2Stream_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMpeg2Stream_SupplyDataBuffer_Proxy( 
+HRESULT STDMETHODCALLTYPE IMpeg2Stream_SupplyDataBuffer_Proxy(
     IMpeg2Stream * This,
     /* [in] */ PMPEG_STREAM_BUFFER pStreamBuffer);
 
@@ -1029,7 +1035,7 @@ EXTERN_C const CLSID CLSID_SectionList;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("73DA5D04-4347-45d3-A9DC-FAE9DDBE558D")
-SectionList;
+    SectionList;
 #endif
 
 EXTERN_C const CLSID CLSID_Mpeg2Stream;
@@ -1037,7 +1043,7 @@ EXTERN_C const CLSID CLSID_Mpeg2Stream;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("F91D96C7-8509-4d0b-AB26-A0DD10904BB7")
-Mpeg2Stream;
+    Mpeg2Stream;
 #endif
 
 EXTERN_C const CLSID CLSID_Mpeg2Data;
@@ -1045,12 +1051,12 @@ EXTERN_C const CLSID CLSID_Mpeg2Data;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("C666E115-BB62-4027-A113-82D643FE2D99")
-Mpeg2Data;
+    Mpeg2Data;
 #endif
 #endif /* __Mpeg2DataLib_LIBRARY_DEFINED__ */
 
 /* interface __MIDL_itf_mpeg2data_0432 */
-/* [local] */ 
+/* [local] */
 
 
 #pragma pack(pop)

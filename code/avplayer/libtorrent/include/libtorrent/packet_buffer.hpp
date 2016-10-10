@@ -39,78 +39,86 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	// this is a circular buffer that automatically resizes
-	// itself as elements are inserted. Elements are indexed
-	// by integers and are assumed to be sequential. Unless the
-	// old elements are removed when new elements are inserted,
-	// the buffer will be resized.
+// this is a circular buffer that automatically resizes
+// itself as elements are inserted. Elements are indexed
+// by integers and are assumed to be sequential. Unless the
+// old elements are removed when new elements are inserted,
+// the buffer will be resized.
 
-	// m_capacity is the number of elements in m_array
-	// and must be an even 2^x.
-	// m_first is the lowest index that has an element
-	// it also determines which indices the other slots
-	// refers to. Since it's a circular buffer, it wraps
-	// around. For example
+// m_capacity is the number of elements in m_array
+// and must be an even 2^x.
+// m_first is the lowest index that has an element
+// it also determines which indices the other slots
+// refers to. Since it's a circular buffer, it wraps
+// around. For example
 
-	//                    m_first = 9
-	//                    |           refers to index 14
-	//                    |           |
-	//                    V           V
-	// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	// | | | | | | | | | | | | | | | | |  mask = (m_capacity-1)
-	// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	//  ^
-	//  |
-	//  refers to index 15
+//                    m_first = 9
+//                    |           refers to index 14
+//                    |           |
+//                    V           V
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// | | | | | | | | | | | | | | | | |  mask = (m_capacity-1)
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//  ^
+//  |
+//  refers to index 15
 
-	// whenever the element at the cursor is removed, the
-	// cursor is bumped to the next occupied element
+// whenever the element at the cursor is removed, the
+// cursor is bumped to the next occupied element
 
-	class TORRENT_EXTRA_EXPORT packet_buffer
-	{
-	public:
-		typedef boost::uint32_t index_type;
+class TORRENT_EXTRA_EXPORT packet_buffer
+{
+public:
+    typedef boost::uint32_t index_type;
 
-		packet_buffer();
-		~packet_buffer();
+    packet_buffer();
+    ~packet_buffer();
 
-		void* insert(index_type idx, void* value);
+    void* insert(index_type idx, void* value);
 
-		std::size_t size() const
-		{ return m_size; }
+    std::size_t size() const
+    {
+        return m_size;
+    }
 
-		std::size_t capacity() const
-		{ return m_capacity; }
+    std::size_t capacity() const
+    {
+        return m_capacity;
+    }
 
-		void* at(index_type idx) const;
+    void* at(index_type idx) const;
 
-		void* remove(index_type idx);
+    void* remove(index_type idx);
 
-		void reserve(std::size_t size);
+    void reserve(std::size_t size);
 
-		index_type cursor() const
-		{ return m_first; }
+    index_type cursor() const
+    {
+        return m_first;
+    }
 
-		index_type span() const
-		{ return (m_last - m_first) & 0xffff; }
+    index_type span() const
+    {
+        return (m_last - m_first) & 0xffff;
+    }
 
 #if defined TORRENT_DEBUG && !defined TORRENT_DISABLE_INVARIANT_CHECKS
-		void check_invariant() const;
+    void check_invariant() const;
 #endif
 
-	private:
-		void** m_storage;
-		std::size_t m_capacity;
+private:
+    void** m_storage;
+    std::size_t m_capacity;
 
-		// this is the total number of elements that are occupied
-		// in the array
-		std::size_t m_size;
+    // this is the total number of elements that are occupied
+    // in the array
+    std::size_t m_size;
 
-		// This defines the first index that is part of the m_storage.
-		// last is one passed the last used slot
-		index_type m_first;
-		index_type m_last;
-	};
+    // This defines the first index that is part of the m_storage.
+    // last is one passed the last used slot
+    index_type m_first;
+    index_type m_last;
+};
 }
 
 #endif // TORRENT_PACKET_BUFFER_HPP_INCLUDED

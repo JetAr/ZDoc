@@ -30,8 +30,8 @@ class   CDPlay8Client;
 #define MAX_SP_BUFFER       1024000
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 struct MazeConfig
 {
@@ -62,8 +62,8 @@ struct MazeConfig
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CMazeApp
 {
@@ -81,18 +81,48 @@ public:
     void    CreateTempLogFile();
     void    CloseTempLogFile();
 
-    MazeConfig* GetConfig() {return &m_Config; };
+    MazeConfig* GetConfig()
+    {
+        return &m_Config;
+    };
 
-    TCHAR*  GetLogDir() { return m_strLogDir; };
-    TCHAR*  GetLogFile() { return m_strLogFile; };
-    BOOL    IsOutOfDateClient() { return m_bOutOfDateClient; };
+    TCHAR*  GetLogDir()
+    {
+        return m_strLogDir;
+    };
+    TCHAR*  GetLogFile()
+    {
+        return m_strLogFile;
+    };
+    BOOL    IsOutOfDateClient()
+    {
+        return m_bOutOfDateClient;
+    };
 
-    VOID    SetOutOfDateClient( BOOL bOutOfDateClient ) { m_bOutOfDateClient = bOutOfDateClient; };
-    VOID    SetAllowConnect(    BOOL bAllowConnect )    { m_bAllowConnect = bAllowConnect; };
-    VOID    SetSaveSettings(    BOOL bSaveSettings )    { m_bSaveSettings = bSaveSettings; };
-    VOID    SetConnectNow(      BOOL bConnectNow )      { m_bConnectNow = bConnectNow; };
-    VOID    SetDisconnectNow(   BOOL bDisconnectNow )   { m_bDisconnectNow = bDisconnectNow; };
-    VOID    SetAllowLoopback(   BOOL bAllowLoopback )   { m_bAllowLoopback = bAllowLoopback; };
+    VOID    SetOutOfDateClient( BOOL bOutOfDateClient )
+    {
+        m_bOutOfDateClient = bOutOfDateClient;
+    };
+    VOID    SetAllowConnect(    BOOL bAllowConnect )
+    {
+        m_bAllowConnect = bAllowConnect;
+    };
+    VOID    SetSaveSettings(    BOOL bSaveSettings )
+    {
+        m_bSaveSettings = bSaveSettings;
+    };
+    VOID    SetConnectNow(      BOOL bConnectNow )
+    {
+        m_bConnectNow = bConnectNow;
+    };
+    VOID    SetDisconnectNow(   BOOL bDisconnectNow )
+    {
+        m_bDisconnectNow = bDisconnectNow;
+    };
+    VOID    SetAllowLoopback(   BOOL bAllowLoopback )
+    {
+        m_bAllowLoopback = bAllowLoopback;
+    };
 
 protected:
     static UINT WINAPI StaticOutputMsgThread( LPVOID pParam );

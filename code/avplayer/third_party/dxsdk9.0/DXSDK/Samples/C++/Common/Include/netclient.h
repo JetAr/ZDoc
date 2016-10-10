@@ -42,10 +42,23 @@ public:
     HRESULT DoConnectWizard();
     HRESULT ConnectUsingLobbySettings();
 
-    void    SetPlayerName( TCHAR* strPlayerName )  { _tcsncpy( m_strLocalPlayerName, strPlayerName, MAX_PATH-1 ); m_strLocalPlayerName[ MAX_PATH-1 ] = 0; }
-    void    SetDefaultPort( DWORD dwDefaultPort )  { m_dwPort = dwDefaultPort; }
-    TCHAR*  GetPlayerName()                        { return m_strLocalPlayerName; }
-    BOOL    HaveConnectionSettingsFromLobby()      { return m_bHaveConnectionSettingsFromLobby; }
+    void    SetPlayerName( TCHAR* strPlayerName )
+    {
+        _tcsncpy( m_strLocalPlayerName, strPlayerName, MAX_PATH-1 );
+        m_strLocalPlayerName[ MAX_PATH-1 ] = 0;
+    }
+    void    SetDefaultPort( DWORD dwDefaultPort )
+    {
+        m_dwPort = dwDefaultPort;
+    }
+    TCHAR*  GetPlayerName()
+    {
+        return m_strLocalPlayerName;
+    }
+    BOOL    HaveConnectionSettingsFromLobby()
+    {
+        return m_bHaveConnectionSettingsFromLobby;
+    }
 
 protected:
     struct DPHostEnumInfo

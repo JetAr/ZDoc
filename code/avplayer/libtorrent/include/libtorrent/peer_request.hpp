@@ -35,14 +35,16 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct TORRENT_EXTRA_EXPORT peer_request
-	{
-		int piece;
-		int start;
-		int length;
-		bool operator==(peer_request const& r) const
-		{ return piece == r.piece && start == r.start && length == r.length; }
-	};
+struct TORRENT_EXTRA_EXPORT peer_request
+{
+    int piece;
+    int start;
+    int length;
+    bool operator==(peer_request const& r) const
+    {
+        return piece == r.piece && start == r.start && length == r.length;
+    }
+};
 }
 
 #endif // TORRENT_PEER_REQUEST_HPP_INCLUDED

@@ -39,31 +39,31 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct storage_interface;
-	class file_storage;
-	struct file_pool;
+struct storage_interface;
+class file_storage;
+struct file_pool;
 
-	enum storage_mode_t
-	{
-		storage_mode_allocate = 0,
-		storage_mode_sparse,
-		// this is here for internal use
-		internal_storage_mode_compact_deprecated,
+enum storage_mode_t
+{
+    storage_mode_allocate = 0,
+    storage_mode_sparse,
+    // this is here for internal use
+    internal_storage_mode_compact_deprecated,
 #ifndef TORRENT_NO_DEPRECATE
-		storage_mode_compact = internal_storage_mode_compact_deprecated
+    storage_mode_compact = internal_storage_mode_compact_deprecated
 #endif
-	};
-	
-	typedef boost::function<storage_interface*(file_storage const&, file_storage const*
-		, std::string const&, file_pool&, std::vector<boost::uint8_t> const&)> storage_constructor_type;
+};
 
-	TORRENT_EXPORT storage_interface* default_storage_constructor(
-		file_storage const&, file_storage const* mapped, std::string const&, file_pool&
-		, std::vector<boost::uint8_t> const&);
+typedef boost::function<storage_interface*(file_storage const&, file_storage const*
+        , std::string const&, file_pool&, std::vector<boost::uint8_t> const&)> storage_constructor_type;
 
-	TORRENT_EXPORT storage_interface* disabled_storage_constructor(
-		file_storage const&, file_storage const* mapped, std::string const&, file_pool&
-		, std::vector<boost::uint8_t> const&);
+TORRENT_EXPORT storage_interface* default_storage_constructor(
+    file_storage const&, file_storage const* mapped, std::string const&, file_pool&
+    , std::vector<boost::uint8_t> const&);
+
+TORRENT_EXPORT storage_interface* disabled_storage_constructor(
+    file_storage const&, file_storage const* mapped, std::string const&, file_pool&
+    , std::vector<boost::uint8_t> const&);
 
 }
 

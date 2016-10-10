@@ -10,7 +10,7 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this list of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in
@@ -128,19 +128,19 @@ void UI_free(UI *ui);
    On success, the all return an index of the added information.  That index
    is usefull when retrieving results with UI_get0_result(). */
 int UI_add_input_string(UI *ui, const char *prompt, int flags,
-	char *result_buf, int minsize, int maxsize);
+                        char *result_buf, int minsize, int maxsize);
 int UI_dup_input_string(UI *ui, const char *prompt, int flags,
-	char *result_buf, int minsize, int maxsize);
+                        char *result_buf, int minsize, int maxsize);
 int UI_add_verify_string(UI *ui, const char *prompt, int flags,
-	char *result_buf, int minsize, int maxsize, const char *test_buf);
+                         char *result_buf, int minsize, int maxsize, const char *test_buf);
 int UI_dup_verify_string(UI *ui, const char *prompt, int flags,
-	char *result_buf, int minsize, int maxsize, const char *test_buf);
+                         char *result_buf, int minsize, int maxsize, const char *test_buf);
 int UI_add_input_boolean(UI *ui, const char *prompt, const char *action_desc,
-	const char *ok_chars, const char *cancel_chars,
-	int flags, char *result_buf);
+                         const char *ok_chars, const char *cancel_chars,
+                         int flags, char *result_buf);
 int UI_dup_input_boolean(UI *ui, const char *prompt, const char *action_desc,
-	const char *ok_chars, const char *cancel_chars,
-	int flags, char *result_buf);
+                         const char *ok_chars, const char *cancel_chars,
+                         int flags, char *result_buf);
 int UI_add_info_string(UI *ui, const char *text);
 int UI_dup_info_string(UI *ui, const char *text);
 int UI_add_error_string(UI *ui, const char *text);
@@ -186,7 +186,7 @@ int UI_dup_error_string(UI *ui, const char *text);
 	"Enter pass phrase for foo.key:"
 */
 char *UI_construct_prompt(UI *ui_method,
-	const char *object_desc, const char *object_name);
+                          const char *object_desc, const char *object_name);
 
 
 /* The following function is used to store a pointer to user-specific data.
@@ -228,7 +228,7 @@ int UI_ctrl(UI *ui, int cmd, long i, void *p, void (*f)(void));
 #define UI_set_app_data(s,arg)         UI_set_ex_data(s,0,arg)
 #define UI_get_app_data(s)             UI_get_ex_data(s,0)
 int UI_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
-	CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
+                        CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
 int UI_set_ex_data(UI *r,int idx,void *arg);
 void *UI_get_ex_data(UI *r, int idx);
 
@@ -293,14 +293,14 @@ DECLARE_STACK_OF(UI_STRING)
 /* The different types of strings that are currently supported.
    This is only needed by method authors. */
 enum UI_string_types
-	{
-	UIT_NONE=0,
-	UIT_PROMPT,		/* Prompt for a string */
-	UIT_VERIFY,		/* Prompt for a string and verify */
-	UIT_BOOLEAN,		/* Prompt for a yes/no response */
-	UIT_INFO,		/* Send info to the user */
-	UIT_ERROR		/* Send an error message to the user */
-	};
+{
+    UIT_NONE=0,
+    UIT_PROMPT,		/* Prompt for a string */
+    UIT_VERIFY,		/* Prompt for a string and verify */
+    UIT_BOOLEAN,		/* Prompt for a yes/no response */
+    UIT_INFO,		/* Send info to the user */
+    UIT_ERROR		/* Send an error message to the user */
+};
 
 /* Create and manipulate methods */
 UI_METHOD *UI_create_method(char *name);

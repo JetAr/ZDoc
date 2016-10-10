@@ -14,55 +14,57 @@
 #include <afxext.h>
 #endif
 
-class CErrorsView : public CFormView
-{
-protected:
-    CErrorsView();           // protected constructor used by dynamic creation
-    DECLARE_DYNCREATE(CErrorsView)
+    class CErrorsView : public CFormView
+    {
+    protected:
+        CErrorsView();           // protected constructor used by dynamic creation
+        DECLARE_DYNCREATE(CErrorsView)
 
 // Form Data
-public:
-    //{{AFX_DATA(CErrorsView)
-    enum { IDD = IDD_ERRORS_FORM };
-    CListBox    m_ListBox;
-    //}}AFX_DATA
+    public:
+        //{{AFX_DATA(CErrorsView)
+        enum { IDD = IDD_ERRORS_FORM };
+        CListBox    m_ListBox;
+        //}}AFX_DATA
 
 // Attributes
-public:
-    CEffectDoc* GetDocument();
-    void ParseErrors();
+    public:
+        CEffectDoc* GetDocument();
+        void ParseErrors();
 
 // Operations
-public:
+    public:
 
 // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CErrorsView)
+        // ClassWizard generated virtual function overrides
+        //{{AFX_VIRTUAL(CErrorsView)
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-    //}}AFX_VIRTUAL
+        virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+        virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
+        //}}AFX_VIRTUAL
 
 // Implementation
-protected:
-    BOOL m_bNeedToParseErrors;
-    virtual ~CErrorsView();
+    protected:
+        BOOL m_bNeedToParseErrors;
+        virtual ~CErrorsView();
 #ifdef _DEBUG
-    virtual void AssertValid() const;
-    virtual void Dump(CDumpContext& dc) const;
+        virtual void AssertValid() const;
+        virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    // Generated message map functions
-    //{{AFX_MSG(CErrorsView)
-    afx_msg void OnSize(UINT nType, int cx, int cy);
-    afx_msg void OnDblclkList();
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
-};
+        // Generated message map functions
+        //{{AFX_MSG(CErrorsView)
+        afx_msg void OnSize(UINT nType, int cx, int cy);
+        afx_msg void OnDblclkList();
+        //}}AFX_MSG
+        DECLARE_MESSAGE_MAP()
+    };
 
 #ifndef _DEBUG  // debug version in ErrorsView.cpp
 inline CEffectDoc* CErrorsView::GetDocument()
-   { return (CEffectDoc*)m_pDocument; }
+{
+    return (CEffectDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

@@ -134,187 +134,227 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	template <class S>
-	struct socket_type_int_impl
-	{ enum { value = 0 }; };
+template <class S>
+struct socket_type_int_impl
+{
+    enum { value = 0 };
+};
 
-	template <>
-	struct socket_type_int_impl<stream_socket>
-	{ enum { value = 1 }; };
+template <>
+struct socket_type_int_impl<stream_socket>
+{
+    enum { value = 1 };
+};
 
-	template <>
-	struct socket_type_int_impl<socks5_stream>
-	{ enum { value = 2 }; };
+template <>
+struct socket_type_int_impl<socks5_stream>
+{
+    enum { value = 2 };
+};
 
-	template <>
-	struct socket_type_int_impl<http_stream>
-	{ enum { value = 3 }; };
+template <>
+struct socket_type_int_impl<http_stream>
+{
+    enum { value = 3 };
+};
 
-	template <>
-	struct socket_type_int_impl<utp_stream>
-	{ enum { value = 4 }; };
+template <>
+struct socket_type_int_impl<utp_stream>
+{
+    enum { value = 4 };
+};
 
 #if TORRENT_USE_I2P
-	template <>
-	struct socket_type_int_impl<i2p_stream>
-	{ enum { value = 5 }; };
+template <>
+struct socket_type_int_impl<i2p_stream>
+{
+    enum { value = 5 };
+};
 #endif
 
 #ifdef TORRENT_USE_OPENSSL
-	template <>
-	struct socket_type_int_impl<ssl_stream<stream_socket> >
-	{ enum { value = 6 }; };
+template <>
+struct socket_type_int_impl<ssl_stream<stream_socket> >
+{
+    enum { value = 6 };
+};
 
-	template <>
-	struct socket_type_int_impl<ssl_stream<socks5_stream> >
-	{ enum { value = 7 }; };
+template <>
+struct socket_type_int_impl<ssl_stream<socks5_stream> >
+{
+    enum { value = 7 };
+};
 
-	template <>
-	struct socket_type_int_impl<ssl_stream<http_stream> >
-	{ enum { value = 8 }; };
+template <>
+struct socket_type_int_impl<ssl_stream<http_stream> >
+{
+    enum { value = 8 };
+};
 
-	template <>
-	struct socket_type_int_impl<ssl_stream<utp_stream> >
-	{ enum { value = 9 }; };
+template <>
+struct socket_type_int_impl<ssl_stream<utp_stream> >
+{
+    enum { value = 9 };
+};
 #endif
 
-	struct TORRENT_EXTRA_EXPORT socket_type
-	{
-		typedef stream_socket::endpoint_type endpoint_type;
-		typedef stream_socket::protocol_type protocol_type;
-	
-		explicit socket_type(io_service& ios): m_io_service(ios), m_type(0) {}
-		~socket_type();
+struct TORRENT_EXTRA_EXPORT socket_type
+{
+    typedef stream_socket::endpoint_type endpoint_type;
+    typedef stream_socket::protocol_type protocol_type;
 
-		io_service& get_io_service() const;
-		bool is_open() const;
+    explicit socket_type(io_service& ios): m_io_service(ios), m_type(0) {}
+    ~socket_type();
 
-		char const* type_name() const;
+    io_service& get_io_service() const;
+    bool is_open() const;
+
+    char const* type_name() const;
 
 #ifndef BOOST_NO_EXCEPTIONS
-		void open(protocol_type const& p);
-		void close();
-		endpoint_type local_endpoint() const;
-		endpoint_type remote_endpoint() const;
-		void bind(endpoint_type const& endpoint);
-		std::size_t available() const;
+    void open(protocol_type const& p);
+    void close();
+    endpoint_type local_endpoint() const;
+    endpoint_type remote_endpoint() const;
+    void bind(endpoint_type const& endpoint);
+    std::size_t available() const;
 #endif
 
-		void open(protocol_type const& p, error_code& ec);
-		void close(error_code& ec);
-		endpoint_type local_endpoint(error_code& ec) const;
-		endpoint_type remote_endpoint(error_code& ec) const;
-		void bind(endpoint_type const& endpoint, error_code& ec);
-		std::size_t available(error_code& ec) const;
-		int type() const;
+    void open(protocol_type const& p, error_code& ec);
+    void close(error_code& ec);
+    endpoint_type local_endpoint(error_code& ec) const;
+    endpoint_type remote_endpoint(error_code& ec) const;
+    void bind(endpoint_type const& endpoint, error_code& ec);
+    std::size_t available(error_code& ec) const;
+    int type() const;
 
 
-		template <class Mutable_Buffers>
-		std::size_t read_some(Mutable_Buffers const& buffers, error_code& ec)
-		{ TORRENT_SOCKTYPE_FORWARD_RET(read_some(buffers, ec), 0) }
+    template <class Mutable_Buffers>
+    std::size_t read_some(Mutable_Buffers const& buffers, error_code& ec)
+    {
+        TORRENT_SOCKTYPE_FORWARD_RET(read_some(buffers, ec), 0)
+    }
 
-		template <class Mutable_Buffers, class Handler>
-		void async_read_some(Mutable_Buffers const& buffers, Handler const& handler)
-		{ TORRENT_SOCKTYPE_FORWARD(async_read_some(buffers, handler)) }
+    template <class Mutable_Buffers, class Handler>
+    void async_read_some(Mutable_Buffers const& buffers, Handler const& handler)
+    {
+        TORRENT_SOCKTYPE_FORWARD(async_read_some(buffers, handler))
+    }
 
-		template <class Const_Buffers>
-		std::size_t write_some(Const_Buffers const& buffers, error_code& ec)
-		{ TORRENT_SOCKTYPE_FORWARD_RET(write_some(buffers, ec), 0) }
+    template <class Const_Buffers>
+    std::size_t write_some(Const_Buffers const& buffers, error_code& ec)
+    {
+        TORRENT_SOCKTYPE_FORWARD_RET(write_some(buffers, ec), 0)
+    }
 
-		template <class Const_Buffers, class Handler>
-		void async_write_some(Const_Buffers const& buffers, Handler const& handler)
-		{ TORRENT_SOCKTYPE_FORWARD(async_write_some(buffers, handler)) }
+    template <class Const_Buffers, class Handler>
+    void async_write_some(Const_Buffers const& buffers, Handler const& handler)
+    {
+        TORRENT_SOCKTYPE_FORWARD(async_write_some(buffers, handler))
+    }
 
-		template <class Handler>
-		void async_connect(endpoint_type const& endpoint, Handler const& handler)
-		{ TORRENT_SOCKTYPE_FORWARD(async_connect(endpoint, handler)) }
+    template <class Handler>
+    void async_connect(endpoint_type const& endpoint, Handler const& handler)
+    {
+        TORRENT_SOCKTYPE_FORWARD(async_connect(endpoint, handler))
+    }
 
 #ifndef BOOST_NO_EXCEPTIONS
-		template <class IO_Control_Command>
-		void io_control(IO_Control_Command& ioc)
-		{ TORRENT_SOCKTYPE_FORWARD(io_control(ioc)) }
+    template <class IO_Control_Command>
+    void io_control(IO_Control_Command& ioc)
+    {
+        TORRENT_SOCKTYPE_FORWARD(io_control(ioc))
+    }
 
-		template <class Mutable_Buffers>
-		std::size_t read_some(Mutable_Buffers const& buffers)
-		{ TORRENT_SOCKTYPE_FORWARD_RET(read_some(buffers), 0) }
+    template <class Mutable_Buffers>
+    std::size_t read_some(Mutable_Buffers const& buffers)
+    {
+        TORRENT_SOCKTYPE_FORWARD_RET(read_some(buffers), 0)
+    }
 #endif
 
-		template <class IO_Control_Command>
-		void io_control(IO_Control_Command& ioc, error_code& ec)
-		{ TORRENT_SOCKTYPE_FORWARD(io_control(ioc, ec)) }
+    template <class IO_Control_Command>
+    void io_control(IO_Control_Command& ioc, error_code& ec)
+    {
+        TORRENT_SOCKTYPE_FORWARD(io_control(ioc, ec))
+    }
 
 #ifndef BOOST_NO_EXCEPTIONS
-		template <class SettableSocketOption>
-		void set_option(SettableSocketOption const& opt)
-		{ TORRENT_SOCKTYPE_FORWARD(set_option(opt)) }
+    template <class SettableSocketOption>
+    void set_option(SettableSocketOption const& opt)
+    {
+        TORRENT_SOCKTYPE_FORWARD(set_option(opt))
+    }
 #endif
 
-		template <class SettableSocketOption>
-		error_code set_option(SettableSocketOption const& opt, error_code& ec)
-		{ TORRENT_SOCKTYPE_FORWARD_RET(set_option(opt, ec), ec) }
+    template <class SettableSocketOption>
+    error_code set_option(SettableSocketOption const& opt, error_code& ec)
+    {
+        TORRENT_SOCKTYPE_FORWARD_RET(set_option(opt, ec), ec)
+    }
 
-		template <class S>
-		void instantiate(io_service& ios, void* userdata = 0)
-		{
-			TORRENT_ASSERT(&ios == &m_io_service);
-			construct(socket_type_int_impl<S>::value, userdata);
-		}
+    template <class S>
+    void instantiate(io_service& ios, void* userdata = 0)
+    {
+        TORRENT_ASSERT(&ios == &m_io_service);
+        construct(socket_type_int_impl<S>::value, userdata);
+    }
 
-		template <class S> S* get()
-		{
-			if (m_type != socket_type_int_impl<S>::value) return 0;
-			return (S*)m_data;
-		}
+    template <class S> S* get()
+    {
+        if (m_type != socket_type_int_impl<S>::value) return 0;
+        return (S*)m_data;
+    }
 
-		template <class S> S const* get() const 
-		{
-			if (m_type != socket_type_int_impl<S>::value) return 0;
-			return (S const*)m_data;
-		}
+    template <class S> S const* get() const
+    {
+        if (m_type != socket_type_int_impl<S>::value) return 0;
+        return (S const*)m_data;
+    }
 
-	private:
+private:
 
-		void destruct();
-		void construct(int type, void* userdata);
+    void destruct();
+    void construct(int type, void* userdata);
 
-		io_service& m_io_service;
-		int m_type;
-		enum { storage_size = max9<
-			sizeof(stream_socket)
-			, sizeof(socks5_stream)
-			, sizeof(http_stream)
-			, sizeof(utp_stream)
+    io_service& m_io_service;
+    int m_type;
+    enum { storage_size = max9<
+                          sizeof(stream_socket)
+    , sizeof(socks5_stream)
+    , sizeof(http_stream)
+    , sizeof(utp_stream)
 #if TORRENT_USE_I2P
-			, sizeof(i2p_stream)
+    , sizeof(i2p_stream)
 #else
-			, 0
+    , 0
 #endif
 #ifdef TORRENT_USE_OPENSSL
-			, sizeof(ssl_stream<stream_socket>)
-			, sizeof(ssl_stream<socks5_stream>)
-			, sizeof(ssl_stream<http_stream>)
-			, sizeof(ssl_stream<utp_stream>)
+    , sizeof(ssl_stream<stream_socket>)
+    , sizeof(ssl_stream<socks5_stream>)
+    , sizeof(ssl_stream<http_stream>)
+    , sizeof(ssl_stream<utp_stream>)
 #else
-			, 0, 0, 0, 0
+    , 0, 0, 0, 0
 #endif
-			>::value
-		};
+    >::value
+         };
 
-		size_type m_data[(storage_size + sizeof(size_type) - 1) / sizeof(size_type)];
-	};
+    size_type m_data[(storage_size + sizeof(size_type) - 1) / sizeof(size_type)];
+};
 
-	// returns true if this socket is an SSL socket
-	bool is_ssl(socket_type const& s);
+// returns true if this socket is an SSL socket
+bool is_ssl(socket_type const& s);
 
-	// returns true if this is a uTP socket
-	bool is_utp(socket_type const& s);
+// returns true if this is a uTP socket
+bool is_utp(socket_type const& s);
 
-	// assuming the socket_type s is an ssl socket, make sure it
-	// verifies the hostname in its SSL handshake
-	void setup_ssl_hostname(socket_type& s, std::string const& hostname, error_code& ec);
+// assuming the socket_type s is an ssl socket, make sure it
+// verifies the hostname in its SSL handshake
+void setup_ssl_hostname(socket_type& s, std::string const& hostname, error_code& ec);
 
-	// properly shuts down SSL sockets. holder keeps s alive
-	void async_shutdown(socket_type& s, boost::shared_ptr<void> holder);
+// properly shuts down SSL sockets. holder keeps s alive
+void async_shutdown(socket_type& s, boost::shared_ptr<void> holder);
 }
 
 #endif

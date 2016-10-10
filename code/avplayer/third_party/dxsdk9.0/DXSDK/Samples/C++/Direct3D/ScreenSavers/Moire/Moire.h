@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // File: Moire.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ protected:
     FLOAT   m_fTimeNextColorChange;
     FLOAT   m_fTimeStartColorChange;
     BOOL    m_bBrightColors;
-    
+
     FLOAT   m_fScale1, m_fScale2;
     FLOAT   m_fRot1, m_fRot2;
 
@@ -67,10 +67,10 @@ protected:
     VOID    Randomize( INT* piNum, INT iMax );
     HRESULT BuildTextures();
     HRESULT BuildMeshes();
-    HRESULT LoadDDSTextureFromResource( LPDIRECT3DDEVICE9 pd3dDevice, 
-        TCHAR* strRes, LPDIRECT3DTEXTURE9* ppTex );
-    VOID    GenerateColors( INT iColorScheme, BOOL bBright, 
-        D3DXCOLOR* pcol1, D3DXCOLOR* pcol2, D3DXCOLOR* pcol3 );
+    HRESULT LoadDDSTextureFromResource( LPDIRECT3DDEVICE9 pd3dDevice,
+                                        TCHAR* strRes, LPDIRECT3DTEXTURE9* ppTex );
+    VOID    GenerateColors( INT iColorScheme, BOOL bBright,
+                            D3DXCOLOR* pcol1, D3DXCOLOR* pcol2, D3DXCOLOR* pcol3 );
     HRESULT ReadRegistry();
     HRESULT WriteRegistry();
 
@@ -79,7 +79,7 @@ public:
     CMoireScreensaver();
 
     // Override from CD3DScreensaver
-    INT_PTR CALLBACK ConfigureDialogProc( HWND hwndDlg, UINT uMsg, 
+    INT_PTR CALLBACK ConfigureDialogProc( HWND hwndDlg, UINT uMsg,
                                           WPARAM wParam, LPARAM lParam );
 };
 

@@ -25,7 +25,7 @@
 
 // Disable warning message for C4201 - use of nameless struct/union
 // Otherwise, strmif.h will generate warnings for Win32 debug builds
-#pragma warning( disable : 4201 )  
+#pragma warning( disable : 4201 )
 
 // You may derive a class from CComModule and use it if you want to override
 // something, but do not change the name of _Module
@@ -35,7 +35,7 @@ public:
     LONG Unlock();
     DWORD dwThreadID;
     HANDLE hEventShutdown;
-    
+
     void MonitorShutdown();
     bool StartMonitor();
     bool bActivity;

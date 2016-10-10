@@ -140,7 +140,7 @@ typedef interface ID3DXEffectPool *LPD3DXEFFECTPOOL;
 
 // {53CA7768-C0D0-4664-8E79-D156E4F5B7E0}
 DEFINE_GUID( IID_ID3DXEffectPool,
-0x53ca7768, 0xc0d0, 0x4664, 0x8e, 0x79, 0xd1, 0x56, 0xe4, 0xf5, 0xb7, 0xe0);
+             0x53ca7768, 0xc0d0, 0x4664, 0x8e, 0x79, 0xd1, 0x56, 0xe4, 0xf5, 0xb7, 0xe0);
 
 
 #undef INTERFACE
@@ -166,7 +166,7 @@ typedef interface ID3DXBaseEffect *LPD3DXBASEEFFECT;
 
 // {804EF574-CCC1-4bf6-B06A-B1404ABDEADE}
 DEFINE_GUID( IID_ID3DXBaseEffect,
-0x804ef574, 0xccc1, 0x4bf6, 0xb0, 0x6a, 0xb1, 0x40, 0x4a, 0xbd, 0xea, 0xde);
+             0x804ef574, 0xccc1, 0x4bf6, 0xb0, 0x6a, 0xb1, 0x40, 0x4a, 0xbd, 0xea, 0xde);
 
 
 #undef INTERFACE
@@ -251,7 +251,7 @@ typedef interface ID3DXEffect *LPD3DXEFFECT;
 
 // {B589B04A-293D-4516-AF0B-3D7DBCF5AC54}
 DEFINE_GUID( IID_ID3DXEffect,
-0xb589b04a, 0x293d, 0x4516, 0xaf, 0xb, 0x3d, 0x7d, 0xbc, 0xf5, 0xac, 0x54);
+             0xb589b04a, 0x293d, 0x4516, 0xaf, 0xb, 0x3d, 0x7d, 0xbc, 0xf5, 0xac, 0x54);
 
 
 #undef INTERFACE
@@ -360,7 +360,7 @@ typedef interface ID3DXEffectCompiler *LPD3DXEFFECTCOMPILER;
 
 // {F8EE90D3-FCC6-4f14-8AE8-6374AE968E33}
 DEFINE_GUID( IID_ID3DXEffectCompiler,
-0xf8ee90d3, 0xfcc6, 0x4f14, 0x8a, 0xe8, 0x63, 0x74, 0xae, 0x96, 0x8e, 0x33);
+             0xf8ee90d3, 0xfcc6, 0x4f14, 0x8a, 0xe8, 0x63, 0x74, 0xae, 0x96, 0x8e, 0x33);
 
 
 #undef INTERFACE
@@ -441,10 +441,10 @@ DECLARE_INTERFACE_(ID3DXEffectCompiler, ID3DXBaseEffect)
 
     // Compilation
     STDMETHOD(CompileEffect)(THIS_ DWORD Flags,
-        LPD3DXBUFFER* ppEffect, LPD3DXBUFFER* ppErrorMsgs) PURE;
+                             LPD3DXBUFFER* ppEffect, LPD3DXBUFFER* ppErrorMsgs) PURE;
 
     STDMETHOD(CompileShader)(THIS_ D3DXHANDLE hFunction, LPCSTR pTarget, DWORD Flags,
-        LPD3DXBUFFER* ppShader, LPD3DXBUFFER* ppErrorMsgs, LPD3DXCONSTANTTABLE* ppConstantTable) PURE;
+                             LPD3DXBUFFER* ppShader, LPD3DXBUFFER* ppErrorMsgs, LPD3DXCONSTANTTABLE* ppConstantTable) PURE;
 };
 
 
@@ -470,8 +470,8 @@ extern "C" {
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXCreateEffectPool(
-        LPD3DXEFFECTPOOL*               ppPool);
+D3DXCreateEffectPool(
+    LPD3DXEFFECTPOOL*               ppPool);
 
 
 //----------------------------------------------------------------------------
@@ -510,26 +510,26 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXCreateEffectFromFileA(
-        LPDIRECT3DDEVICE9               pDevice,
-        LPCSTR                          pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTPOOL                pPool,
-        LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors);
+D3DXCreateEffectFromFileA(
+    LPDIRECT3DDEVICE9               pDevice,
+    LPCSTR                          pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTPOOL                pPool,
+    LPD3DXEFFECT*                   ppEffect,
+    LPD3DXBUFFER*                   ppCompilationErrors);
 
 HRESULT WINAPI
-    D3DXCreateEffectFromFileW(
-        LPDIRECT3DDEVICE9               pDevice,
-        LPCWSTR                         pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTPOOL                pPool,
-        LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors);
+D3DXCreateEffectFromFileW(
+    LPDIRECT3DDEVICE9               pDevice,
+    LPCWSTR                         pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTPOOL                pPool,
+    LPD3DXEFFECT*                   ppEffect,
+    LPD3DXBUFFER*                   ppCompilationErrors);
 
 #ifdef UNICODE
 #define D3DXCreateEffectFromFile D3DXCreateEffectFromFileW
@@ -539,28 +539,28 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCreateEffectFromResourceA(
-        LPDIRECT3DDEVICE9               pDevice,
-        HMODULE                         hSrcModule,
-        LPCSTR                          pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTPOOL                pPool,
-        LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors);
+D3DXCreateEffectFromResourceA(
+    LPDIRECT3DDEVICE9               pDevice,
+    HMODULE                         hSrcModule,
+    LPCSTR                          pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTPOOL                pPool,
+    LPD3DXEFFECT*                   ppEffect,
+    LPD3DXBUFFER*                   ppCompilationErrors);
 
 HRESULT WINAPI
-    D3DXCreateEffectFromResourceW(
-        LPDIRECT3DDEVICE9               pDevice,
-        HMODULE                         hSrcModule,
-        LPCWSTR                         pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTPOOL                pPool,
-        LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors);
+D3DXCreateEffectFromResourceW(
+    LPDIRECT3DDEVICE9               pDevice,
+    HMODULE                         hSrcModule,
+    LPCWSTR                         pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTPOOL                pPool,
+    LPD3DXEFFECT*                   ppEffect,
+    LPD3DXBUFFER*                   ppCompilationErrors);
 
 #ifdef UNICODE
 #define D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW
@@ -570,16 +570,16 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCreateEffect(
-        LPDIRECT3DDEVICE9               pDevice,
-        LPCVOID                         pSrcData,
-        UINT                            SrcDataLen,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTPOOL                pPool,
-        LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors);
+D3DXCreateEffect(
+    LPDIRECT3DDEVICE9               pDevice,
+    LPCVOID                         pSrcData,
+    UINT                            SrcDataLen,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTPOOL                pPool,
+    LPD3DXEFFECT*                   ppEffect,
+    LPD3DXBUFFER*                   ppCompilationErrors);
 
 
 
@@ -617,22 +617,22 @@ HRESULT WINAPI
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXCreateEffectCompilerFromFileA(
-        LPCSTR                          pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors);
+D3DXCreateEffectCompilerFromFileA(
+    LPCSTR                          pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTCOMPILER*           ppCompiler,
+    LPD3DXBUFFER*                   ppParseErrors);
 
 HRESULT WINAPI
-    D3DXCreateEffectCompilerFromFileW(
-        LPCWSTR                         pSrcFile,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors);
+D3DXCreateEffectCompilerFromFileW(
+    LPCWSTR                         pSrcFile,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTCOMPILER*           ppCompiler,
+    LPD3DXBUFFER*                   ppParseErrors);
 
 #ifdef UNICODE
 #define D3DXCreateEffectCompilerFromFile D3DXCreateEffectCompilerFromFileW
@@ -642,24 +642,24 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCreateEffectCompilerFromResourceA(
-        HMODULE                         hSrcModule,
-        LPCSTR                          pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors);
+D3DXCreateEffectCompilerFromResourceA(
+    HMODULE                         hSrcModule,
+    LPCSTR                          pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTCOMPILER*           ppCompiler,
+    LPD3DXBUFFER*                   ppParseErrors);
 
 HRESULT WINAPI
-    D3DXCreateEffectCompilerFromResourceW(
-        HMODULE                         hSrcModule,
-        LPCWSTR                         pSrcResource,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors);
+D3DXCreateEffectCompilerFromResourceW(
+    HMODULE                         hSrcModule,
+    LPCWSTR                         pSrcResource,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTCOMPILER*           ppCompiler,
+    LPD3DXBUFFER*                   ppParseErrors);
 
 #ifdef UNICODE
 #define D3DXCreateEffectCompilerFromResource D3DXCreateEffectCompilerFromResourceW
@@ -669,14 +669,14 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCreateEffectCompiler(
-        LPCSTR                          pSrcData,
-        UINT                            SrcDataLen,
-        CONST D3DXMACRO*                pDefines,
-        LPD3DXINCLUDE                   pInclude,
-        DWORD                           Flags,
-        LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors);
+D3DXCreateEffectCompiler(
+    LPCSTR                          pSrcData,
+    UINT                            SrcDataLen,
+    CONST D3DXMACRO*                pDefines,
+    LPD3DXINCLUDE                   pInclude,
+    DWORD                           Flags,
+    LPD3DXEFFECTCOMPILER*           ppCompiler,
+    LPD3DXBUFFER*                   ppParseErrors);
 
 
 #ifdef __cplusplus

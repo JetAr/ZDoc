@@ -2,7 +2,7 @@
 // File: VMRCore.h
 //
 // Desc: DirectShow sample code
-//       Header file and class description for CVMRCore, 
+//       Header file and class description for CVMRCore,
 //       "main" module to manage VMR and its interfaces
 //       This class is called from CDemonstration.
 //
@@ -20,17 +20,17 @@
 
 class CVMRMixDlg;
 
-class CVMRCore  
+class CVMRCore
 {
 
-public: 
+public:
     CVMRCore(CVMRMixDlg * pDlg, CMediaList *pML);
-    
-    CVMRCore(   CVMRMixDlg * pDlg, 
-                DWORD dwVMRMode, 
-                DWORD dwVMRPrefs, 
+
+    CVMRCore(   CVMRMixDlg * pDlg,
+                DWORD dwVMRMode,
+                DWORD dwVMRPrefs,
                 CMediaList *pML);
-                
+
     virtual ~CVMRCore();
 
     HWND GetClientHwnd();
@@ -44,11 +44,17 @@ public:
 
     // functions to get information about the video playback window
     void SetAbort();
-    void SetHwnd(HWND hwnd){m_hwnd = hwnd;};
+    void SetHwnd(HWND hwnd)
+    {
+        m_hwnd = hwnd;
+    };
     bool SetClientVideo();
 
-    CVMRMixDlg * GetDlg(){ return m_pDlg;};
-    
+    CVMRMixDlg * GetDlg()
+    {
+        return m_pDlg;
+    };
+
     // windows procedure function for the windowless control
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
     TCHAR m_szEventStopTest[MAX_PATH];
@@ -57,27 +63,51 @@ public:
     TCHAR m_szEventResumeCore[MAX_PATH];
 
     // access to interfaces and member variables
-    IVMRWindowlessControl *     GetVMRWndless(){return m_pIWndless;};
-    IGraphBuilder *             GetIGraphBuilder(){return m_pGraph;};
-    IBaseFilter *               GetTestFilter(){return m_pTestFilter;};
+    IVMRWindowlessControl *     GetVMRWndless()
+    {
+        return m_pIWndless;
+    };
+    IGraphBuilder *             GetIGraphBuilder()
+    {
+        return m_pGraph;
+    };
+    IBaseFilter *               GetTestFilter()
+    {
+        return m_pTestFilter;
+    };
 
-    IVMRFilterConfig *          GetVMRConfig() { return m_pConfig; };
-    IMediaControl *             GetMediaControl(){return m_pIMC;};
+    IVMRFilterConfig *          GetVMRConfig()
+    {
+        return m_pConfig;
+    };
+    IMediaControl *             GetMediaControl()
+    {
+        return m_pIMC;
+    };
 
-    IVMRMixerControl *          GetMixerControl(){ return m_pIMixerControl;};
-    IMediaSeeking *             GetMediaSeeking() { return m_pIMediaSeeking;};
-    IVMRMixerBitmap *           GetMixerBitmap(){ return m_pMixerBitmap;};
-    
+    IVMRMixerControl *          GetMixerControl()
+    {
+        return m_pIMixerControl;
+    };
+    IMediaSeeking *             GetMediaSeeking()
+    {
+        return m_pIMediaSeeking;
+    };
+    IVMRMixerBitmap *           GetMixerBitmap()
+    {
+        return m_pMixerBitmap;
+    };
+
 protected:
     // protected member variables
     HWND m_hwnd;
 
-    IGraphBuilder *         m_pGraph;     // graph 
+    IGraphBuilder *         m_pGraph;     // graph
     IBaseFilter *           m_pTestFilter;// the renderer filter
-    IVMRWindowlessControl * m_pIWndless;  
-    IMediaControl *         m_pIMC;       
+    IVMRWindowlessControl * m_pIWndless;
+    IMediaControl *         m_pIMC;
 
-    IVMRFilterConfig *      m_pConfig;  
+    IVMRFilterConfig *      m_pConfig;
     IVideoWindow *          m_pIVidWindow;
 
     IVMRMixerControl *      m_pIMixerControl;
@@ -111,7 +141,7 @@ private:
 
     int             m_nConnectedPins;   // number of active input pins of VMR
 
-    HANDLE m_hWinThread;    // windowless control's window thread  
+    HANDLE m_hWinThread;    // windowless control's window thread
     HANDLE m_hEventStopTest;
     HANDLE m_hEventCloseWindow;
     HANDLE m_hEventKillCore;
@@ -119,7 +149,7 @@ private:
 
     // private working functions
     bool IsRenderer(TCHAR * strFilterName); // determines if a filter is a video renderer
-    LRESULT KillWindow();                   // process closing window by user   
+    LRESULT KillWindow();                   // process closing window by user
 };
 
 #endif // !defined(AFX_NEWCORE_H__9D74D6FC_F94C_45E6_A991_E38D47C3441D__INCLUDED_)

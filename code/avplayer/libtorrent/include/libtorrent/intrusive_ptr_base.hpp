@@ -41,49 +41,58 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	template<class T>
-	struct intrusive_ptr_base
-	{
-		intrusive_ptr_base(intrusive_ptr_base<T> const&)
-			: m_refs(0) {}
+template<class T>
+struct intrusive_ptr_base
+{
+    intrusive_ptr_base(intrusive_ptr_base<T> const&)
+        : m_refs(0) {}
 
-		intrusive_ptr_base& operator=(intrusive_ptr_base const& rhs)
-		{ return *this; }
+    intrusive_ptr_base& operator=(intrusive_ptr_base const& rhs)
+    {
+        return *this;
+    }
 
-		friend void intrusive_ptr_add_ref(intrusive_ptr_base<T> const* s)
-		{
-			TORRENT_ASSERT(s != 0);
-			TORRENT_ASSERT(s->m_refs >= 0);
-			++s->m_refs;
-		}
+    friend void intrusive_ptr_add_ref(intrusive_ptr_base<T> const* s)
+    {
+        TORRENT_ASSERT(s != 0);
+        TORRENT_ASSERT(s->m_refs >= 0);
+        ++s->m_refs;
+    }
 
-		friend void intrusive_ptr_release(intrusive_ptr_base<T> const* s)
-		{
-			TORRENT_ASSERT(s != 0);
-			TORRENT_ASSERT(s->m_refs > 0);
-			if (--s->m_refs == 0)
-				boost::checked_delete(static_cast<T const*>(s));
-		}
+    friend void intrusive_ptr_release(intrusive_ptr_base<T> const* s)
+    {
+        TORRENT_ASSERT(s != 0);
+        TORRENT_ASSERT(s->m_refs > 0);
+        if (--s->m_refs == 0)
+            boost::checked_delete(static_cast<T const*>(s));
+    }
 
-		boost::intrusive_ptr<T> self()
-		{ return boost::intrusive_ptr<T>((T*)this); }
+    boost::intrusive_ptr<T> self()
+    {
+        return boost::intrusive_ptr<T>((T*)this);
+    }
 
-		boost::intrusive_ptr<const T> self() const
-		{ return boost::intrusive_ptr<const T>((T const*)this); }
+    boost::intrusive_ptr<const T> self() const
+    {
+        return boost::intrusive_ptr<const T>((T const*)this);
+    }
 
-		int refcount() const { return m_refs; }
+    int refcount() const
+    {
+        return m_refs;
+    }
 
-		intrusive_ptr_base(): m_refs(0) {}
+    intrusive_ptr_base(): m_refs(0) {}
 
-		// so that we can access this when logging
+    // so that we can access this when logging
 #if !defined TORRENT_LOGGING \
 		&& !defined TORRENT_VERBOSE_LOGGING \
 		&& !defined TORRENT_ERROR_LOGGING
-	private:
+private:
 #endif
-		// reference counter for intrusive_ptr
-		mutable boost::detail::atomic_count m_refs;
-	};
+    // reference counter for intrusive_ptr
+    mutable boost::detail::atomic_count m_refs;
+};
 
 }
 

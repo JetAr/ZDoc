@@ -71,18 +71,18 @@ FLOAT rnd( FLOAT low=-1.0f, FLOAT high=1.0f );
 extern HINSTANCE                    g_hInst;
 extern CProfile                     g_Profile;
 extern CTerrainEngine*              g_pTerrain;
-extern CMyApplication*              g_pApp;              
-extern CInputManager::UserInput*    g_pUserInput;              
+extern CMyApplication*              g_pApp;
+extern CInputManager::UserInput*    g_pUserInput;
 extern IDirect3DDevice9*            g_pd3dDevice;
 extern C3DDrawManager*              g_p3DDrawManager;
-    
+
 // For debugging
 extern D3DXVECTOR3                  g_vDebugMove;
 extern D3DXVECTOR3                  g_vDebugRotate;
 extern BOOL                         g_bDebugFreezeZoneRender;
 extern BOOL                         g_bDebugIsZoneRenderFroze;
-extern BOOL                         g_bDebugFreezeZoneRender;     
-extern CEnemyShip*                  g_pDebugFirstEnemy;            
+extern BOOL                         g_bDebugFreezeZoneRender;
+extern CEnemyShip*                  g_pDebugFirstEnemy;
 
 
 D3DXMATRIX* Donuts_MatrixOrthroNormalize( D3DXMATRIX* pOut, D3DXMATRIX* pM );

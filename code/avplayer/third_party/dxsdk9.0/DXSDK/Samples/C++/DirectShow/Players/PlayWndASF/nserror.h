@@ -801,7 +801,7 @@ Notes:
 // MessageText:
 //
 //  Cannot exceed the maximum client limit.%0
-//  
+//
 //
 #define NS_E_MAX_CLIENTS                 0xC00D0049L
 
@@ -811,7 +811,7 @@ Notes:
 // MessageText:
 //
 //  Log File Size too small.%0
-//  
+//
 //
 #define NS_E_LOG_FILE_SIZE               0xC00D004AL
 
@@ -862,9 +862,9 @@ Notes:
 /////////////////////////////////////////////////////////////////////////
 
 
- // Tiger Events
+// Tiger Events
 
- // %1 is the tiger name
+// %1 is the tiger name
 
 //
 // MessageId: NS_I_TIGER_START
@@ -885,10 +885,10 @@ Notes:
 #define NS_E_TIGER_FAIL                  0xC00D0050L
 
 
- // Cub Events
+// Cub Events
 
- // %1 is the cub ID
- // %2 is the cub name
+// %1 is the cub ID
+// %2 is the cub name
 
 //
 // MessageId: NS_I_CUB_START
@@ -918,11 +918,11 @@ Notes:
 #define NS_E_CUB_FAIL                    0xC00D0053L
 
 
- // Disk Events
+// Disk Events
 
- // %1 is the tiger disk ID
- // %2 is the device name
- // %3 is the cub ID
+// %1 is the tiger disk ID
+// %2 is the device name
+// %3 is the cub ID
 //
 // MessageId: NS_I_DISK_START
 //
@@ -969,7 +969,7 @@ Notes:
 #define NS_I_DISK_REBUILD_ABORTED        0x400D0058L
 
 
- // Admin Events
+// Admin Events
 
 //
 // MessageId: NS_I_LIMIT_FUNNELS
@@ -1035,7 +1035,7 @@ Notes:
 #define NS_W_UNKNOWN_EVENT               0x800D005FL
 
 
- // Alerts
+// Alerts
 
 //
 // MessageId: NS_E_MAX_FUNNELS_ALERT
@@ -1119,7 +1119,7 @@ Notes:
 #define NS_E_ENACTPLAN_GIVEUP            0xC00D0068L
 
 
- // MCMADM warnings/errors
+// MCMADM warnings/errors
 
 //
 // MessageId: MCMADM_I_NO_EVENTS
@@ -1398,7 +1398,7 @@ Notes:
 
 
 /////////////////////////////////////////////////////////////////////
-// This error message is to replace previous NS_E_INVALID_INDEX which 
+// This error message is to replace previous NS_E_INVALID_INDEX which
 // takes an index value for the error message string.  For some application
 // obtain the index value at reporting error time is very difficult, so we
 // use this string to avoid the problem.
@@ -3907,7 +3907,7 @@ Notes:
 #define NS_E_STALE_PRESENTATION          0xC00D1389L
 
 
- // Namespace Errors
+// Namespace Errors
 
 //
 // MessageId: NS_E_NAMESPACE_WRONG_PERSIST
@@ -4027,7 +4027,7 @@ Notes:
 #define NS_E_NAMESPACE_BAD_NAME          0xC00D1396L
 
 
- // Cache Errors
+// Cache Errors
 
 //
 // MessageId: NS_E_CACHE_ARCHIVE_CONFLICT

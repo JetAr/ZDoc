@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: AudioCapDlg.cpp
 //
-// Desc: DirectShow sample code - main header file for the 
+// Desc: DirectShow sample code - main header file for the
 //       audio capture sample application
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -15,7 +15,7 @@
 #endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"		// main symbols
@@ -28,22 +28,22 @@
 class CAudioCapApp : public CWinApp
 {
 public:
-	CAudioCapApp();
+    CAudioCapApp();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAudioCapApp)
-	public:
-	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAudioCapApp)
+public:
+    virtual BOOL InitInstance();
+    //}}AFX_VIRTUAL
 
 // Implementation
 
-	//{{AFX_MSG(CAudioCapApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CAudioCapApp)
+    // NOTE - the ClassWizard will add and remove member functions here.
+    //    DO NOT EDIT what you see in these blocks of generated code !
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 

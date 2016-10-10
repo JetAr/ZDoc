@@ -33,8 +33,8 @@ enum SigningType { SIGN_NONE, SIGN_FAST, SIGN_FULL };
 class CNetConnectWizard
 {
 public:
-	CNetConnectWizard( HINSTANCE hInst, HWND hWndParent, TCHAR* strAppName, GUID* pGuidApp );
-	virtual ~CNetConnectWizard();
+    CNetConnectWizard( HINSTANCE hInst, HWND hWndParent, TCHAR* strAppName, GUID* pGuidApp );
+    virtual ~CNetConnectWizard();
 
     HRESULT WINAPI MessageHandler( PVOID pvUserContext, DWORD dwMessageId, PVOID pMsgBuffer );
     HRESULT WINAPI LobbyMessageHandler( PVOID pvUserContext, DWORD dwMessageId, PVOID pMsgBuffer );
@@ -44,19 +44,58 @@ public:
     HRESULT DoConnectWizard( BOOL bBackTrack );
     HRESULT ConnectUsingLobbySettings();
 
-    void   SetMaxPlayers( DWORD dwMaxPlayers )                 { m_dwMaxPlayers = dwMaxPlayers; }
-    void   SetPlayerName( TCHAR* strPlayerName )               { _tcsncpy( m_strLocalPlayerName, strPlayerName, MAX_PATH-1 ); m_strLocalPlayerName[ MAX_PATH-1 ] = 0; }
-    void   SetSessionName( TCHAR* strSessionName )             { _tcsncpy( m_strSessionName, strSessionName, MAX_PATH-1 ); m_strSessionName[ MAX_PATH-1 ] = 0; }
-    void   SetPreferredProvider( TCHAR* strPreferredProvider ) { _tcsncpy( m_strPreferredProvider, strPreferredProvider, MAX_PATH-1 ); m_strPreferredProvider[ MAX_PATH-1 ] = 0; }
-    void   SetDefaultPort( DWORD dwDefaultPort )               { m_dwPort = dwDefaultPort; }
+    void   SetMaxPlayers( DWORD dwMaxPlayers )
+    {
+        m_dwMaxPlayers = dwMaxPlayers;
+    }
+    void   SetPlayerName( TCHAR* strPlayerName )
+    {
+        _tcsncpy( m_strLocalPlayerName, strPlayerName, MAX_PATH-1 );
+        m_strLocalPlayerName[ MAX_PATH-1 ] = 0;
+    }
+    void   SetSessionName( TCHAR* strSessionName )
+    {
+        _tcsncpy( m_strSessionName, strSessionName, MAX_PATH-1 );
+        m_strSessionName[ MAX_PATH-1 ] = 0;
+    }
+    void   SetPreferredProvider( TCHAR* strPreferredProvider )
+    {
+        _tcsncpy( m_strPreferredProvider, strPreferredProvider, MAX_PATH-1 );
+        m_strPreferredProvider[ MAX_PATH-1 ] = 0;
+    }
+    void   SetDefaultPort( DWORD dwDefaultPort )
+    {
+        m_dwPort = dwDefaultPort;
+    }
 
-    TCHAR* GetPlayerName()                                     { return m_strLocalPlayerName; }
-    TCHAR* GetSessionName()                                    { return m_strSessionName; }
-    TCHAR* GetPreferredProvider()                              { return m_strPreferredProvider; }
-    BOOL   IsHostPlayer()                                      { return m_bHostPlayer; }
-    BOOL   IsMigrateHost()                                     { return m_bMigrateHost; }
-    BOOL   HaveConnectionSettingsFromLobby()                   { return m_bHaveConnectionSettingsFromLobby; }
-    static BOOL SPRequiresPort( GUID* pSP )                    { return (*pSP != CLSID_DP8SP_MODEM && *pSP != CLSID_DP8SP_SERIAL && *pSP != CLSID_DP8SP_BLUETOOTH); } 
+    TCHAR* GetPlayerName()
+    {
+        return m_strLocalPlayerName;
+    }
+    TCHAR* GetSessionName()
+    {
+        return m_strSessionName;
+    }
+    TCHAR* GetPreferredProvider()
+    {
+        return m_strPreferredProvider;
+    }
+    BOOL   IsHostPlayer()
+    {
+        return m_bHostPlayer;
+    }
+    BOOL   IsMigrateHost()
+    {
+        return m_bMigrateHost;
+    }
+    BOOL   HaveConnectionSettingsFromLobby()
+    {
+        return m_bHaveConnectionSettingsFromLobby;
+    }
+    static BOOL SPRequiresPort( GUID* pSP )
+    {
+        return (*pSP != CLSID_DP8SP_MODEM && *pSP != CLSID_DP8SP_SERIAL && *pSP != CLSID_DP8SP_BLUETOOTH);
+    }
 
 protected:
     struct DPHostEnumInfo
@@ -65,7 +104,7 @@ protected:
         DPN_APPLICATION_DESC* pAppDesc;
         IDirectPlay8Address* pHostAddr;
         IDirectPlay8Address* pDeviceAddr;
-		TCHAR                szSession[MAX_PATH];
+        TCHAR                szSession[MAX_PATH];
         DWORD                dwLastPollTime;
         BOOL                 bValid;
         DPHostEnumInfo*      pNext;

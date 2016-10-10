@@ -33,7 +33,7 @@ struct tuple_to_pair
     static void construct(PyObject* x, converter::rvalue_from_python_stage1_data* data)
     {
         void* storage = ((converter::rvalue_from_python_storage<
-            std::pair<T1, T2> >*)data)->storage.bytes;
+                          std::pair<T1, T2> >*)data)->storage.bytes;
 
         object o(borrowed(x));
         std::pair<T1, T2> p;

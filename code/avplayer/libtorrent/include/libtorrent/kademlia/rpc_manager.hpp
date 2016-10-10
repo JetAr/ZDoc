@@ -47,9 +47,17 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "libtorrent/ptime.hpp"
 
-namespace libtorrent { namespace aux { struct session_impl; } }
+namespace libtorrent
+{
+namespace aux
+{
+struct session_impl;
+}
+}
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
@@ -60,9 +68,12 @@ struct udp_socket_interface;
 
 struct null_observer : public observer
 {
-	null_observer(boost::intrusive_ptr<traversal_algorithm> const& a
-		, udp::endpoint const& ep, node_id const& id): observer(a, ep, id) {}
-	virtual void reply(msg const&) { flags |= flag_done; }
+    null_observer(boost::intrusive_ptr<traversal_algorithm> const& a
+                  , udp::endpoint const& ep, node_id const& id): observer(a, ep, id) {}
+    virtual void reply(msg const&)
+    {
+        flags |= flag_done;
+    }
 };
 
 class routing_table;
@@ -71,57 +82,61 @@ struct dht_observer;
 class TORRENT_EXTRA_EXPORT rpc_manager
 {
 public:
-	typedef boost::function3<void, address, int, address> external_ip_fun;
+    typedef boost::function3<void, address, int, address> external_ip_fun;
 
-	rpc_manager(node_id const& our_id
-		, routing_table& table, udp_socket_interface* sock
-		, dht_observer* observer);
-	~rpc_manager();
+    rpc_manager(node_id const& our_id
+                , routing_table& table, udp_socket_interface* sock
+                , dht_observer* observer);
+    ~rpc_manager();
 
-	void unreachable(udp::endpoint const& ep);
+    void unreachable(udp::endpoint const& ep);
 
-	// returns true if the node needs a refresh
-	// if so, id is assigned the node id to refresh
-	bool incoming(msg const&, node_id* id);
-	time_duration tick();
+    // returns true if the node needs a refresh
+    // if so, id is assigned the node id to refresh
+    bool incoming(msg const&, node_id* id);
+    time_duration tick();
 
-	bool invoke(entry& e, udp::endpoint target
-		, observer_ptr o);
+    bool invoke(entry& e, udp::endpoint target
+                , observer_ptr o);
 
-	void add_our_id(entry& e);
+    void add_our_id(entry& e);
 
 #if defined TORRENT_DEBUG || TORRENT_RELEASE_ASSERTS
-	size_t allocation_size() const;
+    size_t allocation_size() const;
 #endif
 #ifdef TORRENT_DEBUG
-	void check_invariant() const;
+    void check_invariant() const;
 #endif
 
-	void* allocate_observer();
-	void free_observer(void* ptr);
+    void* allocate_observer();
+    void free_observer(void* ptr);
 
-	int num_allocated_observers() const { return m_allocated_observers; }
+    int num_allocated_observers() const
+    {
+        return m_allocated_observers;
+    }
 
 private:
 
-	boost::uint32_t calc_connection_id(udp::endpoint addr);
+    boost::uint32_t calc_connection_id(udp::endpoint addr);
 
-	mutable boost::pool<> m_pool_allocator;
+    mutable boost::pool<> m_pool_allocator;
 
-	typedef std::list<observer_ptr> transactions_t;
-	transactions_t m_transactions;
-	
-	udp_socket_interface* m_sock;
-	node_id m_our_id;
-	routing_table& m_table;
-	ptime m_timer;
-	node_id m_random_number;
-	int m_allocated_observers;
-	bool m_destructing;
-	dht_observer* m_observer;
+    typedef std::list<observer_ptr> transactions_t;
+    transactions_t m_transactions;
+
+    udp_socket_interface* m_sock;
+    node_id m_our_id;
+    routing_table& m_table;
+    ptime m_timer;
+    node_id m_random_number;
+    int m_allocated_observers;
+    bool m_destructing;
+    dht_observer* m_observer;
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif
 

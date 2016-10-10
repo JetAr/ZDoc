@@ -12,53 +12,54 @@
 // conflict with the official DirectX SampleGrabber filter
 //------------------------------------------------------------------------------
 // {2FA4F053-6D60-4cb0-9503-8E89234F3F73}
-DEFINE_GUID(CLSID_GrabberSample, 
-0x2fa4f053, 0x6d60, 0x4cb0, 0x95, 0x3, 0x8e, 0x89, 0x23, 0x4f, 0x3f, 0x73);
+DEFINE_GUID(CLSID_GrabberSample,
+            0x2fa4f053, 0x6d60, 0x4cb0, 0x95, 0x3, 0x8e, 0x89, 0x23, 0x4f, 0x3f, 0x73);
 
-DEFINE_GUID(IID_IGrabberSample, 
-0x6b652fff, 0x11fe, 0x4fce, 0x92, 0xad, 0x02, 0x66, 0xb5, 0xd7, 0xc7, 0x8f);
+DEFINE_GUID(IID_IGrabberSample,
+            0x6b652fff, 0x11fe, 0x4fce, 0x92, 0xad, 0x02, 0x66, 0xb5, 0xd7, 0xc7, 0x8f);
 
 
-// We define a callback typedef for this example. 
-// Normally, you would make the SampleGrabber support a COM interface, 
-// and in one of its methods you would pass in a pointer to a COM interface 
+// We define a callback typedef for this example.
+// Normally, you would make the SampleGrabber support a COM interface,
+// and in one of its methods you would pass in a pointer to a COM interface
 // used for calling back. See the DirectX documentation for the SampleGrabber
 // for more information.
 
 typedef HRESULT (*SAMPLECALLBACK) (
-    IMediaSample * pSample, 
-    REFERENCE_TIME * StartTime, 
+    IMediaSample * pSample,
+    REFERENCE_TIME * StartTime,
     REFERENCE_TIME * StopTime,
     BOOL TypeChanged );
 
 
 // We define the interface the app can use to program us
 MIDL_INTERFACE("6B652FFF-11FE-4FCE-92AD-0266B5D7C78F")
-IGrabberSample : public IUnknown
+IGrabberSample :
+public IUnknown
 {
-    public:
-        
-        virtual HRESULT STDMETHODCALLTYPE SetAcceptedMediaType( 
-            const CMediaType *pType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType( 
-            CMediaType *pType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetCallback( 
-            SAMPLECALLBACK Callback) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDeliveryBuffer( 
-            ALLOCATOR_PROPERTIES props,
-            BYTE *pBuffer) = 0;
+public:
+
+    virtual HRESULT STDMETHODCALLTYPE SetAcceptedMediaType(
+        const CMediaType *pType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType(
+        CMediaType *pType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetCallback(
+        SAMPLECALLBACK Callback) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetDeliveryBuffer(
+        ALLOCATOR_PROPERTIES props,
+        BYTE *pBuffer) = 0;
 };
-        
+
 
 class CSampleGrabberInPin;
 class CSampleGrabber;
 
 //----------------------------------------------------------------------------
 // This is a special allocator that KNOWS that the person who is creating it
-// will only create one of them. It allocates CMediaSamples that only 
+// will only create one of them. It allocates CMediaSamples that only
 // reference the buffer location that is set in the pin's renderer's
 // data variable
 //----------------------------------------------------------------------------
@@ -76,8 +77,8 @@ protected:
 
 public:
 
-    CSampleGrabberAllocator( CSampleGrabberInPin * pParent, HRESULT *phr ) 
-        : CMemAllocator( TEXT("SampleGrabberAllocator\0"), NULL, phr ) 
+    CSampleGrabberAllocator( CSampleGrabberInPin * pParent, HRESULT *phr )
+        : CMemAllocator( TEXT("SampleGrabberAllocator\0"), NULL, phr )
         , m_pPin( pParent )
     {
     };
@@ -121,12 +122,15 @@ class CSampleGrabberInPin : public CTransInPlaceInputPin
 
 protected:
 
-    CSampleGrabber * SampleGrabber( ) { return (CSampleGrabber*) m_pFilter; }
+    CSampleGrabber * SampleGrabber( )
+    {
+        return (CSampleGrabber*) m_pFilter;
+    }
     HRESULT SetDeliveryBuffer( ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer );
 
 public:
 
-    CSampleGrabberInPin( CTransInPlaceFilter * pFilter, HRESULT * pHr ) 
+    CSampleGrabberInPin( CTransInPlaceFilter * pFilter, HRESULT * pHr )
         : CTransInPlaceInputPin( TEXT("SampleGrabberInputPin\0"), pFilter, pHr, L"Input\0" )
         , m_pPrivateAllocator( NULL )
         , m_pBuffer( NULL )
@@ -173,7 +177,7 @@ public:
 //----------------------------------------------------------------------------
 
 class CSampleGrabber : public CTransInPlaceFilter,
-                       public IGrabberSample
+    public IGrabberSample
 {
     friend class CSampleGrabberInPin;
     friend class CSampleGrabberAllocator;
@@ -184,21 +188,24 @@ protected:
     SAMPLECALLBACK m_callback;
     CCritSec m_Lock; // serialize access to our data
 
-    BOOL IsReadOnly( ) { return !m_bModifiesData; }
+    BOOL IsReadOnly( )
+    {
+        return !m_bModifiesData;
+    }
 
-    // PURE, override this to ensure we get 
+    // PURE, override this to ensure we get
     // connected with the right media type
     HRESULT CheckInputType( const CMediaType * pmt );
 
-    // PURE, override this to callback 
+    // PURE, override this to callback
     // the user when a sample is received
     HRESULT Transform( IMediaSample * pms );
 
-    // override this so we can return S_FALSE directly. 
+    // override this so we can return S_FALSE directly.
     // The base class CTransInPlace
-    // Transform( ) method is called by it's 
+    // Transform( ) method is called by it's
     // Receive( ) method. There is no way
-    // to get Transform( ) to return an S_FALSE value 
+    // to get Transform( ) to return an S_FALSE value
     // (which means "stop giving me data"),
     // to Receive( ) and get Receive( ) to return S_FALSE as well.
 

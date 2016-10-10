@@ -46,52 +46,89 @@ class CBuffer
     LIST_ENTRY      m_ListEntry ;           //  list's link
     OVERLAPPED      m_Overlapped ;          //  OVERLAPPED struct we use
 
-    public :
+public :
 
-        CBuffer (
-            IN  CBufferPool *   pBufferPool,        //  back pointer
-            IN  DWORD           dwBufferLength,     //  how much to allocator
-            OUT HRESULT *       phr                 //  success/failre of init
-            ) ;
+    CBuffer (
+        IN  CBufferPool *   pBufferPool,        //  back pointer
+        IN  DWORD           dwBufferLength,     //  how much to allocator
+        OUT HRESULT *       phr                 //  success/failre of init
+    ) ;
 
-        ~CBuffer (
-            ) ;
+    ~CBuffer (
+    ) ;
 
-        //  LIST_ENTRY manipulation
-        void InsertHead (IN LIST_ENTRY * pListHead) { ASSERT (IsListEmpty (& m_ListEntry)) ; InsertHeadList (pListHead, & m_ListEntry) ; }
-        void Unhook ()                              { RemoveEntryList (& m_ListEntry) ; InitializeListHead (& m_ListEntry) ; }
+    //  LIST_ENTRY manipulation
+    void InsertHead (IN LIST_ENTRY * pListHead)
+    {
+        ASSERT (IsListEmpty (& m_ListEntry)) ;
+        InsertHeadList (pListHead, & m_ListEntry) ;
+    }
+    void Unhook ()
+    {
+        RemoveEntryList (& m_ListEntry) ;
+        InitializeListHead (& m_ListEntry) ;
+    }
 
-        //  returns a pointer to the object's OVERLAPPED struct
-        OVERLAPPED * GetOverlapped ()   { return & m_Overlapped ; }
+    //  returns a pointer to the object's OVERLAPPED struct
+    OVERLAPPED * GetOverlapped ()
+    {
+        return & m_Overlapped ;
+    }
 
-        //  given a LIST_ENTRY, recovers the hosting CBuffer object
-        static CBuffer * RecoverCBuffer (IN LIST_ENTRY * pListEntry)    { CBuffer * pBuffer = CONTAINING_RECORD (pListEntry, CBuffer, m_ListEntry) ;
-                                                                          return pBuffer ; }
+    //  given a LIST_ENTRY, recovers the hosting CBuffer object
+    static CBuffer * RecoverCBuffer (IN LIST_ENTRY * pListEntry)
+    {
+        CBuffer * pBuffer = CONTAINING_RECORD (pListEntry, CBuffer, m_ListEntry) ;
+        return pBuffer ;
+    }
 
-        //  buffer manipulation
-        BYTE *  GetBuffer ()                    { return m_pbBuffer ; }
-        DWORD   GetBufferLength ()              { return m_dwBufferLength ; }
-        DWORD   GetPayloadLength ()             { return m_dwPayloadLength ; }
-        void    SetPayloadLength (IN DWORD dw)  { ASSERT (dw <= m_dwBufferLength) ; m_dwPayloadLength = dw ; }
+    //  buffer manipulation
+    BYTE *  GetBuffer ()
+    {
+        return m_pbBuffer ;
+    }
+    DWORD   GetBufferLength ()
+    {
+        return m_dwBufferLength ;
+    }
+    DWORD   GetPayloadLength ()
+    {
+        return m_dwPayloadLength ;
+    }
+    void    SetPayloadLength (IN DWORD dw)
+    {
+        ASSERT (dw <= m_dwBufferLength) ;
+        m_dwPayloadLength = dw ;
+    }
 
-        //  async IO completion context; allows us to store information that
-        //  allows us to recover when the IO completes
-        void        SetCompletionContext (IN DWORD_PTR dw)  { m_dwCompletionContext = dw ; }
-        DWORD_PTR   GetCompletionContext ()                 { return m_dwCompletionContext ; }
+    //  async IO completion context; allows us to store information that
+    //  allows us to recover when the IO completes
+    void        SetCompletionContext (IN DWORD_PTR dw)
+    {
+        m_dwCompletionContext = dw ;
+    }
+    DWORD_PTR   GetCompletionContext ()
+    {
+        return m_dwCompletionContext ;
+    }
 
-        //  refcounting
-        ULONG AddRef () { return InterlockedIncrement (& m_lRef) ; }
+    //  refcounting
+    ULONG AddRef ()
+    {
+        return InterlockedIncrement (& m_lRef) ;
+    }
 
-        ULONG
-        Release (
-            ) ;
+    ULONG
+    Release (
+    ) ;
 } ;
 
 class CBufferPool
 {
     //  struct is used to request a CBuffer object; the buffer pool maintains a
     //  pool of these structs to queue buffer requests when none are available.
-    struct BLOCK_REQUEST {
+    struct BLOCK_REQUEST
+    {
         LIST_ENTRY  ListEntry ;
         HANDLE      hEvent ;
         CBuffer *   pBuffer ;
@@ -103,29 +140,38 @@ class CBufferPool
     CRITICAL_SECTION    m_crt ;             //  lock to access the various lists
     DWORD               m_dwBufferAllocatedLength ; //  allocated length of each
 
-    void Lock_ ()       { EnterCriticalSection (& m_crt) ; }
-    void Unlock_ ()     { LeaveCriticalSection (& m_crt) ; }
+    void Lock_ ()
+    {
+        EnterCriticalSection (& m_crt) ;
+    }
+    void Unlock_ ()
+    {
+        LeaveCriticalSection (& m_crt) ;
+    }
 
     //  gets a request object; must hold the pool lock
     BLOCK_REQUEST *
     GetRequestLocked_ (
-        )
+    )
     {
         LIST_ENTRY *    pListEntry ;
         BLOCK_REQUEST * pBlockRequest ;
 
-        if (IsListEmpty (& m_RequestPool) == FALSE) {
+        if (IsListEmpty (& m_RequestPool) == FALSE)
+        {
             //  list of unused is not empty; grab one
             pListEntry = RemoveHeadList (& m_RequestPool) ;
             pBlockRequest = CONTAINING_RECORD (pListEntry, BLOCK_REQUEST, ListEntry) ;
         }
-        else {
+        else
+        {
             //  list is empty; must allocate
             pBlockRequest = new BLOCK_REQUEST ;
         }
 
         //  initialize correctly if we got 1
-        if (pBlockRequest) {
+        if (pBlockRequest)
+        {
             pBlockRequest -> hEvent = NULL ;
             pBlockRequest -> pBuffer = NULL ;
         }
@@ -137,34 +183,37 @@ class CBufferPool
     void
     RecycleRequestLocked_ (
         IN  BLOCK_REQUEST * pBlockRequest
-        )
+    )
     {
         InsertHeadList (& m_RequestPool, & pBlockRequest -> ListEntry) ;
     }
 
-    public :
+public :
 
-        CBufferPool (
-            IN  DWORD       dwPoolSize,     //  number of buffers to allocate
-            IN  DWORD       dwBufferLength, //  allocated length of each buffer
-            OUT HRESULT *   phr             //  success/failure
-            ) ;
+    CBufferPool (
+        IN  DWORD       dwPoolSize,     //  number of buffers to allocate
+        IN  DWORD       dwBufferLength, //  allocated length of each buffer
+        OUT HRESULT *   phr             //  success/failure
+    ) ;
 
-        ~CBufferPool (
-            ) ;
+    ~CBufferPool (
+    ) ;
 
-        DWORD GetBufferAllocatedLength ()   { return m_dwBufferAllocatedLength ; }
+    DWORD GetBufferAllocatedLength ()
+    {
+        return m_dwBufferAllocatedLength ;
+    }
 
-        void
-        Recycle (
-            CBuffer *
-            ) ;
-
+    void
+    Recycle (
         CBuffer *
-        GetBuffer (
-            IN  HANDLE  hEvent,                 //  manual reset
-            IN  DWORD   dwTimeout = INFINITE
-            ) ;
+    ) ;
+
+    CBuffer *
+    GetBuffer (
+        IN  HANDLE  hEvent,                 //  manual reset
+        IN  DWORD   dwTimeout = INFINITE
+    ) ;
 } ;
 
 #endif  //  __buffpool_h

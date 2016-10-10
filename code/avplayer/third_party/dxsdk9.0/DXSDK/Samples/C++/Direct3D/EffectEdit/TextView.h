@@ -14,21 +14,21 @@
 #include <afxext.h>
 #endif
 
-class CMyRichEditCtrl : public CRichEditCtrl
-{
-public:
-    CMyRichEditCtrl();
-    ~CMyRichEditCtrl();
+    class CMyRichEditCtrl : public CRichEditCtrl
+    {
+    public:
+        CMyRichEditCtrl();
+        ~CMyRichEditCtrl();
 
-protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMyRichEditCtrl)
-    afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-    //}}AFX_MSG
-    DECLARE_MESSAGE_MAP()
+    protected:
+        // Generated message map functions
+        //{{AFX_MSG(CMyRichEditCtrl)
+        afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+        //}}AFX_MSG
+        DECLARE_MESSAGE_MAP()
 
-    HMODULE m_hRELibrary;   // Rich Edit DLL handle
-};
+        HMODULE m_hRELibrary;   // Rich Edit DLL handle
+    };
 
 class CTextView : public CFormView
 {
@@ -56,9 +56,9 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CTextView)
-    public:
+public:
     virtual void OnInitialUpdate();
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
     //}}AFX_VIRTUAL
@@ -89,7 +89,9 @@ protected:
 
 #ifndef _DEBUG  // debug version in TextView.cpp
 inline CEffectDoc* CTextView::GetDocument()
-   { return (CEffectDoc*)m_pDocument; }
+{
+    return (CEffectDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

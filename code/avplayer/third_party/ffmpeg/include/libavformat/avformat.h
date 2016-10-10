@@ -323,7 +323,8 @@ int av_append_packet(AVIOContext *s, AVPacket *pkt, int size);
  * The exact value of the fractional number is: 'val + num / den'.
  * num is assumed to be 0 <= num < den.
  */
-typedef struct AVFrac {
+typedef struct AVFrac
+{
     int64_t val, num, den;
 } AVFrac;
 
@@ -335,7 +336,8 @@ struct AVCodecTag;
 /**
  * This structure contains the data a format has to probe a file.
  */
-typedef struct AVProbeData {
+typedef struct AVProbeData
+{
     const char *filename;
     unsigned char *buf; /**< Buffer must have AVPROBE_PADDING_SIZE of extra allocated bytes filled with zero. */
     int buf_size;       /**< Size of buf except extra allocated bytes */
@@ -367,9 +369,9 @@ typedef struct AVProbeData {
 #else
 #define AVFMT_TS_NONSTRICT 0x20000
 #endif
-                                   /**< Format does not require strictly
-                                        increasing timestamps, but they must
-                                        still be monotonic */
+/**< Format does not require strictly
+     increasing timestamps, but they must
+     still be monotonic */
 
 #define AVFMT_SEEK_TO_PTS   0x4000000 /**< Seeking is based on PTS */
 
@@ -377,7 +379,8 @@ typedef struct AVProbeData {
  * @addtogroup lavf_encoding
  * @{
  */
-typedef struct AVOutputFormat {
+typedef struct AVOutputFormat
+{
     const char *name;
     /**
      * Descriptive name for the format, meant to be more human-readable
@@ -456,7 +459,8 @@ typedef struct AVOutputFormat {
  * @addtogroup lavf_decoding
  * @{
  */
-typedef struct AVInputFormat {
+typedef struct AVInputFormat
+{
     /**
      * A comma separated list of short names for the format. New names
      * may be appended with a minor bump.
@@ -580,7 +584,8 @@ typedef struct AVInputFormat {
  * @}
  */
 
-enum AVStreamParseType {
+enum AVStreamParseType
+{
     AVSTREAM_PARSE_NONE,
     AVSTREAM_PARSE_FULL,       /**< full parsing and repack */
     AVSTREAM_PARSE_HEADERS,    /**< Only parse headers, do not repack. */
@@ -591,7 +596,8 @@ enum AVStreamParseType {
                                                              just codec level data, otherwise position generation would fail */
 };
 
-typedef struct AVIndexEntry {
+typedef struct AVIndexEntry
+{
     int64_t pos;
     int64_t timestamp;        /**<
                                * Timestamp in AVStream.time_base units, preferably the time from which on correctly decoded frames are available
@@ -643,7 +649,8 @@ typedef struct AVIndexEntry {
  * version bump.
  * sizeof(AVStream) must not be used outside libav*.
  */
-typedef struct AVStream {
+typedef struct AVStream
+{
     int index;    /**< stream index in AVFormatContext */
     /**
      * Format-specific stream ID.
@@ -750,7 +757,8 @@ typedef struct AVStream {
      * Stream information used internally by av_find_stream_info()
      */
 #define MAX_STD_TIMEBASES (60*12+6)
-    struct {
+    struct
+    {
         int64_t last_dts;
         int64_t duration_gcd;
         int duration_count;
@@ -881,7 +889,8 @@ typedef struct AVStream {
  * version bump.
  * sizeof(AVProgram) must not be used outside libav*.
  */
-typedef struct AVProgram {
+typedef struct AVProgram
+{
     int            id;
     int            flags;
     enum AVDiscard discard;        ///< selects which program to discard and which to feed to the caller
@@ -910,7 +919,8 @@ typedef struct AVProgram {
 #define AVFMTCTX_NOHEADER      0x0001 /**< signal that no header is present
                                          (streams are added dynamically) */
 
-typedef struct AVChapter {
+typedef struct AVChapter
+{
     int id;                 ///< unique ID to identify the chapter
     AVRational time_base;   ///< time base in which the start/end timestamps are specified
     int64_t start, end;     ///< chapter start/end time in time_base units
@@ -922,7 +932,8 @@ typedef struct AVChapter {
  * The duration of a video can be estimated through various ways, and this enum can be used
  * to know how the duration was estimated.
  */
-enum AVDurationEstimationMethod {
+enum AVDurationEstimationMethod
+{
     AVFMT_DURATION_FROM_PTS,    ///< Duration accurately estimated from PTSes
     AVFMT_DURATION_FROM_STREAM, ///< Duration estimated from a stream with a known duration
     AVFMT_DURATION_FROM_BITRATE ///< Duration estimated from bitrate (less accurate)
@@ -936,7 +947,8 @@ enum AVDurationEstimationMethod {
  * sizeof(AVFormatContext) must not be used outside libav*, use
  * avformat_alloc_context() to create an AVFormatContext.
  */
-typedef struct AVFormatContext {
+typedef struct AVFormatContext
+{
     /**
      * A class for logging and AVOptions. Set by avformat_alloc_context().
      * Exports (de)muxer private options if they exist.
@@ -1249,7 +1261,8 @@ typedef struct AVFormatContext {
  */
 enum AVDurationEstimationMethod av_fmt_ctx_get_duration_estimation_method(const AVFormatContext* ctx);
 
-typedef struct AVPacketList {
+typedef struct AVPacketList
+{
     AVPacket pkt;
     struct AVPacketList *next;
 } AVPacketList;
@@ -1369,7 +1382,7 @@ AVProgram *av_new_program(AVFormatContext *s, int id);
 #if FF_API_PKT_DUMP
 attribute_deprecated void av_pkt_dump(FILE *f, AVPacket *pkt, int dump_payload);
 attribute_deprecated void av_pkt_dump_log(void *avcl, int level, AVPacket *pkt,
-                                          int dump_payload);
+        int dump_payload);
 #endif
 
 #if FF_API_ALLOC_OUTPUT_CONTEXT
@@ -1378,8 +1391,8 @@ attribute_deprecated void av_pkt_dump_log(void *avcl, int level, AVPacket *pkt,
  */
 attribute_deprecated
 AVFormatContext *avformat_alloc_output_context(const char *format,
-                                               AVOutputFormat *oformat,
-                                               const char *filename);
+        AVOutputFormat *oformat,
+        const char *filename);
 #endif
 
 /**
@@ -1826,8 +1839,8 @@ AVOutputFormat *av_guess_format(const char *short_name,
  * Guess the codec ID based upon muxer and filename.
  */
 enum AVCodecID av_guess_codec(AVOutputFormat *fmt, const char *short_name,
-                            const char *filename, const char *mime_type,
-                            enum AVMediaType type);
+                              const char *filename, const char *mime_type,
+                              enum AVMediaType type);
 
 /**
  * Get timing information for the data currently output.

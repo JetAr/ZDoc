@@ -32,6 +32,6 @@ __inline void INITDDSTRUCT(T& dd)
 HRESULT
 PaintDDrawSurfaceBlack(
     LPDIRECTDRAWSURFACE7 pDDrawSurface
-    );
+);
 
 #endif

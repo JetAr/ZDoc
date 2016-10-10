@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: MemFile.h
 //
-// Desc: DirectShow sample code - header file for application using async 
+// Desc: DirectShow sample code - header file for application using async
 //       filter.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -26,9 +26,12 @@ public:
 
     HRESULT SetPointer(LONGLONG llPos)
     {
-        if (llPos < 0 || llPos > m_llLength) {
+        if (llPos < 0 || llPos > m_llLength)
+        {
             return S_FALSE;
-        } else {
+        }
+        else
+        {
             m_llPosition = llPos;
             return S_OK;
         }
@@ -44,15 +47,19 @@ public:
 
         /*  Wait until the bytes are here! */
         DWORD dwTime = timeGetTime();
-        if (m_llPosition + dwBytesToRead > m_llLength) {
+        if (m_llPosition + dwBytesToRead > m_llLength)
+        {
             dwReadLength = (DWORD)(m_llLength - m_llPosition);
-        } else {
+        }
+        else
+        {
             dwReadLength = dwBytesToRead;
         }
 
         DWORD dwTimeToArrive =
             ((DWORD)m_llPosition + dwReadLength) / m_dwKBPerSec;
-        if (dwTime - m_dwTimeStart < dwTimeToArrive) {
+        if (dwTime - m_dwTimeStart < dwTimeToArrive)
+        {
             Sleep(dwTimeToArrive - dwTime + m_dwTimeStart);
         }
 

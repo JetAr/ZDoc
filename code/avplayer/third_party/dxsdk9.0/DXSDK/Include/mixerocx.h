@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for mixerocx.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IMixerOCXNotify_FWD_DEFINED__
 #define __IMixerOCXNotify_FWD_DEFINED__
@@ -58,14 +58,14 @@ typedef interface IMixerOCX IMixerOCX;
 #include "unknwn.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_mixerocx_0000 */
-/* [local] */ 
+/* [local] */
 
 
 
@@ -78,66 +78,67 @@ extern RPC_IF_HANDLE __MIDL_itf_mixerocx_0000_v0_0_s_ifspec;
 #define __IMixerOCXNotify_INTERFACE_DEFINED__
 
 /* interface IMixerOCXNotify */
-/* [unique][helpstring][uuid][object] */ 
+/* [unique][helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IMixerOCXNotify;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("81A3BD31-DEE1-11d1-8508-00A0C91F9CA0")
-    IMixerOCXNotify : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE OnInvalidateRect( 
-            /* [in] */ LPCRECT lpcRect) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE OnStatusChange( 
-            /* [in] */ ULONG ulStatusFlags) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE OnDataChange( 
-            /* [in] */ ULONG ulDataFlags) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("81A3BD31-DEE1-11d1-8508-00A0C91F9CA0")
+IMixerOCXNotify :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE OnInvalidateRect(
+        /* [in] */ LPCRECT lpcRect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE OnStatusChange(
+        /* [in] */ ULONG ulStatusFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE OnDataChange(
+        /* [in] */ ULONG ulDataFlags) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMixerOCXNotifyVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMixerOCXNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMixerOCXNotify * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMixerOCXNotify * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *OnInvalidateRect )( 
-            IMixerOCXNotify * This,
-            /* [in] */ LPCRECT lpcRect);
-        
-        HRESULT ( STDMETHODCALLTYPE *OnStatusChange )( 
-            IMixerOCXNotify * This,
-            /* [in] */ ULONG ulStatusFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *OnDataChange )( 
-            IMixerOCXNotify * This,
-            /* [in] */ ULONG ulDataFlags);
-        
-        END_INTERFACE
-    } IMixerOCXNotifyVtbl;
+typedef struct IMixerOCXNotifyVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMixerOCXNotify
-    {
-        CONST_VTBL struct IMixerOCXNotifyVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMixerOCXNotify * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMixerOCXNotify * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMixerOCXNotify * This);
+
+    HRESULT ( STDMETHODCALLTYPE *OnInvalidateRect )(
+        IMixerOCXNotify * This,
+        /* [in] */ LPCRECT lpcRect);
+
+    HRESULT ( STDMETHODCALLTYPE *OnStatusChange )(
+        IMixerOCXNotify * This,
+        /* [in] */ ULONG ulStatusFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *OnDataChange )(
+        IMixerOCXNotify * This,
+        /* [in] */ ULONG ulDataFlags);
+
+    END_INTERFACE
+} IMixerOCXNotifyVtbl;
+
+interface IMixerOCXNotify
+{
+    CONST_VTBL struct IMixerOCXNotifyVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -168,7 +169,7 @@ EXTERN_C const IID IID_IMixerOCXNotify;
 
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCXNotify_OnInvalidateRect_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCXNotify_OnInvalidateRect_Proxy(
     IMixerOCXNotify * This,
     /* [in] */ LPCRECT lpcRect);
 
@@ -180,7 +181,7 @@ void __RPC_STUB IMixerOCXNotify_OnInvalidateRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCXNotify_OnStatusChange_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCXNotify_OnStatusChange_Proxy(
     IMixerOCXNotify * This,
     /* [in] */ ULONG ulStatusFlags);
 
@@ -192,7 +193,7 @@ void __RPC_STUB IMixerOCXNotify_OnStatusChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCXNotify_OnDataChange_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCXNotify_OnDataChange_Proxy(
     IMixerOCXNotify * This,
     /* [in] */ ULONG ulDataFlags);
 
@@ -212,113 +213,114 @@ void __RPC_STUB IMixerOCXNotify_OnDataChange_Stub(
 #define __IMixerOCX_INTERFACE_DEFINED__
 
 /* interface IMixerOCX */
-/* [unique][helpstring][uuid][object] */ 
+/* [unique][helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IMixerOCX;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("81A3BD32-DEE1-11d1-8508-00A0C91F9CA0")
-    IMixerOCX : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE OnDisplayChange( 
-            /* [in] */ ULONG ulBitsPerPixel,
-            /* [in] */ ULONG ulScreenWidth,
-            /* [in] */ ULONG ulScreenHeight) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetAspectRatio( 
-            /* [out] */ LPDWORD pdwPictAspectRatioX,
-            /* [out] */ LPDWORD pdwPictAspectRatioY) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetVideoSize( 
-            /* [out] */ LPDWORD pdwVideoWidth,
-            /* [out] */ LPDWORD pdwVideoHeight) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ LPDWORD *pdwStatus) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE OnDraw( 
-            /* [in] */ HDC hdcDraw,
-            /* [in] */ LPCRECT prcDraw) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetDrawRegion( 
-            /* [in] */ LPPOINT lpptTopLeftSC,
-            /* [in] */ LPCRECT prcDrawCC,
-            /* [in] */ LPCRECT lprcClip) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [in] */ IMixerOCXNotify *pmdns) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE UnAdvise( void) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("81A3BD32-DEE1-11d1-8508-00A0C91F9CA0")
+IMixerOCX :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE OnDisplayChange(
+        /* [in] */ ULONG ulBitsPerPixel,
+        /* [in] */ ULONG ulScreenWidth,
+        /* [in] */ ULONG ulScreenHeight) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetAspectRatio(
+        /* [out] */ LPDWORD pdwPictAspectRatioX,
+        /* [out] */ LPDWORD pdwPictAspectRatioY) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetVideoSize(
+        /* [out] */ LPDWORD pdwVideoWidth,
+        /* [out] */ LPDWORD pdwVideoHeight) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetStatus(
+        /* [out] */ LPDWORD *pdwStatus) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE OnDraw(
+        /* [in] */ HDC hdcDraw,
+        /* [in] */ LPCRECT prcDraw) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetDrawRegion(
+        /* [in] */ LPPOINT lpptTopLeftSC,
+        /* [in] */ LPCRECT prcDrawCC,
+        /* [in] */ LPCRECT lprcClip) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Advise(
+        /* [in] */ IMixerOCXNotify *pmdns) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE UnAdvise( void) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMixerOCXVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMixerOCX * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMixerOCX * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMixerOCX * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *OnDisplayChange )( 
-            IMixerOCX * This,
-            /* [in] */ ULONG ulBitsPerPixel,
-            /* [in] */ ULONG ulScreenWidth,
-            /* [in] */ ULONG ulScreenHeight);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetAspectRatio )( 
-            IMixerOCX * This,
-            /* [out] */ LPDWORD pdwPictAspectRatioX,
-            /* [out] */ LPDWORD pdwPictAspectRatioY);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetVideoSize )( 
-            IMixerOCX * This,
-            /* [out] */ LPDWORD pdwVideoWidth,
-            /* [out] */ LPDWORD pdwVideoHeight);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
-            IMixerOCX * This,
-            /* [out] */ LPDWORD *pdwStatus);
-        
-        HRESULT ( STDMETHODCALLTYPE *OnDraw )( 
-            IMixerOCX * This,
-            /* [in] */ HDC hdcDraw,
-            /* [in] */ LPCRECT prcDraw);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetDrawRegion )( 
-            IMixerOCX * This,
-            /* [in] */ LPPOINT lpptTopLeftSC,
-            /* [in] */ LPCRECT prcDrawCC,
-            /* [in] */ LPCRECT lprcClip);
-        
-        HRESULT ( STDMETHODCALLTYPE *Advise )( 
-            IMixerOCX * This,
-            /* [in] */ IMixerOCXNotify *pmdns);
-        
-        HRESULT ( STDMETHODCALLTYPE *UnAdvise )( 
-            IMixerOCX * This);
-        
-        END_INTERFACE
-    } IMixerOCXVtbl;
+typedef struct IMixerOCXVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMixerOCX
-    {
-        CONST_VTBL struct IMixerOCXVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMixerOCX * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMixerOCX * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMixerOCX * This);
+
+    HRESULT ( STDMETHODCALLTYPE *OnDisplayChange )(
+        IMixerOCX * This,
+        /* [in] */ ULONG ulBitsPerPixel,
+        /* [in] */ ULONG ulScreenWidth,
+        /* [in] */ ULONG ulScreenHeight);
+
+    HRESULT ( STDMETHODCALLTYPE *GetAspectRatio )(
+        IMixerOCX * This,
+        /* [out] */ LPDWORD pdwPictAspectRatioX,
+        /* [out] */ LPDWORD pdwPictAspectRatioY);
+
+    HRESULT ( STDMETHODCALLTYPE *GetVideoSize )(
+        IMixerOCX * This,
+        /* [out] */ LPDWORD pdwVideoWidth,
+        /* [out] */ LPDWORD pdwVideoHeight);
+
+    HRESULT ( STDMETHODCALLTYPE *GetStatus )(
+        IMixerOCX * This,
+        /* [out] */ LPDWORD *pdwStatus);
+
+    HRESULT ( STDMETHODCALLTYPE *OnDraw )(
+        IMixerOCX * This,
+        /* [in] */ HDC hdcDraw,
+        /* [in] */ LPCRECT prcDraw);
+
+    HRESULT ( STDMETHODCALLTYPE *SetDrawRegion )(
+        IMixerOCX * This,
+        /* [in] */ LPPOINT lpptTopLeftSC,
+        /* [in] */ LPCRECT prcDrawCC,
+        /* [in] */ LPCRECT lprcClip);
+
+    HRESULT ( STDMETHODCALLTYPE *Advise )(
+        IMixerOCX * This,
+        /* [in] */ IMixerOCXNotify *pmdns);
+
+    HRESULT ( STDMETHODCALLTYPE *UnAdvise )(
+        IMixerOCX * This);
+
+    END_INTERFACE
+} IMixerOCXVtbl;
+
+interface IMixerOCX
+{
+    CONST_VTBL struct IMixerOCXVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -364,7 +366,7 @@ EXTERN_C const IID IID_IMixerOCX;
 
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_OnDisplayChange_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_OnDisplayChange_Proxy(
     IMixerOCX * This,
     /* [in] */ ULONG ulBitsPerPixel,
     /* [in] */ ULONG ulScreenWidth,
@@ -378,7 +380,7 @@ void __RPC_STUB IMixerOCX_OnDisplayChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_GetAspectRatio_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_GetAspectRatio_Proxy(
     IMixerOCX * This,
     /* [out] */ LPDWORD pdwPictAspectRatioX,
     /* [out] */ LPDWORD pdwPictAspectRatioY);
@@ -391,7 +393,7 @@ void __RPC_STUB IMixerOCX_GetAspectRatio_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_GetVideoSize_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_GetVideoSize_Proxy(
     IMixerOCX * This,
     /* [out] */ LPDWORD pdwVideoWidth,
     /* [out] */ LPDWORD pdwVideoHeight);
@@ -404,7 +406,7 @@ void __RPC_STUB IMixerOCX_GetVideoSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_GetStatus_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_GetStatus_Proxy(
     IMixerOCX * This,
     /* [out] */ LPDWORD *pdwStatus);
 
@@ -416,7 +418,7 @@ void __RPC_STUB IMixerOCX_GetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_OnDraw_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_OnDraw_Proxy(
     IMixerOCX * This,
     /* [in] */ HDC hdcDraw,
     /* [in] */ LPCRECT prcDraw);
@@ -429,7 +431,7 @@ void __RPC_STUB IMixerOCX_OnDraw_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_SetDrawRegion_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_SetDrawRegion_Proxy(
     IMixerOCX * This,
     /* [in] */ LPPOINT lpptTopLeftSC,
     /* [in] */ LPCRECT prcDrawCC,
@@ -443,7 +445,7 @@ void __RPC_STUB IMixerOCX_SetDrawRegion_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_Advise_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_Advise_Proxy(
     IMixerOCX * This,
     /* [in] */ IMixerOCXNotify *pmdns);
 
@@ -455,7 +457,7 @@ void __RPC_STUB IMixerOCX_Advise_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMixerOCX_UnAdvise_Proxy( 
+HRESULT STDMETHODCALLTYPE IMixerOCX_UnAdvise_Proxy(
     IMixerOCX * This);
 
 
@@ -472,10 +474,10 @@ void __RPC_STUB IMixerOCX_UnAdvise_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  HDC_UserSize(     unsigned long *, unsigned long            , HDC * ); 
-unsigned char * __RPC_USER  HDC_UserMarshal(  unsigned long *, unsigned char *, HDC * ); 
-unsigned char * __RPC_USER  HDC_UserUnmarshal(unsigned long *, unsigned char *, HDC * ); 
-void                      __RPC_USER  HDC_UserFree(     unsigned long *, HDC * ); 
+unsigned long             __RPC_USER  HDC_UserSize(     unsigned long *, unsigned long, HDC * );
+unsigned char * __RPC_USER  HDC_UserMarshal(  unsigned long *, unsigned char *, HDC * );
+unsigned char * __RPC_USER  HDC_UserUnmarshal(unsigned long *, unsigned char *, HDC * );
+void                      __RPC_USER  HDC_UserFree(     unsigned long *, HDC * );
 
 /* end of Additional Prototypes */
 

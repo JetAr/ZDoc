@@ -59,89 +59,94 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	namespace aux { struct session_impl; }
+namespace aux
+{
+struct session_impl;
+}
 
-	class TORRENT_EXTRA_EXPORT udp_tracker_connection: public tracker_connection
-	{
-	friend class tracker_manager;
-	public:
+class TORRENT_EXTRA_EXPORT udp_tracker_connection: public tracker_connection
+{
+    friend class tracker_manager;
+public:
 
-		udp_tracker_connection(
-			io_service& ios
-			, connection_queue& cc
-			, tracker_manager& man
-			, tracker_request const& req
-			, boost::weak_ptr<request_callback> c
-			, aux::session_impl& ses
-			, proxy_settings const& ps);
+    udp_tracker_connection(
+        io_service& ios
+        , connection_queue& cc
+        , tracker_manager& man
+        , tracker_request const& req
+        , boost::weak_ptr<request_callback> c
+        , aux::session_impl& ses
+        , proxy_settings const& ps);
 
-		void start();
-		void close();
+    void start();
+    void close();
 
 #if !defined TORRENT_VERBOSE_LOGGING \
 	&& !defined TORRENT_LOGGING \
 	&& !defined TORRENT_ERROR_LOGGING
-	// necessary for logging member offsets
-	private:
+    // necessary for logging member offsets
+private:
 #endif
 
-		enum action_t
-		{
-			action_connect,
-			action_announce,
-			action_scrape,
-			action_error
-		};
+    enum action_t
+    {
+        action_connect,
+        action_announce,
+        action_scrape,
+        action_error
+    };
 
-		boost::intrusive_ptr<udp_tracker_connection> self()
-		{ return boost::intrusive_ptr<udp_tracker_connection>(this); }
+    boost::intrusive_ptr<udp_tracker_connection> self()
+    {
+        return boost::intrusive_ptr<udp_tracker_connection>(this);
+    }
 
-		void name_lookup(error_code const& error, tcp::resolver::iterator i);
-		void timeout(error_code const& error);
-		void start_announce();
+    void name_lookup(error_code const& error, tcp::resolver::iterator i);
+    void timeout(error_code const& error);
+    void start_announce();
 
-		bool on_receive(error_code const& e, udp::endpoint const& ep
-			, char const* buf, int size);
-		bool on_receive_hostname(error_code const& e, char const* hostname
-			, char const* buf, int size);
-		bool on_connect_response(char const* buf, int size);
-		bool on_announce_response(char const* buf, int size);
-		bool on_scrape_response(char const* buf, int size);
+    bool on_receive(error_code const& e, udp::endpoint const& ep
+                    , char const* buf, int size);
+    bool on_receive_hostname(error_code const& e, char const* hostname
+                             , char const* buf, int size);
+    bool on_connect_response(char const* buf, int size);
+    bool on_announce_response(char const* buf, int size);
+    bool on_scrape_response(char const* buf, int size);
 
-		// wraps tracker_connection::fail
-		void fail(error_code const& ec, int code = -1
-			, char const* msg = "", int interval = 0, int min_interval = 0);
+    // wraps tracker_connection::fail
+    void fail(error_code const& ec, int code = -1
+              , char const* msg = "", int interval = 0, int min_interval = 0);
 
-		void send_udp_connect();
-		void send_udp_announce();
-		void send_udp_scrape();
+    void send_udp_connect();
+    void send_udp_announce();
+    void send_udp_scrape();
 
-		virtual void on_timeout(error_code const& ec);
+    virtual void on_timeout(error_code const& ec);
 
-		udp::endpoint pick_target_endpoint() const;
+    udp::endpoint pick_target_endpoint() const;
 
-		bool m_abort;
-		std::string m_hostname;
-		udp::endpoint m_target;
-		std::list<tcp::endpoint> m_endpoints;
+    bool m_abort;
+    std::string m_hostname;
+    udp::endpoint m_target;
+    std::list<tcp::endpoint> m_endpoints;
 
-		int m_transaction_id;
-		aux::session_impl& m_ses;
-		int m_attempts;
+    int m_transaction_id;
+    aux::session_impl& m_ses;
+    int m_attempts;
 
-		struct connection_cache_entry
-		{
-			boost::int64_t connection_id;
-			ptime expires;
-		};
+    struct connection_cache_entry
+    {
+        boost::int64_t connection_id;
+        ptime expires;
+    };
 
-		static std::map<address, connection_cache_entry> m_connection_cache;
-		static mutex m_cache_mutex;
+    static std::map<address, connection_cache_entry> m_connection_cache;
+    static mutex m_cache_mutex;
 
-		action_t m_state;
+    action_t m_state;
 
-		proxy_settings m_proxy;
-	};
+    proxy_settings m_proxy;
+};
 
 }
 

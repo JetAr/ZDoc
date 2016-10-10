@@ -17,12 +17,13 @@ extern "C" {
 
 
 DEFINE_GUID(IID_IAMParse,
-0xc47a3420, 0x005c, 0x11d2, 0x90, 0x38, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x98);
+            0xc47a3420, 0x005c, 0x11d2, 0x90, 0x38, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x98);
 
 //
 //  Parser interface - supported by MPEG-2 splitter filter
 //
-DECLARE_INTERFACE_(IAMParse, IUnknown) {
+DECLARE_INTERFACE_(IAMParse, IUnknown)
+{
     STDMETHOD(GetParseTime) (THIS_
                              REFERENCE_TIME *prtCurrent
                             ) PURE;

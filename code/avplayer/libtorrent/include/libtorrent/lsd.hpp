@@ -55,45 +55,45 @@ typedef boost::function<void(tcp::endpoint, sha1_hash)> peer_callback_t;
 class lsd : public intrusive_ptr_base<lsd>
 {
 public:
-	lsd(io_service& ios, address const& listen_interface
-		, peer_callback_t const& cb);
-	~lsd();
+    lsd(io_service& ios, address const& listen_interface
+        , peer_callback_t const& cb);
+    ~lsd();
 
 //	void rebind(address const& listen_interface);
 
-	void announce(sha1_hash const& ih, int listen_port, bool broadcast = false);
-	void close();
+    void announce(sha1_hash const& ih, int listen_port, bool broadcast = false);
+    void close();
 
 private:
 
-	void resend_announce(error_code const& e, std::string msg);
-	void on_announce(udp::endpoint const& from, char* buffer
-		, std::size_t bytes_transferred);
+    void resend_announce(error_code const& e, std::string msg);
+    void on_announce(udp::endpoint const& from, char* buffer
+                     , std::size_t bytes_transferred);
 //	void setup_receive();
 
-	peer_callback_t m_callback;
+    peer_callback_t m_callback;
 
-	// the udp socket used to send and receive
-	// multicast messages on
-	broadcast_socket m_socket;
+    // the udp socket used to send and receive
+    // multicast messages on
+    broadcast_socket m_socket;
 
-	// used to resend udp packets in case
-	// they time out
-	deadline_timer m_broadcast_timer;
+    // used to resend udp packets in case
+    // they time out
+    deadline_timer m_broadcast_timer;
 
-	// current retry count
-	boost::uint32_t m_retry_count;
+    // current retry count
+    boost::uint32_t m_retry_count;
 
-	// this is a random (presumably unique)
-	// ID for this LSD node. It is used to
-	// ignore our own broadcast messages.
-	// There's no point in adding ourselves
-	// as a peer
-	int m_cookie;
+    // this is a random (presumably unique)
+    // ID for this LSD node. It is used to
+    // ignore our own broadcast messages.
+    // There's no point in adding ourselves
+    // as a peer
+    int m_cookie;
 
-	bool m_disabled;
+    bool m_disabled;
 #if defined(TORRENT_LOGGING) || defined(TORRENT_VERBOSE_LOGGING)
-	FILE* m_log;
+    FILE* m_log;
 #endif
 };
 

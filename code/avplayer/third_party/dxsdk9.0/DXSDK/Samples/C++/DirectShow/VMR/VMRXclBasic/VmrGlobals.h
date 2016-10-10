@@ -4,7 +4,7 @@
 // Desc: DirectShow sample code - a simple full screen video playback sample.
 //       Using the Windows XP Video Mixing Renderer, a video is played back in
 //       a full screen exclusive mode.
-//      
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
@@ -26,52 +26,52 @@ extern LPDIRECTDRAWSURFACE7     g_primarySurface;
 
 //----------------------------------------------------------------------------
 //  CreateVMRGlobals
-// 
+//
 //  creates VMR Globals (look above
 //
 //  Parameters:
 //
-//  Return: true if success 
+//  Return: true if success
 //----------------------------------------------------------------------------
-BOOL 
+BOOL
 CreateVMRGlobals();
 
 //----------------------------------------------------------------------------
 //  ReleaseVMRGlobals
-// 
+//
 //  Releases the global VMR variables
 //  calls ReleaseDDObjects()
 //
 //  Parameters:
 //
-//  Return: 
+//  Return:
 //----------------------------------------------------------------------------
 void
 ReleaseVMRGlobals();
 
 //----------------------------------------------------------------------------
 //  CreateDDObjects
-// 
+//
 //  Creates the DirectDraw objects.
 //
 //  Parameters:
 //      hwnd -- the main app window
-//      screenWidth 
-//      screenHeight 
+//      screenWidth
+//      screenHeight
 //      bitDepth
 //  Return: S_OK or HRESULT of the failed operation
 //----------------------------------------------------------------------------
-HRESULT 
+HRESULT
 CreateDDObjects(HWND hwnd, DWORD screenWidth, DWORD screenHeight, DWORD bitDepth);
 
 //----------------------------------------------------------------------------
 //  Release DD objects
-// 
+//
 //  Releases the global VMR variables
 //
 //  Parameters:
 //
-//  Return: 
+//  Return:
 //----------------------------------------------------------------------------
 void
 ReleaseDDObjects();

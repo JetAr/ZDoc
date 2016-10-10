@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: DMOReg.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) 1999 - 2001, Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
@@ -40,71 +40,74 @@ DEFINE_GUID(DMOCATEGORY_AUDIO_NOISE_SUPPRESS, 0xe07f903f, 0x62fd, 0x4e60, 0x8c, 
 // Matches KSNODETYPE_AGC in ksmedia.h
 DEFINE_GUID(DMOCATEGORY_AGC, 0xE88C9BA0L, 0xC557, 0x11D0, 0x8A, 0x2B, 0x00, 0xA0, 0xC9, 0x25, 0x5A, 0xC1);
 
-typedef struct _DMO_PARTIAL_MEDIATYPE {
-   GUID type;
-   GUID subtype;
+typedef struct _DMO_PARTIAL_MEDIATYPE
+{
+    GUID type;
+    GUID subtype;
 } DMO_PARTIAL_MEDIATYPE, *PDMO_PARTIAL_MEDIATYPE;
 
-enum DMO_REGISTER_FLAGS {
-   DMO_REGISTERF_IS_KEYED = 0x00000001
+enum DMO_REGISTER_FLAGS
+{
+    DMO_REGISTERF_IS_KEYED = 0x00000001
 };
 
-enum DMO_ENUM_FLAGS {
-   DMO_ENUMF_INCLUDE_KEYED = 0x00000001
+enum DMO_ENUM_FLAGS
+{
+    DMO_ENUMF_INCLUDE_KEYED = 0x00000001
 };
 
 STDAPI DMORegister(
-   LPCWSTR szName,
-   REFCLSID clsidDMO,
-   REFGUID guidCategory,
-   DWORD dwFlags, // DMO_REGISTERF_XXX
-   //
-   // Register all mediatypes supported by the object.  This carries no
-   // information about which combinations of input/output types would
-   // actually work.
-   //
-   DWORD cInTypes,
-   const DMO_PARTIAL_MEDIATYPE *pInTypes,
-   DWORD cOutTypes,
-   const DMO_PARTIAL_MEDIATYPE *pOutTypes
+    LPCWSTR szName,
+    REFCLSID clsidDMO,
+    REFGUID guidCategory,
+    DWORD dwFlags, // DMO_REGISTERF_XXX
+    //
+    // Register all mediatypes supported by the object.  This carries no
+    // information about which combinations of input/output types would
+    // actually work.
+    //
+    DWORD cInTypes,
+    const DMO_PARTIAL_MEDIATYPE *pInTypes,
+    DWORD cOutTypes,
+    const DMO_PARTIAL_MEDIATYPE *pOutTypes
 );
 
 STDAPI DMOUnregister(
-   REFCLSID clsidDMO,
-   REFGUID guidCategory // optional - GUID_NULL means unregister from all
+    REFCLSID clsidDMO,
+    REFGUID guidCategory // optional - GUID_NULL means unregister from all
 );
 
 STDAPI DMOEnum(
-   REFGUID guidCategory, // GUID_NULL for "all"
-   DWORD dwFlags, // DMO_ENUMF_XXX
-   //
-   // Enumerate only objects that support at least one of the specified input types
-   // and at least one of the specified output types.  If no input types are specified,
-   // enumerate objects regardless of what input types they support.  Same for
-   // output types.
-   //
-   DWORD cInTypes,
-   const DMO_PARTIAL_MEDIATYPE *pInTypes, // can be NULL only of ulInTypes = 0
-   DWORD cOutTypes,
-   const DMO_PARTIAL_MEDIATYPE *pOutTypes, // can be NULL only of ulOutTypes = 0
-   //
-   // Output parameter - this receives a pointer to the DMO CLSID enumerator
-   //
-   IEnumDMO **ppEnum
+    REFGUID guidCategory, // GUID_NULL for "all"
+    DWORD dwFlags, // DMO_ENUMF_XXX
+    //
+    // Enumerate only objects that support at least one of the specified input types
+    // and at least one of the specified output types.  If no input types are specified,
+    // enumerate objects regardless of what input types they support.  Same for
+    // output types.
+    //
+    DWORD cInTypes,
+    const DMO_PARTIAL_MEDIATYPE *pInTypes, // can be NULL only of ulInTypes = 0
+    DWORD cOutTypes,
+    const DMO_PARTIAL_MEDIATYPE *pOutTypes, // can be NULL only of ulOutTypes = 0
+    //
+    // Output parameter - this receives a pointer to the DMO CLSID enumerator
+    //
+    IEnumDMO **ppEnum
 );
 
 STDAPI DMOGetTypes(
-   REFCLSID clsidDMO,
-   unsigned long ulInputTypesRequested,
-   unsigned long *pulInputTypesSupplied,
-   DMO_PARTIAL_MEDIATYPE *pInputTypes,
-   unsigned long ulOutputTypesRequested,
-   unsigned long *pulOutputTypesSupplied,
-   DMO_PARTIAL_MEDIATYPE *pOutputTypes
+    REFCLSID clsidDMO,
+    unsigned long ulInputTypesRequested,
+    unsigned long *pulInputTypesSupplied,
+    DMO_PARTIAL_MEDIATYPE *pInputTypes,
+    unsigned long ulOutputTypesRequested,
+    unsigned long *pulOutputTypesSupplied,
+    DMO_PARTIAL_MEDIATYPE *pOutputTypes
 );
 
 STDAPI DMOGetName(
-   REFCLSID clsidDMO,
-   WCHAR szName[80]
+    REFCLSID clsidDMO,
+    WCHAR szName[80]
 );
 #endif //__DMOREG_H__

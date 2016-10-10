@@ -8,7 +8,7 @@
 // device configuration. The provided interface is flexible enough for most
 // situations, but is freely modifyable.
 //
-// The CDIDevImage class acts as the interface to the UI client, and the 
+// The CDIDevImage class acts as the interface to the UI client, and the
 // exposed public methods should be called by the client to set the drawing
 // options and perform renderings. The CDIDIObject class is used as a helper
 // class, and the exposed public methods should not be called by client code.
@@ -78,7 +78,7 @@ typedef TCHAR MAXSTRING[MAX_PATH];
 
 //-----------------------------------------------------------------------------
 // Name: CDIDevImage
-// Desc: Handles device image drawing 
+// Desc: Handles device image drawing
 //-----------------------------------------------------------------------------
 class CDIDevImage
 {
@@ -119,7 +119,7 @@ protected:
     HRESULT CreateCustomImageInfo( LPDIRECTINPUTDEVICE8 pDIDevice );
     HRESULT LoadImages();
     HRESULT BuildCustomUI();
-    HRESULT CreateScaledSurfaceCopy( LPDIRECT3DSURFACE9 pSurfaceSrc, DWORD dwWidthSrc, DWORD dwHeightSrc, 
+    HRESULT CreateScaledSurfaceCopy( LPDIRECT3DSURFACE9 pSurfaceSrc, DWORD dwWidthSrc, DWORD dwHeightSrc,
                                      FLOAT fxScale, FLOAT fyScale, LPDIRECT3DSURFACE9 *ppSurfaceDest );
     VOID    CreateFont();
     VOID    DestroyImages();
@@ -138,18 +138,18 @@ protected:
     HBITMAP*                 m_ahImages;        // Array of pointers to background bitmaps
 
     DWORD                    m_dwActiveView;    // Index of the currently active view
-    DWORD                    m_dwNumViews;      // Total number of views for this devic3    
-    
+    DWORD                    m_dwNumViews;      // Total number of views for this devic3
+
     D3DCOLOR                 m_BkColor;         // Background color for main device image
     HFONT                    m_hFont;           // Font to be used when drawing all text
-    
+
     CDIDIObject**            m_apObject;        // Array of pointers to CDIDIObject data objects
     DWORD                    m_dwNumObjects;    // Total number of objects
-    
+
     DWORD                    m_dwWidthPref;     // User-set preferred width
     DWORD                    m_dwHeightPref;    // User-set preffered height
     DWORD                    m_dwScaleMethod;   // Method to use when scaling to preferred size
-                    
+
 
 };
 
@@ -196,7 +196,7 @@ class CDIDIObject
 public:
     // __________________________
     // Constructors / Destructors
-    CDIDIObject( DWORD dwID, DWORD dwNumViews ); 
+    CDIDIObject( DWORD dwID, DWORD dwNumViews );
     ~CDIDIObject();
 
 
@@ -204,21 +204,50 @@ public:
     // Public Methods
     VOID    SetOverlay( DWORD dwViewID, LPCTSTR tszImagePath, RECT rect );
     VOID    SetCallout( DWORD dwViewID, DWORD dwNumPoints, POINT *aptLine, RECT rect, DWORD dwTextAlign );
-    VOID    SetCalloutState( DWORD dwCalloutState ) {m_dwState = dwCalloutState;}
-    DWORD   GetCalloutState() {return m_dwState;}
-    VOID    SetCalloutColors( COLORREF crColorNormal, COLORREF crColorHigh ) { m_crNormColor = crColorNormal; m_crHighColor = crColorHigh; }
-    VOID    GetCalloutColors( LPCOLORREF pcrColorNormal, LPCOLORREF pcrColorHigh ) { if( pcrColorNormal ) *pcrColorNormal = m_crNormColor; if( pcrColorHigh ) *pcrColorHigh = m_crHighColor; }
+    VOID    SetCalloutState( DWORD dwCalloutState )
+    {
+        m_dwState = dwCalloutState;
+    }
+    DWORD   GetCalloutState()
+    {
+        return m_dwState;
+    }
+    VOID    SetCalloutColors( COLORREF crColorNormal, COLORREF crColorHigh )
+    {
+        m_crNormColor = crColorNormal;
+        m_crHighColor = crColorHigh;
+    }
+    VOID    GetCalloutColors( LPCOLORREF pcrColorNormal, LPCOLORREF pcrColorHigh )
+    {
+        if( pcrColorNormal ) *pcrColorNormal = m_crNormColor;
+        if( pcrColorHigh ) *pcrColorHigh = m_crHighColor;
+    }
     VOID    SetCalloutText( LPCTSTR strText );
     VOID    GetCalloutText( LPTSTR strText, DWORD dwSize );
-    DWORD   GetID() { return m_dwID; }
-    VOID    GetName( LPTSTR strName, DWORD dwSize ) { _tcsncpy( strName, m_strName, dwSize ); }
-    VOID    SetName( LPCTSTR strName ) { _tcsncpy( m_strName, strName, MAX_PATH-4 ); }
+    DWORD   GetID()
+    {
+        return m_dwID;
+    }
+    VOID    GetName( LPTSTR strName, DWORD dwSize )
+    {
+        _tcsncpy( strName, m_strName, dwSize );
+    }
+    VOID    SetName( LPCTSTR strName )
+    {
+        _tcsncpy( m_strName, strName, MAX_PATH-4 );
+    }
     VOID    DestroyImages();
     HRESULT AllocateViews( DWORD dwNumViews );
     VOID    ScaleView( DWORD dwViewID, FLOAT fxScale, FLOAT fyScale );
 
-    DIDICallout* GetCallout( DWORD dwViewID ) { return &m_aCallout[dwViewID]; }
-    DIDIOverlay* GetOverlay( DWORD dwViewID ) { return &m_aOverlay[dwViewID]; }
+    DIDICallout* GetCallout( DWORD dwViewID )
+    {
+        return &m_aCallout[dwViewID];
+    }
+    DIDIOverlay* GetOverlay( DWORD dwViewID )
+    {
+        return &m_aOverlay[dwViewID];
+    }
 
 private:
     // _______________
@@ -251,10 +280,22 @@ const DWORD BLUE_MASK  = D3DCOLOR_ARGB(0, 0, 0, 255);
 // Name: GetAlpha, GetRed, GetGreen, GetBlue
 // Desc: Extracts the specified color component
 //-----------------------------------------------------------------------------
-inline BYTE GetAlpha( D3DCOLOR Color ) { return (BYTE)( Color >> 24 ); }
-inline BYTE   GetRed( D3DCOLOR Color ) { return (BYTE)( Color >> 16 ); }
-inline BYTE GetGreen( D3DCOLOR Color ) { return (BYTE)( Color >> 8  ); }
-inline BYTE  GetBlue( D3DCOLOR Color ) { return (BYTE)( Color );       }
+inline BYTE GetAlpha( D3DCOLOR Color )
+{
+    return (BYTE)( Color >> 24 );
+}
+inline BYTE   GetRed( D3DCOLOR Color )
+{
+    return (BYTE)( Color >> 16 );
+}
+inline BYTE GetGreen( D3DCOLOR Color )
+{
+    return (BYTE)( Color >> 8  );
+}
+inline BYTE  GetBlue( D3DCOLOR Color )
+{
+    return (BYTE)( Color );
+}
 
 
 
@@ -263,9 +304,9 @@ inline BYTE  GetBlue( D3DCOLOR Color ) { return (BYTE)( Color );       }
 // Name: ColorFromCR
 // Desc: Returns a D3DCOLOR from the given COLORREF
 //-----------------------------------------------------------------------------
-inline D3DCOLOR ColorFromCR( COLORREF cr ) 
-{ 
-    return GetRValue(cr) << 16 | GetGValue(cr) << 8 | GetBValue(cr); 
+inline D3DCOLOR ColorFromCR( COLORREF cr )
+{
+    return GetRValue(cr) << 16 | GetGValue(cr) << 8 | GetBValue(cr);
 }
 
 
@@ -275,9 +316,9 @@ inline D3DCOLOR ColorFromCR( COLORREF cr )
 // Name: CRFromColor
 // Desc: Returns a COLORREF from the given D3DCOLOR
 //-----------------------------------------------------------------------------
-inline COLORREF CRFromColor( D3DCOLOR color ) 
-{ 
-    return GetBlue(color) << 16 | GetGreen(color) << 8 | GetRed(color); 
+inline COLORREF CRFromColor( D3DCOLOR color )
+{
+    return GetBlue(color) << 16 | GetGreen(color) << 8 | GetRed(color);
 }
 
 
@@ -319,9 +360,9 @@ inline VOID ScalePoint( const POINT* pPointSrc, POINT* pPointDest, FLOAT fxScale
 HRESULT ApplyOverlay( HBITMAP hbmpDest, CONST RECT* prcDest, HBITMAP hbmpSrc );
 HRESULT ApplyAlphaChannel( HBITMAP hbmpDest, HBITMAP hbmpAlpha, BOOL bOpaque );
 HRESULT FillBackground( HBITMAP hbmpDest, D3DCOLOR Fill );
-HRESULT CreateDIBSectionFromSurface( LPDIRECT3DSURFACE9 pSurface, HBITMAP* phBitmap, SIZE* pSize = NULL ); 
+HRESULT CreateDIBSectionFromSurface( LPDIRECT3DSURFACE9 pSurface, HBITMAP* phBitmap, SIZE* pSize = NULL );
 HRESULT RestoreRect( HBITMAP hbmpDest, CONST RECT* prcDest, LPBYTE pSrcPixels );
-HRESULT DrawTooltip( HDC hdcRender, HDC hdcAlpha, TCHAR* strTooltip, RECT* prcBitmap, 
+HRESULT DrawTooltip( HDC hdcRender, HDC hdcAlpha, TCHAR* strTooltip, RECT* prcBitmap,
                      RECT* prcTruncated, COLORREF crFore, COLORREF crBack, COLORREF crBorder );
 IDirect3DSurface9* GetCloneSurface( int iWidth, int iHeight );
 

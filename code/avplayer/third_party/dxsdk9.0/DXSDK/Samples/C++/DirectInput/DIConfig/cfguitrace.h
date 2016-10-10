@@ -22,9 +22,10 @@
 #endif
 
 
-enum __cfgui_tracetype {
-	__cfgui_tracetype_ERROR,
-	__cfgui_tracetype_INFO,
+enum __cfgui_tracetype
+{
+    __cfgui_tracetype_ERROR,
+    __cfgui_tracetype_INFO,
 };
 
 
@@ -71,19 +72,19 @@ void __cfgui_trace(__cfgui_tracetype, LPCTSTR, ...);
 
 class __cfgui_out_filescope
 {
-friend class __cfgui_tracescope;
-	__cfgui_out_filescope(bool bInternal = false);
-	~__cfgui_out_filescope();
-friend void __cfgui_trace(__cfgui_tracetype, LPCTSTR, ...);
-	bool m_bInternal;
+    friend class __cfgui_tracescope;
+    __cfgui_out_filescope(bool bInternal = false);
+    ~__cfgui_out_filescope();
+    friend void __cfgui_trace(__cfgui_tracetype, LPCTSTR, ...);
+    bool m_bInternal;
 };
 
 class __cfgui_tracescope
 {
-	__cfgui_out_filescope fs;
+    __cfgui_out_filescope fs;
 public:
-	__cfgui_tracescope(LPCTSTR);
-	~__cfgui_tracescope();
+    __cfgui_tracescope(LPCTSTR);
+    ~__cfgui_tracescope();
 };
 
 #define tracescope(t,s) __cfgui_tracescope t(s)

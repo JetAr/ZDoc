@@ -40,11 +40,11 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	TORRENT_EXTRA_EXPORT bool inflate_gzip(
-		char const* in, int size
-		, std::vector<char>& buffer
-		, int maximum_size
-		, std::string& error);
+TORRENT_EXTRA_EXPORT bool inflate_gzip(
+    char const* in, int size
+    , std::vector<char>& buffer
+    , int maximum_size
+    , std::string& error);
 
 }
 

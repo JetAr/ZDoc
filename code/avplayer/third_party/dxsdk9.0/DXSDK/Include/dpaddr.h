@@ -27,7 +27,7 @@ extern "C" {
 
 // {934A9523-A3CA-4bc5-ADA0-D6D95D979421}
 DEFINE_GUID(CLSID_DirectPlay8Address,
-0x934a9523, 0xa3ca, 0x4bc5, 0xad, 0xa0, 0xd6, 0xd9, 0x5d, 0x97, 0x94, 0x21);
+            0x934a9523, 0xa3ca, 0x4bc5, 0xad, 0xa0, 0xd6, 0xd9, 0x5d, 0x97, 0x94, 0x21);
 
 
 /****************************************************************************
@@ -41,11 +41,11 @@ typedef REFIID	DPNAREFIID;
 
 // {83783300-4063-4c8a-9DB3-82830A7FEB31}
 DEFINE_GUID(IID_IDirectPlay8Address,
-0x83783300, 0x4063, 0x4c8a, 0x9d, 0xb3, 0x82, 0x83, 0xa, 0x7f, 0xeb, 0x31);
+            0x83783300, 0x4063, 0x4c8a, 0x9d, 0xb3, 0x82, 0x83, 0xa, 0x7f, 0xeb, 0x31);
 
 // {E5A0E990-2BAD-430b-87DA-A142CF75DE58}
 DEFINE_GUID(IID_IDirectPlay8AddressIP,
-0xe5a0e990, 0x2bad, 0x430b, 0x87, 0xda, 0xa1, 0x42, 0xcf, 0x75, 0xde, 0x58);
+            0xe5a0e990, 0x2bad, 0x430b, 0x87, 0xda, 0xa1, 0x42, 0xcf, 0x75, 0xde, 0x58);
 
 
 
@@ -221,9 +221,9 @@ typedef struct sockaddr SOCKADDR;
 
 
 /*
- * 
- * This function is no longer supported.  It is recommended that CoCreateInstance be used to create 
- * DirectPlay8 address objects. 
+ *
+ * This function is no longer supported.  It is recommended that CoCreateInstance be used to create
+ * DirectPlay8 address objects.
  *
  * HRESULT WINAPI DirectPlay8AddressCreate( const GUID * pcIID, void **ppvInterface, IUnknown *pUnknown);
  *
@@ -243,31 +243,31 @@ typedef struct sockaddr SOCKADDR;
 #define INTERFACE IDirectPlay8Address
 DECLARE_INTERFACE_(IDirectPlay8Address,IUnknown)
 {
-	/*** IUnknown methods ***/
-	STDMETHOD(QueryInterface)			(THIS_ DPNAREFIID, LPVOID *) PURE;
-	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
-	STDMETHOD_(ULONG,Release)			(THIS) PURE;
+    /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface)			(THIS_ DPNAREFIID, LPVOID *) PURE;
+    STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
+    STDMETHOD_(ULONG,Release)			(THIS) PURE;
 
-	/*** IDirectPlay8Address methods ***/
-	STDMETHOD(BuildFromURLW)(THIS_ WCHAR *pwszSourceURL ) PURE;
-	STDMETHOD(BuildFromURLA)(THIS_ CHAR *pszSourceURL ) PURE;
-	STDMETHOD(Duplicate)(THIS_ PDIRECTPLAY8ADDRESS *ppdpaNewAddress ) PURE;
-	STDMETHOD(SetEqual)(THIS_ PDIRECTPLAY8ADDRESS pdpaAddress ) PURE;
-	STDMETHOD(IsEqual)(THIS_ PDIRECTPLAY8ADDRESS pdpaAddress ) PURE;
-	STDMETHOD(Clear)(THIS ) PURE;
-	STDMETHOD(GetURLW)(THIS_ WCHAR *pwszURL, PDWORD pdwNumChars ) PURE;
-	STDMETHOD(GetURLA)(THIS_ CHAR *pszURL, PDWORD pdwNumChars) PURE;
-	STDMETHOD(GetSP)(THIS_ GUID *pguidSP ) PURE;
-	STDMETHOD(GetUserData)(THIS_ void *pvUserData, PDWORD pdwBufferSize) PURE;
-	STDMETHOD(SetSP)(THIS_ const GUID * const pguidSP ) PURE;
-	STDMETHOD(SetUserData)(THIS_ const void * const pvUserData, const DWORD dwDataSize) PURE;
-	STDMETHOD(GetNumComponents)(THIS_ PDWORD pdwNumComponents ) PURE;
-	STDMETHOD(GetComponentByName)(THIS_ const WCHAR * const pwszName, void *pvBuffer, PDWORD pdwBufferSize, PDWORD pdwDataType ) PURE;
-	STDMETHOD(GetComponentByIndex)(THIS_ const DWORD dwComponentID, WCHAR * pwszName, PDWORD pdwNameLen, void *pvBuffer, PDWORD pdwBufferSize, PDWORD pdwDataType ) PURE;
-	STDMETHOD(AddComponent)(THIS_ const WCHAR * const pwszName, const void * const lpvData, const DWORD dwDataSize, const DWORD dwDataType ) PURE;	
-	STDMETHOD(GetDevice)(THIS_  GUID * ) PURE;
-	STDMETHOD(SetDevice)(THIS_  const GUID * const) PURE;
-	STDMETHOD(BuildFromDPADDRESS)( THIS_ LPVOID pvAddress, DWORD dwDataSize ) PURE;
+    /*** IDirectPlay8Address methods ***/
+    STDMETHOD(BuildFromURLW)(THIS_ WCHAR *pwszSourceURL ) PURE;
+    STDMETHOD(BuildFromURLA)(THIS_ CHAR *pszSourceURL ) PURE;
+    STDMETHOD(Duplicate)(THIS_ PDIRECTPLAY8ADDRESS *ppdpaNewAddress ) PURE;
+    STDMETHOD(SetEqual)(THIS_ PDIRECTPLAY8ADDRESS pdpaAddress ) PURE;
+    STDMETHOD(IsEqual)(THIS_ PDIRECTPLAY8ADDRESS pdpaAddress ) PURE;
+    STDMETHOD(Clear)(THIS ) PURE;
+    STDMETHOD(GetURLW)(THIS_ WCHAR *pwszURL, PDWORD pdwNumChars ) PURE;
+    STDMETHOD(GetURLA)(THIS_ CHAR *pszURL, PDWORD pdwNumChars) PURE;
+    STDMETHOD(GetSP)(THIS_ GUID *pguidSP ) PURE;
+    STDMETHOD(GetUserData)(THIS_ void *pvUserData, PDWORD pdwBufferSize) PURE;
+    STDMETHOD(SetSP)(THIS_ const GUID * const pguidSP ) PURE;
+    STDMETHOD(SetUserData)(THIS_ const void * const pvUserData, const DWORD dwDataSize) PURE;
+    STDMETHOD(GetNumComponents)(THIS_ PDWORD pdwNumComponents ) PURE;
+    STDMETHOD(GetComponentByName)(THIS_ const WCHAR * const pwszName, void *pvBuffer, PDWORD pdwBufferSize, PDWORD pdwDataType ) PURE;
+    STDMETHOD(GetComponentByIndex)(THIS_ const DWORD dwComponentID, WCHAR * pwszName, PDWORD pdwNameLen, void *pvBuffer, PDWORD pdwBufferSize, PDWORD pdwDataType ) PURE;
+    STDMETHOD(AddComponent)(THIS_ const WCHAR * const pwszName, const void * const lpvData, const DWORD dwDataSize, const DWORD dwDataType ) PURE;
+    STDMETHOD(GetDevice)(THIS_  GUID * ) PURE;
+    STDMETHOD(SetDevice)(THIS_  const GUID * const) PURE;
+    STDMETHOD(BuildFromDPADDRESS)( THIS_ LPVOID pvAddress, DWORD dwDataSize ) PURE;
 };
 
 //
@@ -278,29 +278,29 @@ DECLARE_INTERFACE_(IDirectPlay8Address,IUnknown)
 DECLARE_INTERFACE_(IDirectPlay8AddressIP,IUnknown)
 {
     /*** IUnknown methods ***/
-	STDMETHOD(QueryInterface)			(THIS_ DPNAREFIID, PVOID *) PURE;
-	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
-	STDMETHOD_(ULONG,Release)			(THIS) PURE;
+    STDMETHOD(QueryInterface)			(THIS_ DPNAREFIID, PVOID *) PURE;
+    STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
+    STDMETHOD_(ULONG,Release)			(THIS) PURE;
 
-	/*** IDirectPlay8AddressIP methods ***/
+    /*** IDirectPlay8AddressIP methods ***/
 
-	// Constructs a IDirectPlay8 TCP Address from a SOCKADDR structure
-	STDMETHOD(BuildFromSockAddr)(THIS_ const SOCKADDR * const ) PURE;
+    // Constructs a IDirectPlay8 TCP Address from a SOCKADDR structure
+    STDMETHOD(BuildFromSockAddr)(THIS_ const SOCKADDR * const ) PURE;
 
-	// Constructs a TCP Address from a string (hostname) and port
-	STDMETHOD(BuildAddress)(THIS_ const WCHAR * const wszAddress, const USHORT usPort ) PURE;
+    // Constructs a TCP Address from a string (hostname) and port
+    STDMETHOD(BuildAddress)(THIS_ const WCHAR * const wszAddress, const USHORT usPort ) PURE;
 
-	// Builds a local TCP Address
-	STDMETHOD(BuildLocalAddress)(THIS_ const GUID * const pguidAdapter, const USHORT usPort ) PURE;
+    // Builds a local TCP Address
+    STDMETHOD(BuildLocalAddress)(THIS_ const GUID * const pguidAdapter, const USHORT usPort ) PURE;
 
-	// Gets the address from the structure in SOCKADR format
-	STDMETHOD(GetSockAddress)(THIS_ SOCKADDR *, PDWORD ) PURE;
+    // Gets the address from the structure in SOCKADR format
+    STDMETHOD(GetSockAddress)(THIS_ SOCKADDR *, PDWORD ) PURE;
 
-	// Gets the local afddress
-	STDMETHOD(GetLocalAddress)(THIS_ GUID *pguidAdapter, USHORT *pusPort ) PURE;
+    // Gets the local afddress
+    STDMETHOD(GetLocalAddress)(THIS_ GUID *pguidAdapter, USHORT *pusPort ) PURE;
 
-	// Gets the remote address
-	STDMETHOD(GetAddress)(THIS_ WCHAR *wszAddress, PDWORD pdwAddressLength, USHORT *psPort ) PURE;
+    // Gets the remote address
+    STDMETHOD(GetAddress)(THIS_ WCHAR *wszAddress, PDWORD pdwAddressLength, USHORT *psPort ) PURE;
 };
 
 

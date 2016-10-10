@@ -12,8 +12,8 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #include "NetAbstract.h"
 #include <tchar.h>
@@ -22,8 +22,8 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CDummyConnectorServer : public IOutboundServer
 {
@@ -36,10 +36,10 @@ public:
     };
 
     // From IOutboundServer
-    virtual HRESULT SendPacket( DWORD /*to*/ , void* data , DWORD size , BOOL /*guaranteed*/, DWORD /*dwTimeout*/ )
+    virtual HRESULT SendPacket( DWORD /*to*/, void* data, DWORD size, BOOL /*guaranteed*/, DWORD /*dwTimeout*/ )
     {
         if ( m_pTarget )
-            return m_pTarget->OnPacket( m_dwID , data , size );
+            return m_pTarget->OnPacket( m_dwID, data, size );
         return S_OK;
     };
 
@@ -67,8 +67,8 @@ private:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CDummyConnectorClient : public IOutboundClient
 {
@@ -96,10 +96,10 @@ public:
     }
 
     // From IOutboundClient
-    virtual HRESULT SendPacket( void* data , DWORD size , BOOL /*guaranteed*/, DWORD /*dwTimeout*/ )
+    virtual HRESULT SendPacket( void* data, DWORD size, BOOL /*guaranteed*/, DWORD /*dwTimeout*/ )
     {
         if ( m_pTarget )
-            return m_pTarget->OnPacket( m_dwID , data , size );
+            return m_pTarget->OnPacket( m_dwID, data, size );
         return S_OK;
     };
 
@@ -113,8 +113,14 @@ public:
         return 0;
     }
 
-    virtual BOOL    IsSessionLost() { return FALSE; };
-    virtual DWORD   GetSessionLostReason() { return 0; };
+    virtual BOOL    IsSessionLost()
+    {
+        return FALSE;
+    };
+    virtual DWORD   GetSessionLostReason()
+    {
+        return 0;
+    };
 
     virtual HRESULT GetConnectionInfo( TCHAR* strConnectionInfo, DWORD dwBufLength )
     {

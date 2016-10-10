@@ -15,7 +15,8 @@
 
 #include <boost/assert.hpp>
 
-namespace avhttp {
+namespace avhttp
+{
 
 // 一个位图的类实现.
 //
@@ -25,13 +26,21 @@ struct bitfield
 public:
     bitfield(void) : m_bytes(0), m_size(0), m_own(false) {}
     bitfield(int bits): m_bytes(0), m_size(0)
-    { resize(bits); }
+    {
+        resize(bits);
+    }
     bitfield(int bits, bool val): m_bytes(0), m_size(0)
-    { resize(bits, val); }
+    {
+        resize(bits, val);
+    }
     bitfield(char const* b, int bits): m_bytes(0), m_size(0)
-    { assign(b, bits); }
+    {
+        assign(b, bits);
+    }
     bitfield(bitfield const& rhs): m_bytes(0), m_size(0), m_own(false)
-    { assign(rhs.bytes(), rhs.size()); }
+    {
+        assign(rhs.bytes(), rhs.size());
+    }
 
     void borrow_bytes(char* b, int bits)
     {
@@ -41,12 +50,21 @@ public:
         m_own = false;
     }
 
-    ~bitfield() { dealloc(); }
+    ~bitfield()
+    {
+        dealloc();
+    }
     void assign(char const* b, int bits)
-    { resize(bits); std::memcpy(m_bytes, b, (bits + 7) / 8); clear_trailing_bits(); }
+    {
+        resize(bits);
+        std::memcpy(m_bytes, b, (bits + 7) / 8);
+        clear_trailing_bits();
+    }
 
     bool operator[](int index) const
-    { return get_bit(index); }
+    {
+        return get_bit(index);
+    }
 
     bool get_bit(int index) const
     {
@@ -69,11 +87,23 @@ public:
         m_bytes[index / 8] |= (0x80 >> (index & 7));
     }
 
-    std::size_t bytes_size() const { return m_size / 8 + (m_size % 8 == 0 ? 0 : 1); }
-    std::size_t size() const { return m_size; }
-    bool empty() const { return m_size == 0; }
+    std::size_t bytes_size() const
+    {
+        return m_size / 8 + (m_size % 8 == 0 ? 0 : 1);
+    }
+    std::size_t size() const
+    {
+        return m_size;
+    }
+    bool empty() const
+    {
+        return m_size == 0;
+    }
 
-    char const* bytes() const { return (char*)m_bytes; }
+    char const* bytes() const
+    {
+        return (char*)m_bytes;
+    }
 
     bitfield& operator=(bitfield const& rhs)
     {
@@ -118,23 +148,49 @@ public:
         typedef bool& reference;
         typedef std::forward_iterator_tag iterator_category;
 
-        bool operator*() { return (*byte & bit) != 0; }
-        const_iterator& operator++() { inc(); return *this; }
+        bool operator*()
+        {
+            return (*byte & bit) != 0;
+        }
+        const_iterator& operator++()
+        {
+            inc();
+            return *this;
+        }
         const_iterator operator++(int)
-        { const_iterator ret(*this); inc(); return ret; }
-        const_iterator& operator--() { dec(); return *this; }
+        {
+            const_iterator ret(*this);
+            inc();
+            return ret;
+        }
+        const_iterator& operator--()
+        {
+            dec();
+            return *this;
+        }
         const_iterator operator--(int)
-        { const_iterator ret(*this); dec(); return ret; }
+        {
+            const_iterator ret(*this);
+            dec();
+            return ret;
+        }
 
         const_iterator(): byte(0), bit(0x80) {}
         bool operator==(const_iterator const& rhs) const
-        { return byte == rhs.byte && bit == rhs.bit; }
+        {
+            return byte == rhs.byte && bit == rhs.bit;
+        }
 
         bool operator!=(const_iterator const& rhs) const
-        { return byte != rhs.byte || bit != rhs.bit; }
+        {
+            return byte != rhs.byte || bit != rhs.bit;
+        }
 
         const_iterator& operator+(boost::uint64_t rhs)
-        { for (int i = 0; i < rhs; i++)inc(); return *this; }
+        {
+            for (int i = 0; i < rhs; i++)inc();
+            return *this;
+        }
 
     private:
         void inc()
@@ -169,8 +225,14 @@ public:
         int bit;
     };
 
-    const_iterator begin() const { return const_iterator(m_bytes, 0); }
-    const_iterator end() const { return const_iterator(m_bytes + m_size / 8, m_size & 7); }
+    const_iterator begin() const
+    {
+        return const_iterator(m_bytes, 0);
+    }
+    const_iterator end() const
+    {
+        return const_iterator(m_bytes + m_size / 8, m_size & 7);
+    }
 
     void resize(int bits, bool val)
     {
@@ -232,7 +294,11 @@ public:
         clear_trailing_bits();
     }
 
-    void free() { dealloc(); m_size = 0; }
+    void free()
+    {
+        dealloc();
+        m_size = 0;
+    }
 
 private:
 
@@ -242,7 +308,11 @@ private:
         if (m_size & 7) m_bytes[(m_size + 7) / 8 - 1] &= 0xff << (8 - (m_size & 7));
     }
 
-    void dealloc() { if (m_own) std::free(m_bytes); m_bytes = 0; }
+    void dealloc()
+    {
+        if (m_own) std::free(m_bytes);
+        m_bytes = 0;
+    }
     unsigned char* m_bytes;
     int m_size:31; // in bits.
     bool m_own:1;

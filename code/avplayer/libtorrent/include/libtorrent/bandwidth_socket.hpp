@@ -38,13 +38,13 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct bandwidth_socket
-		: public intrusive_ptr_base<bandwidth_socket>
-	{
-		virtual void assign_bandwidth(int channel, int amount) = 0;
-		virtual bool is_disconnecting() const = 0;
-		virtual ~bandwidth_socket() {}
-	};
+struct bandwidth_socket
+    : public intrusive_ptr_base<bandwidth_socket>
+{
+    virtual void assign_bandwidth(int channel, int amount) = 0;
+    virtual bool is_disconnecting() const = 0;
+    virtual ~bandwidth_socket() {}
+};
 }
 
 #endif // TORRENT_BANDWIDTH_SOCKET_HPP_INCLUDED

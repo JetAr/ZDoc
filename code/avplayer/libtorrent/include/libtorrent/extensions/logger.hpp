@@ -49,9 +49,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct torrent_plugin;
-	class torrent;
-	boost::shared_ptr<torrent_plugin> create_logger_plugin(torrent*);
+struct torrent_plugin;
+class torrent;
+boost::shared_ptr<torrent_plugin> create_logger_plugin(torrent*);
 }
 
 #endif

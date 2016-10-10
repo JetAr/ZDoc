@@ -11,22 +11,22 @@ using namespace libtorrent;
 
 namespace
 {
-    void add_rule(ip_filter& filter, std::string start, std::string end, int flags)
-    {
-        return filter.add_rule(address::from_string(start), address::from_string(end), flags);
-    }
+void add_rule(ip_filter& filter, std::string start, std::string end, int flags)
+{
+    return filter.add_rule(address::from_string(start), address::from_string(end), flags);
+}
 
-    int access0(ip_filter& filter, std::string addr)
-    {
-        return filter.access(address::from_string(addr));
-    }
+int access0(ip_filter& filter, std::string addr)
+{
+    return filter.access(address::from_string(addr));
+}
 }
 
 void bind_ip_filter()
 {
     class_<ip_filter>("ip_filter")
-        .def("add_rule", add_rule)
-        .def("access", access0)
-        .def("export_filter", allow_threads(&ip_filter::export_filter))
+    .def("add_rule", add_rule)
+    .def("access", access0)
+    .def("export_filter", allow_threads(&ip_filter::export_filter))
     ;
 }

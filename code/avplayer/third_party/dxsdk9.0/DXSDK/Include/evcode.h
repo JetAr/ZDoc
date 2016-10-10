@@ -353,8 +353,8 @@
 
 
 #define EC_PREPROCESS_COMPLETE          0x56
-// Sent by the WM ASF writer filter (WMSDK V9 version) to signal the completion 
-// of a pre-process run when running in multipass encode mode. 
+// Sent by the WM ASF writer filter (WMSDK V9 version) to signal the completion
+// of a pre-process run when running in multipass encode mode.
 // Param1 = 0, Param2 = IBaseFilter ptr of sending filter
 
 #define EC_CODECAPI_EVENT               0x57
@@ -379,7 +379,8 @@
 // passing event parameters to the app:
 #ifndef AM_WMT_EVENT_DATA_DEFINED
 #define AM_WMT_EVENT_DATA_DEFINED
-typedef struct {
+typedef struct
+{
     HRESULT hrStatus;        // status code
     void * pData;            // event data
 } AM_WMT_EVENT_DATA;
@@ -413,7 +414,7 @@ typedef struct {
 //         WMT_NEEDS_INDIVIDUALIZATION - lParam2 is NULL
 //         WMT_INDIVIDUALIZE    - lParam2 is a pointer to a WM_INDIVIDUALIZE_STATUS struct
 //     the WMSDK (V9) ASF Writer filter will send this event in response to a wmsdk-signaled error during file
-//         writing, along with the wmsdk WMT_STATUS error as the lParam1 and hrStatus embedded in the 
+//         writing, along with the wmsdk WMT_STATUS error as the lParam1 and hrStatus embedded in the
 //         AM_WMT_EVENT_DATA struct pointed to by the lParam2 pointer.
 //
 // end WMSDK-originated events

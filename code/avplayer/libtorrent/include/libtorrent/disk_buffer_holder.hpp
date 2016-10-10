@@ -40,31 +40,39 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	namespace aux { struct session_impl; }
-	struct disk_buffer_pool;
+namespace aux
+{
+struct session_impl;
+}
+struct disk_buffer_pool;
 
-	struct TORRENT_EXTRA_EXPORT disk_buffer_holder
-	{
-		disk_buffer_holder(aux::session_impl& ses, char* buf);
-		disk_buffer_holder(disk_buffer_pool& disk_pool, char* buf);
-		~disk_buffer_holder();
-		char* release();
-		char* get() const { return m_buf; }
-		void reset(char* buf = 0);
-		void swap(disk_buffer_holder& h)
-		{
-			TORRENT_ASSERT(&h.m_disk_pool == &m_disk_pool);
-			std::swap(h.m_buf, m_buf);
-		}
+struct TORRENT_EXTRA_EXPORT disk_buffer_holder
+{
+    disk_buffer_holder(aux::session_impl& ses, char* buf);
+    disk_buffer_holder(disk_buffer_pool& disk_pool, char* buf);
+    ~disk_buffer_holder();
+    char* release();
+    char* get() const
+    {
+        return m_buf;
+    }
+    void reset(char* buf = 0);
+    void swap(disk_buffer_holder& h)
+    {
+        TORRENT_ASSERT(&h.m_disk_pool == &m_disk_pool);
+        std::swap(h.m_buf, m_buf);
+    }
 
-		typedef char* (disk_buffer_holder::*unspecified_bool_type)();
-		operator unspecified_bool_type() const
-		{ return m_buf == 0? 0: &disk_buffer_holder::release; }
+    typedef char* (disk_buffer_holder::*unspecified_bool_type)();
+    operator unspecified_bool_type() const
+    {
+        return m_buf == 0? 0: &disk_buffer_holder::release;
+    }
 
-	private:
-		disk_buffer_pool& m_disk_pool;
-		char* m_buf;
-	};
+private:
+    disk_buffer_pool& m_disk_pool;
+    char* m_buf;
+};
 
 }
 

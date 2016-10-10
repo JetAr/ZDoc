@@ -71,14 +71,15 @@
  * internal buffer is large enough to hold a reasonable paragraph of text,
  * such as the current paragraph.
  */
-typedef struct AVBPrint {
+typedef struct AVBPrint
+{
     FF_PAD_STRUCTURE(1024,
-    char *str;         /** string so far */
-    unsigned len;      /** length so far */
-    unsigned size;     /** allocated memory */
-    unsigned size_max; /** maximum allocated memory */
-    char reserved_internal_buffer[1];
-    )
+                     char *str;         /** string so far */
+                     unsigned len;      /** length so far */
+                     unsigned size;     /** allocated memory */
+                     unsigned size_max; /** maximum allocated memory */
+                     char reserved_internal_buffer[1];
+                    )
 } AVBPrint;
 
 /**

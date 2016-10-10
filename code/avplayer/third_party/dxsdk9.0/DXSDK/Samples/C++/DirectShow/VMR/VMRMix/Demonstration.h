@@ -2,10 +2,10 @@
 // File: Demonstration.h
 //
 // Desc: DirectShow sample code
-//       Header file and class description for CDemonstration, 
+//       Header file and class description for CDemonstration,
 //       "special effects" module to represent capabilities of VMR.
 //       This class is called from CVMRMixDlg by the "Play" button.
-//       CDemonstration contains CVMRCore member (VMR engine), through which 
+//       CDemonstration contains CVMRCore member (VMR engine), through which
 //       it performs initialization of the graph builder and presentation.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -24,11 +24,11 @@ private:
     CVMRMixDlg *    m_pDlg;             // 'parent' dialog
     TCHAR           m_szMsg[MAX_PATH];  // auxiliary string for debug messages
     bool            m_bInitialized;     // true if graph is build and files are rendered;
-                                        // false otherwise
+    // false otherwise
     CMediaList      m_MList;            // media list to be played
     CVMRCore *      m_pCore;            // 'main' class that implements VMR management
-    VMRALPHABITMAP  m_sBmpParams;       // used in IVMRMixerBitmap; parameters 
-                                        // of the bitmap overlapping the video
+    VMRALPHABITMAP  m_sBmpParams;       // used in IVMRMixerBitmap; parameters
+    // of the bitmap overlapping the video
     HBITMAP         m_hbmp;             // handle to the bitmap overlapping the video
 
     HRESULT SetAlphaBitmapColorKey(UINT ImageID);   // set color key for overlapping bitmap
@@ -37,9 +37,9 @@ private:
 
 public:
     CDemonstration( CVMRMixDlg * pDlg,      // 'parent' dialog
-                    CMediaList * pMajorList,// media list to play 
+                    CMediaList * pMajorList,// media list to play
                     int nSize,              // size of pMajorList
-                    HRESULT *phr) :         
+                    HRESULT *phr) :
         m_pDlg(pDlg),
         m_hbmp(NULL),
         m_pCore(NULL),
@@ -53,7 +53,7 @@ public:
 
         ZeroMemory( &m_sBmpParams, sizeof(VMRALPHABITMAP));
         srand( clock());
-        
+
         pMajorList->Shuffle();
         if( false == pMajorList->Clone(nSize, &m_MList))
         {
@@ -78,17 +78,17 @@ public:
         m_MList.Clean();
     };
 
-    HRESULT Initialize(); 
+    HRESULT Initialize();
     HRESULT UpdateStreams(clock_t tStart);
     virtual HRESULT Perform();
 
     // this function calculates parameters for the 'swirling windows' effect
-    void FountainPath(  long t, 
-                        long T, 
-                        int n, 
-                        NORMALIZEDRECT r0,  
-                        double A0, 
-                        NORMALIZEDRECT * pR, 
+    void FountainPath(  long t,
+                        long T,
+                        int n,
+                        NORMALIZEDRECT r0,
+                        double A0,
+                        NORMALIZEDRECT * pR,
                         double * pA);
 };
 

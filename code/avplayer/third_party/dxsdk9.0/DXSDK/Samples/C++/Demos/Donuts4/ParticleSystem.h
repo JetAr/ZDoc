@@ -12,7 +12,10 @@
 
 
 // Helper function to stuff a FLOAT into a DWORD argument
-inline DWORD FtoDW( FLOAT f ) { return *((DWORD*)&f); }
+inline DWORD FtoDW( FLOAT f )
+{
+    return *((DWORD*)&f);
+}
 
 
 
@@ -35,7 +38,7 @@ public:
         FLOAT       tv;
     };
 
-    #define D3DFVF_COLORVERTEX (D3DFVF_XYZ|D3DFVF_DIFFUSE|D3DFVF_TEX1)
+#define D3DFVF_COLORVERTEX (D3DFVF_XYZ|D3DFVF_DIFFUSE|D3DFVF_TEX1)
 
 
     struct POINTVERTEX
@@ -44,7 +47,7 @@ public:
         D3DCOLOR    color;
     };
 
-    #define D3DFVF_POINTVERTEX (D3DFVF_XYZ|D3DFVF_DIFFUSE)
+#define D3DFVF_POINTVERTEX (D3DFVF_XYZ|D3DFVF_DIFFUSE)
 
 
 
@@ -54,8 +57,8 @@ public:
     struct PARTICLE
     {
         BOOL        m_bSpark;     // Sparks are less energetic particles that
-                                // are generated where/when the main particles
-                                // hit the ground
+        // are generated where/when the main particles
+        // hit the ground
 
         D3DXVECTOR3 m_vPos;       // Current position
         D3DXVECTOR3 m_vVel;       // Current velocity
@@ -78,7 +81,7 @@ protected:
     FLOAT     m_fTime;
 
     DWORD     m_dwBase;
-	DWORD     m_dwFlush;
+    DWORD     m_dwFlush;
     DWORD     m_dwDiscard;
 
     DWORD     m_dwParticles;
@@ -91,7 +94,7 @@ protected:
 
 public:
     CParticleSystem( DWORD dwFlush, DWORD dwDiscard, FLOAT fRadius );
-   ~CParticleSystem();
+    ~CParticleSystem();
 
     HRESULT RestoreDeviceObjects();
     HRESULT InvalidateDeviceObjects();
@@ -101,7 +104,10 @@ public:
                     FLOAT fEmitVel, D3DXVECTOR3 vPosition, BOOL bEmitNewParticles );
 
     HRESULT Render( const float fWrapOffsetX, const float fWrapOffsetZ );
-    HRESULT GetNumActiveParticles() { return m_dwParticles; }
+    HRESULT GetNumActiveParticles()
+    {
+        return m_dwParticles;
+    }
 };
 
 

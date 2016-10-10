@@ -4,7 +4,7 @@
 // Desc: DirectShow sample code - a simple full screen video playback sample.
 //       Using the Windows XP Video Mixing Renderer, a video is played back in
 //		 a full screen exclusive mode.
-//		
+//
 //		stdafx.h : include file for standard system include files,
 //		or project specific include files that are used frequently, but
 //      are changed infrequently

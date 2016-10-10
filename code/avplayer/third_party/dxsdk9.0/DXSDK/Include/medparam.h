@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for medparam.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IMediaParamInfo_FWD_DEFINED__
 #define __IMediaParamInfo_FWD_DEFINED__
@@ -60,38 +60,40 @@ typedef interface IMediaParams IMediaParams;
 #include "strmif.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_medparam_0000 */
-/* [local] */ 
+/* [local] */
 
 typedef float MP_DATA;
 
-typedef 
+typedef
 enum _MP_Type
-    {	MPT_INT	= 0,
-	MPT_FLOAT	= MPT_INT + 1,
-	MPT_BOOL	= MPT_FLOAT + 1,
-	MPT_ENUM	= MPT_BOOL + 1,
-	MPT_MAX	= MPT_ENUM + 1
-    } 	MP_TYPE;
+{
+    MPT_INT	= 0,
+    MPT_FLOAT	= MPT_INT + 1,
+    MPT_BOOL	= MPT_FLOAT + 1,
+    MPT_ENUM	= MPT_BOOL + 1,
+    MPT_MAX	= MPT_ENUM + 1
+} 	MP_TYPE;
 
 #define	MPBOOL_TRUE	( 1 )
 
 #define	MPBOOL_FALSE	( 0 )
 
-typedef 
+typedef
 enum _MP_CURVE_TYPE
-    {	MP_CURVE_JUMP	= 0x1,
-	MP_CURVE_LINEAR	= 0x2,
-	MP_CURVE_SQUARE	= 0x4,
-	MP_CURVE_INVSQUARE	= 0x8,
-	MP_CURVE_SINE	= 0x10
-    } 	MP_CURVE_TYPE;
+{
+    MP_CURVE_JUMP	= 0x1,
+    MP_CURVE_LINEAR	= 0x2,
+    MP_CURVE_SQUARE	= 0x4,
+    MP_CURVE_INVSQUARE	= 0x8,
+    MP_CURVE_SINE	= 0x10
+} 	MP_CURVE_TYPE;
 
 typedef DWORD MP_CAPS;
 
@@ -106,7 +108,7 @@ typedef DWORD MP_CAPS;
 #define	MP_CAPS_CURVE_SINE	( MP_CURVE_SINE )
 
 typedef struct _MP_PARAMINFO
-    {
+{
     MP_TYPE mpType;
     MP_CAPS mopCaps;
     MP_DATA mpdMinValue;
@@ -114,7 +116,7 @@ typedef struct _MP_PARAMINFO
     MP_DATA mpdNeutralValue;
     WCHAR szUnitText[ 32 ];
     WCHAR szLabel[ 32 ];
-    } 	MP_PARAMINFO;
+} 	MP_PARAMINFO;
 
 typedef DWORD DWORD;
 
@@ -123,11 +125,11 @@ typedef DWORD DWORD;
 typedef DWORD MP_TIMEDATA;
 
 DEFINE_GUID(GUID_TIME_REFERENCE,
-0x93ad712b, 0xdaa0, 0x4ffe, 0xbc, 0x81, 0xb0, 0xce, 0x50, 0xf, 0xcd, 0xd9);
+            0x93ad712b, 0xdaa0, 0x4ffe, 0xbc, 0x81, 0xb0, 0xce, 0x50, 0xf, 0xcd, 0xd9);
 DEFINE_GUID(GUID_TIME_MUSIC,
-0x574c49d, 0x5b04, 0x4b15, 0xa5, 0x42, 0xae, 0x28, 0x20, 0x30, 0x11, 0x7b);
+            0x574c49d, 0x5b04, 0x4b15, 0xa5, 0x42, 0xae, 0x28, 0x20, 0x30, 0x11, 0x7b);
 DEFINE_GUID(GUID_TIME_SAMPLES,
-0xa8593d05, 0xc43, 0x4984, 0x9a, 0x63, 0x97, 0xaf, 0x9e, 0x2, 0xc4, 0xc0);
+            0xa8593d05, 0xc43, 0x4984, 0x9a, 0x63, 0x97, 0xaf, 0x9e, 0x2, 0xc4, 0xc0);
 typedef DWORD MP_FLAGS;
 
 #define	MPF_ENVLP_STANDARD	( 0 )
@@ -137,14 +139,14 @@ typedef DWORD MP_FLAGS;
 #define	MPF_ENVLP_BEGIN_NEUTRALVAL	( 0x2 )
 
 typedef struct _MP_ENVELOPE_SEGMENT
-    {
+{
     REFERENCE_TIME rtStart;
     REFERENCE_TIME rtEnd;
     MP_DATA valStart;
     MP_DATA valEnd;
     MP_CURVE_TYPE iCurve;
     MP_FLAGS flags;
-    } 	MP_ENVELOPE_SEGMENT;
+} 	MP_ENVELOPE_SEGMENT;
 
 #define	MPF_PUNCHIN_REFTIME	( 0 )
 
@@ -161,95 +163,96 @@ extern RPC_IF_HANDLE __MIDL_itf_medparam_0000_v0_0_s_ifspec;
 #define __IMediaParamInfo_INTERFACE_DEFINED__
 
 /* interface IMediaParamInfo */
-/* [version][uuid][object] */ 
+/* [version][uuid][object] */
 
 
 EXTERN_C const IID IID_IMediaParamInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("6d6cbb60-a223-44aa-842f-a2f06750be6d")
-    IMediaParamInfo : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetParamCount( 
-            /* [out] */ DWORD *pdwParams) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetParamInfo( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_PARAMINFO *pInfo) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetParamText( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ WCHAR **ppwchText) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetNumTimeFormats( 
-            /* [out] */ DWORD *pdwNumTimeFormats) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSupportedTimeFormat( 
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ GUID *pguidTimeFormat) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCurrentTimeFormat( 
-            /* [out] */ GUID *pguidTimeFormat,
-            /* [out] */ MP_TIMEDATA *pTimeData) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("6d6cbb60-a223-44aa-842f-a2f06750be6d")
+IMediaParamInfo :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetParamCount(
+        /* [out] */ DWORD *pdwParams) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetParamInfo(
+        /* [in] */ DWORD dwParamIndex,
+        /* [out] */ MP_PARAMINFO *pInfo) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetParamText(
+        /* [in] */ DWORD dwParamIndex,
+        /* [out] */ WCHAR **ppwchText) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetNumTimeFormats(
+        /* [out] */ DWORD *pdwNumTimeFormats) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSupportedTimeFormat(
+        /* [in] */ DWORD dwFormatIndex,
+        /* [out] */ GUID *pguidTimeFormat) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentTimeFormat(
+        /* [out] */ GUID *pguidTimeFormat,
+        /* [out] */ MP_TIMEDATA *pTimeData) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMediaParamInfoVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMediaParamInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMediaParamInfo * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMediaParamInfo * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetParamCount )( 
-            IMediaParamInfo * This,
-            /* [out] */ DWORD *pdwParams);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetParamInfo )( 
-            IMediaParamInfo * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_PARAMINFO *pInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetParamText )( 
-            IMediaParamInfo * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ WCHAR **ppwchText);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetNumTimeFormats )( 
-            IMediaParamInfo * This,
-            /* [out] */ DWORD *pdwNumTimeFormats);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSupportedTimeFormat )( 
-            IMediaParamInfo * This,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ GUID *pguidTimeFormat);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetCurrentTimeFormat )( 
-            IMediaParamInfo * This,
-            /* [out] */ GUID *pguidTimeFormat,
-            /* [out] */ MP_TIMEDATA *pTimeData);
-        
-        END_INTERFACE
-    } IMediaParamInfoVtbl;
+typedef struct IMediaParamInfoVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMediaParamInfo
-    {
-        CONST_VTBL struct IMediaParamInfoVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMediaParamInfo * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMediaParamInfo * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMediaParamInfo * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetParamCount )(
+        IMediaParamInfo * This,
+        /* [out] */ DWORD *pdwParams);
+
+    HRESULT ( STDMETHODCALLTYPE *GetParamInfo )(
+        IMediaParamInfo * This,
+        /* [in] */ DWORD dwParamIndex,
+        /* [out] */ MP_PARAMINFO *pInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetParamText )(
+        IMediaParamInfo * This,
+        /* [in] */ DWORD dwParamIndex,
+        /* [out] */ WCHAR **ppwchText);
+
+    HRESULT ( STDMETHODCALLTYPE *GetNumTimeFormats )(
+        IMediaParamInfo * This,
+        /* [out] */ DWORD *pdwNumTimeFormats);
+
+    HRESULT ( STDMETHODCALLTYPE *GetSupportedTimeFormat )(
+        IMediaParamInfo * This,
+        /* [in] */ DWORD dwFormatIndex,
+        /* [out] */ GUID *pguidTimeFormat);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCurrentTimeFormat )(
+        IMediaParamInfo * This,
+        /* [out] */ GUID *pguidTimeFormat,
+        /* [out] */ MP_TIMEDATA *pTimeData);
+
+    END_INTERFACE
+} IMediaParamInfoVtbl;
+
+interface IMediaParamInfo
+{
+    CONST_VTBL struct IMediaParamInfoVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -289,7 +292,7 @@ EXTERN_C const IID IID_IMediaParamInfo;
 
 
 
-HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamCount_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamCount_Proxy(
     IMediaParamInfo * This,
     /* [out] */ DWORD *pdwParams);
 
@@ -301,7 +304,7 @@ void __RPC_STUB IMediaParamInfo_GetParamCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamInfo_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamInfo_Proxy(
     IMediaParamInfo * This,
     /* [in] */ DWORD dwParamIndex,
     /* [out] */ MP_PARAMINFO *pInfo);
@@ -314,7 +317,7 @@ void __RPC_STUB IMediaParamInfo_GetParamInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamText_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamText_Proxy(
     IMediaParamInfo * This,
     /* [in] */ DWORD dwParamIndex,
     /* [out] */ WCHAR **ppwchText);
@@ -327,7 +330,7 @@ void __RPC_STUB IMediaParamInfo_GetParamText_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetNumTimeFormats_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetNumTimeFormats_Proxy(
     IMediaParamInfo * This,
     /* [out] */ DWORD *pdwNumTimeFormats);
 
@@ -339,7 +342,7 @@ void __RPC_STUB IMediaParamInfo_GetNumTimeFormats_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetSupportedTimeFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetSupportedTimeFormat_Proxy(
     IMediaParamInfo * This,
     /* [in] */ DWORD dwFormatIndex,
     /* [out] */ GUID *pguidTimeFormat);
@@ -352,7 +355,7 @@ void __RPC_STUB IMediaParamInfo_GetSupportedTimeFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetCurrentTimeFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetCurrentTimeFormat_Proxy(
     IMediaParamInfo * This,
     /* [out] */ GUID *pguidTimeFormat,
     /* [out] */ MP_TIMEDATA *pTimeData);
@@ -373,94 +376,95 @@ void __RPC_STUB IMediaParamInfo_GetCurrentTimeFormat_Stub(
 #define __IMediaParams_INTERFACE_DEFINED__
 
 /* interface IMediaParams */
-/* [version][uuid][object] */ 
+/* [version][uuid][object] */
 
 
 EXTERN_C const IID IID_IMediaParams;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("6d6cbb61-a223-44aa-842f-a2f06750be6e")
-    IMediaParams : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetParam( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_DATA *pValue) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetParam( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ MP_DATA value) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AddEnvelope( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ DWORD cSegments,
-            /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE FlushEnvelope( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ REFERENCE_TIME refTimeStart,
-            /* [in] */ REFERENCE_TIME refTimeEnd) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetTimeFormat( 
-            /* [in] */ GUID guidTimeFormat,
-            /* [in] */ MP_TIMEDATA mpTimeData) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("6d6cbb61-a223-44aa-842f-a2f06750be6e")
+IMediaParams :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetParam(
+        /* [in] */ DWORD dwParamIndex,
+        /* [out] */ MP_DATA *pValue) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetParam(
+        /* [in] */ DWORD dwParamIndex,
+        /* [in] */ MP_DATA value) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AddEnvelope(
+        /* [in] */ DWORD dwParamIndex,
+        /* [in] */ DWORD cSegments,
+        /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE FlushEnvelope(
+        /* [in] */ DWORD dwParamIndex,
+        /* [in] */ REFERENCE_TIME refTimeStart,
+        /* [in] */ REFERENCE_TIME refTimeEnd) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetTimeFormat(
+        /* [in] */ GUID guidTimeFormat,
+        /* [in] */ MP_TIMEDATA mpTimeData) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMediaParamsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMediaParams * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMediaParams * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMediaParams * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetParam )( 
-            IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_DATA *pValue);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetParam )( 
-            IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ MP_DATA value);
-        
-        HRESULT ( STDMETHODCALLTYPE *AddEnvelope )( 
-            IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ DWORD cSegments,
-            /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments);
-        
-        HRESULT ( STDMETHODCALLTYPE *FlushEnvelope )( 
-            IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ REFERENCE_TIME refTimeStart,
-            /* [in] */ REFERENCE_TIME refTimeEnd);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetTimeFormat )( 
-            IMediaParams * This,
-            /* [in] */ GUID guidTimeFormat,
-            /* [in] */ MP_TIMEDATA mpTimeData);
-        
-        END_INTERFACE
-    } IMediaParamsVtbl;
+typedef struct IMediaParamsVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMediaParams
-    {
-        CONST_VTBL struct IMediaParamsVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMediaParams * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMediaParams * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMediaParams * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetParam )(
+        IMediaParams * This,
+        /* [in] */ DWORD dwParamIndex,
+        /* [out] */ MP_DATA *pValue);
+
+    HRESULT ( STDMETHODCALLTYPE *SetParam )(
+        IMediaParams * This,
+        /* [in] */ DWORD dwParamIndex,
+        /* [in] */ MP_DATA value);
+
+    HRESULT ( STDMETHODCALLTYPE *AddEnvelope )(
+        IMediaParams * This,
+        /* [in] */ DWORD dwParamIndex,
+        /* [in] */ DWORD cSegments,
+        /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments);
+
+    HRESULT ( STDMETHODCALLTYPE *FlushEnvelope )(
+        IMediaParams * This,
+        /* [in] */ DWORD dwParamIndex,
+        /* [in] */ REFERENCE_TIME refTimeStart,
+        /* [in] */ REFERENCE_TIME refTimeEnd);
+
+    HRESULT ( STDMETHODCALLTYPE *SetTimeFormat )(
+        IMediaParams * This,
+        /* [in] */ GUID guidTimeFormat,
+        /* [in] */ MP_TIMEDATA mpTimeData);
+
+    END_INTERFACE
+} IMediaParamsVtbl;
+
+interface IMediaParams
+{
+    CONST_VTBL struct IMediaParamsVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -497,7 +501,7 @@ EXTERN_C const IID IID_IMediaParams;
 
 
 
-HRESULT STDMETHODCALLTYPE IMediaParams_GetParam_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParams_GetParam_Proxy(
     IMediaParams * This,
     /* [in] */ DWORD dwParamIndex,
     /* [out] */ MP_DATA *pValue);
@@ -510,7 +514,7 @@ void __RPC_STUB IMediaParams_GetParam_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParams_SetParam_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParams_SetParam_Proxy(
     IMediaParams * This,
     /* [in] */ DWORD dwParamIndex,
     /* [in] */ MP_DATA value);
@@ -523,7 +527,7 @@ void __RPC_STUB IMediaParams_SetParam_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParams_AddEnvelope_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParams_AddEnvelope_Proxy(
     IMediaParams * This,
     /* [in] */ DWORD dwParamIndex,
     /* [in] */ DWORD cSegments,
@@ -537,7 +541,7 @@ void __RPC_STUB IMediaParams_AddEnvelope_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParams_FlushEnvelope_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParams_FlushEnvelope_Proxy(
     IMediaParams * This,
     /* [in] */ DWORD dwParamIndex,
     /* [in] */ REFERENCE_TIME refTimeStart,
@@ -551,7 +555,7 @@ void __RPC_STUB IMediaParams_FlushEnvelope_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaParams_SetTimeFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaParams_SetTimeFormat_Proxy(
     IMediaParams * This,
     /* [in] */ GUID guidTimeFormat,
     /* [in] */ MP_TIMEDATA mpTimeData);

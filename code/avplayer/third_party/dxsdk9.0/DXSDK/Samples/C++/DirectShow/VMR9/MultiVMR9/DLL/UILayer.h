@@ -14,7 +14,7 @@
 
 // CMultiVMR9UILayer
 
-class CMultiVMR9UILayer : 
+class CMultiVMR9UILayer :
     public CUnknown,
     public IMultiVMR9UILayer
 {
@@ -42,7 +42,7 @@ class CCFMultiVMR9UILayer : public IClassFactory
 {
 public:
     // Constructor
-    CCFMultiVMR9UILayer() : m_RefCount(1) {} 
+    CCFMultiVMR9UILayer() : m_RefCount(1) {}
 
     // IUnknown methods
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv)

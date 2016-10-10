@@ -14,27 +14,27 @@
 class IDIConfigUIFrameWindow
 {
 public:
-	// Reset Entire Configuration
-	STDMETHOD (Reset) () PURE;
+    // Reset Entire Configuration
+    STDMETHOD (Reset) () PURE;
 
-	// Assignment Querying.  GuidInstance is the guid of the device initiating the query.
-	STDMETHOD (QueryActionAssignedAnywhere) (GUID GuidInstance, int i) PURE;
+    // Assignment Querying.  GuidInstance is the guid of the device initiating the query.
+    STDMETHOD (QueryActionAssignedAnywhere) (GUID GuidInstance, int i) PURE;
 
-	// Genre Control
-	STDMETHOD_(int, GetNumGenres) () PURE;
-	STDMETHOD (SetCurGenre) (int i) PURE;
-	STDMETHOD_(int, GetCurGenre) () PURE;
+    // Genre Control
+    STDMETHOD_(int, GetNumGenres) () PURE;
+    STDMETHOD (SetCurGenre) (int i) PURE;
+    STDMETHOD_(int, GetCurGenre) () PURE;
 
-	// User Control
-	STDMETHOD_(int, GetNumUsers) () PURE;
-	STDMETHOD (SetCurUser) (int nPage, int nUser) PURE;
-	STDMETHOD_(int, GetCurUser) (int nPage) PURE;
+    // User Control
+    STDMETHOD_(int, GetNumUsers) () PURE;
+    STDMETHOD (SetCurUser) (int nPage, int nUser) PURE;
+    STDMETHOD_(int, GetCurUser) (int nPage) PURE;
 
-	// ActionFormat Access
-	STDMETHOD (GetActionFormatFromInstanceGuid) (LPDIACTIONFORMATW *lplpAcFor, REFGUID) PURE;
+    // ActionFormat Access
+    STDMETHOD (GetActionFormatFromInstanceGuid) (LPDIACTIONFORMATW *lplpAcFor, REFGUID) PURE;
 
-	// Main HWND Access
-	STDMETHOD_(HWND, GetMainHWND) () PURE;
+    // Main HWND Access
+    STDMETHOD_(HWND, GetMainHWND) () PURE;
 };
 
 

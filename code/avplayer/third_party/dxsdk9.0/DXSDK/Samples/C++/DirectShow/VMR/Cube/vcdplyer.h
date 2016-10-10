@@ -14,7 +14,8 @@
 enum EMovieMode { MOVIE_NOTOPENED = 0x00,
                   MOVIE_PLAYING   = 0x01,
                   MOVIE_STOPPED   = 0x02,
-                  MOVIE_PAUSED    = 0x03 };
+                  MOVIE_PAUSED    = 0x03
+                };
 
 
 // Constants
@@ -90,7 +91,7 @@ private:
 public:
 
     STDMETHODIMP SetStreamMediaType(DWORD dwStrmID, AM_MEDIA_TYPE* pmt, BOOL fTexture);
-     CMovie(HWND hwndApplication);
+    CMovie(HWND hwndApplication);
     ~CMovie();
 
     DECLARE_IUNKNOWN
@@ -99,12 +100,12 @@ public:
     STDMETHODIMP InitCompositionTarget(
         IUnknown* pD3DDevice,
         LPDIRECTDRAWSURFACE7 pddsRenderTarget
-        );
+    );
 
     STDMETHODIMP TermCompositionTarget(
         IUnknown* pD3DDevice,
         LPDIRECTDRAWSURFACE7 pddsRenderTarget
-        )
+    )
     {
         return S_OK;
     }
@@ -118,7 +119,7 @@ public:
         DWORD dwMappedClrBkgnd,
         VMRVIDEOSTREAMINFO* pVideoStreamInfo,
         UINT cStreams
-        );
+    );
 
 
     HRESULT         OpenMovie(TCHAR achFileName[][MAX_PATH], DWORD dwNumFiles);
@@ -143,8 +144,10 @@ public:
 
     void            ToggleFullScreen();
 
-    void            DisplayModeChanged() {
-        if (m_Wc) {
+    void            DisplayModeChanged()
+    {
+        if (m_Wc)
+        {
             m_Wc->DisplayModeChanged();
         }
     }

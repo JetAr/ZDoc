@@ -17,13 +17,13 @@ enum EnumLineType { LINE_PROMPT, LINE_INPUT, LINE_LOG, LINE_CMD };
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 interface IMazeGraphics
 {
 public:
-    virtual VOID    Init( CMazeApp* pMazeApp, CDPlay8Client* pDP8Client, CMazeClient* pMazeClient ) = 0; 
+    virtual VOID    Init( CMazeApp* pMazeApp, CDPlay8Client* pDP8Client, CMazeClient* pMazeClient ) = 0;
     virtual HRESULT Create( HINSTANCE hInstance ) = 0;
     virtual INT     Run() = 0;
     virtual void    HandleOutputMsg( EnumLineType enumLineType, TCHAR* strLine ) = 0;

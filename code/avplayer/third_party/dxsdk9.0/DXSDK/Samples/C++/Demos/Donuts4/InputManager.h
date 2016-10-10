@@ -1,7 +1,7 @@
 ﻿//-----------------------------------------------------------------------------
 // File: InputManager.h
 //
-// Desc: Class to handle DirectInput action mapper 
+// Desc: Class to handle DirectInput action mapper
 //
 // Copyright (C) Microsoft Corporation. All Rights Reserved.
 //-----------------------------------------------------------------------------
@@ -11,8 +11,8 @@ class CInputManager
 {
 public:
     // DirectInput action mapper reports events only when buttons/axis change
-    // so we need to remember the present state of relevant axis/buttons for 
-    // each DirectInput device.  The CInputDeviceManager will store a 
+    // so we need to remember the present state of relevant axis/buttons for
+    // each DirectInput device.  The CInputDeviceManager will store a
     // pointer for each device that points to this struct
     struct InputDeviceState
     {
@@ -53,7 +53,7 @@ public:
         BOOL  bButtonShift;
 
         // One-shot variables
-        BOOL  bDoChangeView;    
+        BOOL  bDoChangeView;
 
         // Menu input variables
         BOOL  bDoMenuUp;
@@ -70,7 +70,10 @@ public:
     HRESULT     OneTimeSceneInit( HWND hWnd, GUID* pGuidApp );
     HRESULT     RestoreDeviceObjects( D3DFORMAT d3dfmtFullscreen );
     void        UpdateInput();
-    UserInput*  GetUserInput() { return &m_UserInput; };
+    UserInput*  GetUserInput()
+    {
+        return &m_UserInput;
+    };
     HRESULT     InvalidateDeviceObjects();
     HRESULT     DeleteDeviceObjects();
     VOID        FinalCleanup();
@@ -79,7 +82,7 @@ public:
     void        ConfigDevices();
 
     HRESULT InputAddDeviceCB( CInputDeviceManager::DeviceInfo* pDeviceInfo, const DIDEVICEINSTANCE* pdidi );
-    static HRESULT CALLBACK StaticInputAddDeviceCB( CInputDeviceManager::DeviceInfo* pDeviceInfo, const DIDEVICEINSTANCE* pdidi, LPVOID pParam );   
+    static HRESULT CALLBACK StaticInputAddDeviceCB( CInputDeviceManager::DeviceInfo* pDeviceInfo, const DIDEVICEINSTANCE* pdidi, LPVOID pParam );
     BOOL    ConfigureInputDevicesCB( IUnknown* pUnknown );
     static BOOL CALLBACK StaticConfigureInputDevicesCB( IUnknown* pUnknown, VOID* pUserData );
 
@@ -89,7 +92,7 @@ public:
     CInputDeviceManager* m_pInputDeviceManager;     // Class for managing DInput devices
     InputDeviceState*    m_pMouseDeviceState;
     LPDIRECT3DSURFACE9   m_pConfigSurface;          // Surface for config'ing DInput devices
-    UserInput            m_UserInput;               // Struct for storing user input 
+    UserInput            m_UserInput;               // Struct for storing user input
     DIACTIONFORMAT       m_diafGame;                // Action format for game play
     DIACTIONFORMAT       m_diafBrowser;             // Action format for menu navigation
 };

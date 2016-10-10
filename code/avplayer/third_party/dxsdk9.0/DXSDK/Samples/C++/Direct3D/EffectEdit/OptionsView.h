@@ -14,24 +14,24 @@
 #include <afxext.h>
 #endif
 
-class CEffectDoc;
+    class CEffectDoc;
 
 class COptionsView : public CFormView
 {
 protected:
-	COptionsView();           // protected constructor used by dynamic creation
-	DECLARE_DYNCREATE(COptionsView)
+    COptionsView();           // protected constructor used by dynamic creation
+    DECLARE_DYNCREATE(COptionsView)
 
 // Form Data
 public:
-	//{{AFX_DATA(COptionsView)
-	enum { IDD = IDD_OPTIONS_FORM };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+    //{{AFX_DATA(COptionsView)
+    enum { IDD = IDD_OPTIONS_FORM };
+    // NOTE: the ClassWizard will add data members here
+    //}}AFX_DATA
 
 // Attributes
 public:
-	CEffectDoc* GetDocument();
+    CEffectDoc* GetDocument();
 
 // Operations
 public:
@@ -39,40 +39,42 @@ public:
     void SetPassNameList( CStringList& passNameList, int iPassCur);
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(COptionsView)
-	public:
-	virtual void OnInitialUpdate();
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(COptionsView)
+public:
+    virtual void OnInitialUpdate();
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	virtual ~COptionsView();
+    virtual ~COptionsView();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+    virtual void AssertValid() const;
+    virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(COptionsView)
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnChangeTechnique();
-	afx_msg void OnChangePass();
-	afx_msg void OnShowStats();
-	afx_msg void OnFillModeChange();
-	afx_msg void OnChangeRenderPass();
-	afx_msg void OnResetCamera();
-	afx_msg void OnChangeRenderTiming();
-	afx_msg void OnRender();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(COptionsView)
+    afx_msg void OnSize(UINT nType, int cx, int cy);
+    afx_msg void OnChangeTechnique();
+    afx_msg void OnChangePass();
+    afx_msg void OnShowStats();
+    afx_msg void OnFillModeChange();
+    afx_msg void OnChangeRenderPass();
+    afx_msg void OnResetCamera();
+    afx_msg void OnChangeRenderTiming();
+    afx_msg void OnRender();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 #ifndef _DEBUG  // debug version in OptionsView.cpp
 inline CEffectDoc* COptionsView::GetDocument()
-   { return (CEffectDoc*)m_pDocument; }
+{
+    return (CEffectDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

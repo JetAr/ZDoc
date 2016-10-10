@@ -47,8 +47,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <boost/bind.hpp>
 #include <boost/pool/pool.hpp>
 
-namespace libtorrent { struct dht_lookup; }
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+struct dht_lookup;
+}
+namespace libtorrent
+{
+namespace dht
 {
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
 TORRENT_DECLARE_LOG(traversal);
@@ -60,68 +65,84 @@ class node_impl;
 // this class may not be instantiated as a stack object
 struct traversal_algorithm : boost::noncopyable
 {
-	void traverse(node_id const& id, udp::endpoint addr);
-	void finished(observer_ptr o);
+    void traverse(node_id const& id, udp::endpoint addr);
+    void finished(observer_ptr o);
 
-	enum flags_t { prevent_request = 1, short_timeout = 2 };
-	void failed(observer_ptr o, int flags = 0);
-	virtual ~traversal_algorithm();
-	void status(dht_lookup& l);
+    enum flags_t { prevent_request = 1, short_timeout = 2 };
+    void failed(observer_ptr o, int flags = 0);
+    virtual ~traversal_algorithm();
+    void status(dht_lookup& l);
 
-	void* allocate_observer();
-	void free_observer(void* ptr);
+    void* allocate_observer();
+    void free_observer(void* ptr);
 
-	virtual char const* name() const { return "traversal_algorithm"; }
-	virtual void start();
+    virtual char const* name() const
+    {
+        return "traversal_algorithm";
+    }
+    virtual void start();
 
-	node_id const& target() const { return m_target; }
+    node_id const& target() const
+    {
+        return m_target;
+    }
 
-	void add_entry(node_id const& id, udp::endpoint addr, unsigned char flags);
+    void add_entry(node_id const& id, udp::endpoint addr, unsigned char flags);
 
-	traversal_algorithm(node_impl& node, node_id target);
-	int invoke_count() const { return m_invoke_count; }
-	int branch_factor() const { return m_branch_factor; }
+    traversal_algorithm(node_impl& node, node_id target);
+    int invoke_count() const
+    {
+        return m_invoke_count;
+    }
+    int branch_factor() const
+    {
+        return m_branch_factor;
+    }
 
 protected:
 
-	// returns true if we're done
-	bool add_requests();
+    // returns true if we're done
+    bool add_requests();
 
-	void add_router_entries();
-	void init();
+    void add_router_entries();
+    void init();
 
-	virtual void done();
-	// should construct an algorithm dependent
-	// observer in ptr.
-	virtual observer_ptr new_observer(void* ptr
-		, udp::endpoint const& ep, node_id const& id);
+    virtual void done();
+    // should construct an algorithm dependent
+    // observer in ptr.
+    virtual observer_ptr new_observer(void* ptr
+                                      , udp::endpoint const& ep, node_id const& id);
 
-	virtual bool invoke(observer_ptr o) { return false; }
+    virtual bool invoke(observer_ptr o)
+    {
+        return false;
+    }
 
-	friend void intrusive_ptr_add_ref(traversal_algorithm* p)
-	{
-		p->m_ref_count++;
-	}
+    friend void intrusive_ptr_add_ref(traversal_algorithm* p)
+    {
+        p->m_ref_count++;
+    }
 
-	friend void intrusive_ptr_release(traversal_algorithm* p)
-	{
-		if (--p->m_ref_count == 0)
-			delete p;
-	}
+    friend void intrusive_ptr_release(traversal_algorithm* p)
+    {
+        if (--p->m_ref_count == 0)
+            delete p;
+    }
 
-	int m_ref_count;
+    int m_ref_count;
 
-	node_impl& m_node;
-	node_id m_target;
-	std::vector<observer_ptr> m_results;
-	int m_invoke_count;
-	int m_branch_factor;
-	int m_responses;
-	int m_timeouts;
-	int m_num_target_nodes;
+    node_impl& m_node;
+    node_id m_target;
+    std::vector<observer_ptr> m_results;
+    int m_invoke_count;
+    int m_branch_factor;
+    int m_responses;
+    int m_timeouts;
+    int m_num_target_nodes;
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif // TRAVERSAL_ALGORITHM_050324_HPP
 

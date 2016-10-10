@@ -93,23 +93,23 @@
 #define IDM_SAMPLE                      40153
 #define IDM_BYTES                       40154
 
-        // File
+// File
 #define STR_FILE_OPEN           IDM_FILE_OPEN  + MENU_STRING_BASE
 #define STR_FILE_OPEN2          IDM_FILE_OPEN2 + MENU_STRING_BASE
 #define STR_FILE_CLOSE          IDM_FILE_CLOSE + MENU_STRING_BASE
 #define STR_FILE_EXIT           IDM_FILE_EXIT  + MENU_STRING_BASE
 
-        // Properties Menu
+// Properties Menu
 #define STR_APP_IMAGE			IDM_APP_IMAGE  + MENU_STRING_BASE
 #define STR_STREAM_A			IDM_STREAM_A   + MENU_STRING_BASE
 #define STR_STREAM_B			IDM_STREAM_B   + MENU_STRING_BASE
 #define STR_CAPTURE_IMAGE		IDM_CAPTURE_IMAGE + MENU_STRING_BASE
 #define STR_DISPLAY_CAPTURED_IMAGE		IDM_DISPLAY_CAPTURED_IMAGE + MENU_STRING_BASE
 
-        // Help Menu            HELP_MENU_BASE
+// Help Menu            HELP_MENU_BASE
 #define STR_HELP_ABOUT          IDM_HELP_ABOUT + MENU_STRING_BASE
 
-        // System Menu
+// System Menu
 #define STR_SYSMENU_RESTORE     1800
 #define STR_SYSMENU_MOVE        1801
 #define STR_SYSMENU_MINIMIZE    1802
@@ -121,7 +121,7 @@
 #define STR_APP_TITLE           2001
 #define STR_APP_TITLE_LOADED    2002
 
-#define IDD_IMAGECTRL           4000 
+#define IDD_IMAGECTRL           4000
 #define IDD_VIDEOPROP           4001
 
 #define STR_MAX_STRING_LEN      256

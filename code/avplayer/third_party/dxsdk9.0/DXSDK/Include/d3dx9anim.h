@@ -11,20 +11,20 @@
 #define __D3DX9ANIM_H__
 
 // {ADE2C06D-3747-4b9f-A514-3440B8284980}
-DEFINE_GUID(IID_ID3DXInterpolator, 
-0xade2c06d, 0x3747, 0x4b9f, 0xa5, 0x14, 0x34, 0x40, 0xb8, 0x28, 0x49, 0x80);
+DEFINE_GUID(IID_ID3DXInterpolator,
+            0xade2c06d, 0x3747, 0x4b9f, 0xa5, 0x14, 0x34, 0x40, 0xb8, 0x28, 0x49, 0x80);
 
 // {6CAA71F8-0972-4cdb-A55B-43B968997515}
-DEFINE_GUID(IID_ID3DXKeyFrameInterpolator, 
-0x6caa71f8, 0x972, 0x4cdb, 0xa5, 0x5b, 0x43, 0xb9, 0x68, 0x99, 0x75, 0x15);
+DEFINE_GUID(IID_ID3DXKeyFrameInterpolator,
+            0x6caa71f8, 0x972, 0x4cdb, 0xa5, 0x5b, 0x43, 0xb9, 0x68, 0x99, 0x75, 0x15);
 
 // {54B569AC-0AEF-473e-9704-3FEF317F64AB}
-DEFINE_GUID(IID_ID3DXAnimationSet, 
-0x54b569ac, 0xaef, 0x473e, 0x97, 0x4, 0x3f, 0xef, 0x31, 0x7f, 0x64, 0xab);
+DEFINE_GUID(IID_ID3DXAnimationSet,
+            0x54b569ac, 0xaef, 0x473e, 0x97, 0x4, 0x3f, 0xef, 0x31, 0x7f, 0x64, 0xab);
 
 // {3A714D34-FF61-421e-909F-639F38356708}
-DEFINE_GUID(IID_ID3DXAnimationController, 
-0x3a714d34, 0xff61, 0x421e, 0x90, 0x9f, 0x63, 0x9f, 0x38, 0x35, 0x67, 0x8);
+DEFINE_GUID(IID_ID3DXAnimationController,
+            0x3a714d34, 0xff61, 0x421e, 0x90, 0x9f, 0x63, 0x9f, 0x38, 0x35, 0x67, 0x8);
 
 
 typedef struct ID3DXInterpolator *LPD3DXINTERPOLATOR;
@@ -39,7 +39,8 @@ typedef struct ID3DXSaveUserData *LPD3DXSAVEUSERDATA;
 //----------------------------------------------------------------------------
 // This enum defines the type of mesh data present in a MeshData structure
 //----------------------------------------------------------------------------
-typedef enum _D3DXMESHDATATYPE {
+typedef enum _D3DXMESHDATATYPE
+{
     D3DXMESHTYPE_MESH      = 0x001,     // normal ID3DXMesh data
     D3DXMESHTYPE_PMESH     = 0x002,     // Progressive Mesh - ID3DXPMesh
     D3DXMESHTYPE_PATCHMESH = 0x003,     // Patch MEsh - ID3DXPatchMesh
@@ -48,7 +49,7 @@ typedef enum _D3DXMESHDATATYPE {
 } D3DXMESHDATATYPE;
 
 //----------------------------------------------------------------------------
-// This struct encapsulates a the mesh data that can be present in a mesh 
+// This struct encapsulates a the mesh data that can be present in a mesh
 //   container.  The supported mesh types are pMesh, pPMesh, pPatchMesh
 //   The valid way to access this is determined by the MeshType enum
 //----------------------------------------------------------------------------
@@ -118,80 +119,80 @@ DECLARE_INTERFACE(ID3DXAllocateHierarchy)
 {
     // ID3DXAllocateHierarchy
 
-	//------------------------------------------------------------------------
-	// CreateFrame:
-	// ------------
-	// Requests allocation of a frame object.
-	//
-	// Parameters:
-	//  Name
-	//		Name of the frame to be created
-	//	ppNewFrame
-	//		Returns returns the created frame object
-	//
-	//------------------------------------------------------------------------
-    STDMETHOD(CreateFrame)(THIS_ LPCSTR Name, 
-                            LPD3DXFRAME *ppNewFrame) PURE;
+    //------------------------------------------------------------------------
+    // CreateFrame:
+    // ------------
+    // Requests allocation of a frame object.
+    //
+    // Parameters:
+    //  Name
+    //		Name of the frame to be created
+    //	ppNewFrame
+    //		Returns returns the created frame object
+    //
+    //------------------------------------------------------------------------
+    STDMETHOD(CreateFrame)(THIS_ LPCSTR Name,
+                           LPD3DXFRAME *ppNewFrame) PURE;
 
-	//------------------------------------------------------------------------
-	// CreateMeshContainer:
-	// --------------------
-	// Requests allocation of a mesh container object.
-	//
-	// Parameters:
-	//  Name
-	//		Name of the mesh
-	//	pMesh
-	//		Pointer to the mesh object if basic polygon data found
-	//	pPMesh
-	//		Pointer to the progressive mesh object if progressive mesh data found
-	//	pPatchMesh
-	//		Pointer to the patch mesh object if patch data found
-	//	pMaterials
-	//		Array of materials used in the mesh
-	//	pEffectInstances
-	//		Array of effect instances used in the mesh
-	//	NumMaterials
-	//		Num elements in the pMaterials array
-	//	pAdjacency
-	//		Adjacency array for the mesh
-	//	pSkinInfo
-	//		Pointer to the skininfo object if the mesh is skinned
-	//	pBoneNames
-	//		Array of names, one for each bone in the skinned mesh. 
-	//		The numberof bones can be found from the pSkinMesh object
-	//	pBoneOffsetMatrices
-	//		Array of matrices, one for each bone in the skinned mesh.
-	//
-	//------------------------------------------------------------------------
-    STDMETHOD(CreateMeshContainer)(THIS_ LPCSTR Name, LPD3DXMESHDATA pMeshData, 
-                            LPD3DXMATERIAL pMaterials, LPD3DXEFFECTINSTANCE pEffectInstances, DWORD NumMaterials, 
-                            DWORD *pAdjacency, LPD3DXSKININFO pSkinInfo, 
-                            LPD3DXMESHCONTAINER *ppNewMeshContainer) PURE;
+    //------------------------------------------------------------------------
+    // CreateMeshContainer:
+    // --------------------
+    // Requests allocation of a mesh container object.
+    //
+    // Parameters:
+    //  Name
+    //		Name of the mesh
+    //	pMesh
+    //		Pointer to the mesh object if basic polygon data found
+    //	pPMesh
+    //		Pointer to the progressive mesh object if progressive mesh data found
+    //	pPatchMesh
+    //		Pointer to the patch mesh object if patch data found
+    //	pMaterials
+    //		Array of materials used in the mesh
+    //	pEffectInstances
+    //		Array of effect instances used in the mesh
+    //	NumMaterials
+    //		Num elements in the pMaterials array
+    //	pAdjacency
+    //		Adjacency array for the mesh
+    //	pSkinInfo
+    //		Pointer to the skininfo object if the mesh is skinned
+    //	pBoneNames
+    //		Array of names, one for each bone in the skinned mesh.
+    //		The numberof bones can be found from the pSkinMesh object
+    //	pBoneOffsetMatrices
+    //		Array of matrices, one for each bone in the skinned mesh.
+    //
+    //------------------------------------------------------------------------
+    STDMETHOD(CreateMeshContainer)(THIS_ LPCSTR Name, LPD3DXMESHDATA pMeshData,
+                                   LPD3DXMATERIAL pMaterials, LPD3DXEFFECTINSTANCE pEffectInstances, DWORD NumMaterials,
+                                   DWORD *pAdjacency, LPD3DXSKININFO pSkinInfo,
+                                   LPD3DXMESHCONTAINER *ppNewMeshContainer) PURE;
 
-	//------------------------------------------------------------------------
-	// DestroyFrame:
-	// -------------
-	// Requests de-allocation of a frame object.
-	//
-	// Parameters:
-	//  pFrameToFree
-	//		Pointer to the frame to be de-allocated
-	//
-	//------------------------------------------------------------------------
-    STDMETHOD(DestroyFrame)(THIS_ LPD3DXFRAME pFrameToFree) PURE; 
+    //------------------------------------------------------------------------
+    // DestroyFrame:
+    // -------------
+    // Requests de-allocation of a frame object.
+    //
+    // Parameters:
+    //  pFrameToFree
+    //		Pointer to the frame to be de-allocated
+    //
+    //------------------------------------------------------------------------
+    STDMETHOD(DestroyFrame)(THIS_ LPD3DXFRAME pFrameToFree) PURE;
 
-	//------------------------------------------------------------------------
-	// DestroyMeshContainer:
-	// ---------------------
-	// Requests de-allocation of a mesh container object.
-	//
-	// Parameters:
-	//  pMeshContainerToFree
-	//		Pointer to the mesh container object to be de-allocated
-	//
-	//------------------------------------------------------------------------
-    STDMETHOD(DestroyMeshContainer)(THIS_ LPD3DXMESHCONTAINER pMeshContainerToFree) PURE; 
+    //------------------------------------------------------------------------
+    // DestroyMeshContainer:
+    // ---------------------
+    // Requests de-allocation of a mesh container object.
+    //
+    // Parameters:
+    //  pMeshContainerToFree
+    //		Pointer to the mesh container object to be de-allocated
+    //
+    //------------------------------------------------------------------------
+    STDMETHOD(DestroyMeshContainer)(THIS_ LPD3DXMESHCONTAINER pMeshContainerToFree) PURE;
 };
 
 //----------------------------------------------------------------------------
@@ -205,12 +206,12 @@ DECLARE_INTERFACE(ID3DXAllocateHierarchy)
 DECLARE_INTERFACE(ID3DXLoadUserData)
 {
     STDMETHOD(LoadTopLevelData)(LPDIRECTXFILEDATA pXofChildData) PURE;
-                            
-    STDMETHOD(LoadFrameChildData)(LPD3DXFRAME pFrame, 
-                            LPDIRECTXFILEDATA pXofChildData) PURE;
-                            
-    STDMETHOD(LoadMeshChildData)(LPD3DXMESHCONTAINER pMeshContainer, 
-                            LPDIRECTXFILEDATA pXofChildData) PURE;                            
+
+    STDMETHOD(LoadFrameChildData)(LPD3DXFRAME pFrame,
+                                  LPDIRECTXFILEDATA pXofChildData) PURE;
+
+    STDMETHOD(LoadMeshChildData)(LPD3DXMESHCONTAINER pMeshContainer,
+                                 LPDIRECTXFILEDATA pXofChildData) PURE;
 };
 
 //----------------------------------------------------------------------------
@@ -223,22 +224,22 @@ DECLARE_INTERFACE(ID3DXLoadUserData)
 //////////////////////////////////////////////////////////////////////////////
 DECLARE_INTERFACE(ID3DXSaveUserData)
 {
-    STDMETHOD(AddFrameChildData)(LPD3DXFRAME pFrame, 
-                            LPDIRECTXFILESAVEOBJECT pXofSave, 
-                            LPDIRECTXFILEDATA pXofFrameData) PURE;
-                            
-    STDMETHOD(AddMeshChildData)(LPD3DXMESHCONTAINER pMeshContainer, 
-                            LPDIRECTXFILESAVEOBJECT pXofSave, 
-                            LPDIRECTXFILEDATA pXofMeshData) PURE;
-                            
-    // NOTE: this is called once per Save.  All top level objects should be added using the 
+    STDMETHOD(AddFrameChildData)(LPD3DXFRAME pFrame,
+                                 LPDIRECTXFILESAVEOBJECT pXofSave,
+                                 LPDIRECTXFILEDATA pXofFrameData) PURE;
+
+    STDMETHOD(AddMeshChildData)(LPD3DXMESHCONTAINER pMeshContainer,
+                                LPDIRECTXFILESAVEOBJECT pXofSave,
+                                LPDIRECTXFILEDATA pXofMeshData) PURE;
+
+    // NOTE: this is called once per Save.  All top level objects should be added using the
     //    provided interface.  One call adds objects before the frame hierarchy, the other after
-    STDMETHOD(AddTopLevelDataObjectsPre)(LPDIRECTXFILESAVEOBJECT pXofSave) PURE; 
-    STDMETHOD(AddTopLevelDataObjectsPost)(LPDIRECTXFILESAVEOBJECT pXofSave) PURE;                             
+    STDMETHOD(AddTopLevelDataObjectsPre)(LPDIRECTXFILESAVEOBJECT pXofSave) PURE;
+    STDMETHOD(AddTopLevelDataObjectsPost)(LPDIRECTXFILESAVEOBJECT pXofSave) PURE;
 
     // callbacks for the user to register and then save templates to the XFile
-    STDMETHOD(RegisterTemplates)(LPDIRECTXFILE pXFileApi) PURE;                             
-    STDMETHOD(SaveTemplates)(LPDIRECTXFILESAVEOBJECT pXofSave) PURE;                             
+    STDMETHOD(RegisterTemplates)(LPDIRECTXFILE pXFileApi) PURE;
+    STDMETHOD(SaveTemplates)(LPDIRECTXFILESAVEOBJECT pXofSave) PURE;
 };
 
 #ifdef __cplusplus
@@ -269,26 +270,26 @@ extern "C" {
 //		in the .X file. This is created with default max tracks and events
 //
 //----------------------------------------------------------------------------
-HRESULT WINAPI 
-    D3DXLoadMeshHierarchyFromXA(
-        LPCSTR Filename,
-        DWORD MeshOptions,
-        LPDIRECT3DDEVICE9 pD3DDevice,
-        LPD3DXALLOCATEHIERARCHY pAlloc,
-        LPD3DXLOADUSERDATA pUserDataLoader, 
-        LPD3DXFRAME *ppFrameHierarchy,
-        LPD3DXANIMATIONCONTROLLER *ppAnimController
+HRESULT WINAPI
+D3DXLoadMeshHierarchyFromXA(
+    LPCSTR Filename,
+    DWORD MeshOptions,
+    LPDIRECT3DDEVICE9 pD3DDevice,
+    LPD3DXALLOCATEHIERARCHY pAlloc,
+    LPD3DXLOADUSERDATA pUserDataLoader,
+    LPD3DXFRAME *ppFrameHierarchy,
+    LPD3DXANIMATIONCONTROLLER *ppAnimController
 );
 
-HRESULT WINAPI 
-    D3DXLoadMeshHierarchyFromXW(
-        LPCWSTR Filename,
-        DWORD MeshOptions,
-        LPDIRECT3DDEVICE9 pD3DDevice,
-        LPD3DXALLOCATEHIERARCHY pAlloc,
-        LPD3DXLOADUSERDATA pUserDataLoader, 
-        LPD3DXFRAME *ppFrameHierarchy,
-        LPD3DXANIMATIONCONTROLLER *ppAnimController
+HRESULT WINAPI
+D3DXLoadMeshHierarchyFromXW(
+    LPCWSTR Filename,
+    DWORD MeshOptions,
+    LPDIRECT3DDEVICE9 pD3DDevice,
+    LPD3DXALLOCATEHIERARCHY pAlloc,
+    LPD3DXLOADUSERDATA pUserDataLoader,
+    LPD3DXFRAME *ppFrameHierarchy,
+    LPD3DXANIMATIONCONTROLLER *ppAnimController
 );
 
 #ifdef UNICODE
@@ -297,16 +298,16 @@ HRESULT WINAPI
 #define D3DXLoadMeshHierarchyFromX D3DXLoadMeshHierarchyFromXA
 #endif
 
-HRESULT WINAPI 
-    D3DXLoadMeshHierarchyFromXInMemory(
-        LPCVOID Memory,
-        DWORD SizeOfMemory,
-        DWORD MeshOptions,
-        LPDIRECT3DDEVICE9 pD3DDevice,
-        LPD3DXALLOCATEHIERARCHY pAlloc,
-        LPD3DXLOADUSERDATA pUserDataLoader, 
-        LPD3DXFRAME *ppFrameHierarchy,
-        LPD3DXANIMATIONCONTROLLER *ppAnimController
+HRESULT WINAPI
+D3DXLoadMeshHierarchyFromXInMemory(
+    LPCVOID Memory,
+    DWORD SizeOfMemory,
+    DWORD MeshOptions,
+    LPDIRECT3DDEVICE9 pD3DDevice,
+    LPD3DXALLOCATEHIERARCHY pAlloc,
+    LPD3DXLOADUSERDATA pUserDataLoader,
+    LPD3DXFRAME *ppFrameHierarchy,
+    LPD3DXANIMATIONCONTROLLER *ppAnimController
 );
 
 //----------------------------------------------------------------------------
@@ -329,22 +330,22 @@ HRESULT WINAPI
 //        data objects saved to .X file
 //
 //----------------------------------------------------------------------------
-HRESULT WINAPI 
-    D3DXSaveMeshHierarchyToFileA(
-        LPCSTR Filename,
-        DWORD XFormat,
-        LPD3DXFRAME pFrameRoot, 
-        LPD3DXANIMATIONCONTROLLER pAnimMixer,
-        LPD3DXSAVEUSERDATA pUserDataSaver
+HRESULT WINAPI
+D3DXSaveMeshHierarchyToFileA(
+    LPCSTR Filename,
+    DWORD XFormat,
+    LPD3DXFRAME pFrameRoot,
+    LPD3DXANIMATIONCONTROLLER pAnimMixer,
+    LPD3DXSAVEUSERDATA pUserDataSaver
 );
 
-HRESULT WINAPI 
-    D3DXSaveMeshHierarchyToFileW(
-        LPCWSTR Filename,
-        DWORD XFormat,
-        LPD3DXFRAME pFrameRoot, 
-        LPD3DXANIMATIONCONTROLLER pAnimMixer,
-        LPD3DXSAVEUSERDATA pUserDataSaver
+HRESULT WINAPI
+D3DXSaveMeshHierarchyToFileW(
+    LPCWSTR Filename,
+    DWORD XFormat,
+    LPD3DXFRAME pFrameRoot,
+    LPD3DXANIMATIONCONTROLLER pAnimMixer,
+    LPD3DXSAVEUSERDATA pUserDataSaver
 );
 
 #ifdef UNICODE
@@ -366,9 +367,9 @@ HRESULT WINAPI
 //
 //----------------------------------------------------------------------------
 HRESULT WINAPI
-    D3DXFrameDestroy(
-        LPD3DXFRAME pFrameRoot,
-        LPD3DXALLOCATEHIERARCHY pAlloc
+D3DXFrameDestroy(
+    LPD3DXFRAME pFrameRoot,
+    LPD3DXALLOCATEHIERARCHY pAlloc
 );
 
 //----------------------------------------------------------------------------
@@ -383,10 +384,10 @@ HRESULT WINAPI
 //      Pointer to the child node
 //
 //----------------------------------------------------------------------------
-HRESULT WINAPI 
-    D3DXFrameAppendChild(
-        LPD3DXFRAME pFrameParent,
-        LPD3DXFRAME pFrameChild
+HRESULT WINAPI
+D3DXFrameAppendChild(
+    LPD3DXFRAME pFrameParent,
+    LPD3DXFRAME pFrameChild
 );
 
 //----------------------------------------------------------------------------
@@ -401,10 +402,10 @@ HRESULT WINAPI
 //      Name of frame to find
 //
 //----------------------------------------------------------------------------
-LPD3DXFRAME WINAPI 
-    D3DXFrameFind(
-        LPD3DXFRAME pFrameRoot,
-        LPCSTR Name
+LPD3DXFRAME WINAPI
+D3DXFrameFind(
+    LPD3DXFRAME pFrameRoot,
+    LPCSTR Name
 );
 
 //----------------------------------------------------------------------------
@@ -421,15 +422,15 @@ LPD3DXFRAME WINAPI
 //
 //----------------------------------------------------------------------------
 HRESULT WINAPI
-    D3DXFrameRegisterNamedMatrices(
-        LPD3DXFRAME pFrameRoot,
-        LPD3DXANIMATIONCONTROLLER pAnimMixer
+D3DXFrameRegisterNamedMatrices(
+    LPD3DXFRAME pFrameRoot,
+    LPD3DXANIMATIONCONTROLLER pAnimMixer
 );
 
 //----------------------------------------------------------------------------
 // D3DXFrameNumNamedMatrices:
 // --------------------------
-// Counts number of frames in a subtree that have non-null names 
+// Counts number of frames in a subtree that have non-null names
 //
 // Parameters:
 //	pFrameRoot
@@ -439,8 +440,8 @@ HRESULT WINAPI
 //
 //----------------------------------------------------------------------------
 UINT WINAPI
-    D3DXFrameNumNamedMatrices(
-        LPD3DXFRAME pFrameRoot
+D3DXFrameNumNamedMatrices(
+    LPD3DXFRAME pFrameRoot
 );
 
 //----------------------------------------------------------------------------
@@ -458,10 +459,10 @@ UINT WINAPI
 //
 //----------------------------------------------------------------------------
 HRESULT WINAPI
-    D3DXFrameCalculateBoundingSphere(
-        LPD3DXFRAME pFrameRoot, 
-        LPD3DXVECTOR3 pObjectCenter, 
-        FLOAT *pObjectRadius
+D3DXFrameCalculateBoundingSphere(
+    LPD3DXFRAME pFrameRoot,
+    LPD3DXVECTOR3 pObjectCenter,
+    FLOAT *pObjectRadius
 );
 
 #ifdef __cplusplus
@@ -490,22 +491,22 @@ DECLARE_INTERFACE_(ID3DXInterpolator, IUnknown)
     STDMETHOD_(LPCSTR, GetName)(THIS) PURE;
     STDMETHOD_(DOUBLE, GetPeriod)(THIS) PURE;
 
-	//----------------------------------------------------------------------------
-	// GetSRT:
-	// -------
-	// Returns the scale, rotation and translation at a given time
-	//
-	// Parameters:
-	//	Time
-	//		Time at which the interpolator should be queried
-	//	pScale
-	//		Returns the scale vector
-	//	pRotate
-	//		Returns the rotation qaternion
-	//	pTranslate
-	//		Returns the translate vector
-	//
-	//----------------------------------------------------------------------------
+    //----------------------------------------------------------------------------
+    // GetSRT:
+    // -------
+    // Returns the scale, rotation and translation at a given time
+    //
+    // Parameters:
+    //	Time
+    //		Time at which the interpolator should be queried
+    //	pScale
+    //		Returns the scale vector
+    //	pRotate
+    //		Returns the rotation qaternion
+    //	pTranslate
+    //		Returns the translate vector
+    //
+    //----------------------------------------------------------------------------
     STDMETHOD(GetSRT)(THIS_ DOUBLE Time, D3DXVECTOR3 *pScale, D3DXQUATERNION *pRotate, D3DXVECTOR3 *pTranslate) PURE;
     STDMETHOD(GetLastSRT)(THIS_ D3DXVECTOR3 *pScale, D3DXQUATERNION *pRotate, D3DXVECTOR3 *pTranslate) PURE;
 };
@@ -580,7 +581,7 @@ DECLARE_INTERFACE_(ID3DXKeyFrameInterpolator, ID3DXInterpolator)
 
 //----------------------------------------------------------------------------
 // This interface implements an set of interpolators. The set consists of
-// interpolators for many nodes for the same animation. 
+// interpolators for many nodes for the same animation.
 //----------------------------------------------------------------------------
 //////////////////////////////////////////////////////////////////////////////
 // ID3DXAnimationSet /////////////////////////////////////////////////////////
@@ -621,7 +622,8 @@ typedef struct _D3DXTRACK_DESC
 //----------------------------------------------------------------------------
 // This enum defines the type of transtion performed on a event that transitions from one value to another
 //----------------------------------------------------------------------------
-typedef enum _D3DXTRACKFLAG {
+typedef enum _D3DXTRACKFLAG
+{
     D3DXTF_LOWPRIORITY            = 0x000,     // This track should be blended with all low priority tracks before mixed with the high priority result
     D3DXTF_HIGHPRIORITY           = 0x001,     // This track should be blended with all high priority tracks before mixed with the low priority result
 
@@ -633,7 +635,7 @@ typedef enum _D3DXTRACKFLAG {
 // This interface implements the main animation functionality. It connects
 // animation sets with the transform frames that are being animated. Allows
 // mixing multiple animations for blended animations or for transistions
-// It adds also has methods to modify blending parameters over time to 
+// It adds also has methods to modify blending parameters over time to
 // enable smooth transistions and other effects.
 //----------------------------------------------------------------------------
 
@@ -641,7 +643,8 @@ typedef enum _D3DXTRACKFLAG {
 //----------------------------------------------------------------------------
 // This enum defines the type of transtion performed on a event that transitions from one value to another
 //----------------------------------------------------------------------------
-typedef enum _D3DXTRANSITIONTYPE {
+typedef enum _D3DXTRANSITIONTYPE
+{
     D3DXTRANSITION_LINEAR            = 0x000,     // Linear transition from one value to the next
     D3DXTRANSITION_EASEINEASEOUT     = 0x001,     // Ease-In Ease-Out spline transtion from one value to the next
 
@@ -654,12 +657,12 @@ typedef enum _D3DXTRANSITIONTYPE {
 //////////////////////////////////////////////////////////////////////////////
 DECLARE_INTERFACE_(ID3DXAnimationController, IUnknown)
 {
-  // IUnknown
+    // IUnknown
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-  // mixing functionality
+    // mixing functionality
     // register outputs of SetTime
     STDMETHOD(RegisterMatrix)(THIS_ LPCSTR Name, D3DXMATRIX *pMatrix) PURE;
 
@@ -676,7 +679,7 @@ DECLARE_INTERFACE_(ID3DXAnimationController, IUnknown)
     STDMETHOD_(UINT, GetMaxNumTracks)(THIS) PURE;
     STDMETHOD(GetTrackDesc)(THIS_ DWORD Track, D3DXTRACK_DESC *pDesc) PURE;
     STDMETHOD(SetTrackDesc)(THIS_ DWORD Track, D3DXTRACK_DESC *pDesc) PURE;
-    
+
     STDMETHOD(GetTrackAnimationSet)(THIS_ DWORD Track, LPD3DXANIMATIONSET *ppAnimSet) PURE;
     STDMETHOD(SetTrackAnimationSet)(THIS_ DWORD Track, LPD3DXANIMATIONSET pAnimSet) PURE;
 
@@ -696,7 +699,7 @@ DECLARE_INTERFACE_(ID3DXAnimationController, IUnknown)
     STDMETHOD_(UINT, GetMaxNumEvents)(THIS) PURE;
     STDMETHOD_(UINT, GetMaxNumAnimationSets)(THIS) PURE;
 
-  // Sequencing abilities
+    // Sequencing abilities
     STDMETHOD(KeyTrackSpeed)(THIS_ DWORD Track, FLOAT NewSpeed, DOUBLE StartTime, DOUBLE Duration, DWORD Method) PURE;
     STDMETHOD(KeyTrackWeight)(THIS_ DWORD Track, FLOAT NewWeight, DOUBLE StartTime, DOUBLE Duration, DWORD Method) PURE;
     STDMETHOD(KeyTrackAnimTime)(THIS_ DWORD Track, DOUBLE NewAnimTime, DOUBLE StartTime) PURE;
@@ -739,11 +742,11 @@ extern "C" {
 //
 //----------------------------------------------------------------------------
 HRESULT WINAPI
-D3DXCreateKeyFrameInterpolator(LPCSTR Name, 
-                            LPD3DXKEY_VECTOR3    ScaleKeys,     UINT NumScaleKeys,
-                            LPD3DXKEY_QUATERNION RotationKeys,  UINT NumRotationKeys,
-                            LPD3DXKEY_VECTOR3    TranslateKeys, UINT NumTranslateKeys,
-                            DOUBLE ScaleInputTimeBy, LPD3DXKEYFRAMEINTERPOLATOR *ppNewInterpolator);
+D3DXCreateKeyFrameInterpolator(LPCSTR Name,
+                               LPD3DXKEY_VECTOR3    ScaleKeys,     UINT NumScaleKeys,
+                               LPD3DXKEY_QUATERNION RotationKeys,  UINT NumRotationKeys,
+                               LPD3DXKEY_VECTOR3    TranslateKeys, UINT NumTranslateKeys,
+                               DOUBLE ScaleInputTimeBy, LPD3DXKEYFRAMEINTERPOLATOR *ppNewInterpolator);
 
 //----------------------------------------------------------------------------
 // D3DXCreateAnimationSet:
@@ -760,11 +763,11 @@ D3DXCreateKeyFrameInterpolator(LPCSTR Name,
 //	ppAnimSet
 //		Returns the animation set interface
 //
-//-----------------------------------------------------------------------------		
+//-----------------------------------------------------------------------------
 HRESULT WINAPI
-D3DXCreateAnimationSet(LPCSTR Name, 
-                            LPD3DXINTERPOLATOR *ppInterpolators, UINT NumInterpolators,
-                            LPD3DXANIMATIONSET *ppAnimSet);
+D3DXCreateAnimationSet(LPCSTR Name,
+                       LPD3DXINTERPOLATOR *ppInterpolators, UINT NumInterpolators,
+                       LPD3DXANIMATIONSET *ppAnimSet);
 
 //----------------------------------------------------------------------------
 // D3DXCreateAnimationController:
@@ -787,10 +790,10 @@ D3DXCreateAnimationSet(LPCSTR Name,
 //	ppAnimController
 //		Returns the animation controller interface
 //
-//-----------------------------------------------------------------------------		
+//-----------------------------------------------------------------------------
 HRESULT WINAPI
 D3DXCreateAnimationController(UINT MaxNumMatrices, UINT MaxNumAnimationSets, UINT MaxNumTracks, UINT MaxNumEvents,
-                                 LPD3DXANIMATIONCONTROLLER *ppAnimController);
+                              LPD3DXANIMATIONCONTROLLER *ppAnimController);
 
 #ifdef __cplusplus
 }

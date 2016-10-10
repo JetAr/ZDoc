@@ -2,7 +2,7 @@
 //  File:   project.h
 //
 //  Desc:   DirectShow sample code
-//          Master header file that includes all the other header files 
+//          Master header file that includes all the other header files
 //          used by the project.
 //
 //  Copyright (c) 2000-2002 Microsoft Corporation. All rights reserved.
@@ -42,7 +42,8 @@
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -50,7 +51,7 @@ __inline void RELEASE( T* &p )
 #endif
 
 #ifndef CHECK_HR
-    #define CHECK_HR(expr) if (FAILED(expr)) {                   \
+#define CHECK_HR(expr) if (FAILED(expr)) {                   \
         OutputDebugString( hresultNameLookup(expr)+TEXT("\n"));  \
         DbgLog((LOG_ERROR, 0,                                    \
                 TEXT("FAILED: %s\nat Line:%d of %s"),            \

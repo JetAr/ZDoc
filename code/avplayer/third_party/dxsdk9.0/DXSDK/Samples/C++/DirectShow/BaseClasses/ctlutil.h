@@ -36,17 +36,17 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      REFIID riid,
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        REFIID riid,
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 };
 
 
@@ -69,26 +69,26 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 
     STDMETHODIMP Invoke(
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS * pdispparams,
-      VARIANT * pvarResult,
-      EXCEPINFO * pexcepinfo,
-      UINT * puArgErr);
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS * pdispparams,
+        VARIANT * pvarResult,
+        EXCEPINFO * pexcepinfo,
+        UINT * puArgErr);
 };
 
 
@@ -111,26 +111,26 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 
     STDMETHODIMP Invoke(
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS * pdispparams,
-      VARIANT * pvarResult,
-      EXCEPINFO * pexcepinfo,
-      UINT * puArgErr);
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS * pdispparams,
+        VARIANT * pvarResult,
+        EXCEPINFO * pexcepinfo,
+        UINT * puArgErr);
 };
 
 
@@ -155,26 +155,26 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 
     STDMETHODIMP Invoke(
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS * pdispparams,
-      VARIANT * pvarResult,
-      EXCEPINFO * pexcepinfo,
-      UINT * puArgErr);
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS * pdispparams,
+        VARIANT * pvarResult,
+        EXCEPINFO * pexcepinfo,
+        UINT * puArgErr);
 
 };
 
@@ -183,10 +183,12 @@ public:
 // and REFERENCE_TIME (essentially a LONGLONG) within filters.
 // this class converts between the two
 
-class COARefTime : public CRefTime {
+class COARefTime : public CRefTime
+{
 public:
 
-    COARefTime() {
+    COARefTime()
+    {
     };
 
     COARefTime(CRefTime t)
@@ -199,24 +201,29 @@ public:
     {
     };
 
-    COARefTime(double d) {
+    COARefTime(double d)
+    {
         m_time = (LONGLONG) (d * 10000000);
     };
 
-    operator double() {
+    operator double()
+    {
         return double(m_time) / 10000000;
     };
 
-    operator REFERENCE_TIME() {
+    operator REFERENCE_TIME()
+    {
         return m_time;
     };
 
-    COARefTime& operator=(const double& rd)  {
+    COARefTime& operator=(const double& rd)
+    {
         m_time = (LONGLONG) (rd * 10000000);
         return *this;
     }
 
-    COARefTime& operator=(const REFERENCE_TIME& rt)  {
+    COARefTime& operator=(const REFERENCE_TIME& rt)
+    {
         m_time = rt;
         return *this;
     }
@@ -308,12 +315,14 @@ public:
     CPosPassThru(const TCHAR *, LPUNKNOWN, HRESULT*, IPin *);
     DECLARE_IUNKNOWN
 
-    HRESULT ForceRefresh() {
+    HRESULT ForceRefresh()
+    {
         return S_OK;
     };
 
     // override to return an accurate current position
-    virtual HRESULT GetMediaTime(LONGLONG *pStartTime,LONGLONG *pEndTime) {
+    virtual HRESULT GetMediaTime(LONGLONG *pStartTime,LONGLONG *pEndTime)
+    {
         return E_FAIL;
     }
 
@@ -330,7 +339,7 @@ public:
     STDMETHODIMP ConvertTimeFormat(LONGLONG * pTarget, const GUID * pTargetFormat,
                                    LONGLONG    Source, const GUID * pSourceFormat );
     STDMETHODIMP SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
-                             , LONGLONG * pStop, DWORD StopFlags );
+                               , LONGLONG * pStop, DWORD StopFlags );
 
     STDMETHODIMP GetPositions( LONGLONG * pCurrent, LONGLONG * pStop );
     STDMETHODIMP GetCurrentPosition( LONGLONG * pCurrent );
@@ -408,26 +417,26 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 
     STDMETHODIMP Invoke(
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS * pdispparams,
-      VARIANT * pvarResult,
-      EXCEPINFO * pexcepinfo,
-      UINT * puArgErr);
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS * pdispparams,
+        VARIANT * pvarResult,
+        EXCEPINFO * pexcepinfo,
+        UINT * puArgErr);
 };
 
 
@@ -451,30 +460,30 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 
     STDMETHODIMP Invoke(
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS * pdispparams,
-      VARIANT * pvarResult,
-      EXCEPINFO * pexcepinfo,
-      UINT * puArgErr);
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS * pdispparams,
+        VARIANT * pvarResult,
+        EXCEPINFO * pexcepinfo,
+        UINT * puArgErr);
 
     STDMETHODIMP GetPreferredAspectRatio(
-      long *plAspectX,
-      long *plAspectY)
+        long *plAspectX,
+        long *plAspectY)
     {
         return E_NOTIMPL;
     }
@@ -501,26 +510,26 @@ public:
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
-      UINT itinfo,
-      LCID lcid,
-      ITypeInfo ** pptinfo);
+        UINT itinfo,
+        LCID lcid,
+        ITypeInfo ** pptinfo);
 
     STDMETHODIMP GetIDsOfNames(
-      REFIID riid,
-      OLECHAR  ** rgszNames,
-      UINT cNames,
-      LCID lcid,
-      DISPID * rgdispid);
+        REFIID riid,
+        OLECHAR  ** rgszNames,
+        UINT cNames,
+        LCID lcid,
+        DISPID * rgdispid);
 
     STDMETHODIMP Invoke(
-      DISPID dispidMember,
-      REFIID riid,
-      LCID lcid,
-      WORD wFlags,
-      DISPPARAMS * pdispparams,
-      VARIANT * pvarResult,
-      EXCEPINFO * pexcepinfo,
-      UINT * puArgErr);
+        DISPID dispidMember,
+        REFIID riid,
+        LCID lcid,
+        WORD wFlags,
+        DISPPARAMS * pdispparams,
+        VARIANT * pvarResult,
+        EXCEPINFO * pexcepinfo,
+        UINT * puArgErr);
 };
 
 
@@ -548,7 +557,8 @@ public:
     STDMETHODIMP CanSeekBackward(LONG *pCanSeekBackward);
 
     // override if you can return the data you are actually working on
-    STDMETHODIMP get_CurrentPosition(REFTIME * pllTime) {
+    STDMETHODIMP get_CurrentPosition(REFTIME * pllTime)
+    {
         return E_NOTIMPL;
     };
 
@@ -593,7 +603,7 @@ public:
                                     LONGLONG    Source, const GUID * pSourceFormat );
 
     STDMETHODIMP SetPositions( LONGLONG * pCurrent,  DWORD CurrentFlags
-			     , LONGLONG * pStop,  DWORD StopFlags );
+                               , LONGLONG * pStop,  DWORD StopFlags );
 
     STDMETHODIMP GetPositions( LONGLONG * pCurrent, LONGLONG * pStop );
 
@@ -681,7 +691,7 @@ public:
         VARIANT*    pvarResult,
         short*      puArgErr,
         BOOL        bStream
-        );
+    );
 
     DECLARE_IUNKNOWN
 
@@ -691,11 +701,11 @@ public:
     // IDeferredCommand methods
     STDMETHODIMP Cancel();
     STDMETHODIMP Confidence(
-                    LONG* pConfidence);
+        LONG* pConfidence);
     STDMETHODIMP Postpone(
-                    REFTIME newtime);
+        REFTIME newtime);
     STDMETHODIMP GetHResult(
-                    HRESULT* phrResult);
+        HRESULT* phrResult);
 
     // other public methods
 
@@ -704,31 +714,38 @@ public:
     // access methods
 
     // returns TRUE if streamtime, FALSE if presentation time
-    BOOL IsStreamTime() {
-       return m_bStream;
+    BOOL IsStreamTime()
+    {
+        return m_bStream;
     };
 
-    CRefTime GetTime() {
+    CRefTime GetTime()
+    {
         return m_time;
     };
 
-    REFIID GetIID() {
+    REFIID GetIID()
+    {
         return *m_iid;
     };
 
-    long GetMethod() {
+    long GetMethod()
+    {
         return m_dispidMethod;
     };
 
-    short GetFlags() {
+    short GetFlags()
+    {
         return m_wFlags;
     };
 
-    DISPPARAMS* GetParams() {
+    DISPPARAMS* GetParams()
+    {
         return &m_DispParams;
     };
 
-    VARIANT* GetResult() {
+    VARIANT* GetResult()
+    {
         return m_pvarResult;
     };
 
@@ -846,7 +863,8 @@ public:
     // return the event handle that will be signalled whenever
     // there are deferred commands due for execution (when GetDueCommand
     // will not block).
-    HANDLE GetDueHandle() {
+    HANDLE GetDueHandle()
+    {
         return HANDLE(m_evDue);
     };
 
@@ -860,18 +878,22 @@ public:
     virtual HRESULT GetCommandDueFor(REFERENCE_TIME tStream, CDeferredCommand**ppCmd);
 
     // check if a given time is due (TRUE if it is due yet)
-    BOOL CheckTime(CRefTime time, BOOL bStream) {
+    BOOL CheckTime(CRefTime time, BOOL bStream)
+    {
 
         // if no clock, nothing is due!
-        if (!m_pClock) {
+        if (!m_pClock)
+        {
             return FALSE;
         }
 
         // stream time
-        if (bStream) {
+        if (bStream)
+        {
 
             // not valid if not running
-            if (!m_bRunning) {
+            if (!m_bRunning)
+            {
                 return FALSE;
             }
             // add on known stream time offset to get presentation time

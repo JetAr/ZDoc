@@ -12,12 +12,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0334 */
+/* File created by MIDL compiler version 6.00.0334 */
 /* Compiler settings for dshowasf.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -48,7 +48,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IConfigAsfWriter_FWD_DEFINED__
 #define __IConfigAsfWriter_FWD_DEFINED__
@@ -63,14 +63,14 @@ typedef interface IConfigAsfWriter IConfigAsfWriter;
 #include "wmsdkidl.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_dshowasf_0000 */
-/* [local] */ 
+/* [local] */
 
 EXTERN_GUID( IID_IConfigAsfWriter,0x45086030,0xF7E4,0x486a,0xB5,0x04,0x82,0x6B,0xB5,0x79,0x2A,0x3B );
 
@@ -84,101 +84,102 @@ extern RPC_IF_HANDLE __MIDL_itf_dshowasf_0000_v0_0_s_ifspec;
 #define __IConfigAsfWriter_INTERFACE_DEFINED__
 
 /* interface IConfigAsfWriter */
-/* [unique][uuid][object] */ 
+/* [unique][uuid][object] */
 
 
 EXTERN_C const IID IID_IConfigAsfWriter;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("45086030-F7E4-486a-B504-826BB5792A3B")
-    IConfigAsfWriter : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE ConfigureFilterUsingProfileId( 
-            /* [in] */ DWORD dwProfileId) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCurrentProfileId( 
-            /* [out] */ DWORD *pdwProfileId) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ConfigureFilterUsingProfileGuid( 
-            /* [in] */ REFGUID guidProfile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCurrentProfileGuid( 
-            /* [out] */ GUID *pProfileGuid) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE ConfigureFilterUsingProfile( 
-            /* [in] */ IWMProfile *pProfile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetCurrentProfile( 
-            /* [out] */ IWMProfile **ppProfile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetIndexMode( 
-            /* [in] */ BOOL bIndexFile) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetIndexMode( 
-            /* [out] */ BOOL *pbIndexFile) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("45086030-F7E4-486a-B504-826BB5792A3B")
+IConfigAsfWriter :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE ConfigureFilterUsingProfileId(
+        /* [in] */ DWORD dwProfileId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentProfileId(
+        /* [out] */ DWORD *pdwProfileId) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ConfigureFilterUsingProfileGuid(
+        /* [in] */ REFGUID guidProfile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentProfileGuid(
+        /* [out] */ GUID *pProfileGuid) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE ConfigureFilterUsingProfile(
+        /* [in] */ IWMProfile *pProfile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetCurrentProfile(
+        /* [out] */ IWMProfile **ppProfile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetIndexMode(
+        /* [in] */ BOOL bIndexFile) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetIndexMode(
+        /* [out] */ BOOL *pbIndexFile) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IConfigAsfWriterVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IConfigAsfWriter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IConfigAsfWriter * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IConfigAsfWriter * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *ConfigureFilterUsingProfileId )( 
-            IConfigAsfWriter * This,
-            /* [in] */ DWORD dwProfileId);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetCurrentProfileId )( 
-            IConfigAsfWriter * This,
-            /* [out] */ DWORD *pdwProfileId);
-        
-        HRESULT ( STDMETHODCALLTYPE *ConfigureFilterUsingProfileGuid )( 
-            IConfigAsfWriter * This,
-            /* [in] */ REFGUID guidProfile);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetCurrentProfileGuid )( 
-            IConfigAsfWriter * This,
-            /* [out] */ GUID *pProfileGuid);
-        
-        HRESULT ( STDMETHODCALLTYPE *ConfigureFilterUsingProfile )( 
-            IConfigAsfWriter * This,
-            /* [in] */ IWMProfile *pProfile);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetCurrentProfile )( 
-            IConfigAsfWriter * This,
-            /* [out] */ IWMProfile **ppProfile);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetIndexMode )( 
-            IConfigAsfWriter * This,
-            /* [in] */ BOOL bIndexFile);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIndexMode )( 
-            IConfigAsfWriter * This,
-            /* [out] */ BOOL *pbIndexFile);
-        
-        END_INTERFACE
-    } IConfigAsfWriterVtbl;
+typedef struct IConfigAsfWriterVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IConfigAsfWriter
-    {
-        CONST_VTBL struct IConfigAsfWriterVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IConfigAsfWriter * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IConfigAsfWriter * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IConfigAsfWriter * This);
+
+    HRESULT ( STDMETHODCALLTYPE *ConfigureFilterUsingProfileId )(
+        IConfigAsfWriter * This,
+        /* [in] */ DWORD dwProfileId);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCurrentProfileId )(
+        IConfigAsfWriter * This,
+        /* [out] */ DWORD *pdwProfileId);
+
+    HRESULT ( STDMETHODCALLTYPE *ConfigureFilterUsingProfileGuid )(
+        IConfigAsfWriter * This,
+        /* [in] */ REFGUID guidProfile);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCurrentProfileGuid )(
+        IConfigAsfWriter * This,
+        /* [out] */ GUID *pProfileGuid);
+
+    HRESULT ( STDMETHODCALLTYPE *ConfigureFilterUsingProfile )(
+        IConfigAsfWriter * This,
+        /* [in] */ IWMProfile *pProfile);
+
+    HRESULT ( STDMETHODCALLTYPE *GetCurrentProfile )(
+        IConfigAsfWriter * This,
+        /* [out] */ IWMProfile **ppProfile);
+
+    HRESULT ( STDMETHODCALLTYPE *SetIndexMode )(
+        IConfigAsfWriter * This,
+        /* [in] */ BOOL bIndexFile);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIndexMode )(
+        IConfigAsfWriter * This,
+        /* [out] */ BOOL *pbIndexFile);
+
+    END_INTERFACE
+} IConfigAsfWriterVtbl;
+
+interface IConfigAsfWriter
+{
+    CONST_VTBL struct IConfigAsfWriterVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -224,7 +225,7 @@ EXTERN_C const IID IID_IConfigAsfWriter;
 
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_ConfigureFilterUsingProfileId_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_ConfigureFilterUsingProfileId_Proxy(
     IConfigAsfWriter * This,
     /* [in] */ DWORD dwProfileId);
 
@@ -236,7 +237,7 @@ void __RPC_STUB IConfigAsfWriter_ConfigureFilterUsingProfileId_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetCurrentProfileId_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetCurrentProfileId_Proxy(
     IConfigAsfWriter * This,
     /* [out] */ DWORD *pdwProfileId);
 
@@ -248,7 +249,7 @@ void __RPC_STUB IConfigAsfWriter_GetCurrentProfileId_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_ConfigureFilterUsingProfileGuid_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_ConfigureFilterUsingProfileGuid_Proxy(
     IConfigAsfWriter * This,
     /* [in] */ REFGUID guidProfile);
 
@@ -260,7 +261,7 @@ void __RPC_STUB IConfigAsfWriter_ConfigureFilterUsingProfileGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetCurrentProfileGuid_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetCurrentProfileGuid_Proxy(
     IConfigAsfWriter * This,
     /* [out] */ GUID *pProfileGuid);
 
@@ -272,7 +273,7 @@ void __RPC_STUB IConfigAsfWriter_GetCurrentProfileGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_ConfigureFilterUsingProfile_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_ConfigureFilterUsingProfile_Proxy(
     IConfigAsfWriter * This,
     /* [in] */ IWMProfile *pProfile);
 
@@ -284,7 +285,7 @@ void __RPC_STUB IConfigAsfWriter_ConfigureFilterUsingProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetCurrentProfile_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetCurrentProfile_Proxy(
     IConfigAsfWriter * This,
     /* [out] */ IWMProfile **ppProfile);
 
@@ -296,7 +297,7 @@ void __RPC_STUB IConfigAsfWriter_GetCurrentProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_SetIndexMode_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_SetIndexMode_Proxy(
     IConfigAsfWriter * This,
     /* [in] */ BOOL bIndexFile);
 
@@ -308,7 +309,7 @@ void __RPC_STUB IConfigAsfWriter_SetIndexMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetIndexMode_Proxy( 
+HRESULT STDMETHODCALLTYPE IConfigAsfWriter_GetIndexMode_Proxy(
     IConfigAsfWriter * This,
     /* [out] */ BOOL *pbIndexFile);
 

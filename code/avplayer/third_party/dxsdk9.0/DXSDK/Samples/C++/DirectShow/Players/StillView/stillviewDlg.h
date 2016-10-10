@@ -49,7 +49,7 @@ class CStillViewDlg : public CDialog
 {
 // Construction
 public:
-	CStillViewDlg(CWnd* pParent = NULL);	// standard constructor
+    CStillViewDlg(CWnd* pParent = NULL);	// standard constructor
 
     HRESULT PrepareMedia(LPTSTR lpszMovie);
     HRESULT InitDirectShow(void);
@@ -76,36 +76,36 @@ public:
     void PlaySelectedFile(void);
 
     // Dialog Data
-	//{{AFX_DATA(CStillViewDlg)
-	enum { IDD = IDD_STILLVIEW_DIALOG };
-	CStatic	m_StrFileTime;
-	CStatic	m_StrImageSize;
-	CEdit	m_EditMediaDir;
-	CSpinButtonCtrl	m_SpinFiles;
-	CButton	m_ButtonProperties;
-	CStatic	m_StrMediaPath;
-	CStatic	m_StrFileDate;
-	CStatic	m_StrFileSize;
-	CListBox    m_ListPinsOutput;
-	CListBox	m_ListPinsInput;
-	CStatic	m_StrFileList;
-	CStatic	m_Screen;
-	CListBox	m_ListInfo;
-	CListBox	m_ListFilters;
-	CListBox	m_ListFiles;
-	//}}AFX_DATA
+    //{{AFX_DATA(CStillViewDlg)
+    enum { IDD = IDD_STILLVIEW_DIALOG };
+    CStatic	m_StrFileTime;
+    CStatic	m_StrImageSize;
+    CEdit	m_EditMediaDir;
+    CSpinButtonCtrl	m_SpinFiles;
+    CButton	m_ButtonProperties;
+    CStatic	m_StrMediaPath;
+    CStatic	m_StrFileDate;
+    CStatic	m_StrFileSize;
+    CListBox    m_ListPinsOutput;
+    CListBox	m_ListPinsInput;
+    CStatic	m_StrFileList;
+    CStatic	m_Screen;
+    CListBox	m_ListInfo;
+    CListBox	m_ListFilters;
+    CListBox	m_ListFiles;
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CStillViewDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CStillViewDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    //}}AFX_VIRTUAL
 
 
 // Implementation
 protected:
-	HICON m_hIcon;
+    HICON m_hIcon;
     int   m_nCurrentFileSelection;
     TCHAR m_szCurrentDir[MAX_PATH];
 
@@ -115,24 +115,24 @@ protected:
     IVideoWindow  *m_pVW;
     IMediaEventEx *m_pME;
 
-	// Generated message map functions
-	//{{AFX_MSG(CStillViewDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnClose();
-	afx_msg void OnDestroy();
-	afx_msg void OnSelectFile();
-	afx_msg void OnSelchangeListFilters();
-	afx_msg void OnDblclkListFilters();
-	afx_msg void OnButtonProppage();
-	afx_msg void OnDeltaposSpinFiles(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnButtonSetMediadir();
-	afx_msg void OnButtonGraphedit();
-	afx_msg BOOL OnEraseBkgnd(CDC *);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CStillViewDlg)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+    afx_msg void OnPaint();
+    afx_msg HCURSOR OnQueryDragIcon();
+    afx_msg void OnClose();
+    afx_msg void OnDestroy();
+    afx_msg void OnSelectFile();
+    afx_msg void OnSelchangeListFilters();
+    afx_msg void OnDblclkListFilters();
+    afx_msg void OnButtonProppage();
+    afx_msg void OnDeltaposSpinFiles(NMHDR* pNMHDR, LRESULT* pResult);
+    afx_msg void OnButtonSetMediadir();
+    afx_msg void OnButtonGraphedit();
+    afx_msg BOOL OnEraseBkgnd(CDC *);
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

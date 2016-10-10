@@ -46,7 +46,8 @@
  * plane is used, and samples for each channel are interleaved. In this case,
  * linesize is the buffer size, in bytes, for the 1 plane.
  */
-enum AVSampleFormat {
+enum AVSampleFormat
+{
     AV_SAMPLE_FMT_NONE = -1,
     AV_SAMPLE_FMT_U8,          ///< unsigned 8 bits
     AV_SAMPLE_FMT_S16,         ///< signed 16 bits

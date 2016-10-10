@@ -93,7 +93,8 @@ class IMediaObjectImpl : public IMediaObject
 {
 private:
     // Member variables
-    struct {
+    struct
+    {
         DWORD   fTypeSet:1;
         DWORD   fIncomplete:1;
         DMO_MEDIA_TYPE CurrentMediaType;
@@ -119,14 +120,16 @@ protected:
     }
     const DMO_MEDIA_TYPE *InputType(DWORD ulInputStreamIndex)
     {
-        if (!InputTypeSet(ulInputStreamIndex)) {
+        if (!InputTypeSet(ulInputStreamIndex))
+        {
             return NULL;
         }
         return &m_InputInfo[ulInputStreamIndex].CurrentMediaType;
     }
     const DMO_MEDIA_TYPE *OutputType(DWORD ulOutputStreamIndex)
     {
-        if (!OutputTypeSet(ulOutputStreamIndex)) {
+        if (!OutputTypeSet(ulOutputStreamIndex))
+        {
             return NULL;
         }
         return &m_OutputInfo[ulOutputStreamIndex].CurrentMediaType;
@@ -151,13 +154,17 @@ protected:
     {
         m_fTypesSet = false;
         DWORD dw;
-        for (dw = 0; dw < NUMBEROFINPUTS; dw++) {
-            if (!InputTypeSet(dw)) {
+        for (dw = 0; dw < NUMBEROFINPUTS; dw++)
+        {
+            if (!InputTypeSet(dw))
+            {
                 return false;
             }
         }
-        for (dw = 0; dw < NUMBEROFOUTPUTS; dw++) {
-            if (!OutputTypeSet(dw)) {
+        for (dw = 0; dw < NUMBEROFOUTPUTS; dw++)
+        {
+            if (!OutputTypeSet(dw))
+            {
                 //  Check if it's optional
                 DWORD dwFlags;
 #ifdef _DEBUG
@@ -165,11 +172,12 @@ protected:
 #endif
                 INTERNAL_CALL(_DERIVED_, GetOutputStreamInfo)(dw, &dwFlags);
                 _ASSERTE(0 == (dwFlags & ~(DMO_OUTPUT_STREAMF_WHOLE_SAMPLES |
-                                         DMO_OUTPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER |
-                                         DMO_OUTPUT_STREAMF_FIXED_SAMPLE_SIZE |
-                                         DMO_OUTPUT_STREAMF_DISCARDABLE |
-                                         DMO_OUTPUT_STREAMF_OPTIONAL)));
-                if (!(dwFlags & DMO_OUTPUT_STREAMF_OPTIONAL)) {
+                                           DMO_OUTPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER |
+                                           DMO_OUTPUT_STREAMF_FIXED_SAMPLE_SIZE |
+                                           DMO_OUTPUT_STREAMF_DISCARDABLE |
+                                           DMO_OUTPUT_STREAMF_OPTIONAL)));
+                if (!(dwFlags & DMO_OUTPUT_STREAMF_OPTIONAL))
+                {
                     return false;
                 }
             }
@@ -188,17 +196,22 @@ protected:
         ZeroMemory(&m_OutputInfo, sizeof(m_OutputInfo));
     }
 
-    virtual ~IMediaObjectImpl() {
+    virtual ~IMediaObjectImpl()
+    {
         DWORD dwCurrentType;
 
-        for (dwCurrentType = 0; dwCurrentType < NUMBEROFINPUTS; dwCurrentType++) {
-            if(InputTypeSet(dwCurrentType)) {
+        for (dwCurrentType = 0; dwCurrentType < NUMBEROFINPUTS; dwCurrentType++)
+        {
+            if(InputTypeSet(dwCurrentType))
+            {
                 MoFreeMediaType(&m_InputInfo[dwCurrentType].CurrentMediaType);
             }
         }
 
-        for (dwCurrentType = 0; dwCurrentType < NUMBEROFOUTPUTS; dwCurrentType++) {
-            if(OutputTypeSet(dwCurrentType)) {
+        for (dwCurrentType = 0; dwCurrentType < NUMBEROFOUTPUTS; dwCurrentType++)
+        {
+            if(OutputTypeSet(dwCurrentType))
+            {
                 MoFreeMediaType(&m_OutputInfo[dwCurrentType].CurrentMediaType);
             }
         }
@@ -215,7 +228,8 @@ protected:
     {
         LockIt lck(static_cast<_DERIVED_ *>(this));
         if (pulNumberOfInputStreams == NULL ||
-            pulNumberOfOutputStreams == NULL) {
+                pulNumberOfOutputStreams == NULL)
+        {
             return E_POINTER;
         }
         *pulNumberOfInputStreams  = NUMBEROFINPUTS;
@@ -226,59 +240,70 @@ protected:
     STDMETHODIMP GetInputStreamInfo(ULONG ulStreamIndex, DWORD *pdwFlags)
     {
         LockIt lck(static_cast<_DERIVED_ *>(this));
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (pdwFlags == NULL) {
+        if (pdwFlags == NULL)
+        {
             return E_POINTER;
         }
         HRESULT hr = INTERNAL_CALL(_DERIVED_, GetInputStreamInfo)(ulStreamIndex, pdwFlags);
         _ASSERTE(0 == (*pdwFlags & ~(DMO_INPUT_STREAMF_WHOLE_SAMPLES |
-                                   DMO_INPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER |
-                                   DMO_INPUT_STREAMF_FIXED_SAMPLE_SIZE |
-                                   DMO_INPUT_STREAMF_HOLDS_BUFFERS)));
+                                     DMO_INPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER |
+                                     DMO_INPUT_STREAMF_FIXED_SAMPLE_SIZE |
+                                     DMO_INPUT_STREAMF_HOLDS_BUFFERS)));
         return hr;
     }
 
     STDMETHODIMP GetOutputStreamInfo(ULONG ulStreamIndex, DWORD *pdwFlags)
     {
         LockIt lck(static_cast<_DERIVED_ *>(this));
-        if (ulStreamIndex >= NUMBEROFOUTPUTS) {
+        if (ulStreamIndex >= NUMBEROFOUTPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (pdwFlags == NULL) {
+        if (pdwFlags == NULL)
+        {
             return E_POINTER;
         }
         HRESULT hr = INTERNAL_CALL(_DERIVED_, GetOutputStreamInfo)(ulStreamIndex, pdwFlags);
         _ASSERTE(0 == (*pdwFlags & ~(DMO_OUTPUT_STREAMF_WHOLE_SAMPLES |
-                                   DMO_OUTPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER |
-                                   DMO_OUTPUT_STREAMF_FIXED_SAMPLE_SIZE |
-                                   DMO_OUTPUT_STREAMF_DISCARDABLE |
-                                   DMO_OUTPUT_STREAMF_OPTIONAL)));
+                                     DMO_OUTPUT_STREAMF_SINGLE_SAMPLE_PER_BUFFER |
+                                     DMO_OUTPUT_STREAMF_FIXED_SAMPLE_SIZE |
+                                     DMO_OUTPUT_STREAMF_DISCARDABLE |
+                                     DMO_OUTPUT_STREAMF_OPTIONAL)));
         return hr;
     }
 
-    STDMETHODIMP GetInputType(ULONG ulStreamIndex, ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    STDMETHODIMP GetInputType(ULONG ulStreamIndex, ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt)
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
         LockIt lck(static_cast<_DERIVED_ *>(this));
         return INTERNAL_CALL(_DERIVED_, GetInputType)(ulStreamIndex, ulTypeIndex, pmt);
     }
 
-    STDMETHODIMP GetOutputType(ULONG ulStreamIndex, ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt) {
-        if (ulStreamIndex >= NUMBEROFOUTPUTS) {
+    STDMETHODIMP GetOutputType(ULONG ulStreamIndex, ULONG ulTypeIndex, DMO_MEDIA_TYPE *pmt)
+    {
+        if (ulStreamIndex >= NUMBEROFOUTPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
         LockIt lck(static_cast<_DERIVED_ *>(this));
         return INTERNAL_CALL(_DERIVED_, GetOutputType)(ulStreamIndex, ulTypeIndex, pmt);
     }
 
-    STDMETHODIMP GetInputCurrentType(ULONG ulStreamIndex, DMO_MEDIA_TYPE *pmt) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    STDMETHODIMP GetInputCurrentType(ULONG ulStreamIndex, DMO_MEDIA_TYPE *pmt)
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (NULL == pmt) {
+        if (NULL == pmt)
+        {
             return E_POINTER;
         }
         LockIt lck(static_cast<_DERIVED_ *>(this));
@@ -286,14 +311,17 @@ protected:
             return MoCopyMediaType(pmt,
                                    &m_InputInfo[ulStreamIndex].CurrentMediaType);
         else
-           return DMO_E_TYPE_NOT_SET;
+            return DMO_E_TYPE_NOT_SET;
     }
 
-    STDMETHODIMP GetOutputCurrentType(ULONG ulStreamIndex, DMO_MEDIA_TYPE *pmt) {
-        if (ulStreamIndex >= NUMBEROFOUTPUTS) {
+    STDMETHODIMP GetOutputCurrentType(ULONG ulStreamIndex, DMO_MEDIA_TYPE *pmt)
+    {
+        if (ulStreamIndex >= NUMBEROFOUTPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (NULL == pmt) {
+        if (NULL == pmt)
+        {
             return E_POINTER;
         }
         LockIt lck(static_cast<_DERIVED_ *>(this));
@@ -301,129 +329,160 @@ protected:
             return MoCopyMediaType(pmt,
                                    &m_OutputInfo[ulStreamIndex].CurrentMediaType);
         else
-           return DMO_E_TYPE_NOT_SET;
+            return DMO_E_TYPE_NOT_SET;
     }
 
-    STDMETHODIMP GetInputSizeInfo(ULONG ulStreamIndex, ULONG *pulSize, ULONG *pcbMaxLookahead, ULONG *pulAlignment) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    STDMETHODIMP GetInputSizeInfo(ULONG ulStreamIndex, ULONG *pulSize, ULONG *pcbMaxLookahead, ULONG *pulAlignment)
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
         if (NULL == pulSize || NULL == pulAlignment ||
-            NULL == pcbMaxLookahead) {
+                NULL == pcbMaxLookahead)
+        {
             return E_POINTER;
         }
         LockIt lck(static_cast<_DERIVED_ *>(this));
-        if (!InputTypeSet(ulStreamIndex)) {
-           return DMO_E_TYPE_NOT_SET;
+        if (!InputTypeSet(ulStreamIndex))
+        {
+            return DMO_E_TYPE_NOT_SET;
         }
         return INTERNAL_CALL(_DERIVED_, GetInputSizeInfo)(ulStreamIndex, pulSize, pcbMaxLookahead, pulAlignment);
     }
 
-    STDMETHODIMP GetOutputSizeInfo(ULONG ulStreamIndex, ULONG *pulSize, ULONG *pulAlignment) {
-        if (ulStreamIndex >= NUMBEROFOUTPUTS) {
+    STDMETHODIMP GetOutputSizeInfo(ULONG ulStreamIndex, ULONG *pulSize, ULONG *pulAlignment)
+    {
+        if (ulStreamIndex >= NUMBEROFOUTPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (NULL == pulSize || NULL == pulAlignment) {
+        if (NULL == pulSize || NULL == pulAlignment)
+        {
             return E_POINTER;
         }
         LockIt lck(static_cast<_DERIVED_ *>(this));
-        if (!m_fTypesSet || !OutputTypeSet(ulStreamIndex)) {
-           return DMO_E_TYPE_NOT_SET;
+        if (!m_fTypesSet || !OutputTypeSet(ulStreamIndex))
+        {
+            return DMO_E_TYPE_NOT_SET;
         }
         return INTERNAL_CALL(_DERIVED_, GetOutputSizeInfo)(ulStreamIndex, pulSize, pulAlignment);
     }
 
-    STDMETHODIMP SetInputType(ULONG ulStreamIndex, const DMO_MEDIA_TYPE *pmt, DWORD dwFlags) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    STDMETHODIMP SetInputType(ULONG ulStreamIndex, const DMO_MEDIA_TYPE *pmt, DWORD dwFlags)
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (dwFlags & ~ (DMO_SET_TYPEF_CLEAR | DMO_SET_TYPEF_TEST_ONLY)) {
+        if (dwFlags & ~ (DMO_SET_TYPEF_CLEAR | DMO_SET_TYPEF_TEST_ONLY))
+        {
             return E_INVALIDARG;
         }
 
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
-        if (dwFlags & DMO_SET_TYPEF_CLEAR) {
+        if (dwFlags & DMO_SET_TYPEF_CLEAR)
+        {
             MoFreeMediaType(&m_InputInfo[ulStreamIndex].CurrentMediaType);
             m_InputInfo[ulStreamIndex].fTypeSet = FALSE;
-            if (!CheckTypesSet()) {
+            if (!CheckTypesSet())
+            {
                 Flush();
                 FreeStreamingResources();
             }
             return NOERROR;
         }
-        if (NULL == pmt) {
+        if (NULL == pmt)
+        {
             return E_POINTER;
         }
         HRESULT hr = INTERNAL_CALL(_DERIVED_, CheckInputType)(ulStreamIndex, pmt);
         if (FAILED(hr))
-           return hr;
+            return hr;
 
-        if (dwFlags & DMO_SET_TYPEF_TEST_ONLY) {
-           return NOERROR;
+        if (dwFlags & DMO_SET_TYPEF_TEST_ONLY)
+        {
+            return NOERROR;
         }
 
 
         // actually set the type
         DMO_MEDIA_TYPE mtTemp;
-        if (S_OK == MoCopyMediaType(&mtTemp, pmt)) {
+        if (S_OK == MoCopyMediaType(&mtTemp, pmt))
+        {
             // Free any previous mediatype
-            if (InputTypeSet(ulStreamIndex)) {
+            if (InputTypeSet(ulStreamIndex))
+            {
                 MoFreeMediaType(&m_InputInfo[ulStreamIndex].CurrentMediaType);
             }
             m_InputInfo[ulStreamIndex].CurrentMediaType = mtTemp;
             m_InputInfo[ulStreamIndex].fTypeSet = TRUE;
             CheckTypesSet();
-        } else {
+        }
+        else
+        {
             return E_OUTOFMEMORY;
         }
 
         return NOERROR;
     }
 
-    STDMETHODIMP SetOutputType(ULONG ulStreamIndex, const DMO_MEDIA_TYPE *pmt, DWORD dwFlags) {
-        if (ulStreamIndex >= NUMBEROFOUTPUTS) {
+    STDMETHODIMP SetOutputType(ULONG ulStreamIndex, const DMO_MEDIA_TYPE *pmt, DWORD dwFlags)
+    {
+        if (ulStreamIndex >= NUMBEROFOUTPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (dwFlags & ~ (DMO_SET_TYPEF_CLEAR | DMO_SET_TYPEF_TEST_ONLY)) {
+        if (dwFlags & ~ (DMO_SET_TYPEF_CLEAR | DMO_SET_TYPEF_TEST_ONLY))
+        {
             return E_INVALIDARG;
         }
 
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
-        if (dwFlags & DMO_SET_TYPEF_CLEAR) {
+        if (dwFlags & DMO_SET_TYPEF_CLEAR)
+        {
             MoFreeMediaType(&m_OutputInfo[ulStreamIndex].CurrentMediaType);
             m_OutputInfo[ulStreamIndex].fTypeSet = FALSE;
-            if (!CheckTypesSet()) {
+            if (!CheckTypesSet())
+            {
                 Flush();
                 FreeStreamingResources();
             }
             return NOERROR;
         }
-        if (NULL == pmt) {
+        if (NULL == pmt)
+        {
             return E_POINTER;
         }
         HRESULT hr = INTERNAL_CALL(_DERIVED_, CheckOutputType)(ulStreamIndex, pmt);
-        if (FAILED(hr)) {
-           return hr;
+        if (FAILED(hr))
+        {
+            return hr;
         }
 
-        if (dwFlags & DMO_SET_TYPEF_TEST_ONLY) {
-           return NOERROR;
+        if (dwFlags & DMO_SET_TYPEF_TEST_ONLY)
+        {
+            return NOERROR;
         }
 
 
         // actually set the type
         DMO_MEDIA_TYPE mtTemp;
-        if (S_OK == MoCopyMediaType(&mtTemp, pmt)) {
+        if (S_OK == MoCopyMediaType(&mtTemp, pmt))
+        {
             // Free any previous mediatype
-            if (OutputTypeSet(ulStreamIndex)) {
+            if (OutputTypeSet(ulStreamIndex))
+            {
                 MoFreeMediaType(&m_OutputInfo[ulStreamIndex].CurrentMediaType);
             }
             m_OutputInfo[ulStreamIndex].CurrentMediaType = mtTemp;
             m_OutputInfo[ulStreamIndex].fTypeSet = TRUE;
             CheckTypesSet();
-        } else {
+        }
+        else
+        {
             return E_OUTOFMEMORY;
         }
 
@@ -433,33 +492,41 @@ protected:
     STDMETHODIMP GetInputStatus(
         ULONG ulStreamIndex,
         DWORD *pdwStatus
-    ) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    )
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
-        if (NULL == pdwStatus) {
+        if (NULL == pdwStatus)
+        {
             return E_POINTER;
         }
         *pdwStatus = 0;
 
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
-        if (!m_fTypesSet) {
+        if (!m_fTypesSet)
+        {
             return DMO_E_TYPE_NOT_SET;
         }
 
-        if (INTERNAL_CALL(_DERIVED_, AcceptingInput)(ulStreamIndex) == S_OK) {
-           *pdwStatus |= DMO_INPUT_STATUSF_ACCEPT_DATA;
+        if (INTERNAL_CALL(_DERIVED_, AcceptingInput)(ulStreamIndex) == S_OK)
+        {
+            *pdwStatus |= DMO_INPUT_STATUSF_ACCEPT_DATA;
         }
         return NOERROR;
     }
 
-    STDMETHODIMP GetInputMaxLatency(unsigned long ulStreamIndex, REFERENCE_TIME *prtLatency) {
+    STDMETHODIMP GetInputMaxLatency(unsigned long ulStreamIndex, REFERENCE_TIME *prtLatency)
+    {
 
-        if (prtLatency == NULL) {
+        if (prtLatency == NULL)
+        {
             return E_POINTER;
         }
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
 
@@ -468,8 +535,10 @@ protected:
         return INTERNAL_CALL(_DERIVED_, GetInputMaxLatency)(ulStreamIndex, prtLatency);
     }
 
-    STDMETHODIMP SetInputMaxLatency(unsigned long ulStreamIndex, REFERENCE_TIME rtLatency) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    STDMETHODIMP SetInputMaxLatency(unsigned long ulStreamIndex, REFERENCE_TIME rtLatency)
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
 
@@ -478,18 +547,22 @@ protected:
         return INTERNAL_CALL(_DERIVED_, SetInputMaxLatency)(ulStreamIndex, rtLatency);
     }
 
-    STDMETHODIMP Discontinuity(ULONG ulStreamIndex) {
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+    STDMETHODIMP Discontinuity(ULONG ulStreamIndex)
+    {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
 
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
-        if (!m_fTypesSet) {
+        if (!m_fTypesSet)
+        {
             return DMO_E_TYPE_NOT_SET;
         }
 
-        if (S_OK != INTERNAL_CALL(_DERIVED_, AcceptingInput)(ulStreamIndex)) {
+        if (S_OK != INTERNAL_CALL(_DERIVED_, AcceptingInput)(ulStreamIndex))
+        {
             return DMO_E_NOTACCEPTING;
         }
 
@@ -500,10 +573,12 @@ protected:
     {
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
-        if (!m_fTypesSet) {
+        if (!m_fTypesSet)
+        {
             return S_OK;
         }
-        if (m_fFlushed) {
+        if (m_fFlushed)
+        {
             return S_OK;
         }
         HRESULT hr =  INTERNAL_CALL(_DERIVED_, Flush)();
@@ -511,16 +586,20 @@ protected:
         return hr;
     }
 
-    STDMETHODIMP AllocateStreamingResources() {
+    STDMETHODIMP AllocateStreamingResources()
+    {
         LockIt lck(static_cast<_DERIVED_ *>(this));
-        if (!m_fTypesSet) {
+        if (!m_fTypesSet)
+        {
             return DMO_E_TYPE_NOT_SET;
         }
-        if (m_fResourcesAllocated) {
+        if (m_fResourcesAllocated)
+        {
             return S_OK;
         }
         HRESULT hr = INTERNAL_CALL(_DERIVED_, AllocateStreamingResources)();
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
             m_fResourcesAllocated = true;
         }
         return hr;
@@ -529,7 +608,8 @@ protected:
     STDMETHODIMP FreeStreamingResources()
     {
         LockIt lck(static_cast<_DERIVED_ *>(this));
-        if (m_fResourcesAllocated) {
+        if (m_fResourcesAllocated)
+        {
             m_fResourcesAllocated = false;
             INTERNAL_CALL(_DERIVED_, Flush)();
             return INTERNAL_CALL(_DERIVED_, FreeStreamingResources)();
@@ -546,16 +626,20 @@ protected:
         DWORD dwFlags, // [in] - discontinuity, timestamp, etc.
         REFERENCE_TIME rtTimestamp, // [in], valid if flag set
         REFERENCE_TIME rtTimelength // [in], valid if flag set
-    ) {
-        if (!pBuffer) {
+    )
+    {
+        if (!pBuffer)
+        {
             return E_POINTER;
         }
-        if (ulStreamIndex >= NUMBEROFINPUTS) {
+        if (ulStreamIndex >= NUMBEROFINPUTS)
+        {
             return DMO_E_INVALIDSTREAMINDEX;
         }
         if (dwFlags & ~(DMO_INPUT_DATA_BUFFERF_SYNCPOINT |
                         DMO_INPUT_DATA_BUFFERF_TIME |
-                        DMO_INPUT_DATA_BUFFERF_TIMELENGTH)) {
+                        DMO_INPUT_DATA_BUFFERF_TIMELENGTH))
+        {
             return E_INVALIDARG;
         }
 
@@ -563,39 +647,44 @@ protected:
 
         //  Make sure all streams have media types set and resources are allocated
         HRESULT hr = AllocateStreamingResources();
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             return hr;
         }
-        if (INTERNAL_CALL(_DERIVED_, AcceptingInput)(ulStreamIndex) != S_OK) {
+        if (INTERNAL_CALL(_DERIVED_, AcceptingInput)(ulStreamIndex) != S_OK)
+        {
             return DMO_E_NOTACCEPTING;
         }
 
         m_fFlushed = false;
 
         return INTERNAL_CALL(_DERIVED_, ProcessInput)(
-                                    ulStreamIndex,
-                                    pBuffer,
-                                    dwFlags,
-                                    rtTimestamp,
-                                    rtTimelength);
+                   ulStreamIndex,
+                   pBuffer,
+                   dwFlags,
+                   rtTimestamp,
+                   rtTimelength);
     }
 
     STDMETHODIMP ProcessOutput(
-                    DWORD dwFlags,
-                    DWORD ulOutputBufferCount,
-                    DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-                    DWORD *pdwStatus)
+        DWORD dwFlags,
+        DWORD ulOutputBufferCount,
+        DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+        DWORD *pdwStatus)
     {
-        if (pdwStatus == NULL) {
+        if (pdwStatus == NULL)
+        {
             return E_POINTER;
         }
 
 
-        if (ulOutputBufferCount != NUMBEROFOUTPUTS || (dwFlags & ~DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER)) {
-           return E_INVALIDARG;
+        if (ulOutputBufferCount != NUMBEROFOUTPUTS || (dwFlags & ~DMO_PROCESS_OUTPUT_DISCARD_WHEN_NO_BUFFER))
+        {
+            return E_INVALIDARG;
         }
 
-        if (NUMBEROFOUTPUTS != 0 && pOutputBuffers == NULL) {
+        if (NUMBEROFOUTPUTS != 0 && pOutputBuffers == NULL)
+        {
             return E_POINTER;
         }
 
@@ -604,25 +693,31 @@ protected:
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
         HRESULT hr = AllocateStreamingResources();
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             return hr;
         }
 
-        for (DWORD dw = 0; dw < NUMBEROFOUTPUTS; dw++) {
+        for (DWORD dw = 0; dw < NUMBEROFOUTPUTS; dw++)
+        {
             pOutputBuffers[dw].dwStatus = 0;
         }
 
         hr = INTERNAL_CALL(_DERIVED_, ProcessOutput)(
-                           dwFlags,
-                           ulOutputBufferCount,
-                           pOutputBuffers,
-                           pdwStatus);
+                 dwFlags,
+                 ulOutputBufferCount,
+                 pOutputBuffers,
+                 pdwStatus);
 
         // remember the DMO's incomplete status
-        for (dw = 0; dw < NUMBEROFOUTPUTS; dw++) {
-            if (pOutputBuffers[dw].dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE) {
+        for (dw = 0; dw < NUMBEROFOUTPUTS; dw++)
+        {
+            if (pOutputBuffers[dw].dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE)
+            {
                 m_OutputInfo[dw].fIncomplete = TRUE;
-            } else {
+            }
+            else
+            {
                 m_OutputInfo[dw].fIncomplete = FALSE;
             }
         }
@@ -632,9 +727,12 @@ protected:
 
     STDMETHODIMP DMOLock(LONG lLock)
     {
-        if (lLock) {
+        if (lLock)
+        {
             static_cast<_DERIVED_ *>(this)->Lock();
-        } else {
+        }
+        else
+        {
             static_cast<_DERIVED_ *>(this)->Unlock();
         }
         return S_OK;

@@ -22,7 +22,10 @@ protected: // create from serialization only
 
 // Attributes
 public:
-    CString GetCode() { return m_strCode; }
+    CString GetCode()
+    {
+        return m_strCode;
+    }
     void SetCode(CString str);
 
     CRenderView* GetRenderView();
@@ -36,7 +39,7 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CEffectDoc)
-    public:
+public:
     virtual BOOL OnNewDocument();
     virtual void Serialize(CArchive& ar);
     //}}AFX_VIRTUAL
@@ -50,7 +53,10 @@ public:
     BOOL GetShowStats();
     void ShowStats( BOOL bShowStats );
     virtual ~CEffectDoc();
-    BOOL UsingExternalEditor() { return m_bUsingExternalEditor; }
+    BOOL UsingExternalEditor()
+    {
+        return m_bUsingExternalEditor;
+    }
     BOOL GetLastModifiedTime( CTime* pTime );
     void ReloadFromFile();
 #ifdef _DEBUG

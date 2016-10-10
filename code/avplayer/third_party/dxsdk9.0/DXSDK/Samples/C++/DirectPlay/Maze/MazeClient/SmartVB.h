@@ -13,8 +13,8 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 // Smart vertex buffer template class. This performs the usual NOOVERWRITE/DISCARDCONTENTS
 // filling loop. Simply call Begin(), then multiple instances of MakeRoom() to be given
@@ -25,36 +25,36 @@
 // consisting of the submitted data, but the client can supply a callback if more complex
 // rendering is required (perhaps for multipass?).
 typedef void (__stdcall *SmartVBRenderCallback)( LPDIRECT3DVERTEXBUFFER9 pVB,
-                                                 DWORD dwStartVertex,
-                                                 DWORD dwNumVertices,
-                                                 LPDIRECT3DINDEXBUFFER9 pIB,
-                                                 DWORD dwStartIndex,
-                                                 DWORD dwIndexCount,
-                                                 void* pParam );
+        DWORD dwStartVertex,
+        DWORD dwNumVertices,
+        LPDIRECT3DINDEXBUFFER9 pIB,
+        DWORD dwStartIndex,
+        DWORD dwIndexCount,
+        void* pParam );
 
 
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 template< class VertType, DWORD VertFVF, DWORD NumIndex > class SmartVB
 {
 public:
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc:
     //-----------------------------------------------------------------------------
     SmartVB() : m_pVB(NULL), m_pd3dDevice(NULL), m_pIB(NULL)
-    { 
-        SetRenderCallback(); 
+    {
+        SetRenderCallback();
     };
 
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc:
     //-----------------------------------------------------------------------------
     ~SmartVB()
@@ -65,7 +65,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc:
     //-----------------------------------------------------------------------------
     HRESULT Init( IDirect3D9* pD3D, IDirect3DDevice9* pDevice, DWORD dwNumVerts )
@@ -85,16 +85,16 @@ public:
         m_pNextIndex    = NULL;
         m_dwNextIndex   = 0;
         if( FAILED( hr = m_pd3dDevice->CreateIndexBuffer( NumIndex * sizeof(WORD),
-                                                     D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, 
-                                                     D3DPOOL_DEFAULT, &m_pIB, NULL ) ) )
+                         D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY, D3DFMT_INDEX16,
+                         D3DPOOL_DEFAULT, &m_pIB, NULL ) ) )
             return hr;
 
         m_pNextVert     = NULL;
         m_dwNextVert    = 0;
         DWORD dwFVFSize = D3DXGetFVFVertexSize( VertFVF );
-        if( FAILED( hr = m_pd3dDevice->CreateVertexBuffer( dwFVFSize * dwNumVerts, 
-                                                    D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY, VertFVF, 
-                                                    D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
+        if( FAILED( hr = m_pd3dDevice->CreateVertexBuffer( dwFVFSize * dwNumVerts,
+                         D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY, VertFVF,
+                         D3DPOOL_DEFAULT, &m_pVB, NULL ) ) )
             return hr;
 
         return S_OK;
@@ -103,7 +103,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc:
     //-----------------------------------------------------------------------------
     void Uninit()
@@ -116,7 +116,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc: Set rendering callback. Passing NULL for the callback gets you a default
     //       call to DrawIndexedPrimitive. pParam is passed through to the callback.
     //-----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc:
     //-----------------------------------------------------------------------------
     HRESULT Begin()
@@ -163,7 +163,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc: Request space to submit data, may cause a 'flush' for rendering
     //-----------------------------------------------------------------------------
     HRESULT MakeRoom( DWORD dwNumVert, DWORD dwNumIndex, VertType** pVertPtr,
@@ -172,7 +172,7 @@ public:
         Flush();
         // Have we room left in the buffer?
         if ( (dwNumVert  + m_dwNextVert  >= m_dwNumVerts) ||
-             (dwNumIndex + m_dwNextIndex >= NumIndex) )
+                (dwNumIndex + m_dwNextIndex >= NumIndex) )
         {
             // Nope, so flush current batch
             Flush();
@@ -203,7 +203,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc: End data filling, and submit for rendering via callback
     //-----------------------------------------------------------------------------
     void    End()
@@ -214,8 +214,8 @@ public:
 
         // Submit for rendering
         if ( m_dwVertexCount > 0 && m_dwIndexCount > 0 )
-            m_pCallback( m_pVB, m_dwFirstVert, m_dwVertexCount, 
-                         m_pIB, m_dwFirstIndex, m_dwIndexCount, 
+            m_pCallback( m_pVB, m_dwFirstVert, m_dwVertexCount,
+                         m_pIB, m_dwFirstIndex, m_dwIndexCount,
                          m_pCallbackParam );
 
         m_pNextVert  = NULL;
@@ -225,7 +225,7 @@ public:
 
 
     //-----------------------------------------------------------------------------
-    // Name: 
+    // Name:
     // Desc: Flush data if we overflowed
     //-----------------------------------------------------------------------------
     void    Flush()
@@ -236,8 +236,8 @@ public:
 
         // Submit for rendering
         if ( m_dwVertexCount > 0 && m_dwIndexCount > 0 )
-            m_pCallback( m_pVB, m_dwFirstVert, m_dwVertexCount, 
-                         m_pIB, m_dwFirstIndex, m_dwIndexCount, 
+            m_pCallback( m_pVB, m_dwFirstVert, m_dwVertexCount,
+                         m_pIB, m_dwFirstIndex, m_dwIndexCount,
                          m_pCallbackParam );
 
         // Lock VB again
@@ -275,18 +275,18 @@ protected:
     DWORD                   m_dwIndexCount;
 
     static void __stdcall DefaultRenderCallback( LPDIRECT3DVERTEXBUFFER9 pVB,
-                                                 DWORD dwStartVertex,
-                                                 DWORD dwNumVertices,
-                                                 LPDIRECT3DINDEXBUFFER9 pIB,
-                                                 DWORD dwStartIndex,
-                                                 DWORD dwIndexCount,
-                                                 void* pParam )
+            DWORD dwStartVertex,
+            DWORD dwNumVertices,
+            LPDIRECT3DINDEXBUFFER9 pIB,
+            DWORD dwStartIndex,
+            DWORD dwIndexCount,
+            void* pParam )
     {
         ((SmartVB*)pParam)->m_pd3dDevice->SetFVF( VertFVF );
         ((SmartVB*)pParam)->m_pd3dDevice->SetStreamSource( 0, pVB, 0, sizeof(VertType) );
         ((SmartVB*)pParam)->m_pd3dDevice->SetIndices( pIB );
-        ((SmartVB*)pParam)->m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, dwStartVertex, 
-                                                                dwNumVertices, dwStartIndex, dwIndexCount/3 );
+        ((SmartVB*)pParam)->m_pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, 0, dwStartVertex,
+                dwNumVertices, dwStartIndex, dwIndexCount/3 );
     };
 
 private:

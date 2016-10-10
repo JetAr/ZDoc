@@ -51,8 +51,9 @@
 #define WAVE_FORMAT_EXTENSIBLE      0xFFFE
 
 #ifdef _WIN32
-static const  GUID KSDATAFORMAT_SUBTYPE_PCM = {
-   0x1,0x0000,0x0010,{0x80,0x00,0x00,0xaa,0x00,0x38,0x9b,0x71}
+static const  GUID KSDATAFORMAT_SUBTYPE_PCM =
+{
+    0x1,0x0000,0x0010,{0x80,0x00,0x00,0xaa,0x00,0x38,0x9b,0x71}
 };
 #endif
 
@@ -86,16 +87,18 @@ static const  GUID KSDATAFORMAT_SUBTYPE_PCM = {
 #ifdef _WIN32
 
 #ifndef _WAVEFORMATEXTENSIBLE_
-typedef struct {
-   WAVEFORMATEX    Format;
-   union {
-      WORD wValidBitsPerSample;       /* bits of precision  */
-      WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
-      WORD wReserved;                 /* If neither applies, set to zero. */
-   } Samples;
-   DWORD           dwChannelMask;      /* which channels are */
-   /* present in stream  */
-   GUID            SubFormat;
+typedef struct
+{
+    WAVEFORMATEX    Format;
+    union
+    {
+        WORD wValidBitsPerSample;       /* bits of precision  */
+        WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
+        WORD wReserved;                 /* If neither applies, set to zero. */
+    } Samples;
+    DWORD           dwChannelMask;      /* which channels are */
+    /* present in stream  */
+    GUID            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
 #endif
 #endif
@@ -112,10 +115,11 @@ typedef struct {
 
 extern int channel_mask[];
 
-typedef struct control_vol_s {
-   float left;
-   float right;
-   bool mute;
+typedef struct control_vol_s
+{
+    float left;
+    float right;
+    bool mute;
 } control_vol_t;
 
 // 播放控制定义
@@ -126,21 +130,21 @@ typedef struct control_vol_s {
 class audio_render
 {
 public:
-   audio_render() {}
-   virtual ~audio_render() {}
+    audio_render() {}
+    virtual ~audio_render() {}
 
 public:
-   // 初始化音频输出.
-   virtual bool init_audio(void* ctx, int channels, int bits_per_sample, int sample_rate, int format) = 0;
+    // 初始化音频输出.
+    virtual bool init_audio(void* ctx, int channels, int bits_per_sample, int sample_rate, int format) = 0;
 
-   // 播放音频数据.
-   virtual int play_audio(uint8_t* data, uint32_t size) = 0;
+    // 播放音频数据.
+    virtual int play_audio(uint8_t* data, uint32_t size) = 0;
 
-   // 音频播放控制, cmd为CONTROL_开始的宏定义.
-   virtual void audio_control(int cmd, void* arg) = 0;
+    // 音频播放控制, cmd为CONTROL_开始的宏定义.
+    virtual void audio_control(int cmd, void* arg) = 0;
 
-   // 销毁音频输出组件.
-   virtual void destory_audio() = 0;
+    // 销毁音频输出组件.
+    virtual void destory_audio() = 0;
 };
 
 #endif // __AUDIO_RENDER_H__

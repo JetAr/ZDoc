@@ -1,9 +1,9 @@
 ﻿// ---------------------------------------------------------------------------
 // File: PropSetter.h
-// 
+//
 // Desc: Contains classes for property-setting dialogs, to be used with
 //       the DES transition object.
-//      
+//
 // Copyright (c) 2002 Microsoft Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -18,7 +18,8 @@
 
 // Struct to hold SMPTE wipe names and numbers
 
-struct WipeNumInfo {
+struct WipeNumInfo
+{
     int num;
     TCHAR* szName;
 };
@@ -27,7 +28,7 @@ struct WipeNumInfo {
 
 /*******************************************************************
  *
- *  CBasePropSetter Class  
+ *  CBasePropSetter Class
  *
  *  Base class for managing a property dialog. To use:
  *  - Override OnReceiveMsg, OnInitDialog, OnOK
@@ -49,8 +50,8 @@ protected:
     HINSTANCE   m_hinst;    // application instance
     HWND        m_hwnd;     // parent window
     HWND        m_hDlg;     // this dialog window
-    int         m_nID;      // Resource ID of the dialog window 
-                            // (Set this in the constructor!)
+    int         m_nID;      // Resource ID of the dialog window
+    // (Set this in the constructor!)
 
 protected:
 
@@ -60,20 +61,38 @@ protected:
         return FALSE;
     }
 
-    virtual HRESULT OnInitDialog() { return S_OK; }
-    virtual HRESULT OnOK() { return S_OK; }
-    virtual HRESULT OnCancel() { return S_OK; }
+    virtual HRESULT OnInitDialog()
+    {
+        return S_OK;
+    }
+    virtual HRESULT OnOK()
+    {
+        return S_OK;
+    }
+    virtual HRESULT OnCancel()
+    {
+        return S_OK;
+    }
 
     // Methods to add, remove, update properties
-    int Count() { return ((int) prop_list.size()); }
+    int Count()
+    {
+        return ((int) prop_list.size());
+    }
 
     void Add(const TCHAR* tszProp, const TCHAR* tszValue);
     void Update(int ix, const TCHAR* tszProp, const TCHAR* tszValue);
     void Remove(int ix);
     void RemoveAll();
 
-    BSTR& Name(int ix) { return prop_list[ix].m_str; }
-    BSTR& Val(int ix) { return value_list[ix].m_str; }
+    BSTR& Name(int ix)
+    {
+        return prop_list[ix].m_str;
+    }
+    BSTR& Val(int ix)
+    {
+        return value_list[ix].m_str;
+    }
 
     // Find a property value by name
     HRESULT FindVal(const TCHAR* szName, BSTR *pbstrVal);
@@ -183,8 +202,8 @@ public:
  *
  *  A picture-in-picture transition is defined by the two rectangles,
  *  source (how much of the source image to display) and destination
- *  (positioned of the PiP within the video frame). 
- 
+ *  (positioned of the PiP within the video frame).
+
  *  This dialog uses two rectangle widgets, which the user can resize
  *  to set the source and destination rectangles. Click the widget to
  *  select it, then grab the anchors on the rectangle corners to resize
@@ -228,7 +247,10 @@ private:
 
         BOOL TestHit(int x, int y);
         BOOL TestMouseMove(int x, int y);
-        void Unclick() { m_bGrabbed = false; }
+        void Unclick()
+        {
+            m_bGrabbed = false;
+        }
 
         // Maps our rectangle by projecting the bounding rectangle onto rcTarget
         void MapToRect(RECT& rcTarget, RECT *pResult);

@@ -37,26 +37,26 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	TORRENT_EXTRA_EXPORT bool is_alpha(char c);
-	TORRENT_EXPORT bool is_digit(char c);
-	TORRENT_EXTRA_EXPORT bool is_print(char c);
-	TORRENT_EXTRA_EXPORT bool is_space(char c);
-	TORRENT_EXTRA_EXPORT char to_lower(char c);
+TORRENT_EXTRA_EXPORT bool is_alpha(char c);
+TORRENT_EXPORT bool is_digit(char c);
+TORRENT_EXTRA_EXPORT bool is_print(char c);
+TORRENT_EXTRA_EXPORT bool is_space(char c);
+TORRENT_EXTRA_EXPORT char to_lower(char c);
 
-	TORRENT_EXTRA_EXPORT int split_string(char const** tags, int buf_size, char* in);
-	TORRENT_EXTRA_EXPORT bool string_begins_no_case(char const* s1, char const* s2);
-	TORRENT_EXTRA_EXPORT bool string_equal_no_case(char const* s1, char const* s2);
+TORRENT_EXTRA_EXPORT int split_string(char const** tags, int buf_size, char* in);
+TORRENT_EXTRA_EXPORT bool string_begins_no_case(char const* s1, char const* s2);
+TORRENT_EXTRA_EXPORT bool string_equal_no_case(char const* s1, char const* s2);
 
-	TORRENT_EXTRA_EXPORT void url_random(char* begin, char* end);
+TORRENT_EXTRA_EXPORT void url_random(char* begin, char* end);
 
-	// strdup is not part of the C standard. Some systems
-	// don't have it and it won't be available when building
-	// in strict ansi mode
-	char* allocate_string_copy(char const* str);
+// strdup is not part of the C standard. Some systems
+// don't have it and it won't be available when building
+// in strict ansi mode
+char* allocate_string_copy(char const* str);
 
-	// returns p + x such that the pointer is 8 bytes aligned
-	// x cannot be greater than 7
-	void* align_pointer(void* p);
+// returns p + x such that the pointer is 8 bytes aligned
+// x cannot be greater than 7
+void* align_pointer(void* p);
 
 }
 

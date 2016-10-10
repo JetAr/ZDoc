@@ -63,4 +63,4 @@ private:
     CAlphaBlt*      m_lpAlphaBlt;
 
 }; // CSparkleStream
-    
+

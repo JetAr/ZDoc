@@ -21,12 +21,12 @@
 BOOL
 IsMulticastIP (
     IN DWORD dwIP   //  network order
-    ) ;
+) ;
 
 BOOL
 IsUnicastIP (
     IN DWORD dwIP   //  network order
-    ) ;
+) ;
 
 //  ---------------------------------------------------------------------------
 //  CInterface - enumerates the network interfaces on the host
@@ -34,7 +34,8 @@ IsUnicastIP (
 
 class CInterface
 {
-    enum {
+    enum
+    {
         NUM_NIC_FIRST_GUESS = 3,    //  1 NIC, 1 loopback, 1 extra
         MAX_SUPPORTED_IFC   = 32
     } ;
@@ -43,26 +44,26 @@ class CInterface
     ULONG               m_cNIC ;
     HANDLE              m_hHeap ;
 
-    public :
+public :
 
-        CInterface (
-            ) ;
+    CInterface (
+    ) ;
 
-        ~CInterface (
-            ) ;
+    ~CInterface (
+    ) ;
 
-        BOOL
-        IsInitialized (
-            ) ;
+    BOOL
+    IsInitialized (
+    ) ;
 
-        HRESULT
-        Initialize (
-            ) ;
+    HRESULT
+    Initialize (
+    ) ;
 
-        INTERFACE_INFO *
-        operator [] (
-            ULONG i
-            ) ;
+    INTERFACE_INFO *
+    operator [] (
+        ULONG i
+    ) ;
 } ;
 
 extern CInterface  g_NIC ;

@@ -14,7 +14,7 @@
 
 // CMultiVMR9RenderEngine
 
-class CMultiVMR9RenderEngine : 
+class CMultiVMR9RenderEngine :
     public CUnknown,
     public IMultiVMR9RenderEngine
 {
@@ -29,58 +29,58 @@ public:
 
     // IMultiVMR9RenderEngine implementation
     STDMETHOD(Initialize)(
-        HWND hWnd, 
+        HWND hWnd,
         DWORD dwFlags,
         IMultiVMR9MixerControl* pMixerControl,
         IMultiVMR9UILayer* pUILayer
-        );
+    );
 
     STDMETHOD(Terminate)(
-        );
+    );
 
     STDMETHOD(Render)(
         void
-        );
+    );
 
     STDMETHOD(GetUILayer)(
         IMultiVMR9UILayer** ppUILayer
-        );
+    );
 
     STDMETHOD(SetFrameRate)(
         int nFramesPerSecBy100
-        );
+    );
 
     STDMETHOD(GetFrameRate)(
         int* pnFramesPerSecBy100
-        );
+    );
 
     STDMETHOD(GetFrameRateAvg)(
         int* pnFramesPerSecBy100
-        );
+    );
 
     STDMETHOD(GetMixingPrefs)(
         DWORD* pdwPrefs
-        );
+    );
 
     STDMETHOD(SetWizardOwner)(
         IMultiVMR9Wizard* pWizard
-        );
+    );
 
     STDMETHOD(GetWizardOwner)(
         IMultiVMR9Wizard** ppWizard
-        );
+    );
 
     STDMETHOD(GetMixerControl)(
         IMultiVMR9MixerControl** ppMixerControl
-        );
+    );
 
     STDMETHOD(Get3DDevice)(
         IDirect3DDevice9 ** ppDevice
-        );
+    );
 
     STDMETHOD(GetVideoWindow)(
         HWND *phwnd
-        );
+    );
 
 //private methods
 private:
@@ -116,7 +116,7 @@ class CCFMultiVMR9RenderEngine : public IClassFactory
 {
 public:
     // Constructor
-    CCFMultiVMR9RenderEngine() : m_RefCount(1) {} 
+    CCFMultiVMR9RenderEngine() : m_RefCount(1) {}
 
     // IUnknown methods
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv)

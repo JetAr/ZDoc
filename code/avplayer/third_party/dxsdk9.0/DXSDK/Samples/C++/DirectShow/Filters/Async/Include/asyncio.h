@@ -91,16 +91,19 @@ public:
         return m_dwUser;
     };
 
-    HRESULT GetHResult() {
+    HRESULT GetHResult()
+    {
         return m_hr;
     };
 
     // we set m_lLength to the actual length
-    LONG GetActualLength() {
+    LONG GetActualLength()
+    {
         return m_lLength;
     };
 
-    LONGLONG GetStart() {
+    LONGLONG GetStart()
+    {
         return m_llPos;
     };
 };
@@ -154,7 +157,8 @@ class CAsyncIo
     CAMEvent m_evStop;         // set when thread should exit
     HANDLE m_hThread;
 
-    LONGLONG Size() {
+    LONGLONG Size()
+    {
         ASSERT(m_pStream != NULL);
         return m_pStream->Size();
     };
@@ -185,7 +189,8 @@ class CAsyncIo
 
     // initial static thread proc calls ThreadProc with DWORD
     // param as this
-    static DWORD WINAPI InitialThreadProc(LPVOID pv) {
+    static DWORD WINAPI InitialThreadProc(LPVOID pv)
+    {
         CAsyncIo * pThis = (CAsyncIo*) pv;
         return pThis->ThreadProc();
     };
@@ -210,34 +215,34 @@ public:
 
     // queue a requested read. must be aligned.
     HRESULT Request(
-            LONGLONG llPos,
-            LONG lLength,
-            BOOL bAligned,
-            BYTE* pBuffer,
-            LPVOID pContext,
-            DWORD dwUser);
+        LONGLONG llPos,
+        LONG lLength,
+        BOOL bAligned,
+        BYTE* pBuffer,
+        LPVOID pContext,
+        DWORD dwUser);
 
     // wait for the next read to complete
     HRESULT WaitForNext(
-            DWORD dwTimeout,
-            LPVOID *ppContext,
-            DWORD * pdwUser,
-            LONG * pcbActual);
+        DWORD dwTimeout,
+        LPVOID *ppContext,
+        DWORD * pdwUser,
+        LONG * pcbActual);
 
     // perform a read of an already aligned buffer
     HRESULT SyncReadAligned(
-            LONGLONG llPos,
-            LONG lLength,
-            BYTE* pBuffer,
-            LONG* pcbActual,
-            PVOID pvContext);
+        LONGLONG llPos,
+        LONG lLength,
+        BYTE* pBuffer,
+        LONG* pcbActual,
+        PVOID pvContext);
 
     // perform a synchronous read. will be buffered
     // if not aligned.
     HRESULT SyncRead(
-            LONGLONG llPos,
-            LONG lLength,
-            BYTE* pBuffer);
+        LONGLONG llPos,
+        LONG lLength,
+        BYTE* pBuffer);
 
     // return length
     HRESULT Length(LONGLONG *pllTotal, LONGLONG* pllAvailable);
@@ -254,20 +259,28 @@ public:
         return m_pStream->Alignment();
     };
 
-    BOOL IsAligned(LONG l) {
-    if ((l & (Alignment() -1)) == 0) {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+    BOOL IsAligned(LONG l)
+    {
+        if ((l & (Alignment() -1)) == 0)
+        {
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
     };
 
-    BOOL IsAligned(LONGLONG ll) {
+    BOOL IsAligned(LONGLONG ll)
+    {
         return IsAligned( (LONG) (ll & 0xffffffff));
     };
 
     //  Accessor
-    HANDLE StopEvent() const { return m_evDone; }
+    HANDLE StopEvent() const
+    {
+        return m_evDone;
+    }
 };
 
 #endif // __ASYNCIO_H__

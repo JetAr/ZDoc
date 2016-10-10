@@ -50,9 +50,9 @@ POSSIBILITY OF SUCH DAMAGE.
 namespace libtorrent
 {
 
-	TORRENT_EXTRA_EXPORT boost::tuple<std::string, std::string
-		, std::string, int, std::string>
-		parse_url_components(std::string url, error_code& ec);
+TORRENT_EXTRA_EXPORT boost::tuple<std::string, std::string
+, std::string, int, std::string>
+parse_url_components(std::string url, error_code& ec);
 
 }
 

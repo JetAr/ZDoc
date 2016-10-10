@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: DDrawXcl.h
 //
-// Desc: DirectShow sample code - DDraw Exclusive Mode Video Playback 
+// Desc: DirectShow sample code - DDraw Exclusive Mode Video Playback
 //       test/sample application header file.
 //
 // Copyright (c) 1993-2002 Microsoft Corporation. All rights reserved.
@@ -68,15 +68,16 @@
 //
 // Some enumerated types
 //
-typedef enum {
-    Unspecified = 0, DVD , File
+typedef enum
+{
+    Unspecified = 0, DVD, File
 } VIDEO_TYPE ;
 
 
 //
 // Function signatures for Windows
 //
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow) ;
 BOOL    InitApplication(void) ;
 BOOL    InitInstance(int nCmdShow) ;

@@ -17,10 +17,11 @@
 extern	"C"	{
 #endif
 
-typedef struct {
-	intmax_t quot;
-	intmax_t rem;
-	} imaxdiv_t;
+typedef struct
+{
+    intmax_t quot;
+    intmax_t rem;
+} imaxdiv_t;
 
 /* Restore to !define(__USE_MINGW_ANSI_STDIO) */
 /* #include <_mingw_print_push.h> */
@@ -28,7 +29,7 @@ typedef struct {
 #if !defined(__cplusplus) || defined(__STDC_FORMAT_MACROS)
 
 /* 7.8.1 Macros for format specifiers
- * 
+ *
  * MS runtime does not yet understand C9x standard "ll"
  * length specifier. It appears to treat "ll" as "l".
  * The non-standard I64 length specifier causes warning in GCC,
@@ -242,13 +243,13 @@ typedef struct {
 #define SCNiPTR "i"
 #define SCNoPTR "o"
 #define SCNxPTR "x"
- #define SCNuPTR "u"
+#define SCNuPTR "u"
 #endif
 
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 /*
  * no length modifier for char types prior to C9x
- * MS runtime  scanf appears to treat "hh" as "h" 
+ * MS runtime  scanf appears to treat "hh" as "h"
  */
 
 /* signed char */
@@ -279,7 +280,9 @@ typedef struct {
 intmax_t __cdecl imaxabs (intmax_t j);
 #ifndef __CRT__NO_INLINE
 /*__CRT_INLINE*/ inline intmax_t __cdecl imaxabs (intmax_t j)
-	{return	(j >= 0 ? j : -j);}
+{
+    return	(j >= 0 ? j : -j);
+}
 #endif
 imaxdiv_t __cdecl imaxdiv (intmax_t numer, intmax_t denom);
 
@@ -288,12 +291,12 @@ imaxdiv_t __cdecl imaxdiv (intmax_t numer, intmax_t denom);
 intmax_t __cdecl strtoimax (const char* /*__restrict__*/ nptr,
                             char** /*__restrict__*/ endptr, int base);
 uintmax_t __cdecl strtoumax (const char* /*__restrict__*/ nptr,
-			     char** /*__restrict__*/ endptr, int base);
+                             char** /*__restrict__*/ endptr, int base);
 
 intmax_t __cdecl wcstoimax (const wchar_t* /*__restrict__*/ nptr,
                             wchar_t** /*__restrict__*/ endptr, int base);
 uintmax_t __cdecl wcstoumax (const wchar_t* /*__restrict__*/ nptr,
-			     wchar_t** /*__restrict__*/ endptr, int base);
+                             wchar_t** /*__restrict__*/ endptr, int base);
 
 /* Set PRI... and SCN... according to __USE_MINGW_ANSI_STDIO.  */
 /* #include <_mingw_print_pop.h> */

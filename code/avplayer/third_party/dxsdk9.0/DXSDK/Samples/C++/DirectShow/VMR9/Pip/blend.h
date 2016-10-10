@@ -55,7 +55,7 @@ typedef struct
 
 } STRM_PARAM;
 
-typedef struct 
+typedef struct
 {
     float   xPos,  yPos;
     float   xSize, ySize;

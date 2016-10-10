@@ -9,7 +9,7 @@
 #endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
-    #error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"       // main symbols
@@ -24,7 +24,10 @@ class CEffectEditCommandLineInfo : public CCommandLineInfo
 public:
     CEffectEditCommandLineInfo();
     virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast);
-    BOOL UseExternalEditor() { return m_bUseExternalEditor; }
+    BOOL UseExternalEditor()
+    {
+        return m_bUseExternalEditor;
+    }
 
 private:
     BOOL m_bUseExternalEditor;
@@ -39,7 +42,7 @@ class CEffectEditDocManager : public CDocManager
 {
 public:
     virtual BOOL DoPromptFileName(CString& fileName, UINT nIDSTitle,
-        DWORD lFlags, BOOL bOpenFileDialog, CDocTemplate* pTemplate);
+                                  DWORD lFlags, BOOL bOpenFileDialog, CDocTemplate* pTemplate);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -58,13 +61,19 @@ public:
     void ActivateOptionsView();
     void SelectLine(int iLine);
     CEffectEditApp();
-    bool RenderContinuously() { return m_bRenderContinuously; }
-    void SetRenderContinuously(bool b) { m_bRenderContinuously = b; }
+    bool RenderContinuously()
+    {
+        return m_bRenderContinuously;
+    }
+    void SetRenderContinuously(bool b)
+    {
+        m_bRenderContinuously = b;
+    }
 
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CEffectEditApp)
-    public:
+public:
     virtual BOOL InitInstance();
     virtual BOOL OnIdle(LONG lCount);
     //}}AFX_VIRTUAL
@@ -101,7 +110,7 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CTabOptionsDialog)
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     //}}AFX_VIRTUAL
 
@@ -110,7 +119,7 @@ protected:
 
     // Generated message map functions
     //{{AFX_MSG(CTabOptionsDialog)
-        // NOTE: the ClassWizard will add member functions here
+    // NOTE: the ClassWizard will add member functions here
     //}}AFX_MSG
     DECLARE_MESSAGE_MAP()
 };

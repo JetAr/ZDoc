@@ -64,76 +64,82 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	class torrent;
-	struct peer_request;
+class torrent;
+struct peer_request;
 
-	namespace detail
-	{
-		struct session_impl;
-	}
+namespace detail
+{
+struct session_impl;
+}
 
-	class TORRENT_EXTRA_EXPORT http_seed_connection
-		: public web_connection_base
-	{
-	friend class invariant_access;
-	public:
+class TORRENT_EXTRA_EXPORT http_seed_connection
+    : public web_connection_base
+{
+    friend class invariant_access;
+public:
 
-		// this is the constructor where the we are the active part.
-		// The peer_conenction should handshake and verify that the
-		// other end has the correct id
-		http_seed_connection(
-			aux::session_impl& ses
-			, boost::weak_ptr<torrent> t
-			, boost::shared_ptr<socket_type> s
-			, tcp::endpoint const& remote
-			, std::string const& url
-			, policy::peer* peerinfo
-			, std::string const& ext_auth
-			, web_seed_entry::headers_t const& ext_headers);
+    // this is the constructor where the we are the active part.
+    // The peer_conenction should handshake and verify that the
+    // other end has the correct id
+    http_seed_connection(
+        aux::session_impl& ses
+        , boost::weak_ptr<torrent> t
+        , boost::shared_ptr<socket_type> s
+        , tcp::endpoint const& remote
+        , std::string const& url
+        , policy::peer* peerinfo
+        , std::string const& ext_auth
+        , web_seed_entry::headers_t const& ext_headers);
 
-		virtual int type() const { return peer_connection::http_seed_connection; }
+    virtual int type() const
+    {
+        return peer_connection::http_seed_connection;
+    }
 
-		// called from the main loop when this connection has any
-		// work to do.
-		void on_receive(error_code const& error
-			, std::size_t bytes_transferred);
-			
-		std::string const& url() const { return m_url; }
-		
-		virtual void get_specific_peer_info(peer_info& p) const;
-		virtual void disconnect(error_code const& ec, int error = 0);
+    // called from the main loop when this connection has any
+    // work to do.
+    void on_receive(error_code const& error
+                    , std::size_t bytes_transferred);
 
-		void write_request(peer_request const& r);
+    std::string const& url() const
+    {
+        return m_url;
+    }
 
-	private:
+    virtual void get_specific_peer_info(peer_info& p) const;
+    virtual void disconnect(error_code const& ec, int error = 0);
 
-		// returns the block currently being
-		// downloaded. And the progress of that
-		// block. If the peer isn't downloading
-		// a piece for the moment, the boost::optional
-		// will be invalid.
-		boost::optional<piece_block_progress> downloading_piece_progress() const;
+    void write_request(peer_request const& r);
 
-		// this is const since it's used as a key in the web seed list in the torrent
-		// if it's changed referencing back into that list will fail
-		const std::string m_url;
+private:
 
-		// the number of bytes left to receive of the response we're
-		// currently parsing
-		size_type m_response_left;
+    // returns the block currently being
+    // downloaded. And the progress of that
+    // block. If the peer isn't downloading
+    // a piece for the moment, the boost::optional
+    // will be invalid.
+    boost::optional<piece_block_progress> downloading_piece_progress() const;
 
-		// this is the offset inside the current receive
-		// buffer where the next chunk header will be.
-		// this is updated for each chunk header that's
-		// parsed. It does not necessarily point to a valid
-		// offset in the receive buffer, if we haven't received
-		// it yet. This offset never includes the HTTP header
-		size_type m_chunk_pos;
+    // this is const since it's used as a key in the web seed list in the torrent
+    // if it's changed referencing back into that list will fail
+    const std::string m_url;
 
-		// this is the number of bytes we've already received
-		// from the next chunk header we're waiting for
-		int m_partial_chunk_header;
-	};
+    // the number of bytes left to receive of the response we're
+    // currently parsing
+    size_type m_response_left;
+
+    // this is the offset inside the current receive
+    // buffer where the next chunk header will be.
+    // this is updated for each chunk header that's
+    // parsed. It does not necessarily point to a valid
+    // offset in the receive buffer, if we haven't received
+    // it yet. This offset never includes the HTTP header
+    size_type m_chunk_pos;
+
+    // this is the number of bytes we've already received
+    // from the next chunk header we're waiting for
+    int m_partial_chunk_header;
+};
 }
 
 #endif // TORRENT_WEB_PEER_CONNECTION_HPP_INCLUDED

@@ -61,15 +61,18 @@ static int decode_packet(int *got_frame, int cached)
 {
     int ret = 0;
 
-    if (pkt.stream_index == video_stream_idx) {
+    if (pkt.stream_index == video_stream_idx)
+    {
         /* decode video frame */
         ret = avcodec_decode_video2(video_dec_ctx, frame, got_frame, &pkt);
-        if (ret < 0) {
+        if (ret < 0)
+        {
             fprintf(stderr, "Error decoding video frame\n");
             return ret;
         }
 
-        if (*got_frame) {
+        if (*got_frame)
+        {
             printf("video_frame%s n:%d coded_n:%d pts:%s\n",
                    cached ? "(cached)" : "",
                    video_frame_count++, frame->coded_picture_number,
@@ -84,15 +87,19 @@ static int decode_packet(int *got_frame, int cached)
             /* write to rawvideo file */
             fwrite(video_dst_data[0], 1, video_dst_bufsize, video_dst_file);
         }
-    } else if (pkt.stream_index == audio_stream_idx) {
+    }
+    else if (pkt.stream_index == audio_stream_idx)
+    {
         /* decode audio frame */
         ret = avcodec_decode_audio4(audio_dec_ctx, frame, got_frame, &pkt);
-        if (ret < 0) {
+        if (ret < 0)
+        {
             fprintf(stderr, "Error decoding audio frame\n");
             return ret;
         }
 
-        if (*got_frame) {
+        if (*got_frame)
+        {
             printf("audio_frame%s n:%d nb_samples:%d pts:%s\n",
                    cached ? "(cached)" : "",
                    audio_frame_count++, frame->nb_samples,
@@ -100,7 +107,8 @@ static int decode_packet(int *got_frame, int cached)
 
             ret = av_samples_alloc(audio_dst_data, &audio_dst_linesize, frame->channels,
                                    frame->nb_samples, frame->format, 1);
-            if (ret < 0) {
+            if (ret < 0)
+            {
                 fprintf(stderr, "Could not allocate audio buffer\n");
                 return AVERROR(ENOMEM);
             }
@@ -133,24 +141,29 @@ static int open_codec_context(int *stream_idx,
     AVCodec *dec = NULL;
 
     ret = av_find_best_stream(fmt_ctx, type, -1, -1, NULL, 0);
-    if (ret < 0) {
+    if (ret < 0)
+    {
         fprintf(stderr, "Could not find %s stream in input file '%s'\n",
                 av_get_media_type_string(type), src_filename);
         return ret;
-    } else {
+    }
+    else
+    {
         *stream_idx = ret;
         st = fmt_ctx->streams[*stream_idx];
 
         /* find decoder for the stream */
         dec_ctx = st->codec;
         dec = avcodec_find_decoder(dec_ctx->codec_id);
-        if (!dec) {
+        if (!dec)
+        {
             fprintf(stderr, "Failed to find %s codec\n",
                     av_get_media_type_string(type));
             return ret;
         }
 
-        if ((ret = avcodec_open2(dec_ctx, dec, NULL)) < 0) {
+        if ((ret = avcodec_open2(dec_ctx, dec, NULL)) < 0)
+        {
             fprintf(stderr, "Failed to open %s codec\n",
                     av_get_media_type_string(type));
             return ret;
@@ -164,9 +177,12 @@ static int get_format_from_sample_fmt(const char **fmt,
                                       enum AVSampleFormat sample_fmt)
 {
     int i;
-    struct sample_fmt_entry {
-        enum AVSampleFormat sample_fmt; const char *fmt_be, *fmt_le;
-    } sample_fmt_entries[] = {
+    struct sample_fmt_entry
+    {
+        enum AVSampleFormat sample_fmt;
+        const char *fmt_be, *fmt_le;
+    } sample_fmt_entries[] =
+    {
         { AV_SAMPLE_FMT_U8,  "u8",    "u8"    },
         { AV_SAMPLE_FMT_S16, "s16be", "s16le" },
         { AV_SAMPLE_FMT_S32, "s32be", "s32le" },
@@ -175,9 +191,11 @@ static int get_format_from_sample_fmt(const char **fmt,
     };
     *fmt = NULL;
 
-    for (i = 0; i < FF_ARRAY_ELEMS(sample_fmt_entries); i++) {
+    for (i = 0; i < FF_ARRAY_ELEMS(sample_fmt_entries); i++)
+    {
         struct sample_fmt_entry *entry = &sample_fmt_entries[i];
-        if (sample_fmt == entry->sample_fmt) {
+        if (sample_fmt == entry->sample_fmt)
+        {
             *fmt = AV_NE(entry->fmt_be, entry->fmt_le);
             return 0;
         }
@@ -193,7 +211,8 @@ int main (int argc, char **argv)
 {
     int ret = 0, got_frame;
 
-    if (argc != 4) {
+    if (argc != 4)
+    {
         fprintf(stderr, "usage: %s input_file video_output_file audio_output_file\n"
                 "API example program to show how to read frames from an input file.\n"
                 "This program reads frames from a file, decodes them, and writes decoded\n"
@@ -210,23 +229,27 @@ int main (int argc, char **argv)
     av_register_all();
 
     /* open input file, and allocate format context */
-    if (avformat_open_input(&fmt_ctx, src_filename, NULL, NULL) < 0) {
+    if (avformat_open_input(&fmt_ctx, src_filename, NULL, NULL) < 0)
+    {
         fprintf(stderr, "Could not open source file %s\n", src_filename);
         exit(1);
     }
 
     /* retrieve stream information */
-    if (avformat_find_stream_info(fmt_ctx, NULL) < 0) {
+    if (avformat_find_stream_info(fmt_ctx, NULL) < 0)
+    {
         fprintf(stderr, "Could not find stream information\n");
         exit(1);
     }
 
-    if (open_codec_context(&video_stream_idx, fmt_ctx, AVMEDIA_TYPE_VIDEO) >= 0) {
+    if (open_codec_context(&video_stream_idx, fmt_ctx, AVMEDIA_TYPE_VIDEO) >= 0)
+    {
         video_stream = fmt_ctx->streams[video_stream_idx];
         video_dec_ctx = video_stream->codec;
 
         video_dst_file = fopen(video_dst_filename, "wb");
-        if (!video_dst_file) {
+        if (!video_dst_file)
+        {
             fprintf(stderr, "Could not open destination file %s\n", video_dst_filename);
             ret = 1;
             goto end;
@@ -236,29 +259,33 @@ int main (int argc, char **argv)
         ret = av_image_alloc(video_dst_data, video_dst_linesize,
                              video_dec_ctx->width, video_dec_ctx->height,
                              video_dec_ctx->pix_fmt, 1);
-        if (ret < 0) {
+        if (ret < 0)
+        {
             fprintf(stderr, "Could not allocate raw video buffer\n");
             goto end;
         }
         video_dst_bufsize = ret;
     }
 
-    if (open_codec_context(&audio_stream_idx, fmt_ctx, AVMEDIA_TYPE_AUDIO) >= 0) {
+    if (open_codec_context(&audio_stream_idx, fmt_ctx, AVMEDIA_TYPE_AUDIO) >= 0)
+    {
         int nb_planes;
 
         audio_stream = fmt_ctx->streams[audio_stream_idx];
         audio_dec_ctx = audio_stream->codec;
         audio_dst_file = fopen(audio_dst_filename, "wb");
-        if (!audio_dst_file) {
+        if (!audio_dst_file)
+        {
             fprintf(stderr, "Could not open destination file %s\n", video_dst_filename);
             ret = 1;
             goto end;
         }
 
         nb_planes = av_sample_fmt_is_planar(audio_dec_ctx->sample_fmt) ?
-            audio_dec_ctx->channels : 1;
+                    audio_dec_ctx->channels : 1;
         audio_dst_data = av_mallocz(sizeof(uint8_t *) * nb_planes);
-        if (!audio_dst_data) {
+        if (!audio_dst_data)
+        {
             fprintf(stderr, "Could not allocate audio data buffers\n");
             ret = AVERROR(ENOMEM);
             goto end;
@@ -268,14 +295,16 @@ int main (int argc, char **argv)
     /* dump input information to stderr */
     av_dump_format(fmt_ctx, 0, src_filename, 0);
 
-    if (!audio_stream && !video_stream) {
+    if (!audio_stream && !video_stream)
+    {
         fprintf(stderr, "Could not find audio or video stream in the input, aborting\n");
         ret = 1;
         goto end;
     }
 
     frame = avcodec_alloc_frame();
-    if (!frame) {
+    if (!frame)
+    {
         fprintf(stderr, "Could not allocate frame\n");
         ret = AVERROR(ENOMEM);
         goto end;
@@ -298,20 +327,24 @@ int main (int argc, char **argv)
     /* flush cached frames */
     pkt.data = NULL;
     pkt.size = 0;
-    do {
+    do
+    {
         decode_packet(&got_frame, 1);
-    } while (got_frame);
+    }
+    while (got_frame);
 
     printf("Demuxing succeeded.\n");
 
-    if (video_stream) {
+    if (video_stream)
+    {
         printf("Play the output video file with the command:\n"
                "ffplay -f rawvideo -pix_fmt %s -video_size %dx%d %s\n",
                av_get_pix_fmt_name(video_dec_ctx->pix_fmt), video_dec_ctx->width, video_dec_ctx->height,
                video_dst_filename);
     }
 
-    if (audio_stream) {
+    if (audio_stream)
+    {
         const char *fmt;
 
         if ((ret = get_format_from_sample_fmt(&fmt, audio_dec_ctx->sample_fmt)) < 0)

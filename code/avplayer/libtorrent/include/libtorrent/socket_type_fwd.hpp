@@ -35,7 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct socket_type;
+struct socket_type;
 }
 
 #endif

@@ -14,7 +14,7 @@
 
 // { 022B8142-0946-11cf-BCB1-444553540000 }
 DEFINE_GUID(CLSID_Tee,
-0x22b8142, 0x946, 0x11cf, 0xbc, 0xb1, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
+            0x22b8142, 0x946, 0x11cf, 0xbc, 0xb1, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0);
 
 class CTee;
 class CTeeOutputPin;
@@ -54,9 +54,9 @@ public:
     STDMETHODIMP BeginFlush();
     STDMETHODIMP EndFlush();
     STDMETHODIMP NewSegment(
-                    REFERENCE_TIME tStart,
-                    REFERENCE_TIME tStop,
-                    double dRate);
+        REFERENCE_TIME tStart,
+        REFERENCE_TIME tStop,
+        double dRate);
 
     // Handles the next block of data from the stream
     STDMETHODIMP Receive(IMediaSample *pSample);
@@ -84,10 +84,10 @@ public:
     // Constructor and destructor
 
     CTeeOutputPin(TCHAR *pObjName,
-                   CTee *pTee,
-                   HRESULT *phr,
-                   LPCWSTR pPinName,
-                   INT PinNumber);
+                  CTee *pTee,
+                  HRESULT *phr,
+                  LPCWSTR pPinName,
+                  INT PinNumber);
 
 #ifdef DEBUG
     ~CTeeOutputPin();
@@ -125,9 +125,9 @@ public:
     HRESULT DeliverBeginFlush();
     HRESULT DeliverEndFlush();
     HRESULT DeliverNewSegment(
-                    REFERENCE_TIME tStart,
-                    REFERENCE_TIME tStop,
-                    double dRate);
+        REFERENCE_TIME tStart,
+        REFERENCE_TIME tStop,
+        double dRate);
 
 
     // Overriden to handle quality messages

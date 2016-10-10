@@ -10,7 +10,7 @@
 
 #define MAX_WATCH_FILES 10
 
-class CFileWatch  
+class CFileWatch
 {
 public:
     CFileWatch();
@@ -20,17 +20,17 @@ public:
     HRESULT Start();
     BOOL    HaveFilesChanged( BOOL bResetChangeFlag );
     HRESULT Cleanup();
-  
+
 public:
 
 protected:
     DWORD   m_dwFileChangeThreadId;
     HANDLE  m_hFileChangeThread;
-    
+
     TCHAR   m_strFilesToWatch[MAX_WATCH_FILES][MAX_PATH];
     int     m_nFilesToWatch;
-    BOOL    m_bFileChanged;    
+    BOOL    m_bFileChanged;
 
     static DWORD WINAPI StaticFileChangeThreadFunc( LPVOID lpParam );
-    DWORD FileChangeThreadFunc();    
+    DWORD FileChangeThreadFunc();
 };

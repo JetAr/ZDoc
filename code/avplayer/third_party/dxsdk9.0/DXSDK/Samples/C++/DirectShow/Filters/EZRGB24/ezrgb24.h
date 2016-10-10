@@ -8,9 +8,9 @@
 
 
 class CEZrgb24 : public CTransformFilter,
-         public IIPEffect,
-         public ISpecifyPropertyPages,
-         public CPersistStream
+    public IIPEffect,
+    public ISpecifyPropertyPages,
+    public CPersistStream
 {
 
 public:

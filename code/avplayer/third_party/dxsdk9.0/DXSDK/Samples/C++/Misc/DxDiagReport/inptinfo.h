@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 // File: inptinfo.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) 2001 Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ struct InputDeviceInfo
 {
     TCHAR m_szInstanceName[MAX_PATH];
     BOOL  m_bAttached;
-    DWORD m_dwJoystickID;  
+    DWORD m_dwJoystickID;
     DWORD m_dwVendorID;
     DWORD m_dwProductID;
     DWORD m_dwDevType;

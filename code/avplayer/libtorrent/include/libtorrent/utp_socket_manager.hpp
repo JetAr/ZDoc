@@ -41,109 +41,141 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	class udp_socket;
-	class utp_stream;
-	struct utp_socket_impl;
+class udp_socket;
+class utp_stream;
+struct utp_socket_impl;
 
-	typedef boost::function<void(boost::shared_ptr<socket_type> const&)> incoming_utp_callback_t;
+typedef boost::function<void(boost::shared_ptr<socket_type> const&)> incoming_utp_callback_t;
 
-	struct utp_socket_manager : udp_socket_observer
-	{
-		utp_socket_manager(session_settings const& sett, udp_socket& s, incoming_utp_callback_t cb);
-		~utp_socket_manager();
+struct utp_socket_manager : udp_socket_observer
+{
+    utp_socket_manager(session_settings const& sett, udp_socket& s, incoming_utp_callback_t cb);
+    ~utp_socket_manager();
 
-		void get_status(utp_status& s) const;
+    void get_status(utp_status& s) const;
 
-		// return false if this is not a uTP packet
-		virtual bool incoming_packet(error_code const& ec, udp::endpoint const& ep
-			, char const* p, int size);
-		virtual bool incoming_packet(error_code const& ec, char const* host, char const* p, int size)
-		{ return false; }
-		virtual void writable();
+    // return false if this is not a uTP packet
+    virtual bool incoming_packet(error_code const& ec, udp::endpoint const& ep
+                                 , char const* p, int size);
+    virtual bool incoming_packet(error_code const& ec, char const* host, char const* p, int size)
+    {
+        return false;
+    }
+    virtual void writable();
 
-		virtual void socket_drained();
+    virtual void socket_drained();
 
-		void tick(ptime now);
+    void tick(ptime now);
 
-		tcp::endpoint local_endpoint(address const& remote, error_code& ec) const;
-		int local_port(error_code& ec) const;
+    tcp::endpoint local_endpoint(address const& remote, error_code& ec) const;
+    int local_port(error_code& ec) const;
 
-		// flags for send_packet
-		enum { dont_fragment = 1 };
-		void send_packet(udp::endpoint const& ep, char const* p, int len
-			, error_code& ec, int flags = 0);
-		void subscribe_writable(utp_socket_impl* s);
+    // flags for send_packet
+    enum { dont_fragment = 1 };
+    void send_packet(udp::endpoint const& ep, char const* p, int len
+                     , error_code& ec, int flags = 0);
+    void subscribe_writable(utp_socket_impl* s);
 
-		// internal, used by utp_stream
-		void remove_socket(boost::uint16_t id);
+    // internal, used by utp_stream
+    void remove_socket(boost::uint16_t id);
 
-		utp_socket_impl* new_utp_socket(utp_stream* str);
-		int gain_factor() const { return m_sett.utp_gain_factor; }
-		int target_delay() const { return m_sett.utp_target_delay * 1000; }
-		int syn_resends() const { return m_sett.utp_syn_resends; }
-		int fin_resends() const { return m_sett.utp_fin_resends; }
-		int num_resends() const { return m_sett.utp_num_resends; }
-		int connect_timeout() const { return m_sett.utp_connect_timeout; }
-		int min_timeout() const { return m_sett.utp_min_timeout; }
-		int loss_multiplier() const { return m_sett.utp_loss_multiplier; }
-		bool allow_dynamic_sock_buf() const { return m_sett.utp_dynamic_sock_buf; }
+    utp_socket_impl* new_utp_socket(utp_stream* str);
+    int gain_factor() const
+    {
+        return m_sett.utp_gain_factor;
+    }
+    int target_delay() const
+    {
+        return m_sett.utp_target_delay * 1000;
+    }
+    int syn_resends() const
+    {
+        return m_sett.utp_syn_resends;
+    }
+    int fin_resends() const
+    {
+        return m_sett.utp_fin_resends;
+    }
+    int num_resends() const
+    {
+        return m_sett.utp_num_resends;
+    }
+    int connect_timeout() const
+    {
+        return m_sett.utp_connect_timeout;
+    }
+    int min_timeout() const
+    {
+        return m_sett.utp_min_timeout;
+    }
+    int loss_multiplier() const
+    {
+        return m_sett.utp_loss_multiplier;
+    }
+    bool allow_dynamic_sock_buf() const
+    {
+        return m_sett.utp_dynamic_sock_buf;
+    }
 
-		void mtu_for_dest(address const& addr, int& link_mtu, int& utp_mtu);
-		void set_sock_buf(int size);
-		int num_sockets() const { return m_utp_sockets.size(); }
+    void mtu_for_dest(address const& addr, int& link_mtu, int& utp_mtu);
+    void set_sock_buf(int size);
+    int num_sockets() const
+    {
+        return m_utp_sockets.size();
+    }
 
-		void defer_ack(utp_socket_impl* s);
-		void subscribe_drained(utp_socket_impl* s);
+    void defer_ack(utp_socket_impl* s);
+    void subscribe_drained(utp_socket_impl* s);
 
-	private:
-		udp_socket& m_sock;
-		incoming_utp_callback_t m_cb;
+private:
+    udp_socket& m_sock;
+    incoming_utp_callback_t m_cb;
 
-		// replace with a hash-map
-		typedef std::multimap<boost::uint16_t, utp_socket_impl*> socket_map_t;
-		socket_map_t m_utp_sockets;
+    // replace with a hash-map
+    typedef std::multimap<boost::uint16_t, utp_socket_impl*> socket_map_t;
+    socket_map_t m_utp_sockets;
 
-		// this is a list of sockets that needs to send an ack.
-		// once the UDP socket is drained, all of these will
-		// have a chance to do that. This is to avoid sending
-		// an ack for every single packet
-		std::vector<utp_socket_impl*> m_deferred_acks;
+    // this is a list of sockets that needs to send an ack.
+    // once the UDP socket is drained, all of these will
+    // have a chance to do that. This is to avoid sending
+    // an ack for every single packet
+    std::vector<utp_socket_impl*> m_deferred_acks;
 
-		// sockets that have received or sent packets this
-		// round, may subscribe to the event of draining the
-		// UDP socket. At that point they may call the
-		// user callback function to indicate bytes have been
-		// sent or received.
-		std::vector<utp_socket_impl*> m_drained_event;
-		
-		// list of sockets that received EWOULDBLOCK from the
-		// underlying socket. They are notified when the socket
-		// becomes writable again
-		std::vector<utp_socket_impl*> m_stalled_sockets;
+    // sockets that have received or sent packets this
+    // round, may subscribe to the event of draining the
+    // UDP socket. At that point they may call the
+    // user callback function to indicate bytes have been
+    // sent or received.
+    std::vector<utp_socket_impl*> m_drained_event;
 
-		// the last socket we received a packet on
-		utp_socket_impl* m_last_socket;
+    // list of sockets that received EWOULDBLOCK from the
+    // underlying socket. They are notified when the socket
+    // becomes writable again
+    std::vector<utp_socket_impl*> m_stalled_sockets;
 
-		int m_new_connection;
+    // the last socket we received a packet on
+    utp_socket_impl* m_last_socket;
 
-		session_settings const& m_sett;
+    int m_new_connection;
 
-		// this is a copy of the routing table, used
-		// to initialize MTU sizes of uTP sockets
-		mutable std::vector<ip_route> m_routes;
+    session_settings const& m_sett;
 
-		// the timestamp for the last time we updated
-		// the routing table
-		mutable ptime m_last_route_update;
+    // this is a copy of the routing table, used
+    // to initialize MTU sizes of uTP sockets
+    mutable std::vector<ip_route> m_routes;
 
-		// cache of interfaces
-		mutable std::vector<ip_interface> m_interfaces;
-		mutable ptime m_last_if_update;
+    // the timestamp for the last time we updated
+    // the routing table
+    mutable ptime m_last_route_update;
 
-		// the buffer size of the socket. This is used
-		// to now lower the buffer size
-		int m_sock_buf_size;
-	};
+    // cache of interfaces
+    mutable std::vector<ip_interface> m_interfaces;
+    mutable ptime m_last_if_update;
+
+    // the buffer size of the socket. This is used
+    // to now lower the buffer size
+    int m_sock_buf_size;
+};
 }
 
 #endif

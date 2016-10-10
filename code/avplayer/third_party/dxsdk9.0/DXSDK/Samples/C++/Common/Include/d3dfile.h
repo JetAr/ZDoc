@@ -26,7 +26,7 @@ public:
 
     LPD3DXMESH          m_pSysMemMesh;    // SysMem mesh, lives through resize
     LPD3DXMESH          m_pLocalMesh;     // Local mesh, rebuilt on resize
-    
+
     DWORD               m_dwNumMaterials; // Materials for the mesh
     D3DMATERIAL9*       m_pMaterials;
     LPDIRECT3DTEXTURE9* m_pTextures;
@@ -34,16 +34,25 @@ public:
 
 public:
     // Rendering
-    HRESULT Render( LPDIRECT3DDEVICE9 pd3dDevice, 
+    HRESULT Render( LPDIRECT3DDEVICE9 pd3dDevice,
                     bool bDrawOpaqueSubsets = true,
                     bool bDrawAlphaSubsets = true );
 
     // Mesh access
-    LPD3DXMESH GetSysMemMesh() { return m_pSysMemMesh; }
-    LPD3DXMESH GetLocalMesh()  { return m_pLocalMesh; }
+    LPD3DXMESH GetSysMemMesh()
+    {
+        return m_pSysMemMesh;
+    }
+    LPD3DXMESH GetLocalMesh()
+    {
+        return m_pLocalMesh;
+    }
 
     // Rendering options
-    void    UseMeshMaterials( bool bFlag ) { m_bUseMaterials = bFlag; }
+    void    UseMeshMaterials( bool bFlag )
+    {
+        m_bUseMaterials = bFlag;
+    }
     HRESULT SetFVF( LPDIRECT3DDEVICE9 pd3dDevice, DWORD dwFVF );
 
     // Initializing
@@ -78,22 +87,28 @@ public:
 
 public:
     // Matrix access
-    void        SetMatrix( D3DXMATRIX* pmat ) { m_mat = *pmat; }
-    D3DXMATRIX* GetMatrix()                   { return &m_mat; }
+    void        SetMatrix( D3DXMATRIX* pmat )
+    {
+        m_mat = *pmat;
+    }
+    D3DXMATRIX* GetMatrix()
+    {
+        return &m_mat;
+    }
 
     CD3DMesh*   FindMesh( TCHAR* strMeshName );
     CD3DFrame*  FindFrame( TCHAR* strFrameName );
-    bool        EnumMeshes( bool (*EnumMeshCB)(CD3DMesh*,void*), 
+    bool        EnumMeshes( bool (*EnumMeshCB)(CD3DMesh*,void*),
                             void* pContext );
 
     HRESULT Destroy();
     HRESULT RestoreDeviceObjects( LPDIRECT3DDEVICE9 pd3dDevice );
     HRESULT InvalidateDeviceObjects();
-    HRESULT Render( LPDIRECT3DDEVICE9 pd3dDevice, 
+    HRESULT Render( LPDIRECT3DDEVICE9 pd3dDevice,
                     bool bDrawOpaqueSubsets = true,
                     bool bDrawAlphaSubsets = true,
                     D3DXMATRIX* pmatWorldMartix = NULL);
-    
+
     CD3DFrame( TCHAR* strName = _T("CD3DFile_Frame") );
     virtual ~CD3DFrame();
 };
@@ -107,9 +122,9 @@ public:
 //-----------------------------------------------------------------------------
 class CD3DFile : public CD3DFrame
 {
-    HRESULT LoadMesh( LPDIRECT3DDEVICE9 pd3dDevice, LPDIRECTXFILEDATA pFileData, 
+    HRESULT LoadMesh( LPDIRECT3DDEVICE9 pd3dDevice, LPDIRECTXFILEDATA pFileData,
                       CD3DFrame* pParentFrame );
-    HRESULT LoadFrame( LPDIRECT3DDEVICE9 pd3dDevice, LPDIRECTXFILEDATA pFileData, 
+    HRESULT LoadFrame( LPDIRECT3DDEVICE9 pd3dDevice, LPDIRECTXFILEDATA pFileData,
                        CD3DFrame* pParentFrame );
 public:
     HRESULT Create( LPDIRECT3DDEVICE9 pd3dDevice, TCHAR* strFilename );

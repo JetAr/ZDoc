@@ -21,5 +21,5 @@ void StopSeekTimer();
 void UpdatePosition(IMediaSeeking *pMS, REFERENCE_TIME rtNow, CStatic& strPosition);
 void ReadMediaPosition(IMediaSeeking *pMS, CSliderCtrl& Seekbar, CStatic& strPosition);
 
-void HandleTrackbar(IMediaControl *pMC, IMediaSeeking *pMS, 
+void HandleTrackbar(IMediaControl *pMC, IMediaSeeking *pMS,
                     CSliderCtrl& Seekbar, CStatic& strPosition, WPARAM wReq);

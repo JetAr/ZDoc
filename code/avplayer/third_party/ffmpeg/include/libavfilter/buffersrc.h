@@ -28,7 +28,8 @@
 #include "libavcodec/avcodec.h"
 #include "avfilter.h"
 
-enum {
+enum
+{
 
     /**
      * Do not check for format changes.

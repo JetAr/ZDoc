@@ -47,11 +47,11 @@ extern "C" {
 
 // {B9C2E9C4-68C1-4d42-A7A1-E76A26982AD6}
 DEFINE_GUID(CLSID_DirectPlayNATHelpUPnP,
-0xb9c2e9c4, 0x68c1, 0x4d42, 0xa7, 0xa1, 0xe7, 0x6a, 0x26, 0x98, 0x2a, 0xd6);
+            0xb9c2e9c4, 0x68c1, 0x4d42, 0xa7, 0xa1, 0xe7, 0x6a, 0x26, 0x98, 0x2a, 0xd6);
 
 // {963AB779-16A1-477c-A36D-CB5E711938F7}
 DEFINE_GUID(CLSID_DirectPlayNATHelpPAST,
-0x963ab779, 0x16a1, 0x477c, 0xa3, 0x6d, 0xcb, 0x5e, 0x71, 0x19, 0x38, 0xf7);
+            0x963ab779, 0x16a1, 0x477c, 0xa3, 0x6d, 0xcb, 0x5e, 0x71, 0x19, 0x38, 0xf7);
 
 
 /****************************************************************************
@@ -61,8 +61,8 @@ DEFINE_GUID(CLSID_DirectPlayNATHelpPAST,
  ****************************************************************************/
 
 // {154940B6-2278-4a2f-9101-9BA9F431F603}
-DEFINE_GUID(IID_IDirectPlayNATHelp, 
-0x154940b6, 0x2278, 0x4a2f, 0x91, 0x1, 0x9b, 0xa9, 0xf4, 0x31, 0xf6, 0x3);
+DEFINE_GUID(IID_IDirectPlayNATHelp,
+            0x154940b6, 0x2278, 0x4a2f, 0x91, 0x1, 0x9b, 0xa9, 0xf4, 0x31, 0xf6, 0x3);
 
 /****************************************************************************
  *
@@ -160,14 +160,14 @@ typedef DWORD_PTR	DPNHHANDLE,	* PDPNHHANDLE;
  * DirectPlay NAT Helper structures
  *
  ****************************************************************************/
- 
+
 typedef struct _DPNHCAPS
 {
-	DWORD	dwSize;							// size of this structure, must be filled in prior to calling GetCaps
-	DWORD	dwFlags;						// flags indicating capabilities of Internet gateway server(s)
-	DWORD	dwNumRegisteredPorts;			// number of ports currently registered, including multiple ports registered at the same time (so this may not be equal to the number of DPNHHANDLEs given out)
-	DWORD	dwMinLeaseTimeRemaining;		// approximate time remaining, in milliseconds, for the lease that will expire soonest
-	DWORD	dwRecommendedGetCapsInterval;	// recommended time, in milliseconds, after which GetCaps should be called again (with DPNHGETCAPS_UPDATESERVERSTATUS flag)
+    DWORD	dwSize;							// size of this structure, must be filled in prior to calling GetCaps
+    DWORD	dwFlags;						// flags indicating capabilities of Internet gateway server(s)
+    DWORD	dwNumRegisteredPorts;			// number of ports currently registered, including multiple ports registered at the same time (so this may not be equal to the number of DPNHHANDLEs given out)
+    DWORD	dwMinLeaseTimeRemaining;		// approximate time remaining, in milliseconds, for the lease that will expire soonest
+    DWORD	dwRecommendedGetCapsInterval;	// recommended time, in milliseconds, after which GetCaps should be called again (with DPNHGETCAPS_UPDATESERVERSTATUS flag)
 } DPNHCAPS, * PDPNHCAPS;
 
 
@@ -210,22 +210,22 @@ typedef HRESULT (WINAPI * PFN_DIRECTPLAYNATHELPCREATE)(const GUID * pIID, void *
 #define INTERFACE IDirectPlayNATHelp
 DECLARE_INTERFACE_(IDirectPlayNATHelp, IUnknown)
 {
-	/*** IUnknown methods ***/
-	STDMETHOD(QueryInterface)				(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
-	STDMETHOD_(ULONG,AddRef)				(THIS) PURE;
-	STDMETHOD_(ULONG,Release)				(THIS) PURE;
+    /*** IUnknown methods ***/
+    STDMETHOD(QueryInterface)				(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG,AddRef)				(THIS) PURE;
+    STDMETHOD_(ULONG,Release)				(THIS) PURE;
 
-	/*** IDirectPlayNATHelp methods ***/
-	STDMETHOD(Initialize)					(THIS_ const DWORD dwFlags) PURE;
-	STDMETHOD(Close)						(THIS_ const DWORD dwFlags) PURE;
-	STDMETHOD(GetCaps)						(THIS_ DPNHCAPS * const dpnhcaps, const DWORD dwFlags) PURE;
-	STDMETHOD(RegisterPorts)				(THIS_ const SOCKADDR * const aLocalAddresses, const DWORD dwAddressesSize, const DWORD dwNumAddresses, const DWORD dwLeaseTime, DPNHHANDLE * const phRegisteredPorts, const DWORD dwFlags) PURE;
-	STDMETHOD(GetRegisteredAddresses)		(THIS_ const DPNHHANDLE hRegisteredPorts, SOCKADDR * const paPublicAddresses, DWORD * const pdwPublicAddressesSize, DWORD * const pdwAddressTypeFlags, DWORD * const pdwLeaseTimeRemaining, const DWORD dwFlags) PURE;
-	STDMETHOD(DeregisterPorts)				(THIS_ const DPNHHANDLE hRegisteredPorts, const DWORD dwFlags) PURE;
-	STDMETHOD(QueryAddress)					(THIS_ const SOCKADDR * const pSourceAddress, const SOCKADDR * const pQueryAddress, SOCKADDR * const pResponseAddress, const int iAddressesSize, const DWORD dwFlags) PURE;
-	STDMETHOD(SetAlertEvent)				(THIS_ const HANDLE hEvent, const DWORD dwFlags) PURE;
-	STDMETHOD(SetAlertIOCompletionPort)		(THIS_ const HANDLE hIOCompletionPort, const DWORD dwCompletionKey, const DWORD dwNumConcurrentThreads, const DWORD dwFlags) PURE;
-	STDMETHOD(ExtendRegisteredPortsLease)	(THIS_ const DPNHHANDLE hRegisteredPorts, const DWORD dwLeaseTime, const DWORD dwFlags) PURE;
+    /*** IDirectPlayNATHelp methods ***/
+    STDMETHOD(Initialize)					(THIS_ const DWORD dwFlags) PURE;
+    STDMETHOD(Close)						(THIS_ const DWORD dwFlags) PURE;
+    STDMETHOD(GetCaps)						(THIS_ DPNHCAPS * const dpnhcaps, const DWORD dwFlags) PURE;
+    STDMETHOD(RegisterPorts)				(THIS_ const SOCKADDR * const aLocalAddresses, const DWORD dwAddressesSize, const DWORD dwNumAddresses, const DWORD dwLeaseTime, DPNHHANDLE * const phRegisteredPorts, const DWORD dwFlags) PURE;
+    STDMETHOD(GetRegisteredAddresses)		(THIS_ const DPNHHANDLE hRegisteredPorts, SOCKADDR * const paPublicAddresses, DWORD * const pdwPublicAddressesSize, DWORD * const pdwAddressTypeFlags, DWORD * const pdwLeaseTimeRemaining, const DWORD dwFlags) PURE;
+    STDMETHOD(DeregisterPorts)				(THIS_ const DPNHHANDLE hRegisteredPorts, const DWORD dwFlags) PURE;
+    STDMETHOD(QueryAddress)					(THIS_ const SOCKADDR * const pSourceAddress, const SOCKADDR * const pQueryAddress, SOCKADDR * const pResponseAddress, const int iAddressesSize, const DWORD dwFlags) PURE;
+    STDMETHOD(SetAlertEvent)				(THIS_ const HANDLE hEvent, const DWORD dwFlags) PURE;
+    STDMETHOD(SetAlertIOCompletionPort)		(THIS_ const HANDLE hIOCompletionPort, const DWORD dwCompletionKey, const DWORD dwNumConcurrentThreads, const DWORD dwFlags) PURE;
+    STDMETHOD(ExtendRegisteredPortsLease)	(THIS_ const DPNHHANDLE hRegisteredPorts, const DWORD dwLeaseTime, const DWORD dwFlags) PURE;
 };
 
 

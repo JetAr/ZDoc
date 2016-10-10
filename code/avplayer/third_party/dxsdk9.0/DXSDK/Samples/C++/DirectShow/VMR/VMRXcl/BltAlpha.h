@@ -34,7 +34,8 @@ __inline void INITDDSTRUCT(T& dd)
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -42,7 +43,7 @@ __inline void RELEASE( T* &p )
 #endif
 
 #ifndef CHECK_HR
-    #define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
+#define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
 #endif
 
 #define COMPLVERTSIZE 640 // must be divisible by 4!!!
@@ -50,7 +51,7 @@ __inline void RELEASE( T* &p )
 
 //----------------------------------------------------------------------------
 // CAlphaBlt
-// 
+//
 // Desc: texture surface to be used in PresentImage of the
 //       customized allocator-presenter
 //----------------------------------------------------------------------------
@@ -89,9 +90,9 @@ private:
 
     //----------------------------------------------------------------------------
     // CAlphaBlt::Rotate
-    // 
-    // Desc: 3D transformation of pVertices that provide rotation around Z and Y 
-    // 
+    //
+    // Desc: 3D transformation of pVertices that provide rotation around Z and Y
+    //
     // Parameters:
     //      theta       - angle of rotation around Z axis
     //      thetaY      - angle of rotation around Y axis
@@ -99,8 +100,8 @@ private:
     //      nSize       - number of vertices
     //      (cx2, cy2)  - center of rotation
     //----------------------------------------------------------------------------
-    void Rotate(float theta, float thetaY, 
-                CAlphaBlt::Vertex * pVertices, 
+    void Rotate(float theta, float thetaY,
+                CAlphaBlt::Vertex * pVertices,
                 int nSize, float cx2, float cy2)
     {
         D3DXMATRIX  mtrV;
@@ -112,28 +113,28 @@ private:
         float pi2 = 1.57079632675f; // pi/2.
 
         // initialize mtrV
-        mtrV.m[0][0] = pVertices[0].x - cx2;    
-        mtrV.m[1][0] = pVertices[0].y - cy2;    
-        mtrV.m[2][0] = pVertices[0].z;          
-        mtrV.m[3][0] = 0.f;                     
+        mtrV.m[0][0] = pVertices[0].x - cx2;
+        mtrV.m[1][0] = pVertices[0].y - cy2;
+        mtrV.m[2][0] = pVertices[0].z;
+        mtrV.m[3][0] = 0.f;
 
-        mtrV.m[0][1] = pVertices[1].x - cx2;    
-        mtrV.m[1][1] = pVertices[1].y - cy2;    
-        mtrV.m[2][1] = pVertices[1].z;  
+        mtrV.m[0][1] = pVertices[1].x - cx2;
+        mtrV.m[1][1] = pVertices[1].y - cy2;
+        mtrV.m[2][1] = pVertices[1].z;
         mtrV.m[3][1] = 0;
 
-        mtrV.m[0][2] = pVertices[2].x - cx2;    
-        mtrV.m[1][2] = pVertices[2].y - cy2;    
-        mtrV.m[2][2] = pVertices[2].z;  
-        mtrV.m[3][2] = 0;               
+        mtrV.m[0][2] = pVertices[2].x - cx2;
+        mtrV.m[1][2] = pVertices[2].y - cy2;
+        mtrV.m[2][2] = pVertices[2].z;
+        mtrV.m[3][2] = 0;
 
         mtrV.m[0][3] = pVertices[3].x - cx2;
         mtrV.m[1][3] = pVertices[3].y - cy2;
         mtrV.m[2][3] = pVertices[3].z;
         mtrV.m[3][3] = 0;
-        
-        D3DXMatrixRotationZ( &mtrRotZ,  theta); 
-        D3DXMatrixRotationY( &mtrRotY,  thetaY); 
+
+        D3DXMatrixRotationZ( &mtrRotZ,  theta);
+        D3DXMatrixRotationY( &mtrRotY,  thetaY);
         D3DXMatrixPerspectiveFov( &mtrPrs, pi2, 1.1f, 0.f, 1.f);
 
 
@@ -145,25 +146,25 @@ private:
 
         // mtrPrs * mtrRotY * mtrRotZ * mtrV
         D3DXMatrixMultiply( &mtrRes, &mtrPrs, &mtrV);
-        
+
         // here, mtrRes has what we need; copy it back to pVertices
-        pVertices[0].x = mtrRes.m[0][0] + cx2;  
-        pVertices[1].x = mtrRes.m[0][1] + cx2;  
-        pVertices[2].x = mtrRes.m[0][2] + cx2;  
+        pVertices[0].x = mtrRes.m[0][0] + cx2;
+        pVertices[1].x = mtrRes.m[0][1] + cx2;
+        pVertices[2].x = mtrRes.m[0][2] + cx2;
         pVertices[3].x = mtrRes.m[0][3] + cx2;
 
-        pVertices[0].y = mtrRes.m[1][0] + cy2;  
-        pVertices[1].y = mtrRes.m[1][1] + cy2;  
-        pVertices[2].y = mtrRes.m[1][2] + cy2;  
+        pVertices[0].y = mtrRes.m[1][0] + cy2;
+        pVertices[1].y = mtrRes.m[1][1] + cy2;
+        pVertices[2].y = mtrRes.m[1][2] + cy2;
         pVertices[3].y = mtrRes.m[1][3] + cy2;
-        
-        pVertices[0].z = mtrRes.m[2][0];    
-        pVertices[1].z = mtrRes.m[2][1];    
-        pVertices[2].z = mtrRes.m[2][2];    
+
+        pVertices[0].z = mtrRes.m[2][0];
+        pVertices[1].z = mtrRes.m[2][1];
+        pVertices[2].z = mtrRes.m[2][2];
         pVertices[3].z = mtrRes.m[2][3];
         return;
-    }   
-    
+    }
+
     //----------------------------------------------------------------------------
     // IsSurfaceBlendable
     //
@@ -175,10 +176,11 @@ private:
     IsSurfaceBlendable(
         DDSURFACEDESC2& ddsd,
         BYTE fAlpha
-        )
+    )
     {
         // Is the surface already a D3D texture ?
-        if (ddsd.ddsCaps.dwCaps & DDSCAPS_TEXTURE) {
+        if (ddsd.ddsCaps.dwCaps & DDSCAPS_TEXTURE)
+        {
             return true;
         }
 
@@ -192,17 +194,17 @@ private:
     // The mirror surface cab be either 16 or 32 bit RGB depending
     // upon the format of the source surface.
     //
-    // Of course it should have the "texture" flag set and should be in VRAM.  
+    // Of course it should have the "texture" flag set and should be in VRAM.
     // If we can't create the surface then the AlphaBlt should fail
     //----------------------------------------------------------------------------
     HRESULT MirrorSourceSurface(
         LPDIRECTDRAWSURFACE7 lpDDS,
         DDSURFACEDESC2& ddsd
-        )
+    )
     {
         HRESULT hr = DD_OK;
         DWORD dwMirrorBitDepth = 0;
-        DDSURFACEDESC2 ddsdMirror={0};
+        DDSURFACEDESC2 ddsdMirror= {0};
 
 
         //
@@ -220,52 +222,63 @@ private:
         m_lpDDMirror = NULL;
 
         if (ddsd.ddpfPixelFormat.dwFlags == DDPF_FOURCC ||
-            ddsd.ddpfPixelFormat.dwRGBBitCount == 32) {
+                ddsd.ddpfPixelFormat.dwRGBBitCount == 32)
+        {
 
             if (ddsd.dwWidth > m_ddsdM32.dwWidth ||
-                ddsd.dwHeight > m_ddsdM32.dwHeight) {
+                    ddsd.dwHeight > m_ddsdM32.dwHeight)
+            {
 
                 RELEASE(m_lpDDM32);
             }
 
-            if (!m_lpDDM32) {
+            if (!m_lpDDM32)
+            {
                 dwMirrorBitDepth = 32;
             }
-            else {
+            else
+            {
                 m_lpDDMirror = m_lpDDM32;
                 ddsdMirror = m_ddsdM32;
             }
         }
-        else if (ddsd.ddpfPixelFormat.dwRGBBitCount == 16) {
+        else if (ddsd.ddpfPixelFormat.dwRGBBitCount == 16)
+        {
 
             if (ddsd.dwWidth > m_ddsdM16.dwWidth ||
-                ddsd.dwHeight > m_ddsdM16.dwHeight) {
+                    ddsd.dwHeight > m_ddsdM16.dwHeight)
+            {
 
                 RELEASE(m_lpDDM16);
             }
 
-            if (!m_lpDDM16) {
+            if (!m_lpDDM16)
+            {
                 dwMirrorBitDepth = 16;
             }
-            else {
+            else
+            {
                 m_lpDDMirror = m_lpDDM16;
                 ddsdMirror = m_ddsdM16;
             }
         }
-        else {
+        else
+        {
 
             // No support for RGB24 or RGB8!
             return E_INVALIDARG;
         }
 
-        if (!m_lpDDMirror) {
+        if (!m_lpDDMirror)
+        {
 
             INITDDSTRUCT(ddsdMirror);
             ddsdMirror.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
             ddsdMirror.ddpfPixelFormat.dwFlags = DDPF_RGB;
             ddsdMirror.ddpfPixelFormat.dwRGBBitCount = dwMirrorBitDepth;
 
-            switch (dwMirrorBitDepth) {
+            switch (dwMirrorBitDepth)
+            {
             case 16:
                 ddsdMirror.ddpfPixelFormat.dwRBitMask = 0x0000F800;
                 ddsdMirror.ddpfPixelFormat.dwGBitMask = 0x000007E0;
@@ -282,33 +295,39 @@ private:
             ddsdMirror.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_TEXTURE;
             ddsdMirror.dwFlags = DDSD_WIDTH | DDSD_HEIGHT | DDSD_CAPS | DDSD_PIXELFORMAT;
 
-            if (m_fPowerOf2) {
+            if (m_fPowerOf2)
+            {
 
                 for (ddsdMirror.dwWidth = 1;
-                     ddsd.dwWidth > ddsdMirror.dwWidth;
-                     ddsdMirror.dwWidth <<= 1);
+                        ddsd.dwWidth > ddsdMirror.dwWidth;
+                        ddsdMirror.dwWidth <<= 1);
 
                 for (ddsdMirror.dwHeight = 1;
-                     ddsd.dwHeight > ddsdMirror.dwHeight;
-                     ddsdMirror.dwHeight <<= 1);
+                        ddsd.dwHeight > ddsdMirror.dwHeight;
+                        ddsdMirror.dwHeight <<= 1);
             }
-            else {
+            else
+            {
                 ddsdMirror.dwWidth = ddsd.dwWidth;
                 ddsdMirror.dwHeight = ddsd.dwHeight;
             }
 
-            if (m_fSquare) {
+            if (m_fSquare)
+            {
 
-                if (ddsdMirror.dwHeight > ddsdMirror.dwWidth) {
+                if (ddsdMirror.dwHeight > ddsdMirror.dwWidth)
+                {
                     ddsdMirror.dwWidth = ddsdMirror.dwHeight;
                 }
 
-                if (ddsdMirror.dwWidth > ddsdMirror.dwHeight) {
+                if (ddsdMirror.dwWidth > ddsdMirror.dwHeight)
+                {
                     ddsdMirror.dwHeight = ddsdMirror.dwWidth;
                 }
             }
 
-            __try {
+            __try
+            {
 
                 // Attempt to create the surface with theses settings
                 CHECK_HR(hr = m_pDD->CreateSurface(&ddsdMirror, &m_lpDDMirror, NULL));
@@ -316,7 +335,8 @@ private:
                 INITDDSTRUCT(ddsdMirror);
                 CHECK_HR(hr =  m_lpDDMirror->GetSurfaceDesc(&ddsdMirror));
 
-                switch (dwMirrorBitDepth) {
+                switch (dwMirrorBitDepth)
+                {
                 case 16:
                     m_ddsdM16 = ddsdMirror;
                     m_lpDDM16 = m_lpDDMirror;
@@ -328,16 +348,20 @@ private:
                     break;
                 }
 
-            } __finally {}
+            }
+            __finally {}
         }
 
-        if (hr == DD_OK) {
+        if (hr == DD_OK)
+        {
 
-            __try {
+            __try
+            {
                 RECT rc = {0, 0, ddsd.dwWidth, ddsd.dwHeight};
                 CHECK_HR(hr = m_lpDDMirror->Blt(&rc, lpDDS, &rc, DDBLT_WAIT, NULL));
                 ddsd = ddsdMirror;
-            } __finally {}
+            }
+            __finally {}
         }
 
         return hr;
@@ -366,47 +390,58 @@ public:
 
         HRESULT hr;
         hr = lpDDSDst->GetDDInterface((LPVOID *)&m_pDD);
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             m_pDD = NULL;
             *phr = hr;
         }
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
             hr = m_pDD->QueryInterface(IID_IDirect3D7, (LPVOID *)&m_pD3D);
-            if (FAILED(hr)) {
+            if (FAILED(hr))
+            {
                 m_pD3D = NULL;
                 *phr = hr;
             }
         }
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
             hr = m_pD3D->CreateDevice(IID_IDirect3DHALDevice,
                                       lpDDSDst,
                                       &m_pD3DDevice);
-            if (FAILED(hr)) {
+            if (FAILED(hr))
+            {
                 m_pD3DDevice = NULL;
                 *phr = hr;
             }
-            else {
+            else
+            {
                 m_lpDDBackBuffer = lpDDSDst;
                 m_lpDDBackBuffer->AddRef();
             }
         }
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             D3DDEVICEDESC7 ddDesc;
-            if (DD_OK == m_pD3DDevice->GetCaps(&ddDesc)) {
+            if (DD_OK == m_pD3DDevice->GetCaps(&ddDesc))
+            {
 
-                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_POW2) {
+                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_POW2)
+                {
                     m_fPowerOf2 = true;
                 }
 
-                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_SQUAREONLY) {
+                if (ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_SQUAREONLY)
+                {
                     m_fSquare = true;
                 }
             }
-            else {
+            else
+            {
                 *phr = hr;
             }
         }
@@ -415,7 +450,7 @@ public:
         // it actually loads the bitmap from the resource onto a texture surface
         m_ptxtrMenu = new TextureContainer(TEXT("IDB_MENU"), 0, 0, IDB_MENU);
 
-        if( m_ptxtrMenu) 
+        if( m_ptxtrMenu)
         {
             hr = m_ptxtrMenu->LoadImageData();
             if( m_ptxtrMenu->m_hbmBitmap )
@@ -426,7 +461,7 @@ public:
                 m_ptxtrMenu->m_dwHeight = (DWORD)bm.bmHeight;
                 m_ptxtrMenu->m_dwBPP    = (DWORD)bm.bmBitsPixel;
             }
-            
+
             hr = m_ptxtrMenu->Restore(m_pD3DDevice);
             if( FAILED(hr))
             {
@@ -435,7 +470,7 @@ public:
             }
         }
 
-        // load the font 
+        // load the font
         m_pFont = new CD3DFont( TEXT("Comic Sans MS"),18,0);
         if( m_pFont )
         {
@@ -487,12 +522,12 @@ public:
 
         pVMenu[3].tu = fMenuWidth;
         pVMenu[3].tv = fMenuHeight;
-   }
+    }
 
     //----------------------------------------------------------------------------
     // Destructor
     //----------------------------------------------------------------------------
-   ~CAlphaBlt()
+    ~CAlphaBlt()
     {
         if( m_ptxtrMenu )
         {
@@ -572,7 +607,7 @@ public:
     {
         float RotRadZ = 0.f;
         float RotRadY = 0.f;
-            
+
         //
         // Setup the DST info
         //
@@ -629,18 +664,18 @@ public:
         }
 
         // to avoid stack overflow, limit counters withing 360 grades
-        if( g_ss.nGradZ > 360) 
+        if( g_ss.nGradZ > 360)
         {
             g_ss.nGradZ = 0;
         }
 
-        if( g_ss.nGradY > 360) 
+        if( g_ss.nGradY > 360)
         {
             g_ss.nGradY = 0;
         }
-    
+
         // and finally rotate the primitive pVertices
-        // NOTE that rotation center is hardcoded for the case 
+        // NOTE that rotation center is hardcoded for the case
         // 640x480 display mode
         Rotate(RotRadZ, RotRadY, pVertices, 4, 320.f, 240.f);
     }
@@ -665,7 +700,7 @@ public:
     //          (b) srink lower part of the picture (parameter c applied to each verticle
     //              so that it would look like a wine glass stem (cosine is what we need)
     //              Shrinking coefficient depends on Y-coordinate of a verticle
-    //          (c) twist lower part of the picture around Y axis, angle depends on 
+    //          (c) twist lower part of the picture around Y axis, angle depends on
     //              Y-coordinate of a verticle
     //----------------------------------------------------------------------------
     void PrepareVerticesTwist(  RECT* lpDst, RECT* lpSrc, BYTE alpha,
@@ -706,16 +741,16 @@ public:
             V[i  ].tu  = ((float)lpSrc->left) / fW;
             V[i+1].tu  = ((float)lpSrc->right) / fW;
             V[i  ].tv  = V[i+1].tv = (float)(lpSrc->top + sH * (float)i/(N-1.f)/2.f)/fH;
-            
-            
+
+
             if( V[i].y >= H )
             {
-                
+
                 c = (float)( W * (1. + cos(pi * (480. - V[i].y)/Ht)) / 4.);
                 //c *= 0.25f;
                 V[i  ].x += c;
                 V[i+1].x -= c;
-                
+
                 radY = pi * ( V[i].y - H ) / 2.f / Ht;
 
                 costh = cos(radY);
@@ -728,12 +763,12 @@ public:
                 x = V[i+1].x - 320.f;
                 V[i+1].x = (float)(costh * x - sinth * V[i+1].z) + 320.f;
                 V[i+1].z = (float)(sinth * x + costh * V[i+1].z);
-                                
+
             } // if
 
         }// for i
 
-        
+
         // now let's implement projection
         D3DXMatrixPerspectiveFov( &mtrPrs, pi/2.f, 1.1f, 0.f, 1.f);
         for( i=0; i<COMPLVERTSIZE; i = i+4)
@@ -776,18 +811,18 @@ public:
             V[i+3].y = mtrRes.m[1][3];
             V[i+3].z = mtrRes.m[2][3];
         }// for
-        
+
         return;
     }
 
     //----------------------------------------------------------------------------
     // AlphaBlt
-    // 
+    //
     // This function receives LPDIRECTDRAWSURFACE7 from ImagePresenter, calls
     // transformation functions to provide visual effects, sets the scene and
     // renders primitives
     //
-    // Parameters: 
+    // Parameters:
     //      lpDst    -- destination rectangle
     //      lpDDSSrc -- surface obtained by ImagePresenter
     //      lpSrc    -- source rectangle
@@ -798,25 +833,27 @@ public:
              LPDIRECTDRAWSURFACE7 lpDDSSrc,
              RECT* lpSrc,
              BYTE  bAlpha
-             )
+            )
     {
         HRESULT hr=S_OK;
         DDSURFACEDESC2 ddsd;
 
         int nVertSize = 0;
 
-        CAlphaBlt::Vertex * pV = NULL; 
+        CAlphaBlt::Vertex * pV = NULL;
 
-        __try {
+        __try
+        {
 
             INITDDSTRUCT(ddsd);
             CHECK_HR(hr = lpDDSSrc->GetSurfaceDesc(&ddsd));
 
-            if (!IsSurfaceBlendable(ddsd, bAlpha)) {
+            if (!IsSurfaceBlendable(ddsd, bAlpha))
+            {
                 CHECK_HR(hr = MirrorSourceSurface(lpDDSSrc, ddsd));
                 lpDDSSrc = m_lpDDMirror;
             }
-            
+
             float fWid = (float)ddsd.dwWidth;
             float fHgt = (float)ddsd.dwHeight;
 
@@ -855,21 +892,21 @@ public:
             m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
             m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
 
-    
+
             //
             // Do the alpha BLT
             //
             CHECK_HR(hr = m_pD3DDevice->BeginScene());
             CHECK_HR(hr = m_pD3DDevice->Clear(0,NULL,D3DCLEAR_TARGET,0,0.5,0));
             CHECK_HR(hr = m_pD3DDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-                                                    D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1,
-                                                    pV, nVertSize, D3DDP_WAIT));
+                          D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+                          pV, nVertSize, D3DDP_WAIT));
 
             // now, draw menu over the video
             CHECK_HR(hr = m_pD3DDevice->SetTexture(0, m_ptxtrMenu->m_pddsSurface));
             CHECK_HR(hr = m_pD3DDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
-                                                    D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1,
-                                                    pVMenu, 4, D3DDP_WAIT));
+                          D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+                          pVMenu, 4, D3DDP_WAIT));
             m_pD3DDevice->SetTexture(0, NULL);
 
             // and if necessary, draw the dext over the menu
@@ -881,14 +918,16 @@ public:
             }
             if( g_ss.bShowStatistics )
             {
-                m_pFont->DrawText(  420, 0, 
+                m_pFont->DrawText(  420, 0,
                                     RGBA_MAKE(0x00, 0xFF, 0x00, 0xFF),
                                     g_ss.achFPS );
             }
 
             CHECK_HR(hr = m_pD3DDevice->EndScene());
 
-        } __finally {
+        }
+        __finally
+        {
             m_pD3DDevice->SetTexture(0, NULL);
         }
 
@@ -899,7 +938,8 @@ public:
     // TextureSquare
     // true if texture is square
     //----------------------------------------------------------------------------
-    bool TextureSquare() {
+    bool TextureSquare()
+    {
         return  m_fSquare;
     }
 
@@ -907,7 +947,8 @@ public:
     // TexturePower2
     // true if texture size is of a power of 2
     //----------------------------------------------------------------------------
-    bool TexturePower2() {
+    bool TexturePower2()
+    {
         return  m_fPowerOf2;
     }
 

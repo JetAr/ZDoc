@@ -92,7 +92,7 @@ typedef struct _DSETUP_CB_PROGRESS
     DWORD dwOverallProgress;
 } DSETUP_CB_PROGRESS;
 
- 
+
 enum _DSETUP_CB_PROGRESS_PHASE
 {
     DSETUP_INITIALIZING,
@@ -108,7 +108,8 @@ enum _DSETUP_CB_PROGRESS_PHASE
 //
 #ifndef UNICODE_ONLY
 
-typedef struct _DIRECTXREGISTERAPPA {
+typedef struct _DIRECTXREGISTERAPPA
+{
     DWORD    dwSize;
     DWORD    dwFlags;
     LPSTR    lpszApplicationName;
@@ -119,7 +120,8 @@ typedef struct _DIRECTXREGISTERAPPA {
     LPSTR    lpszCurrentDirectory;
 } DIRECTXREGISTERAPPA, *PDIRECTXREGISTERAPPA, *LPDIRECTXREGISTERAPPA;
 
-typedef struct _DIRECTXREGISTERAPP2A {
+typedef struct _DIRECTXREGISTERAPP2A
+{
     DWORD    dwSize;
     DWORD    dwFlags;
     LPSTR    lpszApplicationName;
@@ -134,7 +136,8 @@ typedef struct _DIRECTXREGISTERAPP2A {
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 
-typedef struct _DIRECTXREGISTERAPPW {
+typedef struct _DIRECTXREGISTERAPPW
+{
     DWORD    dwSize;
     DWORD    dwFlags;
     LPWSTR   lpszApplicationName;
@@ -145,7 +148,8 @@ typedef struct _DIRECTXREGISTERAPPW {
     LPWSTR   lpszCurrentDirectory;
 } DIRECTXREGISTERAPPW, *PDIRECTXREGISTERAPPW, *LPDIRECTXREGISTERAPPW;
 
-typedef struct _DIRECTXREGISTERAPP2W {
+typedef struct _DIRECTXREGISTERAPP2W
+{
     DWORD    dwSize;
     DWORD    dwFlags;
     LPWSTR   lpszApplicationName;
@@ -185,7 +189,7 @@ DirectXSetupA(
     HWND  hWnd,
     LPSTR lpszRootPath,
     DWORD dwFlags
-    );
+);
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 INT
@@ -194,7 +198,7 @@ DirectXSetupW(
     HWND   hWnd,
     LPWSTR lpszRootPath,
     DWORD  dwFlags
-    );
+);
 #endif //!ANSI_ONLY
 #ifdef UNICODE
 #define DirectXSetup  DirectXSetupW
@@ -208,7 +212,7 @@ WINAPI
 DirectXRegisterApplicationA(
     HWND                  hWnd,
     LPVOID                lpDXRegApp
-    );
+);
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 INT
@@ -216,7 +220,7 @@ WINAPI
 DirectXRegisterApplicationW(
     HWND                  hWnd,
     LPVOID                lpDXRegApp
-    );
+);
 #endif //!ANSI_ONLY
 #ifdef UNICODE
 #define DirectXRegisterApplication  DirectXRegisterApplicationW
@@ -229,7 +233,7 @@ WINAPI
 DirectXUnRegisterApplication(
     HWND     hWnd,
     LPGUID   lpGUID
-    );
+);
 
 //
 // Function Pointers
@@ -243,10 +247,10 @@ typedef INT (WINAPI * LPDIRECTXREGISTERAPPLICATION)(HWND, LPVOID);
 #endif // UNICODE
 
 typedef DWORD (FAR PASCAL * DSETUP_CALLBACK)(DWORD Reason,
-                                  DWORD MsgType,       /* Same as flags to MessageBox */
-                                  LPSTR szMessage,
-                                  LPSTR szName,
-                                  void *pInfo);
+        DWORD MsgType,       /* Same as flags to MessageBox */
+        LPSTR szMessage,
+        LPSTR szName,
+        void *pInfo);
 
 INT WINAPI DirectXSetupSetCallback(DSETUP_CALLBACK Callback);
 INT WINAPI DirectXSetupGetVersion(DWORD *lpdwVersion, DWORD *lpdwMinorVersion);
@@ -258,7 +262,7 @@ DirectXSetupGetEULAA(
     LPSTR lpszEULA,
     UINT  cchEULA,
     WORD LangID
-    );
+);
 #endif //!UNICODE_ONLY
 #ifndef ANSI_ONLY
 UINT
@@ -267,7 +271,7 @@ DirectXSetupGetEULAW(
     LPWSTR lpszEULA,
     UINT   cchEULA,
     WORD  LangID
-    );
+);
 #endif //!ANSI_ONLY
 #ifdef UNICODE
 #define DirectXSetupGetEULA  DirectXSetupGetEULAW

@@ -7,10 +7,10 @@
 // UIElements.h : header file
 //
 
-class CUIElement;
+    class CUIElement;
 
 /////////////////////////////////////////////////////////////////////////////
-// CUIElements 
+// CUIElements
 
 class CUIElements : public CObject
 {
@@ -35,13 +35,19 @@ public:
     HRESULT RestoreDeviceObjects();
     void InvalidateDeviceObjects();
     void DeleteDeviceObjects();
-    LPDIRECT3DDEVICE9 Pd3dDevice() { return m_pd3dDevice; }
+    LPDIRECT3DDEVICE9 Pd3dDevice()
+    {
+        return m_pd3dDevice;
+    }
     HRESULT Render();
     HRESULT RenderArrow( BOOL bSelected );
 
     void SetInfo( UINT bbWidth, UINT bbHeight, D3DXMATRIX* pMatProj );
     void SetMatView( D3DXMATRIX* pMatView );
-    void SetObjectRadius( FLOAT fObjectRadius ) { m_fObjectRadius = fObjectRadius; }
+    void SetObjectRadius( FLOAT fObjectRadius )
+    {
+        m_fObjectRadius = fObjectRadius;
+    }
     void SetEffectParameters( LPD3DXEFFECT pEffect );
     void InitEffectObjects( LPD3DXEFFECT pEffect );
     void DeleteEffectObjects();
@@ -65,7 +71,10 @@ protected:
     D3DXHANDLE m_hParam;
 
 public:
-    CUIElement() { m_hParam = NULL; }
+    CUIElement()
+    {
+        m_hParam = NULL;
+    }
 
     virtual void Render( IDirect3DDevice9* pd3dDevice ) = NULL;
     virtual void SetEffectParameters( LPD3DXEFFECT pEffect ) = NULL;
@@ -73,16 +82,31 @@ public:
     virtual void HandleMouseMove( INT x, INT y ) = NULL;
     virtual void HandleMouseUp() = NULL;
     virtual BOOL IsDragging() = NULL;
-    CString& GetParamName() { return m_strParamName; }
-    CString& GetAnnotName() { return m_strAnnotName; }
-    void SetParamName(CString& strNew) { m_strParamName = strNew; }
-    void SetAnnotName(CString& strNew) { m_strAnnotName = strNew; }
+    CString& GetParamName()
+    {
+        return m_strParamName;
+    }
+    CString& GetAnnotName()
+    {
+        return m_strAnnotName;
+    }
+    void SetParamName(CString& strNew)
+    {
+        m_strParamName = strNew;
+    }
+    void SetAnnotName(CString& strNew)
+    {
+        m_strAnnotName = strNew;
+    }
     virtual void SetParam( LPD3DXEFFECT pEffect, D3DXHANDLE hParam, BOOL bPickUpDefault ) = NULL;
-    D3DXHANDLE GetParamHandle() { return m_hParam; }
+    D3DXHANDLE GetParamHandle()
+    {
+        return m_hParam;
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////
-// CDirLight 
+// CDirLight
 
 class CDirLight : public CUIElement
 {
@@ -105,7 +129,10 @@ public:
 
     virtual void Render( IDirect3DDevice9* pd3dDevice );
     virtual void SetEffectParameters( LPD3DXEFFECT pEffect );
-    virtual BOOL IsDragging() { return m_bDragging; }
+    virtual BOOL IsDragging()
+    {
+        return m_bDragging;
+    }
     virtual void SetParam( LPD3DXEFFECT pEffect, D3DXHANDLE hParam, BOOL bPickUpDefault );
     virtual void HandleMouseDown( INT x, INT y, BOOL* pbSetCapture );
     virtual void HandleMouseMove( INT x, INT y );

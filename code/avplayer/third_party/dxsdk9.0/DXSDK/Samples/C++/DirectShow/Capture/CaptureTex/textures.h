@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------------------------------------------
 // File: Textures.h
 //
-// Desc: DirectShow sample code - header file for DirectShow/Direct3D8 video 
+// Desc: DirectShow sample code - header file for DirectShow/Direct3D8 video
 //       texturing
-//       
+//
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //-----------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ HRESULT CaptureVideo(IBaseFilter *pRenderer);
 HRESULT FindCaptureDevice(IBaseFilter ** ppSrcFilter);
 HRESULT ReconnectDShowRenderer();
 
-HRESULT AddToROT(IUnknown *pUnkGraph); 
+HRESULT AddToROT(IUnknown *pUnkGraph);
 void RemoveFromROT(void);
 
 //-----------------------------------------------------------------------------

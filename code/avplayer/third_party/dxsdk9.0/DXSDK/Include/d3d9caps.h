@@ -23,10 +23,10 @@
 
 typedef struct _D3DVSHADERCAPS2_0
 {
-        DWORD Caps;
-        INT DynamicFlowControlDepth;
-        INT NumTemps;
-        INT StaticFlowControlDepth;
+    DWORD Caps;
+    INT DynamicFlowControlDepth;
+    INT NumTemps;
+    INT StaticFlowControlDepth;
 } D3DVSHADERCAPS2_0;
 
 #define D3DVS20CAPS_PREDICATION             (1<<0)
@@ -156,7 +156,7 @@ typedef struct _D3DCAPS9
     DWORD   VertexTextureFilterCaps;    // D3DPTFILTERCAPS for IDirect3DTexture9's for texture, used in vertex shaders
     DWORD   MaxVShaderInstructionsExecuted; // maximum number of vertex shader instructions that can be executed
     DWORD   MaxPShaderInstructionsExecuted; // maximum number of pixel shader instructions that can be executed
-    DWORD   MaxVertexShader30InstructionSlots; 
+    DWORD   MaxVertexShader30InstructionSlots;
     DWORD   MaxPixelShader30InstructionSlots;
 } D3DCAPS9;
 
@@ -189,7 +189,7 @@ typedef struct _D3DCAPS9
 // COPY and COPYVSYNC swap effects work whether or not this flag is set.
 #define D3DCAPS3_ALPHA_FULLSCREEN_FLIP_OR_DISCARD   0x00000020L
 
-// Indicates that the device can perform a gamma correction from 
+// Indicates that the device can perform a gamma correction from
 // a windowed back buffer containing linear content to the sRGB desktop.
 #define D3DCAPS3_LINEAR_TO_SRGB_PRESENTATION 0x00000080L
 
@@ -288,7 +288,7 @@ typedef struct _D3DCAPS9
 #define D3DPRASTERCAPS_COLORPERSPECTIVE       0x00400000L /* Device iterates colors perspective correct */
 #define D3DPRASTERCAPS_SCISSORTEST            0x01000000L
 #define D3DPRASTERCAPS_SLOPESCALEDEPTHBIAS    0x02000000L
-#define D3DPRASTERCAPS_DEPTHBIAS              0x04000000L 
+#define D3DPRASTERCAPS_DEPTHBIAS              0x04000000L
 #define D3DPRASTERCAPS_MULTISAMPLE_TOGGLE     0x08000000L
 
 //

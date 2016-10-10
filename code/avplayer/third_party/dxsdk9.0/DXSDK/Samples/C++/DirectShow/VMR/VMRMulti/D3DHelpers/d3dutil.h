@@ -58,17 +58,31 @@ inline VOID D3DUtil_SetIdentityMatrix( D3DMATRIX& m )
 
 inline VOID D3DUtil_SetTranslateMatrix( D3DMATRIX& m, FLOAT tx, FLOAT ty,
                                         FLOAT tz )
-{ D3DUtil_SetIdentityMatrix( m ); m._41 = tx; m._42 = ty; m._43 = tz; }
+{
+    D3DUtil_SetIdentityMatrix( m );
+    m._41 = tx;
+    m._42 = ty;
+    m._43 = tz;
+}
 
 inline VOID D3DUtil_SetTranslateMatrix( D3DMATRIX& m, D3DVECTOR& v )
-{ D3DUtil_SetTranslateMatrix( m, v.x, v.y, v.z ); }
+{
+    D3DUtil_SetTranslateMatrix( m, v.x, v.y, v.z );
+}
 
 inline VOID D3DUtil_SetScaleMatrix( D3DMATRIX& m, FLOAT sx, FLOAT sy,
                                     FLOAT sz )
-{ D3DUtil_SetIdentityMatrix( m ); m._11 = sx; m._22 = sy; m._33 = sz; }
+{
+    D3DUtil_SetIdentityMatrix( m );
+    m._11 = sx;
+    m._22 = sy;
+    m._33 = sz;
+}
 
 inline VOID SetScaleMatrix( D3DMATRIX& m, D3DVECTOR& v )
-{ D3DUtil_SetScaleMatrix( m, v.x, v.y, v.z ); }
+{
+    D3DUtil_SetScaleMatrix( m, v.x, v.y, v.z );
+}
 
 VOID    D3DUtil_SetRotateXMatrix( D3DMATRIX& mat, FLOAT fRads );
 VOID    D3DUtil_SetRotateYMatrix( D3DMATRIX& mat, FLOAT fRads );
@@ -83,11 +97,11 @@ VOID    D3DUtil_SetRotationMatrix( D3DMATRIX& mat, D3DVECTOR& vDir, FLOAT fRads 
 HRESULT _DbgOut( CHAR*, DWORD, HRESULT, TCHAR* );
 
 #if defined(DEBUG) | defined(_DEBUG)
-    #define DEBUG_MSG(str)    _DbgOut( __FILE__, (DWORD)__LINE__, 0, str )
-    #define DEBUG_ERR(hr,str) _DbgOut( __FILE__, (DWORD)__LINE__, hr, str )
+#define DEBUG_MSG(str)    _DbgOut( __FILE__, (DWORD)__LINE__, 0, str )
+#define DEBUG_ERR(hr,str) _DbgOut( __FILE__, (DWORD)__LINE__, hr, str )
 #else
-    #define DEBUG_MSG(str)    (0L)
-    #define DEBUG_ERR(hr,str) (hr)
+#define DEBUG_MSG(str)    (0L)
+#define DEBUG_ERR(hr,str) (hr)
 #endif
 
 

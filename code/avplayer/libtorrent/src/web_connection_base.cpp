@@ -55,155 +55,164 @@ using libtorrent::aux::session_impl;
 
 namespace libtorrent
 {
-	web_connection_base::web_connection_base(
-		session_impl& ses
-		, boost::weak_ptr<torrent> t
-		, boost::shared_ptr<socket_type> s
-		, tcp::endpoint const& remote
-		, std::string const& url
-		, policy::peer* peerinfo
-		, std::string const& auth
-		, web_seed_entry::headers_t const& extra_headers)
-		: peer_connection(ses, t, s, remote, peerinfo)
-		, m_parser(http_parser::dont_parse_chunks)
-		, m_external_auth(auth)
-		, m_extra_headers(extra_headers)
-		, m_first_request(true)
-		, m_ssl(false)
-		, m_body_start(0)
-	{
-		INVARIANT_CHECK;
+web_connection_base::web_connection_base(
+    session_impl& ses
+    , boost::weak_ptr<torrent> t
+    , boost::shared_ptr<socket_type> s
+    , tcp::endpoint const& remote
+    , std::string const& url
+    , policy::peer* peerinfo
+    , std::string const& auth
+    , web_seed_entry::headers_t const& extra_headers)
+    : peer_connection(ses, t, s, remote, peerinfo)
+    , m_parser(http_parser::dont_parse_chunks)
+    , m_external_auth(auth)
+    , m_extra_headers(extra_headers)
+    , m_first_request(true)
+    , m_ssl(false)
+    , m_body_start(0)
+{
+    INVARIANT_CHECK;
 
-		// we only want left-over bandwidth
-		set_priority(1);
-		
-		// since this is a web seed, change the timeout
-		// according to the settings.
-		set_timeout(ses.settings().urlseed_timeout);
+    // we only want left-over bandwidth
+    set_priority(1);
 
-		std::string protocol;
-		error_code ec;
-		boost::tie(protocol, m_basic_auth, m_host, m_port, m_path)
-			= parse_url_components(url, ec);
-		TORRENT_ASSERT(!ec);
+    // since this is a web seed, change the timeout
+    // according to the settings.
+    set_timeout(ses.settings().urlseed_timeout);
 
-		if (m_port == -1 && protocol == "http")
-			m_port = 80;
+    std::string protocol;
+    error_code ec;
+    boost::tie(protocol, m_basic_auth, m_host, m_port, m_path)
+        = parse_url_components(url, ec);
+    TORRENT_ASSERT(!ec);
+
+    if (m_port == -1 && protocol == "http")
+        m_port = 80;
 
 #ifdef TORRENT_USE_OPENSSL
-		if (protocol == "https")
-		{
-			m_ssl = true;
-			if (m_port == -1) m_port = 443;
-		}
+    if (protocol == "https")
+    {
+        m_ssl = true;
+        if (m_port == -1) m_port = 443;
+    }
 #endif
 
-		if (!m_basic_auth.empty())
-			m_basic_auth = base64encode(m_basic_auth);
+    if (!m_basic_auth.empty())
+        m_basic_auth = base64encode(m_basic_auth);
 
-		m_server_string = "URL seed @ ";
-		m_server_string += m_host;
-	}
+    m_server_string = "URL seed @ ";
+    m_server_string += m_host;
+}
 
-	void web_connection_base::start()
-	{
-		set_upload_only(true);
-		if (is_disconnecting()) return;
-		peer_connection::start();
-	}
+void web_connection_base::start()
+{
+    set_upload_only(true);
+    if (is_disconnecting()) return;
+    peer_connection::start();
+}
 
-	web_connection_base::~web_connection_base()
-	{}
+web_connection_base::~web_connection_base()
+{}
 
-	void web_connection_base::on_connected()
-	{
-		boost::shared_ptr<torrent> t = associated_torrent().lock();
-		TORRENT_ASSERT(t);
-	
-		// this is always a seed
-		incoming_have_all();
+void web_connection_base::on_connected()
+{
+    boost::shared_ptr<torrent> t = associated_torrent().lock();
+    TORRENT_ASSERT(t);
 
-		// it is always possible to request pieces
-		incoming_unchoke();
+    // this is always a seed
+    incoming_have_all();
 
-		reset_recv_buffer(t->block_size() + 1024);
-	}
+    // it is always possible to request pieces
+    incoming_unchoke();
 
-	void web_connection_base::add_headers(std::string& request
-		, proxy_settings const& ps, bool using_proxy) const
-	{
-		request += "Host: ";
-		request += m_host;
-		if (m_first_request || m_ses.settings().always_send_user_agent) {
-			request += "\r\nUser-Agent: ";
-			request += m_ses.settings().user_agent;
-		}
-		if (!m_external_auth.empty()) {
-			request += "\r\nAuthorization: ";
-			request += m_external_auth;
-		} else if (!m_basic_auth.empty()) {
-			request += "\r\nAuthorization: Basic ";
-			request += m_basic_auth;
-		}
-		if (ps.type == proxy_settings::http_pw) {
-			request += "\r\nProxy-Authorization: Basic ";
-			request += base64encode(ps.username + ":" + ps.password);
-		}
-		for (web_seed_entry::headers_t::const_iterator it = m_extra_headers.begin();
-		     it != m_extra_headers.end(); ++it) {
-		  request += "\r\n";
-		  request += it->first;
-		  request += ": ";
-		  request += it->second;
-		}
-		if (using_proxy) {
-			request += "\r\nProxy-Connection: keep-alive";
-		}
-		if (m_first_request || using_proxy) {
-			request += "\r\nConnection: keep-alive";
-		}
-	}
+    reset_recv_buffer(t->block_size() + 1024);
+}
 
-	// --------------------------
-	// RECEIVE DATA
-	// --------------------------
+void web_connection_base::add_headers(std::string& request
+                                      , proxy_settings const& ps, bool using_proxy) const
+{
+    request += "Host: ";
+    request += m_host;
+    if (m_first_request || m_ses.settings().always_send_user_agent)
+    {
+        request += "\r\nUser-Agent: ";
+        request += m_ses.settings().user_agent;
+    }
+    if (!m_external_auth.empty())
+    {
+        request += "\r\nAuthorization: ";
+        request += m_external_auth;
+    }
+    else if (!m_basic_auth.empty())
+    {
+        request += "\r\nAuthorization: Basic ";
+        request += m_basic_auth;
+    }
+    if (ps.type == proxy_settings::http_pw)
+    {
+        request += "\r\nProxy-Authorization: Basic ";
+        request += base64encode(ps.username + ":" + ps.password);
+    }
+    for (web_seed_entry::headers_t::const_iterator it = m_extra_headers.begin();
+            it != m_extra_headers.end(); ++it)
+    {
+        request += "\r\n";
+        request += it->first;
+        request += ": ";
+        request += it->second;
+    }
+    if (using_proxy)
+    {
+        request += "\r\nProxy-Connection: keep-alive";
+    }
+    if (m_first_request || using_proxy)
+    {
+        request += "\r\nConnection: keep-alive";
+    }
+}
 
-	void web_connection_base::get_specific_peer_info(peer_info& p) const
-	{
-		if (is_interesting()) p.flags |= peer_info::interesting;
-		if (is_choked()) p.flags |= peer_info::choked;
-		if (!is_connecting() && m_server_string.empty())
-			p.flags |= peer_info::handshake;
-		if (is_connecting() && !is_queued()) p.flags |= peer_info::connecting;
-		if (is_queued()) p.flags |= peer_info::queued;
+// --------------------------
+// RECEIVE DATA
+// --------------------------
 
-		p.client = m_server_string;
-	}
+void web_connection_base::get_specific_peer_info(peer_info& p) const
+{
+    if (is_interesting()) p.flags |= peer_info::interesting;
+    if (is_choked()) p.flags |= peer_info::choked;
+    if (!is_connecting() && m_server_string.empty())
+        p.flags |= peer_info::handshake;
+    if (is_connecting() && !is_queued()) p.flags |= peer_info::connecting;
+    if (is_queued()) p.flags |= peer_info::queued;
 
-	bool web_connection_base::in_handshake() const
-	{
-		return m_server_string.empty();
-	}
+    p.client = m_server_string;
+}
 
-	void web_connection_base::on_sent(error_code const& error
-		, std::size_t bytes_transferred)
-	{
-		INVARIANT_CHECK;
+bool web_connection_base::in_handshake() const
+{
+    return m_server_string.empty();
+}
 
-		if (error) return;
-		m_statistics.sent_bytes(0, bytes_transferred);
-	}
+void web_connection_base::on_sent(error_code const& error
+                                  , std::size_t bytes_transferred)
+{
+    INVARIANT_CHECK;
+
+    if (error) return;
+    m_statistics.sent_bytes(0, bytes_transferred);
+}
 
 
 #if defined TORRENT_DEBUG && !defined TORRENT_DISABLE_INVARIANT_CHECKS
-	void web_connection_base::check_invariant() const
-	{
-/*
-		TORRENT_ASSERT(m_num_pieces == std::count(
-			m_have_piece.begin()
-			, m_have_piece.end()
-			, true));
-*/	}
+void web_connection_base::check_invariant() const
+{
+    /*
+    		TORRENT_ASSERT(m_num_pieces == std::count(
+    			m_have_piece.begin()
+    			, m_have_piece.end()
+    			, true));
+    */
+}
 #endif
 
 }

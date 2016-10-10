@@ -30,7 +30,8 @@
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -38,7 +39,7 @@ __inline void RELEASE( T* &p )
 #endif
 
 #ifndef CHECK_HR
-    #define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
+#define CHECK_HR(expr) do { if (FAILED(expr)) __leave; } while(0);
 #endif
 
 // {B87BEB7B-8D29-423f-AE4D-6582C10175AC}

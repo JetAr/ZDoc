@@ -33,7 +33,10 @@ public:
     HRESULT DisconnectPins( CComPtr<IBaseFilter> pFilter);
     HRESULT CheckVMRConnection();
 
-    DWORD_PTR GetID(){ return m_dwID;};
+    DWORD_PTR GetID()
+    {
+        return m_dwID;
+    };
     OAFilterState GetState();
     HRESULT GetTimes( LONGLONG& llCur, LONGLONG& llDur);
     void GetPathT( TCHAR* achPath );
@@ -53,7 +56,7 @@ private:
     TCHAR m_achPath[MAX_PATH];  // path to the media file, TCHAR
 
     DWORD_PTR m_dwID;   // actual cookie identifying the subgraph; assigned in
-                        // IMultiVMR9Wizard::Attach
+    // IMultiVMR9Wizard::Attach
 };
 
 #endif

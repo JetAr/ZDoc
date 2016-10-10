@@ -11,15 +11,15 @@ void bind_big_number()
     using namespace libtorrent;
 
     class_<big_number>("big_number")
-        .def(self == self)
-        .def(self != self)
-        .def(self < self)
-        .def(self_ns::str(self))
-        .def(init<char const*>())
-        .def("clear", &big_number::clear)
-        .def("is_all_zeros", &big_number::is_all_zeros)
-        .def("to_string", &big_number::to_string)
+    .def(self == self)
+    .def(self != self)
+    .def(self < self)
+    .def(self_ns::str(self))
+    .def(init<char const*>())
+    .def("clear", &big_number::clear)
+    .def("is_all_zeros", &big_number::is_all_zeros)
+    .def("to_string", &big_number::to_string)
 //        .def("__getitem__", &big_number::opreator[])
-        ;
+    ;
 }
 

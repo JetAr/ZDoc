@@ -110,7 +110,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <asio/deadline_timer.hpp>
 #include <asio/write.hpp>
 
-#ifdef __OBJC__ 
+#ifdef __OBJC__
 #undef Protocol
 #endif
 

@@ -2,7 +2,7 @@
 // File: Resource.h
 //
 // Desc: Header file for DirectShow Background music player
-//       
+//
 // Copyright (c) 2000-2002 Microsoft Corporation. All rights reserved.
 //-----------------------------------------------------------------------------
 

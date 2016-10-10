@@ -43,12 +43,12 @@ private:
     class CPlane
     {
     public:
-        CPlane( IDirect3DDevice9* pDevice, 
-                TCHAR *achName, 
+        CPlane( IDirect3DDevice9* pDevice,
+                TCHAR *achName,
                 LPCTSTR lpResourceName,
-                float fTilesU, 
-                float fTilesV, 
-                D3DXMATRIX& M, 
+                float fTilesU,
+                float fTilesV,
+                D3DXMATRIX& M,
                 float a,
                 HRESULT *phr);
 

@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: WinCtrl.h
 //
-// Desc: DirectShow base classes - defines classes for video control 
+// Desc: DirectShow base classes - defines classes for video control
 //       interfaces.
 //
 // Copyright (c) 1992-2002 Microsoft Corporation.  All rights reserved.
@@ -36,10 +36,22 @@ public:
 
     HRESULT DoSetWindowStyle(long Style,long WindowLong);
     HRESULT DoGetWindowStyle(long *pStyle,long WindowLong);
-    BOOL IsAutoShowEnabled() { return m_bAutoShow; };
-    COLORREF GetBorderColour() { return m_BorderColour; };
-    HWND GetOwnerWindow() { return m_hwndOwner; };
-    BOOL IsCursorHidden() { return m_bCursorHidden; };
+    BOOL IsAutoShowEnabled()
+    {
+        return m_bAutoShow;
+    };
+    COLORREF GetBorderColour()
+    {
+        return m_BorderColour;
+    };
+    HWND GetOwnerWindow()
+    {
+        return m_hwndOwner;
+    };
+    BOOL IsCursorHidden()
+    {
+        return m_bCursorHidden;
+    };
 
     inline BOOL PossiblyEatMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
@@ -52,7 +64,8 @@ public:
     // pins dynamically when requested in CBaseFilter::GetPin. This can
     // not be called from our constructor because is is a virtual method
 
-    void SetControlWindowPin(CBasePin *pPin) {
+    void SetControlWindowPin(CBasePin *pPin)
+    {
         m_pPin = pPin;
     }
 
@@ -106,7 +119,7 @@ public:
     STDMETHODIMP SetWindowPosition(long Left,long Top,long Width,long Height);
     STDMETHODIMP GetWindowPosition(long *pLeft,long *pTop,long *pWidth,long *pHeight);
     STDMETHODIMP GetRestorePosition(long *pLeft,long *pTop,long *pWidth,long *pHeight);
-	STDMETHODIMP HideCursor(long HideCursor);
+    STDMETHODIMP HideCursor(long HideCursor);
     STDMETHODIMP IsCursorHidden(long *CursorHidden);
 };
 
@@ -156,7 +169,10 @@ public:
                       RECT *pSourceRect);
 
     // Override this if you want notifying when the rectangles change
-    virtual HRESULT OnUpdateRectangles() { return NOERROR; };
+    virtual HRESULT OnUpdateRectangles()
+    {
+        return NOERROR;
+    };
     virtual HRESULT OnVideoSizeChange();
 
     // Derived classes must call this to set the pin the filter is using
@@ -165,7 +181,8 @@ public:
     // pins dynamically when requested in CBaseFilter::GetPin. This can
     // not be called from our constructor because is is a virtual method
 
-    void SetControlVideoPin(CBasePin *pPin) {
+    void SetControlVideoPin(CBasePin *pPin)
+    {
         m_pPin = pPin;
     }
 

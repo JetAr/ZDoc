@@ -55,120 +55,128 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	namespace aux { struct session_impl; }
-	struct lazy_entry;
+namespace aux
+{
+struct session_impl;
+}
+struct lazy_entry;
 }
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
-	TORRENT_DECLARE_LOG(dht_tracker);
+TORRENT_DECLARE_LOG(dht_tracker);
 #endif
 
-	struct dht_tracker;
+struct dht_tracker;
 
-	TORRENT_EXTRA_EXPORT void intrusive_ptr_add_ref(dht_tracker const*);
-	TORRENT_EXTRA_EXPORT void intrusive_ptr_release(dht_tracker const*);	
+TORRENT_EXTRA_EXPORT void intrusive_ptr_add_ref(dht_tracker const*);
+TORRENT_EXTRA_EXPORT void intrusive_ptr_release(dht_tracker const*);
 
-	struct dht_tracker : udp_socket_interface, udp_socket_observer
-	{
-		friend void intrusive_ptr_add_ref(dht_tracker const*);
-		friend void intrusive_ptr_release(dht_tracker const*);
+struct dht_tracker : udp_socket_interface, udp_socket_observer
+{
+    friend void intrusive_ptr_add_ref(dht_tracker const*);
+    friend void intrusive_ptr_release(dht_tracker const*);
 
-		// TODO: 3 take a udp_socket_interface here instead. Move udp_socket_interface down into libtorrent core
-		dht_tracker(libtorrent::aux::session_impl& ses, rate_limited_udp_socket& sock
-			, dht_settings const& settings, entry const* state = 0);
-		virtual ~dht_tracker();
+    // TODO: 3 take a udp_socket_interface here instead. Move udp_socket_interface down into libtorrent core
+    dht_tracker(libtorrent::aux::session_impl& ses, rate_limited_udp_socket& sock
+                , dht_settings const& settings, entry const* state = 0);
+    virtual ~dht_tracker();
 
-		void start(entry const& bootstrap);
-		void stop();
+    void start(entry const& bootstrap);
+    void stop();
 
-		void add_node(udp::endpoint node);
-		void add_node(std::pair<std::string, int> const& node);
-		void add_router_node(udp::endpoint const& node);
+    void add_node(udp::endpoint node);
+    void add_node(std::pair<std::string, int> const& node);
+    void add_router_node(udp::endpoint const& node);
 
-		entry state() const;
+    entry state() const;
 
-		void announce(sha1_hash const& ih, int listen_port, bool seed
-			, boost::function<void(std::vector<tcp::endpoint> const&)> f);
+    void announce(sha1_hash const& ih, int listen_port, bool seed
+                  , boost::function<void(std::vector<tcp::endpoint> const&)> f);
 
-		void dht_status(session_status& s);
-		void network_stats(int& sent, int& received);
+    void dht_status(session_status& s);
+    void network_stats(int& sent, int& received);
 
-		// translate bittorrent kademlia message into the generic kademlia message
-		// used by the library
-		virtual bool incoming_packet(error_code const& ec
-			, udp::endpoint const&, char const* buf, int size);
+    // translate bittorrent kademlia message into the generic kademlia message
+    // used by the library
+    virtual bool incoming_packet(error_code const& ec
+                                 , udp::endpoint const&, char const* buf, int size);
 
-	private:
-	
-		boost::intrusive_ptr<dht_tracker> self()
-		{ return boost::intrusive_ptr<dht_tracker>(this); }
+private:
 
-		void on_name_lookup(error_code const& e
-			, udp::resolver::iterator host);
-		void on_router_name_lookup(error_code const& e
-			, udp::resolver::iterator host);
-		void connection_timeout(error_code const& e);
-		void refresh_timeout(error_code const& e);
-		void tick(error_code const& e);
+    boost::intrusive_ptr<dht_tracker> self()
+    {
+        return boost::intrusive_ptr<dht_tracker>(this);
+    }
 
-		// implements udp_socket_interface
-		virtual bool send_packet(libtorrent::entry& e, udp::endpoint const& addr, int send_flags);
+    void on_name_lookup(error_code const& e
+                        , udp::resolver::iterator host);
+    void on_router_name_lookup(error_code const& e
+                               , udp::resolver::iterator host);
+    void connection_timeout(error_code const& e);
+    void refresh_timeout(error_code const& e);
+    void tick(error_code const& e);
 
-		node_impl m_dht;
-		rate_limited_udp_socket& m_sock;
+    // implements udp_socket_interface
+    virtual bool send_packet(libtorrent::entry& e, udp::endpoint const& addr, int send_flags);
 
-		std::vector<char> m_send_buf;
+    node_impl m_dht;
+    rate_limited_udp_socket& m_sock;
 
-		ptime m_last_new_key;
-		deadline_timer m_timer;
-		deadline_timer m_connection_timer;
-		deadline_timer m_refresh_timer;
-		dht_settings const& m_settings;
-		int m_refresh_bucket;
+    std::vector<char> m_send_buf;
 
-		bool m_abort;
+    ptime m_last_new_key;
+    deadline_timer m_timer;
+    deadline_timer m_connection_timer;
+    deadline_timer m_refresh_timer;
+    dht_settings const& m_settings;
+    int m_refresh_bucket;
 
-		// used to resolve hostnames for nodes
-		udp::resolver m_host_resolver;
+    bool m_abort;
 
-		// sent and received bytes since queried last time
-		int m_sent_bytes;
-		int m_received_bytes;
+    // used to resolve hostnames for nodes
+    udp::resolver m_host_resolver;
 
-		// used to ignore abusive dht nodes
-		struct node_ban_entry
-		{
-			node_ban_entry(): count(0) {}
-			address src;
-			ptime limit;
-			int count;
-		};
+    // sent and received bytes since queried last time
+    int m_sent_bytes;
+    int m_received_bytes;
 
-		enum { num_ban_nodes = 20 };
+    // used to ignore abusive dht nodes
+    struct node_ban_entry
+    {
+        node_ban_entry(): count(0) {}
+        address src;
+        ptime limit;
+        int count;
+    };
 
-		node_ban_entry m_ban_nodes[num_ban_nodes];
+    enum { num_ban_nodes = 20 };
 
-		// reference counter for intrusive_ptr
-		mutable boost::detail::atomic_count m_refs;
+    node_ban_entry m_ban_nodes[num_ban_nodes];
+
+    // reference counter for intrusive_ptr
+    mutable boost::detail::atomic_count m_refs;
 
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
-		int m_replies_sent[5];
-		int m_queries_received[5];
-		int m_replies_bytes_sent[5];
-		int m_queries_bytes_received[5];
-		int m_counter;
+    int m_replies_sent[5];
+    int m_queries_received[5];
+    int m_replies_bytes_sent[5];
+    int m_queries_bytes_received[5];
+    int m_counter;
 
-		int m_total_message_input;
-		int m_total_in_bytes;
-		int m_total_out_bytes;
-		
-		int m_queries_out_bytes;
+    int m_total_message_input;
+    int m_total_in_bytes;
+    int m_total_out_bytes;
+
+    int m_queries_out_bytes;
 #endif
-	};
-}}
+};
+}
+}
 
 #endif
 #endif

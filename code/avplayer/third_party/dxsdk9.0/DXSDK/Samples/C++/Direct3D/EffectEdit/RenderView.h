@@ -18,8 +18,8 @@ protected: // create from serialization only
 
 public:
     //{{AFX_DATA(CRenderView)
-    enum{ IDD = IDD_RENDER_FORM };
-        // NOTE: the ClassWizard will add data members here
+    enum { IDD = IDD_RENDER_FORM };
+    // NOTE: the ClassWizard will add data members here
     //}}AFX_DATA
 
 // Attributes
@@ -36,9 +36,9 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CRenderView)
-    public:
+public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual void OnInitialUpdate(); // called first time after construct
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
@@ -50,19 +50,43 @@ public:
     HRESULT ParseParameters(CString &strErrors);
     HRESULT LoadMesh(CString &strErrors);
     void    UnloadMesh();
-    void    ShowStats( BOOL bShowStats ) { m_bShowStats = bShowStats; }
-    void    SetWireframe( BOOL bWireframe ) { m_bWireframe = bWireframe; }
-    void    SetNoTextures( BOOL bNoTextures ) { m_bNoTextures = bNoTextures; }
-    void    SetSelectedPassOnly( BOOL bSelectedPassOnly ) { m_bSelectedPassOnly = bSelectedPassOnly; }
-    void    SetUpToSelectedPassOnly( BOOL bUpToSelectedPassOnly ) { m_bUpToSelectedPassOnly = bUpToSelectedPassOnly; }
-    BOOL    GetShowStats() { return m_bShowStats; }
-    void    RequestUIReset() { m_bUINeedsReset = TRUE; }
+    void    ShowStats( BOOL bShowStats )
+    {
+        m_bShowStats = bShowStats;
+    }
+    void    SetWireframe( BOOL bWireframe )
+    {
+        m_bWireframe = bWireframe;
+    }
+    void    SetNoTextures( BOOL bNoTextures )
+    {
+        m_bNoTextures = bNoTextures;
+    }
+    void    SetSelectedPassOnly( BOOL bSelectedPassOnly )
+    {
+        m_bSelectedPassOnly = bSelectedPassOnly;
+    }
+    void    SetUpToSelectedPassOnly( BOOL bUpToSelectedPassOnly )
+    {
+        m_bUpToSelectedPassOnly = bUpToSelectedPassOnly;
+    }
+    BOOL    GetShowStats()
+    {
+        return m_bShowStats;
+    }
+    void    RequestUIReset()
+    {
+        m_bUINeedsReset = TRUE;
+    }
     virtual ~CRenderView();
 #ifdef _DEBUG
     virtual void AssertValid() const;
     virtual void Dump(CDumpContext& dc) const;
 #endif
-    void OnToggleFullscreen(void) { ToggleFullscreen(); }
+    void OnToggleFullscreen(void)
+    {
+        ToggleFullscreen();
+    }
     virtual HRESULT AdjustWindowForChange();
     virtual HRESULT FrameMove();
     virtual HRESULT Render();
@@ -128,7 +152,7 @@ protected:
 
     // Scene background
     char m_strBackgroundTexture[MAX_PATH];
-    LPDIRECT3DTEXTURE9 m_pBackgroundTexture;    
+    LPDIRECT3DTEXTURE9 m_pBackgroundTexture;
     DWORD m_dwBackgroundColor;
     LPDIRECT3DVERTEXBUFFER9 m_pVBBackground;
 
@@ -146,7 +170,9 @@ protected:
 
 #ifndef _DEBUG  // debug version in RenderView.cpp
 inline CEffectDoc* CRenderView::GetDocument()
-   { return (CEffectDoc*)m_pDocument; }
+{
+    return (CEffectDoc*)m_pDocument;
+}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

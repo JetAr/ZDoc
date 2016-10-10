@@ -27,12 +27,12 @@ struct D3DXFRAME_DERIVED: public D3DXFRAME
 //-----------------------------------------------------------------------------
 struct D3DXMESHCONTAINER_DERIVED: public D3DXMESHCONTAINER
 {
-    LPDIRECT3DTEXTURE9*  ppTextures;       // array of textures, entries are NULL if no texture specified    
-                                
-    // SkinMesh info             
+    LPDIRECT3DTEXTURE9*  ppTextures;       // array of textures, entries are NULL if no texture specified
+
+    // SkinMesh info
     LPD3DXMESH           pOrigMesh;
     LPD3DXATTRIBUTERANGE pAttributeTable;
-    DWORD                NumAttributeGroups; 
+    DWORD                NumAttributeGroups;
     DWORD                NumInfl;
     LPD3DXBUFFER         pBoneCombinationBuf;
     D3DXMATRIX**         ppBoneMatrixPtrs;
@@ -54,28 +54,28 @@ public:
     virtual ~CAllocateHierarchy();
 
     STDMETHOD(CreateFrame)(
-        THIS_ LPCTSTR Name, 
+        THIS_ LPCTSTR Name,
         LPD3DXFRAME *ppNewFrame
-        );
+    );
 
     STDMETHOD(CreateMeshContainer)(
-        THIS_ LPCTSTR Name, 
+        THIS_ LPCTSTR Name,
         LPD3DXMESHDATA pMeshData,
-        LPD3DXMATERIAL pMaterials, 
-        LPD3DXEFFECTINSTANCE pEffectInstances, 
-        DWORD NumMaterials, 
-        DWORD *pAdjacency, 
-        LPD3DXSKININFO pSkinInfo, 
+        LPD3DXMATERIAL pMaterials,
+        LPD3DXEFFECTINSTANCE pEffectInstances,
+        DWORD NumMaterials,
+        DWORD *pAdjacency,
+        LPD3DXSKININFO pSkinInfo,
         LPD3DXMESHCONTAINER *ppNewMeshContainer
-        );
+    );
 
     STDMETHOD(DestroyFrame)(
         THIS_ LPD3DXFRAME pFrameToFree
-        );
+    );
 
     STDMETHOD(DestroyMeshContainer)(
         THIS_ LPD3DXMESHCONTAINER pMeshContainerBase
-        );
+    );
 
 private:
     HRESULT GenerateSkinnedMesh_(D3DXMESHCONTAINER_DERIVED *pMeshContainer);
@@ -103,13 +103,13 @@ public:
 
 // private methods
 private:
-HRESULT SetupBoneMatrixPointers_(LPD3DXFRAME);
-HRESULT SetupBoneMatrixPointersOnMesh_(LPD3DXMESHCONTAINER pMeshContainerBase);
-HRESULT DrawFrame_(IDirect3DDevice9* pDevice, LPD3DXFRAME pFrame);
-HRESULT DrawMeshContainer_(IDirect3DDevice9* pDevice,
-                           LPD3DXMESHCONTAINER pMeshContainer, 
-                           LPD3DXFRAME pFrame);
-HRESULT UpdateFrameMatrices_(LPD3DXFRAME pFrameBase, D3DXMATRIX* pM);
+    HRESULT SetupBoneMatrixPointers_(LPD3DXFRAME);
+    HRESULT SetupBoneMatrixPointersOnMesh_(LPD3DXMESHCONTAINER pMeshContainerBase);
+    HRESULT DrawFrame_(IDirect3DDevice9* pDevice, LPD3DXFRAME pFrame);
+    HRESULT DrawMeshContainer_(IDirect3DDevice9* pDevice,
+                               LPD3DXMESHCONTAINER pMeshContainer,
+                               LPD3DXFRAME pFrame);
+    HRESULT UpdateFrameMatrices_(LPD3DXFRAME pFrameBase, D3DXMATRIX* pM);
 
 
 // data

@@ -119,7 +119,7 @@ public:
     BOOL IsFavorite(const TCHAR *szMediaDirectory);
     void GetShortName(TCHAR *pszFull, TCHAR *pszFile);
 
-   // Dialog Data
+    // Dialog Data
     //{{AFX_DATA(CAudioboxDlg)
     enum { IDD = IDD_AUDIOBOX_DIALOG };
     CButton m_ButtonFavorite;
@@ -145,7 +145,7 @@ public:
 
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CAudioboxDlg)
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
     //}}AFX_VIRTUAL

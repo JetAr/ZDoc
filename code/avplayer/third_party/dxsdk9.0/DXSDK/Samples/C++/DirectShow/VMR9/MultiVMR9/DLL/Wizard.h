@@ -18,14 +18,14 @@ using namespace std;
 
 /**************************************************************************\
 * class CMultiVMR9Wizard
-* 
-* Objects exposing this interface are responsible for management of several VMRs 
-* in a single rendering environment. Interface implementation of this object contains 
-* reference to the render engine (IMultiVMR9RenderEngine). Upon initialization, 
-* this object creates a separate thread for rendering composed video asynchronously 
+*
+* Objects exposing this interface are responsible for management of several VMRs
+* in a single rendering environment. Interface implementation of this object contains
+* reference to the render engine (IMultiVMR9RenderEngine). Upon initialization,
+* this object creates a separate thread for rendering composed video asynchronously
 * from attached subgraphs
 \**************************************************************************/
-class CMultiVMR9Wizard : 
+class CMultiVMR9Wizard :
     public CUnknown,
     public IMultiVMR9Wizard,
     public IVMRSurfaceAllocator9,
@@ -46,85 +46,85 @@ public:
         DWORD dwFlags,
         HWND hWnd,
         IMultiVMR9RenderEngine *pRenderEngine
-        );
+    );
 
-        // terminate wizard
+    // terminate wizard
     STDMETHOD(Terminate)(
-        );
+    );
 
 
     STDMETHOD(Attach)(
-        IBaseFilter* pVMRFilter, 
+        IBaseFilter* pVMRFilter,
         DWORD_PTR* pdwID
-        );
+    );
 
     STDMETHOD(Detach)(
         DWORD_PTR dwID
-        );
+    );
 
     STDMETHOD(VerifyID)(
         DWORD_PTR dwID
-        );
+    );
 
     STDMETHOD(GetGraph)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         IFilterGraph** ppGraph
-        );
+    );
 
     STDMETHOD(GetRenderEngine)(
         IMultiVMR9RenderEngine** pRenderEngine
-        );
+    );
 
     STDMETHOD(GetMixerControl)(
         IMultiVMR9MixerControl** ppMixerControl
-        );
+    );
 
     STDMETHOD(GetTexture)(
         DWORD_PTR dwID,
-        LPDIRECT3DTEXTURE9* ppTexture 
-        );
+        LPDIRECT3DTEXTURE9* ppTexture
+    );
 
     STDMETHOD(GetVideoSize)(
         DWORD_PTR dwID,
         LONG* plWidth,
         LONG* plHeight
-        );
+    );
 
     // IVMRSurfaceAllocator9 implementation
     STDMETHOD(AdviseNotify)(
         IVMRSurfaceAllocatorNotify9*  lpIVMRSurfAllocNotify
-        );
+    );
 
     STDMETHOD(GetSurface)(
         DWORD_PTR  dwUserID,
         DWORD  SurfaceIndex,
         DWORD  SurfaceFlags,
         IDirect3DSurface9**  lplpSurface
-        );
+    );
 
     STDMETHOD(InitializeDevice)(
         DWORD_PTR  dwUserID,
         VMR9AllocationInfo*  lpAllocInfo,
         DWORD*  lpNumBuffers
-        );
+    );
 
     STDMETHOD(TerminateDevice)(
         DWORD_PTR  dwID
-        );
+    );
 
     // IVMRImagePresenter9 implementation
     STDMETHOD(StartPresenting)(
         DWORD_PTR  dwUserID
-        );
+    );
 
     STDMETHOD(StopPresenting)(
         DWORD_PTR  dwUserID
-        );
+    );
 
     STDMETHOD(PresentImage)(
         DWORD_PTR  dwUserID,
         VMR9PresentationInfo*  lpPresInfo
-        );
+    );
 
     // Private classes
 private:
@@ -134,11 +134,11 @@ private:
         MultiVMR9_VideoSource();
         ~MultiVMR9_VideoSource();
 
-        // methods 
+        // methods
         void DeleteSurfaces();
         HRESULT DisconnectPins();
         HRESULT AllocateSurfaceBuffer( DWORD dwN );
-        HRESULT SetVideoSize(   LONG lImageW, 
+        HRESULT SetVideoSize(   LONG lImageW,
                                 LONG lImageH );
 
 
@@ -147,7 +147,7 @@ private:
         // we use this tag to verify that (MultiVMR9_VideoSource*)(void*)pVideoSource
         // is really MultiVMR9_VideoSource
         DWORD_PTR dwTag;
-        DWORD_PTR dwID; 
+        DWORD_PTR dwID;
         DWORD dwNumBuf;
         DWORD dwNumBufActuallyAllocated;
 
@@ -188,9 +188,9 @@ private:
     DWORD                           m_dwConfigFlags;    // configuration flags
 
     IMultiVMR9RenderEngine*         m_pRenderEngine;    // render engine
-    IVMRSurfaceAllocatorNotify9*    m_pNotify;          // see DirecX docs, "Applications use this interface to 
-                                // set a custom allocator-presenter and the allocator-presenter uses this interface 
-                                // to inform the VMR of changes to the system environment that affect the Direct3D surfaces.
+    IVMRSurfaceAllocatorNotify9*    m_pNotify;          // see DirecX docs, "Applications use this interface to
+    // set a custom allocator-presenter and the allocator-presenter uses this interface
+    // to inform the VMR of changes to the system environment that affect the Direct3D surfaces.
 
     list<MultiVMR9_VideoSource*>    m_listVideoSources;
 
@@ -204,7 +204,7 @@ class CCFMultiVMR9Wizard : public IClassFactory
 {
 public:
     // Constructor
-    CCFMultiVMR9Wizard() : m_RefCount(1) {} 
+    CCFMultiVMR9Wizard() : m_RefCount(1) {}
 
     // IUnknown methods
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv)

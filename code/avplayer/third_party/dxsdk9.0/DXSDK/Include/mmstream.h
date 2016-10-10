@@ -4,12 +4,12 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0357 */
+/* File created by MIDL compiler version 6.00.0357 */
 /* Compiler settings for mmstream.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -40,7 +40,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IMultiMediaStream_FWD_DEFINED__
 #define __IMultiMediaStream_FWD_DEFINED__
@@ -64,14 +64,14 @@ typedef interface IStreamSample IStreamSample;
 #include "unknwn.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 void * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void * ); 
+void __RPC_USER MIDL_user_free( void * );
 
 /* interface __MIDL_itf_mmstream_0000 */
-/* [local] */ 
+/* [local] */
 
 #define MS_ERROR_CODE(x) MAKE_HRESULT(1, FACILITY_ITF, (x) + 0x400)
 #define MS_SUCCESS_CODE(x) MAKE_HRESULT(0, FACILITY_ITF, x)
@@ -89,13 +89,13 @@ void __RPC_USER MIDL_user_free( void * );
 #define MS_E_INVALIDSTREAMTYPE        MS_ERROR_CODE(9)
 #define MS_E_NOTRUNNING               MS_ERROR_CODE(10)
 // {A35FF56A-9FDA-11d0-8FDF-00C04FD9189D}
-DEFINE_GUID(MSPID_PrimaryVideo, 
-0xa35ff56a, 0x9fda, 0x11d0, 0x8f, 0xdf, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
+DEFINE_GUID(MSPID_PrimaryVideo,
+            0xa35ff56a, 0x9fda, 0x11d0, 0x8f, 0xdf, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
 // {A35FF56B-9FDA-11d0-8FDF-00C04FD9189D}
 DEFINE_GUID(MSPID_PrimaryAudio,
-0xa35ff56b, 0x9fda, 0x11d0, 0x8f, 0xdf, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
+            0xa35ff56b, 0x9fda, 0x11d0, 0x8f, 0xdf, 0x0, 0xc0, 0x4f, 0xd9, 0x18, 0x9d);
 #if(_WIN32_WINNT < 0x0400)
-typedef void ( __stdcall *PAPCFUNC )( 
+typedef void ( __stdcall *PAPCFUNC )(
     DWORD_PTR dwParam);
 
 #endif
@@ -105,37 +105,42 @@ typedef GUID MSPID;
 
 typedef REFGUID REFMSPID;
 
-typedef /* [public][public][public] */ 
+typedef /* [public][public][public] */
 enum __MIDL___MIDL_itf_mmstream_0000_0001
-    {	STREAMTYPE_READ	= 0,
-	STREAMTYPE_WRITE	= 1,
-	STREAMTYPE_TRANSFORM	= 2
-    } 	STREAM_TYPE;
+{
+    STREAMTYPE_READ	= 0,
+    STREAMTYPE_WRITE	= 1,
+    STREAMTYPE_TRANSFORM	= 2
+} 	STREAM_TYPE;
 
-typedef /* [public][public][public] */ 
+typedef /* [public][public][public] */
 enum __MIDL___MIDL_itf_mmstream_0000_0002
-    {	STREAMSTATE_STOP	= 0,
-	STREAMSTATE_RUN	= 1
-    } 	STREAM_STATE;
+{
+    STREAMSTATE_STOP	= 0,
+    STREAMSTATE_RUN	= 1
+} 	STREAM_STATE;
 
-typedef /* [public] */ 
+typedef /* [public] */
 enum __MIDL___MIDL_itf_mmstream_0000_0003
-    {	COMPSTAT_NOUPDATEOK	= 0x1,
-	COMPSTAT_WAIT	= 0x2,
-	COMPSTAT_ABORT	= 0x4
-    } 	COMPLETION_STATUS_FLAGS;
+{
+    COMPSTAT_NOUPDATEOK	= 0x1,
+    COMPSTAT_WAIT	= 0x2,
+    COMPSTAT_ABORT	= 0x4
+} 	COMPLETION_STATUS_FLAGS;
 
 
 enum __MIDL___MIDL_itf_mmstream_0000_0004
-    {	MMSSF_HASCLOCK	= 0x1,
-	MMSSF_SUPPORTSEEK	= 0x2,
-	MMSSF_ASYNCHRONOUS	= 0x4
-    } ;
+{
+    MMSSF_HASCLOCK	= 0x1,
+    MMSSF_SUPPORTSEEK	= 0x2,
+    MMSSF_ASYNCHRONOUS	= 0x4
+} ;
 
 enum __MIDL___MIDL_itf_mmstream_0000_0005
-    {	SSUPDATE_ASYNC	= 0x1,
-	SSUPDATE_CONTINUOUS	= 0x2
-    } ;
+{
+    SSUPDATE_ASYNC	= 0x1,
+    SSUPDATE_CONTINUOUS	= 0x2
+} ;
 
 
 
@@ -148,114 +153,115 @@ extern RPC_IF_HANDLE __MIDL_itf_mmstream_0000_v0_0_s_ifspec;
 #define __IMultiMediaStream_INTERFACE_DEFINED__
 
 /* interface IMultiMediaStream */
-/* [unique][uuid][local][object] */ 
+/* [unique][uuid][local][object] */
 
 
 EXTERN_C const IID IID_IMultiMediaStream;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("B502D1BC-9A57-11d0-8FDE-00C04FD9189D")
-    IMultiMediaStream : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetInformation( 
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ STREAM_TYPE *pStreamType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetMediaStream( 
-            /* [in] */ REFMSPID idPurpose,
-            /* [out] */ IMediaStream **ppMediaStream) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE EnumMediaStreams( 
-            /* [in] */ long Index,
-            /* [out] */ IMediaStream **ppMediaStream) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [out] */ STREAM_STATE *pCurrentState) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ STREAM_STATE NewState) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetTime( 
-            /* [out] */ STREAM_TIME *pCurrentTime) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetDuration( 
-            /* [out] */ STREAM_TIME *pDuration) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ STREAM_TIME SeekTime) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetEndOfStreamEventHandle( 
-            /* [out] */ HANDLE *phEOS) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("B502D1BC-9A57-11d0-8FDE-00C04FD9189D")
+IMultiMediaStream :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetInformation(
+        /* [out] */ DWORD *pdwFlags,
+        /* [out] */ STREAM_TYPE *pStreamType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetMediaStream(
+        /* [in] */ REFMSPID idPurpose,
+        /* [out] */ IMediaStream **ppMediaStream) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE EnumMediaStreams(
+        /* [in] */ long Index,
+        /* [out] */ IMediaStream **ppMediaStream) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetState(
+        /* [out] */ STREAM_STATE *pCurrentState) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetState(
+        /* [in] */ STREAM_STATE NewState) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetTime(
+        /* [out] */ STREAM_TIME *pCurrentTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetDuration(
+        /* [out] */ STREAM_TIME *pDuration) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Seek(
+        /* [in] */ STREAM_TIME SeekTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetEndOfStreamEventHandle(
+        /* [out] */ HANDLE *phEOS) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMultiMediaStreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMultiMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMultiMediaStream * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMultiMediaStream * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
-            IMultiMediaStream * This,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ STREAM_TYPE *pStreamType);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
-            IMultiMediaStream * This,
-            /* [in] */ REFMSPID idPurpose,
-            /* [out] */ IMediaStream **ppMediaStream);
-        
-        HRESULT ( STDMETHODCALLTYPE *EnumMediaStreams )( 
-            IMultiMediaStream * This,
-            /* [in] */ long Index,
-            /* [out] */ IMediaStream **ppMediaStream);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetState )( 
-            IMultiMediaStream * This,
-            /* [out] */ STREAM_STATE *pCurrentState);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetState )( 
-            IMultiMediaStream * This,
-            /* [in] */ STREAM_STATE NewState);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTime )( 
-            IMultiMediaStream * This,
-            /* [out] */ STREAM_TIME *pCurrentTime);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetDuration )( 
-            IMultiMediaStream * This,
-            /* [out] */ STREAM_TIME *pDuration);
-        
-        HRESULT ( STDMETHODCALLTYPE *Seek )( 
-            IMultiMediaStream * This,
-            /* [in] */ STREAM_TIME SeekTime);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetEndOfStreamEventHandle )( 
-            IMultiMediaStream * This,
-            /* [out] */ HANDLE *phEOS);
-        
-        END_INTERFACE
-    } IMultiMediaStreamVtbl;
+typedef struct IMultiMediaStreamVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMultiMediaStream
-    {
-        CONST_VTBL struct IMultiMediaStreamVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMultiMediaStream * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMultiMediaStream * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMultiMediaStream * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInformation )(
+        IMultiMediaStream * This,
+        /* [out] */ DWORD *pdwFlags,
+        /* [out] */ STREAM_TYPE *pStreamType);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMediaStream )(
+        IMultiMediaStream * This,
+        /* [in] */ REFMSPID idPurpose,
+        /* [out] */ IMediaStream **ppMediaStream);
+
+    HRESULT ( STDMETHODCALLTYPE *EnumMediaStreams )(
+        IMultiMediaStream * This,
+        /* [in] */ long Index,
+        /* [out] */ IMediaStream **ppMediaStream);
+
+    HRESULT ( STDMETHODCALLTYPE *GetState )(
+        IMultiMediaStream * This,
+        /* [out] */ STREAM_STATE *pCurrentState);
+
+    HRESULT ( STDMETHODCALLTYPE *SetState )(
+        IMultiMediaStream * This,
+        /* [in] */ STREAM_STATE NewState);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTime )(
+        IMultiMediaStream * This,
+        /* [out] */ STREAM_TIME *pCurrentTime);
+
+    HRESULT ( STDMETHODCALLTYPE *GetDuration )(
+        IMultiMediaStream * This,
+        /* [out] */ STREAM_TIME *pDuration);
+
+    HRESULT ( STDMETHODCALLTYPE *Seek )(
+        IMultiMediaStream * This,
+        /* [in] */ STREAM_TIME SeekTime);
+
+    HRESULT ( STDMETHODCALLTYPE *GetEndOfStreamEventHandle )(
+        IMultiMediaStream * This,
+        /* [out] */ HANDLE *phEOS);
+
+    END_INTERFACE
+} IMultiMediaStreamVtbl;
+
+interface IMultiMediaStream
+{
+    CONST_VTBL struct IMultiMediaStreamVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -304,7 +310,7 @@ EXTERN_C const IID IID_IMultiMediaStream;
 
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetInformation_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetInformation_Proxy(
     IMultiMediaStream * This,
     /* [out] */ DWORD *pdwFlags,
     /* [out] */ STREAM_TYPE *pStreamType);
@@ -317,7 +323,7 @@ void __RPC_STUB IMultiMediaStream_GetInformation_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetMediaStream_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetMediaStream_Proxy(
     IMultiMediaStream * This,
     /* [in] */ REFMSPID idPurpose,
     /* [out] */ IMediaStream **ppMediaStream);
@@ -330,7 +336,7 @@ void __RPC_STUB IMultiMediaStream_GetMediaStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_EnumMediaStreams_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_EnumMediaStreams_Proxy(
     IMultiMediaStream * This,
     /* [in] */ long Index,
     /* [out] */ IMediaStream **ppMediaStream);
@@ -343,7 +349,7 @@ void __RPC_STUB IMultiMediaStream_EnumMediaStreams_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetState_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetState_Proxy(
     IMultiMediaStream * This,
     /* [out] */ STREAM_STATE *pCurrentState);
 
@@ -355,7 +361,7 @@ void __RPC_STUB IMultiMediaStream_GetState_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_SetState_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_SetState_Proxy(
     IMultiMediaStream * This,
     /* [in] */ STREAM_STATE NewState);
 
@@ -367,7 +373,7 @@ void __RPC_STUB IMultiMediaStream_SetState_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetTime_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetTime_Proxy(
     IMultiMediaStream * This,
     /* [out] */ STREAM_TIME *pCurrentTime);
 
@@ -379,7 +385,7 @@ void __RPC_STUB IMultiMediaStream_GetTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetDuration_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetDuration_Proxy(
     IMultiMediaStream * This,
     /* [out] */ STREAM_TIME *pDuration);
 
@@ -391,7 +397,7 @@ void __RPC_STUB IMultiMediaStream_GetDuration_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_Seek_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_Seek_Proxy(
     IMultiMediaStream * This,
     /* [in] */ STREAM_TIME SeekTime);
 
@@ -403,7 +409,7 @@ void __RPC_STUB IMultiMediaStream_Seek_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetEndOfStreamEventHandle_Proxy( 
+HRESULT STDMETHODCALLTYPE IMultiMediaStream_GetEndOfStreamEventHandle_Proxy(
     IMultiMediaStream * This,
     /* [out] */ HANDLE *phEOS);
 
@@ -423,97 +429,98 @@ void __RPC_STUB IMultiMediaStream_GetEndOfStreamEventHandle_Stub(
 #define __IMediaStream_INTERFACE_DEFINED__
 
 /* interface IMediaStream */
-/* [unique][uuid][object] */ 
+/* [unique][uuid][object] */
 
 
 EXTERN_C const IID IID_IMediaStream;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("B502D1BD-9A57-11d0-8FDE-00C04FD9189D")
-    IMediaStream : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetMultiMediaStream( 
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetInformation( 
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetSameFormat( 
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AllocateSample( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CreateSharedSample( 
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SendEndOfStream( 
-            DWORD dwFlags) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("B502D1BD-9A57-11d0-8FDE-00C04FD9189D")
+IMediaStream :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetMultiMediaStream(
+        /* [out] */ IMultiMediaStream **ppMultiMediaStream) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetInformation(
+        /* [out] */ MSPID *pPurposeId,
+        /* [out] */ STREAM_TYPE *pType) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetSameFormat(
+        /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
+        /* [in] */ DWORD dwFlags) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE AllocateSample(
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IStreamSample **ppSample) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateSharedSample(
+        /* [in] */ IStreamSample *pExistingSample,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IStreamSample **ppNewSample) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SendEndOfStream(
+        DWORD dwFlags) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IMediaStreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IMediaStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IMediaStream * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IMediaStream * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )( 
-            IMediaStream * This,
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetInformation )( 
-            IMediaStream * This,
-            /* [out] */ MSPID *pPurposeId,
-            /* [out] */ STREAM_TYPE *pType);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetSameFormat )( 
-            IMediaStream * This,
-            /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
-            /* [in] */ DWORD dwFlags);
-        
-        HRESULT ( STDMETHODCALLTYPE *AllocateSample )( 
-            IMediaStream * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample);
-        
-        HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )( 
-            IMediaStream * This,
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample);
-        
-        HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )( 
-            IMediaStream * This,
-            DWORD dwFlags);
-        
-        END_INTERFACE
-    } IMediaStreamVtbl;
+typedef struct IMediaStreamVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IMediaStream
-    {
-        CONST_VTBL struct IMediaStreamVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IMediaStream * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IMediaStream * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IMediaStream * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMultiMediaStream )(
+        IMediaStream * This,
+        /* [out] */ IMultiMediaStream **ppMultiMediaStream);
+
+    HRESULT ( STDMETHODCALLTYPE *GetInformation )(
+        IMediaStream * This,
+        /* [out] */ MSPID *pPurposeId,
+        /* [out] */ STREAM_TYPE *pType);
+
+    HRESULT ( STDMETHODCALLTYPE *SetSameFormat )(
+        IMediaStream * This,
+        /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
+        /* [in] */ DWORD dwFlags);
+
+    HRESULT ( STDMETHODCALLTYPE *AllocateSample )(
+        IMediaStream * This,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IStreamSample **ppSample);
+
+    HRESULT ( STDMETHODCALLTYPE *CreateSharedSample )(
+        IMediaStream * This,
+        /* [in] */ IStreamSample *pExistingSample,
+        /* [in] */ DWORD dwFlags,
+        /* [out] */ IStreamSample **ppNewSample);
+
+    HRESULT ( STDMETHODCALLTYPE *SendEndOfStream )(
+        IMediaStream * This,
+        DWORD dwFlags);
+
+    END_INTERFACE
+} IMediaStreamVtbl;
+
+interface IMediaStream
+{
+    CONST_VTBL struct IMediaStreamVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -553,7 +560,7 @@ EXTERN_C const IID IID_IMediaStream;
 
 
 
-HRESULT STDMETHODCALLTYPE IMediaStream_GetMultiMediaStream_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaStream_GetMultiMediaStream_Proxy(
     IMediaStream * This,
     /* [out] */ IMultiMediaStream **ppMultiMediaStream);
 
@@ -565,7 +572,7 @@ void __RPC_STUB IMediaStream_GetMultiMediaStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaStream_GetInformation_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaStream_GetInformation_Proxy(
     IMediaStream * This,
     /* [out] */ MSPID *pPurposeId,
     /* [out] */ STREAM_TYPE *pType);
@@ -578,7 +585,7 @@ void __RPC_STUB IMediaStream_GetInformation_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaStream_SetSameFormat_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaStream_SetSameFormat_Proxy(
     IMediaStream * This,
     /* [in] */ IMediaStream *pStreamThatHasDesiredFormat,
     /* [in] */ DWORD dwFlags);
@@ -591,7 +598,7 @@ void __RPC_STUB IMediaStream_SetSameFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaStream_AllocateSample_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaStream_AllocateSample_Proxy(
     IMediaStream * This,
     /* [in] */ DWORD dwFlags,
     /* [out] */ IStreamSample **ppSample);
@@ -604,7 +611,7 @@ void __RPC_STUB IMediaStream_AllocateSample_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaStream_CreateSharedSample_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaStream_CreateSharedSample_Proxy(
     IMediaStream * This,
     /* [in] */ IStreamSample *pExistingSample,
     /* [in] */ DWORD dwFlags,
@@ -618,7 +625,7 @@ void __RPC_STUB IMediaStream_CreateSharedSample_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IMediaStream_SendEndOfStream_Proxy( 
+HRESULT STDMETHODCALLTYPE IMediaStream_SendEndOfStream_Proxy(
     IMediaStream * This,
     DWORD dwFlags);
 
@@ -638,94 +645,95 @@ void __RPC_STUB IMediaStream_SendEndOfStream_Stub(
 #define __IStreamSample_INTERFACE_DEFINED__
 
 /* interface IStreamSample */
-/* [unique][uuid][local][object] */ 
+/* [unique][uuid][local][object] */
 
 
 EXTERN_C const IID IID_IStreamSample;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("B502D1BE-9A57-11d0-8FDE-00C04FD9189D")
-    IStreamSample : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE GetMediaStream( 
-            /* [in] */ IMediaStream **ppMediaStream) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSampleTimes( 
-            /* [out] */ STREAM_TIME *pStartTime,
-            /* [out] */ STREAM_TIME *pEndTime,
-            /* [out] */ STREAM_TIME *pCurrentTime) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetSampleTimes( 
-            /* [in] */ const STREAM_TIME *pStartTime,
-            /* [in] */ const STREAM_TIME *pEndTime) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Update( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hEvent,
-            /* [in] */ PAPCFUNC pfnAPC,
-            /* [in] */ DWORD_PTR dwAPCData) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE CompletionStatus( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMilliseconds) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("B502D1BE-9A57-11d0-8FDE-00C04FD9189D")
+IStreamSample :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetMediaStream(
+        /* [in] */ IMediaStream **ppMediaStream) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE GetSampleTimes(
+        /* [out] */ STREAM_TIME *pStartTime,
+        /* [out] */ STREAM_TIME *pEndTime,
+        /* [out] */ STREAM_TIME *pCurrentTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetSampleTimes(
+        /* [in] */ const STREAM_TIME *pStartTime,
+        /* [in] */ const STREAM_TIME *pEndTime) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE Update(
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ HANDLE hEvent,
+        /* [in] */ PAPCFUNC pfnAPC,
+        /* [in] */ DWORD_PTR dwAPCData) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CompletionStatus(
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ DWORD dwMilliseconds) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IStreamSampleVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IStreamSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IStreamSample * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IStreamSample * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetMediaStream )( 
-            IStreamSample * This,
-            /* [in] */ IMediaStream **ppMediaStream);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )( 
-            IStreamSample * This,
-            /* [out] */ STREAM_TIME *pStartTime,
-            /* [out] */ STREAM_TIME *pEndTime,
-            /* [out] */ STREAM_TIME *pCurrentTime);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )( 
-            IStreamSample * This,
-            /* [in] */ const STREAM_TIME *pStartTime,
-            /* [in] */ const STREAM_TIME *pEndTime);
-        
-        HRESULT ( STDMETHODCALLTYPE *Update )( 
-            IStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hEvent,
-            /* [in] */ PAPCFUNC pfnAPC,
-            /* [in] */ DWORD_PTR dwAPCData);
-        
-        HRESULT ( STDMETHODCALLTYPE *CompletionStatus )( 
-            IStreamSample * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwMilliseconds);
-        
-        END_INTERFACE
-    } IStreamSampleVtbl;
+typedef struct IStreamSampleVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IStreamSample
-    {
-        CONST_VTBL struct IStreamSampleVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IStreamSample * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IStreamSample * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IStreamSample * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetMediaStream )(
+        IStreamSample * This,
+        /* [in] */ IMediaStream **ppMediaStream);
+
+    HRESULT ( STDMETHODCALLTYPE *GetSampleTimes )(
+        IStreamSample * This,
+        /* [out] */ STREAM_TIME *pStartTime,
+        /* [out] */ STREAM_TIME *pEndTime,
+        /* [out] */ STREAM_TIME *pCurrentTime);
+
+    HRESULT ( STDMETHODCALLTYPE *SetSampleTimes )(
+        IStreamSample * This,
+        /* [in] */ const STREAM_TIME *pStartTime,
+        /* [in] */ const STREAM_TIME *pEndTime);
+
+    HRESULT ( STDMETHODCALLTYPE *Update )(
+        IStreamSample * This,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ HANDLE hEvent,
+        /* [in] */ PAPCFUNC pfnAPC,
+        /* [in] */ DWORD_PTR dwAPCData);
+
+    HRESULT ( STDMETHODCALLTYPE *CompletionStatus )(
+        IStreamSample * This,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ DWORD dwMilliseconds);
+
+    END_INTERFACE
+} IStreamSampleVtbl;
+
+interface IStreamSample
+{
+    CONST_VTBL struct IStreamSampleVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -762,7 +770,7 @@ EXTERN_C const IID IID_IStreamSample;
 
 
 
-HRESULT STDMETHODCALLTYPE IStreamSample_GetMediaStream_Proxy( 
+HRESULT STDMETHODCALLTYPE IStreamSample_GetMediaStream_Proxy(
     IStreamSample * This,
     /* [in] */ IMediaStream **ppMediaStream);
 
@@ -774,7 +782,7 @@ void __RPC_STUB IStreamSample_GetMediaStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IStreamSample_GetSampleTimes_Proxy( 
+HRESULT STDMETHODCALLTYPE IStreamSample_GetSampleTimes_Proxy(
     IStreamSample * This,
     /* [out] */ STREAM_TIME *pStartTime,
     /* [out] */ STREAM_TIME *pEndTime,
@@ -788,7 +796,7 @@ void __RPC_STUB IStreamSample_GetSampleTimes_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IStreamSample_SetSampleTimes_Proxy( 
+HRESULT STDMETHODCALLTYPE IStreamSample_SetSampleTimes_Proxy(
     IStreamSample * This,
     /* [in] */ const STREAM_TIME *pStartTime,
     /* [in] */ const STREAM_TIME *pEndTime);
@@ -801,7 +809,7 @@ void __RPC_STUB IStreamSample_SetSampleTimes_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IStreamSample_Update_Proxy( 
+HRESULT STDMETHODCALLTYPE IStreamSample_Update_Proxy(
     IStreamSample * This,
     /* [in] */ DWORD dwFlags,
     /* [in] */ HANDLE hEvent,
@@ -816,7 +824,7 @@ void __RPC_STUB IStreamSample_Update_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IStreamSample_CompletionStatus_Proxy( 
+HRESULT STDMETHODCALLTYPE IStreamSample_CompletionStatus_Proxy(
     IStreamSample * This,
     /* [in] */ DWORD dwFlags,
     /* [in] */ DWORD dwMilliseconds);

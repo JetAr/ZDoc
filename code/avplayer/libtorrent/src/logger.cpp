@@ -57,181 +57,185 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/lazy_entry.hpp"
 #include "libtorrent/peer_connection.hpp"
 
-namespace libtorrent {
+namespace libtorrent
+{
 
-	class peer_connection;
+class peer_connection;
 
 namespace
 {
 
-	struct logger_peer_plugin : peer_plugin
-	{
-		logger_peer_plugin(std::string const& filename)
-		{
-			error_code ec;
-			std::string dir = complete("libtorrent_ext_logs");
-			if (!exists(dir)) create_directories(dir, ec);
-			m_file.open(combine_path(dir, filename).c_str(), std::ios_base::out);
-			m_file << "\n\n\n";
-			log_timestamp();
-			m_file << "*** starting log ***\n";
-		}
+struct logger_peer_plugin : peer_plugin
+{
+    logger_peer_plugin(std::string const& filename)
+    {
+        error_code ec;
+        std::string dir = complete("libtorrent_ext_logs");
+        if (!exists(dir)) create_directories(dir, ec);
+        m_file.open(combine_path(dir, filename).c_str(), std::ios_base::out);
+        m_file << "\n\n\n";
+        log_timestamp();
+        m_file << "*** starting log ***\n";
+    }
 
-		void log_timestamp()
-		{
-			m_file << time_now_string() << ": ";
-		}
+    void log_timestamp()
+    {
+        m_file << time_now_string() << ": ";
+    }
 
-		// can add entries to the extension handshake
-		virtual void add_handshake(entry&) {}
-		
-		// called when the extension handshake from the other end is received
-		virtual bool on_extension_handshake(lazy_entry const& h)
-		{
-			log_timestamp();
-			m_file << "<== EXTENSION_HANDSHAKE\n" << print_entry(h);
-			return true;
-		}
+    // can add entries to the extension handshake
+    virtual void add_handshake(entry&) {}
 
-		// returning true from any of the message handlers
-		// indicates that the plugin has handeled the message.
-		// it will break the plugin chain traversing and not let
-		// anyone else handle the message, including the default
-		// handler.
+    // called when the extension handshake from the other end is received
+    virtual bool on_extension_handshake(lazy_entry const& h)
+    {
+        log_timestamp();
+        m_file << "<== EXTENSION_HANDSHAKE\n" << print_entry(h);
+        return true;
+    }
 
-		virtual bool on_choke()
-		{
-			log_timestamp();
-			m_file << "<== CHOKE\n";
-			m_file.flush();
-			return false;
-		}
+    // returning true from any of the message handlers
+    // indicates that the plugin has handeled the message.
+    // it will break the plugin chain traversing and not let
+    // anyone else handle the message, including the default
+    // handler.
 
-		virtual bool on_unchoke()
-		{
-			log_timestamp();
-			m_file << "<== UNCHOKE\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_choke()
+    {
+        log_timestamp();
+        m_file << "<== CHOKE\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_interested()
-		{
-			log_timestamp();
-			m_file << "<== INTERESTED\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_unchoke()
+    {
+        log_timestamp();
+        m_file << "<== UNCHOKE\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_not_interested()
-		{
-			log_timestamp();
-			m_file << "<== NOT_INTERESTED\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_interested()
+    {
+        log_timestamp();
+        m_file << "<== INTERESTED\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_have(int index)
-		{
-			log_timestamp();
-			m_file << "<== HAVE [" << index << "]\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_not_interested()
+    {
+        log_timestamp();
+        m_file << "<== NOT_INTERESTED\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_bitfield(bitfield const& bitfield_)
-		{
-			log_timestamp();
-			m_file << "<== BITFIELD\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_have(int index)
+    {
+        log_timestamp();
+        m_file << "<== HAVE [" << index << "]\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_request(peer_request const& r)
-		{
-			log_timestamp();
-			m_file << "<== REQUEST [ piece: " << r.piece << " | s: " << r.start
-				<< " | l: " << r.length << " ]\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_bitfield(bitfield const& bitfield_)
+    {
+        log_timestamp();
+        m_file << "<== BITFIELD\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_piece(peer_request const& r, disk_buffer_holder& data)
-		{
-			log_timestamp();
-			m_file << "<== PIECE [ piece: " << r.piece << " | s: " << r.start
-				<< " | l: " << r.length << " ]\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_request(peer_request const& r)
+    {
+        log_timestamp();
+        m_file << "<== REQUEST [ piece: " << r.piece << " | s: " << r.start
+               << " | l: " << r.length << " ]\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_cancel(peer_request const& r)
-		{
-			log_timestamp();
-			m_file << "<== CANCEL [ piece: " << r.piece << " | s: " << r.start
-				<< " | l: " << r.length << " ]\n";
-			m_file.flush();
-			return false;
-		}
-	
-		// called when an extended message is received. If returning true,
-		// the message is not processed by any other plugin and if false
-		// is returned the next plugin in the chain will receive it to
-		// be able to handle it
-		virtual bool on_extended(int length
-			, int msg, buffer::const_interval body)
-		{ return false; }
+    virtual bool on_piece(peer_request const& r, disk_buffer_holder& data)
+    {
+        log_timestamp();
+        m_file << "<== PIECE [ piece: " << r.piece << " | s: " << r.start
+               << " | l: " << r.length << " ]\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual bool on_unknown_message(int length, int msg
-			, buffer::const_interval body)
-		{
-			if (body.left() < length) return false;
-			log_timestamp();
-			m_file << "<== UNKNOWN [ msg: " << msg
-				<< " | l: " << length << " ]\n";
-			m_file.flush();
-			return false;
-		}
+    virtual bool on_cancel(peer_request const& r)
+    {
+        log_timestamp();
+        m_file << "<== CANCEL [ piece: " << r.piece << " | s: " << r.start
+               << " | l: " << r.length << " ]\n";
+        m_file.flush();
+        return false;
+    }
 
-		virtual void on_piece_pass(int index)
-		{
-			log_timestamp();
-			m_file << "*** HASH PASSED *** [ piece: " << index << " ]\n";
-			m_file.flush();
-		}
+    // called when an extended message is received. If returning true,
+    // the message is not processed by any other plugin and if false
+    // is returned the next plugin in the chain will receive it to
+    // be able to handle it
+    virtual bool on_extended(int length
+                             , int msg, buffer::const_interval body)
+    {
+        return false;
+    }
 
-		virtual void on_piece_failed(int index)
-		{
-			log_timestamp();
-			m_file << "*** HASH FAILED *** [ piece: " << index << " ]\n";
-			m_file.flush();
-		}
+    virtual bool on_unknown_message(int length, int msg
+                                    , buffer::const_interval body)
+    {
+        if (body.left() < length) return false;
+        log_timestamp();
+        m_file << "<== UNKNOWN [ msg: " << msg
+               << " | l: " << length << " ]\n";
+        m_file.flush();
+        return false;
+    }
 
-	private:
-		std::ofstream m_file;
-	};
+    virtual void on_piece_pass(int index)
+    {
+        log_timestamp();
+        m_file << "*** HASH PASSED *** [ piece: " << index << " ]\n";
+        m_file.flush();
+    }
 
-	struct logger_plugin : torrent_plugin
-	{
-		virtual boost::shared_ptr<peer_plugin> new_connection(
-			peer_connection* pc)
-		{
-			error_code ec;
-			return boost::shared_ptr<peer_plugin>(new logger_peer_plugin(
-				pc->remote().address().to_string(ec) + "_"
-				+ to_string(pc->remote().port()).elems + ".log"));
-		}
-	};
+    virtual void on_piece_failed(int index)
+    {
+        log_timestamp();
+        m_file << "*** HASH FAILED *** [ piece: " << index << " ]\n";
+        m_file.flush();
+    }
 
-} }
+private:
+    std::ofstream m_file;
+};
+
+struct logger_plugin : torrent_plugin
+{
+    virtual boost::shared_ptr<peer_plugin> new_connection(
+        peer_connection* pc)
+    {
+        error_code ec;
+        return boost::shared_ptr<peer_plugin>(new logger_peer_plugin(
+                pc->remote().address().to_string(ec) + "_"
+                + to_string(pc->remote().port()).elems + ".log"));
+    }
+};
+
+}
+}
 
 namespace libtorrent
 {
 
-	boost::shared_ptr<torrent_plugin> create_logger_plugin(torrent*)
-	{
-		return boost::shared_ptr<torrent_plugin>(new logger_plugin());
-	}
+boost::shared_ptr<torrent_plugin> create_logger_plugin(torrent*)
+{
+    return boost::shared_ptr<torrent_plugin>(new logger_plugin());
+}
 
 }
 

@@ -48,13 +48,13 @@
 
 #define MENU_STRING_BASE                1000
 
-        // File
+// File
 #define STR_FILE_OPEN           IDM_FILE_OPEN  + MENU_STRING_BASE
 #define STR_FILE_CLOSE          IDM_FILE_CLOSE + MENU_STRING_BASE
 #define STR_FILE_EXIT           IDM_FILE_EXIT  + MENU_STRING_BASE
 
 
-        // System Menu
+// System Menu
 #define STR_SYSMENU_RESTORE     1800
 #define STR_SYSMENU_MOVE        1801
 #define STR_SYSMENU_MINIMIZE    1802
@@ -68,7 +68,7 @@
 
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

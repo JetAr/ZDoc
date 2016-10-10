@@ -6,7 +6,7 @@
 // Copyright (c) 1994 - 2002 Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
-#include <windows.h>   
+#include <windows.h>
 #include <commdlg.h>
 
 #include <streams.h>
@@ -21,7 +21,8 @@
 template<typename T>
 __inline void RELEASE( T* &p )
 {
-    if( p ) {
+    if( p )
+    {
         p->Release();
         p = NULL;
     }
@@ -29,6 +30,6 @@ __inline void RELEASE( T* &p )
 #endif
 
 #ifndef CHECK_HR
-    #define CHECK_HR(expr) { if (FAILED(expr)) __leave; };
+#define CHECK_HR(expr) { if (FAILED(expr)) __leave; };
 #endif
 

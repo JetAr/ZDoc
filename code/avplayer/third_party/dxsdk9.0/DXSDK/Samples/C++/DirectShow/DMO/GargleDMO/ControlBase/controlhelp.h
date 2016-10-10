@@ -1,7 +1,7 @@
 ﻿//------------------------------------------------------------------------------
 // File: ControlHelp.h
 //
-// Desc: DirectShow sample code - definitions of CSliderValue and 
+// Desc: DirectShow sample code - definitions of CSliderValue and
 //       CRadioChoice classes.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -17,7 +17,7 @@ public:
 };
 
 class CSliderValue
-  : public Handler
+    : public Handler
 {
 public:
     CSliderValue();
@@ -43,7 +43,7 @@ private:
 };
 
 class CRadioChoice
-  : public Handler
+    : public Handler
 {
 public:
     struct ButtonEntry

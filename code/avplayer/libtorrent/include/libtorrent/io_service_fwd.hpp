@@ -47,14 +47,16 @@ POSSIBILITY OF SUCH DAMAGE.
 #pragma warning(pop)
 #endif
 
-#ifdef __OBJC__ 
+#ifdef __OBJC__
 #undef Protocol
 #endif
 
 #if BOOST_VERSION >= 103500
-namespace boost {
+namespace boost
+{
 #endif
-namespace asio {
+namespace asio
+{
 
 class io_service;
 
@@ -67,9 +69,9 @@ namespace libtorrent
 {
 
 #if BOOST_VERSION < 103500
-	typedef ::asio::io_service io_service;
+typedef ::asio::io_service io_service;
 #else
-	typedef boost::asio::io_service io_service;
+typedef boost::asio::io_service io_service;
 #endif
 }
 

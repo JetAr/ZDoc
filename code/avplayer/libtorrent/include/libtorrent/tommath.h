@@ -24,11 +24,11 @@
 #include "libtorrent/tommath_class.h"
 
 #ifndef MIN
-   #define MIN(x,y) ((x)<(y)?(x):(y))
+#define MIN(x,y) ((x)<(y)?(x):(y))
 #endif
 
 #ifndef MAX
-   #define MAX(x,y) ((x)>(y)?(x):(y))
+#define MAX(x,y) ((x)>(y)?(x):(y))
 #endif
 
 #ifdef __cplusplus
@@ -46,10 +46,10 @@ extern "C" {
 
 
 /* detect 64-bit mode if possible */
-#if defined(__x86_64__) 
-   #if !(defined(MP_64BIT) && defined(MP_16BIT) && defined(MP_8BIT))
-      #define MP_64BIT
-   #endif
+#if defined(__x86_64__)
+#if !(defined(MP_64BIT) && defined(MP_16BIT) && defined(MP_8BIT))
+#define MP_64BIT
+#endif
 #endif
 
 /* some default configurations.
@@ -61,70 +61,70 @@ extern "C" {
  * [any size beyond that is ok provided it doesn't overflow the data type]
  */
 #ifdef MP_8BIT
-   typedef unsigned char      mp_digit;
-   typedef unsigned short     mp_word;
+typedef unsigned char      mp_digit;
+typedef unsigned short     mp_word;
 #elif defined(MP_16BIT)
-   typedef unsigned short     mp_digit;
-   typedef unsigned long      mp_word;
+typedef unsigned short     mp_digit;
+typedef unsigned long      mp_word;
 #elif defined(MP_64BIT)
-   /* for GCC only on supported platforms */
+/* for GCC only on supported platforms */
 #ifndef CRYPT
-   typedef unsigned long long ulong64;
-   typedef signed long long   long64;
+typedef unsigned long long ulong64;
+typedef signed long long   long64;
 #endif
 
-   typedef unsigned long      mp_digit;
-   typedef unsigned long      mp_word __attribute__ ((mode(TI)));
+typedef unsigned long      mp_digit;
+typedef unsigned long      mp_word __attribute__ ((mode(TI)));
 
-   #define DIGIT_BIT          60
+#define DIGIT_BIT          60
 #else
-   /* this is the default case, 28-bit digits */
-   
-   /* this is to make porting into LibTomCrypt easier :-) */
+/* this is the default case, 28-bit digits */
+
+/* this is to make porting into LibTomCrypt easier :-) */
 #ifndef CRYPT
-   #if defined(_MSC_VER) || defined(__BORLANDC__) 
-      typedef unsigned __int64   ulong64;
-      typedef signed __int64     long64;
-   #else
-      typedef unsigned long long ulong64;
-      typedef signed long long   long64;
-   #endif
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+typedef unsigned __int64   ulong64;
+typedef signed __int64     long64;
+#else
+typedef unsigned long long ulong64;
+typedef signed long long   long64;
+#endif
 #endif
 
-   typedef unsigned long      mp_digit;
-   typedef ulong64            mp_word;
+typedef unsigned long      mp_digit;
+typedef ulong64            mp_word;
 
-#ifdef MP_31BIT   
-   /* this is an extension that uses 31-bit digits */
-   #define DIGIT_BIT          31
+#ifdef MP_31BIT
+/* this is an extension that uses 31-bit digits */
+#define DIGIT_BIT          31
 #else
-   /* default case is 28-bit digits, defines MP_28BIT as a handy macro to test */
-   #define DIGIT_BIT          28
-   #define MP_28BIT
-#endif   
+/* default case is 28-bit digits, defines MP_28BIT as a handy macro to test */
+#define DIGIT_BIT          28
+#define MP_28BIT
+#endif
 #endif
 
 /* define heap macros */
 #ifndef CRYPT
-   /* default to libc stuff */
-   #ifndef XMALLOC 
-       #define XMALLOC  malloc
-       #define XFREE    free
-       #define XREALLOC realloc
-       #define XCALLOC  calloc
-   #else
-      /* prototypes for our heap functions */
-      extern void *XMALLOC(size_t n);
-      extern void *XREALLOC(void *p, size_t n);
-      extern void *XCALLOC(size_t n, size_t s);
-      extern void XFREE(void *p);
-   #endif
+/* default to libc stuff */
+#ifndef XMALLOC
+#define XMALLOC  malloc
+#define XFREE    free
+#define XREALLOC realloc
+#define XCALLOC  calloc
+#else
+/* prototypes for our heap functions */
+extern void *XMALLOC(size_t n);
+extern void *XREALLOC(void *p, size_t n);
+extern void *XCALLOC(size_t n, size_t s);
+extern void XFREE(void *p);
+#endif
 #endif
 
 
 /* otherwise the bits per digit is calculated automatically from the size of a mp_digit */
 #ifndef DIGIT_BIT
-   #define DIGIT_BIT     ((int)((CHAR_BIT * sizeof(mp_digit) - 1)))  /* bits per digit */
+#define DIGIT_BIT     ((int)((CHAR_BIT * sizeof(mp_digit) - 1)))  /* bits per digit */
 #endif
 
 #define MP_DIGIT_BIT     DIGIT_BIT
@@ -156,27 +156,28 @@ typedef int           mp_err;
 
 /* you'll have to tune these... */
 extern int KARATSUBA_MUL_CUTOFF,
-           KARATSUBA_SQR_CUTOFF,
-           TOOM_MUL_CUTOFF,
-           TOOM_SQR_CUTOFF;
+       KARATSUBA_SQR_CUTOFF,
+       TOOM_MUL_CUTOFF,
+       TOOM_SQR_CUTOFF;
 
 /* define this to use lower memory usage routines (exptmods mostly) */
 /* #define MP_LOW_MEM */
 
 /* default precision */
 #ifndef MP_PREC
-   #ifndef MP_LOW_MEM
-      #define MP_PREC                 32     /* default digits of precision */
-   #else
-      #define MP_PREC                 8      /* default digits of precision */
-   #endif   
+#ifndef MP_LOW_MEM
+#define MP_PREC                 32     /* default digits of precision */
+#else
+#define MP_PREC                 8      /* default digits of precision */
+#endif
 #endif
 
 /* size of comba arrays, should be at least 2 * 2**(BITS_PER_WORD - BITS_PER_DIGIT*2) */
 #define MP_WARRAY               (1 << (sizeof(mp_word) * CHAR_BIT - 2 * DIGIT_BIT + 1))
 
 /* the infamous mp_int structure */
-typedef struct  {
+typedef struct
+{
     int used, alloc, sign;
     mp_digit *dp;
 } mp_int;
@@ -447,9 +448,9 @@ int mp_exptmod(mp_int *a, mp_int *b, mp_int *c, mp_int *d);
 
 /* number of primes */
 #ifdef MP_8BIT
-   #define PRIME_SIZE      31
+#define PRIME_SIZE      31
 #else
-   #define PRIME_SIZE      256
+#define PRIME_SIZE      256
 #endif
 
 /* table of first PRIME_SIZE primes */
@@ -469,7 +470,7 @@ int mp_prime_fermat(mp_int *a, mp_int *b, int *result);
 int mp_prime_miller_rabin(mp_int *a, mp_int *b, int *result);
 
 /* This gives [for a given bit size] the number of trials required
- * such that Miller-Rabin gives a prob of failure lower than 2^-96 
+ * such that Miller-Rabin gives a prob of failure lower than 2^-96
  */
 int mp_prime_rabin_miller_trials(int size);
 
@@ -490,7 +491,7 @@ int mp_prime_is_prime(mp_int *a, int t, int *result);
 int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
 
 /* makes a truly random prime of a given size (bytes),
- * call with bbs = 1 if you want it to be congruent to 3 mod 4 
+ * call with bbs = 1 if you want it to be congruent to 3 mod 4
  *
  * You have to supply a callback which fills in a buffer with random bytes.  "dat" is a parameter you can
  * have passed to the callback (e.g. a state or something).  This function doesn't use "dat" itself
@@ -503,7 +504,7 @@ int mp_prime_next_prime(mp_int *a, int t, int bbs_style);
 /* makes a truly random prime of a given size (bits),
  *
  * Flags are as follows:
- * 
+ *
  *   LTM_PRIME_BBS      - make prime congruent to 3 mod 4
  *   LTM_PRIME_SAFE     - make sure (p-1)/2 is prime as well (implies LTM_PRIME_BBS)
  *   LTM_PRIME_2MSB_OFF - make the 2nd highest bit zero
@@ -573,7 +574,7 @@ void bn_reverse(unsigned char *s, int len);
 extern const char *mp_s_rmap;
 
 #ifdef __cplusplus
-   }
+}
 #endif
 
 #endif

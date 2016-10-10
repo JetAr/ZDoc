@@ -13,17 +13,17 @@
 class IDirectInputActionFramework : public IUnknown
 {
 public:
-	//IUnknown fns
-	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
-	STDMETHOD_(ULONG, AddRef) () PURE;
-	STDMETHOD_(ULONG, Release) () PURE;
+    //IUnknown fns
+    STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
+    STDMETHOD_(ULONG, AddRef) () PURE;
+    STDMETHOD_(ULONG, Release) () PURE;
 
-	//own fns
-	STDMETHOD (ConfigureDevices) (LPDICONFIGUREDEVICESCALLBACK lpdiCallback,
-	                              LPDICONFIGUREDEVICESPARAMSW  lpdiCDParams,
-	                              DWORD                        dwFlags,
-	                              LPVOID                       pvRefData
-	                              ) PURE;
+    //own fns
+    STDMETHOD (ConfigureDevices) (LPDICONFIGUREDEVICESCALLBACK lpdiCallback,
+                                  LPDICONFIGUREDEVICESPARAMSW  lpdiCDParams,
+                                  DWORD                        dwFlags,
+                                  LPVOID                       pvRefData
+                                 ) PURE;
 
 };
 #endif // _IFRMWRK_H

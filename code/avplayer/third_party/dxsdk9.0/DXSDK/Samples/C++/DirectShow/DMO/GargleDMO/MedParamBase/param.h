@@ -25,7 +25,10 @@ typedef struct _ParamInfo
 class CCurveItem : public AListItem
 {
 public:
-    CCurveItem* GetNext() { return (CCurveItem*)AListItem::GetNext();}
+    CCurveItem* GetNext()
+    {
+        return (CCurveItem*)AListItem::GetNext();
+    }
     MP_ENVELOPE_SEGMENT m_Envelope;     // Envelope segment.
 };
 
@@ -33,10 +36,19 @@ public:
 class CCurveList : public AList
 {
 public:
-    void AddHead(CCurveItem* pCurveItem) { AList::AddHead((AListItem*)pCurveItem);}
-    CCurveItem* GetHead(){return (CCurveItem*)AList::GetHead();}
-    CCurveItem* RemoveHead(){ return (CCurveItem*)AList::RemoveHead();}
-	~CCurveList();
+    void AddHead(CCurveItem* pCurveItem)
+    {
+        AList::AddHead((AListItem*)pCurveItem);
+    }
+    CCurveItem* GetHead()
+    {
+        return (CCurveItem*)AList::GetHead();
+    }
+    CCurveItem* RemoveHead()
+    {
+        return (CCurveItem*)AList::RemoveHead();
+    }
+    ~CCurveList();
 
 //    void Clear();
 //    void Insert(CCurveItem* pCurveItem);
@@ -73,7 +85,7 @@ public:
     STDMETHODIMP GetParamInfo(DWORD dwParamIndex,MP_PARAMINFO *pInfo);
     STDMETHODIMP GetParamText(DWORD dwParamIndex,WCHAR **ppwchText);
     STDMETHODIMP GetNumTimeFormats(DWORD *pdwNumTimeFormats);
-    STDMETHODIMP GetSupportedTimeFormat(DWORD dwFormatIndex,GUID *pguidTimeFormat);        
+    STDMETHODIMP GetSupportedTimeFormat(DWORD dwFormatIndex,GUID *pguidTimeFormat);
     STDMETHODIMP GetCurrentTimeFormat( GUID *pguidTimeFormat,MP_TIMEDATA *pTimeData);
 
     // other (non-COM) functions
@@ -96,7 +108,10 @@ public:
     // function that calls SetParam to adjust the value of all parameters that may have changed to their
     // new values at time rtTime
     void UpdateActiveParams(REFERENCE_TIME rtTime, UpdateCallback &rThis); // rThis should be the derived class (*this)
-    DWORD GetActiveParamBits() { return m_dwActiveBits; }
+    DWORD GetActiveParamBits()
+    {
+        return m_dwActiveBits;
+    }
 
 protected:
 

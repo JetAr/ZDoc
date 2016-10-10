@@ -28,7 +28,7 @@ struct RHW_VERTEX
 
 class CTerrainEngine;
 
-class CTerrainMesh  
+class CTerrainMesh
 {
 public:
     CTerrainMesh( CTerrainEngine* pTerrainEngine );
@@ -43,8 +43,14 @@ public:
     HRESULT DeleteDeviceObjects();
     VOID    FinalCleanup();
 
-    HRESULT SmoothMap() { return m_pMap->SmoothMap(); };
-    HRESULT FinalizeSmooth() { return m_pMap->FinalizeSmooth(); };
+    HRESULT SmoothMap()
+    {
+        return m_pMap->SmoothMap();
+    };
+    HRESULT FinalizeSmooth()
+    {
+        return m_pMap->FinalizeSmooth();
+    };
 
     HRESULT CreateMeshFromHeightMap( int nWidth, int nHeight );
 
@@ -60,10 +66,22 @@ public:
     HRESULT CorrectTextureEdge();
     HRESULT GenerateMipMaps();
 
-    inline FLOAT GetHeightWorld( float x, float z ) { return m_pMap->GetHeightObj( x-m_fWorldOffsetX, z-m_fWorldOffsetZ ); };
-    inline FLOAT GetHeightObj( float x, float z ) { return m_pMap->GetHeightObj( x, z ); };
-    inline BOOL  IsOutOfRangeWorld( float x, float z ) { return m_pMap->IsOutOfRangeObj( x-m_fWorldOffsetX, z-m_fWorldOffsetZ ); };
-    inline BOOL  IsOutOfRangeObj( float x, float z ) { return m_pMap->IsOutOfRangeObj( x, z ); };
+    inline FLOAT GetHeightWorld( float x, float z )
+    {
+        return m_pMap->GetHeightObj( x-m_fWorldOffsetX, z-m_fWorldOffsetZ );
+    };
+    inline FLOAT GetHeightObj( float x, float z )
+    {
+        return m_pMap->GetHeightObj( x, z );
+    };
+    inline BOOL  IsOutOfRangeWorld( float x, float z )
+    {
+        return m_pMap->IsOutOfRangeObj( x-m_fWorldOffsetX, z-m_fWorldOffsetZ );
+    };
+    inline BOOL  IsOutOfRangeObj( float x, float z )
+    {
+        return m_pMap->IsOutOfRangeObj( x, z );
+    };
 
     DWORD GetTexelColor( DWORD iLevel, float x, float z );
     HRESULT SaveMeshToXFile();
@@ -83,6 +101,6 @@ public:
     CTerrainMesh*       m_pNorthEast;
     CTerrainEngine*     g_pTerrainEngine;
     D3DFORMAT           m_fmtTexture;
-    LPDIRECT3DTEXTURE9  m_pTexture;       
+    LPDIRECT3DTEXTURE9  m_pTexture;
 };
 

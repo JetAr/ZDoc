@@ -13,8 +13,8 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 #include "NetAbstract.h"
 #include "SyncObjects.h"
@@ -37,8 +37,8 @@ struct  ClientPosPacket;
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 struct PlayerData
 {
@@ -76,8 +76,8 @@ struct PlayerData
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 struct ServerCell
 {
@@ -88,8 +88,8 @@ struct ServerCell
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CMazeServer : public INetServer
 {
@@ -103,62 +103,110 @@ public:
     void    OnSessionLost( DWORD dwReason );
 
     // Hook up to the network service
-    void    SetOutboundServer( IOutboundServer* poutnet ) { m_pNet = poutnet; };
+    void    SetOutboundServer( IOutboundServer* poutnet )
+    {
+        m_pNet = poutnet;
+    };
 
     // Initialisation - need to hook up a maze object
     HRESULT Init( BOOL bLocalLoopback, const CMaze* pmaze );
     void    Shutdown();
 
     // Chance of server sending packets via reliable transport
-    void    SetServerReliableRate( DWORD percent ) { m_dwServerReliableRate = percent; };
-    DWORD   GetServerReliableRate() const { return m_dwServerReliableRate; };
+    void    SetServerReliableRate( DWORD percent )
+    {
+        m_dwServerReliableRate = percent;
+    };
+    DWORD   GetServerReliableRate() const
+    {
+        return m_dwServerReliableRate;
+    };
 
     // Timeout of server's packets
-    void    SetServerTimeout( DWORD timeout ) { m_dwServerTimeout = timeout; };
-    DWORD   GetServerTimeout() const { return m_dwServerTimeout; };
+    void    SetServerTimeout( DWORD timeout )
+    {
+        m_dwServerTimeout = timeout;
+    };
+    DWORD   GetServerTimeout() const
+    {
+        return m_dwServerTimeout;
+    };
 
     // Change of client sending packets via reliable transport. Setting this causes the server
     // to propagate this setting to all currently connected clients
     void    SetClientReliableRate( DWORD percent );
-    DWORD   GetClientReliableRate() const { return DWORD(m_ClientNetConfig.ubReliableRate); };
+    DWORD   GetClientReliableRate() const
+    {
+        return DWORD(m_ClientNetConfig.ubReliableRate);
+    };
 
     // Change client update rate. Setting this causes the server to propagate this setting to all
     // currently connected clients
     void    SetClientUpdateRate( DWORD rate );
-    DWORD   GetClientUpdateRate() const { return DWORD(m_ClientNetConfig.wUpdateRate); };
+    DWORD   GetClientUpdateRate() const
+    {
+        return DWORD(m_ClientNetConfig.wUpdateRate);
+    };
 
     // Change client timeout. Setting this causes the server to propagate this setting to all
     // currently connected clients
     void    SetClientTimeout( DWORD timeout );
-    DWORD   GetClientTimeout() const { return DWORD(m_ClientNetConfig.wTimeout); };
+    DWORD   GetClientTimeout() const
+    {
+        return DWORD(m_ClientNetConfig.wTimeout);
+    };
 
     // Change Client position pack size. Setting this causes the server to propagate this setting to all
     // currently connected clients
     void    SetClientPackSize( DWORD size );
-    DWORD   GetClientPackSize() const { return DWORD(m_ClientNetConfig.wClientPackSizeArray[m_ClientNetConfig.ubClientPackIndex]); };
+    DWORD   GetClientPackSize() const
+    {
+        return DWORD(m_ClientNetConfig.wClientPackSizeArray[m_ClientNetConfig.ubClientPackIndex]);
+    };
 
     // Change Server position pack size.
     void    SetServerPackSize( DWORD size );
-    DWORD   GetServerPackSize() const { return DWORD(m_ClientNetConfig.wServerPackSizeArray[m_ClientNetConfig.ubServerPackIndex]); };
-    
+    DWORD   GetServerPackSize() const
+    {
+        return DWORD(m_ClientNetConfig.wServerPackSizeArray[m_ClientNetConfig.ubServerPackIndex]);
+    };
+
     // How long the user wants to hold the Server's Dplay Threads
-    void    SetServerThreadWait( DWORD threadwait ) { m_dwServerThreadWait = threadwait; };
-    DWORD   GetServerThreadWait() const { return m_dwServerThreadWait; };
+    void    SetServerThreadWait( DWORD threadwait )
+    {
+        m_dwServerThreadWait = threadwait;
+    };
+    DWORD   GetServerThreadWait() const
+    {
+        return m_dwServerThreadWait;
+    };
 
     // How long the user wants to hold the Server's Dplay Threads
     void    SetClientThreadWait( DWORD threadwait );
-    DWORD   GetClientThreadWait() const { return DWORD(m_ClientNetConfig.dwThreadWait); };
-    
-    
+    DWORD   GetClientThreadWait() const
+    {
+        return DWORD(m_ClientNetConfig.dwThreadWait);
+    };
+
+
     // Various commands
     void    DisplayConnectionInfo( DWORD dwID );
     void    DisplayNextConnectionInfo();
     void    PrintStats();
 
-    void    SetLogLevel( DWORD dwLogLevel ) { m_dwLogLevel = dwLogLevel; }
-    DWORD   GetLogLevel() { return m_dwLogLevel; }
+    void    SetLogLevel( DWORD dwLogLevel )
+    {
+        m_dwLogLevel = dwLogLevel;
+    }
+    DWORD   GetLogLevel()
+    {
+        return m_dwLogLevel;
+    }
 
-    DWORD   GetNumPlayers() { return m_dwPlayerCount; }
+    DWORD   GetNumPlayers()
+    {
+        return m_dwPlayerCount;
+    }
 
 protected:
     BOOL                m_bLocalLoopback;
@@ -175,12 +223,12 @@ protected:
     CLockArray<LOCK_GRID_SIZE,LOCK_GRID_SIZE>   m_LockGrid;
     DWORD               m_dwMazeXShift;
     DWORD               m_dwMazeYShift;
-    void                LockCell( DWORD x , DWORD y );
-    void                UnlockCell( DWORD x , DWORD y );
-    void                LockRange( DWORD x1 , DWORD y1 , DWORD x2 , DWORD y2 );
-    void                UnlockRange( DWORD x1 , DWORD y1 , DWORD x2 , DWORD y2 );
-    void                LockCellPair( DWORD x1 , DWORD y1 , DWORD x2 , DWORD y2 );
-    void                UnlockCellPair( DWORD x1 , DWORD y1 , DWORD x2 , DWORD y2 );
+    void                LockCell( DWORD x, DWORD y );
+    void                UnlockCell( DWORD x, DWORD y );
+    void                LockRange( DWORD x1, DWORD y1, DWORD x2, DWORD y2 );
+    void                UnlockRange( DWORD x1, DWORD y1, DWORD x2, DWORD y2 );
+    void                LockCellPair( DWORD x1, DWORD y1, DWORD x2, DWORD y2 );
+    void                UnlockCellPair( DWORD x1, DWORD y1, DWORD x2, DWORD y2 );
     CCriticalSection    m_OffMapLock;
 
     // The PlayerData lists
@@ -194,8 +242,14 @@ protected:
     // The player object locks
     enum { NUM_PLAYER_OBJECT_LOCKS = 16 };
     CCriticalSection    m_PlayerDataLocks[NUM_PLAYER_OBJECT_LOCKS];
-    void                LockPlayerData( PlayerData* pPlayerData ) { m_PlayerDataLocks[((pPlayerData-m_PlayerDatas) & (NUM_PLAYER_OBJECT_LOCKS-1))].Enter(); };
-    void                UnlockPlayerData( PlayerData* pPlayerData ) { m_PlayerDataLocks[((pPlayerData-m_PlayerDatas) & (NUM_PLAYER_OBJECT_LOCKS-1))].Leave(); };
+    void                LockPlayerData( PlayerData* pPlayerData )
+    {
+        m_PlayerDataLocks[((pPlayerData-m_PlayerDatas) & (NUM_PLAYER_OBJECT_LOCKS-1))].Enter();
+    };
+    void                UnlockPlayerData( PlayerData* pPlayerData )
+    {
+        m_PlayerDataLocks[((pPlayerData-m_PlayerDatas) & (NUM_PLAYER_OBJECT_LOCKS-1))].Leave();
+    };
 
     PlayerData*        CreatePlayerData();
     void                DestroyPlayerData( PlayerData* pPlayerData );
@@ -227,8 +281,8 @@ protected:
     BOOL    IsClientVersionSupported( DWORD dwClientVersion );
 
     DWORD   m_dwPlayerCount;
-    
-    CCriticalSection    m_csThreadCountLock;    
+
+    CCriticalSection    m_csThreadCountLock;
     WORD   m_wActiveThreadCount;
     WORD   m_wMaxThreadCount;
     FLOAT  m_fAvgThreadCount;
@@ -267,13 +321,13 @@ protected:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
+// Name:
 // Desc: This function is called by the server to output informational text.
-//       In the client it should probably just be a dummy function, in the server 
+//       In the client it should probably just be a dummy function, in the server
 //       it should probably just spew out to the console
 //-----------------------------------------------------------------------------
 enum ServerBufferType { SLINE_PROMPT, SLINE_INPUT, SLINE_LOG, SLINE_CMD };
-void ConsolePrintf( ServerBufferType enumLineType, const TCHAR* fmt , ... );
+void ConsolePrintf( ServerBufferType enumLineType, const TCHAR* fmt, ... );
 
 
 

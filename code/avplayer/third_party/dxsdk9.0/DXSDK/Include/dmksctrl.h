@@ -25,13 +25,13 @@
 #include <objbase.h>
 
 #if !defined(_NTRTL_)
-    #ifndef DEFINE_GUIDEX
-        #define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID name
-    #endif /* !defined(DEFINE_GUIDEX) */
+#ifndef DEFINE_GUIDEX
+#define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID name
+#endif /* !defined(DEFINE_GUIDEX) */
 
-    #ifndef STATICGUIDOF
-        #define STATICGUIDOF(guid) STATIC_##guid
-    #endif /* !defined(STATICGUIDOF) */
+#ifndef STATICGUIDOF
+#define STATICGUIDOF(guid) STATIC_##guid
+#endif /* !defined(STATICGUIDOF) */
 #endif /* !defined(_NTRTL_) */
 
 #ifndef STATIC_IID_IKsControl
@@ -39,8 +39,8 @@
     0x28F54685L, 0x06FD, 0x11D2, 0xB2, 0x7A, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
 #endif /* STATIC_IID_IKsControl */
 
-/* 
- * Warning: This will prevent the rest of ks.h from being pulled in if ks.h is 
+/*
+ * Warning: This will prevent the rest of ks.h from being pulled in if ks.h is
  * included after dmksctrl.h. Make sure you do not include both headers in
  * the same source file.
  */
@@ -48,9 +48,12 @@
 #define _KS_
 
 #if (defined(_MSC_EXTENSIONS) || defined(__cplusplus)) && !defined(CINTERFACE)
-typedef struct {
-    union {
-        struct {
+typedef struct
+{
+    union
+    {
+        struct
+        {
             GUID    Set;
             ULONG   Id;
             ULONG   Flags;
@@ -59,9 +62,12 @@ typedef struct {
     };
 } KSIDENTIFIER, *PKSIDENTIFIER;
 #else
-typedef struct {
-    union {
-        struct {
+typedef struct
+{
+    union
+    {
+        struct
+        {
             GUID    Set;
             ULONG   Id;
             ULONG   Flags;
@@ -108,7 +114,7 @@ typedef KSIDENTIFIER KSPROPERTY, *PKSPROPERTY, KSMETHOD, *PKSMETHOD, KSEVENT, *P
 #define INTERFACE IKsControl
 DECLARE_INTERFACE_(IKsControl, IUnknown)
 {
-     /* IUnknown */
+    /* IUnknown */
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;

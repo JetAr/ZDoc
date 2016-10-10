@@ -40,40 +40,40 @@ class CNetRecvAlloc ;
 class CNetOutputPin :
     public CBaseOutputPin
 {
-    public :
+public :
 
-        CNetOutputPin (
-            IN  TCHAR *         szName,
-            IN  CBaseFilter *   pFilter,
-            IN  CCritSec *      pLock,
-            OUT HRESULT *       pHr,
-            IN  LPCWSTR         pszName
-            ) ;
+    CNetOutputPin (
+        IN  TCHAR *         szName,
+        IN  CBaseFilter *   pFilter,
+        IN  CCritSec *      pLock,
+        OUT HRESULT *       pHr,
+        IN  LPCWSTR         pszName
+    ) ;
 
-        ~CNetOutputPin () ;
+    ~CNetOutputPin () ;
 
-        HRESULT
-        GetMediaType (
-            IN  int             iPosition,
-            OUT CMediaType *    pmt
-            ) ;
+    HRESULT
+    GetMediaType (
+        IN  int             iPosition,
+        OUT CMediaType *    pmt
+    ) ;
 
-        HRESULT
-        CheckMediaType (
-            IN  const CMediaType * pmt
-            ) ;
+    HRESULT
+    CheckMediaType (
+        IN  const CMediaType * pmt
+    ) ;
 
-        HRESULT
-        DecideBufferSize (
-            IN  IMemAllocator *,
-            OUT ALLOCATOR_PROPERTIES *
-            ) ;
+    HRESULT
+    DecideBufferSize (
+        IN  IMemAllocator *,
+        OUT ALLOCATOR_PROPERTIES *
+    ) ;
 
-        virtual
-        HRESULT
-        InitAllocator (
-            OUT IMemAllocator ** ppAlloc
-            ) ;
+    virtual
+    HRESULT
+    InitAllocator (
+        OUT IMemAllocator ** ppAlloc
+    ) ;
 } ;
 
 //  ---------------------------------------------------------------------------
@@ -93,7 +93,8 @@ class CNetworkReceiverFilter :
         Object implements our filter.
 --*/
 {
-    enum {
+    enum
+    {
         POOL_SIZE               = 24,       //  buffer pool size
         MEDIA_SAMPLE_POOL_SIZE  = 10,       //  media samples in our pool
     } ;
@@ -109,97 +110,109 @@ class CNetworkReceiverFilter :
     CTSMediaSamplePool *    m_pMSPool ;         //  media sample pool
     CNetRecvAlloc *         m_pNetRecvAlloc ;   //  allocator
 
-    public :
+public :
 
-        CNetworkReceiverFilter (
-            IN  TCHAR *     tszName,
-            IN  LPUNKNOWN   punk,
-            OUT HRESULT *   phr
-            ) ;
+    CNetworkReceiverFilter (
+        IN  TCHAR *     tszName,
+        IN  LPUNKNOWN   punk,
+        OUT HRESULT *   phr
+    ) ;
 
-        ~CNetworkReceiverFilter (
-            ) ;
+    ~CNetworkReceiverFilter (
+    ) ;
 
-        void LockFilter ()              { m_crtFilterLock.Lock () ; }
-        void UnlockFilter ()            { m_crtFilterLock.Unlock () ; }
+    void LockFilter ()
+    {
+        m_crtFilterLock.Lock () ;
+    }
+    void UnlockFilter ()
+    {
+        m_crtFilterLock.Unlock () ;
+    }
 
-        DECLARE_IUNKNOWN ;
-        DECLARE_IMULTICASTCONFIG () ;
+    DECLARE_IUNKNOWN ;
+    DECLARE_IMULTICASTCONFIG () ;
 
-        //  --------------------------------------------------------------------
-        //  CBaseFilter methods
+    //  --------------------------------------------------------------------
+    //  CBaseFilter methods
 
-        int GetPinCount ()              { return 1 ; }
+    int GetPinCount ()
+    {
+        return 1 ;
+    }
 
-        CBasePin *
-        GetPin (
-            IN  int Index
-            ) ;
+    CBasePin *
+    GetPin (
+        IN  int Index
+    ) ;
 
-        CNetRecvAlloc *
-        GetRecvAllocator (
-            )
-        {
-            return m_pNetRecvAlloc ;
-        }
+    CNetRecvAlloc *
+    GetRecvAllocator (
+    )
+    {
+        return m_pNetRecvAlloc ;
+    }
 
-        STDMETHODIMP
-        NonDelegatingQueryInterface (
-            IN  REFIID  riid,
-            OUT void ** ppv
-            ) ;
+    STDMETHODIMP
+    NonDelegatingQueryInterface (
+        IN  REFIID  riid,
+        OUT void ** ppv
+    ) ;
 
-        static
-        CUnknown *
-        CreateInstance (
-            IN  LPUNKNOWN   punk,
-            OUT HRESULT *   phr
-            ) ;
+    static
+    CUnknown *
+    CreateInstance (
+        IN  LPUNKNOWN   punk,
+        OUT HRESULT *   phr
+    ) ;
 
-        STDMETHODIMP
-        GetPages (
-            IN OUT CAUUID * pPages
-            ) ;
+    STDMETHODIMP
+    GetPages (
+        IN OUT CAUUID * pPages
+    ) ;
 
-        AMOVIESETUP_FILTER *
-        GetSetupData (
-            )
-        {
-            return & g_sudRecvFilter ;
-        }
+    AMOVIESETUP_FILTER *
+    GetSetupData (
+    )
+    {
+        return & g_sudRecvFilter ;
+    }
 
-        STDMETHODIMP
-        Pause (
-            ) ;
+    STDMETHODIMP
+    Pause (
+    ) ;
 
-        STDMETHODIMP
-        Stop (
-            ) ;
+    STDMETHODIMP
+    Stop (
+    ) ;
 
-        //  --------------------------------------------------------------------
-        //  CPersistStream
+    //  --------------------------------------------------------------------
+    //  CPersistStream
 
-        HRESULT
-        WriteToStream (
-            IN  IStream *   pIStream
-            ) ;
+    HRESULT
+    WriteToStream (
+        IN  IStream *   pIStream
+    ) ;
 
-        HRESULT
-        ReadFromStream (
-            IN  IStream *   pIStream
-            ) ;
+    HRESULT
+    ReadFromStream (
+        IN  IStream *   pIStream
+    ) ;
 
-        int SizeMax ()  { return (sizeof m_ulIP + sizeof m_usPort + sizeof m_ulNIC) ; }
+    int SizeMax ()
+    {
+        return (sizeof m_ulIP + sizeof m_usPort + sizeof m_ulNIC) ;
+    }
 
-        STDMETHODIMP
-        GetClassID (
-            OUT CLSID * pCLSID
-            ) ;
+    STDMETHODIMP
+    GetClassID (
+        OUT CLSID * pCLSID
+    ) ;
 
-        //  class methods
+    //  class methods
 
-        void
-        ProcessBuffer (
-            IN  CBuffer *
-            ) ;
+    void
+    ProcessBuffer (
+        IN  CBuffer *
+    ) ;
 } ;

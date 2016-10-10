@@ -16,12 +16,12 @@ Abstract:
 #include <guiddef.h>
 
 #if defined( DEFINE_GUIDEX )
-    #undef DEFINE_GUIDEX
+#undef DEFINE_GUIDEX
 #endif
 #define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID __declspec(selectany) name = { STATICGUIDOF(name) }
 
 #ifndef STATICGUIDOF
-    #define STATICGUIDOF(guid) STATIC_##guid
+#define STATICGUIDOF(guid) STATIC_##guid
 #endif // !defined(STATICGUIDOF)
 
 #if !defined( DEFINE_WAVEFORMATEX_GUID )

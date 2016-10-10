@@ -33,7 +33,8 @@ DEALINGS IN THE SOFTWARE.
 #include <boost/locale.hpp>
 #include <boost/locale/utf.hpp>
 
-namespace libyk {
+namespace libyk
+{
 
 inline std::string wide_utf8(const std::wstring &source);
 inline std::wstring utf8_wide(std::string const &source);
@@ -44,58 +45,58 @@ inline std::wstring ansi_wide(const std::string &source, const std::string &char
 
 inline std::wstring ansi_wide(const std::string &source, const std::string &characters/* = "GB2312"*/)
 {
-	std::wstring destination;
+    std::wstring destination;
 
-	std::string s = ansi_utf8(source, characters);
-	destination = boost::locale::conv::utf_to_utf<wchar_t>(s);
+    std::string s = ansi_utf8(source, characters);
+    destination = boost::locale::conv::utf_to_utf<wchar_t>(s);
 
-	return destination;
+    return destination;
 }
 
 inline std::string ansi_utf8(std::string const &source, const std::string &characters/* = "GB2312"*/)
 {
-	std::string destination;
+    std::string destination;
 
-	destination = boost::locale::conv::between(source, "UTF-8", characters);
+    destination = boost::locale::conv::between(source, "UTF-8", characters);
 
-	return destination;
+    return destination;
 }
 
 inline std::string wide_utf8(const std::wstring &source)
 {
-	std::string destination;
+    std::string destination;
 
-	destination = boost::locale::conv::utf_to_utf<char>(source);
+    destination = boost::locale::conv::utf_to_utf<char>(source);
 
-	return destination;
+    return destination;
 }
 
 inline std::wstring utf8_wide(std::string const &source)
 {
-	std::wstring destination;
+    std::wstring destination;
 
-	destination = boost::locale::conv::utf_to_utf<wchar_t>(source);
+    destination = boost::locale::conv::utf_to_utf<wchar_t>(source);
 
-	return destination;
+    return destination;
 }
 
 inline std::string utf8_ansi(std::string const &source, const std::string &characters/* = "GB2312"*/)
 {
-	std::string destination;
+    std::string destination;
 
-	destination = boost::locale::conv::between(source, characters, "UTF-8");
+    destination = boost::locale::conv::between(source, characters, "UTF-8");
 
-	return destination;
+    return destination;
 }
 
 inline std::string wide_ansi(std::wstring const &source, const std::string &characters/* = "GB2312"*/)
 {
-	std::string destination;
+    std::string destination;
 
-	destination = wide_utf8(source);
-	destination = utf8_ansi(destination, characters);
+    destination = wide_utf8(source);
+    destination = utf8_ansi(destination, characters);
 
-	return destination;
+    return destination;
 }
 
 }

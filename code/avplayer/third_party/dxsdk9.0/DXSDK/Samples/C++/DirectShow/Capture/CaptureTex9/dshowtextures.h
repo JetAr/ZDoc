@@ -29,9 +29,9 @@ public:
 
 private:
     CCustomPresentation* m_pCP;
-    CComPtr<IDirect3DSurface9>      m_pSurfBuf;     // we use this surface to copy media sample to -- 
-                                                    // then we will use Blt from m_pSurfBuf to 
-                                                    // m_pTexture to provide format translation
+    CComPtr<IDirect3DSurface9>      m_pSurfBuf;     // we use this surface to copy media sample to --
+    // then we will use Blt from m_pSurfBuf to
+    // m_pTexture to provide format translation
     D3DFORMAT  m_MediaFormat;                       // format of the surface that gets media samples
 
     LONG m_lVidWidth;   // Video width

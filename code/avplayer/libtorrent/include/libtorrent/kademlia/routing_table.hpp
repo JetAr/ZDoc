@@ -53,24 +53,26 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	struct session_status;
+struct session_status;
 }
 
-namespace libtorrent { namespace dht
+namespace libtorrent
+{
+namespace dht
 {
 
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
 TORRENT_DECLARE_LOG(table);
 #endif
 
-	
+
 typedef std::vector<node_entry> bucket_t;
 
 struct routing_table_node
 {
-	bucket_t replacements;
-	bucket_t live_nodes;
-	ptime last_active;
+    bucket_t replacements;
+    bucket_t live_nodes;
+    ptime last_active;
 };
 
 // differences in the implementation from the description in
@@ -86,138 +88,151 @@ struct routing_table_node
 class TORRENT_EXTRA_EXPORT routing_table
 {
 public:
-	routing_table(node_id const& id, int bucket_size
-		, dht_settings const& settings);
+    routing_table(node_id const& id, int bucket_size
+                  , dht_settings const& settings);
 
-	void status(session_status& s) const;
+    void status(session_status& s) const;
 
-	void node_failed(node_id const& id, udp::endpoint const& ep);
-	
-	// adds an endpoint that will never be added to
-	// the routing table
-	void add_router_node(udp::endpoint router);
+    void node_failed(node_id const& id, udp::endpoint const& ep);
 
-	// iterates over the router nodes added
-	typedef std::set<udp::endpoint>::const_iterator router_iterator;
-	router_iterator router_begin() const { return m_router_nodes.begin(); }
-	router_iterator router_end() const { return m_router_nodes.end(); }
+    // adds an endpoint that will never be added to
+    // the routing table
+    void add_router_node(udp::endpoint router);
 
-	bool add_node(node_entry e);
+    // iterates over the router nodes added
+    typedef std::set<udp::endpoint>::const_iterator router_iterator;
+    router_iterator router_begin() const
+    {
+        return m_router_nodes.begin();
+    }
+    router_iterator router_end() const
+    {
+        return m_router_nodes.end();
+    }
 
-	// this function is called every time the node sees
-	// a sign of a node being alive. This node will either
-	// be inserted in the k-buckets or be moved to the top
-	// of its bucket.
-	bool node_seen(node_id const& id, udp::endpoint ep, int rtt);
+    bool add_node(node_entry e);
 
-	// this may add a node to the routing table and mark it as
-	// not pinged. If the bucket the node falls into is full,
-	// the node will be ignored.
-	void heard_about(node_id const& id, udp::endpoint const& ep);
-	
-	// if any bucket in the routing table needs to be refreshed
-	// this function will return true and set the target to an
-	// appropriate target inside that bucket	
-	bool need_refresh(node_id& target) const;
+    // this function is called every time the node sees
+    // a sign of a node being alive. This node will either
+    // be inserted in the k-buckets or be moved to the top
+    // of its bucket.
+    bool node_seen(node_id const& id, udp::endpoint ep, int rtt);
 
-	enum
-	{
-		include_failed = 1
-	};
-	// fills the vector with the count nodes from our buckets that
-	// are nearest to the given id.
-	void find_node(node_id const& id, std::vector<node_entry>& l
-		, int options, int count = 0);
-	
-	int bucket_size(int bucket) const
-	{
-		int num_buckets = m_buckets.size();
-		if (num_buckets == 0) return 0;
-		if (bucket < num_buckets) bucket = num_buckets - 1;
-		table_t::const_iterator i = m_buckets.begin();
-		std::advance(i, bucket);
-		return (int)i->live_nodes.size();
-	}
+    // this may add a node to the routing table and mark it as
+    // not pinged. If the bucket the node falls into is full,
+    // the node will be ignored.
+    void heard_about(node_id const& id, udp::endpoint const& ep);
 
-	void for_each_node(void (*)(void*, node_entry const&)
-		, void (*)(void*, node_entry const&), void* userdata) const;
+    // if any bucket in the routing table needs to be refreshed
+    // this function will return true and set the target to an
+    // appropriate target inside that bucket
+    bool need_refresh(node_id& target) const;
 
-	int bucket_size() const { return m_bucket_size; }
+    enum
+    {
+        include_failed = 1
+    };
+    // fills the vector with the count nodes from our buckets that
+    // are nearest to the given id.
+    void find_node(node_id const& id, std::vector<node_entry>& l
+                   , int options, int count = 0);
 
-	boost::tuple<int, int> size() const;
-	size_type num_global_nodes() const;
-	
-	// returns true if there are no working nodes
-	// in the routing table
-	bool need_bootstrap() const;
-	int num_active_buckets() const { return m_buckets.size(); }
-	
-	void replacement_cache(bucket_t& nodes) const;
+    int bucket_size(int bucket) const
+    {
+        int num_buckets = m_buckets.size();
+        if (num_buckets == 0) return 0;
+        if (bucket < num_buckets) bucket = num_buckets - 1;
+        table_t::const_iterator i = m_buckets.begin();
+        std::advance(i, bucket);
+        return (int)i->live_nodes.size();
+    }
+
+    void for_each_node(void (*)(void*, node_entry const&)
+                       , void (*)(void*, node_entry const&), void* userdata) const;
+
+    int bucket_size() const
+    {
+        return m_bucket_size;
+    }
+
+    boost::tuple<int, int> size() const;
+    size_type num_global_nodes() const;
+
+    // returns true if there are no working nodes
+    // in the routing table
+    bool need_bootstrap() const;
+    int num_active_buckets() const
+    {
+        return m_buckets.size();
+    }
+
+    void replacement_cache(bucket_t& nodes) const;
 
 #if defined TORRENT_DHT_VERBOSE_LOGGING || defined TORRENT_DEBUG
-	// used for debug and monitoring purposes. This will print out
-	// the state of the routing table to the given stream
-	void print_state(std::ostream& os) const;
+    // used for debug and monitoring purposes. This will print out
+    // the state of the routing table to the given stream
+    void print_state(std::ostream& os) const;
 #endif
 
-	void touch_bucket(node_id const& target);
+    void touch_bucket(node_id const& target);
 
-	int bucket_limit(int bucket) const;
+    int bucket_limit(int bucket) const;
 
 private:
 
-	typedef std::list<routing_table_node> table_t;
+    typedef std::list<routing_table_node> table_t;
 
-	table_t::iterator find_bucket(node_id const& id);
+    table_t::iterator find_bucket(node_id const& id);
 
-	void split_bucket();
+    void split_bucket();
 
-	// return a pointer the node_entry with the given endpoint
-	// or 0 if we don't have such a node. Both the address and the
-	// port has to match
-	node_entry* find_node(udp::endpoint const& ep, routing_table::table_t::iterator* bucket);
+    // return a pointer the node_entry with the given endpoint
+    // or 0 if we don't have such a node. Both the address and the
+    // port has to match
+    node_entry* find_node(udp::endpoint const& ep, routing_table::table_t::iterator* bucket);
 
-	// constant called k in paper
-	int m_bucket_size;
-	
-	dht_settings const& m_settings;
+    // constant called k in paper
+    int m_bucket_size;
 
-	// (k-bucket, replacement cache) pairs
-	// the first entry is the bucket the furthest
-	// away from our own ID. Each time the bucket
-	// closest to us (m_buckets.back()) has more than
-	// bucket size nodes in it, another bucket is
-	// added to the end and it's split up between them
-	table_t m_buckets;
+    dht_settings const& m_settings;
 
-	node_id m_id; // our own node id
+    // (k-bucket, replacement cache) pairs
+    // the first entry is the bucket the furthest
+    // away from our own ID. Each time the bucket
+    // closest to us (m_buckets.back()) has more than
+    // bucket size nodes in it, another bucket is
+    // added to the end and it's split up between them
+    table_t m_buckets;
 
-	// the last time need_bootstrap() returned true
-	mutable ptime m_last_bootstrap;
+    node_id m_id; // our own node id
 
-	// the last time the routing table was refreshed.
-	// this is used to stagger buckets needing refresh
-	// to be at least 45 seconds apart.
-	mutable ptime m_last_refresh;
+    // the last time need_bootstrap() returned true
+    mutable ptime m_last_bootstrap;
 
-	// the last time we refreshed our own bucket
-	// refreshed every 15 minutes
-	mutable ptime m_last_self_refresh;
-	
-	// this is a set of all the endpoints that have
-	// been identified as router nodes. They will
-	// be used in searches, but they will never
-	// be added to the routing table.
-	std::set<udp::endpoint> m_router_nodes;
+    // the last time the routing table was refreshed.
+    // this is used to stagger buckets needing refresh
+    // to be at least 45 seconds apart.
+    mutable ptime m_last_refresh;
 
-	// these are all the IPs that are in the routing
-	// table. It's used to only allow a single entry
-	// per IP in the whole table. Currently only for
-	// IPv4
-	std::set<address_v4::bytes_type> m_ips;
+    // the last time we refreshed our own bucket
+    // refreshed every 15 minutes
+    mutable ptime m_last_self_refresh;
+
+    // this is a set of all the endpoints that have
+    // been identified as router nodes. They will
+    // be used in searches, but they will never
+    // be added to the routing table.
+    std::set<udp::endpoint> m_router_nodes;
+
+    // these are all the IPs that are in the routing
+    // table. It's used to only allow a single entry
+    // per IP in the whole table. Currently only for
+    // IPv4
+    std::set<address_v4::bytes_type> m_ips;
 };
 
-} } // namespace libtorrent::dht
+}
+} // namespace libtorrent::dht
 
 #endif // ROUTING_TABLE_HPP
 

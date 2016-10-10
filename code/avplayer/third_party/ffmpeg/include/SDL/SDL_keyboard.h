@@ -56,11 +56,12 @@ extern "C" {
  *	}
  *      @endcode
  */
-typedef struct SDL_keysym {
-	Uint8 scancode;			/**< hardware specific scancode */
-	SDLKey sym;			/**< SDL virtual keysym */
-	SDLMod mod;			/**< current key modifiers */
-	Uint16 unicode;			/**< translated character */
+typedef struct SDL_keysym
+{
+    Uint8 scancode;			/**< hardware specific scancode */
+    SDLKey sym;			/**< SDL virtual keysym */
+    SDLMod mod;			/**< current key modifiers */
+    Uint16 unicode;			/**< translated character */
 } SDL_keysym;
 
 /** This is the mask which refers to all hotkey bindings */

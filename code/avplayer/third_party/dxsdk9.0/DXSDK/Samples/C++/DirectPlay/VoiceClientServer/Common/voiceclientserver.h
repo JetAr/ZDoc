@@ -18,7 +18,7 @@
 #define WM_APP_UPDATE_STATS     (WM_APP + 1)
 
 // This GUID allows DirectPlay to find other instances of the same game on
-// the network.  So it must be unique for every game, and the same for 
+// the network.  So it must be unique for every game, and the same for
 // every instance of that game.  // {AD8EF550-EB5D-49b8-9C13-DC6CCDA33FC5}
 GUID g_guidApp = { 0xad8ef550, 0xeb5d, 0x49b8, { 0x9c, 0x13, 0xdc, 0x6c, 0xcd, 0xa3, 0x3f, 0xc5 } };
 
@@ -26,7 +26,7 @@ GUID g_guidApp = { 0xad8ef550, 0xeb5d, 0x49b8, { 0x9c, 0x13, 0xdc, 0x6c, 0xcd, 0
 
 
 //-----------------------------------------------------------------------------
-// App specific DirectPlay messages and structures 
+// App specific DirectPlay messages and structures
 //-----------------------------------------------------------------------------
 #define VOICECLIENTSERVER_PORT      2511
 #define GAME_MSGID_CREATE_PLAYER    1
@@ -43,7 +43,7 @@ struct GAMEMSG_GENERIC
 
 struct GAMEMSG_SET_ID : public GAMEMSG_GENERIC
 {
-    DWORD dpnidPlayer;                 // dpnid of the player 
+    DWORD dpnidPlayer;                 // dpnid of the player
 };
 
 struct GAMEMSG_CREATE_PLAYER : public GAMEMSG_GENERIC

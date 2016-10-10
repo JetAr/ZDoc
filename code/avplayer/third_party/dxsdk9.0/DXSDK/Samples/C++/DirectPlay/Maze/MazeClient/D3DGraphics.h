@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 // File: d3dgraphics.h
 //
-// Desc: see main.cpp 
+// Desc: see main.cpp
 //
 // Copyright (c) 1999-2001 Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -43,15 +43,15 @@ struct VERTEX_TL_TEXTURED
     D3DXVECTOR3 vPos;
     float       fRHW;
     DWORD       dwDiffuse;
-    DWORD       dwSpecular;    
+    DWORD       dwSpecular;
     FLOAT       fU, fV;
 };
 #define FVF_TL_TEXTURED  (D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_SPECULAR|D3DFVF_TEX1)
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 class CD3DGraphics : public IMazeGraphics, public CD3DScreensaver
 {
@@ -60,14 +60,20 @@ public:
     ~CD3DGraphics();
 
     // From IMazeGraphics
-    virtual VOID    Init( CMazeApp* pMazeApp, CDPlay8Client* pDP8Client, CMazeClient* pMazeClient ); 
+    virtual VOID    Init( CMazeApp* pMazeApp, CDPlay8Client* pDP8Client, CMazeClient* pMazeClient );
     virtual HRESULT Create( HINSTANCE hInstance );
     virtual INT     Run();
     virtual void    HandleOutputMsg( EnumLineType enumLineType, TCHAR* strLine );
-    virtual BOOL    IsPreview() { return m_bIsPreview; };
+    virtual BOOL    IsPreview()
+    {
+        return m_bIsPreview;
+    };
     virtual void    Shutdown();
 
-    virtual BOOL    GetFloatWinInfo()                          { return FALSE; }
+    virtual BOOL    GetFloatWinInfo()
+    {
+        return FALSE;
+    }
     virtual VOID    SetDevice( UINT iDevice )                  { }
     virtual HRESULT ConfirmDevice(D3DCAPS9*,DWORD,D3DFORMAT);
     virtual HRESULT OneTimeSceneInit();
@@ -78,7 +84,7 @@ public:
     virtual HRESULT InvalidateDeviceObjects();
     virtual HRESULT DeleteDeviceObjects();
     virtual HRESULT FinalCleanup();
-    virtual LRESULT SaverProc( HWND hWnd , UINT message , WPARAM wParam , LPARAM lParam );
+    virtual LRESULT SaverProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 
     CMazeApp*           m_pMazeApp;
     CDPlay8Client*      m_pDP8Client;

@@ -41,61 +41,67 @@ namespace libtorrent
 template <int history_size>
 struct sliding_average
 {
-	sliding_average(): m_mean(-1), m_average_deviation(-1) {}
+    sliding_average(): m_mean(-1), m_average_deviation(-1) {}
 
-	void add_sample(int s)
-	{
-		if (m_mean == -1)
-		{
-			m_mean = s;
-			return;
-		}
-		int deviation = abs(m_mean - s);
+    void add_sample(int s)
+    {
+        if (m_mean == -1)
+        {
+            m_mean = s;
+            return;
+        }
+        int deviation = abs(m_mean - s);
 
-		m_mean = m_mean - m_mean / history_size + s / history_size;
+        m_mean = m_mean - m_mean / history_size + s / history_size;
 
-		if (m_average_deviation == -1)
-		{
-			m_average_deviation = deviation;
-			return;
-		}
-		m_average_deviation = m_average_deviation - m_average_deviation
-			/ history_size + deviation / history_size;
-	}
+        if (m_average_deviation == -1)
+        {
+            m_average_deviation = deviation;
+            return;
+        }
+        m_average_deviation = m_average_deviation - m_average_deviation
+                              / history_size + deviation / history_size;
+    }
 
-	int mean() const { return m_mean != -1 ? m_mean : 0; }
-	int avg_deviation() const { return m_average_deviation != -1 ? m_average_deviation : 0; }
+    int mean() const
+    {
+        return m_mean != -1 ? m_mean : 0;
+    }
+    int avg_deviation() const
+    {
+        return m_average_deviation != -1 ? m_average_deviation : 0;
+    }
 
 private:
-	int m_mean;
-	int m_average_deviation;
+    int m_mean;
+    int m_average_deviation;
 };
 
 struct average_accumulator
 {
-	average_accumulator()
-		: m_num_samples(0)
-		, m_sample_sum(0)
-	{}
+    average_accumulator()
+        : m_num_samples(0)
+        , m_sample_sum(0)
+    {}
 
-	void add_sample(int s)
-	{
-		++m_num_samples;
-		m_sample_sum += s;
-	}
+    void add_sample(int s)
+    {
+        ++m_num_samples;
+        m_sample_sum += s;
+    }
 
-	int mean()
-	{
-		int ret;
-		if (m_num_samples == 0) ret = 0;
-		else ret = int(m_sample_sum / m_num_samples);
-		m_num_samples = 0;
-		m_sample_sum = 0;
-		return ret;
-	}
+    int mean()
+    {
+        int ret;
+        if (m_num_samples == 0) ret = 0;
+        else ret = int(m_sample_sum / m_num_samples);
+        m_num_samples = 0;
+        m_sample_sum = 0;
+        return ret;
+    }
 
-	int m_num_samples;
-	size_type m_sample_sum;
+    int m_num_samples;
+    size_type m_sample_sum;
 };
 
 }

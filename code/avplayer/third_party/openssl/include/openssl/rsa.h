@@ -5,21 +5,21 @@
  * This package is an SSL implementation written
  * by Eric Young (eay@cryptsoft.com).
  * The implementation was written so as to conform with Netscapes SSL.
- * 
+ *
  * This library is free for commercial and non-commercial use as long as
  * the following conditions are aheared to.  The following conditions
  * apply to all code found in this distribution, be it the RC4, RSA,
  * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
  * included with this distribution is covered by the same copyright terms
  * except that the holder is Tim Hudson (tjh@cryptsoft.com).
- * 
+ *
  * Copyright remains Eric Young's, and as such any Copyright notices in
  * the code are not to be removed.
  * If this package is used in a product, Eric Young should be given attribution
  * as the author of the parts of the library used.
  * This can be in the form of a textual message at program startup or
  * in documentation (online or textual) provided with the package.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -34,10 +34,10 @@
  *     Eric Young (eay@cryptsoft.com)"
  *    The word 'cryptographic' can be left out if the rouines from the library
  *    being used are not cryptographic related :-).
- * 4. If you include any Windows specific code (or a derivative thereof) from 
+ * 4. If you include any Windows specific code (or a derivative thereof) from
  *    the apps directory (application code) you must include an acknowledgement:
  *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -49,7 +49,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- * 
+ *
  * The licence and distribution terms for any publically available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
@@ -83,82 +83,82 @@ extern "C" {
 /* typedef struct rsa_meth_st RSA_METHOD; */
 
 struct rsa_meth_st
-	{
-	const char *name;
-	int (*rsa_pub_enc)(int flen,const unsigned char *from,
-			   unsigned char *to,
-			   RSA *rsa,int padding);
-	int (*rsa_pub_dec)(int flen,const unsigned char *from,
-			   unsigned char *to,
-			   RSA *rsa,int padding);
-	int (*rsa_priv_enc)(int flen,const unsigned char *from,
-			    unsigned char *to,
-			    RSA *rsa,int padding);
-	int (*rsa_priv_dec)(int flen,const unsigned char *from,
-			    unsigned char *to,
-			    RSA *rsa,int padding);
-	int (*rsa_mod_exp)(BIGNUM *r0,const BIGNUM *I,RSA *rsa,BN_CTX *ctx); /* Can be null */
-	int (*bn_mod_exp)(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
-			  const BIGNUM *m, BN_CTX *ctx,
-			  BN_MONT_CTX *m_ctx); /* Can be null */
-	int (*init)(RSA *rsa);		/* called at new */
-	int (*finish)(RSA *rsa);	/* called at free */
-	int flags;			/* RSA_METHOD_FLAG_* things */
-	char *app_data;			/* may be needed! */
-/* New sign and verify functions: some libraries don't allow arbitrary data
- * to be signed/verified: this allows them to be used. Note: for this to work
- * the RSA_public_decrypt() and RSA_private_encrypt() should *NOT* be used
- * RSA_sign(), RSA_verify() should be used instead. Note: for backwards
- * compatibility this functionality is only enabled if the RSA_FLAG_SIGN_VER
- * option is set in 'flags'.
- */
-	int (*rsa_sign)(int type,
-		const unsigned char *m, unsigned int m_length,
-		unsigned char *sigret, unsigned int *siglen, const RSA *rsa);
-	int (*rsa_verify)(int dtype,
-		const unsigned char *m, unsigned int m_length,
-		const unsigned char *sigbuf, unsigned int siglen,
-								const RSA *rsa);
-/* If this callback is NULL, the builtin software RSA key-gen will be used. This
- * is for behavioural compatibility whilst the code gets rewired, but one day
- * it would be nice to assume there are no such things as "builtin software"
- * implementations. */
-	int (*rsa_keygen)(RSA *rsa, int bits, BIGNUM *e, BN_GENCB *cb);
-	};
+{
+    const char *name;
+    int (*rsa_pub_enc)(int flen,const unsigned char *from,
+                       unsigned char *to,
+                       RSA *rsa,int padding);
+    int (*rsa_pub_dec)(int flen,const unsigned char *from,
+                       unsigned char *to,
+                       RSA *rsa,int padding);
+    int (*rsa_priv_enc)(int flen,const unsigned char *from,
+                        unsigned char *to,
+                        RSA *rsa,int padding);
+    int (*rsa_priv_dec)(int flen,const unsigned char *from,
+                        unsigned char *to,
+                        RSA *rsa,int padding);
+    int (*rsa_mod_exp)(BIGNUM *r0,const BIGNUM *I,RSA *rsa,BN_CTX *ctx); /* Can be null */
+    int (*bn_mod_exp)(BIGNUM *r, const BIGNUM *a, const BIGNUM *p,
+                      const BIGNUM *m, BN_CTX *ctx,
+                      BN_MONT_CTX *m_ctx); /* Can be null */
+    int (*init)(RSA *rsa);		/* called at new */
+    int (*finish)(RSA *rsa);	/* called at free */
+    int flags;			/* RSA_METHOD_FLAG_* things */
+    char *app_data;			/* may be needed! */
+    /* New sign and verify functions: some libraries don't allow arbitrary data
+     * to be signed/verified: this allows them to be used. Note: for this to work
+     * the RSA_public_decrypt() and RSA_private_encrypt() should *NOT* be used
+     * RSA_sign(), RSA_verify() should be used instead. Note: for backwards
+     * compatibility this functionality is only enabled if the RSA_FLAG_SIGN_VER
+     * option is set in 'flags'.
+     */
+    int (*rsa_sign)(int type,
+                    const unsigned char *m, unsigned int m_length,
+                    unsigned char *sigret, unsigned int *siglen, const RSA *rsa);
+    int (*rsa_verify)(int dtype,
+                      const unsigned char *m, unsigned int m_length,
+                      const unsigned char *sigbuf, unsigned int siglen,
+                      const RSA *rsa);
+    /* If this callback is NULL, the builtin software RSA key-gen will be used. This
+     * is for behavioural compatibility whilst the code gets rewired, but one day
+     * it would be nice to assume there are no such things as "builtin software"
+     * implementations. */
+    int (*rsa_keygen)(RSA *rsa, int bits, BIGNUM *e, BN_GENCB *cb);
+};
 
 struct rsa_st
-	{
-	/* The first parameter is used to pickup errors where
-	 * this is passed instead of aEVP_PKEY, it is set to 0 */
-	int pad;
-	long version;
-	const RSA_METHOD *meth;
-	/* functional reference if 'meth' is ENGINE-provided */
-	ENGINE *engine;
-	BIGNUM *n;
-	BIGNUM *e;
-	BIGNUM *d;
-	BIGNUM *p;
-	BIGNUM *q;
-	BIGNUM *dmp1;
-	BIGNUM *dmq1;
-	BIGNUM *iqmp;
-	/* be careful using this if the RSA structure is shared */
-	CRYPTO_EX_DATA ex_data;
-	int references;
-	int flags;
+{
+    /* The first parameter is used to pickup errors where
+     * this is passed instead of aEVP_PKEY, it is set to 0 */
+    int pad;
+    long version;
+    const RSA_METHOD *meth;
+    /* functional reference if 'meth' is ENGINE-provided */
+    ENGINE *engine;
+    BIGNUM *n;
+    BIGNUM *e;
+    BIGNUM *d;
+    BIGNUM *p;
+    BIGNUM *q;
+    BIGNUM *dmp1;
+    BIGNUM *dmq1;
+    BIGNUM *iqmp;
+    /* be careful using this if the RSA structure is shared */
+    CRYPTO_EX_DATA ex_data;
+    int references;
+    int flags;
 
-	/* Used to cache montgomery values */
-	BN_MONT_CTX *_method_mod_n;
-	BN_MONT_CTX *_method_mod_p;
-	BN_MONT_CTX *_method_mod_q;
+    /* Used to cache montgomery values */
+    BN_MONT_CTX *_method_mod_n;
+    BN_MONT_CTX *_method_mod_p;
+    BN_MONT_CTX *_method_mod_q;
 
-	/* all BIGNUM values are actually in the following data, if it is not
-	 * NULL */
-	char *bignum_data;
-	BN_BLINDING *blinding;
-	BN_BLINDING *mt_blinding;
-	};
+    /* all BIGNUM values are actually in the following data, if it is not
+     * NULL */
+    char *bignum_data;
+    BN_BLINDING *blinding;
+    BN_BLINDING *mt_blinding;
+};
 
 #ifndef OPENSSL_RSA_MAX_MODULUS_BITS
 # define OPENSSL_RSA_MAX_MODULUS_BITS	16384
@@ -205,16 +205,16 @@ struct rsa_st
                                                 * flag disables these constant time 
                                                 * operations and results in faster RSA 
                                                 * private key operations.
-                                                */ 
+                                                */
 #ifndef OPENSSL_NO_DEPRECATED
 #define RSA_FLAG_NO_EXP_CONSTTIME RSA_FLAG_NO_CONSTTIME /* deprecated name for the flag*/
-                                                /* new with 0.9.7h; the built-in RSA
-                                                * implementation now uses constant time
-                                                * modular exponentiation for secret exponents
-                                                * by default. This flag causes the
-                                                * faster variable sliding window method to
-                                                * be used for all exponents.
-                                                */
+/* new with 0.9.7h; the built-in RSA
+* implementation now uses constant time
+* modular exponentiation for secret exponents
+* by default. This flag causes the
+* faster variable sliding window method to
+* be used for all exponents.
+*/
 #endif
 
 
@@ -285,22 +285,22 @@ int	RSA_size(const RSA *rsa);
 /* Deprecated version */
 #ifndef OPENSSL_NO_DEPRECATED
 RSA *	RSA_generate_key(int bits, unsigned long e,void
-		(*callback)(int,int,void *),void *cb_arg);
+                         (*callback)(int,int,void *),void *cb_arg);
 #endif /* !defined(OPENSSL_NO_DEPRECATED) */
 
 /* New version */
 int	RSA_generate_key_ex(RSA *rsa, int bits, BIGNUM *e, BN_GENCB *cb);
 
 int	RSA_check_key(const RSA *);
-	/* next 4 return -1 on error */
+/* next 4 return -1 on error */
 int	RSA_public_encrypt(int flen, const unsigned char *from,
-		unsigned char *to, RSA *rsa,int padding);
+                       unsigned char *to, RSA *rsa,int padding);
 int	RSA_private_encrypt(int flen, const unsigned char *from,
-		unsigned char *to, RSA *rsa,int padding);
-int	RSA_public_decrypt(int flen, const unsigned char *from, 
-		unsigned char *to, RSA *rsa,int padding);
-int	RSA_private_decrypt(int flen, const unsigned char *from, 
-		unsigned char *to, RSA *rsa,int padding);
+                        unsigned char *to, RSA *rsa,int padding);
+int	RSA_public_decrypt(int flen, const unsigned char *from,
+                       unsigned char *to, RSA *rsa,int padding);
+int	RSA_private_decrypt(int flen, const unsigned char *from,
+                        unsigned char *to, RSA *rsa,int padding);
 void	RSA_free (RSA *r);
 /* "up" the RSA object's reference count */
 int	RSA_up_ref(RSA *r);
@@ -324,12 +324,12 @@ DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPublicKey)
 DECLARE_ASN1_ENCODE_FUNCTIONS_const(RSA, RSAPrivateKey)
 
 typedef struct rsa_pss_params_st
-	{
-	X509_ALGOR *hashAlgorithm;
-	X509_ALGOR *maskGenAlgorithm;
-	ASN1_INTEGER *saltLength;
-	ASN1_INTEGER *trailerField;
-	} RSA_PSS_PARAMS;
+{
+    X509_ALGOR *hashAlgorithm;
+    X509_ALGOR *maskGenAlgorithm;
+    ASN1_INTEGER *saltLength;
+    ASN1_INTEGER *trailerField;
+} RSA_PSS_PARAMS;
 
 DECLARE_ASN1_FUNCTIONS(RSA_PSS_PARAMS)
 
@@ -343,86 +343,86 @@ int	RSA_print(BIO *bp, const RSA *r,int offset);
 
 #ifndef OPENSSL_NO_RC4
 int i2d_RSA_NET(const RSA *a, unsigned char **pp,
-		int (*cb)(char *buf, int len, const char *prompt, int verify),
-		int sgckey);
+                int (*cb)(char *buf, int len, const char *prompt, int verify),
+                int sgckey);
 RSA *d2i_RSA_NET(RSA **a, const unsigned char **pp, long length,
-		 int (*cb)(char *buf, int len, const char *prompt, int verify),
-		 int sgckey);
+                 int (*cb)(char *buf, int len, const char *prompt, int verify),
+                 int sgckey);
 
 int i2d_Netscape_RSA(const RSA *a, unsigned char **pp,
-		     int (*cb)(char *buf, int len, const char *prompt,
-			       int verify));
+                     int (*cb)(char *buf, int len, const char *prompt,
+                               int verify));
 RSA *d2i_Netscape_RSA(RSA **a, const unsigned char **pp, long length,
-		      int (*cb)(char *buf, int len, const char *prompt,
-				int verify));
+                      int (*cb)(char *buf, int len, const char *prompt,
+                                int verify));
 #endif
 
 /* The following 2 functions sign and verify a X509_SIG ASN1 object
  * inside PKCS#1 padded RSA encryption */
 int RSA_sign(int type, const unsigned char *m, unsigned int m_length,
-	unsigned char *sigret, unsigned int *siglen, RSA *rsa);
+             unsigned char *sigret, unsigned int *siglen, RSA *rsa);
 int RSA_verify(int type, const unsigned char *m, unsigned int m_length,
-	const unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
+               const unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
 
 /* The following 2 function sign and verify a ASN1_OCTET_STRING
  * object inside PKCS#1 padded RSA encryption */
 int RSA_sign_ASN1_OCTET_STRING(int type,
-	const unsigned char *m, unsigned int m_length,
-	unsigned char *sigret, unsigned int *siglen, RSA *rsa);
+                               const unsigned char *m, unsigned int m_length,
+                               unsigned char *sigret, unsigned int *siglen, RSA *rsa);
 int RSA_verify_ASN1_OCTET_STRING(int type,
-	const unsigned char *m, unsigned int m_length,
-	unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
+                                 const unsigned char *m, unsigned int m_length,
+                                 unsigned char *sigbuf, unsigned int siglen, RSA *rsa);
 
 int RSA_blinding_on(RSA *rsa, BN_CTX *ctx);
 void RSA_blinding_off(RSA *rsa);
 BN_BLINDING *RSA_setup_blinding(RSA *rsa, BN_CTX *ctx);
 
 int RSA_padding_add_PKCS1_type_1(unsigned char *to,int tlen,
-	const unsigned char *f,int fl);
+                                 const unsigned char *f,int fl);
 int RSA_padding_check_PKCS1_type_1(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,int rsa_len);
+                                   const unsigned char *f,int fl,int rsa_len);
 int RSA_padding_add_PKCS1_type_2(unsigned char *to,int tlen,
-	const unsigned char *f,int fl);
+                                 const unsigned char *f,int fl);
 int RSA_padding_check_PKCS1_type_2(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,int rsa_len);
+                                   const unsigned char *f,int fl,int rsa_len);
 int PKCS1_MGF1(unsigned char *mask, long len,
-	const unsigned char *seed, long seedlen, const EVP_MD *dgst);
+               const unsigned char *seed, long seedlen, const EVP_MD *dgst);
 int RSA_padding_add_PKCS1_OAEP(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,
-	const unsigned char *p,int pl);
+                               const unsigned char *f,int fl,
+                               const unsigned char *p,int pl);
 int RSA_padding_check_PKCS1_OAEP(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,int rsa_len,
-	const unsigned char *p,int pl);
+                                 const unsigned char *f,int fl,int rsa_len,
+                                 const unsigned char *p,int pl);
 int RSA_padding_add_SSLv23(unsigned char *to,int tlen,
-	const unsigned char *f,int fl);
+                           const unsigned char *f,int fl);
 int RSA_padding_check_SSLv23(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,int rsa_len);
+                             const unsigned char *f,int fl,int rsa_len);
 int RSA_padding_add_none(unsigned char *to,int tlen,
-	const unsigned char *f,int fl);
+                         const unsigned char *f,int fl);
 int RSA_padding_check_none(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,int rsa_len);
+                           const unsigned char *f,int fl,int rsa_len);
 int RSA_padding_add_X931(unsigned char *to,int tlen,
-	const unsigned char *f,int fl);
+                         const unsigned char *f,int fl);
 int RSA_padding_check_X931(unsigned char *to,int tlen,
-	const unsigned char *f,int fl,int rsa_len);
+                           const unsigned char *f,int fl,int rsa_len);
 int RSA_X931_hash_id(int nid);
 
 int RSA_verify_PKCS1_PSS(RSA *rsa, const unsigned char *mHash,
-			const EVP_MD *Hash, const unsigned char *EM, int sLen);
+                         const EVP_MD *Hash, const unsigned char *EM, int sLen);
 int RSA_padding_add_PKCS1_PSS(RSA *rsa, unsigned char *EM,
-			const unsigned char *mHash,
-			const EVP_MD *Hash, int sLen);
+                              const unsigned char *mHash,
+                              const EVP_MD *Hash, int sLen);
 
 int RSA_verify_PKCS1_PSS_mgf1(RSA *rsa, const unsigned char *mHash,
-			const EVP_MD *Hash, const EVP_MD *mgf1Hash, 
-			const unsigned char *EM, int sLen);
+                              const EVP_MD *Hash, const EVP_MD *mgf1Hash,
+                              const unsigned char *EM, int sLen);
 
 int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
-			const unsigned char *mHash,
-			const EVP_MD *Hash, const EVP_MD *mgf1Hash, int sLen);
+                                   const unsigned char *mHash,
+                                   const EVP_MD *Hash, const EVP_MD *mgf1Hash, int sLen);
 
 int RSA_get_ex_new_index(long argl, void *argp, CRYPTO_EX_new *new_func,
-	CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
+                         CRYPTO_EX_dup *dup_func, CRYPTO_EX_free *free_func);
 int RSA_set_ex_data(RSA *r,int idx,void *arg);
 void *RSA_get_ex_data(const RSA *r, int idx);
 

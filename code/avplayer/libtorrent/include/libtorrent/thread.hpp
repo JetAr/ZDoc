@@ -53,34 +53,34 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	typedef boost::asio::detail::thread thread;
-	typedef boost::asio::detail::mutex mutex;
-	typedef boost::asio::detail::event event;
+typedef boost::asio::detail::thread thread;
+typedef boost::asio::detail::mutex mutex;
+typedef boost::asio::detail::event event;
 
-	TORRENT_EXPORT void sleep(int milliseconds);
+TORRENT_EXPORT void sleep(int milliseconds);
 
-	struct TORRENT_EXTRA_EXPORT condition_variable
-	{
-		condition_variable();
-		~condition_variable();
-		void wait(mutex::scoped_lock& l);
-		void wait_for(mutex::scoped_lock& l, time_duration rel_time);
-		void notify_all();
-	private:
+struct TORRENT_EXTRA_EXPORT condition_variable
+{
+    condition_variable();
+    ~condition_variable();
+    void wait(mutex::scoped_lock& l);
+    void wait_for(mutex::scoped_lock& l, time_duration rel_time);
+    void notify_all();
+private:
 #ifdef BOOST_HAS_PTHREADS
-		pthread_cond_t m_cond;
+    pthread_cond_t m_cond;
 #elif defined TORRENT_WINDOWS || defined TORRENT_CYGWIN
-		HANDLE m_sem;
-		mutex m_mutex;
-		int m_num_waiters;
+    HANDLE m_sem;
+    mutex m_mutex;
+    int m_num_waiters;
 #elif defined TORRENT_BEOS
-		sem_id m_sem;
-		mutex m_mutex;
-		int m_num_waiters;
+    sem_id m_sem;
+    mutex m_mutex;
+    int m_num_waiters;
 #else
 #error not implemented
 #endif
-	};
+};
 }
 
 #endif

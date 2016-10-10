@@ -1,16 +1,16 @@
 ﻿ // no longer used  - but might get
- // our own facility in the future?
- // FacilityNames=(FACILITY_VFW=0x4)
- // To add a message:
- //
- // The MessageId is the number of the message.
- // Accepted severities are 'Success' and 'Warning'.
- //
- // Facility should be FACILITY_ITF (was FACILITY_VFW).
- //
- // The SymbolicName is the name used in the code to identify the message.
- // The text of a message starts the line after 'Language=' and
- // ends before a line with only a '.' in column one.
+// our own facility in the future?
+// FacilityNames=(FACILITY_VFW=0x4)
+// To add a message:
+//
+// The MessageId is the number of the message.
+// Accepted severities are 'Success' and 'Warning'.
+//
+// Facility should be FACILITY_ITF (was FACILITY_VFW).
+//
+// The SymbolicName is the name used in the code to identify the message.
+// The text of a message starts the line after 'Language=' and
+// ends before a line with only a '.' in column one.
 //
 //  Values are 32 bit values layed out as follows:
 //
@@ -677,7 +677,7 @@
 //
 #define VFW_E_INVALID_MEDIA_TYPE         ((HRESULT)0x80040248L)
 
- // Message id from WINWarning.H
+// Message id from WINWarning.H
 //
 // MessageId: VFW_E_BAD_KEY
 //
@@ -687,7 +687,7 @@
 //
 #define VFW_E_BAD_KEY                    ((HRESULT)0x800403F2L)
 
- // Message id from WINWarning.H
+// Message id from WINWarning.H
 //
 // MessageId: VFW_S_NO_MORE_ITEMS
 //

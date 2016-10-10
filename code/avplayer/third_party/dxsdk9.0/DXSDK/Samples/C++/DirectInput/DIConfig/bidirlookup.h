@@ -21,47 +21,50 @@ template <class L, class R>
 class bidirlookup
 {
 private:
-	
-	CMap<L, const L &, R, const R &> l2r;
-	CMap<R, const R &, L, const L &> r2l;
 
-	bool addnode(const L &l, const R &r)
-	{
-		l2r.SetAt(l, r);
-		r2l.SetAt(r, l);
-		return true;
-	}
+    CMap<L, const L &, R, const R &> l2r;
+    CMap<R, const R &, L, const L &> r2l;
+
+    bool addnode(const L &l, const R &r)
+    {
+        l2r.SetAt(l, r);
+        r2l.SetAt(r, l);
+        return true;
+    }
 
 public:
-	void clear()
-	{
-		l2r.RemoveAll();
-		r2l.RemoveAll();
-	}
+    void clear()
+    {
+        l2r.RemoveAll();
+        r2l.RemoveAll();
+    }
 
-	bidirlookup() {}
-	~bidirlookup() {clear();}
+    bidirlookup() {}
+    ~bidirlookup()
+    {
+        clear();
+    }
 
-	bool add(const L &l, const R &r)
-	{
-		L tl;
-		R tr;
+    bool add(const L &l, const R &r)
+    {
+        L tl;
+        R tr;
 
-		if (l2r.Lookup(l, tr) || r2l.Lookup(r, tl))
-			return false;
-		
-		return addnode(l, r);
-	}
+        if (l2r.Lookup(l, tr) || r2l.Lookup(r, tl))
+            return false;
 
-	bool getleft(L &l, const R &r)
-	{
-		return r2l.Lookup(r, l) ? true : false;
-	}
+        return addnode(l, r);
+    }
 
-	bool getright(const L &l, R &r)
-	{
-		return l2r.Lookup(l, r) ? true : false;
-	}
+    bool getleft(L &l, const R &r)
+    {
+        return r2l.Lookup(r, l) ? true : false;
+    }
+
+    bool getright(const L &l, R &r)
+    {
+        return l2r.Lookup(l, r) ? true : false;
+    }
 };
 
 
@@ -71,82 +74,86 @@ template <class L, class R>
 class bidirlookup
 {
 private:
-	struct node {
-		node(const L &a, const R &b) : l(a), r(b), next(NULL) {}
-		node *next;
-		L l;
-		R r;
-	} *head;
+    struct node
+    {
+        node(const L &a, const R &b) : l(a), r(b), next(NULL) {}
+        node *next;
+        L l;
+        R r;
+    } *head;
 
-	bool addnode(const L &l, const R &r)
-	{
-		node *old = head;
-		head = new node(l, r);
-		if (!head)
-			return false;
-		head->next = old;
-		return true;
-	}
+    bool addnode(const L &l, const R &r)
+    {
+        node *old = head;
+        head = new node(l, r);
+        if (!head)
+            return false;
+        head->next = old;
+        return true;
+    }
 
-	node *getleftnode(const L &l)
-	{
-		for (node *on = head; on; on = on->next)
-			if (on->l == l)
-				return on;
-		return NULL;
-	}
+    node *getleftnode(const L &l)
+    {
+        for (node *on = head; on; on = on->next)
+            if (on->l == l)
+                return on;
+        return NULL;
+    }
 
-	node *getrightnode(const R &r)
-	{
-		for (node *on = head; on; on = on->next)
-			if (on->r == r)
-				return on;
-		return NULL;
-	}
+    node *getrightnode(const R &r)
+    {
+        for (node *on = head; on; on = on->next)
+            if (on->r == r)
+                return on;
+        return NULL;
+    }
 
 public:
-	void clear()
-	{
-		while (head)
-		{
-			node *next = head->next;
-			delete head;
-			head = next;
-		}
-	}
+    void clear()
+    {
+        while (head)
+        {
+            node *next = head->next;
+            delete head;
+            head = next;
+        }
+    }
 
-	bidirlookup() : head(NULL) {}
-	~bidirlookup() {clear();}
+    bidirlookup() : head(NULL) {}
+    ~bidirlookup()
+    {
+        clear();
+    }
 
-	bool add(const L &l, const R &r)
-	{
-		if (getleftnode(l) || getrightnode(r))
-			return false;
-		
-		return addnode(l, r);
-	}
+    bool add(const L &l, const R &r)
+    {
+        if (getleftnode(l) || getrightnode(r))
+            return false;
 
-	bool getleft(L &l, const R &r)
-	{
-		node *n = getrightnode(r);
-		if (!n)
-			return false;
+        return addnode(l, r);
+    }
 
-		l = n->l;
+    bool getleft(L &l, const R &r)
+    {
+        node *n = getrightnode(r);
+        if (!n)
+            return false;
 
-		return true;
-	}
+        l = n->l;
 
-	bool getright(const L &l, R &r)
-	{
-		node *n = getleftnode(l);
-		if (!n)
-			return false;
+        return true;
+    }
 
-		r = n->r;
+    bool getright(const L &l, R &r)
+    {
+        node *n = getleftnode(l);
+        if (!n)
+            return false;
 
-		return true;
-	}
+        r = n->r;
+
+        return true;
+    }
 };
 
 #endif

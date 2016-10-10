@@ -47,30 +47,34 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/proxy_base.hpp"
 #include "libtorrent/session_settings.hpp"
 
-namespace libtorrent {
+namespace libtorrent
+{
 
-	namespace i2p_error {
+namespace i2p_error
+{
 
-		enum i2p_error_code
-		{
-			no_error = 0,
-			parse_failed,
-			cant_reach_peer,
-			i2p_error,
-			invalid_key,
-			invalid_id,
-			timeout,
-			key_not_found,
-			num_errors
-		};
-	}
+enum i2p_error_code
+{
+    no_error = 0,
+    parse_failed,
+    cant_reach_peer,
+    i2p_error,
+    invalid_key,
+    invalid_id,
+    timeout,
+    key_not_found,
+    num_errors
+};
+}
 
 struct TORRENT_EXPORT i2p_error_category : boost::system::error_category
 {
-	virtual const char* name() const;
-	virtual std::string message(int ev) const;
-	virtual boost::system::error_condition default_error_condition(int ev) const
-	{ return boost::system::error_condition(ev, *this); }
+    virtual const char* name() const;
+    virtual std::string message(int ev) const;
+    virtual boost::system::error_condition default_error_condition(int ev) const
+    {
+        return boost::system::error_condition(ev, *this);
+    }
 };
 
 extern i2p_error_category i2p_category;
@@ -79,141 +83,168 @@ class i2p_stream : public proxy_base
 {
 public:
 
-	explicit i2p_stream(io_service& io_service)
-		: proxy_base(io_service)
-		, m_id(0)
-		, m_command(cmd_create_session)
-		, m_state(0)
-	{}
+    explicit i2p_stream(io_service& io_service)
+        : proxy_base(io_service)
+        , m_id(0)
+        , m_command(cmd_create_session)
+        , m_state(0)
+    {}
 
-	enum command_t
-	{
-		cmd_none,
-		cmd_create_session,
-		cmd_connect,
-		cmd_accept,
-		cmd_name_lookup,
-		cmd_incoming
-	};
+    enum command_t
+    {
+        cmd_none,
+        cmd_create_session,
+        cmd_connect,
+        cmd_accept,
+        cmd_name_lookup,
+        cmd_incoming
+    };
 
-	void set_command(command_t c) { m_command = c; }
+    void set_command(command_t c)
+    {
+        m_command = c;
+    }
 
-	void set_session_id(char const* id) { m_id = id; }
+    void set_session_id(char const* id)
+    {
+        m_id = id;
+    }
 
-	void set_destination(std::string const& d) { m_dest = d; }
-	std::string const& destination() { return m_dest; }
+    void set_destination(std::string const& d)
+    {
+        m_dest = d;
+    }
+    std::string const& destination()
+    {
+        return m_dest;
+    }
 
-	typedef boost::function<void(error_code const&)> handler_type;
+    typedef boost::function<void(error_code const&)> handler_type;
 
-	template <class Handler>
-	void async_connect(endpoint_type const& endpoint, Handler const& handler)
-	{
-		// since we don't support regular endpoints, just ignore the one
-		// provided and use m_dest.
+    template <class Handler>
+    void async_connect(endpoint_type const& endpoint, Handler const& handler)
+    {
+        // since we don't support regular endpoints, just ignore the one
+        // provided and use m_dest.
 
-		// the connect is split up in the following steps:
-		// 1. resolve name of proxy server
-		// 2. connect to SAM bridge
-		// 4 send command message (CONNECT/ACCEPT)
+        // the connect is split up in the following steps:
+        // 1. resolve name of proxy server
+        // 2. connect to SAM bridge
+        // 4 send command message (CONNECT/ACCEPT)
 
-		// to avoid unnecessary copying of the handler,
-		// store it in a shaed_ptr
-		boost::shared_ptr<handler_type> h(new handler_type(handler));
+        // to avoid unnecessary copying of the handler,
+        // store it in a shaed_ptr
+        boost::shared_ptr<handler_type> h(new handler_type(handler));
 
-		tcp::resolver::query q(m_hostname, to_string(m_port).elems);
-		m_resolver.async_resolve(q, boost::bind(
-			&i2p_stream::do_connect, this, _1, _2, h));
-	}
+        tcp::resolver::query q(m_hostname, to_string(m_port).elems);
+        m_resolver.async_resolve(q, boost::bind(
+                                     &i2p_stream::do_connect, this, _1, _2, h));
+    }
 
-	std::string name_lookup() const { return m_name_lookup; }
-	void set_name_lookup(char const* name) { m_name_lookup = name; }
+    std::string name_lookup() const
+    {
+        return m_name_lookup;
+    }
+    void set_name_lookup(char const* name)
+    {
+        m_name_lookup = name;
+    }
 
-	void send_name_lookup(boost::shared_ptr<handler_type> h);
+    void send_name_lookup(boost::shared_ptr<handler_type> h);
 
 private:
 
-	bool handle_error(error_code const& e, boost::shared_ptr<handler_type> const& h);
-	void do_connect(error_code const& e, tcp::resolver::iterator i
-		, boost::shared_ptr<handler_type> h);
-	void connected(error_code const& e, boost::shared_ptr<handler_type> h);
-	void start_read_line(error_code const& e, boost::shared_ptr<handler_type> h);
-	void read_line(error_code const& e, boost::shared_ptr<handler_type> h);
-	void send_connect(boost::shared_ptr<handler_type> h);
-	void send_accept(boost::shared_ptr<handler_type> h);
-	void send_session_create(boost::shared_ptr<handler_type> h);
+    bool handle_error(error_code const& e, boost::shared_ptr<handler_type> const& h);
+    void do_connect(error_code const& e, tcp::resolver::iterator i
+                    , boost::shared_ptr<handler_type> h);
+    void connected(error_code const& e, boost::shared_ptr<handler_type> h);
+    void start_read_line(error_code const& e, boost::shared_ptr<handler_type> h);
+    void read_line(error_code const& e, boost::shared_ptr<handler_type> h);
+    void send_connect(boost::shared_ptr<handler_type> h);
+    void send_accept(boost::shared_ptr<handler_type> h);
+    void send_session_create(boost::shared_ptr<handler_type> h);
 
-	// send and receive buffer
-	std::vector<char> m_buffer;
-	char const* m_id;
-	int m_command; // 0 = connect, 1 = accept
-	std::string m_dest;
-	std::string m_name_lookup;
+    // send and receive buffer
+    std::vector<char> m_buffer;
+    char const* m_id;
+    int m_command; // 0 = connect, 1 = accept
+    std::string m_dest;
+    std::string m_name_lookup;
 
-	enum state_t
-	{
-		read_hello_response,
-		read_connect_response,
-		read_accept_response,
-		read_session_create_response,
-		read_name_lookup_response
-	};
+    enum state_t
+    {
+        read_hello_response,
+        read_connect_response,
+        read_accept_response,
+        read_session_create_response,
+        read_name_lookup_response
+    };
 
-	int m_state;
+    int m_state;
 };
 
 class i2p_connection
 {
 public:
-	i2p_connection(io_service& ios);
-	~i2p_connection();
+    i2p_connection(io_service& ios);
+    ~i2p_connection();
 
-	proxy_settings const& proxy() const { return m_sam_router; }
+    proxy_settings const& proxy() const
+    {
+        return m_sam_router;
+    }
 
-	bool is_open() const
-	{
-		return m_sam_socket
-			&& m_sam_socket->is_open()
-			&& m_state != sam_connecting;
-	}
-	void open(proxy_settings const& s, i2p_stream::handler_type const& h);
-	void close(error_code&);
+    bool is_open() const
+    {
+        return m_sam_socket
+               && m_sam_socket->is_open()
+               && m_state != sam_connecting;
+    }
+    void open(proxy_settings const& s, i2p_stream::handler_type const& h);
+    void close(error_code&);
 
-	char const* session_id() const { return m_session_id.c_str(); }
-	std::string const& local_endpoint() const { return m_i2p_local_endpoint; }
+    char const* session_id() const
+    {
+        return m_session_id.c_str();
+    }
+    std::string const& local_endpoint() const
+    {
+        return m_i2p_local_endpoint;
+    }
 
-	typedef boost::function<void(error_code const&, char const*)> name_lookup_handler;
-	void async_name_lookup(char const* name, name_lookup_handler handler);
+    typedef boost::function<void(error_code const&, char const*)> name_lookup_handler;
+    void async_name_lookup(char const* name, name_lookup_handler handler);
 
 private:
 
-	void on_sam_connect(error_code const& ec, i2p_stream::handler_type const& h);
-	void do_name_lookup(std::string const& name
-		, name_lookup_handler const& h);
-	void on_name_lookup(error_code const& ec
-		, name_lookup_handler handler);
+    void on_sam_connect(error_code const& ec, i2p_stream::handler_type const& h);
+    void do_name_lookup(std::string const& name
+                        , name_lookup_handler const& h);
+    void on_name_lookup(error_code const& ec
+                        , name_lookup_handler handler);
 
-	void set_local_endpoint(error_code const& ec, char const* dest);
+    void set_local_endpoint(error_code const& ec, char const* dest);
 
-	// to talk to i2p SAM bridge
-	boost::shared_ptr<i2p_stream> m_sam_socket;
-	proxy_settings m_sam_router;
+    // to talk to i2p SAM bridge
+    boost::shared_ptr<i2p_stream> m_sam_socket;
+    proxy_settings m_sam_router;
 
-	// our i2p endpoint key
-	std::string m_i2p_local_endpoint;
-	std::string m_session_id;
+    // our i2p endpoint key
+    std::string m_i2p_local_endpoint;
+    std::string m_session_id;
 
-	std::list<std::pair<std::string, name_lookup_handler> > m_name_lookup;
+    std::list<std::pair<std::string, name_lookup_handler> > m_name_lookup;
 
-	enum state_t
-	{
-		sam_connecting,
-		sam_name_lookup,
-		sam_idle
-	};
+    enum state_t
+    {
+        sam_connecting,
+        sam_name_lookup,
+        sam_idle
+    };
 
-	state_t m_state;
+    state_t m_state;
 
-	io_service& m_io_service;
+    io_service& m_io_service;
 };
 
 }

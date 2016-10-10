@@ -27,14 +27,15 @@
 
 typedef uint32_t AVCRC;
 
-typedef enum {
+typedef enum
+{
     AV_CRC_8_ATM,
     AV_CRC_16_ANSI,
     AV_CRC_16_CCITT,
     AV_CRC_32_IEEE,
     AV_CRC_32_IEEE_LE,  /*< reversed bitorder version of AV_CRC_32_IEEE */
     AV_CRC_MAX,         /*< Not part of public API! Do not use outside libavutil. */
-}AVCRCId;
+} AVCRCId;
 
 /**
  * Initialize a CRC table.

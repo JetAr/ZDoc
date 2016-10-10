@@ -10,7 +10,7 @@
 
 //------------------------------------------------------------------------------
 // Name: AsStr()
-// Desc: This overloaded function converts enumerations into human-readable 
+// Desc: This overloaded function converts enumerations into human-readable
 //       text.  In most cases, it utilizes the ENUM_CASE macro to create
 //       generic strings out of the enumerated types.  If you want more user-friendly
 //       strings, use the form found in the DVD_TextStringType function.

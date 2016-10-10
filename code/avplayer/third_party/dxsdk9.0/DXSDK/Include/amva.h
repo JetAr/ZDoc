@@ -19,14 +19,14 @@ extern "C" {
 
 //  Flags for QueryRenderStatus
 #define AMVA_QUERYRENDERSTATUSF_READ     0x00000001  // Query for read
-                                                     // set this bit to 0
-                                                     // if query for update
+// set this bit to 0
+// if query for update
 
 typedef struct _tag_AMVAUncompBufferInfo
 {
-     DWORD                   dwMinNumSurfaces;       // IN   min number of surfaces to be allocated
-     DWORD                   dwMaxNumSurfaces;       // IN   max number of surfaces to be allocated
-     DDPIXELFORMAT           ddUncompPixelFormat;    // IN   pixel format of surfaces to be allocated
+    DWORD                   dwMinNumSurfaces;       // IN   min number of surfaces to be allocated
+    DWORD                   dwMaxNumSurfaces;       // IN   max number of surfaces to be allocated
+    DDPIXELFORMAT           ddUncompPixelFormat;    // IN   pixel format of surfaces to be allocated
 } AMVAUncompBufferInfo, *LPAMVAUncompBufferInfo;
 
 typedef struct _tag_AMVAUncompDataInfo

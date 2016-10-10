@@ -20,7 +20,7 @@ static const MultiVMR9Mixer_DefaultFVF = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TE
 
 // CMultiVMR9MixerControl
 
-class CMultiVMR9MixerControl : 
+class CMultiVMR9MixerControl :
     public CUnknown,
     public IMultiVMR9MixerControl
 {
@@ -37,69 +37,69 @@ public:
     // IMultiVMR9MixerControl implementation
     STDMETHOD(SetRenderEngineOwner)(
         IMultiVMR9RenderEngine* pRenderEngine
-        );
+    );
 
     STDMETHOD(GetRenderEngineOwner)(
         IMultiVMR9RenderEngine** ppRenderEngine
-        );
+    );
 
     STDMETHOD(Initialize)(
         IDirect3DDevice9 *pDevice
-        );
+    );
 
     STDMETHOD(Compose)(
         void* lpParam
-        );
+    );
 
     STDMETHOD(Render)(
         IDirect3DDevice9 *pDevice,
         void* lpParam
-        );
+    );
 
     STDMETHOD(GetOutputRect)(
         DWORD_PTR dwID,
         NORMALIZEDRECT* lpNormRect
-        );
+    );
 
     STDMETHOD(GetIdealOutputRect)(
         DWORD_PTR dwID,
         DWORD dwWidth,
         DWORD dwHeight,
         NORMALIZEDRECT* lpNormRect
-        );
+    );
 
     STDMETHOD(SetOutputRect)(
         DWORD_PTR dwID,
         NORMALIZEDRECT* lpNormRect
-        );
+    );
 
     STDMETHOD(GetZOrder)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         DWORD *pdwZ
-        );
+    );
 
     STDMETHOD(SetZOrder)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         DWORD pdwZ
-        );
+    );
 
     STDMETHOD(GetAlpha)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         float* pAlpha
-        );
+    );
 
     STDMETHOD(SetAlpha)(
-        DWORD_PTR dwID, 
+        DWORD_PTR dwID,
         float Alpha
-        );
+    );
 
     STDMETHOD(GetBackgroundColor)(
         COLORREF* pColor
-        );
+    );
 
     STDMETHOD(SetBackgroundColor)(
         COLORREF Color
-        );
+    );
 
     STDMETHOD(AddVideoSource)(
         DWORD_PTR dwID,
@@ -107,16 +107,16 @@ public:
         LONG lImageHeight,
         LONG lTextureWidth,
         LONG lTextureHeight
-        );
+    );
 
     STDMETHOD(DeleteVideoSource)(
         DWORD_PTR dwID
-        );
+    );
 
     // private classes
 private:
 
-    // custom vertex, specific for default implementation of 
+    // custom vertex, specific for default implementation of
     // CLSID_MultiVMR9MixerControl
     typedef struct _MultiVMR9_Vertex
     {
@@ -127,7 +127,7 @@ private:
 
     } MultiVMR9_Vertex;
 
-    // custom primitive for a video source, 
+    // custom primitive for a video source,
     // specific for default implementation of CLSID_MultiVMR9MixerControl
     class CMultiVMR9_Frame
     {
@@ -136,15 +136,15 @@ private:
         ~CMultiVMR9_Frame();
 
 
-        HRESULT Initialize( 
-                    DWORD_PTR dwUserID,
-                    LONG lWidth, 
-                    LONG lHeight, 
-                    LONG lTextureWidth,
-                    LONG lTextureHeight,
-                    LONG lRenderTargetWidth,
-                    LONG lRenderTargetHeight,
-                    float fAlpha);
+        HRESULT Initialize(
+            DWORD_PTR dwUserID,
+            LONG lWidth,
+            LONG lHeight,
+            LONG lTextureWidth,
+            LONG lTextureHeight,
+            LONG lRenderTargetWidth,
+            LONG lRenderTargetHeight,
+            float fAlpha);
 
         HRESULT UpdateDestination(NORMALIZEDRECT& newnrect);
 
@@ -186,7 +186,7 @@ class CCFMultiVMR9MixerControl : public IClassFactory
 {
 public:
     // Constructor
-    CCFMultiVMR9MixerControl() : m_RefCount(1) {} 
+    CCFMultiVMR9MixerControl() : m_RefCount(1) {}
 
     // IUnknown methods
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv)

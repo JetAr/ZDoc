@@ -41,33 +41,38 @@ DEFINE_GUID(IID_IDirectInputJoyConfig8,     0xeb0d7dfa,0x1990,0x4f27,0xb4,0xd6,0
  *
  ****************************************************************************/
 
-typedef struct DIOBJECTATTRIBUTES {
+typedef struct DIOBJECTATTRIBUTES
+{
     DWORD   dwFlags;
     WORD    wUsagePage;
     WORD    wUsage;
 } DIOBJECTATTRIBUTES, *LPDIOBJECTATTRIBUTES;
 typedef const DIOBJECTATTRIBUTES *LPCDIOBJECTATTRIBUTES;
 
-typedef struct DIFFOBJECTATTRIBUTES {
+typedef struct DIFFOBJECTATTRIBUTES
+{
     DWORD   dwFFMaxForce;
     DWORD   dwFFForceResolution;
 } DIFFOBJECTATTRIBUTES, *LPDIFFOBJECTATTRIBUTES;
 typedef const DIFFOBJECTATTRIBUTES *LPCDIFFOBJECTATTRIBUTES;
 
-typedef struct DIOBJECTCALIBRATION {
+typedef struct DIOBJECTCALIBRATION
+{
     LONG    lMin;
     LONG    lCenter;
     LONG    lMax;
 } DIOBJECTCALIBRATION, *LPDIOBJECTCALIBRATION;
 typedef const DIOBJECTCALIBRATION *LPCDIOBJECTCALIBRATION;
 
-typedef struct DIPOVCALIBRATION {
+typedef struct DIPOVCALIBRATION
+{
     LONG    lMin[5];
     LONG    lMax[5];
 } DIPOVCALIBRATION, *LPDIPOVCALIBRATION;
 typedef const DIPOVCALIBRATION *LPCDIPOVCALIBRATION;
 
-typedef struct DIEFFECTATTRIBUTES {
+typedef struct DIEFFECTATTRIBUTES
+{
     DWORD   dwEffectId;
     DWORD   dwEffType;
     DWORD   dwStaticParams;
@@ -76,14 +81,16 @@ typedef struct DIEFFECTATTRIBUTES {
 } DIEFFECTATTRIBUTES, *LPDIEFFECTATTRIBUTES;
 typedef const DIEFFECTATTRIBUTES *LPCDIEFFECTATTRIBUTES;
 
-typedef struct DIFFDEVICEATTRIBUTES {
+typedef struct DIFFDEVICEATTRIBUTES
+{
     DWORD   dwFlags;
     DWORD   dwFFSamplePeriod;
     DWORD   dwFFMinTimeResolution;
 } DIFFDEVICEATTRIBUTES, *LPDIFFDEVICEATTRIBUTES;
 typedef const DIFFDEVICEATTRIBUTES *LPCDIFFDEVICEATTRIBUTES;
 
-typedef struct DIDRIVERVERSIONS {
+typedef struct DIDRIVERVERSIONS
+{
     DWORD   dwSize;
     DWORD   dwFirmwareRevision;
     DWORD   dwHardwareRevision;
@@ -91,7 +98,8 @@ typedef struct DIDRIVERVERSIONS {
 } DIDRIVERVERSIONS, *LPDIDRIVERVERSIONS;
 typedef const DIDRIVERVERSIONS *LPCDIDRIVERVERSIONS;
 
-typedef struct DIDEVICESTATE {
+typedef struct DIDEVICESTATE
+{
     DWORD   dwSize;
     DWORD   dwState;
     DWORD   dwLoad;
@@ -101,7 +109,8 @@ typedef struct DIDEVICESTATE {
 
 #ifndef DIJ_RINGZERO
 
-typedef struct DIHIDFFINITINFO {
+typedef struct DIHIDFFINITINFO
+{
     DWORD   dwSize;
     LPWSTR  pwszDeviceInterface;
     GUID    GuidInstance;
@@ -281,7 +290,8 @@ typedef struct IDirectInputEffectDriver *LPDIRECTINPUTEFFECTDRIVER;
 #define JOYTYPE_ENABLEINPUTREPORT       0x01000000l /* Enable initial input reports */
 
 /* struct for storing x,y, z, and rudder values */
-typedef struct joypos_tag {
+typedef struct joypos_tag
+{
     DWORD       dwX;
     DWORD       dwY;
     DWORD       dwZ;
@@ -291,7 +301,8 @@ typedef struct joypos_tag {
 } JOYPOS, FAR *LPJOYPOS;
 
 /* struct for storing ranges */
-typedef struct joyrange_tag {
+typedef struct joyrange_tag
+{
     JOYPOS      jpMin;
     JOYPOS      jpMax;
     JOYPOS      jpCenter;
@@ -304,13 +315,15 @@ typedef struct joyrange_tag {
  *               as "dead". specified as a percentage
  *               (0-100). Only X & Y handled by system driver
  */
-typedef struct joyreguservalues_tag {
+typedef struct joyreguservalues_tag
+{
     DWORD       dwTimeOut;
     JOYRANGE    jrvRanges;
     JOYPOS      jpDeadZone;
 } JOYREGUSERVALUES, FAR *LPJOYREGUSERVALUES;
 
-typedef struct joyreghwsettings_tag {
+typedef struct joyreghwsettings_tag
+{
     DWORD       dwFlags;
     DWORD       dwNumButtons;
 } JOYREGHWSETTINGS, FAR *LPJOYHWSETTINGS;
@@ -321,7 +334,8 @@ typedef struct joyreghwsettings_tag {
  *  dwPOVValues - POV values returned by hardware
  *  dwCalFlags  - what has been calibrated
  */
-typedef struct joyreghwvalues_tag {
+typedef struct joyreghwvalues_tag
+{
     JOYRANGE    jrvHardware;
     DWORD       dwPOVValues[JOY_POV_NUMDIRS];
     DWORD       dwCalFlags;
@@ -335,7 +349,8 @@ typedef struct joyreghwvalues_tag {
  *  dwType          - type of joystick
  *  dwReserved      - reserved for OEM drivers
  */
-typedef struct joyreghwconfig_tag {
+typedef struct joyreghwconfig_tag
+{
     JOYREGHWSETTINGS    hws;
     DWORD               dwUsageSettings;
     JOYREGHWVALUES      hwv;
@@ -344,7 +359,8 @@ typedef struct joyreghwconfig_tag {
 } JOYREGHWCONFIG, FAR *LPJOYREGHWCONFIG;
 
 /* joystick calibration info structure */
-typedef struct joycalibrate_tag {
+typedef struct joycalibrate_tag
+{
     UINT    wXbase;
     UINT    wXdelta;
     UINT    wYbase;
@@ -378,7 +394,8 @@ typedef BOOL (FAR PASCAL * LPDIJOYTYPECALLBACK)(LPCWSTR, LPVOID);
 
 /* This structure is defined for DirectX 5.0 compatibility */
 
-typedef struct DIJOYTYPEINFO_DX5 {
+typedef struct DIJOYTYPEINFO_DX5
+{
     DWORD dwSize;
     JOYREGHWSETTINGS hws;
     CLSID clsidConfig;
@@ -388,7 +405,8 @@ typedef struct DIJOYTYPEINFO_DX5 {
 typedef const DIJOYTYPEINFO_DX5 *LPCDIJOYTYPEINFO_DX5;
 
 /* This structure is defined for DirectX 6.1 compatibility */
-typedef struct DIJOYTYPEINFO_DX6 {
+typedef struct DIJOYTYPEINFO_DX6
+{
     DWORD dwSize;
     JOYREGHWSETTINGS hws;
     CLSID clsidConfig;
@@ -399,7 +417,8 @@ typedef struct DIJOYTYPEINFO_DX6 {
 } DIJOYTYPEINFO_DX6, *LPDIJOYTYPEINFO_DX6;
 typedef const DIJOYTYPEINFO_DX6 *LPCDIJOYTYPEINFO_DX6;
 
-typedef struct DIJOYTYPEINFO {
+typedef struct DIJOYTYPEINFO
+{
     DWORD dwSize;
     JOYREGHWSETTINGS hws;
     CLSID clsidConfig;
@@ -423,7 +442,8 @@ typedef const DIJOYTYPEINFO *LPCDIJOYTYPEINFO;
 
 /* This structure is defined for DirectX 5.0 compatibility */
 
-typedef struct DIJOYCONFIG_DX5 {
+typedef struct DIJOYCONFIG_DX5
+{
     DWORD dwSize;
     GUID guidInstance;
     JOYREGHWCONFIG hwc;
@@ -433,7 +453,8 @@ typedef struct DIJOYCONFIG_DX5 {
 } DIJOYCONFIG_DX5, *LPDIJOYCONFIG_DX5;
 typedef const DIJOYCONFIG_DX5 *LPCDIJOYCONFIG_DX5;
 
-typedef struct DIJOYCONFIG {
+typedef struct DIJOYCONFIG
+{
     DWORD dwSize;
     GUID guidInstance;
     JOYREGHWCONFIG hwc;
@@ -443,7 +464,7 @@ typedef struct DIJOYCONFIG {
 #if(DIRECTINPUT_VERSION >= 0x05b2)
     GUID  guidGameport;
 #endif /* DIRECTINPUT_VERSION >= 0x05b2 */
-    } DIJOYCONFIG, *LPDIJOYCONFIG;
+} DIJOYCONFIG, *LPDIJOYCONFIG;
 typedef const DIJOYCONFIG *LPCDIJOYCONFIG;
 
 
@@ -451,7 +472,8 @@ typedef const DIJOYCONFIG *LPCDIJOYCONFIG;
 #define DIJU_GLOBALDRIVER           0x00000002
 #define DIJU_GAMEPORTEMULATOR       0x00000004
 
-typedef struct DIJOYUSERVALUES {
+typedef struct DIJOYUSERVALUES
+{
     DWORD dwSize;
     JOYREGUSERVALUES ruv;
     WCHAR wszGlobalDriver[MAX_JOYSTRING];
@@ -699,19 +721,19 @@ typedef struct IDirectInputJoyConfig8 *LPDIRECTINPUTJOYCONFIG8;
 #define DIERR_DRIVERLAST                0x800403FFL
 
 /*
- *  Unless the specific driver has been precisely identified, no meaning 
- *  should be attributed to these values other than that the driver 
- *  originated the error.  However, to illustrate the types of error that 
- *  may be causing the failure, the PID force feedback driver distributed 
+ *  Unless the specific driver has been precisely identified, no meaning
+ *  should be attributed to these values other than that the driver
+ *  originated the error.  However, to illustrate the types of error that
+ *  may be causing the failure, the PID force feedback driver distributed
  *  with DirectX 7 could return the following errors:
  *
- *  DIERR_DRIVERFIRST + 1   
+ *  DIERR_DRIVERFIRST + 1
  *      The requested usage was not found.
- *  DIERR_DRIVERFIRST + 2   
+ *  DIERR_DRIVERFIRST + 2
  *      The parameter block couldn't be	downloaded to the device.
- *  DIERR_DRIVERFIRST + 3   
+ *  DIERR_DRIVERFIRST + 3
  *      PID initialization failed.
- *  DIERR_DRIVERFIRST + 4   
+ *  DIERR_DRIVERFIRST + 4
  *      The provided values couldn't be scaled.
  */
 

@@ -29,37 +29,43 @@ extern "C" {
 #endif
 
 typedef struct _D3DRMVECTOR4D
-{   D3DVALUE x, y, z, w;
+{
+    D3DVALUE x, y, z, w;
 } D3DRMVECTOR4D, *LPD3DRMVECTOR4D;
 
 typedef D3DVALUE D3DRMMATRIX4D[4][4];
 
 typedef struct _D3DRMQUATERNION
-{   D3DVALUE s;
+{
+    D3DVALUE s;
     D3DVECTOR v;
 } D3DRMQUATERNION, *LPD3DRMQUATERNION;
 
 typedef struct _D3DRMRAY
-{   D3DVECTOR dvDir;
+{
+    D3DVECTOR dvDir;
     D3DVECTOR dvPos;
 } D3DRMRAY, *LPD3DRMRAY;
 
 typedef struct _D3DRMBOX
-{   D3DVECTOR min, max;
+{
+    D3DVECTOR min, max;
 } D3DRMBOX, *LPD3DRMBOX;
 
 typedef void (*D3DRMWRAPCALLBACK)
-    (LPD3DVECTOR, int* u, int* v, LPD3DVECTOR a, LPD3DVECTOR b, LPVOID);
+(LPD3DVECTOR, int* u, int* v, LPD3DVECTOR a, LPD3DVECTOR b, LPVOID);
 
 typedef enum _D3DRMLIGHTTYPE
-{   D3DRMLIGHT_AMBIENT,
+{
+    D3DRMLIGHT_AMBIENT,
     D3DRMLIGHT_POINT,
     D3DRMLIGHT_SPOT,
     D3DRMLIGHT_DIRECTIONAL,
     D3DRMLIGHT_PARALLELPOINT
 } D3DRMLIGHTTYPE, *LPD3DRMLIGHTTYPE;
 
-typedef enum _D3DRMSHADEMODE {
+typedef enum _D3DRMSHADEMODE
+{
     D3DRMSHADE_FLAT     = 0,
     D3DRMSHADE_GOURAUD  = 1,
     D3DRMSHADE_PHONG    = 2,
@@ -68,7 +74,8 @@ typedef enum _D3DRMSHADEMODE {
     D3DRMSHADE_MAX      = 8
 } D3DRMSHADEMODE, *LPD3DRMSHADEMODE;
 
-typedef enum _D3DRMLIGHTMODE {
+typedef enum _D3DRMLIGHTMODE
+{
     D3DRMLIGHT_OFF      = 0 * D3DRMSHADE_MAX,
     D3DRMLIGHT_ON       = 1 * D3DRMSHADE_MAX,
 
@@ -76,7 +83,8 @@ typedef enum _D3DRMLIGHTMODE {
     D3DRMLIGHT_MAX      = 8 * D3DRMSHADE_MAX
 } D3DRMLIGHTMODE, *LPD3DRMLIGHTMODE;
 
-typedef enum _D3DRMFILLMODE {
+typedef enum _D3DRMFILLMODE
+{
     D3DRMFILL_POINTS    = 0 * D3DRMLIGHT_MAX,
     D3DRMFILL_WIREFRAME = 1 * D3DRMLIGHT_MAX,
     D3DRMFILL_SOLID     = 2 * D3DRMLIGHT_MAX,
@@ -100,7 +108,8 @@ typedef DWORD D3DRMRENDERQUALITY, *LPD3DRMRENDERQUALITY;
 #define D3DRMRENDERMODE_DISABLESORTEDALPHAZWRITE 32
 
 typedef enum _D3DRMTEXTUREQUALITY
-{   D3DRMTEXTURE_NEAREST,               /* choose nearest texel */
+{
+    D3DRMTEXTURE_NEAREST,               /* choose nearest texel */
     D3DRMTEXTURE_LINEAR,                /* interpolate 4 texels */
     D3DRMTEXTURE_MIPNEAREST,            /* nearest texel in nearest mipmap  */
     D3DRMTEXTURE_MIPLINEAR,             /* interpolate 2 texels from 2 mipmaps */
@@ -127,7 +136,8 @@ typedef enum _D3DRMTEXTUREQUALITY
 #define D3DRMSHADOW_TRUEALPHA               0x00000001 /* shadow should render without artifacts when true alpha is on */
 
 typedef enum _D3DRMCOMBINETYPE
-{   D3DRMCOMBINE_REPLACE,
+{
+    D3DRMCOMBINE_REPLACE,
     D3DRMCOMBINE_BEFORE,
     D3DRMCOMBINE_AFTER
 } D3DRMCOMBINETYPE, *LPD3DRMCOMBINETYPE;
@@ -135,20 +145,23 @@ typedef enum _D3DRMCOMBINETYPE
 typedef D3DCOLORMODEL D3DRMCOLORMODEL, *LPD3DRMCOLORMODEL;
 
 typedef enum _D3DRMPALETTEFLAGS
-{   D3DRMPALETTE_FREE,                  /* renderer may use this entry freely */
+{
+    D3DRMPALETTE_FREE,                  /* renderer may use this entry freely */
     D3DRMPALETTE_READONLY,              /* fixed but may be used by renderer */
     D3DRMPALETTE_RESERVED               /* may not be used by renderer */
 } D3DRMPALETTEFLAGS, *LPD3DRMPALETTEFLAGS;
 
 typedef struct _D3DRMPALETTEENTRY
-{   unsigned char red;          /* 0 .. 255 */
+{
+    unsigned char red;          /* 0 .. 255 */
     unsigned char green;        /* 0 .. 255 */
     unsigned char blue;         /* 0 .. 255 */
     unsigned char flags;        /* one of D3DRMPALETTEFLAGS */
 } D3DRMPALETTEENTRY, *LPD3DRMPALETTEENTRY;
 
 typedef struct _D3DRMIMAGE
-{   int width, height;          /* width and height in pixels */
+{
+    int width, height;          /* width and height in pixels */
     int aspectx, aspecty;       /* aspect ratio for non-square pixels */
     int depth;                  /* bits per pixel */
     int rgb;                    /* if false, pixels are indices into a
@@ -180,7 +193,8 @@ typedef struct _D3DRMIMAGE
 } D3DRMIMAGE, *LPD3DRMIMAGE;
 
 typedef enum _D3DRMWRAPTYPE
-{   D3DRMWRAP_FLAT,
+{
+    D3DRMWRAP_FLAT,
     D3DRMWRAP_CYLINDER,
     D3DRMWRAP_SPHERE,
     D3DRMWRAP_CHROME,
@@ -196,7 +210,8 @@ typedef enum _D3DRMWRAPTYPE
  * Set up righthanded mode by using IDirect3DRM3::SetOptions().
  */
 typedef enum _D3DRMPROJECTIONTYPE
-{   D3DRMPROJECT_PERSPECTIVE,
+{
+    D3DRMPROJECT_PERSPECTIVE,
     D3DRMPROJECT_ORTHOGRAPHIC,
     D3DRMPROJECT_RIGHTHANDPERSPECTIVE, /* Only valid pre-DX6 */
     D3DRMPROJECT_RIGHTHANDORTHOGRAPHIC /* Only valid pre-DX6 */
@@ -206,7 +221,8 @@ typedef enum _D3DRMPROJECTIONTYPE
 #define D3DRMOPTIONS_RIGHTHANDED 0x00000002L
 
 typedef enum _D3DRMXOFFORMAT
-{   D3DRMXOF_BINARY,
+{
+    D3DRMXOF_BINARY,
     D3DRMXOF_COMPRESSED,
     D3DRMXOF_TEXT
 } D3DRMXOFFORMAT, *LPD3DRMXOFFORMAT;
@@ -221,35 +237,41 @@ typedef DWORD D3DRMSAVEOPTIONS;
 #define D3DRMXOFSAVE_TEXTURETOPOLOGY 32
 
 typedef enum _D3DRMCOLORSOURCE
-{   D3DRMCOLOR_FROMFACE,
+{
+    D3DRMCOLOR_FROMFACE,
     D3DRMCOLOR_FROMVERTEX
 } D3DRMCOLORSOURCE, *LPD3DRMCOLORSOURCE;
 
 typedef enum _D3DRMFRAMECONSTRAINT
-{   D3DRMCONSTRAIN_Z,           /* use only X and Y rotations */
+{
+    D3DRMCONSTRAIN_Z,           /* use only X and Y rotations */
     D3DRMCONSTRAIN_Y,           /* use only X and Z rotations */
     D3DRMCONSTRAIN_X            /* use only Y and Z rotations */
 } D3DRMFRAMECONSTRAINT, *LPD3DRMFRAMECONSTRAINT;
 
 typedef enum _D3DRMMATERIALMODE
-{   D3DRMMATERIAL_FROMMESH,
+{
+    D3DRMMATERIAL_FROMMESH,
     D3DRMMATERIAL_FROMPARENT,
     D3DRMMATERIAL_FROMFRAME
 } D3DRMMATERIALMODE, *LPD3DRMMATERIALMODE;
 
 typedef enum _D3DRMFOGMODE
-{   D3DRMFOG_LINEAR,            /* linear between start and end */
+{
+    D3DRMFOG_LINEAR,            /* linear between start and end */
     D3DRMFOG_EXPONENTIAL,       /* density * exp(-distance) */
     D3DRMFOG_EXPONENTIALSQUARED /* density * exp(-distance*distance) */
 } D3DRMFOGMODE, *LPD3DRMFOGMODE;
 
-typedef enum _D3DRMZBUFFERMODE {
+typedef enum _D3DRMZBUFFERMODE
+{
     D3DRMZBUFFER_FROMPARENT,    /* default */
     D3DRMZBUFFER_ENABLE,        /* enable zbuffering */
     D3DRMZBUFFER_DISABLE        /* disable zbuffering */
 } D3DRMZBUFFERMODE, *LPD3DRMZBUFFERMODE;
 
-typedef enum _D3DRMSORTMODE {
+typedef enum _D3DRMSORTMODE
+{
     D3DRMSORT_FROMPARENT,       /* default */
     D3DRMSORT_NONE,             /* don't sort child frames */
     D3DRMSORT_FRONTTOBACK,      /* sort child frames front-to-back */
@@ -424,15 +446,17 @@ typedef DWORD D3DRMLOADOPTIONS;
 
 #define D3DRMLOAD_ASYNCHRONOUS 0x400L
 
-typedef struct _D3DRMLOADRESOURCE {
-  HMODULE hModule;
-  LPCTSTR lpName;
-  LPCTSTR lpType;
+typedef struct _D3DRMLOADRESOURCE
+{
+    HMODULE hModule;
+    LPCTSTR lpName;
+    LPCTSTR lpType;
 } D3DRMLOADRESOURCE, *LPD3DRMLOADRESOURCE;
 
-typedef struct _D3DRMLOADMEMORY {
-  LPVOID lpMemory;
-  DWORD dSize;
+typedef struct _D3DRMLOADMEMORY
+{
+    LPVOID lpMemory;
+    DWORD dSize;
 } D3DRMLOADMEMORY, *LPD3DRMLOADMEMORY;
 
 #define D3DRMPMESHSTATUS_VALID 0x01L
@@ -444,18 +468,20 @@ typedef struct _D3DRMLOADMEMORY {
 #define D3DRMPMESHEVENT_BASEMESH 0x01L
 #define D3DRMPMESHEVENT_COMPLETE 0x02L
 
-typedef struct _D3DRMPMESHLOADSTATUS {
-  DWORD dwSize;            // Size of this structure
-  DWORD dwPMeshSize;       // Total Size (bytes)
-  DWORD dwBaseMeshSize;    // Total Size of the Base Mesh
-  DWORD dwBytesLoaded;     // Total bytes loaded
-  DWORD dwVerticesLoaded;  // Number of vertices loaded
-  DWORD dwFacesLoaded;     // Number of faces loaded
-  HRESULT dwLoadResult;    // Result of the load operation
-  DWORD dwFlags;
+typedef struct _D3DRMPMESHLOADSTATUS
+{
+    DWORD dwSize;            // Size of this structure
+    DWORD dwPMeshSize;       // Total Size (bytes)
+    DWORD dwBaseMeshSize;    // Total Size of the Base Mesh
+    DWORD dwBytesLoaded;     // Total bytes loaded
+    DWORD dwVerticesLoaded;  // Number of vertices loaded
+    DWORD dwFacesLoaded;     // Number of faces loaded
+    HRESULT dwLoadResult;    // Result of the load operation
+    DWORD dwFlags;
 } D3DRMPMESHLOADSTATUS, *LPD3DRMPMESHLOADSTATUS;
 
-typedef enum _D3DRMUSERVISUALREASON {
+typedef enum _D3DRMUSERVISUALREASON
+{
     D3DRMUSERVISUAL_CANSEE,
     D3DRMUSERVISUAL_RENDER
 } D3DRMUSERVISUALREASON, *LPD3DRMUSERVISUALREASON;
@@ -547,7 +573,8 @@ static const D3DRMMAPPINGFLAG D3DRMMAP_WRAPV = 2;
 static const D3DRMMAPPINGFLAG D3DRMMAP_PERSPCORRECT = 4;
 
 typedef struct _D3DRMVERTEX
-{   D3DVECTOR       position;
+{
+    D3DVECTOR       position;
     D3DVECTOR       normal;
     D3DVALUE        tu, tv;
     D3DCOLOR        color;
@@ -560,16 +587,16 @@ static const D3DRMGROUPINDEX D3DRMGROUP_ALLGROUPS = -1;
  * Create a color from three components in the range 0-1 inclusive.
  */
 extern D3DCOLOR D3DRMAPI        D3DRMCreateColorRGB(D3DVALUE red,
-                                          D3DVALUE green,
-                                          D3DVALUE blue);
+        D3DVALUE green,
+        D3DVALUE blue);
 
 /*
  * Create a color from four components in the range 0-1 inclusive.
  */
 extern D3DCOLOR D3DRMAPI        D3DRMCreateColorRGBA(D3DVALUE red,
-                                                 D3DVALUE green,
-                                                 D3DVALUE blue,
-                                                 D3DVALUE alpha);
+        D3DVALUE green,
+        D3DVALUE blue,
+        D3DVALUE alpha);
 
 /*
  * Get the red component of a color.
@@ -595,33 +622,33 @@ extern D3DVALUE                 D3DRMAPI D3DRMColorGetAlpha(D3DCOLOR);
  * Add two vectors.  Returns its first argument.
  */
 extern LPD3DVECTOR      D3DRMAPI D3DRMVectorAdd(LPD3DVECTOR d,
-                                          LPD3DVECTOR s1,
-                                          LPD3DVECTOR s2);
+        LPD3DVECTOR s1,
+        LPD3DVECTOR s2);
 
 /*
  * Subtract two vectors.  Returns its first argument.
  */
 extern LPD3DVECTOR      D3DRMAPI D3DRMVectorSubtract(LPD3DVECTOR d,
-                                               LPD3DVECTOR s1,
-                                               LPD3DVECTOR s2);
+        LPD3DVECTOR s1,
+        LPD3DVECTOR s2);
 /*
  * Reflect a ray about a given normal.  Returns its first argument.
  */
 extern LPD3DVECTOR      D3DRMAPI D3DRMVectorReflect(LPD3DVECTOR d,
-                                              LPD3DVECTOR ray,
-                                              LPD3DVECTOR norm);
+        LPD3DVECTOR ray,
+        LPD3DVECTOR norm);
 
 /*
  * Calculate the vector cross product.  Returns its first argument.
  */
 extern LPD3DVECTOR      D3DRMAPI D3DRMVectorCrossProduct(LPD3DVECTOR d,
-                                                   LPD3DVECTOR s1,
-                                                   LPD3DVECTOR s2);
+        LPD3DVECTOR s1,
+        LPD3DVECTOR s2);
 /*
  * Return the vector dot product.
  */
 extern D3DVALUE                 D3DRMAPI D3DRMVectorDotProduct(LPD3DVECTOR s1,
-                                                 LPD3DVECTOR s2);
+        LPD3DVECTOR s2);
 
 /*
  * Scale a vector so that its modulus is 1.  Returns its argument or
@@ -658,23 +685,23 @@ extern LPD3DVECTOR      D3DRMAPI D3DRMVectorRandom(LPD3DVECTOR d);
  */
 
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionFromRotation(LPD3DRMQUATERNION quat,
-                                                              LPD3DVECTOR v,
-                                                              D3DVALUE theta);
+        LPD3DVECTOR v,
+        D3DVALUE theta);
 
 /*
  * Calculate the product of two quaternions
  */
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionMultiply(LPD3DRMQUATERNION q,
-                                                          LPD3DRMQUATERNION a,
-                                                          LPD3DRMQUATERNION b);
+        LPD3DRMQUATERNION a,
+        LPD3DRMQUATERNION b);
 
 /*
  * Interpolate between two quaternions
  */
 extern LPD3DRMQUATERNION D3DRMAPI D3DRMQuaternionSlerp(LPD3DRMQUATERNION q,
-                                                       LPD3DRMQUATERNION a,
-                                                       LPD3DRMQUATERNION b,
-                                                       D3DVALUE alpha);
+        LPD3DRMQUATERNION a,
+        LPD3DRMQUATERNION b,
+        D3DVALUE alpha);
 
 /*
  * Calculate the matrix for the rotation that a unit quaternion represents

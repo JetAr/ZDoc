@@ -3,7 +3,7 @@
 
 
 HRESULT
-PrivCreateInstance(REFCLSID ptszClsid, LPUNKNOWN punkOuter, DWORD dwClsContext, 
+PrivCreateInstance(REFCLSID ptszClsid, LPUNKNOWN punkOuter, DWORD dwClsContext,
                    REFIID riid, LPVOID *ppvOut, HINSTANCE *phinst);
 
 HRESULT

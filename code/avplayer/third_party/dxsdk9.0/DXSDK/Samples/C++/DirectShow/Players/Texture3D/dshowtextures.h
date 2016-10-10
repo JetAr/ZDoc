@@ -1,8 +1,8 @@
 ﻿//-----------------------------------------------------------------------------
 // File: DShowTextures.h
 //
-// Desc: DirectShow sample code - adds support for DirectShow videos playing 
-//       on a DirectX 8.0 texture surface. Turns the D3D texture tutorial into 
+// Desc: DirectShow sample code - adds support for DirectShow videos playing
+//       on a DirectX 8.0 texture surface. Turns the D3D texture tutorial into
 //       a recreation of the VideoTex sample from previous versions of DirectX.
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -30,10 +30,10 @@ public:
     HRESULT CheckMediaType(const CMediaType *pmt );     // Format acceptable?
     HRESULT SetMediaType(const CMediaType *pmt );       // Video format notification
     HRESULT DoRenderSample(IMediaSample *pMediaSample); // New video sample
-    
-	LONG m_lVidWidth;	// Video width
-	LONG m_lVidHeight;	// Video Height
-	LONG m_lVidPitch;	// Video Pitch
+
+    LONG m_lVidWidth;	// Video width
+    LONG m_lVidHeight;	// Video Height
+    LONG m_lVidPitch;	// Video Pitch
 };
 
 

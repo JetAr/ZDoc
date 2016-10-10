@@ -40,84 +40,85 @@ int quit = 0;
 
 void stop(int signal)
 {
-	quit = 1;
+    quit = 1;
 }
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2)
-	{
-		fprintf(stderr, "usage: ./simple_client torrent-file\n");
-		return 1;
-	}
+    if (argc != 2)
+    {
+        fprintf(stderr, "usage: ./simple_client torrent-file\n");
+        return 1;
+    }
 
-	int ret = 0;
-	void* ses = session_create(
-		SES_LISTENPORT, 6881,
-		SES_LISTENPORT_END, 6889,
-		SES_ALERT_MASK, ~(cat_progress | cat_port_mapping | cat_debug | cat_performance_warning | cat_peer),
-		TAG_END);
+    int ret = 0;
+    void* ses = session_create(
+                    SES_LISTENPORT, 6881,
+                    SES_LISTENPORT_END, 6889,
+                    SES_ALERT_MASK, ~(cat_progress | cat_port_mapping | cat_debug | cat_performance_warning | cat_peer),
+                    TAG_END);
 
-	int t = session_add_torrent(ses,
-		TOR_FILENAME, argv[1],
-		TOR_SAVE_PATH, "./",
-		TAG_END);
+    int t = session_add_torrent(ses,
+                                TOR_FILENAME, argv[1],
+                                TOR_SAVE_PATH, "./",
+                                TAG_END);
 
-	if (t < 0)
-	{
-		fprintf(stderr, "Failed to add torrent\n");
-		ret = 1;
-		goto exit;
-	}
+    if (t < 0)
+    {
+        fprintf(stderr, "Failed to add torrent\n");
+        ret = 1;
+        goto exit;
+    }
 
-	struct torrent_status st;
+    struct torrent_status st;
 
-	printf("press ctrl-C to stop\n");
+    printf("press ctrl-C to stop\n");
 
-	signal(SIGINT, &stop);
-	signal(SIGABRT, &stop);
-	signal(SIGQUIT, &stop);
+    signal(SIGINT, &stop);
+    signal(SIGABRT, &stop);
+    signal(SIGQUIT, &stop);
 
-	while (quit == 0)
-	{
-		char const* message = "";
+    while (quit == 0)
+    {
+        char const* message = "";
 
-		char const* state[] = {"queued", "checking", "downloading metadata"
-			, "downloading", "finished", "seeding", "allocating"
-			, "checking_resume_data"};
+        char const* state[] = {"queued", "checking", "downloading metadata"
+                               , "downloading", "finished", "seeding", "allocating"
+                               , "checking_resume_data"
+                              };
 
-		if (torrent_get_status(t, &st, sizeof(st)) < 0) break;
-		printf("\r%3.f%% %d kB (%5.f kB/s) up: %d kB (%5.f kB/s) peers: %d '%s' %s  "
-			, (double)st.progress * 100.
-			, (int)(st.total_payload_download / 1000)
-			, (double)st.download_payload_rate / 1000.
-			, (int)(st.total_payload_upload / 1000)
-			, (double)st.upload_payload_rate / 1000.
-			, st.num_peers
-			, state[st.state]
-			, message);
+        if (torrent_get_status(t, &st, sizeof(st)) < 0) break;
+        printf("\r%3.f%% %d kB (%5.f kB/s) up: %d kB (%5.f kB/s) peers: %d '%s' %s  "
+               , (double)st.progress * 100.
+               , (int)(st.total_payload_download / 1000)
+               , (double)st.download_payload_rate / 1000.
+               , (int)(st.total_payload_upload / 1000)
+               , (double)st.upload_payload_rate / 1000.
+               , st.num_peers
+               , state[st.state]
+               , message);
 
 
-		char msg[400];
-		while (session_pop_alert(ses, msg, sizeof(msg), 0) >= 0)
-		{
-			printf("%s\n", msg);
-		}
+        char msg[400];
+        while (session_pop_alert(ses, msg, sizeof(msg), 0) >= 0)
+        {
+            printf("%s\n", msg);
+        }
 
-		if (strlen(st.error) > 0)
-		{
-			fprintf(stderr, "\nERROR: %s\n", st.error);
-			break;
-		}
+        if (strlen(st.error) > 0)
+        {
+            fprintf(stderr, "\nERROR: %s\n", st.error);
+            break;
+        }
 
-		fflush(stdout);
-		usleep(1000000);
-	}
-	printf("\nclosing\n");
+        fflush(stdout);
+        usleep(1000000);
+    }
+    printf("\nclosing\n");
 
 exit:
 
-	session_close(ses);
-	return ret;
+    session_close(ses);
+    return ret;
 }
 

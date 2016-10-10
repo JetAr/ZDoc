@@ -38,7 +38,7 @@ struct D3DAdapterInfo
 
 //-----------------------------------------------------------------------------
 // Name: struct D3DDeviceInfo
-// Desc: Info about a D3D device, including a list of D3DDeviceCombos (see below) 
+// Desc: Info about a D3D device, including a list of D3DDeviceCombos (see below)
 //       that work with the device.
 //-----------------------------------------------------------------------------
 struct D3DDeviceInfo
@@ -65,7 +65,7 @@ struct D3DDSMSConflict
 
 //-----------------------------------------------------------------------------
 // Name: struct D3DDeviceCombo
-// Desc: A combination of adapter format, back buffer format, and windowed/fullscreen 
+// Desc: A combination of adapter format, back buffer format, and windowed/fullscreen
 //       that is compatible with a particular D3D device (and the app).
 //-----------------------------------------------------------------------------
 struct D3DDeviceCombo
@@ -77,8 +77,8 @@ struct D3DDeviceCombo
     bool IsWindowed;
     CArrayList* pDepthStencilFormatList; // List of D3DFORMATs
     CArrayList* pMultiSampleTypeList; // List of D3DMULTISAMPLE_TYPEs
-    CArrayList* pMultiSampleQualityList; // List of DWORDs (number of quality 
-                                         // levels for each multisample type)
+    CArrayList* pMultiSampleQualityList; // List of DWORDs (number of quality
+    // levels for each multisample type)
     CArrayList* pDSMSConflictList; // List of D3DDSMSConflicts
     CArrayList* pVertexProcessingTypeList; // List of VertexProcessingTypes
     CArrayList* pPresentIntervalList; // List of D3DPRESENT_INTERVALs
@@ -87,8 +87,8 @@ struct D3DDeviceCombo
 };
 
 
-typedef bool(* CONFIRMDEVICECALLBACK)( D3DCAPS9* pCaps, VertexProcessingType vertexProcessingType, 
-									   D3DFORMAT adapterFormat, D3DFORMAT backBufferFormat );
+typedef bool(* CONFIRMDEVICECALLBACK)( D3DCAPS9* pCaps, VertexProcessingType vertexProcessingType,
+                                       D3DFORMAT adapterFormat, D3DFORMAT backBufferFormat );
 
 
 //-----------------------------------------------------------------------------
@@ -111,7 +111,7 @@ private:
 
 public:
     CArrayList* m_pAdapterInfoList;
-    // The following variables can be used to limit what modes, formats, 
+    // The following variables can be used to limit what modes, formats,
     // etc. are enumerated.  Set them to the values you want before calling
     // Enumerate().
     CONFIRMDEVICECALLBACK ConfirmDeviceCallback;
@@ -129,7 +129,10 @@ public:
 
     CD3DEnumeration();
     ~CD3DEnumeration();
-    void SetD3D(IDirect3D9* pD3D) { m_pD3D = pD3D; }
+    void SetD3D(IDirect3D9* pD3D)
+    {
+        m_pD3D = pD3D;
+    }
     HRESULT Enumerate();
 };
 

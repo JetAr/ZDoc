@@ -91,4 +91,4 @@ private:
     HRESULT SetPaletteEntries(Colour colour);
 
 }; // CBallStream
-    
+

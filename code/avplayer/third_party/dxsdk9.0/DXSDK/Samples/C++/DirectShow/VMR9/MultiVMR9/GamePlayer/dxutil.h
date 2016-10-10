@@ -20,7 +20,7 @@
 
 #ifndef UNDER_CE
 //-----------------------------------------------------------------------------
-// Name: DXUtil_GetDXSDKMediaPath() and DXUtil_FindMediaFile() 
+// Name: DXUtil_GetDXSDKMediaPath() and DXUtil_FindMediaFile()
 // Desc: Returns the DirectX SDK path, as stored in the system registry
 //       during the SDK install.
 //-----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ HRESULT DXUtil_FindMediaFileCb( TCHAR* szDestPath, int cbDest, TCHAR* strFilenam
 
 //-----------------------------------------------------------------------------
 // Name: DXUtil_Read*RegKey() and DXUtil_Write*RegKey()
-// Desc: Helper functions to read/write a string registry key 
+// Desc: Helper functions to read/write a string registry key
 //-----------------------------------------------------------------------------
 HRESULT DXUtil_WriteStringRegKey( HKEY hKey, TCHAR* strRegName, TCHAR* strValue );
 HRESULT DXUtil_WriteIntRegKey( HKEY hKey, TCHAR* strRegName, DWORD dwValue );
@@ -56,11 +56,12 @@ HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL* pbValue, BOOL
 //          TIMER_ADVANCE         - to advance the timer by 0.1 seconds
 //          TIMER_GETABSOLUTETIME - to get the absolute system time
 //          TIMER_GETAPPTIME      - to get the current time
-//          TIMER_GETELAPSEDTIME  - to get the time that elapsed between 
+//          TIMER_GETELAPSEDTIME  - to get the time that elapsed between
 //                                  TIMER_GETELAPSEDTIME calls
 //-----------------------------------------------------------------------------
 enum TIMER_COMMAND { TIMER_RESET, TIMER_START, TIMER_STOP, TIMER_ADVANCE,
-                     TIMER_GETABSOLUTETIME, TIMER_GETAPPTIME, TIMER_GETELAPSEDTIME };
+                     TIMER_GETABSOLUTETIME, TIMER_GETAPPTIME, TIMER_GETELAPSEDTIME
+                   };
 FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command );
 
 
@@ -87,7 +88,7 @@ HRESULT DXUtil_ConvertWideStringToGenericCb( TCHAR* tstrDestination, const WCHAR
 VOID DXUtil_LaunchReadme( HWND hWnd );
 
 //-----------------------------------------------------------------------------
-// GUID to String converting 
+// GUID to String converting
 //-----------------------------------------------------------------------------
 HRESULT DXUtil_ConvertGUIDToStringCch( const GUID* pGuidSrc, TCHAR* strDest, int cchDestChar );
 HRESULT DXUtil_ConvertGUIDToStringCb( const GUID* pGuidSrc, TCHAR* strDest, int cbDestChar );
@@ -101,9 +102,9 @@ HRESULT DXUtil_ConvertStringToGUID( const TCHAR* strIn, GUID* pGuidOut );
 VOID    DXUtil_Trace( TCHAR* strMsg, ... );
 
 #if defined(DEBUG) | defined(_DEBUG)
-    #define DXTRACE           DXUtil_Trace
+#define DXTRACE           DXUtil_Trace
 #else
-    #define DXTRACE           sizeof
+#define DXTRACE           sizeof
 #endif
 
 
@@ -137,9 +138,15 @@ public:
     HRESULT Add( void* pEntry );
     void Remove( UINT Entry );
     void* GetPtr( UINT Entry );
-    UINT Count( void ) { return m_NumEntries; }
+    UINT Count( void )
+    {
+        return m_NumEntries;
+    }
     bool Contains( void* pEntryData );
-    void Clear( void ) { m_NumEntries = 0; }
+    void Clear( void )
+    {
+        m_NumEntries = 0;
+    }
 };
 
 //-----------------------------------------------------------------------------

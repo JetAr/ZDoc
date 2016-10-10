@@ -75,8 +75,8 @@ typedef interface ID3DXEffect ID3DXEffect;
 typedef interface ID3DXEffect *LPD3DXEFFECT;
 
 // {648B1CEB-8D4E-4d66-B6FA-E44969E82E89}
-DEFINE_GUID( IID_ID3DXEffect, 
-0x648b1ceb, 0x8d4e, 0x4d66, 0xb6, 0xfa, 0xe4, 0x49, 0x69, 0xe8, 0x2e, 0x89);
+DEFINE_GUID( IID_ID3DXEffect,
+             0x648b1ceb, 0x8d4e, 0x4d66, 0xb6, 0xfa, 0xe4, 0x49, 0x69, 0xe8, 0x2e, 0x89);
 
 
 #undef INTERFACE
@@ -103,9 +103,9 @@ DECLARE_INTERFACE_(ID3DXEffect, IUnknown)
     STDMETHOD(GetTechnique)(THIS_ LPCSTR* ppTechnique) PURE;
 
     STDMETHOD(SetDword)(THIS_ LPCSTR pParameter, DWORD dw) PURE;
-    STDMETHOD(GetDword)(THIS_ LPCSTR pParameter, DWORD* pdw) PURE; 
+    STDMETHOD(GetDword)(THIS_ LPCSTR pParameter, DWORD* pdw) PURE;
     STDMETHOD(SetFloat)(THIS_ LPCSTR pParameter, FLOAT f) PURE;
-    STDMETHOD(GetFloat)(THIS_ LPCSTR pParameter, FLOAT* pf) PURE;    
+    STDMETHOD(GetFloat)(THIS_ LPCSTR pParameter, FLOAT* pf) PURE;
     STDMETHOD(SetVector)(THIS_ LPCSTR pParameter, CONST D3DXVECTOR4* pVector) PURE;
     STDMETHOD(GetVector)(THIS_ LPCSTR pParameter, D3DXVECTOR4* pVector) PURE;
     STDMETHOD(SetMatrix)(THIS_ LPCSTR pParameter, CONST D3DXMATRIX* pMatrix) PURE;
@@ -167,18 +167,18 @@ extern "C" {
 //----------------------------------------------------------------------------
 
 HRESULT WINAPI
-    D3DXCreateEffectFromFileA(
-        LPDIRECT3DDEVICE8 pDevice,
-        LPCSTR            pSrcFile,
-        LPD3DXEFFECT*     ppEffect,
-        LPD3DXBUFFER*     ppCompilationErrors);
+D3DXCreateEffectFromFileA(
+    LPDIRECT3DDEVICE8 pDevice,
+    LPCSTR            pSrcFile,
+    LPD3DXEFFECT*     ppEffect,
+    LPD3DXBUFFER*     ppCompilationErrors);
 
 HRESULT WINAPI
-    D3DXCreateEffectFromFileW(
-        LPDIRECT3DDEVICE8 pDevice,
-        LPCWSTR           pSrcFile,
-        LPD3DXEFFECT*     ppEffect,
-        LPD3DXBUFFER*     ppCompilationErrors);
+D3DXCreateEffectFromFileW(
+    LPDIRECT3DDEVICE8 pDevice,
+    LPCWSTR           pSrcFile,
+    LPD3DXEFFECT*     ppEffect,
+    LPD3DXBUFFER*     ppCompilationErrors);
 
 #ifdef UNICODE
 #define D3DXCreateEffectFromFile D3DXCreateEffectFromFileW
@@ -188,20 +188,20 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCreateEffectFromResourceA(
-        LPDIRECT3DDEVICE8 pDevice,
-        HMODULE           hSrcModule,
-        LPCSTR            pSrcResource,
-        LPD3DXEFFECT*     ppEffect,
-        LPD3DXBUFFER*     ppCompilationErrors);
+D3DXCreateEffectFromResourceA(
+    LPDIRECT3DDEVICE8 pDevice,
+    HMODULE           hSrcModule,
+    LPCSTR            pSrcResource,
+    LPD3DXEFFECT*     ppEffect,
+    LPD3DXBUFFER*     ppCompilationErrors);
 
 HRESULT WINAPI
-    D3DXCreateEffectFromResourceW(
-        LPDIRECT3DDEVICE8 pDevice,
-        HMODULE           hSrcModule,
-        LPCWSTR           pSrcResource,
-        LPD3DXEFFECT*     ppEffect,
-        LPD3DXBUFFER*     ppCompilationErrors);
+D3DXCreateEffectFromResourceW(
+    LPDIRECT3DDEVICE8 pDevice,
+    HMODULE           hSrcModule,
+    LPCWSTR           pSrcResource,
+    LPD3DXEFFECT*     ppEffect,
+    LPD3DXBUFFER*     ppCompilationErrors);
 
 #ifdef UNICODE
 #define D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW
@@ -211,12 +211,12 @@ HRESULT WINAPI
 
 
 HRESULT WINAPI
-    D3DXCreateEffect(
-        LPDIRECT3DDEVICE8 pDevice,
-        LPCVOID           pSrcData,
-        UINT              SrcDataSize,
-        LPD3DXEFFECT*     ppEffect,
-        LPD3DXBUFFER*     ppCompilationErrors);
+D3DXCreateEffect(
+    LPDIRECT3DDEVICE8 pDevice,
+    LPCVOID           pSrcData,
+    UINT              SrcDataSize,
+    LPD3DXEFFECT*     ppEffect,
+    LPD3DXBUFFER*     ppCompilationErrors);
 
 
 #ifdef __cplusplus

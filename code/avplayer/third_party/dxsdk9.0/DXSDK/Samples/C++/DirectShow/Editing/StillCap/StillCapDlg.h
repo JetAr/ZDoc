@@ -46,7 +46,7 @@ protected:
 
     HRESULT InitStillGraph( );
     HRESULT InitCaptureGraph( TCHAR * pFilename );
-    HRESULT InitPlaybackGraph( TCHAR * pFilename ); 
+    HRESULT InitPlaybackGraph( TCHAR * pFilename );
 
     void GetDefaultCapDevice( IBaseFilter ** ppCap );
     void ClearGraphs( );
@@ -68,9 +68,9 @@ public:
 
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CStillCapDlg)
-    public:
+public:
     virtual BOOL DestroyWindow();
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
     //}}AFX_VIRTUAL

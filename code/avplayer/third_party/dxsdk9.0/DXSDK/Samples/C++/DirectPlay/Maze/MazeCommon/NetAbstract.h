@@ -15,8 +15,8 @@ enum { DISCONNNECT_REASON_UNKNOWN = 0, DISCONNNECT_REASON_CLIENT_OUT_OF_DATE };
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 interface   INetServer
 {
@@ -34,8 +34,8 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 interface   INetClient
 {
@@ -50,14 +50,14 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 interface   IOutboundServer
 {
 public:
-    virtual HRESULT SendPacket( DWORD dwTo, void* dwData, DWORD dwSize, 
-                                BOOL dwGuaranteed, DWORD dwTimeout ) = 0;
+    virtual HRESULT SendPacket( DWORD dwTo, void* dwData, DWORD dwSize,
+    BOOL dwGuaranteed, DWORD dwTimeout ) = 0;
     virtual HRESULT GetConnectionInfo( DWORD dwID, TCHAR* strConnectionInfo, DWORD dwBufLength ) = 0;
     virtual HRESULT RejectClient( DWORD dwID, HRESULT hrReason ) = 0;
 };
@@ -66,14 +66,14 @@ public:
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
+// Name:
+// Desc:
 //-----------------------------------------------------------------------------
 interface   IOutboundClient
 {
 public:
-    virtual HRESULT SendPacket( void* dwData, DWORD dwSize, 
-                                BOOL dwGuaranteed, DWORD dwTimeout ) = 0;
+    virtual HRESULT SendPacket( void* dwData, DWORD dwSize,
+    BOOL dwGuaranteed, DWORD dwTimeout ) = 0;
     virtual DWORD GetThroughputBPS() = 0;
     virtual DWORD GetRoundTripLatencyMS() = 0;
     virtual BOOL  IsSessionLost() = 0;

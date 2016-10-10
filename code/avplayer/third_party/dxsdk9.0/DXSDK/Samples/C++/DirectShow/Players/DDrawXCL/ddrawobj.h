@@ -24,46 +24,77 @@ class COverlayCallback ;
 //
 // DDraw object class to paint color key, flip etc etc.
 //
-class CDDrawObject {
+class CDDrawObject
+{
 public:   // public methods for Windows structure to call
     CDDrawObject(HWND hWndApp) ;
     ~CDDrawObject(void) ;
-    
+
     BOOL    Initialize(HWND hWndApp) ;
 
     HRESULT StartExclusiveMode(HWND hWndApp) ;
     HRESULT StopExclusiveMode(HWND hWndApp) ;
     HRESULT UpdateAndFlipSurfaces(void) ;
 
-    void    SetVideoPosition(DWORD dwVideoLeft, DWORD dwVideoTop, 
+    void    SetVideoPosition(DWORD dwVideoLeft, DWORD dwVideoTop,
                              DWORD dwVideoWidth, DWORD dwVideoHeight) ;
-    void    SetBallPosition(DWORD dwVideoLeft, DWORD dwVideoTop, 
+    void    SetBallPosition(DWORD dwVideoLeft, DWORD dwVideoTop,
                             DWORD dwVideoWidth, DWORD dwVideoHeight) ;
     void    MoveBallPosition(int iDirX, int iDirY) ;
 
-    inline  void    SetColorKey(DWORD dwColorKey)   { m_dwVideoKeyColor = dwColorKey ; } ;
-    inline  void    GetScreenRect(RECT *pRect)      { *pRect = m_RectScrn ; } ;
-    inline  BOOL    IsInExclusiveMode(void)         { return m_bInExclMode ; } ;
-    inline  LPDIRECTDRAW         GetDDObject(void)  { return m_pDDObject ; } ;
-    inline  LPDIRECTDRAWSURFACE  GetDDPrimary(void) { return m_pPrimary ; } ;
-    inline  void    SetOverlayState(BOOL bState)    { m_bOverlayVisible = bState ; } ;
-    inline  IDDrawExclModeVideoCallback * GetCallbackInterface(void) { return m_pOverlayCallback ; } ;
-    
+    inline  void    SetColorKey(DWORD dwColorKey)
+    {
+        m_dwVideoKeyColor = dwColorKey ;
+    } ;
+    inline  void    GetScreenRect(RECT *pRect)
+    {
+        *pRect = m_RectScrn ;
+    } ;
+    inline  BOOL    IsInExclusiveMode(void)
+    {
+        return m_bInExclMode ;
+    } ;
+    inline  LPDIRECTDRAW         GetDDObject(void)
+    {
+        return m_pDDObject ;
+    } ;
+    inline  LPDIRECTDRAWSURFACE  GetDDPrimary(void)
+    {
+        return m_pPrimary ;
+    } ;
+    inline  void    SetOverlayState(BOOL bState)
+    {
+        m_bOverlayVisible = bState ;
+    } ;
+    inline  IDDrawExclModeVideoCallback * GetCallbackInterface(void)
+    {
+        return m_pOverlayCallback ;
+    } ;
+
 private:  // private helper methods for the class' own use
     void    DrawOnSurface(LPDIRECTDRAWSURFACE pSurface) ;
 
     HRESULT FillSurface(IDirectDrawSurface *pDDSurface) ;
     HRESULT ConvertColorRefToPhysColor(COLORREF rgb, DWORD *pdwPhysColor) ;
 
-    inline  DWORD   GetColorKey(DWORD dwColorKey)   { return m_dwVideoKeyColor ; } ;
-    inline  void    IncCount(void)                  { m_iCount++ ; } ;
-    inline  int     GetCount(void)                  { return m_iCount ; } ;
-    
+    inline  DWORD   GetColorKey(DWORD dwColorKey)
+    {
+        return m_dwVideoKeyColor ;
+    } ;
+    inline  void    IncCount(void)
+    {
+        m_iCount++ ;
+    } ;
+    inline  int     GetCount(void)
+    {
+        return m_iCount ;
+    } ;
+
 private:  // internal state info
     LPDIRECTDRAW         m_pDDObject ;   // DirectDraw interface
     LPDIRECTDRAWSURFACE  m_pPrimary ;    // primary surface
     LPDIRECTDRAWSURFACE  m_pBackBuff ;   // back buffer attached to primary
-    
+
     BOOL     m_bInExclMode ;     // Are we in exclusive mode now?
     RECT     m_RectScrn ;        // whole screen as a rect
     RECT     m_RectVideo ;       // current video position as rect
@@ -109,7 +140,7 @@ public:
     STDMETHODIMP OnUpdateColorKey(COLORKEY const *pKey,
                                   DWORD    dwColor) ;
 
-    STDMETHODIMP OnUpdateSize(DWORD dwWidth, DWORD dwHeight, 
+    STDMETHODIMP OnUpdateSize(DWORD dwWidth, DWORD dwHeight,
                               DWORD dwARWidth, DWORD dwARHeight) ;
 
 private:

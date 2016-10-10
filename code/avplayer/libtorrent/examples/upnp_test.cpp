@@ -36,58 +36,58 @@ POSSIBILITY OF SUCH DAMAGE.
 
 void print_alert(libtorrent::alert const* a)
 {
-	using namespace libtorrent;
+    using namespace libtorrent;
 
-	if (alert_cast<portmap_error_alert>(a))
-	{
-		printf("%s","\x1b[32m");
-	}
-	else if (alert_cast<portmap_alert>(a))
-	{
-		printf("%s","\x1b[33m");
-	}
+    if (alert_cast<portmap_error_alert>(a))
+    {
+        printf("%s","\x1b[32m");
+    }
+    else if (alert_cast<portmap_alert>(a))
+    {
+        printf("%s","\x1b[33m");
+    }
 
-	printf("[%s] %s\n", time_now_string(), a->message().c_str());
-	printf("%s", "\x1b[0m");
+    printf("[%s] %s\n", time_now_string(), a->message().c_str());
+    printf("%s", "\x1b[0m");
 }
 
 int main(int argc, char* argv[])
 {
-	using namespace libtorrent;
+    using namespace libtorrent;
 
-	if (argc != 1)
-	{
-		fputs("usage: ./upnp_test\n", stderr);
-		return 1;
-	}
+    if (argc != 1)
+    {
+        fputs("usage: ./upnp_test\n", stderr);
+        return 1;
+    }
 
-	session s;
-	s.set_alert_mask(alert::port_mapping_notification);
+    session s;
+    s.set_alert_mask(alert::port_mapping_notification);
 
-	for (;;)
-	{
-		alert const* a = s.wait_for_alert(seconds(5));
-		if (a == 0)
-		{
-			s.stop_upnp();
-			s.stop_natpmp();
-			break;
-		}
-		std::auto_ptr<alert> holder = s.pop_alert();
-		print_alert(holder.get());
-	}
+    for (;;)
+    {
+        alert const* a = s.wait_for_alert(seconds(5));
+        if (a == 0)
+        {
+            s.stop_upnp();
+            s.stop_natpmp();
+            break;
+        }
+        std::auto_ptr<alert> holder = s.pop_alert();
+        print_alert(holder.get());
+    }
 
-	printf("\x1b[1m\n\n===================== done mapping. Now deleting mappings ========================\n\n\n\x1b[0m");
+    printf("\x1b[1m\n\n===================== done mapping. Now deleting mappings ========================\n\n\n\x1b[0m");
 
-	for (;;)
-	{
-		alert const* a = s.wait_for_alert(seconds(5));
-		if (a == 0) break;
-		std::auto_ptr<alert> holder = s.pop_alert();
-		print_alert(holder.get());
-	}
+    for (;;)
+    {
+        alert const* a = s.wait_for_alert(seconds(5));
+        if (a == 0) break;
+        std::auto_ptr<alert> holder = s.pop_alert();
+        print_alert(holder.get());
+    }
 
 
-	return 0;
+    return 0;
 }
 

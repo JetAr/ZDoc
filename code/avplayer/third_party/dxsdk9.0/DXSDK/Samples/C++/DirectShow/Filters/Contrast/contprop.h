@@ -35,7 +35,8 @@ private:
 
     IContrast *m_pContrast;
 
-    IContrast *pIContrast() {
+    IContrast *pIContrast()
+    {
         ASSERT(m_pContrast);
         return m_pContrast;
     };

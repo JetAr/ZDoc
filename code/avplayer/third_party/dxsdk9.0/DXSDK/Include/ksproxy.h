@@ -34,7 +34,7 @@ extern "C" {
 
 #define STATIC_IID_IKsPin\
     0xb61178d1L, 0xa2d9, 0x11cf, 0x9e, 0x53, 0x00, 0xaa, 0x00, 0xa2, 0x16, 0xa1
-    
+
 #define STATIC_IID_IKsPinPipe\
     0xe539cd90L, 0xa8b4, 0x11d1, 0x81, 0x89, 0x00, 0xa0, 0xc9, 0x06, 0x28, 0x02
 
@@ -52,10 +52,10 @@ extern "C" {
 
 #define STATIC_IID_IKsAllocator\
     0x8da64899L, 0xc0d9, 0x11d0, 0x84, 0x13, 0x00, 0x00, 0xf8, 0x22, 0xfe, 0x8a
-    
+
 #define STATIC_IID_IKsAllocatorEx\
     0x091bb63aL, 0x603f, 0x11d1, 0xb0, 0x67, 0x00, 0xa0, 0xc9, 0x06, 0x28, 0x02
-    
+
 
 #ifndef STATIC_IID_IKsPropertySet
 #define STATIC_IID_IKsPropertySet\
@@ -104,13 +104,15 @@ DEFINE_GUIDEX(IID_IKsAllocatorEx);
 
 #define STATIC_IID_IKsQualityForwarder STATIC_KSCATEGORY_QUALITY
 
-typedef enum {
+typedef enum
+{
     KsAllocatorMode_User,
     KsAllocatorMode_Kernel
 } KSALLOCATORMODE;
 
 
-typedef enum {
+typedef enum
+{
     FramingProp_Uninitialized,
     FramingProp_None,
     FramingProp_Old,
@@ -120,7 +122,8 @@ typedef enum {
 typedef FRAMING_PROP *PFRAMING_PROP;
 
 
-typedef enum {
+typedef enum
+{
     Framing_Cache_Update,     // request to bypass cache when read/write
     Framing_Cache_ReadLast,
     Framing_Cache_ReadOrig,
@@ -128,8 +131,9 @@ typedef enum {
 } FRAMING_CACHE_OPS;
 
 
-typedef struct {
-    LONGLONG     MinTotalNominator;  
+typedef struct
+{
+    LONGLONG     MinTotalNominator;
     LONGLONG     MaxTotalNominator;
     LONGLONG     TotalDenominator;
 } OPTIMAL_WEIGHT_TOTALS;
@@ -140,7 +144,7 @@ typedef struct IKsPin IKsPin;
 typedef struct IKsAllocator IKsAllocator;
 typedef struct IKsAllocatorEx IKsAllocatorEx;
 
-                      
+
 //
 // allocators strategy is defined by graph manager
 //
@@ -152,7 +156,7 @@ typedef struct IKsAllocatorEx IKsAllocatorEx;
 #define AllocatorStrategy_MinimizeNumberOfFrames        0x00000001
 #define AllocatorStrategy_MinimizeFrameSize             0x00000002
 #define AllocatorStrategy_MinimizeNumberOfAllocators    0x00000004
-#define AllocatorStrategy_MaximizeSpeed                 0x00000008 
+#define AllocatorStrategy_MaximizeSpeed                 0x00000008
 
 //
 // factors (flags) defining the Pipes properties
@@ -175,7 +179,8 @@ typedef struct IKsAllocatorEx IKsAllocatorEx;
 
 
 
-typedef enum {
+typedef enum
+{
     PipeState_DontCare,
     PipeState_RangeNotFixed,
     PipeState_RangeFixed,
@@ -188,14 +193,16 @@ typedef enum {
 // pipe dimensions relative to BeginPin.
 //
 
-typedef struct _PIPE_DIMENSIONS {
+typedef struct _PIPE_DIMENSIONS
+{
     KS_COMPRESSION    AllocatorPin;
     KS_COMPRESSION    MaxExpansionPin;
     KS_COMPRESSION    EndPin;
 } PIPE_DIMENSIONS, *PPIPE_DIMENSIONS;
 
 
-typedef enum {
+typedef enum
+{
     Pipe_Allocator_None,
     Pipe_Allocator_FirstPin,
     Pipe_Allocator_LastPin,
@@ -205,7 +212,8 @@ typedef enum {
 typedef PIPE_ALLOCATOR_PLACE  *PPIPE_ALLOCATOR_PLACE;
 
 
-typedef enum {
+typedef enum
+{
     KS_MemoryTypeDontCare = 0,
     KS_MemoryTypeKernelPaged,
     KS_MemoryTypeKernelNonPaged,
@@ -219,33 +227,34 @@ typedef KS_LogicalMemoryType  *PKS_LogicalMemoryType;
 
 
 
-typedef struct _PIPE_TERMINATION {
+typedef struct _PIPE_TERMINATION
+{
     ULONG                       Flags;
     ULONG                       OutsideFactors;
     ULONG                       Weigth;            // outside weight
     KS_FRAMING_RANGE            PhysicalRange;
-    KS_FRAMING_RANGE_WEIGHTED   OptimalRange;      
+    KS_FRAMING_RANGE_WEIGHTED   OptimalRange;
     KS_COMPRESSION              Compression;       // relative to the connected pin on a neighboring filter.
 } PIPE_TERMINATION;
 
 
 //
-// extended allocator properties 
+// extended allocator properties
 //
 typedef struct _ALLOCATOR_PROPERTIES_EX
-    {
+{
     long cBuffers;
     long cbBuffer;
     long cbAlign;
     long cbPrefix;
 // new part
-    GUID                       MemoryType;         
+    GUID                       MemoryType;
     GUID                       BusType;            // one of the buses this pipe is using
-    PIPE_STATE                 State;                        
-    PIPE_TERMINATION           Input;                        
-    PIPE_TERMINATION           Output;                       
+    PIPE_STATE                 State;
+    PIPE_TERMINATION           Input;
+    PIPE_TERMINATION           Output;
     ULONG                      Strategy;
-    ULONG                      Flags;              
+    ULONG                      Flags;
     ULONG                      Weight;
     KS_LogicalMemoryType       LogicalMemoryType;
     PIPE_ALLOCATOR_PLACE       AllocatorPlace;
@@ -255,7 +264,7 @@ typedef struct _ALLOCATOR_PROPERTIES_EX
     ULONG                      CountNextSegments;  // possible multiple dependent pipes
     IKsAllocatorEx**           NextSegments;
     ULONG                      InsideFactors;      // existing factors (different from "don't care")
-    ULONG                      NumberPins;                   
+    ULONG                      NumberPins;
 } ALLOCATOR_PROPERTIES_EX;
 
 typedef ALLOCATOR_PROPERTIES_EX *PALLOCATOR_PROPERTIES_EX;
@@ -342,7 +351,7 @@ DECLARE_INTERFACE_(IKsAllocatorEx, IKsAllocator)
     ) PURE;
     STDMETHOD_(VOID, KsSetProperties)(
         THIS_
-        PALLOCATOR_PROPERTIES_EX 
+        PALLOCATOR_PROPERTIES_EX
     ) PURE;
     STDMETHOD_(VOID, KsSetAllocatorHandle)(
         THIS_
@@ -352,9 +361,10 @@ DECLARE_INTERFACE_(IKsAllocatorEx, IKsAllocator)
         THIS_
         IKsPin*   KsPin
     ) PURE;
-};  
+};
 
-typedef enum {
+typedef enum
+{
     KsPeekOperation_PeekOnly,
     KsPeekOperation_AddRef
 } KSPEEKOPERATION;
@@ -431,9 +441,9 @@ DECLARE_INTERFACE_(IKsPinEx, IKsPin)
         THIS_
         IMediaSample* Sample,
         HRESULT hr
-    ) PURE;        
+    ) PURE;
 };
-                         
+
 interface DECLSPEC_UUID("e539cd90-a8b4-11d1-8189-00a0c9062802") IKsPinPipe;
 #undef INTERFACE
 #define INTERFACE IKsPinPipe
@@ -499,7 +509,8 @@ DECLARE_INTERFACE_(IKsPinFactory, IUnknown)
     ) PURE;
 };
 
-typedef enum {
+typedef enum
+{
     KsIoOperation_Write,
     KsIoOperation_Read
 } KSIOOPERATION;
@@ -519,7 +530,7 @@ DECLARE_INTERFACE_(IKsDataTypeHandler, IUnknown)
     STDMETHOD(KsIsMediaTypeInRanges)(
         THIS_
         PVOID DataRanges
-        ) PURE;
+    ) PURE;
     STDMETHOD(KsPrepareIoOperation)(
         THIS_
         IMediaSample *Sample,
@@ -574,18 +585,19 @@ DECLARE_INTERFACE_(IKsInterfaceHandler, IUnknown)
 
 
 //
-// This structure definition is the common header required by the proxy to 
-// dispatch the stream segment to the interface handler.  Interface handlers 
-// will create extended structures to include other information such as 
+// This structure definition is the common header required by the proxy to
+// dispatch the stream segment to the interface handler.  Interface handlers
+// will create extended structures to include other information such as
 // media samples, extended header size and so on.
 //
 
-typedef struct _KSSTREAM_SEGMENT {
+typedef struct _KSSTREAM_SEGMENT
+{
     IKsInterfaceHandler     *KsInterfaceHandler;
     IKsDataTypeHandler      *KsDataTypeHandler;
     KSIOOPERATION           IoOperation;
     HANDLE                  CompletionEvent;
-    
+
 } KSSTREAM_SEGMENT;
 
 interface DECLSPEC_UUID("423c13a2-2070-11d0-9ef7-00aa00a216a1") IKsObject;
@@ -628,7 +640,7 @@ WINAPI
 KsResolveRequiredAttributes(
     PKSDATARANGE DataRange,
     PKSMULTIPLE_ITEM Attributes OPTIONAL
-    );
+);
 
 KSDDKAPI
 HRESULT
@@ -637,7 +649,7 @@ KsOpenDefaultDevice(
     REFGUID Category,
     ACCESS_MASK Access,
     PHANDLE DeviceHandle
-    );
+);
 KSDDKAPI
 HRESULT
 WINAPI
@@ -649,7 +661,7 @@ KsSynchronousDeviceControl(
     PVOID       OutBuffer,
     ULONG       OutLength,
     PULONG      BytesReturned
-    );
+);
 KSDDKAPI
 HRESULT
 WINAPI
@@ -658,7 +670,7 @@ KsGetMultiplePinFactoryItems(
     ULONG   PinFactoryId,
     ULONG   PropertyId,
     PVOID*  Items
-    );
+);
 KSDDKAPI
 HRESULT
 WINAPI
@@ -666,7 +678,7 @@ KsGetMediaTypeCount(
     HANDLE      FilterHandle,
     ULONG       PinFactoryId,
     ULONG*      MediaTypeCount
-    );
+);
 KSDDKAPI
 HRESULT
 WINAPI
@@ -675,7 +687,7 @@ KsGetMediaType(
     AM_MEDIA_TYPE* AmMediaType,
     HANDLE      FilterHandle,
     ULONG       PinFactoryId
-    );
+);
 
 #endif // __STREAMS__
 

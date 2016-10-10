@@ -25,24 +25,24 @@
 class sdl_audio_render:public audio_render
 {
 public:
-	   // 初始化音频输出.
-   virtual bool init_audio(void* ctx, int channels, int bits_per_sample, int sample_rate, int format);
+    // 初始化音频输出.
+    virtual bool init_audio(void* ctx, int channels, int bits_per_sample, int sample_rate, int format);
 
-   // 播放音频数据.
-   virtual int play_audio(uint8_t* data, uint32_t size);
+    // 播放音频数据.
+    virtual int play_audio(uint8_t* data, uint32_t size);
 
-   // 音频播放控制, cmd为CONTROL_开始的宏定义.
-   virtual void audio_control(int cmd, void* arg);
+    // 音频播放控制, cmd为CONTROL_开始的宏定义.
+    virtual void audio_control(int cmd, void* arg);
 
-   // 销毁音频输出组件.
-   virtual void destory_audio();
+    // 销毁音频输出组件.
+    virtual void destory_audio();
 
-   static void sdl_audio_callback(void *userdata, Uint8 *stream, int len);
-   friend void sdl_audio_callback(void *userdata, Uint8 *stream, int len);
+    static void sdl_audio_callback(void *userdata, Uint8 *stream, int len);
+    friend void sdl_audio_callback(void *userdata, Uint8 *stream, int len);
 private:
-	void audio_callback(Uint8 *stream, int len);
+    void audio_callback(Uint8 *stream, int len);
 private:
-	int adfd[2];
+    int adfd[2];
 };
 
 #endif // SDL_RENDER_H

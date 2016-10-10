@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
-// File: 
+// File:
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) 1999-2001 Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -12,13 +12,13 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
-// Desc: Client IDs are 32-bit values that refer to a particular Client. They are 
-//       broken up into two bitfields, one of which can be used into an index 
-//       of a list of Client 'slots', the other bitfield is a "uniqueness" value 
+// Name:
+// Desc: Client IDs are 32-bit values that refer to a particular Client. They are
+//       broken up into two bitfields, one of which can be used into an index
+//       of a list of Client 'slots', the other bitfield is a "uniqueness" value
 //       that is incremented each time a new Client is created. Hence, although
-//       the same slot may be reused by different Clients are different times, 
-//       it's possible to distinguish between the two by comparing uniqueness 
+//       the same slot may be reused by different Clients are different times,
+//       it's possible to distinguish between the two by comparing uniqueness
 //       values (you can just compare the whole 32-bit id).
 //-----------------------------------------------------------------------------
 typedef DWORD   CLClientID;

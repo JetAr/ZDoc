@@ -31,7 +31,7 @@
 //               LIST [] 'ins ' [dlid,insh,RGNLIST,ARTLIST,INFOLIST]
 //
 // RGNLIST
-// LIST [] 'lrgn' 
+// LIST [] 'lrgn'
 //               LIST [] 'rgn '  [rgnh,wsmp,wlnk,ARTLIST]
 //               LIST [] 'rgn '  [rgnh,wsmp,wlnk,ARTLIST]
 //               LIST [] 'rgn '  [rgnh,wsmp,wlnk,ARTLIST]
@@ -43,7 +43,7 @@
 //         '3rd1' Possible 3rd party articulation structure 1
 //         '3rd2' Possible 3rd party articulation structure 2 .... and so on
 //
-// WAVEPOOL 
+// WAVEPOOL
 // ptbl [] [pool table]
 // LIST [] 'wvpl'
 //               [path],
@@ -55,7 +55,7 @@
 //               LIST [] 'wave' [dlid,RIFFWAVE]
 //
 // INFOLIST
-// LIST [] 'INFO' 
+// LIST [] 'INFO'
 //               'icmt' 'One of those crazy comments.'
 //               'icop' 'Copyright (C) 1996 Sonic Foundry'
 //
@@ -86,7 +86,7 @@
 #define FOURCC_VERS  mmioFOURCC('v','e','r','s')
 
 /*/////////////////////////////////////////////////////////////////////////
-// Articulation connection graph definitions 
+// Articulation connection graph definitions
 /////////////////////////////////////////////////////////////////////////*/
 
 /* Generic Sources */
@@ -129,34 +129,38 @@
 #define CONN_TRN_NONE              0x0000
 #define CONN_TRN_CONCAVE           0x0001
 
-typedef struct _DLSID {
-  ULONG    ulData1;
-  USHORT   usData2;
-  USHORT   usData3;
-  BYTE     abData4[8];
+typedef struct _DLSID
+{
+    ULONG    ulData1;
+    USHORT   usData2;
+    USHORT   usData3;
+    BYTE     abData4[8];
 } DLSID, FAR *LPDLSID;
 
-typedef struct _DLSVERSION {
-  DWORD    dwVersionMS;
-  DWORD    dwVersionLS;
-}DLSVERSION, FAR *LPDLSVERSION;
-                   
+typedef struct _DLSVERSION
+{
+    DWORD    dwVersionMS;
+    DWORD    dwVersionLS;
+} DLSVERSION, FAR *LPDLSVERSION;
 
-typedef struct _CONNECTION {
-  USHORT   usSource;
-  USHORT   usControl;
-  USHORT   usDestination;
-  USHORT   usTransform;
-  LONG     lScale;
-  }CONNECTION, FAR *LPCONNECTION;
+
+typedef struct _CONNECTION
+{
+    USHORT   usSource;
+    USHORT   usControl;
+    USHORT   usDestination;
+    USHORT   usTransform;
+    LONG     lScale;
+} CONNECTION, FAR *LPCONNECTION;
 
 
 /* Level 1 Articulation Data */
 
-typedef struct _CONNECTIONLIST {
-  ULONG    cbSize;            /* size of the connection list structure */
-  ULONG    cConnections;      /* count of connections in the list */
-  } CONNECTIONLIST, FAR *LPCONNECTIONLIST;
+typedef struct _CONNECTIONLIST
+{
+    ULONG    cbSize;            /* size of the connection list structure */
+    ULONG    cConnections;      /* count of connections in the list */
+} CONNECTIONLIST, FAR *LPCONNECTIONLIST;
 
 
 
@@ -164,17 +168,19 @@ typedef struct _CONNECTIONLIST {
 // Generic type defines for regions and instruments
 /////////////////////////////////////////////////////////////////////////*/
 
-typedef struct _RGNRANGE {
-  USHORT usLow;
-  USHORT usHigh;
-}RGNRANGE, FAR * LPRGNRANGE;
+typedef struct _RGNRANGE
+{
+    USHORT usLow;
+    USHORT usHigh;
+} RGNRANGE, FAR * LPRGNRANGE;
 
 #define F_INSTRUMENT_DRUMS      0x80000000
 
-typedef struct _MIDILOCALE {
-  ULONG ulBank;
-  ULONG ulInstrument;
-}MIDILOCALE, FAR *LPMIDILOCALE;
+typedef struct _MIDILOCALE
+{
+    ULONG ulBank;
+    ULONG ulInstrument;
+} MIDILOCALE, FAR *LPMIDILOCALE;
 
 /*/////////////////////////////////////////////////////////////////////////
 // Header structures found in an DLS file for collection, instruments, and
@@ -183,23 +189,26 @@ typedef struct _MIDILOCALE {
 
 #define F_RGN_OPTION_SELFNONEXCLUSIVE  0x0001
 
-typedef struct _RGNHEADER {
-  RGNRANGE RangeKey;            /* Key range  */
-  RGNRANGE RangeVelocity;       /* Velocity Range  */
-  USHORT   fusOptions;          /* Synthesis options for this range */
-  USHORT   usKeyGroup;          /* Key grouping for non simultaneous play */
-                                /* 0 = no group, 1 up is group */
-                                /* for Level 1 only groups 1-15 are allowed */
-}RGNHEADER, FAR *LPRGNHEADER;
+typedef struct _RGNHEADER
+{
+    RGNRANGE RangeKey;            /* Key range  */
+    RGNRANGE RangeVelocity;       /* Velocity Range  */
+    USHORT   fusOptions;          /* Synthesis options for this range */
+    USHORT   usKeyGroup;          /* Key grouping for non simultaneous play */
+    /* 0 = no group, 1 up is group */
+    /* for Level 1 only groups 1-15 are allowed */
+} RGNHEADER, FAR *LPRGNHEADER;
 
-typedef struct _INSTHEADER {
-  ULONG      cRegions;          /* Count of regions in this instrument */
-  MIDILOCALE Locale;            /* Intended MIDI locale of this instrument */
-}INSTHEADER, FAR *LPINSTHEADER;
+typedef struct _INSTHEADER
+{
+    ULONG      cRegions;          /* Count of regions in this instrument */
+    MIDILOCALE Locale;            /* Intended MIDI locale of this instrument */
+} INSTHEADER, FAR *LPINSTHEADER;
 
-typedef struct _DLSHEADER {
-  ULONG      cInstruments;      /* Count of instruments in the collection */
-}DLSHEADER, FAR *LPDLSHEADER;
+typedef struct _DLSHEADER
+{
+    ULONG      cInstruments;      /* Count of instruments in the collection */
+} DLSHEADER, FAR *LPDLSHEADER;
 
 /*////////////////////////////////////////////////////////////////////////////
 // definitions for the Wave link structure
@@ -214,23 +223,26 @@ typedef struct _DLSHEADER {
 
 #define F_WAVELINK_PHASE_MASTER  0x0001
 
-typedef struct _WAVELINK { /* any paths or links are stored right after struct */
-  USHORT   fusOptions;     /* options flags for this wave */
-  USHORT   usPhaseGroup;   /* Phase grouping for locking channels */
-  ULONG    ulChannel;      /* channel placement */
-  ULONG    ulTableIndex;   /* index into the wave pool table, 0 based */
-}WAVELINK, FAR *LPWAVELINK;
+typedef struct _WAVELINK   /* any paths or links are stored right after struct */
+{
+    USHORT   fusOptions;     /* options flags for this wave */
+    USHORT   usPhaseGroup;   /* Phase grouping for locking channels */
+    ULONG    ulChannel;      /* channel placement */
+    ULONG    ulTableIndex;   /* index into the wave pool table, 0 based */
+} WAVELINK, FAR *LPWAVELINK;
 
 #define POOL_CUE_NULL  0xffffffffl
 
-typedef struct _POOLCUE { 
-  ULONG    ulOffset;       /* Offset to the entry in the list */
-}POOLCUE, FAR *LPPOOLCUE;
+typedef struct _POOLCUE
+{
+    ULONG    ulOffset;       /* Offset to the entry in the list */
+} POOLCUE, FAR *LPPOOLCUE;
 
-typedef struct _POOLTABLE {
-  ULONG    cbSize;            /* size of the pool table structure */
-  ULONG    cCues;             /* count of cues in the list */
-  } POOLTABLE, FAR *LPPOOLTABLE;
+typedef struct _POOLTABLE
+{
+    ULONG    cbSize;            /* size of the pool table structure */
+    ULONG    cCues;             /* count of cues in the list */
+} POOLTABLE, FAR *LPPOOLTABLE;
 
 /*////////////////////////////////////////////////////////////////////////////
 // Structures for the "wsmp" chunk
@@ -240,14 +252,15 @@ typedef struct _POOLTABLE {
 #define F_WSMP_NO_COMPRESSION    0x0002l
 
 
-typedef struct _rwsmp {
-  ULONG   cbSize;
-  USHORT  usUnityNote;         /* MIDI Unity Playback Note */
-  SHORT   sFineTune;           /* Fine Tune in log tuning */
-  LONG    lAttenuation;        /* Overall Attenuation to be applied to data */
-  ULONG   fulOptions;          /* Flag options  */
-  ULONG   cSampleLoops;        /* Count of Sample loops, 0 loops is one shot */
-  } WSMPL, FAR *LPWSMPL;
+typedef struct _rwsmp
+{
+    ULONG   cbSize;
+    USHORT  usUnityNote;         /* MIDI Unity Playback Note */
+    SHORT   sFineTune;           /* Fine Tune in log tuning */
+    LONG    lAttenuation;        /* Overall Attenuation to be applied to data */
+    ULONG   fulOptions;          /* Flag options  */
+    ULONG   cSampleLoops;        /* Count of Sample loops, 0 loops is one shot */
+} WSMPL, FAR *LPWSMPL;
 
 
 /* This loop type is a normal forward playing loop which is continually */
@@ -256,11 +269,12 @@ typedef struct _rwsmp {
 
 #define WLOOP_TYPE_FORWARD   0
 
-typedef struct _rloop {
-  ULONG cbSize;
-  ULONG ulType;              /* Loop Type */
-  ULONG ulStart;             /* Start of loop in samples */
-  ULONG ulLength;            /* Length of loop in samples */
+typedef struct _rloop
+{
+    ULONG cbSize;
+    ULONG ulType;              /* Loop Type */
+    ULONG ulStart;             /* Start of loop in samples */
+    ULONG ulLength;            /* Length of loop in samples */
 } WLOOP, FAR *LPWLOOP;
 
 #endif /*_INC_DLS1 */

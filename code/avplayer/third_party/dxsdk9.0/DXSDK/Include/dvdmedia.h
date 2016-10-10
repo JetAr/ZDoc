@@ -23,7 +23,8 @@ extern "C" {
 // AC-3 definition for the AM_KSPROPSETID_AC3 property set
 // -----------------------------------------------------------------------
 
-typedef enum {
+typedef enum
+{
     AM_PROPERTY_AC3_ERROR_CONCEALMENT = 1,
     AM_PROPERTY_AC3_ALTERNATE_AUDIO = 2,
     AM_PROPERTY_AC3_DOWNMIX = 3,
@@ -33,12 +34,14 @@ typedef enum {
     AM_PROPERTY_AC3_ROOM_TYPE = 7
 } AM_PROPERTY_AC3;
 
-typedef struct  {
+typedef struct
+{
     BOOL        fRepeatPreviousBlock;
     BOOL        fErrorInCurrentBlock;
 } AM_AC3_ERROR_CONCEALMENT, *PAM_AC3_ERROR_CONCEALMENT;
 
-typedef struct {
+typedef struct
+{
     BOOL    fStereo;
     ULONG   DualMode;
 } AM_AC3_ALTERNATE_AUDIO, *PAM_AC3_ALTERNATE_AUDIO;
@@ -47,12 +50,14 @@ typedef struct {
 #define AM_AC3_ALTERNATE_AUDIO_2     2
 #define AM_AC3_ALTERNATE_AUDIO_BOTH  3
 
-typedef struct {
+typedef struct
+{
     BOOL        fDownMix;
     BOOL        fDolbySurround;
 } AM_AC3_DOWNMIX, *PAM_AC3_DOWNMIX;
 
-typedef struct {
+typedef struct
+{
     LONG        BitStreamMode;
 } AM_AC3_BIT_STREAM_MODE, *PAM_AC3_BIT_STREAM_MODE;
 
@@ -65,11 +70,13 @@ typedef struct {
 #define AM_AC3_SERVICE_EMERGENCY_FLASH       6
 #define AM_AC3_SERVICE_VOICE_OVER            7
 
-typedef struct {
+typedef struct
+{
     ULONG   DialogueLevel;
 } AM_AC3_DIALOGUE_LEVEL, *PAM_AC3_DIALOGUE_LEVEL;
 
-typedef struct {
+typedef struct
+{
     BOOL    fLargeRoom;
 } AM_AC3_ROOM_TYPE, *PAM_AC3_ROOM_TYPE;
 
@@ -78,24 +85,28 @@ typedef struct {
 // subpicture definition for the AM_KSPROPSETID_DvdSubPic property set
 // -----------------------------------------------------------------------
 
-typedef enum {
+typedef enum
+{
     AM_PROPERTY_DVDSUBPIC_PALETTE = 0,
     AM_PROPERTY_DVDSUBPIC_HLI = 1,
     AM_PROPERTY_DVDSUBPIC_COMPOSIT_ON = 2  // TRUE for subpicture is displayed
 } AM_PROPERTY_DVDSUBPIC;
 
-typedef struct _AM_DVD_YUV {
+typedef struct _AM_DVD_YUV
+{
     UCHAR   Reserved;
     UCHAR   Y;
     UCHAR   U;
     UCHAR   V;
 } AM_DVD_YUV, *PAM_DVD_YUV;
 
-typedef struct _AM_PROPERTY_SPPAL {
+typedef struct _AM_PROPERTY_SPPAL
+{
     AM_DVD_YUV sppal[16];
 } AM_PROPERTY_SPPAL, *PAM_PROPERTY_SPPAL;
 
-typedef struct _AM_COLCON {
+typedef struct _AM_COLCON
+{
     UCHAR emph1col:4;
     UCHAR emph2col:4;
     UCHAR backcol:4;
@@ -107,7 +118,8 @@ typedef struct _AM_COLCON {
 
 } AM_COLCON, *PAM_COLCON;
 
-typedef struct _AM_PROPERTY_SPHLI {
+typedef struct _AM_PROPERTY_SPHLI
+{
     USHORT     HLISS;      //
     USHORT     Reserved;
     ULONG      StartPTM;   // start presentation time in x/90000
@@ -136,7 +148,8 @@ typedef BOOL AM_PROPERTY_COMPOSIT_ON, *PAM_PROPERTY_COMPOSIT_ON;
 //
 // AM_KSPROPSETID_CopyProt property set definitions
 //
-typedef enum {
+typedef enum
+{
     AM_PROPERTY_DVDCOPY_CHLG_KEY = 0x01,
     AM_PROPERTY_DVDCOPY_DVD_KEY1 = 0x02,
     AM_PROPERTY_DVDCOPY_DEC_KEY2 = 0x03,
@@ -147,45 +160,53 @@ typedef enum {
     AM_PROPERTY_DVDCOPY_DISC_KEY = 0x80
 } AM_PROPERTY_DVDCOPYPROT;
 
-typedef struct _AM_DVDCOPY_CHLGKEY {
+typedef struct _AM_DVDCOPY_CHLGKEY
+{
     BYTE ChlgKey[10];
     BYTE Reserved[2];
 } AM_DVDCOPY_CHLGKEY, *PAM_DVDCOPY_CHLGKEY;
 
-typedef struct _AM_DVDCOPY_BUSKEY {
+typedef struct _AM_DVDCOPY_BUSKEY
+{
     BYTE BusKey[5];
     BYTE Reserved[1];
 } AM_DVDCOPY_BUSKEY, *PAM_DVDCOPY_BUSKEY;
 
-typedef struct _AM_DVDCOPY_DISCKEY {
+typedef struct _AM_DVDCOPY_DISCKEY
+{
     BYTE DiscKey[2048];
 } AM_DVDCOPY_DISCKEY, *PAM_DVDCOPY_DISCKEY;
 
-typedef struct AM_DVDCOPY_TITLEKEY {
+typedef struct AM_DVDCOPY_TITLEKEY
+{
     ULONG KeyFlags;
     ULONG Reserved1[2];
     UCHAR TitleKey[6];
     UCHAR Reserved2[2];
 } AM_DVDCOPY_TITLEKEY, *PAM_DVDCOPY_TITLEKEY;
 
-typedef struct _AM_COPY_MACROVISION {
+typedef struct _AM_COPY_MACROVISION
+{
     ULONG MACROVISIONLevel;
 } AM_COPY_MACROVISION, *PAM_COPY_MACROVISION;
 
-typedef struct AM_DVDCOPY_SET_COPY_STATE {
+typedef struct AM_DVDCOPY_SET_COPY_STATE
+{
     ULONG DVDCopyState;
 } AM_DVDCOPY_SET_COPY_STATE, *PAM_DVDCOPY_SET_COPY_STATE;
 
-typedef enum {
+typedef enum
+{
     AM_DVDCOPYSTATE_INITIALIZE = 0,
     AM_DVDCOPYSTATE_INITIALIZE_TITLE = 1,   // indicates we are starting a title
-                                        // key copy protection sequence
+    // key copy protection sequence
     AM_DVDCOPYSTATE_AUTHENTICATION_NOT_REQUIRED = 2,
     AM_DVDCOPYSTATE_AUTHENTICATION_REQUIRED = 3,
     AM_DVDCOPYSTATE_DONE = 4
 } AM_DVDCOPYSTATE;
 
-typedef enum {
+typedef enum
+{
     AM_MACROVISION_DISABLED = 0,
     AM_MACROVISION_LEVEL1 = 1,
     AM_MACROVISION_LEVEL2 = 2,
@@ -194,7 +215,8 @@ typedef enum {
 
 
 // CSS region stucture
-typedef struct _DVD_REGION {
+typedef struct _DVD_REGION
+{
     UCHAR CopySystem;
     UCHAR RegionData;
     UCHAR SystemRegion;
@@ -225,14 +247,16 @@ typedef struct _DVD_REGION {
 // video format blocks
 // -----------------------------------------------------------------------
 
-enum AM_MPEG2Level {
+enum AM_MPEG2Level
+{
     AM_MPEG2Level_Low = 1,
     AM_MPEG2Level_Main = 2,
     AM_MPEG2Level_High1440 = 3,
     AM_MPEG2Level_High = 4
 };
 
-enum AM_MPEG2Profile {
+enum AM_MPEG2Profile
+{
     AM_MPEG2Profile_Simple = 1,
     AM_MPEG2Profile_Main = 2,
     AM_MPEG2Profile_SNRScalable = 3,
@@ -257,33 +281,34 @@ enum AM_MPEG2Profile {
 #define AMCOPYPROTECT_RestrictDuplication   0x00000001  // duplication of this stream should be restricted
 
 #define AMMPEG2_DoPanScan           0x00000001  //if set, the MPEG-2 video decoder should crop output image
-                        //  based on pan-scan vectors in picture_display_extension
-                        //  and change the picture aspect ratio accordingly.
+//  based on pan-scan vectors in picture_display_extension
+//  and change the picture aspect ratio accordingly.
 #define AMMPEG2_DVDLine21Field1     0x00000002  //if set, the MPEG-2 decoder must be able to produce an output
-                        //  pin for DVD style closed caption data found in GOP layer of field 1
+//  pin for DVD style closed caption data found in GOP layer of field 1
 #define AMMPEG2_DVDLine21Field2     0x00000004  //if set, the MPEG-2 decoder must be able to produce an output
-                        //  pin for DVD style closed caption data found in GOP layer of field 2
+//  pin for DVD style closed caption data found in GOP layer of field 2
 #define AMMPEG2_SourceIsLetterboxed 0x00000008  //if set, indicates that black bars have been encoded in the top
-                        //  and bottom of the video.
+//  and bottom of the video.
 #define AMMPEG2_FilmCameraMode      0x00000010  //if set, indicates "film mode" used for 625/50 content.  If cleared,
-                        //  indicates that "camera mode" was used.
+//  indicates that "camera mode" was used.
 #define AMMPEG2_LetterboxAnalogOut  0x00000020  //if set and this stream is sent to an analog output, it should
-                        //  be letterboxed.  Streams sent to VGA should be letterboxed only by renderers.
+//  be letterboxed.  Streams sent to VGA should be letterboxed only by renderers.
 #define AMMPEG2_DSS_UserData        0x00000040  //if set, the MPEG-2 decoder must process DSS style user data
 #define AMMPEG2_DVB_UserData        0x00000080  //if set, the MPEG-2 decoder must process DVB style user data
 #define AMMPEG2_27MhzTimebase       0x00000100  //if set, the PTS,DTS timestamps advance at 27MHz rather than 90KHz
 
 #define AMMPEG2_WidescreenAnalogOut 0x00000200  //if set and this stream is sent to an analog output, it should
-                        //  be in widescreen format (4x3 content should be centered on a 16x9 output).
-                        //  Streams sent to VGA should be widescreened only by renderers.
+//  be in widescreen format (4x3 content should be centered on a 16x9 output).
+//  Streams sent to VGA should be widescreened only by renderers.
 
 // PRESENT in dwReserved1 field in VIDEOINFOHEADER2
 #define AMCONTROL_USED              0x00000001 // Used to test if these flags are supported.  Set and test for AcceptMediaType.
-                                                // If rejected, then you cannot use the AMCONTROL flags (send 0 for dwReserved1)
+// If rejected, then you cannot use the AMCONTROL flags (send 0 for dwReserved1)
 #define AMCONTROL_PAD_TO_4x3        0x00000002 // if set means display the image in a 4x3 area
 #define AMCONTROL_PAD_TO_16x9       0x00000004 // if set means display the image in a 16x9 area
 
-typedef struct tagVIDEOINFOHEADER2 {
+typedef struct tagVIDEOINFOHEADER2
+{
     RECT                rcSource;
     RECT                rcTarget;
     DWORD               dwBitRate;
@@ -293,7 +318,8 @@ typedef struct tagVIDEOINFOHEADER2 {
     DWORD               dwCopyProtectFlags; // use AMCOPYPROTECT_* defines. Reject connection if undefined bits are not 0
     DWORD               dwPictAspectRatioX; // X dimension of picture aspect ratio, e.g. 16 for 16x9 display
     DWORD               dwPictAspectRatioY; // Y dimension of picture aspect ratio, e.g.  9 for 16x9 display
-    union {
+    union
+    {
         DWORD dwControlFlags;               // use AMCONTROL_* defines, use this from now on
         DWORD dwReserved1;                  // for backward compatiblity (was "must be 0";  connection rejected otherwise)
     };
@@ -301,7 +327,8 @@ typedef struct tagVIDEOINFOHEADER2 {
     BITMAPINFOHEADER    bmiHeader;
 } VIDEOINFOHEADER2;
 
-typedef struct tagMPEG2VIDEOINFO {
+typedef struct tagMPEG2VIDEOINFO
+{
     VIDEOINFOHEADER2    hdr;
     DWORD               dwStartTimeCode;        //  ?? not used for DVD ??
     DWORD               cbSequenceHeader;       // is 0 for DVD (no sequence header)
@@ -309,8 +336,8 @@ typedef struct tagMPEG2VIDEOINFO {
     DWORD               dwLevel;                // use enum MPEG2Level
     DWORD               dwFlags;                // use AMMPEG2_* defines.  Reject connection if undefined bits are not 0
     DWORD               dwSequenceHeader[1];    // DWORD instead of Byte for alignment purposes
-                                                //   For MPEG-2, if a sequence_header is included, the sequence_extension
-                                                //   should also be included
+    //   For MPEG-2, if a sequence_header is included, the sequence_extension
+    //   should also be included
 } MPEG2VIDEOINFO;
 
 #define SIZE_MPEG2VIDEOINFO(pv) (FIELD_OFFSET(MPEG2VIDEOINFO, dwSequenceHeader[0]) + (pv)->cbSequenceHeader)
@@ -332,14 +359,14 @@ typedef struct tagMPEG2VIDEOINFO {
 #define AM_VIDEO_FLAG_FIELD1            0x0001L // the sample is field1 (remember to use AM_VIDEO_FLAG_FIELD_MASK when using this)
 #define AM_VIDEO_FLAG_FIELD2            0x0002L // the sample is the field2 (remember to use AM_VIDEO_FLAG_FIELD_MASK when using this)
 #define AM_VIDEO_FLAG_FIELD1FIRST       0x0004L // if set means display field1 first, else display field2 first.
-                                                // this bit is irrelavant for 1FieldPerSample mode
+// this bit is irrelavant for 1FieldPerSample mode
 #define AM_VIDEO_FLAG_WEAVE             0x0008L // if set use bob display mode else weave
 #define AM_VIDEO_FLAG_IPB_MASK          0x0030L // use this mask to check whether the sample is I, P or B
 #define AM_VIDEO_FLAG_I_SAMPLE          0x0000L // I Sample (remember to use AM_VIDEO_FLAG_IPB_MASK when using this)
 #define AM_VIDEO_FLAG_P_SAMPLE          0x0010L // P Sample (remember to use AM_VIDEO_FLAG_IPB_MASK when using this)
 #define AM_VIDEO_FLAG_B_SAMPLE          0x0020L // B Sample (remember to use AM_VIDEO_FLAG_IPB_MASK when using this)
 #define AM_VIDEO_FLAG_REPEAT_FIELD      0x0040L // if set means display the field which has been displayed first again after displaying
-                                                // both fields first. This bit is irrelavant for 1FieldPerSample mode
+// both fields first. This bit is irrelavant for 1FieldPerSample mode
 
 // -----------------------------------------------------------------------
 // AM_KSPROPSETID_DvdKaraoke property set definitions
@@ -351,7 +378,8 @@ typedef struct tagAM_DvdKaraokeData
     DWORD   dwSpeakerAssignment;    // AM_DvdKaraoke_SpeakerAssignment
 } AM_DvdKaraokeData;
 
-typedef enum {
+typedef enum
+{
     AM_PROPERTY_DVDKARAOKE_ENABLE = 0,  // BOOL
     AM_PROPERTY_DVDKARAOKE_DATA = 1,
 } AM_PROPERTY_DVDKARAOKE;
@@ -361,7 +389,8 @@ typedef enum {
 // rate changes.
 // -----------------------------------------------------------------------
 
-typedef enum {
+typedef enum
+{
     AM_RATE_SimpleRateChange = 1,    // rw, use AM_SimpleRateChange
     AM_RATE_ExactRateChange  = 2,    // rw, use AM_ExactRateChange
     AM_RATE_MaxFullDataRate  = 3,    // r,  use AM_MaxFullDataRate
@@ -377,7 +406,8 @@ typedef enum {
 // rate change scheme.
 // -------------------------------------------------------------------
 
-typedef enum {
+typedef enum
+{
     AM_RATE_ChangeRate       = 1,    // w,  use AM_DVD_ChangeRate
     AM_RATE_FullDataRateMax  = 2,    // r,  use AM_MaxFullDataRate
     AM_RATE_ReverseDecode    = 3,    // r,  use LONG
@@ -385,7 +415,8 @@ typedef enum {
     AM_RATE_DecoderVersion   = 5     // r,  use LONG
 } AM_PROPERTY_DVD_RATE_CHANGE;
 
-typedef struct {
+typedef struct
+{
     // this is the simplest mechanism to set a time stamp rate change on
     // a filter (simplest for the person setting the rate change, harder
     // for the filter doing the rate change).
@@ -393,12 +424,14 @@ typedef struct {
     LONG        Rate;       //new rate * 10000 (decimal)
 } AM_SimpleRateChange;
 
-typedef struct {
+typedef struct
+{
     LONG    lMaxForwardFullFrame ;          //  rate * 10000
     LONG    lMaxReverseFullFrame ;          //  rate * 10000
 } AM_QueryRate ;
 
-typedef struct {
+typedef struct
+{
     REFERENCE_TIME  OutputZeroTime; //input TS that maps to zero output TS
     LONG        Rate;       //new rate * 10000 (decimal)
 } AM_ExactRateChange;
@@ -408,7 +441,8 @@ typedef LONG AM_MaxFullDataRate; //rate * 10000 (decimal)
 typedef DWORD AM_Step; // number of frame to step
 
 // New rate change property set, structs. enums etc.
-typedef struct {
+typedef struct
+{
     REFERENCE_TIME  StartInTime;   // stream time (input) at which to start decoding at this rate
     REFERENCE_TIME  StartOutTime;  // reference time (output) at which to start showing at this rate
     LONG            Rate;          // new rate * 10000 (decimal)
@@ -416,7 +450,8 @@ typedef struct {
 
 typedef LONGLONG  AM_DVD_DecoderPosition ;
 
-typedef enum {
+typedef enum
+{
     DVD_DIR_FORWARD  = 0,
     DVD_DIR_BACKWARD = 1
 } DVD_PLAY_DIRECTION ;

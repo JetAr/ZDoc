@@ -18,7 +18,8 @@ enum EMovieMode { MOVIE_NOTOPENED = 0x00,
                   MOVIE_OPENED    = 0x01,
                   MOVIE_PLAYING   = 0x02,
                   MOVIE_STOPPED   = 0x03,
-                  MOVIE_PAUSED    = 0x04 };
+                  MOVIE_PAUSED    = 0x04
+                };
 
 
 
@@ -60,7 +61,7 @@ private:
 
 
 public:
-     CMovie(HWND hwndApplication);
+    CMovie(HWND hwndApplication);
     ~CMovie();
 
     DECLARE_IUNKNOWN
@@ -68,7 +69,7 @@ public:
 
     // IVMRSurfaceAllocator
     STDMETHODIMP AllocateSurface(DWORD_PTR dwUserID,
-                                VMRALLOCATIONINFO* lpAllocInfo,
+                                 VMRALLOCATIONINFO* lpAllocInfo,
                                  DWORD* lpdwActualBackBuffers,
                                  LPDIRECTDRAWSURFACE7* lplpSurface);
     STDMETHODIMP FreeSurface(DWORD_PTR dwUserID);
@@ -115,8 +116,10 @@ public:
     void            SetFullScreenMode(BOOL bMode);
     BOOL            IsFullScreenMode();
 
-    void            DisplayModeChanged() {
-        if (m_lpDefWC) {
+    void            DisplayModeChanged()
+    {
+        if (m_lpDefWC)
+        {
             m_lpDefWC->DisplayModeChanged();
         }
     }

@@ -13,7 +13,7 @@
 
 
 //-----------------------------------------------------------------------------
-// Name: 
+// Name:
 // Desc: Random number generator class - a simple linear congruential generator.
 // We use this instead of the CRT function because we want to be certain that
 // we are using the exact same generator on both server and client side and so
@@ -25,8 +25,8 @@ class   CRandom
 public:
     // Constructor. The random formula is X(n+1) = (a*X(n) + b) mod m
     // The default values for a,b,m give a maximal period generator that does not
-    // overflow with 32-bit interger arithmetic. 
-    CRandom( DWORD seed = 31415, DWORD a = 8121, 
+    // overflow with 32-bit interger arithmetic.
+    CRandom( DWORD seed = 31415, DWORD a = 8121,
              DWORD b = 28411,    DWORD m = 134456 ) :
         m_dwSeed(seed),m_dwA(a),m_dwB(b),m_dwM(m) {};
 

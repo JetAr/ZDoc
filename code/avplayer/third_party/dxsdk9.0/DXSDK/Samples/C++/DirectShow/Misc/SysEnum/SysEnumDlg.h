@@ -35,8 +35,9 @@ typedef struct _category_info
 // The DirectShow reference documentation lists a set of filter categories
 // for which you can enumerate corresponding filters.  See 'Filter Categories'
 // under 'DirectShow->Reference->Constants and GUIDS' in the DirectX docs.
-const CATEGORY_INFO_DS categories[] = {
-    
+const CATEGORY_INFO_DS categories[] =
+{
+
     &CLSID_AudioInputDeviceCategory, TEXT("Audio Capture Devices\0"),
     &CLSID_AudioCompressorCategory,  TEXT("Audio Compressors\0"),
     &CLSID_AudioRendererCategory,    TEXT("Audio Renderers\0"),
@@ -59,9 +60,9 @@ class CSysEnumDlg : public CDialog
 {
 // Construction
 public:
-	ICreateDevEnum * m_pSysDevEnum;
+    ICreateDevEnum * m_pSysDevEnum;
 
-	CSysEnumDlg(CWnd* pParent = NULL);	// standard constructor
+    CSysEnumDlg(CWnd* pParent = NULL);	// standard constructor
 
     HRESULT EnumFilters(IEnumMoniker *pEnumCat);
 
@@ -76,38 +77,38 @@ public:
     void ShowFilenameByCLSID(REFCLSID clsid);
 
 // Dialog Data
-	//{{AFX_DATA(CSysEnumDlg)
-	enum { IDD = IDD_SYSENUM_DIALOG };
-	CStatic	m_StrFilename;
-	CStatic	m_StrFilters;
-	CStatic	m_StrClasses;
-	CListBox	m_FilterList;
-	CListBox	m_DeviceList;
-	BOOL	m_bShowAllCategories;
-	//}}AFX_DATA
+    //{{AFX_DATA(CSysEnumDlg)
+    enum { IDD = IDD_SYSENUM_DIALOG };
+    CStatic	m_StrFilename;
+    CStatic	m_StrFilters;
+    CStatic	m_StrClasses;
+    CListBox	m_FilterList;
+    CListBox	m_DeviceList;
+    BOOL	m_bShowAllCategories;
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSysEnumDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CSysEnumDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	HICON m_hIcon;
+    HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CSysEnumDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnPaint();
-	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnSelchangeListDevices();
-	afx_msg void OnClose();
-	afx_msg void OnCheckShowall();
-	afx_msg void OnSelchangeListFilters();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CSysEnumDlg)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+    afx_msg void OnPaint();
+    afx_msg HCURSOR OnQueryDragIcon();
+    afx_msg void OnSelchangeListDevices();
+    afx_msg void OnClose();
+    afx_msg void OnCheckShowall();
+    afx_msg void OnSelchangeListFilters();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

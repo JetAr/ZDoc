@@ -12,9 +12,9 @@
 #ifdef FORWARD_DECLS
 
 
-	enum DVIMAGE;
+enum DVIMAGE;
 
-	class CDeviceView;
+class CDeviceView;
 
 #define DEFAULTVIEWSBWIDTH 11
 
@@ -25,116 +25,125 @@
 #define __CDEVICEVIEW_H__
 
 
-enum DVIMAGE {
-	DVI_IMAGE,
-	DVI_THUMB,
-	DVI_SELTHUMB
+enum DVIMAGE
+{
+    DVI_IMAGE,
+    DVI_THUMB,
+    DVI_SELTHUMB
 };
 
 
 class CDeviceView : public CFlexWnd
 {
 private:
-friend class CDeviceUI;	// CDeviceUI has exclusive right to create/destroy views
-friend class CDIDeviceActionConfigPage;
-	CDeviceView(CDeviceUI &ui);
-	~CDeviceView();
-	CDeviceUI &m_ui;
+    friend class CDeviceUI;	// CDeviceUI has exclusive right to create/destroy views
+    friend class CDIDeviceActionConfigPage;
+    CDeviceView(CDeviceUI &ui);
+    ~CDeviceView();
+    CDeviceUI &m_ui;
 
 public:
-	// control information
-	int GetNumControls();
-	CDeviceControl *GetControl(int nControl);
-	CDeviceControl *GetControlFromOfs(DWORD dwOfs)
-		{ return GetControl(GetIndexFromOfs(dwOfs)); }
+    // control information
+    int GetNumControls();
+    CDeviceControl *GetControl(int nControl);
+    CDeviceControl *GetControlFromOfs(DWORD dwOfs)
+    {
+        return GetControl(GetIndexFromOfs(dwOfs));
+    }
 
-	// text information
-	int GetNumTexts();
-	CDeviceViewText *GetText(int nText);
+    // text information
+    int GetNumTexts();
+    CDeviceViewText *GetText(int nText);
 
-	// text addition
-	CDeviceViewText *NewText();
-	CDeviceViewText *AddText(
-		HFONT, COLORREF, COLORREF, const RECT &, LPCTSTR text);
-	CDeviceViewText *AddText(
-		HFONT, COLORREF, COLORREF, const POINT &, LPCTSTR text);
-	CDeviceViewText *AddWrappedLineOfText(
-		HFONT, COLORREF, COLORREF, LPCTSTR text);
+    // text addition
+    CDeviceViewText *NewText();
+    CDeviceViewText *AddText(
+        HFONT, COLORREF, COLORREF, const RECT &, LPCTSTR text);
+    CDeviceViewText *AddText(
+        HFONT, COLORREF, COLORREF, const POINT &, LPCTSTR text);
+    CDeviceViewText *AddWrappedLineOfText(
+        HFONT, COLORREF, COLORREF, LPCTSTR text);
 
-	void SetImage(CBitmap *&refpbm);
-	void SetImagePath(LPCTSTR tszPath);
+    void SetImage(CBitmap *&refpbm);
+    void SetImagePath(LPCTSTR tszPath);
 
-	// imaging
-	CBitmap *GetImage(DVIMAGE dvi);
-	
-	// editing
-	void Remove(CDeviceControl *pControl);
-	void RemoveAll(BOOL bUser = TRUE);
-	BOOL DoesCalloutOtherThanSpecifiedExistForOffset(CDeviceControl *, DWORD);
-	BOOL DoesCalloutExistForOffset(DWORD);
-	BOOL IsUnassignedOffsetAvailable();
+    // imaging
+    CBitmap *GetImage(DVIMAGE dvi);
 
-	int GetViewIndex();
+    // editing
+    void Remove(CDeviceControl *pControl);
+    void RemoveAll(BOOL bUser = TRUE);
+    BOOL DoesCalloutOtherThanSpecifiedExistForOffset(CDeviceControl *, DWORD);
+    BOOL DoesCalloutExistForOffset(DWORD);
+    BOOL IsUnassignedOffsetAvailable();
 
-	int GetIndexFromOfs(DWORD dwOfs);  // For writing to INI
+    int GetViewIndex();
+
+    int GetIndexFromOfs(DWORD dwOfs);  // For writing to INI
 
 
-	void MakeMissingImages();
+    void MakeMissingImages();
 
-	CDeviceControl *NewControl();
+    CDeviceControl *NewControl();
 
 protected:
-	virtual void OnPaint(HDC hDC);
-	virtual void OnMouseOver(POINT point, WPARAM fwKeys);
-	virtual void OnClick(POINT point, WPARAM fwKeys, BOOL bLeft);
-	virtual void OnDoubleClick(POINT point, WPARAM fwKeys, BOOL bLeft);
-	virtual void OnWheel(POINT point, WPARAM wParam);
-	virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual void OnPaint(HDC hDC);
+    virtual void OnMouseOver(POINT point, WPARAM fwKeys);
+    virtual void OnClick(POINT point, WPARAM fwKeys, BOOL bLeft);
+    virtual void OnDoubleClick(POINT point, WPARAM fwKeys, BOOL bLeft);
+    virtual void OnWheel(POINT point, WPARAM wParam);
+    virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
-	// helpers
-	void Unpopulate(BOOL bInternalOnly = FALSE);
-	
-	// images/visualization
-	CBitmap *m_pbmImage, *m_pbmThumb, *m_pbmSelThumb;
-	LPTSTR m_ptszImagePath;
-	CBitmap *GrabViewImage();
+    // helpers
+    void Unpopulate(BOOL bInternalOnly = FALSE);
 
-	LPCTSTR GetImagePath() { return m_ptszImagePath; }
+    // images/visualization
+    CBitmap *m_pbmImage, *m_pbmThumb, *m_pbmSelThumb;
+    LPTSTR m_ptszImagePath;
+    CBitmap *GrabViewImage();
 
-	// controls
-	CArray<CDeviceControl *, CDeviceControl *&> m_arpControl;
+    LPCTSTR GetImagePath()
+    {
+        return m_ptszImagePath;
+    }
 
-	// text
-	CArray<CDeviceViewText *, CDeviceViewText *&> m_arpText;
-	POINT m_ptNextWLOText;
+    // controls
+    CArray<CDeviceControl *, CDeviceControl *&> m_arpControl;
 
-	// Special painting
-	virtual void DoOnPaint(HDC hDC);
-	BOOL m_bForcePaint;  // This indicates that we need painting even if GetUpdateRect returns FALSE.
+    // text
+    CArray<CDeviceViewText *, CDeviceViewText *&> m_arpText;
+    POINT m_ptNextWLOText;
 
-	// Sort assigned for keyboard devices
-	void SwapControls(int i, int j);
-	void SortAssigned(BOOL bSort);
-	void SortCallouts(int iStart, int iEnd);
+    // Special painting
+    virtual void DoOnPaint(HDC hDC);
+    BOOL m_bForcePaint;  // This indicates that we need painting even if GetUpdateRect returns FALSE.
 
-	// editting state machine
-	int m_SuperState, m_State, m_SubState;
-	int m_OldSuperState, m_OldState, m_OldSubState;
-	CDeviceControl *m_pControlContext;
+    // Sort assigned for keyboard devices
+    void SwapControls(int i, int j);
+    void SortAssigned(BOOL bSort);
+    void SortCallouts(int iStart, int iEnd);
 
-	// scrolling (vertical only)
-	BOOL m_bScrollEnable;
-	int m_nScrollOffset;
-	int m_nViewHeight;
+    // editting state machine
+    int m_SuperState, m_State, m_SubState;
+    int m_OldSuperState, m_OldState, m_OldSubState;
+    CDeviceControl *m_pControlContext;
+
+    // scrolling (vertical only)
+    BOOL m_bScrollEnable;
+    int m_nScrollOffset;
+    int m_nViewHeight;
 public:
-	void EnableScrolling() {m_bScrollEnable = TRUE;}	
-	void ScrollToMakeControlVisible(const RECT &rc);
-	void CalcDimensions();
+    void EnableScrolling()
+    {
+        m_bScrollEnable = TRUE;
+    }
+    void ScrollToMakeControlVisible(const RECT &rc);
+    void CalcDimensions();
 private:
-	void DisableScrollBar();
-	void EnableScrollBar();
-	CFlexScrollBar m_sb;
+    void DisableScrollBar();
+    void EnableScrollBar();
+    CFlexScrollBar m_sb;
 };
 
 

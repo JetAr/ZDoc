@@ -14,46 +14,49 @@
 
 #ifndef EXCLUDE_DVDEVCODE_ENUMS
 
-typedef enum _tagDVD_ERROR {
+typedef enum _tagDVD_ERROR
+{
     DVD_ERROR_Unexpected=1,         // Something unexpected happened, perhaps content
-                                    //   is incorrectly authored.  Playback is stopped.
-    DVD_ERROR_CopyProtectFail=2,    // Key exchange for DVD copy protection failed. 
-                                    //   Playback is stopped.
-    DVD_ERROR_InvalidDVD1_0Disc=3,  // DVD-Video disc is incorrectly authored for v1.0 
-                                    //   of spec. Playback is stopped.
+    //   is incorrectly authored.  Playback is stopped.
+    DVD_ERROR_CopyProtectFail=2,    // Key exchange for DVD copy protection failed.
+    //   Playback is stopped.
+    DVD_ERROR_InvalidDVD1_0Disc=3,  // DVD-Video disc is incorrectly authored for v1.0
+    //   of spec. Playback is stopped.
     DVD_ERROR_InvalidDiscRegion=4,  // The Disc cannot be played because the disc is not
-                                    // authored to play in system region.
-                                    // The region mismatch may be fixable by 
-                                    // changing the system region with dvdrgn.exe
+    // authored to play in system region.
+    // The region mismatch may be fixable by
+    // changing the system region with dvdrgn.exe
     DVD_ERROR_LowParentalLevel=5,   // Player parental level is lower than the lowest parental
-                                    //   level available in the DVD content. Playback is stopped.
+    //   level available in the DVD content. Playback is stopped.
     DVD_ERROR_MacrovisionFail=6,    // Macrovision Distribution Failed.
-                                    // Playback is stopped.
+    // Playback is stopped.
     DVD_ERROR_IncompatibleSystemAndDecoderRegions=7,
-                                    // No discs can be played because the system region
-                                    // does not match the decoder region.
+    // No discs can be played because the system region
+    // does not match the decoder region.
     DVD_ERROR_IncompatibleDiscAndDecoderRegions=8
-                                    // The disc cannot be played because the disc is
-                                    // not authored to be played in the decoder's region
+            // The disc cannot be played because the disc is
+            // not authored to be played in the decoder's region
 } DVD_ERROR;
 
-typedef enum _tagDVD_WARNING {
+typedef enum _tagDVD_WARNING
+{
     DVD_WARNING_InvalidDVD1_0Disc=1,// DVD-Video disc is incorrectly authored. Playback
-                                    //   can continue, but unexpected behavior may occur.
+    //   can continue, but unexpected behavior may occur.
     DVD_WARNING_FormatNotSupported=2,// A decoder would not support the current format.  Playback
-                                    //   of a stream (audio, video of SP) may not function.
-                                    //   lParam2 contains the stream type (see AM_DVD_STREAM_FLAGS)
-    DVD_WARNING_IllegalNavCommand=3,// The internal DVD navigation command processor attempted to 
-                                    //   process an illegal command.
+    //   of a stream (audio, video of SP) may not function.
+    //   lParam2 contains the stream type (see AM_DVD_STREAM_FLAGS)
+    DVD_WARNING_IllegalNavCommand=3,// The internal DVD navigation command processor attempted to
+    //   process an illegal command.
     DVD_WARNING_Open = 4,           // File Open Failed
     DVD_WARNING_Seek = 5,           // File Seek Failed
     DVD_WARNING_Read = 6            // File Read Failed
 } DVD_WARNING;
 
-typedef enum _tagDVD_PB_STOPPED {
+typedef enum _tagDVD_PB_STOPPED
+{
     DVD_PB_STOPPED_Other=0,                 // The navigator stopped the playback (no reason available).
     DVD_PB_STOPPED_NoBranch=1,              // The nav completed the current pgc and there was no more video and
-                                            // did not find any other branching instruction for subsequent playback.
+    // did not find any other branching instruction for subsequent playback.
     DVD_PB_STOPPED_NoFirstPlayDomain =2,    // The disc does not contain an initial startup program.
     DVD_PB_STOPPED_StopCommand = 3,         // The app issued a stop() command or a stop command was authored on the disc.
     DVD_PB_STOPPED_Reset=4,                 // The navigator was reset to the start of the disc (using ResetOnStop).
@@ -74,12 +77,12 @@ typedef enum _tagDVD_PB_STOPPED {
 // DVD-Video event codes
 // ======================
 //
-// All DVD-Video event are always passed on to the application, and are 
+// All DVD-Video event are always passed on to the application, and are
 // never processed by the filter graph
 
 
 #define EC_DVD_DOMAIN_CHANGE                    (EC_DVDBASE + 0x01)
-// Parameters: ( DWORD, void ) 
+// Parameters: ( DWORD, void )
 // lParam1 is enum DVD_DOMAIN, and indicates the player's new domain
 //
 // Raised from following domains: all
@@ -88,7 +91,7 @@ typedef enum _tagDVD_PB_STOPPED {
 
 
 #define EC_DVD_TITLE_CHANGE                     (EC_DVDBASE + 0x02)
-// Parameters: ( DWORD, void ) 
+// Parameters: ( DWORD, void )
 // lParam1 is the new title number.
 //
 // Raised from following domains: DVD_DOMAIN_Title
@@ -100,96 +103,96 @@ typedef enum _tagDVD_PB_STOPPED {
 
 
 #define EC_DVD_CHAPTER_START                   (EC_DVDBASE + 0x03)
-// Parameters: ( DWORD, void ) 
-// lParam1 is the new chapter number (which is the program number for 
+// Parameters: ( DWORD, void )
+// lParam1 is the new chapter number (which is the program number for
 // One_Sequential_PGC_Titles).
 //
 // Raised from following domains: DVD_DOMAIN_Title
 //
-// Signales that DVD player started playback of a new program in the Title 
+// Signales that DVD player started playback of a new program in the Title
 // domain.  This is only signaled for One_Sequential_PGC_Titles.
 
 
 #define EC_DVD_AUDIO_STREAM_CHANGE              (EC_DVDBASE + 0x04)
-// Parameters: ( DWORD, void ) 
+// Parameters: ( DWORD, void )
 // lParam1 is the new user audio stream number.
 //
 // Raised from following domains: all
 //
-// Signaled when ever the current user audio stream number changes for the main 
+// Signaled when ever the current user audio stream number changes for the main
 // title.  This can be changed automatically with a navigation command on disc
 // as well as through IDVDAnnexJ.
 // Audio stream numbers range from 0 to 7.  Stream 0xffffffff
 // indicates that no stream is selected.
 
 #define EC_DVD_SUBPICTURE_STREAM_CHANGE         (EC_DVDBASE + 0x05)
-// Parameters: ( DWORD, BOOL ) 
+// Parameters: ( DWORD, BOOL )
 // lParam1 is the new user subpicture stream number.
 // lParam2 is the subpicture's on/off state (TRUE if on)
 //
 // Raised from following domains: all
 //
-// Signaled when ever the current user subpicture stream number changes for the main 
+// Signaled when ever the current user subpicture stream number changes for the main
 // title.  This can be changed automatically with a navigation command on disc
-// as well as through IDVDAnnexJ.  
+// as well as through IDVDAnnexJ.
 // Subpicture stream numbers range from 0 to 31.  Stream 0xffffffff
-// indicates that no stream is selected.  
+// indicates that no stream is selected.
 
 #define EC_DVD_ANGLE_CHANGE                     (EC_DVDBASE + 0x06)
-// Parameters: ( DWORD, DWORD ) 
+// Parameters: ( DWORD, DWORD )
 // lParam1 is the number of available angles.
 // lParam2 is the current user angle number.
 //
 // Raised from following domains: all
 //
-// Signaled when ever either 
-//   a) the number of available angles changes, or  
+// Signaled when ever either
+//   a) the number of available angles changes, or
 //   b) the current user angle number changes.
-// Current angle number can be changed automatically with navigation command 
+// Current angle number can be changed automatically with navigation command
 // on disc as well as through IDVDAnnexJ.
 // When the number of available angles is 1, the current video is not multiangle.
 // Angle numbers range from 1 to 9.
 
 
 #define EC_DVD_BUTTON_CHANGE                    (EC_DVDBASE + 0x07)
-// Parameters: ( DWORD, DWORD ) 
+// Parameters: ( DWORD, DWORD )
 // lParam1 is the number of available buttons.
 // lParam2 is the current selected button number.
 //
 // Raised from following domains: all
 //
-// Signaled when ever either 
-//   a) the number of available buttons changes, or  
+// Signaled when ever either
+//   a) the number of available buttons changes, or
 //   b) the current selected button number changes.
-// The current selected button can be changed automatically with navigation 
-// commands on disc as well as through IDVDAnnexJ.  
+// The current selected button can be changed automatically with navigation
+// commands on disc as well as through IDVDAnnexJ.
 // Button numbers range from 1 to 36.  Selected button number 0 implies that
-// no button is selected.  Note that these button numbers enumerate all 
+// no button is selected.  Note that these button numbers enumerate all
 // available button numbers, and do not always correspond to button numbers
 // used for IDVDAnnexJ::ButtonSelectAndActivate since only a subset of buttons
 // may be activated with ButtonSelectAndActivate.
 
 
 #define EC_DVD_VALID_UOPS_CHANGE                (EC_DVDBASE + 0x08)
-// Parameters: ( DWORD, void ) 
+// Parameters: ( DWORD, void )
 // lParam1 is a VALID_UOP_SOMTHING_OR_OTHER bit-field stuct which indicates
 //   which IDVDAnnexJ commands are explicitly disable by the DVD disc.
 //
 // Raised from following domains: all
 //
 // Signaled when ever the available set of IDVDAnnexJ methods changes.  This
-// only indicates which operations are explicited disabled by the content on 
-// the DVD disc, and does not guarentee that it is valid to call methods 
+// only indicates which operations are explicited disabled by the content on
+// the DVD disc, and does not guarentee that it is valid to call methods
 // which are not disabled.  For example, if no buttons are currently present,
 // IDVDAnnexJ::ButtonActivate() won't work, even though the buttons are not
-// explicitly disabled. 
+// explicitly disabled.
 
 
 #define EC_DVD_STILL_ON                         (EC_DVDBASE + 0x09)
-// Parameters: ( BOOL, DWORD ) 
+// Parameters: ( BOOL, DWORD )
 // lParam1 == 0  -->  buttons are available, so StillOff won't work
 // lParam1 == 1  -->  no buttons available, so StillOff will work
-// lParam2 indicates the number of seconds the still will last, with 0xffffffff 
+// lParam2 indicates the number of seconds the still will last, with 0xffffffff
 //   indicating an infinite still (wait till button or StillOff selected).
 //
 // Raised from following domains: all
@@ -200,7 +203,7 @@ typedef enum _tagDVD_PB_STOPPED {
 // with still off).
 
 #define EC_DVD_STILL_OFF                         (EC_DVDBASE + 0x0a)
-// Parameters: ( void, void ) 
+// Parameters: ( void, void )
 //
 //   Indicating that any still that is currently active
 //   has been released.
@@ -211,12 +214,12 @@ typedef enum _tagDVD_PB_STOPPED {
 //
 
 #define EC_DVD_CURRENT_TIME                     (EC_DVDBASE + 0x0b)
-// Parameters: ( DWORD, BOOL ) 
-// lParam1 is a DVD_TIMECODE which indicates the current 
+// Parameters: ( DWORD, BOOL )
+// lParam1 is a DVD_TIMECODE which indicates the current
 //   playback time code in a BCD HH:MM:SS:FF format.
 // lParam2 == 0  -->  time code is 25 frames/sec
 // lParam2 == 1  -->  time code is 30 frames/sec (non-drop).
-// lParam2 == 2  -->  time code is invalid (current playback time 
+// lParam2 == 2  -->  time code is invalid (current playback time
 //                    cannot be determined for current title)
 //
 // Raised from following domains: DVD_DOMAIN_Title
@@ -226,14 +229,14 @@ typedef enum _tagDVD_PB_STOPPED {
 
 
 #define EC_DVD_ERROR                            (EC_DVDBASE + 0x0c)
-// Parameters: ( DWORD, void) 
+// Parameters: ( DWORD, void)
 // lParam1 is an enum DVD_ERROR which notifies the app of some error condition.
 //
 // Raised from following domains: all
 //
 
 #define EC_DVD_WARNING                           (EC_DVDBASE + 0x0d)
-// Parameters: ( DWORD, DWORD) 
+// Parameters: ( DWORD, DWORD)
 // lParam1 is an enum DVD_WARNING which notifies the app of some warning condition.
 // lParam2 contains more specific information about the warning (warning dependent)
 //
@@ -306,7 +309,7 @@ typedef enum _tagDVD_PB_STOPPED {
 //  lParam1 == 1 indicates that an angle block is being played back and angle changes
 //             can be performed.
 //
-//  Indicates whether an angle block is being played and if angle changes can be 
+//  Indicates whether an angle block is being played and if angle changes can be
 //  performed. However, angle changes are not restricted to angle blocks and the
 //  manifestation of the angle change can be seen only in an angle block.
 
@@ -347,7 +350,7 @@ typedef enum _tagDVD_PB_STOPPED {
 //
 
 #define EC_DVD_CURRENT_HMSF_TIME                     (EC_DVDBASE + 0x1a)
-// Parameters: ( ULONG, ULONG ) 
+// Parameters: ( ULONG, ULONG )
 // lParam2 contains a union of the DVD_TIMECODE_FLAGS
 // lParam1 contains a DVD_HMSF_TIMECODE.  Assign lParam1 to a ULONG then cast the
 // ULONG as a DVD_HMSF_TIMECODE to use its values.
@@ -357,7 +360,7 @@ typedef enum _tagDVD_PB_STOPPED {
 // Signaled at the beginning of every VOBU, which occurs every .4 to 1.0 sec.
 
 #define EC_DVD_KARAOKE_MODE                     (EC_DVDBASE + 0x1b)
-// Parameters: ( BOOL, reserved ) 
+// Parameters: ( BOOL, reserved )
 // lParam1 is either TRUE (a karaoke track is being played) or FALSE (no karaoke data is being played).
 //
 #endif // __DVDEVCOD__

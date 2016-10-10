@@ -11,7 +11,7 @@
 
 extern const AMOVIESETUP_FILTER sudSource565Bit;
 
-class CSource565Bit 
+class CSource565Bit
     : public CSource
 {
 protected:
@@ -33,7 +33,7 @@ private:
     DECLARE_IUNKNOWN
     CSource565Bit(LPUNKNOWN lpunk, HRESULT *phr);
     ~CSource565Bit();
-    
+
     STDMETHODIMP NonDelegatingQueryInterface( REFIID riid, void ** ppv );
 
     int GetPinCount();
@@ -43,7 +43,7 @@ private:
 
 // CSource565BitStream manages the data flow from the output pin.
 //
-class CSource565BitStream 
+class CSource565BitStream
     : public CSourceStream
     , public CSourceSeeking
 {
@@ -84,9 +84,9 @@ public:
     HRESULT OnThreadStartPlay( );
 
     // need to override or we'll get an assert
-    STDMETHODIMP Notify( IBaseFilter * pFilter, Quality q ) 
-    { 
-        return S_OK; 
+    STDMETHODIMP Notify( IBaseFilter * pFilter, Quality q )
+    {
+        return S_OK;
     }
 
     // CSourceSeeking

@@ -2,7 +2,7 @@
 //  File:   Utils.h
 //
 //  Desc:   DirectShow sample code
-//          Prototypes for external (global) utilities 
+//          Prototypes for external (global) utilities
 //          specific for VMRXcl app
 //
 //  Copyright (c) 2000-2002 Microsoft Corporation. All rights reserved.
@@ -26,27 +26,27 @@ void SurfaceDescHelper( DWORD dwFlags, TCHAR * pszFlags );
 
 //----------------------------------------------------------------------------
 //  SceneSettings
-//  
+//
 //  This structure defines demonstration settings
 //----------------------------------------------------------------------------
 struct SceneSettings
 {
     bool    bRotateZ;           // rotate around Z axis if true
     int     nGradZ;             // angle of rotation around Z axis, in grades
-                                // this is a 'time' variable for Z-rotation effect
+    // this is a 'time' variable for Z-rotation effect
     bool    bRotateY;           // rotate around Y axis if true
     int     nGradY;             // angle of rotation around Y axis, in grades
-                                // this is a 'time' variable for Y-rotation effect
+    // this is a 'time' variable for Y-rotation effect
     bool    bShowStatistics;    // show FPS in the upper right corner if true
     bool    bShowTwist;         // show "twist" effect if true; THIS STATE OVERRIDES bRotateZ AND bRotateY
     int     nDy;                // vertical offset for the twist effect
-                                // this is a 'time' variable for "twist" effect
+    // this is a 'time' variable for "twist" effect
     bool    bShowHelp;          // show text help hints if true (it is activated by right click on the control)
     int     nXHelp;             // coordinates for text help hint
     int     nYHelp;
     TCHAR   achHelp[MAX_PATH];  // help hint text
-    TCHAR   achFPS[MAX_PATH];   // string representation of FramesPerSecons 
-                                // (when bShowStatistics is on)
+    TCHAR   achFPS[MAX_PATH];   // string representation of FramesPerSecons
+    // (when bShowStatistics is on)
 
     SceneSettings() // constructor: no effects by default
     {

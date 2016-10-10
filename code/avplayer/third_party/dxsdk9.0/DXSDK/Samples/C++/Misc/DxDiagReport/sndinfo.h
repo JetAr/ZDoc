@@ -1,7 +1,7 @@
 ﻿//----------------------------------------------------------------------------
 // File: sndinfo.h
 //
-// Desc: 
+// Desc:
 //
 // Copyright (c) 2001 Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
@@ -45,30 +45,30 @@ struct SoundInfo
     BOOL m_bI3DL2Source;
     BOOL m_bZoomFX;
 
-    DWORD m_dwFlags;  
-    DWORD m_dwMinSecondarySampleRate; 
-    DWORD m_dwMaxSecondarySampleRate; 
-    DWORD m_dwPrimaryBuffers; 
-    DWORD m_dwMaxHwMixingAllBuffers; 
-    DWORD m_dwMaxHwMixingStaticBuffers; 
-    DWORD m_dwMaxHwMixingStreamingBuffers; 
-    DWORD m_dwFreeHwMixingAllBuffers; 
-    DWORD m_dwFreeHwMixingStaticBuffers; 
-    DWORD m_dwFreeHwMixingStreamingBuffers; 
-    DWORD m_dwMaxHw3DAllBuffers; 
-    DWORD m_dwMaxHw3DStaticBuffers; 
-    DWORD m_dwMaxHw3DStreamingBuffers; 
-    DWORD m_dwFreeHw3DAllBuffers; 
-    DWORD m_dwFreeHw3DStaticBuffers; 
-    DWORD m_dwFreeHw3DStreamingBuffers; 
-    DWORD m_dwTotalHwMemBytes; 
-    DWORD m_dwFreeHwMemBytes; 
-    DWORD m_dwMaxContigFreeHwMemBytes; 
-    DWORD m_dwUnlockTransferRateHwBuffers; 
-    DWORD m_dwPlayCpuOverheadSwBuffers; 
+    DWORD m_dwFlags;
+    DWORD m_dwMinSecondarySampleRate;
+    DWORD m_dwMaxSecondarySampleRate;
+    DWORD m_dwPrimaryBuffers;
+    DWORD m_dwMaxHwMixingAllBuffers;
+    DWORD m_dwMaxHwMixingStaticBuffers;
+    DWORD m_dwMaxHwMixingStreamingBuffers;
+    DWORD m_dwFreeHwMixingAllBuffers;
+    DWORD m_dwFreeHwMixingStaticBuffers;
+    DWORD m_dwFreeHwMixingStreamingBuffers;
+    DWORD m_dwMaxHw3DAllBuffers;
+    DWORD m_dwMaxHw3DStaticBuffers;
+    DWORD m_dwMaxHw3DStreamingBuffers;
+    DWORD m_dwFreeHw3DAllBuffers;
+    DWORD m_dwFreeHw3DStaticBuffers;
+    DWORD m_dwFreeHw3DStreamingBuffers;
+    DWORD m_dwTotalHwMemBytes;
+    DWORD m_dwFreeHwMemBytes;
+    DWORD m_dwMaxContigFreeHwMemBytes;
+    DWORD m_dwUnlockTransferRateHwBuffers;
+    DWORD m_dwPlayCpuOverheadSwBuffers;
 
-    TCHAR m_szNotesLocalized[3000]; 
-    TCHAR m_szNotesEnglish[3000]; 
+    TCHAR m_szNotesLocalized[3000];
+    TCHAR m_szNotesEnglish[3000];
     TCHAR m_szRegHelpText[3000];
     TCHAR m_szTestResultLocalized[3000];
     TCHAR m_szTestResultEnglish[3000];
@@ -95,8 +95,8 @@ struct SoundCaptureInfo
     BOOL  m_bDefaultSoundRecording;
     BOOL  m_bDefaultVoiceRecording;
 
-    DWORD m_dwFlags;  
-    DWORD m_dwFormats;  
+    DWORD m_dwFlags;
+    DWORD m_dwFormats;
 
     DWORD m_nElementCount;
 };

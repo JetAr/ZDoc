@@ -25,7 +25,7 @@
 #define NS_S_QUIT         ( (HRESULT) 0x01000003 )  // Dialog quit, close app
 #define NS_S_LOBBYCONNECT ( (HRESULT) 0x01000004 )  // Dialog connected from lobby, connect success
 #define NS_S_REJECTED     ( (HRESULT) 0x01000005 )  // The player was rejected from the game, so 
-                                                    // the previous connection dialog should be shown
+// the previous connection dialog should be shown
 #define NS_S_GAMECANCELED ( (HRESULT) 0x01000006 )  // The host canceled the game, so quit.
 
 #define MAX_SLOTS            10
@@ -43,7 +43,7 @@
 
 
 //-----------------------------------------------------------------------------
-// App specific DirectPlay messages and structures 
+// App specific DirectPlay messages and structures
 //-----------------------------------------------------------------------------
 #define STAGE_MSGID_SETSLOTID     0x12001
 #define STAGE_MSGID_SETSTAGEDATA  0x12002
@@ -57,8 +57,8 @@
 class CNetStage
 {
 public:
-	CNetStage( HINSTANCE hInst, TCHAR* strAppName );
-	virtual ~CNetStage();
+    CNetStage( HINSTANCE hInst, TCHAR* strAppName );
+    virtual ~CNetStage();
 
     HRESULT Init( IDirectPlay8Peer* pDP );
     HRESULT DoStage( TCHAR* strLocalPlayerName, BOOL bHostPlayer );
@@ -91,7 +91,7 @@ protected:
     struct STAGEMSG_STAGEDATA : public STAGEMSG_GENERIC
     {
         DPNHANDLE hBufferHandle;
-        SLOT_INFO Slots[MAX_SLOTS]; 
+        SLOT_INFO Slots[MAX_SLOTS];
     };
 
     static INT_PTR CALLBACK StaticStageDlgProc( HWND, UINT, WPARAM, LPARAM );
@@ -129,7 +129,7 @@ protected:
     TCHAR               m_strLocalPlayerName[MAX_PLAYER_NAME];
     STAGEMSG_STAGEDATA* m_pStageDataMsg;
     CRITICAL_SECTION    m_csSlots;
-    SLOT_INFO           m_Slots[MAX_SLOTS]; 
+    SLOT_INFO           m_Slots[MAX_SLOTS];
     DWORD               m_dwNumberSlotsOpen;
     DPNID               m_dpnidHostPlayer;
 };

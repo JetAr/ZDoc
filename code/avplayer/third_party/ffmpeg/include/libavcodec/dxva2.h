@@ -49,7 +49,8 @@
  *
  * The application must make it available as AVCodecContext.hwaccel_context.
  */
-struct dxva_context {
+struct dxva_context
+{
     /**
      * DXVA2 decoder object
      */

@@ -35,15 +35,15 @@ POSSIBILITY OF SUCH DAMAGE.
 
 namespace libtorrent
 {
-	class alert;
+class alert;
 
-	struct alert_dispatcher
-	{
-		// return true if the alert was swallowed (i.e.
-		// ownership was taken over). In this case, the
-		// alert will not be passed on to any one else
-		virtual bool post_alert(alert* a) = 0;
-	};
+struct alert_dispatcher
+{
+    // return true if the alert was swallowed (i.e.
+    // ownership was taken over). In this case, the
+    // alert will not be passed on to any one else
+    virtual bool post_alert(alert* a) = 0;
+};
 }
 
 #endif

@@ -12,35 +12,38 @@
 
 class CFlexMsgBox : public CFlexWnd
 {
-	LPTSTR m_tszText;  // Text string of the message
-	COLORREF m_rgbText, m_rgbBk, m_rgbSelText, m_rgbSelBk, m_rgbFill, m_rgbLine;
-	HFONT m_hFont;
-	BOOL m_bSent;
+    LPTSTR m_tszText;  // Text string of the message
+    COLORREF m_rgbText, m_rgbBk, m_rgbSelText, m_rgbSelBk, m_rgbFill, m_rgbLine;
+    HFONT m_hFont;
+    BOOL m_bSent;
 
-	HWND m_hWndNotify;
+    HWND m_hWndNotify;
 
-	void SetRect();
-	void InternalPaint(HDC hDC);
+    void SetRect();
+    void InternalPaint(HDC hDC);
 
-	RECT GetRect(const RECT &);
-	RECT GetRect();
+    RECT GetRect(const RECT &);
+    RECT GetRect();
 
-	void Notify(int code);
+    void Notify(int code);
 
 public:
-	CFlexMsgBox();
-	virtual ~CFlexMsgBox();
+    CFlexMsgBox();
+    virtual ~CFlexMsgBox();
 
-	HWND Create(HWND hParent, const RECT &rect, BOOL bVisible);
+    HWND Create(HWND hParent, const RECT &rect, BOOL bVisible);
 
-	void SetNotify(HWND hWnd) { m_hWndNotify = hWnd; }
-	void SetText(LPCTSTR tszText);
+    void SetNotify(HWND hWnd)
+    {
+        m_hWndNotify = hWnd;
+    }
+    void SetText(LPCTSTR tszText);
 
-	// cosmetics
-	void SetFont(HFONT hFont);
-	void SetColors(COLORREF text, COLORREF bk, COLORREF seltext, COLORREF selbk, COLORREF fill, COLORREF line);
+    // cosmetics
+    void SetFont(HFONT hFont);
+    void SetColors(COLORREF text, COLORREF bk, COLORREF seltext, COLORREF selbk, COLORREF fill, COLORREF line);
 
-	virtual void OnPaint(HDC hDC);
+    virtual void OnPaint(HDC hDC);
 };
 
 #endif

@@ -39,59 +39,59 @@ class CNetRecvProp :
 
     HRESULT
     OnSave_ (
-        ) ;
+    ) ;
 
     void
     Refresh_ (
-        ) ;
+    ) ;
 
-    public :
+public :
 
-        CNetRecvProp (
-            IN  TCHAR *     pClassName,
-            IN  IUnknown *  pIUnknown,
-            IN  REFCLSID    rclsid,
-            OUT HRESULT *   pHr
-            ) ;
+    CNetRecvProp (
+        IN  TCHAR *     pClassName,
+        IN  IUnknown *  pIUnknown,
+        IN  REFCLSID    rclsid,
+        OUT HRESULT *   pHr
+    ) ;
 
-        HRESULT
-        OnActivate (
-            ) ;
+    HRESULT
+    OnActivate (
+    ) ;
 
-        HRESULT
-        OnApplyChanges (
-            ) ;
+    HRESULT
+    OnApplyChanges (
+    ) ;
 
-        HRESULT
-        OnConnect (
-            IN  IUnknown *  pIUnknown
-            ) ;
+    HRESULT
+    OnConnect (
+        IN  IUnknown *  pIUnknown
+    ) ;
 
-        HRESULT
-        OnDeactivate (
-            ) ;
+    HRESULT
+    OnDeactivate (
+    ) ;
 
-        HRESULT
-        OnDisconnect (
-            ) ;
+    HRESULT
+    OnDisconnect (
+    ) ;
 
-        BOOL
-        OnReceiveMessage (
-            IN  HWND    hwnd,
-            IN  UINT    uMsg,
-            IN  WPARAM  wParam,
-            IN  LPARAM  lParam
-            ) ;
+    BOOL
+    OnReceiveMessage (
+        IN  HWND    hwnd,
+        IN  UINT    uMsg,
+        IN  WPARAM  wParam,
+        IN  LPARAM  lParam
+    ) ;
 
-        DECLARE_IUNKNOWN ;
+    DECLARE_IUNKNOWN ;
 
-        static
-        CUnknown *
-        WINAPI
-        CreateInstance (
-            IN  IUnknown *  pIUnknown,
-            IN  HRESULT *   pHr
-            ) ;
+    static
+    CUnknown *
+    WINAPI
+    CreateInstance (
+        IN  IUnknown *  pIUnknown,
+        IN  HRESULT *   pHr
+    ) ;
 } ;
 
 #endif  //  __proprecv_h

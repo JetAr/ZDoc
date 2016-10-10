@@ -30,7 +30,8 @@ extern "C" {
 //
 //===========================================================================
 
-typedef struct _KSP_BDA_NODE_PIN {
+typedef struct _KSP_BDA_NODE_PIN
+{
     KSPROPERTY      Property;
     ULONG           ulNodeType;
     ULONG           ulInputPinId;
@@ -66,7 +67,8 @@ typedef struct _KSM_BDA_PIN_PAIR
 } KSM_BDA_PIN_PAIR, * PKSM_BDA_PIN_PAIR;
 
 
-typedef struct {
+typedef struct
+{
     KSP_NODE        Property;
     ULONG           EsPid;
 } KSP_NODE_ESPID, *PKSP_NODE_ESPID;
@@ -82,11 +84,12 @@ typedef struct {
 //  Antenna Signal Formats
 //
 
-typedef struct tagKS_DATARANGE_BDA_ANTENNA {
-   KSDATARANGE                  DataRange;
+typedef struct tagKS_DATARANGE_BDA_ANTENNA
+{
+    KSDATARANGE                  DataRange;
 
-   //   Antenna specifier can go here if required
-   //
+    //   Antenna specifier can go here if required
+    //
 } KS_DATARANGE_BDA_ANTENNA, *PKS_DATARANGE_BDA_ANTENNA;
 
 
@@ -94,23 +97,25 @@ typedef struct tagKS_DATARANGE_BDA_ANTENNA {
 //  Transport Formats
 //
 
-typedef struct tagBDA_TRANSPORT_INFO {
+typedef struct tagBDA_TRANSPORT_INFO
+{
     ULONG           ulcbPhyiscalPacket; // Size, in bytes, of a physical packet
-                                        // (e.g. Satellite link payload size.
+    // (e.g. Satellite link payload size.
     ULONG           ulcbPhyiscalFrame;  // Size, in bytes, of each physical frame
-                                        // 0 indicates no HW requirement
+    // 0 indicates no HW requirement
     ULONG           ulcbPhyiscalFrameAlignment; // Capture buffer alignment in bytes
-                                                // 0 and 1 indicate no alignment requirements
+    // 0 and 1 indicate no alignment requirements
     REFERENCE_TIME  AvgTimePerFrame; // Normal ActiveMovie units (100 nS)
 
 } BDA_TRANSPORT_INFO, *PBDA_TRANSPORT_INFO;
 
-typedef struct tagKS_DATARANGE_BDA_TRANSPORT {
-   KSDATARANGE                  DataRange;
-   BDA_TRANSPORT_INFO           BdaTransportInfo;
+typedef struct tagKS_DATARANGE_BDA_TRANSPORT
+{
+    KSDATARANGE                  DataRange;
+    BDA_TRANSPORT_INFO           BdaTransportInfo;
 
-   //   Transport specifier can go here if required
-   //
+    //   Transport specifier can go here if required
+    //
 } KS_DATARANGE_BDA_TRANSPORT, *PKS_DATARANGE_BDA_TRANSPORT;
 
 
@@ -119,7 +124,7 @@ typedef struct tagKS_DATARANGE_BDA_TRANSPORT {
 //
 //      These are sent by the IBroadcastEvent service on the graph.
 //      To receive,
-//          0) Implement IBroadcastEvent in your receiving object - this has one Method on it: Fire() 
+//          0) Implement IBroadcastEvent in your receiving object - this has one Method on it: Fire()
 //          1) QI the graphs service provider for SID_SBroadcastEventService
 //                 for the IID_IBroadcastEvent object
 //          2) OR create the event service (CLSID_BroadcastEventService) if not already there
@@ -291,7 +296,8 @@ DEFINE_GUIDSTRUCT("297BB104-E5C9-4ACE-B123-95C3CBB24D4F", PINNAME_BDA_OPENCABLE_
 DEFINE_GUIDSTRUCT("71985F43-1CA1-11d3-9CC8-00C04F7971E0", KSPROPSETID_BdaEthernetFilter);
 #define KSPROPSETID_BdaEthernetFilter DEFINE_GUIDNAMED(KSPROPSETID_BdaEthernetFilter)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_ETHERNET_FILTER_MULTICAST_LIST_SIZE = 0,
     KSPROPERTY_BDA_ETHERNET_FILTER_MULTICAST_LIST,
     KSPROPERTY_BDA_ETHERNET_FILTER_MULTICAST_MODE
@@ -337,7 +343,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("71985F44-1CA1-11d3-9CC8-00C04F7971E0", KSPROPSETID_BdaIPv4Filter);
 #define KSPROPSETID_BdaIPv4Filter DEFINE_GUIDNAMED(KSPROPSETID_BdaIPv4Filter)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_IPv4_FILTER_MULTICAST_LIST_SIZE = 0,
     KSPROPERTY_BDA_IPv4_FILTER_MULTICAST_LIST,
     KSPROPERTY_BDA_IPv4_FILTER_MULTICAST_MODE
@@ -383,7 +390,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("E1785A74-2A23-4fb3-9245-A8F88017EF33", KSPROPSETID_BdaIPv6Filter);
 #define KSPROPSETID_BdaIPv6Filter DEFINE_GUIDNAMED(KSPROPSETID_BdaIPv6Filter)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_IPv6_FILTER_MULTICAST_LIST_SIZE = 0,
     KSPROPERTY_BDA_IPv6_FILTER_MULTICAST_LIST,
     KSPROPERTY_BDA_IPv6_FILTER_MULTICAST_MODE
@@ -432,7 +440,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("1347D106-CF3A-428a-A5CB-AC0D9A2A4338", KSPROPSETID_BdaSignalStats);
 #define KSPROPSETID_BdaSignalStats DEFINE_GUIDNAMED(KSPROPSETID_BdaSignalStats)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_SIGNAL_STRENGTH = 0,
     KSPROPERTY_BDA_SIGNAL_QUALITY,
     KSPROPERTY_BDA_SIGNAL_PRESENT,
@@ -529,7 +538,7 @@ typedef enum {
 //  Each time a signal statistics property is requested, the node should
 //  report the average value for the last n milliseconds where n is the
 //  value set by this property.  If no value is set or if the driver does
-//  not support this property, the driver should default to 
+//  not support this property, the driver should default to
 //  100 millisecond sample times.
 //
 //  The driver may report values for the most recently completed sample
@@ -558,7 +567,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("FD0A5AF3-B41D-11d2-9C95-00C04F7971E0", KSMETHODSETID_BdaChangeSync);
 #define KSMETHODSETID_BdaChangeSync DEFINE_GUIDNAMED(KSMETHODSETID_BdaChangeSync)
 
-typedef enum {
+typedef enum
+{
     KSMETHOD_BDA_START_CHANGES = 0,
     KSMETHOD_BDA_CHECK_CHANGES,
     KSMETHOD_BDA_COMMIT_CHANGES,
@@ -615,7 +625,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("71985F45-1CA1-11d3-9CC8-00C04F7971E0", KSMETHODSETID_BdaDeviceConfiguration);
 #define KSMETHODSETID_BdaDeviceConfiguration DEFINE_GUIDNAMED(KSMETHODSETID_BdaDeviceConfiguration)
 
-typedef enum {
+typedef enum
+{
     KSMETHOD_BDA_CREATE_PIN_FACTORY = 0,
     KSMETHOD_BDA_DELETE_PIN_FACTORY,
     KSMETHOD_BDA_CREATE_TOPOLOGY
@@ -662,7 +673,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("A14EE835-0A23-11d3-9CC7-00C04F7971E0", KSPROPSETID_BdaTopology);
 #define KSPROPSETID_BdaTopology DEFINE_GUIDNAMED(KSPROPSETID_BdaTopology)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_NODE_TYPES,
     KSPROPERTY_BDA_PIN_TYPES,
     KSPROPERTY_BDA_TEMPLATE_CONNECTIONS,
@@ -671,7 +683,7 @@ typedef enum {
     KSPROPERTY_BDA_NODE_EVENTS,
     KSPROPERTY_BDA_CONTROLLING_PIN_ID,
     KSPROPERTY_BDA_NODE_DESCRIPTORS
- }KSPROPERTY_BDA_TOPOLOGY;
+} KSPROPERTY_BDA_TOPOLOGY;
 
 #define DEFINE_KSPROPERTY_ITEM_BDA_NODE_TYPES(GetHandler, SetHandler)\
     DEFINE_KSPROPERTY_ITEM(\
@@ -759,7 +771,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("0DED49D5-A8B7-4d5d-97A1-12B0C195874D", KSPROPSETID_BdaPinControl);
 #define KSPROPSETID_BdaPinControl DEFINE_GUIDNAMED(KSPROPSETID_BdaPinControl)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_PIN_ID = 0,
     KSPROPERTY_BDA_PIN_TYPE
 } KSPROPERTY_BDA_PIN_CONTROL;
@@ -796,7 +809,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("104781CD-50BD-40d5-95FB-087E0E86A591", KSEVENTSETID_BdaPinEvent);
 #define KSEVENTSETID_BdaPinEvent DEFINE_GUIDNAMED(KSEVENTSETID_BdaPinEvent)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_BDA_PIN_CONNECTED = 0,
     KSEVENT_BDA_PIN_DISCONNECTED
 } KSPROPERTY_BDA_PIN_EVENT;
@@ -835,7 +849,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("71985F46-1CA1-11d3-9CC8-00C04F7971E0", KSPROPSETID_BdaVoidTransform);
 #define KSPROPSETID_BdaVoidTransform DEFINE_GUIDNAMED(KSPROPSETID_BdaVoidTransform)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_VOID_TRANSFORM_START = 0,
     KSPROPERTY_BDA_VOID_TRANSFORM_STOP
 } KSPROPERTY_BDA_VOID_TRANSFORM;
@@ -872,7 +887,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("DDF15B0D-BD25-11d2-9CA0-00C04F7971E0", KSPROPSETID_BdaNullTransform);
 #define KSPROPSETID_BdaNullTransform DEFINE_GUIDNAMED(KSPROPSETID_BdaNullTransform)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_NULL_TRANSFORM_START = 0,
     KSPROPERTY_BDA_NULL_TRANSFORM_STOP
 } KSPROPERTY_BDA_NULL_TRANSFORM;
@@ -909,7 +925,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("71985F47-1CA1-11d3-9CC8-00C04F7971E0", KSPROPSETID_BdaFrequencyFilter);
 #define KSPROPSETID_BdaFrequencyFilter DEFINE_GUIDNAMED(KSPROPSETID_BdaFrequencyFilter)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_RF_TUNER_FREQUENCY = 0,
     KSPROPERTY_BDA_RF_TUNER_POLARITY,
     KSPROPERTY_BDA_RF_TUNER_RANGE,
@@ -986,7 +1003,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("992CF102-49F9-4719-A664-C4F23E2408F4", KSPROPSETID_BdaLNBInfo);
 #define KSPROPSETID_BdaLNBInfo DEFINE_GUIDNAMED(KSPROPSETID_BdaLNBInfo)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_LNB_LOF_LOW_BAND = 0,
     KSPROPERTY_BDA_LNB_LOF_HIGH_BAND,
     KSPROPERTY_BDA_LNB_SWITCH_FREQUENCY
@@ -1033,7 +1051,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("EF30F379-985B-4d10-B640-A79D5E04E1E0", KSPROPSETID_BdaDigitalDemodulator);
 #define KSPROPSETID_BdaDigitalDemodulator DEFINE_GUIDNAMED(KSPROPSETID_BdaDigitalDemodulator)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_MODULATION_TYPE = 0,
     KSPROPERTY_BDA_INNER_FEC_TYPE,
     KSPROPERTY_BDA_INNER_FEC_RATE,
@@ -1140,7 +1159,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("DDF15B12-BD25-11d2-9CA0-00C04F7971E0", KSPROPSETID_BdaAutodemodulate);
 #define KSPROPSETID_BdaAutodemodulate DEFINE_GUIDNAMED(KSPROPSETID_BdaAutodemodulate)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_AUTODEMODULATE_START = 0,
     KSPROPERTY_BDA_AUTODEMODULATE_STOP
 } KSPROPERTY_BDA_AUTODEMODULATE;
@@ -1176,7 +1196,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("516B99C5-971C-4aaf-B3F3-D9FDA8A15E16", KSPROPSETID_BdaTableSection);
 #define KSPROPSETID_BdaTableSection DEFINE_GUIDNAMED(KSPROPSETID_BdaTableSection)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_TABLE_SECTION = 0,
 } KSPROPERTY_IDS_BDA_TABLE;
 
@@ -1203,7 +1224,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("D0A67D65-08DF-4fec-8533-E5B550410B85", KSPROPSETID_BdaPIDFilter);
 #define KSPROPSETID_BdaPIDFilter DEFINE_GUIDNAMED(KSPROPSETID_BdaPIDFilter)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_PIDFILTER_MAP_PIDS = 0,
     KSPROPERTY_BDA_PIDFILTER_UNMAP_PIDS,
     KSPROPERTY_BDA_PIDFILTER_LIST_PIDS
@@ -1250,7 +1272,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("B0693766-5278-4ec6-B9E1-3CE40560EF5A", KSPROPSETID_BdaCA);
 #define KSPROPSETID_BdaCA DEFINE_GUIDNAMED(KSPROPSETID_BdaCA)
 
-typedef enum {
+typedef enum
+{
     KSPROPERTY_BDA_ECM_MAP_STATUS = 0,
     KSPROPERTY_BDA_CA_MODULE_STATUS,
     KSPROPERTY_BDA_CA_SMART_CARD_STATUS,
@@ -1327,7 +1350,8 @@ typedef enum {
 DEFINE_GUIDSTRUCT("488C4CCC-B768-4129-8EB1-B00A071F9068", KSEVENTSETID_BdaCAEvent);
 #define KSEVENTSETID_BdaCAEvent DEFINE_GUIDNAMED(KSEVENTSETID_BdaCAEvent)
 
-typedef enum {
+typedef enum
+{
     KSEVENT_BDA_PROGRAM_FLOW_STATUS_CHANGED = 0,
     KSEVENT_BDA_CA_MODULE_STATUS_CHANGED,
     KSEVENT_BDA_CA_SMART_CARD_STATUS_CHANGED,
