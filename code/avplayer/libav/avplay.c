@@ -1965,10 +1965,10 @@ void* video_render_thrd(void *param)
                 //z video_clock		视频时长
                 //z 帧率
                 //z 码率
-                //z char szBuff[1024] = { 0 };
-				char szBuff[1024] = {0};
+				/*
+                char szBuff[1024] = { 0 };
                 sprintf(szBuff,"%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
-                OutputDebugStringA(szBuff);
+                OutputDebugStringA(szBuff);*/
 
                 printf("%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",
                        master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
