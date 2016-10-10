@@ -1966,12 +1966,13 @@ void* video_render_thrd(void *param)
                 //z 帧率
                 //z 码率
 				/*
-                char szBuff[1024] = { 0 };
+                char szBuff[1024];
                 sprintf(szBuff,"%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
-                OutputDebugStringA(szBuff);*/
+                OutputDebugStringA(szBuff);
 
                 printf("%7.3f A-V: %7.3f A: %7.3f V: %7.3f FR: %d/fps, VB: %d/kbps\r",
                        master_clock(play), diff, audio_clock(play), video_clock(play), play->m_real_frame_rate, play->m_real_bit_rate);
+					   */
 
                 /*	在这里计算帧率.	*/
                 if (play->m_enable_calc_frame_rate)

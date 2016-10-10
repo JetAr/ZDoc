@@ -1,4 +1,4 @@
-/*
+﻿/*
  * avplay.h
  * ~~~~~~~~
  *
@@ -12,7 +12,11 @@
 #ifdef _MSC_VER
 #	include <windows.h>
 #	define inline
+
+#ifndef __CRT__NO_INLINE
 #	define __CRT__NO_INLINE
+#endif
+
 #	ifdef API_EXPORTS
 #		define EXPORT_API __declspec(dllexport)
 #	else

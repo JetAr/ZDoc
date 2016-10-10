@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 2003, Arvid Norberg All rights reserved.
 Copyright (c) 2013, Jack All rights reserved.
