@@ -1,0 +1,64 @@
+GDI+在VS2008 编译不过的解决方法
+
+今天写程序的时候用到GDI+，不过编译不通过。出现的错误为：
+
+1>------ Build started: Project: Label, Configuration: Debug Win32 ------
+1>Compiling...
+1>stdafx.cpp
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(74) : error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(74) : error C2440: 'initializing' : cannot convert from 'const char [37]' to 'int'
+1>        There is no context in which this conversion is possible
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(74) : error C2146: syntax error : missing ';' before identifier 'IImageBytes'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(74) : error C2470: 'IImageBytes' : looks like a function definition, but there is no parameter list; skipping apparent body
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(74) : error C2059: syntax error : 'public'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(280) : error C2146: syntax error : missing ';' before identifier 'id'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(280) : error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusimaging.h(280) : error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusheaders.h(443) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusheaders.h(444) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusheaders.h(445) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusheaders.h(453) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusflat.h(1244) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusflat.h(1247) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusflat.h(1250) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusflat.h(1262) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdipluspath.h(133) : error C2061: syntax error : identifier 'byte'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(410) : error C2061: syntax error : identifier 'PROPID'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(414) : error C2065: 'list' : undeclared identifier
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(419) : error C2065: 'PROPID' : undeclared identifier
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(420) : error C2146: syntax error : missing ')' before identifier 'propId'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(420) : error C2761: 'UINT Gdiplus::Image::GetPropertyItemSize(void)' : member function redeclaration not allowed
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(420) : error C2059: syntax error : ')'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(421) : error C2143: syntax error : missing ';' before '{'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(421) : error C2447: '{' : missing function header (old-style formal list?)
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(433) : error C2065: 'PROPID' : undeclared identifier
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(433) : error C2146: syntax error : missing ')' before identifier 'propId'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(433) : error C2761: 'Gdiplus::Status Gdiplus::Image::GetPropertyItem(void)' : member function redeclaration not allowed
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(436) : error C2059: syntax error : ')'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(437) : error C2143: syntax error : missing ';' before '{'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(437) : error C2447: '{' : missing function header (old-style formal list?)
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(472) : error C2065: 'PROPID' : undeclared identifier
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(473) : error C2146: syntax error : missing ')' before identifier 'propId'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(473) : error C2761: 'Gdiplus::Status Gdiplus::Image::RemovePropertyItem(void)' : member function redeclaration not allowed
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(473) : error C2059: syntax error : ')'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(474) : error C2143: syntax error : missing ';' before '{'
+1>c:/program files/microsoft sdks/windows/v6.0a/include/gdiplusbitmap.h(474) : error C2447: '{' : missing function header (old-style formal list?)
+1>Build log was saved at "file://c:/Users/ll/Documents/Visual Studio 2008/Projects/LabelControl/Label/Debug/BuildLog.htm"
+1>Label - 37 error(s), 0 warning(s)
+========== Build: 0 succeeded, 1 failed, 0 up-to-date, 0 skipped ========== 
+
+解决方法如下：
+
+在stdafx.h文件中加入#include <objbase.h>即可。
+
+This header is included by a lot of stuff, such as the DirectX libs, and eventually includes the necessary stuff. This should be considered a bug I think. The <gdiplus.h> lib should include it itself.
+ 
+
+参考：http://social.msdn.microsoft.com/Forums/en-US/Vsexpressvc/thread/55e02319-43b7-4ff1-b8c0-250e2e268c70 
+
+VS2005上如果有问题，可以用下面的代码：
+
+#include <comdef.h>  
+#include <gdiplus.h>
+#pragma comment(lib, "gdiplus.lib")
+using namespace Gdiplus;
