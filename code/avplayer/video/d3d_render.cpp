@@ -3,6 +3,7 @@
 #include "dxerr9.h"
 #pragma comment(lib, "DxErr9.lib")
 
+//z 定义 format table，前面是mplayer，后面是d3d的。
 struct_fmt_table fmt_table[] = {
 	{FOURCC_PIX_FMT_YVU420,   (D3DFORMAT)MAKEFOURCC('Y','V','1','2')},
 	{FOURCC_PIX_FMT_YUV420P,  (D3DFORMAT)MAKEFOURCC('I','4','2','0')},
@@ -18,6 +19,7 @@ struct_fmt_table fmt_table[] = {
 	{FOURCC_PIX_FMT_BGR8,     D3DFMT_R3G3B2}, /* untested	*/
 };
 
+//z ctor，初始化
 d3d_render::d3d_render()
 : m_d3d_handle(NULL)
 , m_d3d_device(NULL)
@@ -558,11 +560,13 @@ bool d3d_render::reconfigure_d3d()
 	return true;
 }
 
+//z 销毁 d3d surface
 void d3d_render::destroy_d3d_surfaces()
 {
 	printf("destroy_d3d_surfaces called.\n");
 
 	/* Let's destroy the old (if any) D3D Surfaces */
+	//z 如果 pBits 不为 null，
 	if (m_locked_rect.pBits)
 		m_d3d_surface->UnlockRect();
 	m_locked_rect.pBits = NULL;

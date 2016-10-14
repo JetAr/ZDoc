@@ -48,4 +48,3 @@ private:
 };
 
 #endif // __Y4M_RENDER_H__
-

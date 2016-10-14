@@ -29,6 +29,7 @@ typedef enum back_buffer_action
 
 extern struct_fmt_table fmt_table[];
 
+//z 一共定义了多少个 entry 
 #define DISPLAY_FORMAT_TABLE_ENTRIES (sizeof(fmt_table) / sizeof(fmt_table[0]))
 
 class d3d_render
@@ -38,20 +39,21 @@ public:
     d3d_render();
     virtual ~d3d_render();
 
+	//z 必须实现的接口定义
 public:
-    /* 初始render.	*/
+    /* 初始 render.	*/
     virtual bool init_render(void* ctx, int w, int h, int pix_fmt);
 
-    /* 渲染一帧.	*/
+    /* 渲染一帧. */
     virtual bool render_one_frame(AVFrame* data, int pix_fmt);
 
-    /* 调整大小.	*/
+    /* 调整大小. */
     virtual void re_size(int width, int height);
 
     /* 设置宽高比.	*/
     virtual void aspect_ratio(int srcw, int srch, bool enable_aspect);
 
-    /* 撤销render.		*/
+    /* 撤销 render. */
     virtual void destory_render();
 
 private:
@@ -70,7 +72,7 @@ private:
     LPDIRECT3DTEXTURE9 m_d3d_texture_osd;     /**< Direct3D Texture. Uses RGBA */
     LPDIRECT3DTEXTURE9 m_d3d_texture_system;  /**< Direct3D Texture. System memory cannot lock a normal texture. Uses RGBA */
     LPDIRECT3DSURFACE9 m_d3d_backbuf;         /**< Video card's back buffer (used to display next frame) */
-    D3DLOCKED_RECT m_locked_rect;             /**< The locked offscreen surface */
+	D3DLOCKED_RECT m_locked_rect;             /**< The locked offscreen surface */
     D3DFORMAT m_desktop_fmt;                  /**< Desktop (screen) colorspace format. */
     D3DFORMAT m_movie_src_fmt;                /**< Movie colorspace format (depends on the movie's codec) */
     D3DPRESENT_PARAMETERS m_present_params;
