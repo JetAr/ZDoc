@@ -1,4 +1,4 @@
-#ifndef _INSECURE_MEMZERO_H_
+﻿#ifndef _INSECURE_MEMZERO_H_
 #define _INSECURE_MEMZERO_H_
 
 #include <stddef.h>
@@ -31,7 +31,7 @@ static inline void
 insecure_memzero(volatile void * buf, size_t len)
 {
 
-	(insecure_memzero_ptr)(buf, len);
+    (insecure_memzero_ptr)(buf, len);
 }
 
 #endif /* !_INSECURE_MEMZERO_H_ */

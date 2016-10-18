@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -21,16 +21,16 @@ GNU General Public License for more details.
 class DlgConvert : public DockingDlgInterface
 {
 public:
-						DlgConvert(crypt::Options::Convert& opt);
-	void				display(bool toShow = true) const;
+    DlgConvert(crypt::Options::Convert& opt);
+    void				display(bool toShow = true) const;
 
 private:
-	INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
-	void				updateOptions();
-	void				enableOptions(bool v) const;
-	void				OnFromChanged(crypt::Encoding enc) const;
+    INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+    void				updateOptions();
+    void				enableOptions(bool v) const;
+    void				OnFromChanged(crypt::Encoding enc) const;
 
-	crypt::Options::Convert&	options;
+    crypt::Options::Convert&	options;
 };
 
 #endif

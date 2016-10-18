@@ -1,4 +1,4 @@
-// dll.h - written and placed in the public domain by Wei Dai
+﻿// dll.h - written and placed in the public domain by Wei Dai
 
 //! \file
 //! \headerfile dll.h

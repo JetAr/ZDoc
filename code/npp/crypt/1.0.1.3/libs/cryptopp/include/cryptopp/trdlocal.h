@@ -1,4 +1,4 @@
-#ifndef CRYPTOPP_TRDLOCAL_H
+﻿#ifndef CRYPTOPP_TRDLOCAL_H
 #define CRYPTOPP_TRDLOCAL_H
 
 #include "config.h"
@@ -20,21 +20,21 @@ NAMESPACE_BEGIN(CryptoPP)
 class CRYPTOPP_DLL ThreadLocalStorage : public NotCopyable
 {
 public:
-	//! exception thrown by ThreadLocalStorage class
-	class Err : public OS_Error
-	{
-	public:
-		Err(const std::string& operation, int error);
-	};
+    //! exception thrown by ThreadLocalStorage class
+    class Err : public OS_Error
+    {
+    public:
+        Err(const std::string& operation, int error);
+    };
 
-	ThreadLocalStorage();
-	~ThreadLocalStorage() CRYPTOPP_THROW;
+    ThreadLocalStorage();
+    ~ThreadLocalStorage() CRYPTOPP_THROW;
 
-	void SetValue(void *value);
-	void *GetValue() const;
+    void SetValue(void *value);
+    void *GetValue() const;
 
 private:
-	ThreadLocalIndexType m_index;
+    ThreadLocalIndexType m_index;
 };
 
 NAMESPACE_END

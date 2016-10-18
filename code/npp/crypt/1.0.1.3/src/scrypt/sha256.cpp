@@ -1,4 +1,4 @@
-#include <assert.h>
+﻿#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -14,14 +14,14 @@
 static void
 be32enc_vect(uint8_t * dst, const uint32_t * src, size_t len)
 {
-	size_t i;
+    size_t i;
 
-	/* Sanity-check. */
-	assert(len % 4 == 0);
+    /* Sanity-check. */
+    assert(len % 4 == 0);
 
-	/* Encode vector, one word at a time. */
-	for (i = 0; i < len / 4; i++)
-		be32enc(dst + i * 4, src[i]);
+    /* Encode vector, one word at a time. */
+    for (i = 0; i < len / 4; i++)
+        be32enc(dst + i * 4, src[i]);
 }
 
 /*
@@ -31,14 +31,14 @@ be32enc_vect(uint8_t * dst, const uint32_t * src, size_t len)
 static void
 be32dec_vect(uint32_t * dst, const uint8_t * src, size_t len)
 {
-	size_t i;
+    size_t i;
 
-	/* Sanity-check. */
-	assert(len % 4 == 0);
+    /* Sanity-check. */
+    assert(len % 4 == 0);
 
-	/* Decode vector, one word at a time. */
-	for (i = 0; i < len / 4; i++)
-		dst[i] = be32dec(src + i * 4);
+    /* Decode vector, one word at a time. */
+    for (i = 0; i < len / 4; i++)
+        dst[i] = be32dec(src + i * 4);
 }
 
 /* Elementary functions used by SHA256 */
@@ -73,129 +73,131 @@ be32dec_vect(uint32_t * dst, const uint8_t * src, size_t len)
 static void
 SHA256_Transform(uint32_t * state, const uint8_t block[64])
 {
-	uint32_t W[64];
-	uint32_t S[8];
-	uint32_t t0, t1;
-	int i;
+    uint32_t W[64];
+    uint32_t S[8];
+    uint32_t t0, t1;
+    int i;
 
-	/* 1. Prepare message schedule W. */
-	be32dec_vect(W, block, 64);
-	for (i = 16; i < 64; i++)
-		W[i] = s1(W[i - 2]) + W[i - 7] + s0(W[i - 15]) + W[i - 16];
+    /* 1. Prepare message schedule W. */
+    be32dec_vect(W, block, 64);
+    for (i = 16; i < 64; i++)
+        W[i] = s1(W[i - 2]) + W[i - 7] + s0(W[i - 15]) + W[i - 16];
 
-	/* 2. Initialize working variables. */
-	memcpy(S, state, 32);
+    /* 2. Initialize working variables. */
+    memcpy(S, state, 32);
 
-	/* 3. Mix. */
-	RNDr(S, W, 0, 0x428a2f98);
-	RNDr(S, W, 1, 0x71374491);
-	RNDr(S, W, 2, 0xb5c0fbcf);
-	RNDr(S, W, 3, 0xe9b5dba5);
-	RNDr(S, W, 4, 0x3956c25b);
-	RNDr(S, W, 5, 0x59f111f1);
-	RNDr(S, W, 6, 0x923f82a4);
-	RNDr(S, W, 7, 0xab1c5ed5);
-	RNDr(S, W, 8, 0xd807aa98);
-	RNDr(S, W, 9, 0x12835b01);
-	RNDr(S, W, 10, 0x243185be);
-	RNDr(S, W, 11, 0x550c7dc3);
-	RNDr(S, W, 12, 0x72be5d74);
-	RNDr(S, W, 13, 0x80deb1fe);
-	RNDr(S, W, 14, 0x9bdc06a7);
-	RNDr(S, W, 15, 0xc19bf174);
-	RNDr(S, W, 16, 0xe49b69c1);
-	RNDr(S, W, 17, 0xefbe4786);
-	RNDr(S, W, 18, 0x0fc19dc6);
-	RNDr(S, W, 19, 0x240ca1cc);
-	RNDr(S, W, 20, 0x2de92c6f);
-	RNDr(S, W, 21, 0x4a7484aa);
-	RNDr(S, W, 22, 0x5cb0a9dc);
-	RNDr(S, W, 23, 0x76f988da);
-	RNDr(S, W, 24, 0x983e5152);
-	RNDr(S, W, 25, 0xa831c66d);
-	RNDr(S, W, 26, 0xb00327c8);
-	RNDr(S, W, 27, 0xbf597fc7);
-	RNDr(S, W, 28, 0xc6e00bf3);
-	RNDr(S, W, 29, 0xd5a79147);
-	RNDr(S, W, 30, 0x06ca6351);
-	RNDr(S, W, 31, 0x14292967);
-	RNDr(S, W, 32, 0x27b70a85);
-	RNDr(S, W, 33, 0x2e1b2138);
-	RNDr(S, W, 34, 0x4d2c6dfc);
-	RNDr(S, W, 35, 0x53380d13);
-	RNDr(S, W, 36, 0x650a7354);
-	RNDr(S, W, 37, 0x766a0abb);
-	RNDr(S, W, 38, 0x81c2c92e);
-	RNDr(S, W, 39, 0x92722c85);
-	RNDr(S, W, 40, 0xa2bfe8a1);
-	RNDr(S, W, 41, 0xa81a664b);
-	RNDr(S, W, 42, 0xc24b8b70);
-	RNDr(S, W, 43, 0xc76c51a3);
-	RNDr(S, W, 44, 0xd192e819);
-	RNDr(S, W, 45, 0xd6990624);
-	RNDr(S, W, 46, 0xf40e3585);
-	RNDr(S, W, 47, 0x106aa070);
-	RNDr(S, W, 48, 0x19a4c116);
-	RNDr(S, W, 49, 0x1e376c08);
-	RNDr(S, W, 50, 0x2748774c);
-	RNDr(S, W, 51, 0x34b0bcb5);
-	RNDr(S, W, 52, 0x391c0cb3);
-	RNDr(S, W, 53, 0x4ed8aa4a);
-	RNDr(S, W, 54, 0x5b9cca4f);
-	RNDr(S, W, 55, 0x682e6ff3);
-	RNDr(S, W, 56, 0x748f82ee);
-	RNDr(S, W, 57, 0x78a5636f);
-	RNDr(S, W, 58, 0x84c87814);
-	RNDr(S, W, 59, 0x8cc70208);
-	RNDr(S, W, 60, 0x90befffa);
-	RNDr(S, W, 61, 0xa4506ceb);
-	RNDr(S, W, 62, 0xbef9a3f7);
-	RNDr(S, W, 63, 0xc67178f2);
+    /* 3. Mix. */
+    RNDr(S, W, 0, 0x428a2f98);
+    RNDr(S, W, 1, 0x71374491);
+    RNDr(S, W, 2, 0xb5c0fbcf);
+    RNDr(S, W, 3, 0xe9b5dba5);
+    RNDr(S, W, 4, 0x3956c25b);
+    RNDr(S, W, 5, 0x59f111f1);
+    RNDr(S, W, 6, 0x923f82a4);
+    RNDr(S, W, 7, 0xab1c5ed5);
+    RNDr(S, W, 8, 0xd807aa98);
+    RNDr(S, W, 9, 0x12835b01);
+    RNDr(S, W, 10, 0x243185be);
+    RNDr(S, W, 11, 0x550c7dc3);
+    RNDr(S, W, 12, 0x72be5d74);
+    RNDr(S, W, 13, 0x80deb1fe);
+    RNDr(S, W, 14, 0x9bdc06a7);
+    RNDr(S, W, 15, 0xc19bf174);
+    RNDr(S, W, 16, 0xe49b69c1);
+    RNDr(S, W, 17, 0xefbe4786);
+    RNDr(S, W, 18, 0x0fc19dc6);
+    RNDr(S, W, 19, 0x240ca1cc);
+    RNDr(S, W, 20, 0x2de92c6f);
+    RNDr(S, W, 21, 0x4a7484aa);
+    RNDr(S, W, 22, 0x5cb0a9dc);
+    RNDr(S, W, 23, 0x76f988da);
+    RNDr(S, W, 24, 0x983e5152);
+    RNDr(S, W, 25, 0xa831c66d);
+    RNDr(S, W, 26, 0xb00327c8);
+    RNDr(S, W, 27, 0xbf597fc7);
+    RNDr(S, W, 28, 0xc6e00bf3);
+    RNDr(S, W, 29, 0xd5a79147);
+    RNDr(S, W, 30, 0x06ca6351);
+    RNDr(S, W, 31, 0x14292967);
+    RNDr(S, W, 32, 0x27b70a85);
+    RNDr(S, W, 33, 0x2e1b2138);
+    RNDr(S, W, 34, 0x4d2c6dfc);
+    RNDr(S, W, 35, 0x53380d13);
+    RNDr(S, W, 36, 0x650a7354);
+    RNDr(S, W, 37, 0x766a0abb);
+    RNDr(S, W, 38, 0x81c2c92e);
+    RNDr(S, W, 39, 0x92722c85);
+    RNDr(S, W, 40, 0xa2bfe8a1);
+    RNDr(S, W, 41, 0xa81a664b);
+    RNDr(S, W, 42, 0xc24b8b70);
+    RNDr(S, W, 43, 0xc76c51a3);
+    RNDr(S, W, 44, 0xd192e819);
+    RNDr(S, W, 45, 0xd6990624);
+    RNDr(S, W, 46, 0xf40e3585);
+    RNDr(S, W, 47, 0x106aa070);
+    RNDr(S, W, 48, 0x19a4c116);
+    RNDr(S, W, 49, 0x1e376c08);
+    RNDr(S, W, 50, 0x2748774c);
+    RNDr(S, W, 51, 0x34b0bcb5);
+    RNDr(S, W, 52, 0x391c0cb3);
+    RNDr(S, W, 53, 0x4ed8aa4a);
+    RNDr(S, W, 54, 0x5b9cca4f);
+    RNDr(S, W, 55, 0x682e6ff3);
+    RNDr(S, W, 56, 0x748f82ee);
+    RNDr(S, W, 57, 0x78a5636f);
+    RNDr(S, W, 58, 0x84c87814);
+    RNDr(S, W, 59, 0x8cc70208);
+    RNDr(S, W, 60, 0x90befffa);
+    RNDr(S, W, 61, 0xa4506ceb);
+    RNDr(S, W, 62, 0xbef9a3f7);
+    RNDr(S, W, 63, 0xc67178f2);
 
-	/* 4. Mix local working variables into global state. */
-	for (i = 0; i < 8; i++)
-		state[i] += S[i];
+    /* 4. Mix local working variables into global state. */
+    for (i = 0; i < 8; i++)
+        state[i] += S[i];
 
-	/* Clean the stack. */
-	insecure_memzero(W, 256);
-	insecure_memzero(S, 32);
-	insecure_memzero(&t0, sizeof(uint32_t));
-	insecure_memzero(&t1, sizeof(uint32_t));
+    /* Clean the stack. */
+    insecure_memzero(W, 256);
+    insecure_memzero(S, 32);
+    insecure_memzero(&t0, sizeof(uint32_t));
+    insecure_memzero(&t1, sizeof(uint32_t));
 }
 
-static uint8_t PAD[64] = {
-	0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+static uint8_t PAD[64] =
+{
+    0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /* Add padding and terminating bit-count. */
 static void
 SHA256_Pad(SHA256_CTX * ctx)
 {
-	uint8_t len[8];
-	uint32_t r, plen;
+    uint8_t len[8];
+    uint32_t r, plen;
 
-	/*
-	 * Convert length to a vector of bytes -- we do this now rather
-	 * than later because the length will change after we pad.
-	 */
-	be64enc(len, ctx->count);
+    /*
+     * Convert length to a vector of bytes -- we do this now rather
+     * than later because the length will change after we pad.
+     */
+    be64enc(len, ctx->count);
 
-	/* Add 1--64 bytes so that the resulting length is 56 mod 64. */
-	r = (ctx->count >> 3) & 0x3f;
-	plen = (r < 56) ? (56 - r) : (120 - r);
-	SHA256_Update(ctx, PAD, (size_t)plen);
+    /* Add 1--64 bytes so that the resulting length is 56 mod 64. */
+    r = (ctx->count >> 3) & 0x3f;
+    plen = (r < 56) ? (56 - r) : (120 - r);
+    SHA256_Update(ctx, PAD, (size_t)plen);
 
-	/* Add the terminating bit-count. */
-	SHA256_Update(ctx, len, 8);
+    /* Add the terminating bit-count. */
+    SHA256_Update(ctx, len, 8);
 }
 
 /* Magic initialization constants. */
-static const uint32_t initstate[8] = {
-	0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
-	0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19
+static const uint32_t initstate[8] =
+{
+    0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
+    0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19
 };
 
 /**
@@ -206,11 +208,11 @@ void
 SHA256_Init(SHA256_CTX * ctx)
 {
 
-	/* Zero bits processed so far. */
-	ctx->count = 0;
+    /* Zero bits processed so far. */
+    ctx->count = 0;
 
-	/* Initialize state. */
-	memcpy(ctx->state, initstate, sizeof(initstate));
+    /* Initialize state. */
+    memcpy(ctx->state, initstate, sizeof(initstate));
 }
 
 /**
@@ -220,40 +222,42 @@ SHA256_Init(SHA256_CTX * ctx)
 void
 SHA256_Update(SHA256_CTX * ctx, const void * in, size_t len)
 {
-	uint32_t r;
-	const uint8_t * src = (const uint8_t *)in;
+    uint32_t r;
+    const uint8_t * src = (const uint8_t *)in;
 
-	/* Return immediately if we have nothing to do. */
-	if (len == 0)
-		return;
+    /* Return immediately if we have nothing to do. */
+    if (len == 0)
+        return;
 
-	/* Number of bytes left in the buffer from previous updates. */
-	r = (ctx->count >> 3) & 0x3f;
+    /* Number of bytes left in the buffer from previous updates. */
+    r = (ctx->count >> 3) & 0x3f;
 
-	/* Update number of bits. */
-	ctx->count += (uint64_t)(len) << 3;
+    /* Update number of bits. */
+    ctx->count += (uint64_t)(len) << 3;
 
-	/* Handle the case where we don't need to perform any transforms. */
-	if (len < 64 - r) {
-		memcpy(&ctx->buf[r], src, len);
-		return;
-	}
+    /* Handle the case where we don't need to perform any transforms. */
+    if (len < 64 - r)
+    {
+        memcpy(&ctx->buf[r], src, len);
+        return;
+    }
 
-	/* Finish the current block. */
-	memcpy(&ctx->buf[r], src, 64 - r);
-	SHA256_Transform(ctx->state, ctx->buf);
-	src += 64 - r;
-	len -= 64 - r;
+    /* Finish the current block. */
+    memcpy(&ctx->buf[r], src, 64 - r);
+    SHA256_Transform(ctx->state, ctx->buf);
+    src += 64 - r;
+    len -= 64 - r;
 
-	/* Perform complete blocks. */
-	while (len >= 64) {
-		SHA256_Transform(ctx->state, src);
-		src += 64;
-		len -= 64;
-	}
+    /* Perform complete blocks. */
+    while (len >= 64)
+    {
+        SHA256_Transform(ctx->state, src);
+        src += 64;
+        len -= 64;
+    }
 
-	/* Copy left over data into buffer. */
-	memcpy(ctx->buf, src, len);
+    /* Copy left over data into buffer. */
+    memcpy(ctx->buf, src, len);
 }
 
 /**
@@ -265,14 +269,14 @@ void
 SHA256_Final(uint8_t digest[32], SHA256_CTX * ctx)
 {
 
-	/* Add padding. */
-	SHA256_Pad(ctx);
+    /* Add padding. */
+    SHA256_Pad(ctx);
 
-	/* Write the hash. */
-	be32enc_vect(digest, ctx->state, 32);
+    /* Write the hash. */
+    be32enc_vect(digest, ctx->state, 32);
 
-	/* Clear the context state. */
-	insecure_memzero(ctx, sizeof(SHA256_CTX));
+    /* Clear the context state. */
+    insecure_memzero(ctx, sizeof(SHA256_CTX));
 }
 
 /**
@@ -282,11 +286,11 @@ SHA256_Final(uint8_t digest[32], SHA256_CTX * ctx)
 void
 SHA256_Buf(const void * in, size_t len, uint8_t digest[32])
 {
-	SHA256_CTX ctx;
+    SHA256_CTX ctx;
 
-	SHA256_Init(&ctx);
-	SHA256_Update(&ctx, in, len);
-	SHA256_Final(digest, &ctx);
+    SHA256_Init(&ctx);
+    SHA256_Update(&ctx, in, len);
+    SHA256_Final(digest, &ctx);
 }
 
 /**
@@ -297,37 +301,38 @@ SHA256_Buf(const void * in, size_t len, uint8_t digest[32])
 void
 HMAC_SHA256_Init(HMAC_SHA256_CTX * ctx, const void * _K, size_t Klen)
 {
-	uint8_t pad[64];
-	uint8_t khash[32];
-	const uint8_t * K = (const uint8_t *)_K;
-	size_t i;
+    uint8_t pad[64];
+    uint8_t khash[32];
+    const uint8_t * K = (const uint8_t *)_K;
+    size_t i;
 
-	/* If Klen > 64, the key is really SHA256(K). */
-	if (Klen > 64) {
-		SHA256_Init(&ctx->ictx);
-		SHA256_Update(&ctx->ictx, K, Klen);
-		SHA256_Final(khash, &ctx->ictx);
-		K = khash;
-		Klen = 32;
-	}
+    /* If Klen > 64, the key is really SHA256(K). */
+    if (Klen > 64)
+    {
+        SHA256_Init(&ctx->ictx);
+        SHA256_Update(&ctx->ictx, K, Klen);
+        SHA256_Final(khash, &ctx->ictx);
+        K = khash;
+        Klen = 32;
+    }
 
-	/* Inner SHA256 operation is SHA256(K xor [block of 0x36] || data). */
-	SHA256_Init(&ctx->ictx);
-	memset(pad, 0x36, 64);
-	for (i = 0; i < Klen; i++)
-		pad[i] ^= K[i];
-	SHA256_Update(&ctx->ictx, pad, 64);
+    /* Inner SHA256 operation is SHA256(K xor [block of 0x36] || data). */
+    SHA256_Init(&ctx->ictx);
+    memset(pad, 0x36, 64);
+    for (i = 0; i < Klen; i++)
+        pad[i] ^= K[i];
+    SHA256_Update(&ctx->ictx, pad, 64);
 
-	/* Outer SHA256 operation is SHA256(K xor [block of 0x5c] || hash). */
-	SHA256_Init(&ctx->octx);
-	memset(pad, 0x5c, 64);
-	for (i = 0; i < Klen; i++)
-		pad[i] ^= K[i];
-	SHA256_Update(&ctx->octx, pad, 64);
+    /* Outer SHA256 operation is SHA256(K xor [block of 0x5c] || hash). */
+    SHA256_Init(&ctx->octx);
+    memset(pad, 0x5c, 64);
+    for (i = 0; i < Klen; i++)
+        pad[i] ^= K[i];
+    SHA256_Update(&ctx->octx, pad, 64);
 
-	/* Clean the stack. */
-	insecure_memzero(khash, 32);
-	insecure_memzero(pad, 64);
+    /* Clean the stack. */
+    insecure_memzero(khash, 32);
+    insecure_memzero(pad, 64);
 }
 
 /**
@@ -338,8 +343,8 @@ void
 HMAC_SHA256_Update(HMAC_SHA256_CTX * ctx, const void * in, size_t len)
 {
 
-	/* Feed data to the inner SHA256 operation. */
-	SHA256_Update(&ctx->ictx, in, len);
+    /* Feed data to the inner SHA256 operation. */
+    SHA256_Update(&ctx->ictx, in, len);
 }
 
 /**
@@ -350,19 +355,19 @@ HMAC_SHA256_Update(HMAC_SHA256_CTX * ctx, const void * in, size_t len)
 void
 HMAC_SHA256_Final(uint8_t digest[32], HMAC_SHA256_CTX * ctx)
 {
-	uint8_t ihash[32];
+    uint8_t ihash[32];
 
-	/* Finish the inner SHA256 operation. */
-	SHA256_Final(ihash, &ctx->ictx);
+    /* Finish the inner SHA256 operation. */
+    SHA256_Final(ihash, &ctx->ictx);
 
-	/* Feed the inner hash to the outer SHA256 operation. */
-	SHA256_Update(&ctx->octx, ihash, 32);
+    /* Feed the inner hash to the outer SHA256 operation. */
+    SHA256_Update(&ctx->octx, ihash, 32);
 
-	/* Finish the outer SHA256 operation. */
-	SHA256_Final(digest, &ctx->octx);
+    /* Finish the outer SHA256 operation. */
+    SHA256_Final(digest, &ctx->octx);
 
-	/* Clean the stack. */
-	insecure_memzero(ihash, 32);
+    /* Clean the stack. */
+    insecure_memzero(ihash, 32);
 }
 
 /**
@@ -372,13 +377,13 @@ HMAC_SHA256_Final(uint8_t digest[32], HMAC_SHA256_CTX * ctx)
  */
 void
 HMAC_SHA256_Buf(const void * K, size_t Klen, const void * in, size_t len,
-    uint8_t digest[32])
+                uint8_t digest[32])
 {
-	HMAC_SHA256_CTX ctx;
+    HMAC_SHA256_CTX ctx;
 
-	HMAC_SHA256_Init(&ctx, K, Klen);
-	HMAC_SHA256_Update(&ctx, in, len);
-	HMAC_SHA256_Final(digest, &ctx);
+    HMAC_SHA256_Init(&ctx, K, Klen);
+    HMAC_SHA256_Update(&ctx, in, len);
+    HMAC_SHA256_Final(digest, &ctx);
 }
 
 /**
@@ -388,55 +393,57 @@ HMAC_SHA256_Buf(const void * K, size_t Klen, const void * in, size_t len,
  */
 void
 PBKDF2_SHA256(const uint8_t * passwd, size_t passwdlen, const uint8_t * salt,
-    size_t saltlen, uint64_t c, uint8_t * buf, size_t dkLen)
+              size_t saltlen, uint64_t c, uint8_t * buf, size_t dkLen)
 {
-	HMAC_SHA256_CTX PShctx, hctx;
-	size_t i;
-	uint8_t ivec[4];
-	uint8_t U[32];
-	uint8_t T[32];
-	uint64_t j;
-	int k;
-	size_t clen;
+    HMAC_SHA256_CTX PShctx, hctx;
+    size_t i;
+    uint8_t ivec[4];
+    uint8_t U[32];
+    uint8_t T[32];
+    uint64_t j;
+    int k;
+    size_t clen;
 
-	/* Sanity-check. */
-	assert(dkLen <= 32 * (size_t)(UINT32_MAX));
+    /* Sanity-check. */
+    assert(dkLen <= 32 * (size_t)(UINT32_MAX));
 
-	/* Compute HMAC state after processing P and S. */
-	HMAC_SHA256_Init(&PShctx, passwd, passwdlen);
-	HMAC_SHA256_Update(&PShctx, salt, saltlen);
+    /* Compute HMAC state after processing P and S. */
+    HMAC_SHA256_Init(&PShctx, passwd, passwdlen);
+    HMAC_SHA256_Update(&PShctx, salt, saltlen);
 
-	/* Iterate through the blocks. */
-	for (i = 0; i * 32 < dkLen; i++) {
-		/* Generate INT(i + 1). */
-		be32enc(ivec, (uint32_t)(i + 1));
+    /* Iterate through the blocks. */
+    for (i = 0; i * 32 < dkLen; i++)
+    {
+        /* Generate INT(i + 1). */
+        be32enc(ivec, (uint32_t)(i + 1));
 
-		/* Compute U_1 = PRF(P, S || INT(i)). */
-		memcpy(&hctx, &PShctx, sizeof(HMAC_SHA256_CTX));
-		HMAC_SHA256_Update(&hctx, ivec, 4);
-		HMAC_SHA256_Final(U, &hctx);
+        /* Compute U_1 = PRF(P, S || INT(i)). */
+        memcpy(&hctx, &PShctx, sizeof(HMAC_SHA256_CTX));
+        HMAC_SHA256_Update(&hctx, ivec, 4);
+        HMAC_SHA256_Final(U, &hctx);
 
-		/* T_i = U_1 ... */
-		memcpy(T, U, 32);
+        /* T_i = U_1 ... */
+        memcpy(T, U, 32);
 
-		for (j = 2; j <= c; j++) {
-			/* Compute U_j. */
-			HMAC_SHA256_Init(&hctx, passwd, passwdlen);
-			HMAC_SHA256_Update(&hctx, U, 32);
-			HMAC_SHA256_Final(U, &hctx);
+        for (j = 2; j <= c; j++)
+        {
+            /* Compute U_j. */
+            HMAC_SHA256_Init(&hctx, passwd, passwdlen);
+            HMAC_SHA256_Update(&hctx, U, 32);
+            HMAC_SHA256_Final(U, &hctx);
 
-			/* ... xor U_j ... */
-			for (k = 0; k < 32; k++)
-				T[k] ^= U[k];
-		}
+            /* ... xor U_j ... */
+            for (k = 0; k < 32; k++)
+                T[k] ^= U[k];
+        }
 
-		/* Copy as many bytes as necessary into buf. */
-		clen = dkLen - i * 32;
-		if (clen > 32)
-			clen = 32;
-		memcpy(&buf[i * 32], T, clen);
-	}
+        /* Copy as many bytes as necessary into buf. */
+        clen = dkLen - i * 32;
+        if (clen > 32)
+            clen = 32;
+        memcpy(&buf[i * 32], T, clen);
+    }
 
-	/* Clean PShctx, since we never called _Final on it. */
-	insecure_memzero(&PShctx, sizeof(HMAC_SHA256_CTX));
+    /* Clean PShctx, since we never called _Final on it. */
+    insecure_memzero(&PShctx, sizeof(HMAC_SHA256_CTX));
 }

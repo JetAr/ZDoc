@@ -1,4 +1,4 @@
-// fips140.cpp - written and placed in the public domain by Wei Dai
+﻿// fips140.cpp - written and placed in the public domain by Wei Dai
 
 #include "pch.h"
 
@@ -10,7 +10,7 @@
 
 NAMESPACE_BEGIN(CryptoPP)
 
-// Define this to 1 to turn on FIPS 140-2 compliance features, including additional tests during 
+// Define this to 1 to turn on FIPS 140-2 compliance features, including additional tests during
 // startup, random number generation, and key generation. These tests may affect performance.
 #ifndef CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2
 #define CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2 0
@@ -28,58 +28,58 @@ PowerUpSelfTestStatus g_powerUpSelfTestStatus = POWER_UP_SELF_TEST_NOT_DONE;
 
 bool FIPS_140_2_ComplianceEnabled()
 {
-	return CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2;
+    return CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2;
 }
 
 void SimulatePowerUpSelfTestFailure()
 {
-	g_powerUpSelfTestStatus = POWER_UP_SELF_TEST_FAILED;
+    g_powerUpSelfTestStatus = POWER_UP_SELF_TEST_FAILED;
 }
 
 PowerUpSelfTestStatus CRYPTOPP_API GetPowerUpSelfTestStatus()
 {
-	return g_powerUpSelfTestStatus;
+    return g_powerUpSelfTestStatus;
 }
 
 #if CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2
 ThreadLocalStorage & AccessPowerUpSelfTestInProgress()
 {
-	static ThreadLocalStorage selfTestInProgress;
-	return selfTestInProgress;
+    static ThreadLocalStorage selfTestInProgress;
+    return selfTestInProgress;
 }
 #endif
 
 bool PowerUpSelfTestInProgressOnThisThread()
 {
 #if CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2
-	return AccessPowerUpSelfTestInProgress().GetValue() != NULL;
+    return AccessPowerUpSelfTestInProgress().GetValue() != NULL;
 #else
-	assert(false);	// should not be called
-	return false;
+    assert(false);	// should not be called
+    return false;
 #endif
 }
 
 void SetPowerUpSelfTestInProgressOnThisThread(bool inProgress)
 {
-	CRYPTOPP_UNUSED(inProgress);
+    CRYPTOPP_UNUSED(inProgress);
 #if CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2
-	AccessPowerUpSelfTestInProgress().SetValue((void *)inProgress);
+    AccessPowerUpSelfTestInProgress().SetValue((void *)inProgress);
 #endif
 }
 
 void EncryptionPairwiseConsistencyTest_FIPS_140_Only(const PK_Encryptor &encryptor, const PK_Decryptor &decryptor)
 {
-	CRYPTOPP_UNUSED(encryptor), CRYPTOPP_UNUSED(decryptor);
+    CRYPTOPP_UNUSED(encryptor), CRYPTOPP_UNUSED(decryptor);
 #if CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2
-	EncryptionPairwiseConsistencyTest(encryptor, decryptor);
+    EncryptionPairwiseConsistencyTest(encryptor, decryptor);
 #endif
 }
 
 void SignaturePairwiseConsistencyTest_FIPS_140_Only(const PK_Signer &signer, const PK_Verifier &verifier)
 {
-	CRYPTOPP_UNUSED(signer), CRYPTOPP_UNUSED(verifier);
+    CRYPTOPP_UNUSED(signer), CRYPTOPP_UNUSED(verifier);
 #if CRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2
-	SignaturePairwiseConsistencyTest(signer, verifier);
+    SignaturePairwiseConsistencyTest(signer, verifier);
 #endif
 }
 

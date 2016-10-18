@@ -1,4 +1,4 @@
-#ifndef _SHA256_H_
+﻿#ifndef _SHA256_H_
 #define _SHA256_H_
 
 #include <stddef.h>
@@ -20,10 +20,11 @@
 #define HMAC_SHA256_CTX libcperciva_HMAC_SHA256_CTX
 
 /* Context structure for SHA256 operations. */
-typedef struct {
-	uint32_t state[8];
-	uint64_t count;
-	uint8_t buf[64];
+typedef struct
+{
+    uint32_t state[8];
+    uint64_t count;
+    uint8_t buf[64];
 } SHA256_CTX;
 
 /**
@@ -52,9 +53,10 @@ void SHA256_Final(uint8_t[32], SHA256_CTX *);
 void SHA256_Buf(const void *, size_t, uint8_t[32]);
 
 /* Context structure for HMAC-SHA256 operations. */
-typedef struct {
-	SHA256_CTX ictx;
-	SHA256_CTX octx;
+typedef struct
+{
+    SHA256_CTX ictx;
+    SHA256_CTX octx;
 } HMAC_SHA256_CTX;
 
 /**
@@ -90,6 +92,6 @@ void HMAC_SHA256_Buf(const void *, size_t, const void *, size_t, uint8_t[32]);
  * write the output to buf.  The value dkLen must be at most 32 * (2^32 - 1).
  */
 void PBKDF2_SHA256(const uint8_t *, size_t, const uint8_t *, size_t,
-    uint64_t, uint8_t *, size_t);
+                   uint64_t, uint8_t *, size_t);
 
 #endif /* !_SHA256_H_ */

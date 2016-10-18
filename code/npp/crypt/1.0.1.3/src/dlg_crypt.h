@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -29,45 +29,45 @@ GNU General Public License for more details.
 class DlgCrypt : public ModalDialog
 {
 public:
-	enum class Operation { Enc, Dec };
+    enum class Operation { Enc, Dec };
 
-						DlgCrypt();
+    DlgCrypt();
     void				destroy();
-	bool				doDialog(Operation operation, crypt::Options::Crypt* options, bool no_bin_output = false, const string* filename = NULL);
+    bool				doDialog(Operation operation, crypt::Options::Crypt* options, bool no_bin_output = false, const string* filename = NULL);
 
 private:
-	INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+    INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-	void				initDialog();
-	void				checkSpinControlValue(int ctrlID);
-	void				changeActiveTab(int id);	
-	void				setCipherInfo(crypt::Cipher cipher, crypt::Mode mode);
-	void				enableKeyDeriControls();
-	bool				updateOptions();
-	bool				OnClickOK();
-	void				OnCipherChange();	
-	void				OnCipherCategoryChange(int category, bool change_cipher=false);
-	void				OnEncodingChange(crypt::Encoding enc);
-	
-	
-	Operation				operation;
-	const string*			filename;
-	bool					no_bin_output;
-	crypt::Options::Crypt*	options;
+    void				initDialog();
+    void				checkSpinControlValue(int ctrlID);
+    void				changeActiveTab(int id);
+    void				setCipherInfo(crypt::Cipher cipher, crypt::Mode mode);
+    void				enableKeyDeriControls();
+    bool				updateOptions();
+    bool				OnClickOK();
+    void				OnCipherChange();
+    void				OnCipherCategoryChange(int category, bool change_cipher=false);
+    void				OnEncodingChange(crypt::Encoding enc);
 
-	bool					confirm_password;	
-	crypt::Cipher			t_cipher;
-	crypt::KeyDerivation	t_key_derivation;
-	string					t_password;
 
-	HWND					hwnd_basic;
-	HWND					hwnd_auth;
-	HWND					hwnd_key;
-	HWND					hwnd_iv;
-	HWND					hwnd_encoding;
+    Operation				operation;
+    const string*			filename;
+    bool					no_bin_output;
+    crypt::Options::Crypt*	options;
 
-	URLCtrl					url_help[7];
-	enum HelpURL { encoding, cipher, mode, salt, keyalgo, hmac, iv };
+    bool					confirm_password;
+    crypt::Cipher			t_cipher;
+    crypt::KeyDerivation	t_key_derivation;
+    string					t_password;
+
+    HWND					hwnd_basic;
+    HWND					hwnd_auth;
+    HWND					hwnd_key;
+    HWND					hwnd_iv;
+    HWND					hwnd_encoding;
+
+    URLCtrl					url_help[7];
+    enum HelpURL { encoding, cipher, mode, salt, keyalgo, hmac, iv };
 };
 
 

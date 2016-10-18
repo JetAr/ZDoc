@@ -1,4 +1,4 @@
-/*
+﻿/*
  This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
  This program is free software; you can redistribute it and/or
@@ -21,16 +21,16 @@
 class DlgInitdata : public ModalDialog
 {
 public:
-						DlgInitdata();
-	bool				doDialog(crypt::InitStrings* data, bool salt, bool iv, bool tag);
+    DlgInitdata();
+    bool				doDialog(crypt::InitStrings* data, bool salt, bool iv, bool tag);
 
 private:
-	INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+    INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-	crypt::InitStrings* _data;
-	bool				_salt;
-	bool				_iv;
-	bool				_tag;
+    crypt::InitStrings* _data;
+    bool				_salt;
+    bool				_iv;
+    bool				_tag;
 };
 
 

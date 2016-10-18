@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@ typedef std::string string;
 
 namespace unicode
 {
-	void				wchar_to_utf8(const wchar_t* i, int i_len, std::string& o);
-	void				utf8_to_wchar(const char* i, int i_len, std::wstring& o);
+void				wchar_to_utf8(const wchar_t* i, int i_len, std::string& o);
+void				utf8_to_wchar(const char* i, int i_len, std::wstring& o);
 }
 
 #endif

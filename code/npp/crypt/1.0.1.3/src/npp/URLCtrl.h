@@ -1,4 +1,4 @@
-// This file is part of Notepad++ project
+﻿// This file is part of Notepad++ project
 // Copyright (C)2003 Don HO <don.h@free.fr>
 //
 // This program is free software; you can redistribute it and/or
@@ -7,10 +7,10 @@
 // version 2 of the License, or (at your option) any later version.
 //
 // Note that the GPL places important restrictions on "derived works", yet
-// it does not provide a detailed definition of that term.  To avoid      
-// misunderstandings, we consider an application to constitute a          
+// it does not provide a detailed definition of that term.  To avoid
+// misunderstandings, we consider an application to constitute a
 // "derivative work" for the purpose of this license if it does any of the
-// following:                                                             
+// following:
 // 1. Integrates source code from Notepad++.
 // 2. Integrates/includes/aggregates Notepad++ into a proprietary executable
 //    installer, such as those produced by InstallShield.
@@ -38,34 +38,35 @@ class URLCtrl : public Window
 {
 public:
     URLCtrl():_hfUnderlined(0),_hCursor(0), _msgDest(NULL), _cmdID(0), _oldproc(NULL), \
-		_linkColor(), _visitedColor(), _clicking(false), _URL(TEXT("")), hwndTip(NULL) {};
+        _linkColor(), _visitedColor(), _clicking(false), _URL(TEXT("")), hwndTip(NULL) {};
 
     void create(HWND itemHandle, const TCHAR * link, COLORREF linkColor = RGB(50,50,155), bool tooltip = true);
-	void create(HWND itemHandle, int cmd, HWND msgDest = NULL);
-	void changeURL(const TCHAR* url);
+    void create(HWND itemHandle, int cmd, HWND msgDest = NULL);
+    void changeURL(const TCHAR* url);
     void destroy();
 private:
-	void action();
+    void action();
 protected :
     generic_string _URL;
     HFONT	_hfUnderlined;
     HCURSOR	_hCursor;
 
-	HWND _msgDest;
-	unsigned long _cmdID;
+    HWND _msgDest;
+    unsigned long _cmdID;
 
     WNDPROC  _oldproc;
-    COLORREF _linkColor;			
+    COLORREF _linkColor;
     COLORREF _visitedColor;
     bool  _clicking;
 
-	HWND hwndTip;
+    HWND hwndTip;
 
-    static LRESULT CALLBACK URLCtrlProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam){
+    static LRESULT CALLBACK URLCtrlProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+    {
         return ((URLCtrl *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->runProc(hwnd, Message, wParam, lParam);
     };
     LRESULT runProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
-	COLORREF getCtrlBgColor(HWND hWnd);
+    COLORREF getCtrlBgColor(HWND hWnd);
 };
 
 #endif //URLCTRL_INCLUDED

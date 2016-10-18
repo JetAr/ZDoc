@@ -1,4 +1,4 @@
-/*
+﻿/*
 this file is part of Function List Plugin for Notepad++
 Copyright (C)2005 Jens Lorenz <jens.plugin.npp@gmx.de>
 
@@ -47,26 +47,28 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #define DWS_DF_FLOATING		0x80000000			// default state is floating
 
 
-typedef struct {
-	HWND		hClient;		// client Window Handle
-	TCHAR		*pszName;		// name of plugin (shown in window)
-	int			dlgID;			// a funcItem provides the function pointer to start a dialog. Please parse here these ID
+typedef struct
+{
+    HWND		hClient;		// client Window Handle
+    TCHAR		*pszName;		// name of plugin (shown in window)
+    int			dlgID;			// a funcItem provides the function pointer to start a dialog. Please parse here these ID
 
-	// user modifications
-	UINT		uMask;			// mask params: look to above defines
-	HICON		hIconTab;		// icon for tabs
-	TCHAR		*pszAddInfo;		// for plugin to display additional informations
+    // user modifications
+    UINT		uMask;			// mask params: look to above defines
+    HICON		hIconTab;		// icon for tabs
+    TCHAR		*pszAddInfo;		// for plugin to display additional informations
 
-	// internal data, do not use !!!
-	RECT		rcFloat;		// floating position
-	int			iPrevCont;		// stores the privious container (toggling between float and dock)
-	const TCHAR*	pszModuleName;	// it's the plugin file name. It's used to identify the plugin
+    // internal data, do not use !!!
+    RECT		rcFloat;		// floating position
+    int			iPrevCont;		// stores the privious container (toggling between float and dock)
+    const TCHAR*	pszModuleName;	// it's the plugin file name. It's used to identify the plugin
 } tTbData;
 
 
-typedef struct {
-	HWND		hWnd;							// the docking manager wnd
-	RECT		rcRegion[DOCKCONT_MAX];			// position of docked dialogs
+typedef struct
+{
+    HWND		hWnd;							// the docking manager wnd
+    RECT		rcRegion[DOCKCONT_MAX];			// position of docked dialogs
 } tDockMgr;
 
 

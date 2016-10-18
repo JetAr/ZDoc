@@ -1,4 +1,4 @@
-// fips140.h - written and placed in the public domain by Wei Dai
+﻿// fips140.h - written and placed in the public domain by Wei Dai
 
 //! \file fips140.h
 //! \brief Classes and functions for the FIPS 140-2 validated library
@@ -15,7 +15,7 @@
 #include "secblock.h"
 
 NAMESPACE_BEGIN(CryptoPP)
-	
+
 //! \class SelfTestFailure
 //! Exception thrown when a crypto algorithm is used after a self test fails
 //! \details The self tests for an algorithm are performed by Algortihm class
@@ -23,7 +23,7 @@ NAMESPACE_BEGIN(CryptoPP)
 class CRYPTOPP_DLL SelfTestFailure : public Exception
 {
 public:
-	explicit SelfTestFailure(const std::string &s) : Exception(OTHER_ERROR, s) {}
+    explicit SelfTestFailure(const std::string &s) : Exception(OTHER_ERROR, s) {}
 };
 
 //! \brief Determines whether the library provides FIPS validated cryptography
@@ -35,16 +35,17 @@ public:
 CRYPTOPP_DLL bool CRYPTOPP_API FIPS_140_2_ComplianceEnabled();
 
 //! \brief Status of the power-up self test
-enum PowerUpSelfTestStatus {
-	
-	//! \brief The self tests have not been performed.
-	POWER_UP_SELF_TEST_NOT_DONE,
-	//! \brief The self tests were executed via DoPowerUpSelfTest() or
-	//!   DoDllPowerUpSelfTest(), but the result was failure.
-	POWER_UP_SELF_TEST_FAILED,
-	//! \brief The self tests were executed via DoPowerUpSelfTest() or
-	//!   DoDllPowerUpSelfTest(), and the result was success.
-	POWER_UP_SELF_TEST_PASSED
+enum PowerUpSelfTestStatus
+{
+
+    //! \brief The self tests have not been performed.
+    POWER_UP_SELF_TEST_NOT_DONE,
+    //! \brief The self tests were executed via DoPowerUpSelfTest() or
+    //!   DoDllPowerUpSelfTest(), but the result was failure.
+    POWER_UP_SELF_TEST_FAILED,
+    //! \brief The self tests were executed via DoPowerUpSelfTest() or
+    //!   DoDllPowerUpSelfTest(), and the result was success.
+    POWER_UP_SELF_TEST_PASSED
 };
 
 //! \brief Performs the power-up self test

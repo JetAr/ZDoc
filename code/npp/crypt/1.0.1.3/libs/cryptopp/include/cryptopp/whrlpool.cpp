@@ -1,4 +1,4 @@
-// whrlpool.cpp - originally modified by Kevin Springle from
+﻿// whrlpool.cpp - originally modified by Kevin Springle from
 // Paulo Barreto and Vincent Rijmen's public domain code, whirlpool.c.
 // Updated to Whirlpool version 3.0, optimized and SSE version added by Wei Dai
 // All modifications are placed in the public domain
@@ -21,7 +21,7 @@
  *      ``The Whirlpool hashing function,''
  *      NESSIE submission, 2000 (tweaked version, 2001),
  *      <https://www.cosic.esat.kuleuven.ac.be/nessie/workshop/submissions/whirlpool.zip>
- * 
+ *
  * @author  Paulo S.L.M. Barreto
  * @author  Vincent Rijmen.
  *
@@ -88,32 +88,32 @@ NAMESPACE_BEGIN(CryptoPP)
 #if !defined(NDEBUG) && !defined(CRYPTOPP_DOXYGEN_PROCESSING)
 void Whirlpool_TestInstantiations()
 {
-	Whirlpool x;
+    Whirlpool x;
 }
 #endif
 
 void Whirlpool::InitState(HashWordType *state)
 {
-	memset(state, 0, 8*sizeof(state[0]));
+    memset(state, 0, 8*sizeof(state[0]));
 }
 
 void Whirlpool::TruncatedFinal(byte *hash, size_t size)
 {
-	ThrowIfInvalidTruncatedSize(size);
+    ThrowIfInvalidTruncatedSize(size);
 
-	PadLastBlock(32);
-	CorrectEndianess(m_data, m_data, 32);
+    PadLastBlock(32);
+    CorrectEndianess(m_data, m_data, 32);
 
-	m_data[m_data.size()-4] = 0;
-	m_data[m_data.size()-3] = 0;
-	m_data[m_data.size()-2] = GetBitCountHi();
-	m_data[m_data.size()-1] = GetBitCountLo();
+    m_data[m_data.size()-4] = 0;
+    m_data[m_data.size()-3] = 0;
+    m_data[m_data.size()-2] = GetBitCountHi();
+    m_data[m_data.size()-1] = GetBitCountLo();
 
-	Transform(m_state, m_data);
-	CorrectEndianess(m_state, m_state, DigestSize());
-	memcpy(hash, m_state, size);
+    Transform(m_state, m_data);
+    CorrectEndianess(m_state, m_state, DigestSize());
+    memcpy(hash, m_state, size);
 
-	Restart();		// reinit for next use
+    Restart();		// reinit for next use
 }
 
 /*
@@ -129,9 +129,11 @@ void Whirlpool::TruncatedFinal(byte *hash, size_t size)
  */
 
 #if CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE
-CRYPTOPP_ALIGN_DATA(16) static const word64 Whirlpool_C[4*256+R] CRYPTOPP_SECTION_ALIGN16 = {
+CRYPTOPP_ALIGN_DATA(16) static const word64 Whirlpool_C[4*256+R] CRYPTOPP_SECTION_ALIGN16 =
+{
 #else
-static const word64 Whirlpool_C[4*256+R] = {
+static const word64 Whirlpool_C[4*256+R] =
+{
 #endif
     W64LIT(0x18186018c07830d8), W64LIT(0x23238c2305af4626), W64LIT(0xc6c63fc67ef991b8), W64LIT(0xe8e887e8136fcdfb),
     W64LIT(0x878726874ca113cb), W64LIT(0xb8b8dab8a9626d11), W64LIT(0x0101040108050209), W64LIT(0x4f4f214f426e9e0d),
@@ -196,9 +198,9 @@ static const word64 Whirlpool_C[4*256+R] = {
     W64LIT(0x16165816b04e2ca6), W64LIT(0x3a3ae83acdd274f7), W64LIT(0x6969b9696fd0d206), W64LIT(0x09092409482d1241),
     W64LIT(0x7070dd70a7ade0d7), W64LIT(0xb6b6e2b6d954716f), W64LIT(0xd0d067d0ceb7bd1e), W64LIT(0xeded93ed3b7ec7d6),
     W64LIT(0xcccc17cc2edb85e2), W64LIT(0x424215422a578468), W64LIT(0x98985a98b4c22d2c), W64LIT(0xa4a4aaa4490e55ed),
-	W64LIT(0x2828a0285d885075), W64LIT(0x5c5c6d5cda31b886), W64LIT(0xf8f8c7f8933fed6b), W64LIT(0x8686228644a411c2),
+    W64LIT(0x2828a0285d885075), W64LIT(0x5c5c6d5cda31b886), W64LIT(0xf8f8c7f8933fed6b), W64LIT(0x8686228644a411c2),
 
-	W64LIT(0xd818186018c07830), W64LIT(0x2623238c2305af46), W64LIT(0xb8c6c63fc67ef991), W64LIT(0xfbe8e887e8136fcd),
+    W64LIT(0xd818186018c07830), W64LIT(0x2623238c2305af46), W64LIT(0xb8c6c63fc67ef991), W64LIT(0xfbe8e887e8136fcd),
     W64LIT(0xcb878726874ca113), W64LIT(0x11b8b8dab8a9626d), W64LIT(0x0901010401080502), W64LIT(0x0d4f4f214f426e9e),
     W64LIT(0x9b3636d836adee6c), W64LIT(0xffa6a6a2a6590451), W64LIT(0x0cd2d26fd2debdb9), W64LIT(0x0ef5f5f3f5fb06f7),
     W64LIT(0x967979f979ef80f2), W64LIT(0x306f6fa16f5fcede), W64LIT(0x6d91917e91fcef3f), W64LIT(0xf852525552aa07a4),
@@ -263,7 +265,7 @@ static const word64 Whirlpool_C[4*256+R] = {
     W64LIT(0xe2cccc17cc2edb85), W64LIT(0x68424215422a5784), W64LIT(0x2c98985a98b4c22d), W64LIT(0xeda4a4aaa4490e55),
     W64LIT(0x752828a0285d8850), W64LIT(0x865c5c6d5cda31b8), W64LIT(0x6bf8f8c7f8933fed), W64LIT(0xc28686228644a411),
 
-	W64LIT(0x30d818186018c078), W64LIT(0x462623238c2305af), W64LIT(0x91b8c6c63fc67ef9), W64LIT(0xcdfbe8e887e8136f),
+    W64LIT(0x30d818186018c078), W64LIT(0x462623238c2305af), W64LIT(0x91b8c6c63fc67ef9), W64LIT(0xcdfbe8e887e8136f),
     W64LIT(0x13cb878726874ca1), W64LIT(0x6d11b8b8dab8a962), W64LIT(0x0209010104010805), W64LIT(0x9e0d4f4f214f426e),
     W64LIT(0x6c9b3636d836adee), W64LIT(0x51ffa6a6a2a65904), W64LIT(0xb90cd2d26fd2debd), W64LIT(0xf70ef5f5f3f5fb06),
     W64LIT(0xf2967979f979ef80), W64LIT(0xde306f6fa16f5fce), W64LIT(0x3f6d91917e91fcef), W64LIT(0xa4f852525552aa07),
@@ -328,7 +330,7 @@ static const word64 Whirlpool_C[4*256+R] = {
     W64LIT(0x85e2cccc17cc2edb), W64LIT(0x8468424215422a57), W64LIT(0x2d2c98985a98b4c2), W64LIT(0x55eda4a4aaa4490e),
     W64LIT(0x50752828a0285d88), W64LIT(0xb8865c5c6d5cda31), W64LIT(0xed6bf8f8c7f8933f), W64LIT(0x11c28686228644a4),
 
-	W64LIT(0x7830d818186018c0), W64LIT(0xaf462623238c2305), W64LIT(0xf991b8c6c63fc67e), W64LIT(0x6fcdfbe8e887e813),
+    W64LIT(0x7830d818186018c0), W64LIT(0xaf462623238c2305), W64LIT(0xf991b8c6c63fc67e), W64LIT(0x6fcdfbe8e887e813),
     W64LIT(0xa113cb878726874c), W64LIT(0x626d11b8b8dab8a9), W64LIT(0x0502090101040108), W64LIT(0x6e9e0d4f4f214f42),
     W64LIT(0xee6c9b3636d836ad), W64LIT(0x0451ffa6a6a2a659), W64LIT(0xbdb90cd2d26fd2de), W64LIT(0x06f70ef5f5f3f5fb),
     W64LIT(0x80f2967979f979ef), W64LIT(0xcede306f6fa16f5f), W64LIT(0xef3f6d91917e91fc), W64LIT(0x07a4f852525552aa),
@@ -393,68 +395,68 @@ static const word64 Whirlpool_C[4*256+R] = {
     W64LIT(0xdb85e2cccc17cc2e), W64LIT(0x578468424215422a), W64LIT(0xc22d2c98985a98b4), W64LIT(0x0e55eda4a4aaa449),
     W64LIT(0x8850752828a0285d), W64LIT(0x31b8865c5c6d5cda), W64LIT(0x3fed6bf8f8c7f893), W64LIT(0xa411c28686228644),
 
-	W64LIT(0x1823c6e887b8014f),
-	W64LIT(0x36a6d2f5796f9152),
-	W64LIT(0x60bc9b8ea30c7b35),
-	W64LIT(0x1de0d7c22e4bfe57),
-	W64LIT(0x157737e59ff04ada),
-	W64LIT(0x58c9290ab1a06b85),
-	W64LIT(0xbd5d10f4cb3e0567),
-	W64LIT(0xe427418ba77d95d8),
-	W64LIT(0xfbee7c66dd17479e),
-	W64LIT(0xca2dbf07ad5a8333)
+    W64LIT(0x1823c6e887b8014f),
+    W64LIT(0x36a6d2f5796f9152),
+    W64LIT(0x60bc9b8ea30c7b35),
+    W64LIT(0x1de0d7c22e4bfe57),
+    W64LIT(0x157737e59ff04ada),
+    W64LIT(0x58c9290ab1a06b85),
+    W64LIT(0xbd5d10f4cb3e0567),
+    W64LIT(0xe427418ba77d95d8),
+    W64LIT(0xfbee7c66dd17479e),
+    W64LIT(0xca2dbf07ad5a8333)
 };
 
 // Whirlpool basic transformation. Transforms state based on block.
 void Whirlpool::Transform(word64 *digest, const word64 *block)
 {
 #if CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE
-	if (HasISSE())
-	{
-		// MMX version has the same structure as C version below
+    if (HasISSE())
+    {
+        // MMX version has the same structure as C version below
 #ifdef __GNUC__
-	#if CRYPTOPP_BOOL_X64
-		word64 workspace[16];
-	#endif
-	__asm__ __volatile__
-	(
-		INTEL_NOPREFIX
-		AS_PUSH_IF86(	bx)
-		AS2(	mov		AS_REG_6, WORD_REG(ax))
+#if CRYPTOPP_BOOL_X64
+        word64 workspace[16];
+#endif
+        __asm__ __volatile__
+        (
+            INTEL_NOPREFIX
+            AS_PUSH_IF86(	bx)
+            AS2(	mov		AS_REG_6, WORD_REG(ax))
 #else
-	#if _MSC_VER < 1300
-		AS_PUSH_IF86(	bx)
-	#endif
-		AS2(	lea		AS_REG_6, [Whirlpool_C])
-		AS2(	mov		WORD_REG(cx), digest)
-		AS2(	mov		WORD_REG(dx), block)
+#if _MSC_VER < 1300
+        AS_PUSH_IF86(	bx)
+#endif
+        AS2(	lea		AS_REG_6, [Whirlpool_C])
+        AS2(	mov		WORD_REG(cx), digest)
+        AS2(	mov		WORD_REG(dx), block)
 #endif
 #if CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32
-		AS2(	mov		eax, esp)
-		AS2(	and		esp, -16)
-		AS2(	sub		esp, 16*8)
-		AS_PUSH_IF86(	ax)
-	#if CRYPTOPP_BOOL_X86
-		#define SSE2_workspace	esp+WORD_SZ
-	#elif CRYPTOPP_BOOL_X32
-		#define SSE2_workspace	esp+(WORD_SZ*2)
-	#endif
-#else
-	#define SSE2_workspace	%3
+            AS2(	mov		eax, esp)
+            AS2(	and		esp, -16)
+            AS2(	sub		esp, 16*8)
+            AS_PUSH_IF86(	ax)
+#if CRYPTOPP_BOOL_X86
+#define SSE2_workspace	esp+WORD_SZ
+#elif CRYPTOPP_BOOL_X32
+#define SSE2_workspace	esp+(WORD_SZ*2)
 #endif
-		AS2(	xor		esi, esi)
-		ASL(0)
-		AS2(	movq	mm0, [WORD_REG(cx)+8*WORD_REG(si)])
-		AS2(	movq	[SSE2_workspace+8*WORD_REG(si)], mm0)		// k
-		AS2(	pxor	mm0, [WORD_REG(dx)+8*WORD_REG(si)])
-		AS2(	movq	[SSE2_workspace+64+8*WORD_REG(si)], mm0)	// s
-		AS2(	movq	[WORD_REG(cx)+8*WORD_REG(si)], mm0)
-		AS1(	inc		WORD_REG(si))
-		AS2(	cmp		WORD_REG(si), 8)
-		ASJ(	jne,	0, b)
+#else
+#define SSE2_workspace	%3
+#endif
+            AS2(	xor		esi, esi)
+            ASL(0)
+            AS2(	movq	mm0, [WORD_REG(cx)+8*WORD_REG(si)])
+            AS2(	movq	[SSE2_workspace+8*WORD_REG(si)], mm0)		// k
+            AS2(	pxor	mm0, [WORD_REG(dx)+8*WORD_REG(si)])
+            AS2(	movq	[SSE2_workspace+64+8*WORD_REG(si)], mm0)	// s
+            AS2(	movq	[WORD_REG(cx)+8*WORD_REG(si)], mm0)
+            AS1(	inc		WORD_REG(si))
+            AS2(	cmp		WORD_REG(si), 8)
+            ASJ(	jne,	0, b)
 
-		AS2(	xor		esi, esi)
-		ASL(1)
+            AS2(	xor		esi, esi)
+            ASL(1)
 
 #define KSL0(a, b)	AS2(movq	mm##a, b)
 #define KSL1(a, b)	AS2(pxor	mm##a, b)
@@ -530,89 +532,89 @@ void Whirlpool::Transform(word64 *digest, const word64 *block)
 	TSH##op(c, [AS_REG_6+1*2048+8*WORD_REG(di)])\
 	TSH##op(d, [AS_REG_6+0*2048+8*WORD_REG(ax)])
 
-		KSL(0, 4, 3, 2, 1, 0)
-		KSL(0, 0, 7, 6, 5, 4)
-		KSL(1, 1, 0, 7, 6, 5)
-		KSL(1, 2, 1, 0, 7, 6)
-		KSL(1, 3, 2, 1, 0, 7)
-		KSL(1, 5, 4, 3, 2, 1)
-		KSL(1, 6, 5, 4, 3, 2)
-		KSL(1, 7, 6, 5, 4, 3)
-		KSH(0, 0, 7, 6, 5, 4)
-		KSH(0, 4, 3, 2, 1, 0)
-		KSH(1, 1, 0, 7, 6, 5)
-		KSH(1, 2, 1, 0, 7, 6)
-		KSH(1, 5, 4, 3, 2, 1)
-		KSH(1, 6, 5, 4, 3, 2)
-		KSH(2, 3, 2, 1, 0, 7)
-		KSH(2, 7, 6, 5, 4, 3)
+            KSL(0, 4, 3, 2, 1, 0)
+            KSL(0, 0, 7, 6, 5, 4)
+            KSL(1, 1, 0, 7, 6, 5)
+            KSL(1, 2, 1, 0, 7, 6)
+            KSL(1, 3, 2, 1, 0, 7)
+            KSL(1, 5, 4, 3, 2, 1)
+            KSL(1, 6, 5, 4, 3, 2)
+            KSL(1, 7, 6, 5, 4, 3)
+            KSH(0, 0, 7, 6, 5, 4)
+            KSH(0, 4, 3, 2, 1, 0)
+            KSH(1, 1, 0, 7, 6, 5)
+            KSH(1, 2, 1, 0, 7, 6)
+            KSH(1, 5, 4, 3, 2, 1)
+            KSH(1, 6, 5, 4, 3, 2)
+            KSH(2, 3, 2, 1, 0, 7)
+            KSH(2, 7, 6, 5, 4, 3)
 
-		AS2(	pxor	mm0, [AS_REG_6 + 8*1024 + WORD_REG(si)*8])
-		AS2(	movq	[SSE2_workspace], mm0)
+            AS2(	pxor	mm0, [AS_REG_6 + 8*1024 + WORD_REG(si)*8])
+            AS2(	movq	[SSE2_workspace], mm0)
 
-		TSL(0, 4, 3, 2, 1, 0)
-		TSL(0, 0, 7, 6, 5, 4)
-		TSL(1, 1, 0, 7, 6, 5)
-		TSL(1, 2, 1, 0, 7, 6)
-		TSL(1, 3, 2, 1, 0, 7)
-		TSL(1, 5, 4, 3, 2, 1)
-		TSL(1, 6, 5, 4, 3, 2)
-		TSL(1, 7, 6, 5, 4, 3)
-		TSH(0, 0, 7, 6, 5, 4)
-		TSH(0, 4, 3, 2, 1, 0)
-		TSH(1, 1, 0, 7, 6, 5)
-		TSH(1, 2, 1, 0, 7, 6)
-		TSH(1, 5, 4, 3, 2, 1)
-		TSH(1, 6, 5, 4, 3, 2)
+            TSL(0, 4, 3, 2, 1, 0)
+            TSL(0, 0, 7, 6, 5, 4)
+            TSL(1, 1, 0, 7, 6, 5)
+            TSL(1, 2, 1, 0, 7, 6)
+            TSL(1, 3, 2, 1, 0, 7)
+            TSL(1, 5, 4, 3, 2, 1)
+            TSL(1, 6, 5, 4, 3, 2)
+            TSL(1, 7, 6, 5, 4, 3)
+            TSH(0, 0, 7, 6, 5, 4)
+            TSH(0, 4, 3, 2, 1, 0)
+            TSH(1, 1, 0, 7, 6, 5)
+            TSH(1, 2, 1, 0, 7, 6)
+            TSH(1, 5, 4, 3, 2, 1)
+            TSH(1, 6, 5, 4, 3, 2)
 
-		AS1(	inc		WORD_REG(si))
-		AS2(	cmp		WORD_REG(si), 10)
-		ASJ(	je,		2, f)
+            AS1(	inc		WORD_REG(si))
+            AS2(	cmp		WORD_REG(si), 10)
+            ASJ(	je,		2, f)
 
-		TSH(2, 3, 2, 1, 0, 7)
-		TSH(2, 7, 6, 5, 4, 3)
+            TSH(2, 3, 2, 1, 0, 7)
+            TSH(2, 7, 6, 5, 4, 3)
 
-		ASJ(	jmp,	1, b)
-		ASL(2)
+            ASJ(	jmp,	1, b)
+            ASL(2)
 
-		TSH(3, 3, 2, 1, 0, 7)
-		TSH(3, 7, 6, 5, 4, 3)
+            TSH(3, 3, 2, 1, 0, 7)
+            TSH(3, 7, 6, 5, 4, 3)
 
 #undef KSL
 #undef KSH
 #undef TSL
 #undef TSH
 
-		AS_POP_IF86(	sp)
-		AS1(	emms)
+            AS_POP_IF86(	sp)
+            AS1(	emms)
 
 #if defined(__GNUC__) || (defined(_MSC_VER) && _MSC_VER < 1300)
-		AS_POP_IF86(	bx)
+            AS_POP_IF86(	bx)
 #endif
 #ifdef __GNUC__
-		ATT_PREFIX
-			:
-			: "a" (Whirlpool_C), "c" (digest), "d" (block)
-	#if CRYPTOPP_BOOL_X64
-			, "r" (workspace)
-	#endif
-			: "%esi", "%edi", "memory", "cc"
-	#if CRYPTOPP_BOOL_X64
-			, "%r9"
-	#endif
-		);
+            ATT_PREFIX
+            :
+            : "a" (Whirlpool_C), "c" (digest), "d" (block)
+#if CRYPTOPP_BOOL_X64
+            , "r" (workspace)
 #endif
-	}
-	else
+            : "%esi", "%edi", "memory", "cc"
+#if CRYPTOPP_BOOL_X64
+            , "%r9"
+#endif
+        );
+#endif
+    }
+    else
 #endif		// #ifdef CRYPTOPP_X86_ASM_AVAILABLE
-	{
-	word64 s[8];	// the cipher state
-	word64 k[8];	// the round key
+    {
+        word64 s[8];	// the cipher state
+        word64 k[8];	// the round key
 
-	// Compute and apply K^0 to the cipher state
-	// Also apply part of the Miyaguchi-Preneel compression function
-	for (int i=0; i<8; i++)
-		digest[i] = s[i] = block[i] ^ (k[i] = digest[i]);
+        // Compute and apply K^0 to the cipher state
+        // Also apply part of the Miyaguchi-Preneel compression function
+        for (int i=0; i<8; i++)
+            digest[i] = s[i] = block[i] ^ (k[i] = digest[i]);
 
 #define KSL(op, i, a, b, c, d)	\
 	t = (word32)k[i];\
@@ -663,61 +665,61 @@ void Whirlpool::Transform(word64 *digest, const word64 *block)
 	t >>= 8;\
 	TSH_OP(op, d, 0);\
 
-	// Iterate over all rounds:
-	int r=0;
-	while (true)
-	{
-		// Added initialization due to Coverity findings.
-		word64 w0=0, w1=0, w2=0, w3=0, w4=0, w5=0, w6=0, w7=0;
-		word32 t=0;
+        // Iterate over all rounds:
+        int r=0;
+        while (true)
+        {
+            // Added initialization due to Coverity findings.
+            word64 w0=0, w1=0, w2=0, w3=0, w4=0, w5=0, w6=0, w7=0;
+            word32 t=0;
 
-		KSL(0, 4, 3, 2, 1, 0)
-		KSL(0, 0, 7, 6, 5, 4)
-		KSL(1, 1, 0, 7, 6, 5)
-		KSL(1, 2, 1, 0, 7, 6)
-		KSL(1, 3, 2, 1, 0, 7)
-		KSL(1, 5, 4, 3, 2, 1)
-		KSL(1, 6, 5, 4, 3, 2)
-		KSL(1, 7, 6, 5, 4, 3)
-		KSH(0, 0, 7, 6, 5, 4)
-		KSH(0, 4, 3, 2, 1, 0)
-		KSH(1, 1, 0, 7, 6, 5)
-		KSH(1, 2, 1, 0, 7, 6)
-		KSH(1, 5, 4, 3, 2, 1)
-		KSH(1, 6, 5, 4, 3, 2)
-		KSH(2, 3, 2, 1, 0, 7)
-		KSH(2, 7, 6, 5, 4, 3)
+            KSL(0, 4, 3, 2, 1, 0)
+            KSL(0, 0, 7, 6, 5, 4)
+            KSL(1, 1, 0, 7, 6, 5)
+            KSL(1, 2, 1, 0, 7, 6)
+            KSL(1, 3, 2, 1, 0, 7)
+            KSL(1, 5, 4, 3, 2, 1)
+            KSL(1, 6, 5, 4, 3, 2)
+            KSL(1, 7, 6, 5, 4, 3)
+            KSH(0, 0, 7, 6, 5, 4)
+            KSH(0, 4, 3, 2, 1, 0)
+            KSH(1, 1, 0, 7, 6, 5)
+            KSH(1, 2, 1, 0, 7, 6)
+            KSH(1, 5, 4, 3, 2, 1)
+            KSH(1, 6, 5, 4, 3, 2)
+            KSH(2, 3, 2, 1, 0, 7)
+            KSH(2, 7, 6, 5, 4, 3)
 
-		k[0] ^= Whirlpool_C[1024+r];
+            k[0] ^= Whirlpool_C[1024+r];
 
-		TSL(0, 4, 3, 2, 1, 0)
-		TSL(0, 0, 7, 6, 5, 4)
-		TSL(1, 1, 0, 7, 6, 5)
-		TSL(1, 2, 1, 0, 7, 6)
-		TSL(1, 3, 2, 1, 0, 7)
-		TSL(1, 5, 4, 3, 2, 1)
-		TSL(1, 6, 5, 4, 3, 2)
-		TSL(1, 7, 6, 5, 4, 3)
-		TSH(0, 0, 7, 6, 5, 4)
-		TSH(0, 4, 3, 2, 1, 0)
-		TSH(1, 1, 0, 7, 6, 5)
-		TSH(1, 2, 1, 0, 7, 6)
-		TSH(1, 5, 4, 3, 2, 1)
-		TSH(1, 6, 5, 4, 3, 2)
+            TSL(0, 4, 3, 2, 1, 0)
+            TSL(0, 0, 7, 6, 5, 4)
+            TSL(1, 1, 0, 7, 6, 5)
+            TSL(1, 2, 1, 0, 7, 6)
+            TSL(1, 3, 2, 1, 0, 7)
+            TSL(1, 5, 4, 3, 2, 1)
+            TSL(1, 6, 5, 4, 3, 2)
+            TSL(1, 7, 6, 5, 4, 3)
+            TSH(0, 0, 7, 6, 5, 4)
+            TSH(0, 4, 3, 2, 1, 0)
+            TSH(1, 1, 0, 7, 6, 5)
+            TSH(1, 2, 1, 0, 7, 6)
+            TSH(1, 5, 4, 3, 2, 1)
+            TSH(1, 6, 5, 4, 3, 2)
 
-		if (++r < R)
-		{
-			TSH(2, 3, 2, 1, 0, 7)
-			TSH(2, 7, 6, 5, 4, 3)
-		}
-		else
-		{
-			TSH(3, 3, 2, 1, 0, 7)
-			TSH(3, 7, 6, 5, 4, 3)
-			break;
-		}
-	}
-	}
+            if (++r < R)
+            {
+                TSH(2, 3, 2, 1, 0, 7)
+                TSH(2, 7, 6, 5, 4, 3)
+            }
+            else
+            {
+                TSH(3, 3, 2, 1, 0, 7)
+                TSH(3, 7, 6, 5, 4, 3)
+                break;
+            }
+        }
+    }
 }
 
 NAMESPACE_END

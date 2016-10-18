@@ -1,4 +1,4 @@
-// arc4.h - written and placed in the public domain by Wei Dai
+﻿// arc4.h - written and placed in the public domain by Wei Dai
 
 //! \file arc4.h
 //! \brief Classes for ARC4 cipher
@@ -13,7 +13,8 @@
 
 NAMESPACE_BEGIN(CryptoPP)
 
-namespace Weak1 {
+namespace Weak1
+{
 
 //! \class ARC4_Base
 //! \brief Class specific methods used to operate the cipher.
@@ -21,25 +22,40 @@ namespace Weak1 {
 class CRYPTOPP_NO_VTABLE ARC4_Base : public VariableKeyLength<16, 1, 256>, public RandomNumberGenerator, public SymmetricCipher, public SymmetricCipherDocumentation
 {
 public:
-	~ARC4_Base();
+    ~ARC4_Base();
 
-	static const char *StaticAlgorithmName() {return "ARC4";}
+    static const char *StaticAlgorithmName()
+    {
+        return "ARC4";
+    }
 
-	void GenerateBlock(byte *output, size_t size);
-	void DiscardBytes(size_t n);
+    void GenerateBlock(byte *output, size_t size);
+    void DiscardBytes(size_t n);
 
     void ProcessData(byte *outString, const byte *inString, size_t length);
-	
-	bool IsRandomAccess() const {return false;}
-	bool IsSelfInverting() const {return true;}
-	bool IsForwardTransformation() const {return true;}
 
-	typedef SymmetricCipherFinal<ARC4_Base> Encryption;
-	typedef SymmetricCipherFinal<ARC4_Base> Decryption;
+    bool IsRandomAccess() const
+    {
+        return false;
+    }
+    bool IsSelfInverting() const
+    {
+        return true;
+    }
+    bool IsForwardTransformation() const
+    {
+        return true;
+    }
+
+    typedef SymmetricCipherFinal<ARC4_Base> Encryption;
+    typedef SymmetricCipherFinal<ARC4_Base> Decryption;
 
 protected:
-	void UncheckedSetKey(const byte *key, unsigned int length, const NameValuePairs &params);
-	virtual unsigned int GetDefaultDiscardBytes() const {return 0;}
+    void UncheckedSetKey(const byte *key, unsigned int length, const NameValuePairs &params);
+    virtual unsigned int GetDefaultDiscardBytes() const
+    {
+        return 0;
+    }
 
     FixedSizeSecBlock<byte, 256> m_state;
     byte m_x, m_y;
@@ -55,20 +71,29 @@ DOCUMENTED_TYPEDEF(SymmetricCipherFinal<ARC4_Base>, ARC4)
 class CRYPTOPP_NO_VTABLE MARC4_Base : public ARC4_Base
 {
 public:
-	static const char *StaticAlgorithmName() {return "MARC4";}
+    static const char *StaticAlgorithmName()
+    {
+        return "MARC4";
+    }
 
-	typedef SymmetricCipherFinal<MARC4_Base> Encryption;
-	typedef SymmetricCipherFinal<MARC4_Base> Decryption;
+    typedef SymmetricCipherFinal<MARC4_Base> Encryption;
+    typedef SymmetricCipherFinal<MARC4_Base> Decryption;
 
 protected:
-	unsigned int GetDefaultDiscardBytes() const {return 256;}
+    unsigned int GetDefaultDiscardBytes() const
+    {
+        return 256;
+    }
 };
 
 DOCUMENTED_TYPEDEF(SymmetricCipherFinal<MARC4_Base>, MARC4)
 
 }
 #if CRYPTOPP_ENABLE_NAMESPACE_WEAK >= 1
-namespace Weak {using namespace Weak1;}		// import Weak1 into CryptoPP::Weak
+namespace Weak
+{
+using namespace Weak1;   // import Weak1 into CryptoPP::Weak
+}
 #else
 using namespace Weak1;	// import Weak1 into CryptoPP with warning
 #ifdef __GNUC__

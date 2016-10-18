@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or

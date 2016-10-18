@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define KeccakF_width 1600
 #define KeccakF_laneInBytes 8
 
-/** Function called at least once before any use of the other KeccakF1600_* 
+/** Function called at least once before any use of the other KeccakF1600_*
   * functions, possibly to initialize global variables.
   */
 void KeccakF1600_Initialize( void );
@@ -27,14 +27,14 @@ void KeccakF1600_Initialize( void );
   */
 void KeccakF1600_StateInitialize(void *state);
 
-/** Function to XOR data given as bytes into the state. 
+/** Function to XOR data given as bytes into the state.
   * The bits to modify are restricted to be consecutive and to be in the same lane.
-  * The bit positions that are affected by this function are 
-  * from @a lanePosition*64 + @a offset*8 
+  * The bit positions that are affected by this function are
+  * from @a lanePosition*64 + @a offset*8
   * to @a lanePosition*64 + @a offset*8 + @a length*8.
   * (The bit positions, the x,y,z coordinates and their link are defined in the "Keccak reference".)
   * @param  state   Pointer to the state.
-  * @param  lanePosition    Index of the lane to be modified (x+5*y, 
+  * @param  lanePosition    Index of the lane to be modified (x+5*y,
   *                         or bit position divided by 64).
   * @param  data    Pointer to the input data.
   * @param  offset  Offset in bytes within the lane.
@@ -46,7 +46,7 @@ void KeccakF1600_StateInitialize(void *state);
 void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length);
 
 /** Function to XOR data given as bytes into the state.
-  * The bits to modify are restricted to start from the bit position 0 and 
+  * The bits to modify are restricted to start from the bit position 0 and
   * to span a whole number of lanes (i.e., multiple of 8 bytes).
   * @param  state   Pointer to the state.
   * @param  data    Pointer to the input data.
@@ -72,12 +72,12 @@ void KeccakF1600_StatePermute(void *state);
 
 /** Function to retrieve data from the state into bytes.
   * The bits to output are restricted to be consecutive and to be in the same lane.
-  * The bit positions that are retrieved by this function are 
-  * from @a lanePosition*64 + @a offset*8 
+  * The bit positions that are retrieved by this function are
+  * from @a lanePosition*64 + @a offset*8
   * to @a lanePosition*64 + @a offset*8 + @a length*8.
   * (The bit positions, the x,y,z coordinates and their link are defined in the "Keccak reference".)
   * @param  state   Pointer to the state.
-  * @param  lanePosition    Index of the lane to be read (x+5*y, 
+  * @param  lanePosition    Index of the lane to be read (x+5*y,
   *                         or bit position divided by 64).
   * @param  data    Pointer to the area where to store output data.
   * @param  offset  Offset in byte within the lane.
@@ -89,7 +89,7 @@ void KeccakF1600_StatePermute(void *state);
 void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePosition, unsigned char *data, unsigned int offset, unsigned int length);
 
 /** Function to retrieve data from the state into bytes.
-  * The bits to output are restricted to start from the bit position 0 and 
+  * The bits to output are restricted to start from the bit position 0 and
   * to span a whole number of lanes (i.e., multiple of 8 bytes).
   * @param  state   Pointer to the state.
   * @param  data    Pointer to the area where to store output data.
@@ -99,9 +99,9 @@ void KeccakF1600_StateExtractBytesInLane(const void *state, unsigned int lanePos
   */
 void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsigned int laneCount);
 
-/** Function to sequentially XOR data bytes, apply the Keccak-f[1600] 
+/** Function to sequentially XOR data bytes, apply the Keccak-f[1600]
   * permutation and retrieve data bytes from the state.
-  * The bits to modify and to output are restricted to start from the bit 
+  * The bits to modify and to output are restricted to start from the bit
   * position 0 and  to span a whole number of lanes (i.e., multiple of 8 bytes).
   * Its effect should be functionally identical to calling in order:
   * - KeccakF1600_StateXORLanes(state, inData, inLaneCount);

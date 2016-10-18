@@ -1,4 +1,4 @@
-#ifndef CRYPTOPP_RANDPOOL_H
+﻿#ifndef CRYPTOPP_RANDPOOL_H
 #define CRYPTOPP_RANDPOOL_H
 
 #include "cryptlib.h"
@@ -15,20 +15,26 @@ NAMESPACE_BEGIN(CryptoPP)
 class CRYPTOPP_DLL RandomPool : public RandomNumberGenerator, public NotCopyable
 {
 public:
-	RandomPool();
+    RandomPool();
 
-	bool CanIncorporateEntropy() const {return true;}
-	void IncorporateEntropy(const byte *input, size_t length);
-	void GenerateIntoBufferedTransformation(BufferedTransformation &target, const std::string &channel, lword size);
+    bool CanIncorporateEntropy() const
+    {
+        return true;
+    }
+    void IncorporateEntropy(const byte *input, size_t length);
+    void GenerateIntoBufferedTransformation(BufferedTransformation &target, const std::string &channel, lword size);
 
-	// for backwards compatibility. use RandomNumberSource, RandomNumberStore, and RandomNumberSink for other BufferTransformation functionality
-	void Put(const byte *input, size_t length) {IncorporateEntropy(input, length);}
+    // for backwards compatibility. use RandomNumberSource, RandomNumberStore, and RandomNumberSink for other BufferTransformation functionality
+    void Put(const byte *input, size_t length)
+    {
+        IncorporateEntropy(input, length);
+    }
 
 private:
-	FixedSizeSecBlock<byte, 32> m_key;
-	FixedSizeSecBlock<byte, 16> m_seed;
-	member_ptr<BlockCipher> m_pCipher;
-	bool m_keySet;
+    FixedSizeSecBlock<byte, 32> m_key;
+    FixedSizeSecBlock<byte, 16> m_seed;
+    member_ptr<BlockCipher> m_pCipher;
+    bool m_keySet;
 };
 
 NAMESPACE_END

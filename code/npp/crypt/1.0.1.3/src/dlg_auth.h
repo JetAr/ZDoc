@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -20,16 +20,16 @@ GNU General Public License for more details.
 
 class DlgAuth: public ModalDialog
 {
-public:    
-						DlgAuth() : ModalDialog() {};
-   	bool				doDialog(const TCHAR* filename=NULL);
-	void				getKeyString(std::string& out);
+public:
+    DlgAuth() : ModalDialog() {};
+    bool				doDialog(const TCHAR* filename=NULL);
+    void				getKeyString(std::string& out);
 
 private:
-	INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+    INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-	std::string			keystring;
-	string				caption;
+    std::string			keystring;
+    string				caption;
 };
 
 

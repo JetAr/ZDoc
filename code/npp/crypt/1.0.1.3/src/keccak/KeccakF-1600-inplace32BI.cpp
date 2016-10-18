@@ -83,14 +83,14 @@ void KeccakF1600_StateXORBytesInLane(void *state, unsigned int lanePosition, con
     low = *((UINT32*)(laneAsBytes+0));
     high = *((UINT32*)(laneAsBytes+4));
 #else
-    low = laneAsBytes[0] 
-        | ((UINT32)(laneAsBytes[1]) << 8) 
-        | ((UINT32)(laneAsBytes[2]) << 16)
-        | ((UINT32)(laneAsBytes[3]) << 24);
-    high = laneAsBytes[4] 
-        | ((UINT32)(laneAsBytes[5]) << 8) 
-        | ((UINT32)(laneAsBytes[6]) << 16)
-        | ((UINT32)(laneAsBytes[7]) << 24);
+    low = laneAsBytes[0]
+          | ((UINT32)(laneAsBytes[1]) << 8)
+          | ((UINT32)(laneAsBytes[2]) << 16)
+          | ((UINT32)(laneAsBytes[3]) << 24);
+    high = laneAsBytes[4]
+           | ((UINT32)(laneAsBytes[5]) << 8)
+           | ((UINT32)(laneAsBytes[6]) << 16)
+           | ((UINT32)(laneAsBytes[7]) << 24);
 #endif
     toBitInterleavingAndXOR(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1)
 }
@@ -104,22 +104,24 @@ void KeccakF1600_StateXORLanes(void *state, const unsigned char *data, unsigned 
     UINT32 * pS = (UINT32 *)state;
     UINT32 t, x0, x1;
     int i;
-    for (i = laneCount-1; i >= 0; --i) {
+    for (i = laneCount-1; i >= 0; --i)
+    {
         toBitInterleavingAndXOR(*(pI++), *(pI++), *(pS++), *(pS++), t, x0, x1)
     }
 #else
     unsigned int lanePosition;
-    for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
+    for(lanePosition=0; lanePosition<laneCount; lanePosition++)
+    {
         UINT8 laneAsBytes[8];
         memcpy(laneAsBytes, data+lanePosition*8, 8);
-        UINT32 low = laneAsBytes[0] 
-            | ((UINT32)(laneAsBytes[1]) << 8) 
-            | ((UINT32)(laneAsBytes[2]) << 16)
-            | ((UINT32)(laneAsBytes[3]) << 24);
-        UINT32 high = laneAsBytes[4] 
-            | ((UINT32)(laneAsBytes[5]) << 8) 
-            | ((UINT32)(laneAsBytes[6]) << 16)
-            | ((UINT32)(laneAsBytes[7]) << 24);
+        UINT32 low = laneAsBytes[0]
+                     | ((UINT32)(laneAsBytes[1]) << 8)
+                     | ((UINT32)(laneAsBytes[2]) << 16)
+                     | ((UINT32)(laneAsBytes[3]) << 24);
+        UINT32 high = laneAsBytes[4]
+                      | ((UINT32)(laneAsBytes[5]) << 8)
+                      | ((UINT32)(laneAsBytes[6]) << 16)
+                      | ((UINT32)(laneAsBytes[7]) << 24);
         UINT32 even, odd, temp, temp0, temp1;
         UINT32 *stateAsHalfLanes = (UINT32*)state;
         toBitInterleavingAndXOR(low, high, stateAsHalfLanes[lanePosition*2+0], stateAsHalfLanes[lanePosition*2+1], temp, temp0, temp1)
@@ -179,12 +181,14 @@ void KeccakF1600_StateExtractLanes(const void *state, unsigned char *data, unsig
     const UINT32 * pS = (const UINT32 *)state;
     UINT32 t, x0, x1;
     int i;
-    for (i = laneCount-1; i >= 0; --i) {
+    for (i = laneCount-1; i >= 0; --i)
+    {
         fromBitInterleaving(*(pS++), *(pS++), *(pI++), *(pI++), t, x0, x1)
     }
 #else
     unsigned int lanePosition;
-    for(lanePosition=0; lanePosition<laneCount; lanePosition++) {
+    for(lanePosition=0; lanePosition<laneCount; lanePosition++)
+    {
         UINT32 *stateAsHalfLanes = (UINT32*)state;
         UINT32 low, high, temp, temp0, temp1;
         fromBitInterleaving(stateAsHalfLanes[lanePosition*2], stateAsHalfLanes[lanePosition*2+1], low, high, temp, temp0, temp1);
@@ -344,7 +348,8 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
         UINT32 * pS = (UINT32 *)state;
         UINT32 t, x0, x1;
         int i;
-        for (i = inLaneCount-1; i >= 0; --i) {
+        for (i = inLaneCount-1; i >= 0; --i)
+        {
             toBitInterleavingAndXOR(*(pI++), *(pI++), *(pS++), *(pS++), t, x0, x1)
         }
     }
@@ -354,63 +359,63 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
         UINT32 Da1, De1, Di1, Do1, Du1;
         UINT32 Ca0, Ce0, Ci0, Co0, Cu0;
         UINT32 Cx, Cy, Cz, Cw;
-        #define Ba Ca0
-        #define Be Ce0
-        #define Bi Ci0
-        #define Bo Co0
-        #define Bu Cu0
+#define Ba Ca0
+#define Be Ce0
+#define Bi Ci0
+#define Bo Co0
+#define Bu Cu0
         const UINT32 *pRoundConstants = KeccakF1600RoundConstants_int2;
         UINT32 *stateAsHalfLanes = (UINT32*)state;
-        #define Aba0 stateAsHalfLanes[ 0]
-        #define Aba1 stateAsHalfLanes[ 1]
-        #define Abe0 stateAsHalfLanes[ 2]
-        #define Abe1 stateAsHalfLanes[ 3]
-        #define Abi0 stateAsHalfLanes[ 4]
-        #define Abi1 stateAsHalfLanes[ 5]
-        #define Abo0 stateAsHalfLanes[ 6]
-        #define Abo1 stateAsHalfLanes[ 7]
-        #define Abu0 stateAsHalfLanes[ 8]
-        #define Abu1 stateAsHalfLanes[ 9]
-        #define Aga0 stateAsHalfLanes[10]
-        #define Aga1 stateAsHalfLanes[11]
-        #define Age0 stateAsHalfLanes[12]
-        #define Age1 stateAsHalfLanes[13]
-        #define Agi0 stateAsHalfLanes[14]
-        #define Agi1 stateAsHalfLanes[15]
-        #define Ago0 stateAsHalfLanes[16]
-        #define Ago1 stateAsHalfLanes[17]
-        #define Agu0 stateAsHalfLanes[18]
-        #define Agu1 stateAsHalfLanes[19]
-        #define Aka0 stateAsHalfLanes[20]
-        #define Aka1 stateAsHalfLanes[21]
-        #define Ake0 stateAsHalfLanes[22]
-        #define Ake1 stateAsHalfLanes[23]
-        #define Aki0 stateAsHalfLanes[24]
-        #define Aki1 stateAsHalfLanes[25]
-        #define Ako0 stateAsHalfLanes[26]
-        #define Ako1 stateAsHalfLanes[27]
-        #define Aku0 stateAsHalfLanes[28]
-        #define Aku1 stateAsHalfLanes[29]
-        #define Ama0 stateAsHalfLanes[30]
-        #define Ama1 stateAsHalfLanes[31]
-        #define Ame0 stateAsHalfLanes[32]
-        #define Ame1 stateAsHalfLanes[33]
-        #define Ami0 stateAsHalfLanes[34]
-        #define Ami1 stateAsHalfLanes[35]
-        #define Amo0 stateAsHalfLanes[36]
-        #define Amo1 stateAsHalfLanes[37]
-        #define Amu0 stateAsHalfLanes[38]
-        #define Amu1 stateAsHalfLanes[39]
-        #define Asa0 stateAsHalfLanes[40]
-        #define Asa1 stateAsHalfLanes[41]
-        #define Ase0 stateAsHalfLanes[42]
-        #define Ase1 stateAsHalfLanes[43]
-        #define Asi0 stateAsHalfLanes[44]
-        #define Asi1 stateAsHalfLanes[45]
-        #define Aso0 stateAsHalfLanes[46]
-        #define Aso1 stateAsHalfLanes[47]
-        #define Asu0 stateAsHalfLanes[48]
-        #define Asu1 stateAsHalfLanes[49]
+#define Aba0 stateAsHalfLanes[ 0]
+#define Aba1 stateAsHalfLanes[ 1]
+#define Abe0 stateAsHalfLanes[ 2]
+#define Abe1 stateAsHalfLanes[ 3]
+#define Abi0 stateAsHalfLanes[ 4]
+#define Abi1 stateAsHalfLanes[ 5]
+#define Abo0 stateAsHalfLanes[ 6]
+#define Abo1 stateAsHalfLanes[ 7]
+#define Abu0 stateAsHalfLanes[ 8]
+#define Abu1 stateAsHalfLanes[ 9]
+#define Aga0 stateAsHalfLanes[10]
+#define Aga1 stateAsHalfLanes[11]
+#define Age0 stateAsHalfLanes[12]
+#define Age1 stateAsHalfLanes[13]
+#define Agi0 stateAsHalfLanes[14]
+#define Agi1 stateAsHalfLanes[15]
+#define Ago0 stateAsHalfLanes[16]
+#define Ago1 stateAsHalfLanes[17]
+#define Agu0 stateAsHalfLanes[18]
+#define Agu1 stateAsHalfLanes[19]
+#define Aka0 stateAsHalfLanes[20]
+#define Aka1 stateAsHalfLanes[21]
+#define Ake0 stateAsHalfLanes[22]
+#define Ake1 stateAsHalfLanes[23]
+#define Aki0 stateAsHalfLanes[24]
+#define Aki1 stateAsHalfLanes[25]
+#define Ako0 stateAsHalfLanes[26]
+#define Ako1 stateAsHalfLanes[27]
+#define Aku0 stateAsHalfLanes[28]
+#define Aku1 stateAsHalfLanes[29]
+#define Ama0 stateAsHalfLanes[30]
+#define Ama1 stateAsHalfLanes[31]
+#define Ame0 stateAsHalfLanes[32]
+#define Ame1 stateAsHalfLanes[33]
+#define Ami0 stateAsHalfLanes[34]
+#define Ami1 stateAsHalfLanes[35]
+#define Amo0 stateAsHalfLanes[36]
+#define Amo1 stateAsHalfLanes[37]
+#define Amu0 stateAsHalfLanes[38]
+#define Amu1 stateAsHalfLanes[39]
+#define Asa0 stateAsHalfLanes[40]
+#define Asa1 stateAsHalfLanes[41]
+#define Ase0 stateAsHalfLanes[42]
+#define Ase1 stateAsHalfLanes[43]
+#define Asi0 stateAsHalfLanes[44]
+#define Asi1 stateAsHalfLanes[45]
+#define Aso0 stateAsHalfLanes[46]
+#define Aso1 stateAsHalfLanes[47]
+#define Asu0 stateAsHalfLanes[48]
+#define Asu1 stateAsHalfLanes[49]
 
         do
         {
@@ -874,56 +879,56 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
         }
         while ( *pRoundConstants != 0xFF );
 
-        #undef Aba0
-        #undef Aba1
-        #undef Abe0
-        #undef Abe1
-        #undef Abi0
-        #undef Abi1
-        #undef Abo0
-        #undef Abo1
-        #undef Abu0
-        #undef Abu1
-        #undef Aga0
-        #undef Aga1
-        #undef Age0
-        #undef Age1
-        #undef Agi0
-        #undef Agi1
-        #undef Ago0
-        #undef Ago1
-        #undef Agu0
-        #undef Agu1
-        #undef Aka0
-        #undef Aka1
-        #undef Ake0
-        #undef Ake1
-        #undef Aki0
-        #undef Aki1
-        #undef Ako0
-        #undef Ako1
-        #undef Aku0
-        #undef Aku1
-        #undef Ama0
-        #undef Ama1
-        #undef Ame0
-        #undef Ame1
-        #undef Ami0
-        #undef Ami1
-        #undef Amo0
-        #undef Amo1
-        #undef Amu0
-        #undef Amu1
-        #undef Asa0
-        #undef Asa1
-        #undef Ase0
-        #undef Ase1
-        #undef Asi0
-        #undef Asi1
-        #undef Aso0
-        #undef Aso1
-        #undef Asu0
-        #undef Asu1
+#undef Aba0
+#undef Aba1
+#undef Abe0
+#undef Abe1
+#undef Abi0
+#undef Abi1
+#undef Abo0
+#undef Abo1
+#undef Abu0
+#undef Abu1
+#undef Aga0
+#undef Aga1
+#undef Age0
+#undef Age1
+#undef Agi0
+#undef Agi1
+#undef Ago0
+#undef Ago1
+#undef Agu0
+#undef Agu1
+#undef Aka0
+#undef Aka1
+#undef Ake0
+#undef Ake1
+#undef Aki0
+#undef Aki1
+#undef Ako0
+#undef Ako1
+#undef Aku0
+#undef Aku1
+#undef Ama0
+#undef Ama1
+#undef Ame0
+#undef Ame1
+#undef Ami0
+#undef Ami1
+#undef Amo0
+#undef Amo1
+#undef Amu0
+#undef Amu1
+#undef Asa0
+#undef Asa1
+#undef Ase0
+#undef Ase1
+#undef Asi0
+#undef Asi1
+#undef Aso0
+#undef Aso1
+#undef Asu0
+#undef Asu1
     }
 
     {
@@ -931,7 +936,8 @@ void KeccakF1600_StateXORPermuteExtract(void *state, const unsigned char *inData
         const UINT32 * pS = (const UINT32 *)state;
         UINT32 t, x0, x1;
         int i;
-        for (i = outLaneCount-1; i >= 0; --i) {
+        for (i = outLaneCount-1; i >= 0; --i)
+        {
             fromBitInterleaving(*(pS++), *(pS++), *(pI++), *(pI++), t, x0, x1)
         }
     }

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -21,20 +21,23 @@ GNU General Public License for more details.
 class ModalDialog : public Window
 {
 public:
-						ModalDialog() : Window() {};
-						~ModalDialog() { destroy();	};
-	virtual void		init(HINSTANCE hInst, HWND parent, int dialogID, INT_PTR returnID);
-	virtual bool		doDialog();
-	void				destroy();
+    ModalDialog() : Window() {};
+    ~ModalDialog()
+    {
+        destroy();
+    };
+    virtual void		init(HINSTANCE hInst, HWND parent, int dialogID, INT_PTR returnID);
+    virtual bool		doDialog();
+    void				destroy();
 
 protected:
-	void						goToCenter();
-	static INT_PTR CALLBACK		dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-	virtual	INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam) = 0;
+    void						goToCenter();
+    static INT_PTR CALLBACK		dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+    virtual	INT_PTR CALLBACK	run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam) = 0;
 
-	RECT		_rc;
-	int			_dlgID;
-	INT_PTR		_returnID;
+    RECT		_rc;
+    int			_dlgID;
+    INT_PTR		_returnID;
 };
 
 #endif

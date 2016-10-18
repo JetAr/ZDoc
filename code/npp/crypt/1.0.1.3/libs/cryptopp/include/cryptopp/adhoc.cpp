@@ -1,4 +1,4 @@
-#include "config.h"
+﻿#include "config.h"
 #include <iosfwd>
 
 #if CRYPTOPP_MSC_VERSION
@@ -16,8 +16,8 @@ extern int (*AdhocTest)(int argc, char *argv[]);
 
 int MyAdhocTest(int argc, char *argv[])
 {
-	CRYPTOPP_UNUSED(argc), CRYPTOPP_UNUSED(argv);
-	return 0;
+    CRYPTOPP_UNUSED(argc), CRYPTOPP_UNUSED(argv);
+    return 0;
 }
 
 static int s_i = (AdhocTest = &MyAdhocTest, 0);

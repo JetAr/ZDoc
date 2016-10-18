@@ -1,4 +1,4 @@
-// aes.h - written and placed in the public domain by Wei Dai
+﻿// aes.h - written and placed in the public domain by Wei Dai
 
 //! \file
 //! \brief Class file for the AES cipher (Rijndael)

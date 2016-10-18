@@ -1,4 +1,4 @@
-// tiger.cpp - written and placed in the public domain by Wei Dai
+﻿// tiger.cpp - written and placed in the public domain by Wei Dai
 
 #include "pch.h"
 #include "config.h"
@@ -11,57 +11,57 @@ NAMESPACE_BEGIN(CryptoPP)
 
 void Tiger::InitState(HashWordType *state)
 {
-	state[0] = W64LIT(0x0123456789ABCDEF);
-	state[1] = W64LIT(0xFEDCBA9876543210);
-	state[2] = W64LIT(0xF096A5B4C3B2E187);
+    state[0] = W64LIT(0x0123456789ABCDEF);
+    state[1] = W64LIT(0xFEDCBA9876543210);
+    state[2] = W64LIT(0xF096A5B4C3B2E187);
 }
 
 void Tiger::TruncatedFinal(byte *hash, size_t size)
 {
-	ThrowIfInvalidTruncatedSize(size);
+    ThrowIfInvalidTruncatedSize(size);
 
-	PadLastBlock(56, 0x01);
-	CorrectEndianess(m_data, m_data, 56);
+    PadLastBlock(56, 0x01);
+    CorrectEndianess(m_data, m_data, 56);
 
-	m_data[7] = GetBitCountLo();
+    m_data[7] = GetBitCountLo();
 
-	Transform(m_state, m_data);
-	CorrectEndianess(m_state, m_state, DigestSize());
-	memcpy(hash, m_state, size);
+    Transform(m_state, m_data);
+    CorrectEndianess(m_state, m_state, DigestSize());
+    memcpy(hash, m_state, size);
 
-	Restart();		// reinit for next use
+    Restart();		// reinit for next use
 }
 
 void Tiger::Transform (word64 *digest, const word64 *X)
 {
 #if CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE && (CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32)
-	if (HasSSE2())
-	{
+    if (HasSSE2())
+    {
 #ifdef __GNUC__
-		__asm__ __volatile__
-		(
-		INTEL_NOPREFIX
-		AS_PUSH_IF86(bx)
+        __asm__ __volatile__
+        (
+            INTEL_NOPREFIX
+            AS_PUSH_IF86(bx)
 #else
-	#if _MSC_VER < 1300
-		const word64 *t = table;
-		AS2(	mov		edx, t)
-	#else
-		AS2(	lea		edx, [table])
-	#endif
-		AS2(	mov		eax, digest)
-		AS2(	mov		esi, X)
+#if _MSC_VER < 1300
+        const word64 *t = table;
+        AS2(	mov		edx, t)
+#else
+        AS2(	lea		edx, [table])
 #endif
-		AS2(	movq	mm0, [eax])
-		AS2(	movq	mm1, [eax+1*8])
-		AS2(	movq	mm5, mm1)
-		AS2(	movq	mm2, [eax+2*8])
-		AS2(	movq	mm7, [edx+4*2048+0*8])
-		AS2(	movq	mm6, [edx+4*2048+1*8])
-		AS2(	mov		ecx, esp)
-		AS2(	and		esp, 0xfffffff0)
-		AS2(	sub		esp, 8*8)
-		AS_PUSH_IF86(cx)
+        AS2(	mov		eax, digest)
+        AS2(	mov		esi, X)
+#endif
+            AS2(	movq	mm0, [eax])
+            AS2(	movq	mm1, [eax+1*8])
+            AS2(	movq	mm5, mm1)
+            AS2(	movq	mm2, [eax+2*8])
+            AS2(	movq	mm7, [edx+4*2048+0*8])
+            AS2(	movq	mm6, [edx+4*2048+1*8])
+            AS2(	mov		ecx, esp)
+            AS2(	and		esp, 0xfffffff0)
+            AS2(	sub		esp, 8*8)
+            AS_PUSH_IF86(cx)
 
 #define SSE2_round(a,b,c,x,mul) \
 		AS2(	pxor	c, [x])\
@@ -180,45 +180,45 @@ void Tiger::Transform (word64 *digest, const word64 *X)
 		AS2(	movq	[Y+7*8], mm3)
 
 #if CRYPTOPP_BOOL_X32
-		SSE2_pass(mm0, mm1, mm2, 5, esi)
-		SSE2_key_schedule(esp+8, esi)	
-		SSE2_pass(mm2, mm0, mm1, 7, esp+8)
-		SSE2_key_schedule(esp+8, esp+8)
-		SSE2_pass(mm1, mm2, mm0, 9, esp+8)
+            SSE2_pass(mm0, mm1, mm2, 5, esi)
+            SSE2_key_schedule(esp+8, esi)
+            SSE2_pass(mm2, mm0, mm1, 7, esp+8)
+            SSE2_key_schedule(esp+8, esp+8)
+            SSE2_pass(mm1, mm2, mm0, 9, esp+8)
 #else
-		SSE2_pass(mm0, mm1, mm2, 5, esi)
-		SSE2_key_schedule(esp+4, esi)	
-		SSE2_pass(mm2, mm0, mm1, 7, esp+4)
-		SSE2_key_schedule(esp+4, esp+4)
-		SSE2_pass(mm1, mm2, mm0, 9, esp+4)
+            SSE2_pass(mm0, mm1, mm2, 5, esi)
+            SSE2_key_schedule(esp+4, esi)
+            SSE2_pass(mm2, mm0, mm1, 7, esp+4)
+            SSE2_key_schedule(esp+4, esp+4)
+            SSE2_pass(mm1, mm2, mm0, 9, esp+4)
 #endif
 
-		AS2(	pxor	mm0, [eax+0*8])
-		AS2(	movq	[eax+0*8], mm0)
-		AS2(	psubq	mm1, mm5)
-		AS2(	movq	[eax+1*8], mm1)
-		AS2(	paddq	mm2, [eax+2*8])
-		AS2(	movq	[eax+2*8], mm2)
+            AS2(	pxor	mm0, [eax+0*8])
+            AS2(	movq	[eax+0*8], mm0)
+            AS2(	psubq	mm1, mm5)
+            AS2(	movq	[eax+1*8], mm1)
+            AS2(	paddq	mm2, [eax+2*8])
+            AS2(	movq	[eax+2*8], mm2)
 
-		AS_POP_IF86(sp)
-		AS1(	emms)
+            AS_POP_IF86(sp)
+            AS1(	emms)
 
 #ifdef __GNUC__
-		AS_POP_IF86(bx)
-		ATT_PREFIX
-			:
-			: "a" (digest), "S" (X), "d" (table)
-			: "%ecx", "%edi", "memory", "cc"
-		);
+            AS_POP_IF86(bx)
+            ATT_PREFIX
+            :
+            : "a" (digest), "S" (X), "d" (table)
+            : "%ecx", "%edi", "memory", "cc"
+        );
 #endif
-	}
-	else
+    }
+    else
 #endif
-	{
-		word64 a = digest[0];
-		word64 b = digest[1];
-		word64 c = digest[2];
-		word64 Y[8];
+    {
+        word64 a = digest[0];
+        word64 b = digest[1];
+        word64 c = digest[2];
+        word64 Y[8];
 
 #define t1 (table)
 #define t2 (table+256)
@@ -261,16 +261,16 @@ void Tiger::Transform (word64 *digest, const word64 *X)
 	Y[6] += Y[5]; \
 	Y[7] -= Y[6] ^ W64LIT(0x0123456789ABCDEF)
 
-		pass(a,b,c,5,X);
-		key_schedule(Y,X);
-		pass(c,a,b,7,Y);
-		key_schedule(Y,Y);
-		pass(b,c,a,9,Y);
+        pass(a,b,c,5,X);
+        key_schedule(Y,X);
+        pass(c,a,b,7,Y);
+        key_schedule(Y,Y);
+        pass(b,c,a,9,Y);
 
-		digest[0] = a ^ digest[0];
-		digest[1] = b - digest[1];
-		digest[2] = c + digest[2];
-	}
+        digest[0] = a ^ digest[0];
+        digest[1] = b - digest[1];
+        digest[2] = c + digest[2];
+    }
 }
 
 NAMESPACE_END

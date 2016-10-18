@@ -1,4 +1,4 @@
-// config.h - written and placed in the public domain by Wei Dai
+﻿// config.h - written and placed in the public domain by Wei Dai
 
 //! \file config.h
 //! \brief Library configuration file
@@ -176,11 +176,11 @@ typedef unsigned short word16;
 typedef unsigned int word32;
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
-	typedef unsigned __int64 word64;
-	#define W64LIT(x) x##ui64
+typedef unsigned __int64 word64;
+#define W64LIT(x) x##ui64
 #else
-	typedef unsigned long long word64;
-	#define W64LIT(x) x##ULL
+typedef unsigned long long word64;
+#define W64LIT(x) x##ULL
 #endif
 
 // define large word type, used for file offsets and such
@@ -188,77 +188,77 @@ typedef word64 lword;
 const lword LWORD_MAX = W64LIT(0xffffffffffffffff);
 
 #ifdef __GNUC__
-	#define CRYPTOPP_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#define CRYPTOPP_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
 
 // Apple and LLVM's Clang. Apple Clang version 7.0 roughly equals LLVM Clang version 3.7
 #if defined(__clang__ ) && !defined(__apple_build_version__)
-	#define CRYPTOPP_CLANG_VERSION (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
+#define CRYPTOPP_CLANG_VERSION (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
 #elif defined(__clang__ ) && defined(__apple_build_version__)
-	#define CRYPTOPP_APPLE_CLANG_VERSION (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
+#define CRYPTOPP_APPLE_CLANG_VERSION (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
 #endif
 
 #ifdef _MSC_VER
-	#define CRYPTOPP_MSC_VERSION (_MSC_VER)
+#define CRYPTOPP_MSC_VERSION (_MSC_VER)
 #endif
 
 // Need GCC 4.6/Clang 1.7/Apple Clang 2.0 or above due to "GCC diagnostic {push|pop}"
 #if (CRYPTOPP_GCC_VERSION >= 40600) || (CRYPTOPP_CLANG_VERSION >= 10700) || (CRYPTOPP_APPLE_CLANG_VERSION >= 20000)
-	#define CRYPTOPP_GCC_DIAGNOSTIC_AVAILABLE 1
+#define CRYPTOPP_GCC_DIAGNOSTIC_AVAILABLE 1
 #endif
 
 // Clang due to "Inline assembly operands don't work with .intel_syntax", http://llvm.org/bugs/show_bug.cgi?id=24232
 //   TODO: supply the upper version when LLVM fixes it. We set it to 20.0 for compilation purposes.
 #if (defined(CRYPTOPP_CLANG_VERSION) && CRYPTOPP_CLANG_VERSION <= 200000) || (defined(CRYPTOPP_APPLE_CLANG_VERSION) && CRYPTOPP_APPLE_CLANG_VERSION <= 200000)
-	#define CRYPTOPP_DISABLE_INTEL_ASM 1
+#define CRYPTOPP_DISABLE_INTEL_ASM 1
 #endif
 
 // define hword, word, and dword. these are used for multiprecision integer arithmetic
 // Intel compiler won't have _umul128 until version 10.0. See http://softwarecommunity.intel.com/isn/Community/en-US/forums/thread/30231625.aspx
 #if (defined(_MSC_VER) && (!defined(__INTEL_COMPILER) || __INTEL_COMPILER >= 1000) && (defined(_M_X64) || defined(_M_IA64))) || (defined(__DECCXX) && defined(__alpha__)) || (defined(__INTEL_COMPILER) && (__INTEL_COMPILER < 1000) && defined(__x86_64__)) || (defined(__SUNPRO_CC) && defined(__x86_64__))
-	typedef word32 hword;
-	typedef word64 word;
+typedef word32 hword;
+typedef word64 word;
 #else
-	#define CRYPTOPP_NATIVE_DWORD_AVAILABLE
-	#if defined(__alpha__) || defined(__ia64__) || defined(_ARCH_PPC64) || defined(__x86_64__) || defined(__mips64) || defined(__sparc64__)
-		#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !(CRYPTOPP_GCC_VERSION == 40001 && defined(__APPLE__)) && (CRYPTOPP_GCC_VERSION >= 30400)
-			// GCC 4.0.1 on MacOS X is missing __umodti3 and __udivti3
-			// mode(TI) division broken on amd64 with GCC earlier than GCC 3.4
-			#define CRYPTOPP_WORD128_AVAILABLE
-			typedef word32 hword;
-			typedef word64 word;
-			typedef __uint128_t dword;
-			typedef __uint128_t word128;
-		#elif defined(__GNUC__) && (__SIZEOF_INT128__ >= 16)
-			// Detect availabliltiy of int128_t and uint128_t in preprocessor, http://gcc.gnu.org/ml/gcc-help/2015-08/msg00185.html.
-			#define CRYPTOPP_WORD128_AVAILABLE
-			typedef word32 hword;
-			typedef word64 word;
-			typedef __uint128_t dword;
-			typedef __uint128_t word128;	
-		#else
-			// if we're here, it means we're on a 64-bit CPU but we don't have a way to obtain 128-bit multiplication results
-			typedef word16 hword;
-			typedef word32 word;
-			typedef word64 dword;
-		#endif
-	#elif defined(__GNUC__) && (__SIZEOF_INT128__ >= 16)
-		// Detect availabliltiy of int128_t and uint128_t in preprocessor, http://gcc.gnu.org/ml/gcc-help/2015-08/msg00185.html.
-		#define CRYPTOPP_WORD128_AVAILABLE
-		typedef word32 hword;
-		typedef word64 word;
-		typedef __uint128_t dword;
-		typedef __uint128_t word128;	
-	#else
-		// being here means the native register size is probably 32 bits or less
-		#define CRYPTOPP_BOOL_SLOW_WORD64 1
-		typedef word16 hword;
-		typedef word32 word;
-		typedef word64 dword;
-	#endif
+#define CRYPTOPP_NATIVE_DWORD_AVAILABLE
+#if defined(__alpha__) || defined(__ia64__) || defined(_ARCH_PPC64) || defined(__x86_64__) || defined(__mips64) || defined(__sparc64__)
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !(CRYPTOPP_GCC_VERSION == 40001 && defined(__APPLE__)) && (CRYPTOPP_GCC_VERSION >= 30400)
+// GCC 4.0.1 on MacOS X is missing __umodti3 and __udivti3
+// mode(TI) division broken on amd64 with GCC earlier than GCC 3.4
+#define CRYPTOPP_WORD128_AVAILABLE
+typedef word32 hword;
+typedef word64 word;
+typedef __uint128_t dword;
+typedef __uint128_t word128;
+#elif defined(__GNUC__) && (__SIZEOF_INT128__ >= 16)
+// Detect availabliltiy of int128_t and uint128_t in preprocessor, http://gcc.gnu.org/ml/gcc-help/2015-08/msg00185.html.
+#define CRYPTOPP_WORD128_AVAILABLE
+typedef word32 hword;
+typedef word64 word;
+typedef __uint128_t dword;
+typedef __uint128_t word128;
+#else
+// if we're here, it means we're on a 64-bit CPU but we don't have a way to obtain 128-bit multiplication results
+typedef word16 hword;
+typedef word32 word;
+typedef word64 dword;
+#endif
+#elif defined(__GNUC__) && (__SIZEOF_INT128__ >= 16)
+// Detect availabliltiy of int128_t and uint128_t in preprocessor, http://gcc.gnu.org/ml/gcc-help/2015-08/msg00185.html.
+#define CRYPTOPP_WORD128_AVAILABLE
+typedef word32 hword;
+typedef word64 word;
+typedef __uint128_t dword;
+typedef __uint128_t word128;
+#else
+// being here means the native register size is probably 32 bits or less
+#define CRYPTOPP_BOOL_SLOW_WORD64 1
+typedef word16 hword;
+typedef word32 word;
+typedef word64 dword;
+#endif
 #endif
 #ifndef CRYPTOPP_BOOL_SLOW_WORD64
-	#define CRYPTOPP_BOOL_SLOW_WORD64 0
+#define CRYPTOPP_BOOL_SLOW_WORD64 0
 #endif
 
 // Produce a compiler error. It can be commented out, but you may not get the benefit of the fastest integers.
@@ -272,50 +272,50 @@ const unsigned int WORD_BITS = WORD_SIZE * 8;
 NAMESPACE_END
 
 #ifndef CRYPTOPP_L1_CACHE_LINE_SIZE
-	// This should be a lower bound on the L1 cache line size. It's used for defense against timing attacks.
-	// Also see http://stackoverflow.com/questions/794632/programmatically-get-the-cache-line-size.
-	#if defined(_M_X64) || defined(__x86_64__) || (__ILP32__ >= 1)
-		#define CRYPTOPP_L1_CACHE_LINE_SIZE 64
-	#else
-		// L1 cache line size is 32 on Pentium III and earlier
-		#define CRYPTOPP_L1_CACHE_LINE_SIZE 32
-	#endif
+// This should be a lower bound on the L1 cache line size. It's used for defense against timing attacks.
+// Also see http://stackoverflow.com/questions/794632/programmatically-get-the-cache-line-size.
+#if defined(_M_X64) || defined(__x86_64__) || (__ILP32__ >= 1)
+#define CRYPTOPP_L1_CACHE_LINE_SIZE 64
+#else
+// L1 cache line size is 32 on Pentium III and earlier
+#define CRYPTOPP_L1_CACHE_LINE_SIZE 32
+#endif
 #endif
 
 #if defined(_MSC_VER)
-	#if _MSC_VER == 1200
-		#include <malloc.h>
-	#endif
-	#if _MSC_VER > 1200 || defined(_mm_free)
-		#define CRYPTOPP_MSVC6PP_OR_LATER		// VC 6 processor pack or later
-	#else
-		#define CRYPTOPP_MSVC6_NO_PP			// VC 6 without processor pack
-	#endif
+#if _MSC_VER == 1200
+#include <malloc.h>
+#endif
+#if _MSC_VER > 1200 || defined(_mm_free)
+#define CRYPTOPP_MSVC6PP_OR_LATER		// VC 6 processor pack or later
+#else
+#define CRYPTOPP_MSVC6_NO_PP			// VC 6 without processor pack
+#endif
 #endif
 
 #ifndef CRYPTOPP_ALIGN_DATA
-	#if defined(CRYPTOPP_MSVC6PP_OR_LATER)
-		#define CRYPTOPP_ALIGN_DATA(x) __declspec(align(x))
-	#elif defined(__GNUC__)
-		#define CRYPTOPP_ALIGN_DATA(x) __attribute__((aligned(x)))
-	#else
-		#define CRYPTOPP_ALIGN_DATA(x)
-	#endif
+#if defined(CRYPTOPP_MSVC6PP_OR_LATER)
+#define CRYPTOPP_ALIGN_DATA(x) __declspec(align(x))
+#elif defined(__GNUC__)
+#define CRYPTOPP_ALIGN_DATA(x) __attribute__((aligned(x)))
+#else
+#define CRYPTOPP_ALIGN_DATA(x)
+#endif
 #endif
 
 #ifndef CRYPTOPP_SECTION_ALIGN16
 #if defined(__GNUC__) && !defined(__APPLE__)
-		// the alignment attribute doesn't seem to work without this section attribute when -fdata-sections is turned on
-		#define CRYPTOPP_SECTION_ALIGN16 __attribute__((section ("CryptoPP_Align16")))
-	#else
-		#define CRYPTOPP_SECTION_ALIGN16
-	#endif
+// the alignment attribute doesn't seem to work without this section attribute when -fdata-sections is turned on
+#define CRYPTOPP_SECTION_ALIGN16 __attribute__((section ("CryptoPP_Align16")))
+#else
+#define CRYPTOPP_SECTION_ALIGN16
+#endif
 #endif
 
 #if defined(_MSC_VER) || defined(__fastcall)
-	#define CRYPTOPP_FASTCALL __fastcall
+#define CRYPTOPP_FASTCALL __fastcall
 #else
-	#define CRYPTOPP_FASTCALL
+#define CRYPTOPP_FASTCALL
 #endif
 
 // VC60 workaround: it doesn't allow typename in some places
@@ -339,21 +339,21 @@ NAMESPACE_END
 #endif
 
 #ifdef _MSC_VER
-	// 4127: conditional expression is constant
-	// 4231: nonstandard extension used : 'extern' before template explicit instantiation
-	// 4250: dominance
-	// 4251: member needs to have dll-interface
-	// 4275: base needs to have dll-interface
-	// 4505: unreferenced local function
-	// 4512: assignment operator not generated
-	// 4660: explicitly instantiating a class that's already implicitly instantiated
-	// 4661: no suitable definition provided for explicit template instantiation request
-	// 4786: identifer was truncated in debug information
-	// 4355: 'this' : used in base member initializer list
-	// 4910: '__declspec(dllexport)' and 'extern' are incompatible on an explicit instantiation
+// 4127: conditional expression is constant
+// 4231: nonstandard extension used : 'extern' before template explicit instantiation
+// 4250: dominance
+// 4251: member needs to have dll-interface
+// 4275: base needs to have dll-interface
+// 4505: unreferenced local function
+// 4512: assignment operator not generated
+// 4660: explicitly instantiating a class that's already implicitly instantiated
+// 4661: no suitable definition provided for explicit template instantiation request
+// 4786: identifer was truncated in debug information
+// 4355: 'this' : used in base member initializer list
+// 4910: '__declspec(dllexport)' and 'extern' are incompatible on an explicit instantiation
 #	pragma warning(disable: 4127 4231 4250 4251 4275 4505 4512 4660 4661 4786 4355 4910)
-	// Security related, possible defects
-	// http://blogs.msdn.com/b/vcblog/archive/2010/12/14/off-by-default-compiler-warnings-in-visual-c.aspx
+// Security related, possible defects
+// http://blogs.msdn.com/b/vcblog/archive/2010/12/14/off-by-default-compiler-warnings-in-visual-c.aspx
 #	pragma warning(once: 4191 4242 4263 4264 4266 4302 4826 4905 4906 4928)
 #endif
 
@@ -361,7 +361,7 @@ NAMESPACE_END
 // 8037: non-const function called for const object. needed to work around BCB2006 bug
 #	pragma warn -8037
 #endif
-	
+
 // [GCC Bug 53431] "C++ preprocessor ignores #pragma GCC diagnostic". Clang honors it.
 #if CRYPTOPP_GCC_DIAGNOSTIC_AVAILABLE
 # pragma GCC diagnostic ignored "-Wunknown-pragmas"
@@ -380,71 +380,71 @@ NAMESPACE_END
 #define CRYPTOPP_DISABLE_ASM
 #define CRYPTOPP_DISABLE_SSE2
 #endif
-	
+
 // Apple's Clang prior to 5.0 cannot handle SSE2 (and Apple does not use LLVM Clang numbering...)
 #if defined(CRYPTOPP_APPLE_CLANG_VERSION) && (CRYPTOPP_APPLE_CLANG_VERSION < 50000)
 # define CRYPTOPP_DISABLE_ASM
 #endif
 
 #if !defined(CRYPTOPP_DISABLE_ASM) && ((defined(_MSC_VER) && defined(_M_IX86)) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))))
-	// C++Builder 2010 does not allow "call label" where label is defined within inline assembly
-	#define CRYPTOPP_X86_ASM_AVAILABLE
+// C++Builder 2010 does not allow "call label" where label is defined within inline assembly
+#define CRYPTOPP_X86_ASM_AVAILABLE
 
-	#if !defined(CRYPTOPP_DISABLE_SSE2) && (defined(CRYPTOPP_MSVC6PP_OR_LATER) || CRYPTOPP_GCC_VERSION >= 30300 || defined(__SSE2__))
-		#define CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE 1
-	#else
-		#define CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE 0
-	#endif
+#if !defined(CRYPTOPP_DISABLE_SSE2) && (defined(CRYPTOPP_MSVC6PP_OR_LATER) || CRYPTOPP_GCC_VERSION >= 30300 || defined(__SSE2__))
+#define CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE 1
+#else
+#define CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE 0
+#endif
 
-	// SSE3 was actually introduced in GNU as 2.17, which was released 6/23/2006, but we can't tell what version of binutils is installed.
-	// GCC 4.1.2 was released on 2/13/2007, so we'll use that as a proxy for the binutils version. Also see the output of
-	// `gcc -dM -E -march=native - < /dev/null | grep -i SSE` for preprocessor defines available.
-	#if !defined(CRYPTOPP_DISABLE_SSSE3) && (_MSC_VER >= 1400 || CRYPTOPP_GCC_VERSION >= 40102 || defined(__SSSE3__) || defined(__SSE3__))
-		#define CRYPTOPP_BOOL_SSSE3_ASM_AVAILABLE 1
-	#else
-		#define CRYPTOPP_BOOL_SSSE3_ASM_AVAILABLE 0
-	#endif
+// SSE3 was actually introduced in GNU as 2.17, which was released 6/23/2006, but we can't tell what version of binutils is installed.
+// GCC 4.1.2 was released on 2/13/2007, so we'll use that as a proxy for the binutils version. Also see the output of
+// `gcc -dM -E -march=native - < /dev/null | grep -i SSE` for preprocessor defines available.
+#if !defined(CRYPTOPP_DISABLE_SSSE3) && (_MSC_VER >= 1400 || CRYPTOPP_GCC_VERSION >= 40102 || defined(__SSSE3__) || defined(__SSE3__))
+#define CRYPTOPP_BOOL_SSSE3_ASM_AVAILABLE 1
+#else
+#define CRYPTOPP_BOOL_SSSE3_ASM_AVAILABLE 0
+#endif
 #endif
 
 #if !defined(CRYPTOPP_DISABLE_ASM) && defined(_MSC_VER) && defined(_M_X64)
-	#define CRYPTOPP_X64_MASM_AVAILABLE
+#define CRYPTOPP_X64_MASM_AVAILABLE
 #endif
 
 #if !defined(CRYPTOPP_DISABLE_ASM) && defined(__GNUC__) && defined(__x86_64__)
-	#define CRYPTOPP_X64_ASM_AVAILABLE
+#define CRYPTOPP_X64_ASM_AVAILABLE
 #endif
 
 #if !defined(CRYPTOPP_DISABLE_SSE2) && (defined(CRYPTOPP_MSVC6PP_OR_LATER) || defined(__SSE2__))
-	#define CRYPTOPP_BOOL_SSE2_INTRINSICS_AVAILABLE 1
+#define CRYPTOPP_BOOL_SSE2_INTRINSICS_AVAILABLE 1
 #else
-	#define CRYPTOPP_BOOL_SSE2_INTRINSICS_AVAILABLE 0
+#define CRYPTOPP_BOOL_SSE2_INTRINSICS_AVAILABLE 0
 #endif
 
 #if !defined(CRYPTOPP_DISABLE_SSSE3) && !defined(CRYPTOPP_DISABLE_AESNI) && CRYPTOPP_BOOL_SSE2_INTRINSICS_AVAILABLE && (CRYPTOPP_GCC_VERSION >= 40400 || _MSC_FULL_VER >= 150030729 || __INTEL_COMPILER >= 1110 || defined(__AES__))
-	#define CRYPTOPP_BOOL_AESNI_INTRINSICS_AVAILABLE 1
+#define CRYPTOPP_BOOL_AESNI_INTRINSICS_AVAILABLE 1
 #else
-	#define CRYPTOPP_BOOL_AESNI_INTRINSICS_AVAILABLE 0
+#define CRYPTOPP_BOOL_AESNI_INTRINSICS_AVAILABLE 0
 #endif
 
 #if CRYPTOPP_BOOL_SSE2_INTRINSICS_AVAILABLE || CRYPTOPP_BOOL_SSE2_ASM_AVAILABLE || defined(CRYPTOPP_X64_MASM_AVAILABLE)
-	#define CRYPTOPP_BOOL_ALIGN16 1
+#define CRYPTOPP_BOOL_ALIGN16 1
 #else
-	#define CRYPTOPP_BOOL_ALIGN16 0
+#define CRYPTOPP_BOOL_ALIGN16 0
 #endif
 
 // how to allocate 16-byte aligned memory (for SSE2)
 #if defined(CRYPTOPP_MSVC6PP_OR_LATER)
-	#define CRYPTOPP_MM_MALLOC_AVAILABLE
+#define CRYPTOPP_MM_MALLOC_AVAILABLE
 #elif defined(__APPLE__)
-	#define CRYPTOPP_APPLE_MALLOC_AVAILABLE
+#define CRYPTOPP_APPLE_MALLOC_AVAILABLE
 #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
-	#define CRYPTOPP_MALLOC_ALIGNMENT_IS_16
+#define CRYPTOPP_MALLOC_ALIGNMENT_IS_16
 #elif defined(__linux__) || defined(__sun__) || defined(__CYGWIN__)
-	#define CRYPTOPP_MEMALIGN_AVAILABLE
+#define CRYPTOPP_MEMALIGN_AVAILABLE
 #else
-	#define CRYPTOPP_NO_ALIGNED_ALLOC
+#define CRYPTOPP_NO_ALIGNED_ALLOC
 #endif
-	
+
 // Apple always provides 16-byte aligned, and tells us to use calloc
 // http://developer.apple.com/library/mac/documentation/Performance/Conceptual/ManagingMemory/Articles/MemoryAlloc.html
 
@@ -457,7 +457,7 @@ NAMESPACE_END
 #	define CRYPTOPP_NOINLINE __attribute__((noinline))
 #else
 #	define CRYPTOPP_NOINLINE_DOTDOTDOT ...
-#	define CRYPTOPP_NOINLINE 
+#	define CRYPTOPP_NOINLINE
 #endif
 
 // how to declare class constants
@@ -466,28 +466,28 @@ NAMESPACE_END
 #else
 #	define CRYPTOPP_CONSTANT(x) static const int x;
 #endif
-	
+
 // Linux provides X32, which is 32-bit integers, longs and pointers on x86_64 using the full x86_64 register set.
 // Detect via __ILP32__ (http://wiki.debian.org/X32Port). Both GCC and Clang provide the preprocessor macro.
 #if ((__ILP32__ >= 1) || (_ILP32 >= 1))
-	#define CRYPTOPP_BOOL_X32 1
+#define CRYPTOPP_BOOL_X32 1
 #else
-	#define CRYPTOPP_BOOL_X32 0
+#define CRYPTOPP_BOOL_X32 0
 #endif
 
 // see http://predef.sourceforge.net/prearch.html
 #if (defined(_M_IX86) || defined(__i386__) || defined(__i386) || defined(_X86_) || defined(__I86__) || defined(__INTEL__)) && !CRYPTOPP_BOOL_X32
-	#define CRYPTOPP_BOOL_X86 1
+#define CRYPTOPP_BOOL_X86 1
 #else
-	#define CRYPTOPP_BOOL_X86 0
+#define CRYPTOPP_BOOL_X86 0
 #endif
-	
+
 #if (defined(_M_X64) || defined(__x86_64__)) && !CRYPTOPP_BOOL_X32
-	#define CRYPTOPP_BOOL_X64 1
+#define CRYPTOPP_BOOL_X64 1
 #else
-	#define CRYPTOPP_BOOL_X64 0
+#define CRYPTOPP_BOOL_X64 0
 #endif
-	
+
 // Undo the ASM and Intrinsic related defines due to X32.
 #if CRYPTOPP_BOOL_X32
 # undef CRYPTOPP_BOOL_X64
@@ -497,7 +497,7 @@ NAMESPACE_END
 
 #if !defined(CRYPTOPP_NO_UNALIGNED_DATA_ACCESS) && !defined(CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS)
 #if (CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32 || defined(__powerpc__) || (__ARM_FEATURE_UNALIGNED >= 1))
-	#define CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS
+#define CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS
 #endif
 #endif
 
@@ -512,7 +512,7 @@ NAMESPACE_END
 #if defined(__unix__) || defined(__MACH__) || defined(__NetBSD__) || defined(__sun)
 #define CRYPTOPP_UNIX_AVAILABLE
 #endif
-	
+
 #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
 #define CRYPTOPP_BSD_AVAILABLE
 #endif
@@ -642,7 +642,7 @@ NAMESPACE_END
 #endif
 
 // C++11 or C++14 is available
-#if defined(CRYPTOPP_CXX11) 
+#if defined(CRYPTOPP_CXX11)
 
 // alignof/alignas: MS at VS2013 (19.00); GCC at 4.8; Clang at 3.3; and Intel 15.0.
 #if (CRYPTOPP_MSC_VERSION >= 1900)
@@ -673,7 +673,7 @@ NAMESPACE_END
 #elif (CRYPTOPP_GCC_VERSION >= 40600)
 #  define CRYPTOPP_CXX11_NOEXCEPT 1
 #endif // noexcept compilers
-	
+
 // variadic templates: MS at VS2013 (18.00); GCC at 4.3; Clang at 2.9; and Intel 12.1.
 #if (CRYPTOPP_MSC_VERSION >= 1800)
 #  define CRYPTOPP_CXX11_VARIADIC_TEMPLATES 1
@@ -691,7 +691,7 @@ NAMESPACE_END
 // Needed because we are catching warnings with GCC and MSC
 
 #endif // CRYPTOPP_CXX11
-	
+
 #if defined(CRYPTOPP_CXX11_NOEXCEPT)
 #  define CRYPTOPP_THROW noexcept(false)
 #  define CRYPTOPP_NO_THROW noexcept(true)

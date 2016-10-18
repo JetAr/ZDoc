@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -18,35 +18,36 @@ GNU General Public License for more details.
 
 INT_PTR CALLBACK DlgAbout::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message) 
-	{
-        case WM_INITDIALOG :
-		{
-			SetDlgItemText(_hSelf, IDC_ABOUT_TEXT, TEXT(NPPC_ABOUT_TEXT));
-			SetDlgItemText(_hSelf, IDC_ABOUT_CERBERUS_URL, TEXT(NPPC_ABOUT_LINK));
+    switch (message)
+    {
+    case WM_INITDIALOG :
+    {
+        SetDlgItemText(_hSelf, IDC_ABOUT_TEXT, TEXT(NPPC_ABOUT_TEXT));
+        SetDlgItemText(_hSelf, IDC_ABOUT_CERBERUS_URL, TEXT(NPPC_ABOUT_LINK));
 
-            cerberus.init(_hInst, _hSelf);
-            cerberus.create(::GetDlgItem(_hSelf, IDC_ABOUT_CERBERUS_URL), TEXT(NPPC_ABOUT_URL));
+        cerberus.init(_hInst, _hSelf);
+        cerberus.create(::GetDlgItem(_hSelf, IDC_ABOUT_CERBERUS_URL), TEXT(NPPC_ABOUT_URL));
 
-			goToCenter();
+        goToCenter();
 
-			return TRUE;
-		}
-		case WM_COMMAND : 
-	    {
-		    switch (LOWORD(wParam))
-		    {
-				case IDC_OK: 
-					EndDialog(_hSelf, IDC_OK);
-				    return TRUE;
-				case IDC_CANCEL : case IDCANCEL:
-				    EndDialog(_hSelf, IDC_CANCEL);
-					return TRUE;
-			    default :
-				    break;
-		    }
-		    break;
-	    }
-	}
-	return FALSE;
+        return TRUE;
+    }
+    case WM_COMMAND :
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDC_OK:
+            EndDialog(_hSelf, IDC_OK);
+            return TRUE;
+        case IDC_CANCEL :
+        case IDCANCEL:
+            EndDialog(_hSelf, IDC_CANCEL);
+            return TRUE;
+        default :
+            break;
+        }
+        break;
+    }
+    }
+    return FALSE;
 }

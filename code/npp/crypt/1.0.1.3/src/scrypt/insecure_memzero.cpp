@@ -1,4 +1,4 @@
-#include <stddef.h>
+﻿#include <stddef.h>
 #include <stdint.h>
 
 #include "insecure_memzero.h"
@@ -7,11 +7,11 @@
 static void
 insecure_memzero_func(volatile void * buf, size_t len)
 {
-	volatile uint8_t * _buf = (volatile uint8_t *)buf;
-	size_t i;
+    volatile uint8_t * _buf = (volatile uint8_t *)buf;
+    size_t i;
 
-	for (i = 0; i < len; i++)
-		_buf[i] = 0;
+    for (i = 0; i < len; i++)
+        _buf[i] = 0;
 }
 
 /* Pointer to memory-zeroing function. */

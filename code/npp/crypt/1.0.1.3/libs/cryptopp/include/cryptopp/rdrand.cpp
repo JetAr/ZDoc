@@ -1,4 +1,4 @@
-// rdrand.cpp - written and placed in public domain by Jeffrey Walton and Uri Blumenthal.
+﻿// rdrand.cpp - written and placed in public domain by Jeffrey Walton and Uri Blumenthal.
 //              Copyright assigned to Crypto++ project.
 
 #include "pch.h"
@@ -166,126 +166,126 @@ extern "C" int NASM_RRA_GenerateBlock(byte*, size_t, unsigned int);
 #if NASM_RDSEED_ASM_AVAILABLE
 extern "C" int NASM_RSA_GenerateBlock(byte*, size_t, unsigned int);
 #endif
-	
+
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
 NAMESPACE_BEGIN(CryptoPP)
-	
+
 #if ALL_RDRAND_INTRIN_AVAILABLE
 static int ALL_RRI_GenerateBlock(byte *output, size_t size, unsigned int safety)
 {
-	assert((output && size) || !(output || size));
+    assert((output && size) || !(output || size));
 #if CRYPTOPP_BOOL_X64 || CRYTPOPP_BOOL_X32
-	word64 val;
+    word64 val;
 #else
-	word32 val;
+    word32 val;
 #endif
 
-	while (size >= sizeof(val))
-	{
+    while (size >= sizeof(val))
+    {
 #if CRYPTOPP_BOOL_X64 || CRYTPOPP_BOOL_X32
-		if (_rdrand64_step((word64*)output))
+        if (_rdrand64_step((word64*)output))
 #else
-		if (_rdrand32_step((word32*)output))
+        if (_rdrand32_step((word32*)output))
 #endif
         {
-			output += sizeof(val);
-			size -= sizeof(val);
+            output += sizeof(val);
+            size -= sizeof(val);
         }
         else
         {
-			if (!safety--)
-				return 0;
+            if (!safety--)
+                return 0;
         }
-	}
-
-	if (size)
-	{
-#if CRYPTOPP_BOOL_X64 || CRYTPOPP_BOOL_X32
-		if (_rdrand64_step(&val))
-#else
-		if (_rdrand32_step(&val))
-#endif
-		{
-			memcpy(output, &val, size);
-			size = 0;
-		}
-		else
-		{
-			if (!safety--)
-				return 0;
-		}
     }
-		
+
+    if (size)
+    {
 #if CRYPTOPP_BOOL_X64 || CRYTPOPP_BOOL_X32
-	*((volatile word64*)&val) = 0;
+        if (_rdrand64_step(&val))
 #else
-	*((volatile word32*)&val) = 0;
+        if (_rdrand32_step(&val))
+#endif
+        {
+            memcpy(output, &val, size);
+            size = 0;
+        }
+        else
+        {
+            if (!safety--)
+                return 0;
+        }
+    }
+
+#if CRYPTOPP_BOOL_X64 || CRYTPOPP_BOOL_X32
+    *((volatile word64*)&val) = 0;
+#else
+    *((volatile word32*)&val) = 0;
 #endif
 
-	return int(size == 0);
+    return int(size == 0);
 }
 #endif // ALL_RDRAND_INTRINSIC_AVAILABLE
 
 #if GCC_RDRAND_ASM_AVAILABLE
 static int GCC_RRA_GenerateBlock(byte *output, size_t size, unsigned int safety)
 {
-	assert((output && size) || !(output || size));
+    assert((output && size) || !(output || size));
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	word64 val;
+    word64 val;
 #else
-	word32 val;
+    word32 val;
 #endif
-	char rc;
-	while (size)
-	{
+    char rc;
+    while (size)
+    {
         __asm__ volatile(
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-			".byte 0x48, 0x0f, 0xc7, 0xf0;\n"  // rdrand rax
+            ".byte 0x48, 0x0f, 0xc7, 0xf0;\n"  // rdrand rax
 #else
-			".byte 0x0f, 0xc7, 0xf0;\n"        // rdrand eax
+            ".byte 0x0f, 0xc7, 0xf0;\n"        // rdrand eax
 #endif
-			"setc %1; "
-			: "=a" (val), "=qm" (rc)
-			:
-			: "cc"
+            "setc %1; "
+            : "=a" (val), "=qm" (rc)
+            :
+            : "cc"
         );
 
-		if (rc)
+        if (rc)
         {
-			if (size >= sizeof(val))
-			{
+            if (size >= sizeof(val))
+            {
 #if defined(CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS) && (CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32)
-				*((word64*)output) = val;
+                *((word64*)output) = val;
 #elif defined(CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS) && (CRYPTOPP_BOOL_X86)
-				*((word32*)output) = val;
+                *((word32*)output) = val;
 #else
-				memcpy(output, &val, sizeof(val));
+                memcpy(output, &val, sizeof(val));
 #endif
-				output += sizeof(val);
-				size -= sizeof(val);
-			}
-			else
-			{
-				memcpy(output, &val, size);
-				size = 0;
-			}
+                output += sizeof(val);
+                size -= sizeof(val);
+            }
+            else
+            {
+                memcpy(output, &val, size);
+                size = 0;
+            }
         }
         else
         {
-			if (!safety--)
-				break;
+            if (!safety--)
+                break;
         }
-	}
+    }
 
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	*((volatile word64*)&val) = 0;
+    *((volatile word64*)&val) = 0;
 #else
-	*((volatile word32*)&val) = 0;
+    *((volatile word32*)&val) = 0;
 #endif
 
-	return int(size == 0);
+    return int(size == 0);
 }
 
 #endif // GCC_RDRAND_ASM_AVAILABLE
@@ -293,51 +293,64 @@ static int GCC_RRA_GenerateBlock(byte *output, size_t size, unsigned int safety)
 #if (CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32 || CRYPTOPP_BOOL_X64)
 void RDRAND::GenerateBlock(byte *output, size_t size)
 {
-	CRYPTOPP_UNUSED(output), CRYPTOPP_UNUSED(size);
-	assert((output && size) || !(output || size));
+    CRYPTOPP_UNUSED(output), CRYPTOPP_UNUSED(size);
+    assert((output && size) || !(output || size));
 
-	if(!HasRDRAND())
-		throw NotImplemented("RDRAND: rdrand is not available on this platform");
+    if(!HasRDRAND())
+        throw NotImplemented("RDRAND: rdrand is not available on this platform");
 
-	int rc; CRYPTOPP_UNUSED(rc);
+    int rc;
+    CRYPTOPP_UNUSED(rc);
 #if MASM_RDRAND_ASM_AVAILABLE
-	rc = MASM_RRA_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDRAND_Err("MASM_RRA_GenerateBlock"); }
+    rc = MASM_RRA_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDRAND_Err("MASM_RRA_GenerateBlock");
+    }
 #elif NASM_RDRAND_ASM_AVAILABLE
-	rc = NASM_RRA_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDRAND_Err("NASM_RRA_GenerateBlock"); }
+    rc = NASM_RRA_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDRAND_Err("NASM_RRA_GenerateBlock");
+    }
 #elif ALL_RDRAND_INTRIN_AVAILABLE
-	rc = ALL_RRI_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDRAND_Err("ALL_RRI_GenerateBlock"); }
+    rc = ALL_RRI_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDRAND_Err("ALL_RRI_GenerateBlock");
+    }
 #elif GCC_RDRAND_ASM_AVAILABLE
-	rc = GCC_RRA_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDRAND_Err("GCC_RRA_GenerateBlock"); }
+    rc = GCC_RRA_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDRAND_Err("GCC_RRA_GenerateBlock");
+    }
 #else
-	// RDRAND not detected at compile time, and no suitable compiler found
-	throw NotImplemented("RDRAND: failed to find a suitable implementation???");
+    // RDRAND not detected at compile time, and no suitable compiler found
+    throw NotImplemented("RDRAND: failed to find a suitable implementation???");
 #endif // CRYPTOPP_CPUID_AVAILABLE
 }
 
 void RDRAND::DiscardBytes(size_t n)
 {
-	// RoundUpToMultipleOf is used because a full word is read, and its cheaper
-	//   to discard full words. There's no sense in dealing with tail bytes.
-	assert(HasRDRAND());
+    // RoundUpToMultipleOf is used because a full word is read, and its cheaper
+    //   to discard full words. There's no sense in dealing with tail bytes.
+    assert(HasRDRAND());
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	FixedSizeSecBlock<word64, 16> discard;
-	n = RoundUpToMultipleOf(n, sizeof(word64));
+    FixedSizeSecBlock<word64, 16> discard;
+    n = RoundUpToMultipleOf(n, sizeof(word64));
 #else
-	FixedSizeSecBlock<word32, 16> discard;
-	n = RoundUpToMultipleOf(n, sizeof(word32));
+    FixedSizeSecBlock<word32, 16> discard;
+    n = RoundUpToMultipleOf(n, sizeof(word32));
 #endif
 
-	size_t count = STDMIN(n, discard.SizeInBytes());
-	while (count)
-	{
-		GenerateBlock(discard.BytePtr(), count);
-		n -= count;
-		count = STDMIN(n, discard.SizeInBytes());
-	}
+    size_t count = STDMIN(n, discard.SizeInBytes());
+    while (count)
+    {
+        GenerateBlock(discard.BytePtr(), count);
+        n -= count;
+        count = STDMIN(n, discard.SizeInBytes());
+    }
 }
 #endif // CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32 || CRYPTOPP_BOOL_X64
 
@@ -347,168 +360,181 @@ void RDRAND::DiscardBytes(size_t n)
 #if ALL_RDSEED_INTRIN_AVAILABLE
 static int ALL_RSI_GenerateBlock(byte *output, size_t size, unsigned int safety)
 {
-	assert((output && size) || !(output || size));
+    assert((output && size) || !(output || size));
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	word64 val;
+    word64 val;
 #else
-	word32 val;
+    word32 val;
 #endif
 
-	while (size >= sizeof(val))
-	{
+    while (size >= sizeof(val))
+    {
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-		if (_rdseed64_step((word64*)output))
+        if (_rdseed64_step((word64*)output))
 #else
-		if (_rdseed32_step((word32*)output))
+        if (_rdseed32_step((word32*)output))
 #endif
         {
-			output += sizeof(val);
-			size -= sizeof(val);
+            output += sizeof(val);
+            size -= sizeof(val);
         }
         else
         {
-			if (!safety--)
-				return 0;
+            if (!safety--)
+                return 0;
         }
-	}
-
-	if (size)
-	{
-#if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-		if (_rdseed64_step(&val))
-#else
-		if (_rdseed32_step(&val))
-#endif
-		{
-			memcpy(output, &val, size);
-			size = 0;
-		}
-		else
-		{
-			if (!safety--)
-				return 0;
-		}
     }
-		
+
+    if (size)
+    {
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	*((volatile word64*)&val) = 0;
+        if (_rdseed64_step(&val))
 #else
-	*((volatile word32*)&val) = 0;
+        if (_rdseed32_step(&val))
+#endif
+        {
+            memcpy(output, &val, size);
+            size = 0;
+        }
+        else
+        {
+            if (!safety--)
+                return 0;
+        }
+    }
+
+#if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
+    *((volatile word64*)&val) = 0;
+#else
+    *((volatile word32*)&val) = 0;
 #endif
 
-	return int(size == 0);
+    return int(size == 0);
 }
 #endif // ALL_RDSEED_INTRIN_AVAILABLE
 
 #if GCC_RDSEED_ASM_AVAILABLE
 static int GCC_RSA_GenerateBlock(byte *output, size_t size, unsigned int safety)
 {
-	assert((output && size) || !(output || size));
+    assert((output && size) || !(output || size));
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	word64 val;
+    word64 val;
 #else
-	word32 val;
+    word32 val;
 #endif
-	char rc;
-	while (size)
-	{
+    char rc;
+    while (size)
+    {
         __asm__ volatile(
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-			".byte 0x48, 0x0f, 0xc7, 0xf8;\n"  // rdseed rax
+            ".byte 0x48, 0x0f, 0xc7, 0xf8;\n"  // rdseed rax
 #else
-			".byte 0x0f, 0xc7, 0xf8;\n"        // rdseed eax
+            ".byte 0x0f, 0xc7, 0xf8;\n"        // rdseed eax
 #endif
-			"setc %1; "
-			: "=a" (val), "=qm" (rc)
-			:
-			: "cc"
+            "setc %1; "
+            : "=a" (val), "=qm" (rc)
+            :
+            : "cc"
         );
 
-		if (rc)
+        if (rc)
         {
-			if (size >= sizeof(val))
-			{
+            if (size >= sizeof(val))
+            {
 #if defined(CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS) && (CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32)
-				*((word64*)output) = val;
+                *((word64*)output) = val;
 #elif defined(CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS) && (CRYPTOPP_BOOL_X86)
-				*((word32*)output) = val;
+                *((word32*)output) = val;
 #else
-				memcpy(output, &val, sizeof(val));
+                memcpy(output, &val, sizeof(val));
 #endif
-				output += sizeof(val);
-				size -= sizeof(val);
-			}
-			else
-			{
-				memcpy(output, &val, size);
-				size = 0;
-			}
+                output += sizeof(val);
+                size -= sizeof(val);
+            }
+            else
+            {
+                memcpy(output, &val, size);
+                size = 0;
+            }
         }
         else
         {
-			if (!safety--)
-				break;
+            if (!safety--)
+                break;
         }
-	}
+    }
 
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	*((volatile word64*)&val) = 0;
+    *((volatile word64*)&val) = 0;
 #else
-	*((volatile word32*)&val) = 0;
+    *((volatile word32*)&val) = 0;
 #endif
 
-	return int(size == 0);
+    return int(size == 0);
 }
 #endif // GCC_RDSEED_ASM_AVAILABLE
 
 #if (CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32 || CRYPTOPP_BOOL_X64)
 void RDSEED::GenerateBlock(byte *output, size_t size)
 {
-	CRYPTOPP_UNUSED(output), CRYPTOPP_UNUSED(size);
-	assert((output && size) || !(output || size));
+    CRYPTOPP_UNUSED(output), CRYPTOPP_UNUSED(size);
+    assert((output && size) || !(output || size));
 
-	if(!HasRDSEED())
-		throw NotImplemented("RDSEED: rdseed is not available on this platform");
+    if(!HasRDSEED())
+        throw NotImplemented("RDSEED: rdseed is not available on this platform");
 
-	int rc; CRYPTOPP_UNUSED(rc);
+    int rc;
+    CRYPTOPP_UNUSED(rc);
 #if MASM_RDSEED_ASM_AVAILABLE
-	rc = MASM_RSA_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDSEED_Err("MASM_RSA_GenerateBlock"); }
+    rc = MASM_RSA_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDSEED_Err("MASM_RSA_GenerateBlock");
+    }
 #elif NASM_RDSEED_ASM_AVAILABLE
-	rc = NASM_RSA_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDRAND_Err("NASM_RSA_GenerateBlock"); }
+    rc = NASM_RSA_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDRAND_Err("NASM_RSA_GenerateBlock");
+    }
 #elif ALL_RDSEED_INTRIN_AVAILABLE
-	rc = ALL_RSI_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDSEED_Err("ALL_RSI_GenerateBlock"); }
+    rc = ALL_RSI_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDSEED_Err("ALL_RSI_GenerateBlock");
+    }
 #elif GCC_RDSEED_ASM_AVAILABLE
-	rc = GCC_RSA_GenerateBlock(output, size, m_retries);
-	if (!rc) { throw RDSEED_Err("GCC_RSA_GenerateBlock"); }
+    rc = GCC_RSA_GenerateBlock(output, size, m_retries);
+    if (!rc)
+    {
+        throw RDSEED_Err("GCC_RSA_GenerateBlock");
+    }
 #else
-	// RDSEED not detected at compile time, and no suitable compiler found
-	throw NotImplemented("RDSEED: failed to find a suitable implementation???");
+    // RDSEED not detected at compile time, and no suitable compiler found
+    throw NotImplemented("RDSEED: failed to find a suitable implementation???");
 #endif
 }
 
 void RDSEED::DiscardBytes(size_t n)
 {
-	// RoundUpToMultipleOf is used because a full word is read, and its cheaper
-	//   to discard full words. There's no sense in dealing with tail bytes.
-	assert(HasRDSEED());
+    // RoundUpToMultipleOf is used because a full word is read, and its cheaper
+    //   to discard full words. There's no sense in dealing with tail bytes.
+    assert(HasRDSEED());
 #if CRYPTOPP_BOOL_X64 || CRYPTOPP_BOOL_X32
-	FixedSizeSecBlock<word64, 16> discard;
-	n = RoundUpToMultipleOf(n, sizeof(word64));
+    FixedSizeSecBlock<word64, 16> discard;
+    n = RoundUpToMultipleOf(n, sizeof(word64));
 #else
-	FixedSizeSecBlock<word32, 16> discard;
-	n = RoundUpToMultipleOf(n, sizeof(word32));
+    FixedSizeSecBlock<word32, 16> discard;
+    n = RoundUpToMultipleOf(n, sizeof(word32));
 #endif
 
-	size_t count = STDMIN(n, discard.SizeInBytes());
-	while (count)
-	{
-		GenerateBlock(discard.BytePtr(), count);
-		n -= count;
-		count = STDMIN(n, discard.SizeInBytes());
-	}
+    size_t count = STDMIN(n, discard.SizeInBytes());
+    while (count)
+    {
+        GenerateBlock(discard.BytePtr(), count);
+        n -= count;
+        count = STDMIN(n, discard.SizeInBytes());
+    }
 }
 #endif // CRYPTOPP_BOOL_X86 || CRYPTOPP_BOOL_X32 || CRYPTOPP_BOOL_X64
 

@@ -36,7 +36,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
   * the position of input/output bytes in the state and the phase
   * (absorbing or squeezing).
   */
-ALIGN typedef struct Keccak_SpongeInstanceStruct {
+ALIGN typedef struct Keccak_SpongeInstanceStruct
+{
     /** The state processed by the permutation. */
     ALIGN unsigned char state[KeccakF_width/8];
     /** The value of the rate in bits.*/
@@ -61,7 +62,7 @@ int Keccak_SpongeInitialize(Keccak_SpongeInstance *spongeInstance, unsigned int 
 /**
   * Function to give input data bytes for the sponge function to absorb.
   * @param  spongeInstance  Pointer to the sponge instance initialized by Keccak_SpongeInitialize().
-  * @param  data        Pointer to the input data. 
+  * @param  data        Pointer to the input data.
   * @param  dataByteLen  The number of input bytes provided in the input data.
   * @pre    The sponge function must be in the absorbing phase,
   *         i.e., Keccak_SpongeSqueeze() or Keccak_SpongeAbsorbLastFewBits()
@@ -74,7 +75,7 @@ int Keccak_SpongeAbsorb(Keccak_SpongeInstance *spongeInstance, const unsigned ch
   * Function to give input data bits for the sponge function to absorb
   * and then to switch to the squeezing phase.
   * @param  spongeInstance  Pointer to the sponge instance initialized by Keccak_SpongeInitialize().
-  * @param  delimitedData   Byte containing from 0 to 7 trailing bits 
+  * @param  delimitedData   Byte containing from 0 to 7 trailing bits
   *                     that must be absorbed.
   *                     These <i>n</i> bits must be in the least significant bit positions.
   *                     These bits must be delimited with a bit 1 at position <i>n</i>
@@ -96,8 +97,8 @@ int Keccak_SpongeAbsorbLastFewBits(Keccak_SpongeInstance *spongeInstance, unsign
 
 /**
   * Function to squeeze output data from the sponge function.
-  * If the sponge function was in the absorbing phase, this function 
-  * switches it to the squeezing phase 
+  * If the sponge function was in the absorbing phase, this function
+  * switches it to the squeezing phase
   * as if Keccak_SpongeAbsorbLastFewBits(spongeInstance, 0x01) was called.
   * @param  spongeInstance  Pointer to the sponge instance initialized by Keccak_SpongeInitialize().
   * @param  data        Pointer to the buffer where to store the output data.

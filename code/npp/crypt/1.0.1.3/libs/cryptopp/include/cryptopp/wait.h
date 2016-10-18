@@ -1,4 +1,4 @@
-#ifndef CRYPTOPP_WAIT_H
+﻿#ifndef CRYPTOPP_WAIT_H
 #define CRYPTOPP_WAIT_H
 
 #include "config.h"
@@ -26,31 +26,38 @@ NAMESPACE_BEGIN(CryptoPP)
 class Tracer
 {
 public:
-	Tracer(unsigned int level) : m_level(level) {}
-	virtual ~Tracer() {}
+    Tracer(unsigned int level) : m_level(level) {}
+    virtual ~Tracer() {}
 
 protected:
-	//! Override this in your most-derived tracer to do the actual tracing.
-	virtual void Trace(unsigned int n, std::string const& s) = 0;
+    //! Override this in your most-derived tracer to do the actual tracing.
+    virtual void Trace(unsigned int n, std::string const& s) = 0;
 
-	/*! By default, tracers will decide which trace messages to trace according to a trace level
-		mechanism. If your most-derived tracer uses a different mechanism, override this to
-		return false. If this method returns false, the default TraceXxxx(void) methods will all
-		return 0 and must be overridden explicitly by your tracer for trace messages you want. */
-	virtual bool UsingDefaults() const { return true; }
+    /*! By default, tracers will decide which trace messages to trace according to a trace level
+    	mechanism. If your most-derived tracer uses a different mechanism, override this to
+    	return false. If this method returns false, the default TraceXxxx(void) methods will all
+    	return 0 and must be overridden explicitly by your tracer for trace messages you want. */
+    virtual bool UsingDefaults() const
+    {
+        return true;
+    }
 
 protected:
-	unsigned int m_level;
+    unsigned int m_level;
 
-	void TraceIf(unsigned int n, std::string const&s)
-		{ if (n) Trace(n, s); }
+    void TraceIf(unsigned int n, std::string const&s)
+    {
+        if (n) Trace(n, s);
+    }
 
-	/*! Returns nr if, according to the default log settings mechanism (using log levels),
-	    the message should be traced. Returns 0 if the default trace level mechanism is not
-		in use, or if it is in use but the event should not be traced. Provided as a utility
-		method for easier and shorter coding of default TraceXxxx(void) implementations. */
-	unsigned int Tracing(unsigned int nr, unsigned int minLevel) const
-		{ return (UsingDefaults() && m_level >= minLevel) ? nr : 0; }
+    /*! Returns nr if, according to the default log settings mechanism (using log levels),
+        the message should be traced. Returns 0 if the default trace level mechanism is not
+    	in use, or if it is in use but the event should not be traced. Provided as a utility
+    	method for easier and shorter coding of default TraceXxxx(void) implementations. */
+    unsigned int Tracing(unsigned int nr, unsigned int minLevel) const
+    {
+        return (UsingDefaults() && m_level >= minLevel) ? nr : 0;
+    }
 };
 
 // Your Tracer-derived class should inherit as virtual public from Tracer or another
@@ -99,50 +106,53 @@ protected:
 	and would pass this parameter to subsequent functions they call using the construct:
 
 	SubFunc(arg1, arg2, CallStack("my func at place such and such", &callStack));
-	
+
 	The advantage of this approach is that it is easy to use and should be very efficient,
 	involving no allocation from the heap, just a linked list of stack objects containing
 	pointers to static ASCIIZ strings (or possibly additional but simple data if derived). */
 class CallStack
 {
 public:
-	CallStack(char const* i, CallStack const* p) : m_info(i), m_prev(p) {}
-	CallStack const* Prev() const { return m_prev; }
-	virtual std::string Format() const;
+    CallStack(char const* i, CallStack const* p) : m_info(i), m_prev(p) {}
+    CallStack const* Prev() const
+    {
+        return m_prev;
+    }
+    virtual std::string Format() const;
 
 protected:
-	char const* m_info;
-	CallStack const* m_prev;
+    char const* m_info;
+    CallStack const* m_prev;
 };
 
 /*! An extended CallStack entry type with an additional numeric parameter. */
 class CallStackWithNr : public CallStack
 {
 public:
-	CallStackWithNr(char const* i, word32 n, CallStack const* p) : CallStack(i, p), m_nr(n) {}
-	std::string Format() const;
+    CallStackWithNr(char const* i, word32 n, CallStack const* p) : CallStack(i, p), m_nr(n) {}
+    std::string Format() const;
 
 protected:
-	word32 m_nr;
+    word32 m_nr;
 };
 
 /*! An extended CallStack entry type with an additional string parameter. */
 class CallStackWithStr : public CallStack
 {
 public:
-	CallStackWithStr(char const* i, char const* z, CallStack const* p) : CallStack(i, p), m_z(z) {}
-	std::string Format() const;
+    CallStackWithStr(char const* i, char const* z, CallStack const* p) : CallStack(i, p), m_z(z) {}
+    std::string Format() const;
 
 protected:
-	char const* m_z;
+    char const* m_z;
 };
 
 // Thanks to Maximilian Zamorsky for help with http://connect.microsoft.com/VisualStudio/feedback/details/1570496/
 CRYPTOPP_BEGIN_TRACER_CLASS_1(WaitObjectsTracer, Tracer)
-	CRYPTOPP_BEGIN_TRACER_EVENTS(0x48752841)
-		CRYPTOPP_TRACER_EVENT(NoWaitLoop)
-	CRYPTOPP_END_TRACER_EVENTS
-	CRYPTOPP_TRACER_EVENT_METHODS(NoWaitLoop, 1)
+CRYPTOPP_BEGIN_TRACER_EVENTS(0x48752841)
+CRYPTOPP_TRACER_EVENT(NoWaitLoop)
+CRYPTOPP_END_TRACER_EVENTS
+CRYPTOPP_TRACER_EVENT_METHODS(NoWaitLoop, 1)
 CRYPTOPP_END_TRACER_CLASS
 
 struct WaitingThreadData;
@@ -151,63 +161,63 @@ struct WaitingThreadData;
 class WaitObjectContainer : public NotCopyable
 {
 public:
-	//! exception thrown by WaitObjectContainer
-	class Err : public Exception
-	{
-	public:
-		Err(const std::string& s) : Exception(IO_ERROR, s) {}
-	};
+    //! exception thrown by WaitObjectContainer
+    class Err : public Exception
+    {
+    public:
+        Err(const std::string& s) : Exception(IO_ERROR, s) {}
+    };
 
-	static unsigned int MaxWaitObjects();
+    static unsigned int MaxWaitObjects();
 
-	WaitObjectContainer(WaitObjectsTracer* tracer = 0);
+    WaitObjectContainer(WaitObjectsTracer* tracer = 0);
 
-	void Clear();
-	void SetNoWait(CallStack const& callStack);
-	void ScheduleEvent(double milliseconds, CallStack const& callStack);
-	// returns false if timed out
-	bool Wait(unsigned long milliseconds);
+    void Clear();
+    void SetNoWait(CallStack const& callStack);
+    void ScheduleEvent(double milliseconds, CallStack const& callStack);
+    // returns false if timed out
+    bool Wait(unsigned long milliseconds);
 
 #ifdef USE_WINDOWS_STYLE_SOCKETS
 # ifndef CRYPTOPP_MAINTAIN_BACKWARDS_COMPATIBILITY_562
-	virtual ~WaitObjectContainer();
+    virtual ~WaitObjectContainer();
 # else
-	~WaitObjectContainer();
+    ~WaitObjectContainer();
 #endif
-	void AddHandle(HANDLE handle, CallStack const& callStack);
+    void AddHandle(HANDLE handle, CallStack const& callStack);
 #else
-	void AddReadFd(int fd, CallStack const& callStack);
-	void AddWriteFd(int fd, CallStack const& callStack);
+    void AddReadFd(int fd, CallStack const& callStack);
+    void AddWriteFd(int fd, CallStack const& callStack);
 #endif
 
 private:
-	WaitObjectsTracer* m_tracer;
+    WaitObjectsTracer* m_tracer;
 
 #ifdef USE_WINDOWS_STYLE_SOCKETS
-	void CreateThreads(unsigned int count);
-	std::vector<HANDLE> m_handles;
-	std::vector<WaitingThreadData *> m_threads;
-	HANDLE m_startWaiting;
-	HANDLE m_stopWaiting;
+    void CreateThreads(unsigned int count);
+    std::vector<HANDLE> m_handles;
+    std::vector<WaitingThreadData *> m_threads;
+    HANDLE m_startWaiting;
+    HANDLE m_stopWaiting;
 #else
-	fd_set m_readfds, m_writefds;
-	int m_maxFd;
+    fd_set m_readfds, m_writefds;
+    int m_maxFd;
 #endif
-	bool m_noWait;
-	double m_firstEventTime;
-	Timer m_eventTimer;
+    bool m_noWait;
+    double m_firstEventTime;
+    Timer m_eventTimer;
 
 #ifdef USE_WINDOWS_STYLE_SOCKETS
-	typedef size_t LastResultType;
+    typedef size_t LastResultType;
 #else
-	typedef int LastResultType;
+    typedef int LastResultType;
 #endif
-	enum { LASTRESULT_NOWAIT = -1, LASTRESULT_SCHEDULED = -2, LASTRESULT_TIMEOUT = -3 };
-	LastResultType m_lastResult;
-	unsigned int m_sameResultCount;
-	Timer m_noWaitTimer;
-	void SetLastResult(LastResultType result);
-	void DetectNoWait(LastResultType result, CallStack const& callStack);
+    enum { LASTRESULT_NOWAIT = -1, LASTRESULT_SCHEDULED = -2, LASTRESULT_TIMEOUT = -3 };
+    LastResultType m_lastResult;
+    unsigned int m_sameResultCount;
+    Timer m_noWaitTimer;
+    void SetLastResult(LastResultType result);
+    void DetectNoWait(LastResultType result, CallStack const& callStack);
 };
 
 NAMESPACE_END

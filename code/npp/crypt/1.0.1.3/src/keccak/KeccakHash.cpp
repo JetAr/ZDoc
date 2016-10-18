@@ -37,17 +37,21 @@ int Keccak_HashUpdate(Keccak_HashInstance *instance, const BitSequence *data, Da
 {
     if ((databitlen % 8) == 0)
         return Keccak_SpongeAbsorb(&instance->sponge, data, databitlen/8);
-    else {
+    else
+    {
         int ret = Keccak_SpongeAbsorb(&instance->sponge, data, databitlen/8);
-        if (ret == SUCCESS) {
+        if (ret == SUCCESS)
+        {
             // The last partial byte is assumed to be aligned on the least significant bits
             unsigned char lastByte = data[databitlen/8];
             // Concatenate the last few bits provided here with those of the suffix
             unsigned short delimitedLastBytes = (unsigned short)lastByte | ((unsigned short)instance->delimitedSuffix << (databitlen % 8));
-            if ((delimitedLastBytes & 0xFF00) == 0x0000) {
+            if ((delimitedLastBytes & 0xFF00) == 0x0000)
+            {
                 instance->delimitedSuffix = delimitedLastBytes & 0xFF;
             }
-            else {
+            else
+            {
                 unsigned char oneByte[1];
                 oneByte[0] = delimitedLastBytes & 0xFF;
                 ret = Keccak_SpongeAbsorb(&instance->sponge, oneByte, 1);

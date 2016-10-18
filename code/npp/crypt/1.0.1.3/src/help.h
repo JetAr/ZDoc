@@ -1,4 +1,4 @@
-/*
+﻿/*
 This file is part of the NppCrypt Plugin [www.cerberus-design.de] for Notepad++ [ Copyright (C)2003 Don HO <don.h@free.fr> ]
 
 This program is free software; you can redistribute it and/or
@@ -22,38 +22,38 @@ GNU General Public License for more details.
 
 namespace helper
 {
-	namespace Scintilla
-	{
-		HWND			getCurrent();
-		void			replaceSelection(const std::basic_string<byte>& buffer);
-		bool			getSelection(const byte** pdata, size_t* length, size_t* start = NULL, size_t* end = NULL);
-	};
+namespace Scintilla
+{
+HWND			getCurrent();
+void			replaceSelection(const std::basic_string<byte>& buffer);
+bool			getSelection(const byte** pdata, size_t* length, size_t* start = NULL, size_t* end = NULL);
+};
 
-	namespace Buffer
-	{
-		uptr_t			getCurrent();
-		bool			is8Bit(uptr_t);
-		bool			isCurrent8Bit();
-		void			getPath(uptr_t bufferid, string& path, string& filename, string& extension);
-	};
+namespace Buffer
+{
+uptr_t			getCurrent();
+bool			is8Bit(uptr_t);
+bool			isCurrent8Bit();
+void			getPath(uptr_t bufferid, string& path, string& filename, string& extension);
+};
 
-	namespace Windows
-	{
-		void			copyToClipboard(const std::basic_string<byte>& buffer);
-	};
+namespace Windows
+{
+void			copyToClipboard(const std::basic_string<byte>& buffer);
+};
 
-	namespace NPP
-	{
-		HINSTANCE		getDLLHandle();
-		HWND			getWindow();
-		bool			setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool check0nInit = false);
-	};
+namespace NPP
+{
+HINSTANCE		getDLLHandle();
+HWND			getWindow();
+bool			setCommand(size_t index, TCHAR *cmdName, PFUNCPLUGINCMD pFunc, ShortcutKey *sk, bool check0nInit = false);
+};
 
-	namespace BC
-	{
-		void			prepareHMAC(crypt::Options::Crypt::HMAC& hmac, int header_version);
-		void			preparePassword(std::string& password, int header_version);
-	};
+namespace BC
+{
+void			prepareHMAC(crypt::Options::Crypt::HMAC& hmac, int header_version);
+void			preparePassword(std::string& password, int header_version);
+};
 };
 
 #endif

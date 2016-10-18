@@ -1,4 +1,4 @@
-// osrng.cpp - written and placed in the public domain by Wei Dai
+﻿// osrng.cpp - written and placed in the public domain by Wei Dai
 
 // Thanks to Leonard Janke for the suggestion for AutoSeededRandomPool.
 
@@ -30,13 +30,13 @@ NAMESPACE_BEGIN(CryptoPP)
 
 #if defined(NONBLOCKING_RNG_AVAILABLE) || defined(BLOCKING_RNG_AVAILABLE)
 OS_RNG_Err::OS_RNG_Err(const std::string &operation)
-	: Exception(OTHER_ERROR, "OS_Rng: " + operation + " operation failed with error " + 
+    : Exception(OTHER_ERROR, "OS_Rng: " + operation + " operation failed with error " +
 #ifdef CRYPTOPP_WIN32_AVAILABLE
-		"0x" + IntToString(GetLastError(), 16)
+                "0x" + IntToString(GetLastError(), 16)
 #else
-		IntToString(errno)
+                IntToString(errno)
 #endif
-		)
+               )
 {
 }
 #endif
@@ -47,13 +47,13 @@ OS_RNG_Err::OS_RNG_Err(const std::string &operation)
 
 MicrosoftCryptoProvider::MicrosoftCryptoProvider()
 {
-	if (!CryptAcquireContext(&m_hProvider, 0, 0, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
-		throw OS_RNG_Err("CryptAcquireContext");
+    if (!CryptAcquireContext(&m_hProvider, 0, 0, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
+        throw OS_RNG_Err("CryptAcquireContext");
 }
 
 MicrosoftCryptoProvider::~MicrosoftCryptoProvider()
 {
-	CryptReleaseContext(m_hProvider, 0);
+    CryptReleaseContext(m_hProvider, 0);
 }
 
 #endif
@@ -61,16 +61,16 @@ MicrosoftCryptoProvider::~MicrosoftCryptoProvider()
 NonblockingRng::NonblockingRng()
 {
 #ifndef CRYPTOPP_WIN32_AVAILABLE
-	m_fd = open("/dev/urandom",O_RDONLY);
-	if (m_fd == -1)
-		throw OS_RNG_Err("open /dev/urandom");
+    m_fd = open("/dev/urandom",O_RDONLY);
+    if (m_fd == -1)
+        throw OS_RNG_Err("open /dev/urandom");
 #endif
 }
 
 NonblockingRng::~NonblockingRng()
 {
 #ifndef CRYPTOPP_WIN32_AVAILABLE
-	close(m_fd);
+    close(m_fd);
 #endif
 }
 
@@ -78,27 +78,27 @@ void NonblockingRng::GenerateBlock(byte *output, size_t size)
 {
 #ifdef CRYPTOPP_WIN32_AVAILABLE
 #	ifdef WORKAROUND_MS_BUG_Q258000
-		const MicrosoftCryptoProvider &m_Provider = Singleton<MicrosoftCryptoProvider>().Ref();
+    const MicrosoftCryptoProvider &m_Provider = Singleton<MicrosoftCryptoProvider>().Ref();
 #	endif
-	if (!CryptGenRandom(m_Provider.GetProviderHandle(), (DWORD)size, output))
-		throw OS_RNG_Err("CryptGenRandom");
+    if (!CryptGenRandom(m_Provider.GetProviderHandle(), (DWORD)size, output))
+        throw OS_RNG_Err("CryptGenRandom");
 #else
-	while (size)
-	{
-		ssize_t len = read(m_fd, output, size);
+    while (size)
+    {
+        ssize_t len = read(m_fd, output, size);
 
-		if (len < 0)
-		{
-			// /dev/urandom reads CAN give EAGAIN errors! (maybe EINTR as well)
-			if (errno != EINTR && errno != EAGAIN)
-				throw OS_RNG_Err("read /dev/urandom");
+        if (len < 0)
+        {
+            // /dev/urandom reads CAN give EAGAIN errors! (maybe EINTR as well)
+            if (errno != EINTR && errno != EAGAIN)
+                throw OS_RNG_Err("read /dev/urandom");
 
-			continue;
-		}
+            continue;
+        }
 
-		output += len;
-		size -= len;
-	}
+        output += len;
+        size -= len;
+    }
 #endif
 }
 
@@ -118,37 +118,37 @@ void NonblockingRng::GenerateBlock(byte *output, size_t size)
 
 BlockingRng::BlockingRng()
 {
-	m_fd = open(CRYPTOPP_BLOCKING_RNG_FILENAME,O_RDONLY);
-	if (m_fd == -1)
-		throw OS_RNG_Err("open " CRYPTOPP_BLOCKING_RNG_FILENAME);
+    m_fd = open(CRYPTOPP_BLOCKING_RNG_FILENAME,O_RDONLY);
+    if (m_fd == -1)
+        throw OS_RNG_Err("open " CRYPTOPP_BLOCKING_RNG_FILENAME);
 }
 
 BlockingRng::~BlockingRng()
 {
-	close(m_fd);
+    close(m_fd);
 }
 
 void BlockingRng::GenerateBlock(byte *output, size_t size)
 {
-	while (size)
-	{
-		// on some systems /dev/random will block until all bytes
-		// are available, on others it returns immediately
-		ssize_t len = read(m_fd, output, size);
-		if (len < 0)
-		{
-			// /dev/random reads CAN give EAGAIN errors! (maybe EINTR as well)
-			if (errno != EINTR && errno != EAGAIN)
-				throw OS_RNG_Err("read " CRYPTOPP_BLOCKING_RNG_FILENAME);
+    while (size)
+    {
+        // on some systems /dev/random will block until all bytes
+        // are available, on others it returns immediately
+        ssize_t len = read(m_fd, output, size);
+        if (len < 0)
+        {
+            // /dev/random reads CAN give EAGAIN errors! (maybe EINTR as well)
+            if (errno != EINTR && errno != EAGAIN)
+                throw OS_RNG_Err("read " CRYPTOPP_BLOCKING_RNG_FILENAME);
 
-			continue;
-		}
+            continue;
+        }
 
-		size -= len;
-		output += len;
-		if (size)
-			sleep(1);
-	}
+        size -= len;
+        output += len;
+        if (size)
+            sleep(1);
+    }
 }
 
 #endif
@@ -158,31 +158,31 @@ void BlockingRng::GenerateBlock(byte *output, size_t size)
 void OS_GenerateRandomBlock(bool blocking, byte *output, size_t size)
 {
 #ifdef NONBLOCKING_RNG_AVAILABLE
-	if (blocking)
+    if (blocking)
 #endif
-	{
+    {
 #ifdef BLOCKING_RNG_AVAILABLE
-		BlockingRng rng;
-		rng.GenerateBlock(output, size);
+        BlockingRng rng;
+        rng.GenerateBlock(output, size);
 #endif
-	}
+    }
 
 #ifdef BLOCKING_RNG_AVAILABLE
-	if (!blocking)
+    if (!blocking)
 #endif
-	{
+    {
 #ifdef NONBLOCKING_RNG_AVAILABLE
-		NonblockingRng rng;
-		rng.GenerateBlock(output, size);
+        NonblockingRng rng;
+        rng.GenerateBlock(output, size);
 #endif
-	}
+    }
 }
 
 void AutoSeededRandomPool::Reseed(bool blocking, unsigned int seedSize)
 {
-	SecByteBlock seed(seedSize);
-	OS_GenerateRandomBlock(blocking, seed, seedSize);
-	IncorporateEntropy(seed, seedSize);
+    SecByteBlock seed(seedSize);
+    OS_GenerateRandomBlock(blocking, seed, seedSize);
+    IncorporateEntropy(seed, seedSize);
 }
 
 NAMESPACE_END
