@@ -67,24 +67,32 @@ private:
 
 private:
     LPDIRECT3D9 m_d3d_handle;                 /**< Direct3D Handle */
+	//z d3d 设备
     LPDIRECT3DDEVICE9 m_d3d_device;           /**< The Direct3D Adapter */
     LPDIRECT3DSURFACE9 m_d3d_surface;         /**< Offscreen Direct3D Surface. */
+	//z 此项目未用
     LPDIRECT3DTEXTURE9 m_d3d_texture_osd;     /**< Direct3D Texture. Uses RGBA */
     LPDIRECT3DTEXTURE9 m_d3d_texture_system;  /**< Direct3D Texture. System memory cannot lock a normal texture. Uses RGBA */
-    LPDIRECT3DSURFACE9 m_d3d_backbuf;         /**< Video card's back buffer (used to display next frame) */
+    //z back buff， 用于显示下一帧
+	LPDIRECT3DSURFACE9 m_d3d_backbuf;         /**< Video card's back buffer (used to display next frame) */
 	D3DLOCKED_RECT m_locked_rect;             /**< The locked offscreen surface */
+	//z 屏幕（桌面）颜色空间
     D3DFORMAT m_desktop_fmt;                  /**< Desktop (screen) colorspace format. */
+	//z 视频颜色空间
     D3DFORMAT m_movie_src_fmt;                /**< Movie colorspace format (depends on the movie's codec) */
     D3DPRESENT_PARAMETERS m_present_params;
     RECT m_last_client_rect;
-
+	
+	//z backbuf 宽和高
     int m_cur_backbuf_width;         /**< Current backbuffer width */
     int m_cur_backbuf_height;        /**< Current backbuffer height */
+	//z 材质尺寸是否必须是2的幂次
     int m_device_caps_power2_only;   /**< 1 = texture sizes have to be power 2
 												0 = texture sizes can be anything */
+	//z 材质是否必须是 square
     int m_device_caps_square_only;   /**< 1 = textures have to be square
 												0 = textures do not have to be square */
-    int m_device_texture_sys;        /**< 1 = device can texture from system memory
+	int m_device_texture_sys;        /**< 1 = device can texture from system memory
 												0 = device requires shadow */
     int m_max_texture_width;         /**< from the device capabilities */
     int m_max_texture_height;        /**< from the device capabilities */

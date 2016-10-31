@@ -62,7 +62,7 @@ bool ddraw_render::init_render(void* ctx, int w, int h, int pix_fmt)
 	if (pix_fmt != -1)
 		m_video_fmt = pix_fmt;
 	else
-		m_video_fmt = PIX_FMT_YUV420P;
+		m_video_fmt = PIX_FMT_YUV420P;//z pix_fmt 为-1，使用 420p 格式
 
 	HRESULT hr;
 

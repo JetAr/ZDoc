@@ -217,6 +217,8 @@ bool d3d_render::render_one_frame(AVFrame* data, int pix_fmt)
 	}
 
 	/* Lock the offscreen surface if it's not already locked. */
+	//z 根据 pBits 看下 offscreen 是否锁定
+	//z m_d3d_surface 是 offscreen surface ？
 	if (!m_locked_rect.pBits && m_d3d_surface)
 	{
 		hr = m_d3d_surface->LockRect(&m_locked_rect, NULL, 0);
@@ -226,6 +228,7 @@ bool d3d_render::render_one_frame(AVFrame* data, int pix_fmt)
 			if (!reconfigure_d3d())
 				return false;
 
+			//z 再次尝试一次
 			hr = m_d3d_surface->LockRect(&m_locked_rect, NULL, 0);
 			if (FAILED(hr))
 				return false;
@@ -241,6 +244,7 @@ bool d3d_render::render_one_frame(AVFrame* data, int pix_fmt)
 		return false;
 	}
 
+	//z 得到的是一个 yuv 。w*h*3/2 (1 + 1/4 + 1/4)
 	uint8_t*	dst_yuv[3] = { (uint8_t*)m_locked_rect.pBits,
 		(uint8_t*)m_locked_rect.pBits + m_locked_rect.Pitch * m_image_height,
 		(uint8_t*)m_locked_rect.pBits + m_locked_rect.Pitch * m_image_height + 
@@ -284,7 +288,6 @@ bool d3d_render::render_one_frame(AVFrame* data, int pix_fmt)
 	m_d3d_device->Clear(0, NULL,
 	D3DCLEAR_TARGET, 0, 0, 0);
 	*/
-
 	hr = m_d3d_device->StretchRect(m_d3d_surface,
 		NULL,
 		m_d3d_backbuf,
@@ -381,13 +384,17 @@ void d3d_render::fill_d3d_presentparams(D3DPRESENT_PARAMETERS *present_params)
 	/* Prepare Direct3D initialization parameters. */
 	memset(present_params, 0, sizeof(D3DPRESENT_PARAMETERS));
 	present_params->Windowed               = TRUE;
+	//z 切换特效
 	present_params->SwapEffect             = D3DSWAPEFFECT_COPY;
 	present_params->Flags                  = D3DPRESENTFLAG_VIDEO;
+	//z 关联的窗口
 	present_params->hDeviceWindow          = m_hwnd; /* w32_common var */
 	//    present_params->BackBufferWidth        = 0; /* 防止闪烁, 赋值为0, 原因不详. */
 	//    present_params->BackBufferHeight       = 0;
+	//z 多重采样类型
 	present_params->MultiSampleType        = D3DMULTISAMPLE_NONE;
 	present_params->PresentationInterval   = D3DPRESENT_INTERVAL_ONE;
+	//z 设置 back buffer format 为 BackBufferFormat
 	present_params->BackBufferFormat       = m_desktop_fmt;
 	present_params->BackBufferCount        = 1;
 	present_params->EnableAutoDepthStencil = FALSE;
@@ -396,6 +403,7 @@ void d3d_render::fill_d3d_presentparams(D3DPRESENT_PARAMETERS *present_params)
 bool d3d_render::configure_d3d()
 {
 	D3DDISPLAYMODE disp_mode;
+	//z 宽、高，刷新率以及格式
 	D3DVIEWPORT9 vp = { 0, 0, m_image_width, m_image_height, 0, 1 };
 	HRESULT hr;
 
@@ -404,6 +412,7 @@ bool d3d_render::configure_d3d()
 	/* Get the current desktop display mode, so we can set up a back buffer
 	* of the same format. 
 	*/
+	//z 得到默认显卡（0）的显式模式。
 	hr = m_d3d_handle->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &disp_mode);
 	if (FAILED(hr))
 	{
@@ -413,6 +422,7 @@ bool d3d_render::configure_d3d()
 	}
 
 	/* Write current Desktop's colorspace format in the global storage. */
+	//z 记录下桌面格式。
 	m_desktop_fmt = disp_mode.Format;
 
 	if (!change_d3d_backbuffer(BACKBUFFER_CREATE))
@@ -421,6 +431,7 @@ bool d3d_render::configure_d3d()
 	if (!create_d3d_surfaces())
 		return false;
 
+	//z view port 是什么概念了？
 	hr = m_d3d_device->SetViewport(&vp);
 	if (FAILED(hr))
 	{
@@ -444,6 +455,7 @@ bool d3d_render::change_d3d_backbuffer(back_buffer_action_e action)
 	/* fill_d3d_presentparams(&present_params);*/
 	/* vo_w32_window is w32_common variable. It's a handle to the window. */
 
+	//z 得到 back 的 width 以及 height。
 	if (m_image_width > m_cur_backbuf_width)
 		m_cur_backbuf_width = m_image_width;
 
@@ -453,6 +465,7 @@ bool d3d_render::change_d3d_backbuffer(back_buffer_action_e action)
 	fill_d3d_presentparams(&m_present_params);
 	if (m_d3d_handle)
 	{
+		//z 创建 d3d device
 		hr = m_d3d_handle->CreateDevice(D3DADAPTER_DEFAULT,
 			D3DDEVTYPE_HAL, m_hwnd,
 			D3DCREATE_SOFTWARE_VERTEXPROCESSING|D3DCREATE_FPU_PRESERVE|D3DCREATE_MULTITHREADED,
@@ -486,11 +499,13 @@ bool d3d_render::create_d3d_surfaces()
 {
 	printf("create_d3d_surfaces called.\n");
 
+	//z 如果 device 没有创建，直接返回
 	if (!m_d3d_device)
 		return false;
 
 	HRESULT hr;
 
+	//z 创建 offscreen plain surface
 	if (!m_d3d_surface)
 	{
 		hr = m_d3d_device->CreateOffscreenPlainSurface(m_image_width, m_image_height,
@@ -501,7 +516,8 @@ bool d3d_render::create_d3d_surfaces()
 			return false;
 		}
 	}
-
+	
+	//z 创建 back buffer
 	if (!m_d3d_backbuf)
 	{
 		hr = m_d3d_device->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &m_d3d_backbuf);
@@ -511,7 +527,8 @@ bool d3d_render::create_d3d_surfaces()
 			return false;
 		}
 	}
-
+	
+	//z 设置默认的 render state
 	/* setup default renderstate */
 	IDirect3DDevice9_SetRenderState(m_d3d_device, D3DRS_SRCBLEND, D3DBLEND_ONE);
 	IDirect3DDevice9_SetRenderState(m_d3d_device, D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -546,6 +563,7 @@ bool d3d_render::reconfigure_d3d()
 	}
 
 	/* Initialize Direct3D from the beginning */
+	//z 创建 d3d handle
 	m_d3d_handle = Direct3DCreate9(D3D_SDK_VERSION);
 	if (!m_d3d_handle)
 	{
@@ -566,11 +584,12 @@ void d3d_render::destroy_d3d_surfaces()
 	printf("destroy_d3d_surfaces called.\n");
 
 	/* Let's destroy the old (if any) D3D Surfaces */
-	//z 如果 pBits 不为 null，
+	//z 如果 pBits 不为 null，说明有 LockRect 
 	if (m_locked_rect.pBits)
 		m_d3d_surface->UnlockRect();
 	m_locked_rect.pBits = NULL;
 
+	//z 如果已经创建 m_d3d_surface ，先销毁
 	if (m_d3d_surface)
 		m_d3d_surface->Release();
 	m_d3d_surface = NULL;
