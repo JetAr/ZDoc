@@ -234,6 +234,19 @@ void CNalParser::h264_debug_sps(sps_t* sps, HTREEITEM root)
     }
 }
 
+void CNalParser::expand_tree()
+{
+	HTREEITEM hItem;
+	HTREEITEM hCurrent;
+
+	hItem= m_pTree->GetFirstVisibleItem();
+	while (hItem != NULL)
+	{
+		m_pTree->Expand(hItem,TVE_EXPAND);
+		hItem= m_pTree->GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	}
+}
+
 void CNalParser::h264_debug_pps(pps_t* pps, HTREEITEM root)
 {
     my_printf("pic_parameter_set_rbsp()");
@@ -813,6 +826,7 @@ void CNalParser::h264_debug_seis( h264_stream_t* h, HTREEITEM root)
  */
 void CNalParser::h264_debug_nal_t(h264_stream_t* h, nal_t* nal)
 {
+	m_pTree->SetRedraw(FALSE);
     m_pTree->DeleteAllItems();
     my_printf("NAL");
     HTREEITEM root = AddTreeItem(TVI_ROOT);
@@ -852,6 +866,9 @@ void CNalParser::h264_debug_nal_t(h264_stream_t* h, nal_t* nal)
     else if( nal->nal_unit_type == NAL_UNIT_TYPE_PPS) { h264_debug_pps(h->pps, root); }
     else if( nal->nal_unit_type == NAL_UNIT_TYPE_AUD) { h264_debug_aud(h->aud, root); }
     else if( nal->nal_unit_type == NAL_UNIT_TYPE_SEI) { h264_debug_seis(h, root); }
+
+	expand_tree();
+	m_pTree->SetRedraw(TRUE);
 }
 
 ////////////////////////////////////////////////////////
@@ -2034,6 +2051,7 @@ void CNalParser::h265_debug_nal_t(h265_stream_t* h, h265_nal_t* nal)
 
     const char* nal_unit_type_name = NULL;
     
+	m_pTree->SetRedraw(FALSE);
     m_pTree->DeleteAllItems();
 
     switch (nal->nal_unit_type)
@@ -2190,4 +2208,7 @@ void CNalParser::h265_debug_nal_t(h265_stream_t* h, h265_nal_t* nal)
         h265_debug_seis(h, root);
     else if(my_nal_type == 5)
         h265_debug_slice_header(h, root);
+
+	expand_tree();
+	m_pTree->SetRedraw(TRUE);
 }

@@ -139,6 +139,7 @@ private:
 
     void h265_debug_nal_t(h265_stream_t* h, h265_nal_t* nal);
 
+	void expand_tree();
 
 private:
     // todo：不使用这种写死空间的做法

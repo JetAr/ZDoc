@@ -158,7 +158,7 @@ void CHexEdit::OnPaint()
 			UpdateScrollbars();
 		}
 		
-		TRACE("%i %i\n", m_topindex, m_selStart);
+		//z TRACE("%i %i\n", m_topindex, m_selStart);
 		
 		height = rc.Height() / m_lineHeight;
 		height *= m_lineHeight;
