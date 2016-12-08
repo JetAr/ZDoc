@@ -1,4 +1,4 @@
-/*
+﻿/*
  * copyright (c) 2005-2012 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
@@ -67,7 +67,8 @@
  */
 
 
-enum AVRounding {
+enum AVRounding
+{
     AV_ROUND_ZERO     = 0, ///< Round toward zero.
     AV_ROUND_INF      = 1, ///< Round away from zero.
     AV_ROUND_DOWN     = 2, ///< Round toward -infinity.
@@ -157,8 +158,8 @@ int64_t av_rescale_delta(AVRational in_tb, int64_t in_ts,  AVRational fs_tb, int
 int64_t av_add_stable(AVRational ts_tb, int64_t ts, AVRational inc_tb, int64_t inc);
 
 
-    /**
- * @}
- */
+/**
+* @}
+*/
 
 #endif /* AVUTIL_MATHEMATICS_H */

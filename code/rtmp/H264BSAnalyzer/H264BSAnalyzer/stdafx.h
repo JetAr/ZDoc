@@ -1,4 +1,4 @@
-
+﻿
 // stdafx.h : include file for standard system include files,
 // or project specific include files that are used frequently,
 // but are changed infrequently
@@ -37,12 +37,12 @@
 
 #include <afxcontrolbars.h>     // MFC support for ribbons and control bars
 
-// FFMPEG�и�ͷ�ļ��õ�
+// FFMPEG有个头文件用到
 #ifndef __STDC_CONSTANT_MACROS
 #define __STDC_CONSTANT_MACROS
 #endif
 
-//////// GDI�⼰ͷ�ļ�
+//////// GDI库及头文件
 #pragma comment(lib, "gdiplus.lib")
 #include <gdiplus.h>
 using namespace Gdiplus;

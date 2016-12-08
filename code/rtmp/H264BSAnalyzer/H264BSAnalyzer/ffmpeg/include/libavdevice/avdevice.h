@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -105,7 +105,8 @@ AVOutputFormat *av_output_audio_device_next(AVOutputFormat *d);
  */
 AVOutputFormat *av_output_video_device_next(AVOutputFormat *d);
 
-typedef struct AVDeviceRect {
+typedef struct AVDeviceRect
+{
     int x;      /**< x coordinate of top left corner */
     int y;      /**< y coordinate of top left corner */
     int width;  /**< width */
@@ -115,7 +116,8 @@ typedef struct AVDeviceRect {
 /**
  * Message types used by avdevice_app_to_dev_control_message().
  */
-enum AVAppToDevMessageType {
+enum AVAppToDevMessageType
+{
     /**
      * Dummy message.
      */
@@ -194,7 +196,8 @@ enum AVAppToDevMessageType {
 /**
  * Message types used by avdevice_dev_to_app_control_message().
  */
-enum AVDevToAppMessageType {
+enum AVDevToAppMessageType
+{
     /**
      * Dummy message.
      */
@@ -396,7 +399,8 @@ int avdevice_dev_to_app_control_message(struct AVFormatContext *s,
  * It is used by devices in conjunction with av_device_capabilities AVOption table
  * to implement capabilities probing API based on AVOption API. Should not be used directly.
  */
-typedef struct AVDeviceCapabilitiesQuery {
+typedef struct AVDeviceCapabilitiesQuery
+{
     const AVClass *av_class;
     AVFormatContext *device_context;
     enum AVCodecID codec;
@@ -448,7 +452,8 @@ void avdevice_capabilities_free(AVDeviceCapabilitiesQuery **caps, AVFormatContex
 /**
  * Structure describes basic parameters of the device.
  */
-typedef struct AVDeviceInfo {
+typedef struct AVDeviceInfo
+{
     char *device_name;                   /**< device name, format depends on device */
     char *device_description;            /**< human friendly name */
 } AVDeviceInfo;
@@ -456,7 +461,8 @@ typedef struct AVDeviceInfo {
 /**
  * List of devices.
  */
-typedef struct AVDeviceInfoList {
+typedef struct AVDeviceInfoList
+{
     AVDeviceInfo **devices;              /**< list of autodetected devices */
     int nb_devices;                      /**< number of autodetected devices */
     int default_device;                  /**< index of default device or -1 if no default */

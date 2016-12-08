@@ -1,4 +1,4 @@
-
+﻿
 // H264BSAnalyzer.cpp : Defines the class behaviors for the application.
 //
 

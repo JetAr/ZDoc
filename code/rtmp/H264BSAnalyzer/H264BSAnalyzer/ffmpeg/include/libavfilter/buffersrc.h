@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * This file is part of FFmpeg.
  *
@@ -35,7 +35,8 @@
  * @{
  */
 
-enum {
+enum
+{
 
     /**
      * Do not check for format changes.

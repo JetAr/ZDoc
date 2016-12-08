@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2013 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This file is part of FFmpeg.
@@ -28,7 +28,8 @@
 /**
  * List of possible 3D Types
  */
-enum AVStereo3DType {
+enum AVStereo3DType
+{
     /**
      * Video is not stereoscopic (and metadata has to be there).
      */
@@ -120,7 +121,8 @@ enum AVStereo3DType {
  * @note The struct must be allocated with av_stereo3d_alloc() and
  *       its size is not a part of the public ABI.
  */
-typedef struct AVStereo3D {
+typedef struct AVStereo3D
+{
     /**
      * How views are packed within the video.
      */

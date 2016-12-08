@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 H.265 ver:
 3.0  ITU-T H.265 (V3)  2015-04-29
 ref: HM16.6 source code
@@ -118,17 +118,17 @@ typedef struct
 {
     uint8_t nal_hrd_parameters_present_flag;
     uint8_t vcl_hrd_parameters_present_flag;
-      uint8_t sub_pic_hrd_params_present_flag;
-        uint8_t tick_divisor_minus2;
-        uint8_t du_cpb_removal_delay_increment_length_minus1;
-        uint8_t sub_pic_cpb_params_in_pic_timing_sei_flag;
-        uint8_t dpb_output_delay_du_length_minus1;
-      uint8_t bit_rate_scale;
-      uint8_t cpb_size_scale;
-      uint8_t cpb_size_du_scale;
-      uint8_t initial_cpb_removal_delay_length_minus1;
-      uint8_t au_cpb_removal_delay_length_minus1;
-      uint8_t dpb_output_delay_length_minus1;
+    uint8_t sub_pic_hrd_params_present_flag;
+    uint8_t tick_divisor_minus2;
+    uint8_t du_cpb_removal_delay_increment_length_minus1;
+    uint8_t sub_pic_cpb_params_in_pic_timing_sei_flag;
+    uint8_t dpb_output_delay_du_length_minus1;
+    uint8_t bit_rate_scale;
+    uint8_t cpb_size_scale;
+    uint8_t cpb_size_du_scale;
+    uint8_t initial_cpb_removal_delay_length_minus1;
+    uint8_t au_cpb_removal_delay_length_minus1;
+    uint8_t dpb_output_delay_length_minus1;
     vector<uint8_t> fixed_pic_rate_general_flag;
     vector<uint8_t> fixed_pic_rate_within_cvs_flag;
     vector<int> elemental_duration_in_tc_minus1;
@@ -172,10 +172,10 @@ typedef struct
     int log2_max_transform_skip_block_size_minus2;
     uint8_t cross_component_prediction_enabled_flag;
     uint8_t chroma_qp_offset_list_enabled_flag;
-      int diff_cu_chroma_qp_offset_depth;
-      int chroma_qp_offset_list_len_minus1;
-      vector<int> cb_qp_offset_list;
-      vector<int> cr_qp_offset_list;
+    int diff_cu_chroma_qp_offset_depth;
+    int chroma_qp_offset_list_len_minus1;
+    vector<int> cb_qp_offset_list;
+    vector<int> cr_qp_offset_list;
     int log2_sao_offset_scale_luma;
     int log2_sao_offset_scale_chroma;
 } pps_range_extension_t;
@@ -198,45 +198,45 @@ E.2.1  VUI parameters syntax
 typedef struct
 {
     uint8_t aspect_ratio_info_present_flag;
-      uint8_t aspect_ratio_idc;
-      int sar_width;
-      int sar_height;
+    uint8_t aspect_ratio_idc;
+    int sar_width;
+    int sar_height;
     uint8_t overscan_info_present_flag;
-      uint8_t overscan_appropriate_flag;
+    uint8_t overscan_appropriate_flag;
     uint8_t video_signal_type_present_flag;
-      uint8_t video_format;
-      uint8_t video_full_range_flag;
-      uint8_t colour_description_present_flag;
-        uint8_t colour_primaries;
-        uint8_t transfer_characteristics;
-        uint8_t matrix_coeffs;
+    uint8_t video_format;
+    uint8_t video_full_range_flag;
+    uint8_t colour_description_present_flag;
+    uint8_t colour_primaries;
+    uint8_t transfer_characteristics;
+    uint8_t matrix_coeffs;
     uint8_t chroma_loc_info_present_flag;
-      int chroma_sample_loc_type_top_field;
-      int chroma_sample_loc_type_bottom_field;
+    int chroma_sample_loc_type_top_field;
+    int chroma_sample_loc_type_bottom_field;
     uint8_t neutral_chroma_indication_flag;
     uint8_t field_seq_flag;
     uint8_t frame_field_info_present_flag;
     uint8_t default_display_window_flag;
-      int def_disp_win_left_offset;
-      int def_disp_win_right_offset;
-      int def_disp_win_top_offset;
-      int def_disp_win_bottom_offset;
+    int def_disp_win_left_offset;
+    int def_disp_win_right_offset;
+    int def_disp_win_top_offset;
+    int def_disp_win_bottom_offset;
     uint8_t vui_timing_info_present_flag;
-      uint32_t vui_num_units_in_tick;
-      uint32_t vui_time_scale;
-      uint8_t vui_poc_proportional_to_timing_flag;
-        int vui_num_ticks_poc_diff_one_minus1;
-      uint8_t vui_hrd_parameters_present_flag;
-      hrd_parameters_t hrd_parameters;
+    uint32_t vui_num_units_in_tick;
+    uint32_t vui_time_scale;
+    uint8_t vui_poc_proportional_to_timing_flag;
+    int vui_num_ticks_poc_diff_one_minus1;
+    uint8_t vui_hrd_parameters_present_flag;
+    hrd_parameters_t hrd_parameters;
     uint8_t bitstream_restriction_flag;
-      uint8_t tiles_fixed_structure_flag;
-      uint8_t motion_vectors_over_pic_boundaries_flag;
-      uint8_t restricted_ref_pic_lists_flag;
-      int min_spatial_segmentation_idc;
-      int max_bytes_per_pic_denom;
-      int max_bits_per_min_cu_denom;
-      int log2_max_mv_length_horizontal;
-      int log2_max_mv_length_vertical;
+    uint8_t tiles_fixed_structure_flag;
+    uint8_t motion_vectors_over_pic_boundaries_flag;
+    uint8_t restricted_ref_pic_lists_flag;
+    int min_spatial_segmentation_idc;
+    int max_bytes_per_pic_denom;
+    int max_bits_per_min_cu_denom;
+    int log2_max_mv_length_horizontal;
+    int log2_max_mv_length_vertical;
 } vui_parameters_t;
 
 /**
@@ -338,16 +338,16 @@ typedef struct
     int vps_num_layer_sets_minus1;
     vector<vector<uint8_t> > layer_id_included_flag;
     uint8_t vps_timing_info_present_flag;
-      int vps_num_units_in_tick;
-      int vps_time_scale;
-      uint8_t vps_poc_proportional_to_timing_flag;
-        int vps_num_ticks_poc_diff_one_minus1;
-      int vps_num_hrd_parameters;
-      vector<int> hrd_layer_set_idx;
-      vector<uint8_t> cprms_present_flag;
-      hrd_parameters_t hrd_parameters;
+    int vps_num_units_in_tick;
+    int vps_time_scale;
+    uint8_t vps_poc_proportional_to_timing_flag;
+    int vps_num_ticks_poc_diff_one_minus1;
+    int vps_num_hrd_parameters;
+    vector<int> hrd_layer_set_idx;
+    vector<uint8_t> cprms_present_flag;
+    hrd_parameters_t hrd_parameters;
     uint8_t vps_extension_flag;
-      uint8_t vps_extension_data_flag;
+    uint8_t vps_extension_data_flag;
 } h265_vps_t;
 
 /**
@@ -366,10 +366,10 @@ typedef struct
     int pic_width_in_luma_samples;
     int pic_height_in_luma_samples;
     int conformance_window_flag;
-      int conf_win_left_offset;
-      int conf_win_right_offset;
-      int conf_win_top_offset;
-      int conf_win_bottom_offset;
+    int conf_win_left_offset;
+    int conf_win_right_offset;
+    int conf_win_top_offset;
+    int conf_win_bottom_offset;
     int bit_depth_luma_minus8;
     int bit_depth_chroma_minus8;
     int log2_max_pic_order_cnt_lsb_minus4;
@@ -384,35 +384,35 @@ typedef struct
     int max_transform_hierarchy_depth_inter;
     int max_transform_hierarchy_depth_intra;
     uint8_t scaling_list_enabled_flag;
-      uint8_t sps_infer_scaling_list_flag;
-      int sps_scaling_list_ref_layer_id;
-      int sps_scaling_list_data_present_flag;
-        scaling_list_data_t scaling_list_data;
+    uint8_t sps_infer_scaling_list_flag;
+    int sps_scaling_list_ref_layer_id;
+    int sps_scaling_list_data_present_flag;
+    scaling_list_data_t scaling_list_data;
     uint8_t amp_enabled_flag;
     uint8_t sample_adaptive_offset_enabled_flag;
     uint8_t pcm_enabled_flag;
-      uint8_t pcm_sample_bit_depth_luma_minus1;
-      uint8_t pcm_sample_bit_depth_chroma_minus1;
-      int log2_min_pcm_luma_coding_block_size_minus3;
-      int log2_diff_max_min_pcm_luma_coding_block_size;
-      uint8_t pcm_loop_filter_disabled_flag;
+    uint8_t pcm_sample_bit_depth_luma_minus1;
+    uint8_t pcm_sample_bit_depth_chroma_minus1;
+    int log2_min_pcm_luma_coding_block_size_minus3;
+    int log2_diff_max_min_pcm_luma_coding_block_size;
+    uint8_t pcm_loop_filter_disabled_flag;
     int num_short_term_ref_pic_sets;
     vector<st_ref_pic_set_t> st_ref_pic_set;
     vector<referencePictureSets_t> m_RPSList; // store
     uint8_t long_term_ref_pics_present_flag;
-      int num_long_term_ref_pics_sps;
-      int lt_ref_pic_poc_lsb_sps_bytes;
-      vector<int> lt_ref_pic_poc_lsb_sps;
-      vector<uint8_t> used_by_curr_pic_lt_sps_flag;
+    int num_long_term_ref_pics_sps;
+    int lt_ref_pic_poc_lsb_sps_bytes;
+    vector<int> lt_ref_pic_poc_lsb_sps;
+    vector<uint8_t> used_by_curr_pic_lt_sps_flag;
     uint8_t sps_temporal_mvp_enabled_flag;
     uint8_t strong_intra_smoothing_enabled_flag;
     uint8_t vui_parameters_present_flag;
-      vui_parameters_t vui;
+    vui_parameters_t vui;
     uint8_t sps_extension_present_flag;
-      uint8_t sps_range_extension_flag;
-      uint8_t sps_multilayer_extension_flag;
-      uint8_t sps_3d_extension_flag;
-      uint8_t sps_extension_5bits;
+    uint8_t sps_range_extension_flag;
+    uint8_t sps_multilayer_extension_flag;
+    uint8_t sps_3d_extension_flag;
+    uint8_t sps_extension_5bits;
     sps_range_extension_t sps_range_extension;
     uint8_t inter_view_mv_vert_constraint_flag ; //sps_multilayer_extension_t sps_multilayer_extension;
     //sps_3d_extension_t sps_3d_extension;
@@ -448,28 +448,28 @@ typedef struct
     uint8_t transquant_bypass_enabled_flag;
     uint8_t tiles_enabled_flag;
     uint8_t entropy_coding_sync_enabled_flag;
-      int num_tile_columns_minus1;
-      int num_tile_rows_minus1;
-      int uniform_spacing_flag;
-        vector<int> column_width_minus1;
-        vector<int> row_height_minus1;
-      uint8_t loop_filter_across_tiles_enabled_flag;
+    int num_tile_columns_minus1;
+    int num_tile_rows_minus1;
+    int uniform_spacing_flag;
+    vector<int> column_width_minus1;
+    vector<int> row_height_minus1;
+    uint8_t loop_filter_across_tiles_enabled_flag;
     uint8_t pps_loop_filter_across_slices_enabled_flag;
     uint8_t deblocking_filter_control_present_flag;
-      uint8_t deblocking_filter_override_enabled_flag;
-      uint8_t pps_deblocking_filter_disabled_flag;
-        int pps_beta_offset_div2;
-        int pps_tc_offset_div2;
+    uint8_t deblocking_filter_override_enabled_flag;
+    uint8_t pps_deblocking_filter_disabled_flag;
+    int pps_beta_offset_div2;
+    int pps_tc_offset_div2;
     uint8_t pps_scaling_list_data_present_flag;
-      scaling_list_data_t scaling_list_data;
+    scaling_list_data_t scaling_list_data;
     uint8_t lists_modification_present_flag;
     int log2_parallel_merge_level_minus2;
     uint8_t slice_segment_header_extension_present_flag;
     uint8_t pps_extension_present_flag;
-      uint8_t pps_range_extension_flag;
-      uint8_t pps_multilayer_extension_flag;
-      uint8_t pps_3d_extension_flag;
-      uint8_t pps_extension_5bits;
+    uint8_t pps_range_extension_flag;
+    uint8_t pps_multilayer_extension_flag;
+    uint8_t pps_3d_extension_flag;
+    uint8_t pps_extension_5bits;
     pps_range_extension_t pps_range_extension;
     //pps_multilayer_extension_t pps_multilayer_extension;
     //pps_3d_extension_t pps_3d_extension;
@@ -488,28 +488,28 @@ typedef struct
     int first_slice_segment_in_pic_flag;
     uint8_t no_output_of_prior_pics_flag;
     int slice_pic_parameter_set_id;
-      uint8_t dependent_slice_segment_flag;
-      int slice_segment_address;
-      int slice_segment_address_bytes;
-        vector<uint8_t> slice_reserved_flag;
-        int slice_type;
-        uint8_t pic_output_flag;
-        int colour_plane_id;
-        int slice_pic_order_cnt_lsb_bytes;
-        int slice_pic_order_cnt_lsb;
-        uint8_t short_term_ref_pic_set_sps_flag;
-        st_ref_pic_set_t st_ref_pic_set;
-        referencePictureSets_t* m_pRPS;
-        referencePictureSets_t m_localRPS;
-        int short_term_ref_pic_set_idx;
-        int short_term_ref_pic_set_idx_bytes;
-        int num_long_term_sps;
-        int num_long_term_pics;
-        vector<int> lt_idx_sps;
-        vector<int> poc_lsb_lt;
-        vector<uint8_t> used_by_curr_pic_lt_flag;
-        vector<uint8_t> delta_poc_msb_present_flag;
-        vector<int> delta_poc_msb_cycle_lt;
+    uint8_t dependent_slice_segment_flag;
+    int slice_segment_address;
+    int slice_segment_address_bytes;
+    vector<uint8_t> slice_reserved_flag;
+    int slice_type;
+    uint8_t pic_output_flag;
+    int colour_plane_id;
+    int slice_pic_order_cnt_lsb_bytes;
+    int slice_pic_order_cnt_lsb;
+    uint8_t short_term_ref_pic_set_sps_flag;
+    st_ref_pic_set_t st_ref_pic_set;
+    referencePictureSets_t* m_pRPS;
+    referencePictureSets_t m_localRPS;
+    int short_term_ref_pic_set_idx;
+    int short_term_ref_pic_set_idx_bytes;
+    int num_long_term_sps;
+    int num_long_term_pics;
+    vector<int> lt_idx_sps;
+    vector<int> poc_lsb_lt;
+    vector<uint8_t> used_by_curr_pic_lt_flag;
+    vector<uint8_t> delta_poc_msb_present_flag;
+    vector<int> delta_poc_msb_cycle_lt;
     uint8_t slice_temporal_mvp_enabled_flag;
     uint8_t slice_sao_luma_flag;
     uint8_t slice_sao_chroma_flag;
@@ -543,8 +543,8 @@ typedef struct
 
 typedef struct
 {
-  int rbsp_size;
-  uint8_t* rbsp_buf;
+    int rbsp_size;
+    uint8_t* rbsp_buf;
 } h265_slice_data_rbsp_t;
 
 /**
@@ -670,7 +670,7 @@ enum NalUnitType
     NAL_UNIT_INVALID,
 };
 
-// Table 7-7 ¨C Name association to slice_type --checked
+// Table 7-7 Â¨C Name association to slice_type --checked
 enum SliceType
 {
     H265_SH_SLICE_TYPE_B = 0,        // P (P slice)
@@ -678,7 +678,7 @@ enum SliceType
     H265_SH_SLICE_TYPE_I = 2,        // I (I slice)
 };
 
-//7.4.3.5 Table 7-2 ¨C Interpretation of pic_type --checked
+//7.4.3.5 Table 7-2 Â¨C Interpretation of pic_type --checked
 #define H265_AUD_PRIMARY_PIC_TYPE_I       0                // I
 #define H265_AUD_PRIMARY_PIC_TYPE_IP      1                // P, I
 #define H265_AUD_PRIMARY_PIC_TYPE_IPB     2                // B, P, I
@@ -701,17 +701,17 @@ enum SliceType
 #define H265_SAR_4_3       14             // 160:99
 #define H265_SAR_3_2       15             // 160:99
 #define H265_SAR_2_1       16             // 160:99
-                                          // 17..254           Reserved
+// 17..254           Reserved
 #define H265_SAR_Extended  255        // Extended_SAR
 
 /// chroma formats (according to semantics of chroma_format_idc)
 enum ChromaFormat
 {
-  CHROMA_400        = 0,
-  CHROMA_420        = 1,
-  CHROMA_422        = 2,
-  CHROMA_444        = 3,
-  NUM_CHROMA_FORMAT = 4
+    CHROMA_400        = 0,
+    CHROMA_420        = 1,
+    CHROMA_422        = 2,
+    CHROMA_444        = 3,
+    NUM_CHROMA_FORMAT = 4
 };
 
 enum ProfileName

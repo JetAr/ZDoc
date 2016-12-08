@@ -1,4 +1,4 @@
-#ifndef PALPARSE_H
+ï»¿#ifndef PALPARSE_H
 #define PALPARSE_H
 
 #include "stdafx.h"
@@ -12,16 +12,16 @@ using std::vector;
 typedef struct
 {
     int type;                       // 0 -- h.264; 1 -- h.265
-    unsigned int num;               // ĞòºÅ
-    unsigned int len;               // º¬ÆğÊ¼ÂëµÄ×ÜµÄ³¤¶È
-    unsigned int offset;       // nal°üÔÚÎÄ¼şÖĞµÄÆ«ÒÆ
-    int sliceType;               // Ö¡ÀàĞÍ
-    int nalType;            // NALÀàĞÍ
-    int startcodeLen;             // start code³¤¶È
-    char startcodeBuffer[16];         // ÆğÊ¼Âë£¬×Ö·û´®ĞÎÊ½
+    unsigned int num;               // åºå·
+    unsigned int len;               // å«èµ·å§‹ç çš„æ€»çš„é•¿åº¦
+    unsigned int offset;       // nalåŒ…åœ¨æ–‡ä»¶ä¸­çš„åç§»
+    int sliceType;               // å¸§ç±»å‹
+    int nalType;            // NALç±»å‹
+    int startcodeLen;             // start codeé•¿åº¦
+    char startcodeBuffer[16];         // èµ·å§‹ç ï¼Œå­—ç¬¦ä¸²å½¢å¼
 } NALU_t;
 
-typedef struct 
+typedef struct
 {
     int profile_idc;
     int level_idc;
@@ -31,15 +31,15 @@ typedef struct
     int crop_right;
     int crop_top;
     int crop_bottom;
-    float max_framerate;  // ÓÉSPS¼ÆËãµÃµ½µÄÖ¡ÂÊ£¬Îª0±íÊ¾SPSÖĞÃ»ÓĞÏàÓ¦µÄ×Ö¶Î¼ÆËã
-    int chroma_format_idc;  // YUVÑÕÉ«¿Õ¼ä 0: monochrome 1:420 2:422 3:444
-}SPSInfo_t;
+    float max_framerate;  // ç”±SPSè®¡ç®—å¾—åˆ°çš„å¸§ç‡ï¼Œä¸º0è¡¨ç¤ºSPSä¸­æ²¡æœ‰ç›¸åº”çš„å­—æ®µè®¡ç®—
+    int chroma_format_idc;  // YUVé¢œè‰²ç©ºé—´ 0: monochrome 1:420 2:422 3:444
+} SPSInfo_t;
 
-typedef struct 
+typedef struct
 {
-    int encoding_type;  // Îª1±íÊ¾CABAC 0±íÊ¾CAVLC
+    int encoding_type;  // ä¸º1è¡¨ç¤ºCABAC 0è¡¨ç¤ºCAVLC
 
-}PPSInfo_t;
+} PPSInfo_t;
 
 enum FileType
 {
@@ -56,14 +56,14 @@ class CNalParser
 public:
     CNalParser();
     ~CNalParser();
-    
+
     int init(const char* filename, CTreeCtrl* tree);
     int release(void);
 
-    // ËÑË÷ÊÓÆµÎÄ¼şµÄANLµ¥Ôª£¬¼ÇÂ¼Æ«ÒÆ¼°³¤¶È
+    // æœç´¢è§†é¢‘æ–‡ä»¶çš„ANLå•å…ƒï¼Œè®°å½•åç§»åŠé•¿åº¦
     int probeNALU(vector<NALU_t>& vNal, int num);
 
-    // ½âÎöoffset´¦´óĞ¡ÎªlengthµÄÊı¾İ£¬Ê®Áù½øÖÆÊı¾İ´«µİµ½naluData£¬NALĞÅÏ¢´«µİµ½naluInfo
+    // è§£æoffsetå¤„å¤§å°ä¸ºlengthçš„æ•°æ®ï¼Œåå…­è¿›åˆ¶æ•°æ®ä¼ é€’åˆ°naluDataï¼ŒNALä¿¡æ¯ä¼ é€’åˆ°naluInfo
     int parseNALU(NALU_t& vNal, char** naluData, char** naluInfo);
 
     void getVideoInfo(videoinfo_t* videoInfo)
@@ -139,11 +139,11 @@ private:
 
     void h265_debug_nal_t(h265_stream_t* h, h265_nal_t* nal);
 
-	void expand_tree();
+    void expand_tree();
 
 private:
-    // todo£º²»Ê¹ÓÃÕâÖÖĞ´ËÀ¿Õ¼äµÄ×ö·¨
-    //´æ·Å½âÎö³öÀ´µÄ×Ö·û´®
+    // todoï¼šä¸ä½¿ç”¨è¿™ç§å†™æ­»ç©ºé—´çš„åšæ³•
+    //å­˜æ”¾è§£æå‡ºæ¥çš„å­—ç¬¦ä¸²
     char m_tmpStore[1024];
     char m_outputInfo[OUTPUT_SIZE];
 

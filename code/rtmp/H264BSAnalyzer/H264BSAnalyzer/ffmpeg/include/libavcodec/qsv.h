@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Intel MediaSDK QSV public API
  *
  * This file is part of FFmpeg.
@@ -23,7 +23,8 @@
 
 #include <mfx/mfxvideo.h>
 
-typedef struct AVQSVContext {
+typedef struct AVQSVContext
+{
     mfxSession session;
     int iopattern;
 

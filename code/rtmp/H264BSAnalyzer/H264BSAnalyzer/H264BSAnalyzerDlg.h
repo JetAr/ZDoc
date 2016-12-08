@@ -1,4 +1,4 @@
-
+ï»¿
 // H264BSAnalyzerDlg.h : header file
 //
 #include "resource.h"
@@ -27,7 +27,7 @@ public:
 // Dialog Data
     enum { IDD = IDD_H264BSANALYZER_DIALOG };
 
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
     // our own...
@@ -47,9 +47,9 @@ protected:
     DECLARE_MESSAGE_MAP()
 public:
     CListCtrl m_h264NalList;
-    CHexEdit m_edHexInfo;   // ÏÔÊ¾Ê®Áù½øÖÆ
-    
-    CPlayDlg* m_pPlayDlg;   // ²¥·Å´°¿Ú
+    CHexEdit m_edHexInfo;   // æ˜¾ç¤ºåå…­è¿›åˆ¶
+
+    CPlayDlg* m_pPlayDlg;   // æ’­æ”¾çª—å£
 
     void OnBnClickedH264InputurlOpen();
 
@@ -59,7 +59,7 @@ private:
     CString m_strFileUrl;
     CNalParser m_cParser;
     vector<NALU_t> m_vNalTypeVector;
-    int m_nValTotalNum; // m_vNalTypeVectorÓĞ¶àÉÙ¸öNALU_t
+    int m_nValTotalNum; // m_vNalTypeVectoræœ‰å¤šå°‘ä¸ªNALU_t
 
     HANDLE m_hFileThread;
     HANDLE m_hNALThread;

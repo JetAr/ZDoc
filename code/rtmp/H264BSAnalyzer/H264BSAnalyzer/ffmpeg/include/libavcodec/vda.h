@@ -1,4 +1,4 @@
-/*
+﻿/*
  * VDA HW acceleration
  *
  * copyright (c) 2011 Sebastien Zwickert
@@ -44,7 +44,8 @@
 #include "libavcodec/version.h"
 
 // extra flags not defined in VDADecoder.h
-enum {
+enum
+{
     kVDADecodeInfo_Asynchronous = 1UL << 0,
     kVDADecodeInfo_FrameDropped = 1UL << 1
 };
@@ -62,7 +63,8 @@ enum {
  *
  * The application must make it available as AVCodecContext.hwaccel_context.
  */
-struct vda_context {
+struct vda_context
+{
     /**
      * VDA decoder object.
      *
@@ -160,7 +162,8 @@ int ff_vda_destroy_decoder(struct vda_context *vda_ctx);
  * Its size is not a part of the public ABI, it must be allocated with
  * av_vda_alloc_context() and freed with av_free().
  */
-typedef struct AVVDAContext {
+typedef struct AVVDAContext
+{
     /**
      * VDA decoder object. Created and freed by the caller.
      */

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Filter graphs
  * copyright (c) 2007 Bobby Bingham
  *

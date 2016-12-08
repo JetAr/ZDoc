@@ -1,4 +1,4 @@
-/*
+﻿/*
  * pixel format descriptor
  * Copyright (c) 2009 Michael Niedermayer <michaelni@gmx.at>
  *
@@ -27,7 +27,8 @@
 #include "attributes.h"
 #include "pixfmt.h"
 
-typedef struct AVComponentDescriptor {
+typedef struct AVComponentDescriptor
+{
     /**
      * Which of the 4 planes contains the component.
      */
@@ -66,7 +67,8 @@ typedef struct AVComponentDescriptor {
  *       and all the YUV variants) AVPixFmtDescriptor just stores how values
  *       are stored not what these values represent.
  */
-typedef struct AVPixFmtDescriptor {
+typedef struct AVPixFmtDescriptor
+{
     const char *name;
     uint8_t nb_components;  ///< The number of components each pixel has, (1-4)
 
@@ -368,7 +370,7 @@ int av_get_pix_fmt_loss(enum AVPixelFormat dst_pix_fmt,
  * (maximum loss for an invalid dst_pix_fmt).
  */
 enum AVPixelFormat av_find_best_pix_fmt_of_2(enum AVPixelFormat dst_pix_fmt1, enum AVPixelFormat dst_pix_fmt2,
-                                             enum AVPixelFormat src_pix_fmt, int has_alpha, int *loss_ptr);
+        enum AVPixelFormat src_pix_fmt, int has_alpha, int *loss_ptr);
 
 /**
  * @return the name for provided color range or NULL if unknown.

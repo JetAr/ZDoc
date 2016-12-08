@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -36,7 +36,8 @@
  * 525/60 and 625/50, but the plans are to use it for various
  * DV specs as well (e.g. SMPTE314M vs. IEC 61834).
  */
-typedef struct AVDVProfile {
+typedef struct AVDVProfile
+{
     int              dsf;                   /* value of the dsf in the DV header */
     int              video_stype;           /* stype for VAUX source pack */
     int              frame_size;            /* total size of one frame in bytes */
@@ -52,9 +53,9 @@ typedef struct AVDVProfile {
     const uint8_t   *block_sizes;           /* AC block sizes, in bits */
     int              audio_stride;          /* size of audio_shuffle table */
     int              audio_min_samples[3];  /* min amount of audio samples */
-                                            /* for 48kHz, 44.1kHz and 32kHz */
+    /* for 48kHz, 44.1kHz and 32kHz */
     int              audio_samples_dist[5]; /* how many samples are supposed to be */
-                                            /* in each frame in a 5 frames window */
+    /* in each frame in a 5 frames window */
     const uint8_t  (*audio_shuffle)[9];     /* PCM shuffling table */
 } AVDVProfile;
 
@@ -64,7 +65,7 @@ typedef struct AVDVProfile {
  */
 attribute_deprecated
 const AVDVProfile* avpriv_dv_frame_profile2(AVCodecContext* codec, const AVDVProfile *sys,
-                                            const uint8_t* frame, unsigned buf_size);
+        const uint8_t* frame, unsigned buf_size);
 #endif
 
 /**

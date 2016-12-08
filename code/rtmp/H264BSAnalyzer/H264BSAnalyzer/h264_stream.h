@@ -1,20 +1,20 @@
-/* 
+ï»¿/*
  * h264bitstream - a library for reading and writing H.264 video
  * Copyright (C) 2005-2007 Auroras Entertainment, LLC
  * Copyright (C) 2008-2011 Avail-TVN
- * 
+ *
  * Written by Alex Izvorski <aizvorski@gmail.com> and Alex Giladi <alex.giladi@gmail.com>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -59,19 +59,19 @@ typedef struct
     int bit_depth_chroma_minus8;
     int qpprime_y_zero_transform_bypass_flag;
     int seq_scaling_matrix_present_flag;
-      int seq_scaling_list_present_flag[8];
-      int ScalingList4x4[6];
-      int UseDefaultScalingMatrix4x4Flag[6];
-      int ScalingList8x8[2];
-      int UseDefaultScalingMatrix8x8Flag[2];
+    int seq_scaling_list_present_flag[8];
+    int ScalingList4x4[6];
+    int UseDefaultScalingMatrix4x4Flag[6];
+    int ScalingList8x8[2];
+    int UseDefaultScalingMatrix8x8Flag[2];
     int log2_max_frame_num_minus4;
     int pic_order_cnt_type;
-      int log2_max_pic_order_cnt_lsb_minus4;
-      int delta_pic_order_always_zero_flag;
-      int offset_for_non_ref_pic;
-      int offset_for_top_to_bottom_field;
-      int num_ref_frames_in_pic_order_cnt_cycle;
-      int offset_for_ref_frame[256];
+    int log2_max_pic_order_cnt_lsb_minus4;
+    int delta_pic_order_always_zero_flag;
+    int offset_for_non_ref_pic;
+    int offset_for_top_to_bottom_field;
+    int num_ref_frames_in_pic_order_cnt_cycle;
+    int offset_for_ref_frame[256];
     int max_num_ref_frames;
     int gaps_in_frame_num_value_allowed_flag;
     int pic_width_in_mbs_minus1;
@@ -80,46 +80,46 @@ typedef struct
     int mb_adaptive_frame_field_flag;
     int direct_8x8_inference_flag;
     int frame_cropping_flag;
-      int frame_crop_left_offset;
-      int frame_crop_right_offset;
-      int frame_crop_top_offset;
-      int frame_crop_bottom_offset;
+    int frame_crop_left_offset;
+    int frame_crop_right_offset;
+    int frame_crop_top_offset;
+    int frame_crop_bottom_offset;
     int vui_parameters_present_flag;
-    
+
     struct
     {
         int aspect_ratio_info_present_flag;
-          int aspect_ratio_idc;
-            int sar_width;
-            int sar_height;
+        int aspect_ratio_idc;
+        int sar_width;
+        int sar_height;
         int overscan_info_present_flag;
-          int overscan_appropriate_flag;
+        int overscan_appropriate_flag;
         int video_signal_type_present_flag;
-          int video_format;
-          int video_full_range_flag;
-          int colour_description_present_flag;
-            int colour_primaries;
-            int transfer_characteristics;
-            int matrix_coefficients;
+        int video_format;
+        int video_full_range_flag;
+        int colour_description_present_flag;
+        int colour_primaries;
+        int transfer_characteristics;
+        int matrix_coefficients;
         int chroma_loc_info_present_flag;
-          int chroma_sample_loc_type_top_field;
-          int chroma_sample_loc_type_bottom_field;
+        int chroma_sample_loc_type_top_field;
+        int chroma_sample_loc_type_bottom_field;
         int timing_info_present_flag;
-          int num_units_in_tick;
-          int time_scale;
-          int fixed_frame_rate_flag;
+        int num_units_in_tick;
+        int time_scale;
+        int fixed_frame_rate_flag;
         int nal_hrd_parameters_present_flag;
         int vcl_hrd_parameters_present_flag;
-          int low_delay_hrd_flag;
+        int low_delay_hrd_flag;
         int pic_struct_present_flag;
         int bitstream_restriction_flag;
-          int motion_vectors_over_pic_boundaries_flag;
-          int max_bytes_per_pic_denom;
-          int max_bits_per_mb_denom;
-          int log2_max_mv_length_horizontal;
-          int log2_max_mv_length_vertical;
-          int num_reorder_frames;
-          int max_dec_frame_buffering;
+        int motion_vectors_over_pic_boundaries_flag;
+        int max_bytes_per_pic_denom;
+        int max_bits_per_mb_denom;
+        int log2_max_mv_length_horizontal;
+        int log2_max_mv_length_vertical;
+        int num_reorder_frames;
+        int max_dec_frame_buffering;
     } vui;
 
     struct
@@ -127,9 +127,9 @@ typedef struct
         int cpb_cnt_minus1;
         int bit_rate_scale;
         int cpb_size_scale;
-          int bit_rate_value_minus1[32]; // up to cpb_cnt_minus1, which is <= 31
-          int cpb_size_value_minus1[32];
-          int cbr_flag[32];
+        int bit_rate_value_minus1[32]; // up to cpb_cnt_minus1, which is <= 31
+        int cpb_size_value_minus1[32];
+        int cbr_flag[32];
         int initial_cpb_removal_delay_length_minus1;
         int cpb_removal_delay_length_minus1;
         int dpb_output_delay_length_minus1;
@@ -146,23 +146,23 @@ typedef struct
    @see write_pic_parameter_set_rbsp
    @see debug_pps
 */
-typedef struct 
+typedef struct
 {
     int pic_parameter_set_id;
     int seq_parameter_set_id;
     int entropy_coding_mode_flag;
-    int pic_order_present_flag; // 2005°æ±¾Îª´Ë×Ö¶ÎÃû ±£Áô£¬²»Ó°Ïì¿â±¾ÉíwriteµÄ±àÒë£¬µ«Êµ¼Ê²»Ê¹ÓÃ
-    int bottom_field_pic_order_in_frame_present_flag; // 2013°æ±¾Îª´Ë×Ö¶ÎÃû
+    int pic_order_present_flag; // 2005ç‰ˆæœ¬ä¸ºæ­¤å­—æ®µå ä¿ç•™ï¼Œä¸å½±å“åº“æœ¬èº«writeçš„ç¼–è¯‘ï¼Œä½†å®žé™…ä¸ä½¿ç”¨
+    int bottom_field_pic_order_in_frame_present_flag; // 2013ç‰ˆæœ¬ä¸ºæ­¤å­—æ®µå
     int num_slice_groups_minus1;
     int slice_group_map_type;
-      int run_length_minus1[8]; // up to num_slice_groups_minus1, which is <= 7 in Baseline and Extended, 0 otheriwse
-      int top_left[8];
-      int bottom_right[8];
-      int slice_group_change_direction_flag;
-      int slice_group_change_rate_minus1;
-      int pic_size_in_map_units_minus1;
-      int slice_group_id_bytes;
-      vector<int> slice_group_id; // FIXME what size?
+    int run_length_minus1[8]; // up to num_slice_groups_minus1, which is <= 7 in Baseline and Extended, 0 otheriwse
+    int top_left[8];
+    int bottom_right[8];
+    int slice_group_change_direction_flag;
+    int slice_group_change_rate_minus1;
+    int pic_size_in_map_units_minus1;
+    int slice_group_id_bytes;
+    vector<int> slice_group_id; // FIXME what size?
     int num_ref_idx_l0_active_minus1;
     int num_ref_idx_l1_active_minus1;
     int weighted_pred_flag;
@@ -179,11 +179,11 @@ typedef struct
 
     int transform_8x8_mode_flag;
     int pic_scaling_matrix_present_flag;
-       int pic_scaling_list_present_flag[8];
-       int* ScalingList4x4[6];
-       int UseDefaultScalingMatrix4x4Flag[6];
-       int* ScalingList8x8[2];
-       int UseDefaultScalingMatrix8x8Flag[2];
+    int pic_scaling_list_present_flag[8];
+    int* ScalingList4x4[6];
+    int UseDefaultScalingMatrix4x4Flag[6];
+    int* ScalingList8x8[2];
+    int UseDefaultScalingMatrix8x8Flag[2];
     int second_chroma_qp_index_offset;
 } pps_t;
 
@@ -258,7 +258,7 @@ typedef struct
     int frame_num_bytes;
     int frame_num;
     int field_pic_flag;
-      int bottom_field_flag;
+    int bottom_field_flag;
     int idr_pic_id;
     int pic_order_cnt_lsb_bytes;
     int pic_order_cnt_lsb;
@@ -327,39 +327,39 @@ typedef struct
 typedef struct
 {
     int clock_timestamp_flag;
-        int ct_type;
-        int nuit_field_based_flag;
-        int counting_type;
-        int full_timestamp_flag;
-        int discontinuity_flag;
-        int cnt_dropped_flag;
-        int n_frames;
+    int ct_type;
+    int nuit_field_based_flag;
+    int counting_type;
+    int full_timestamp_flag;
+    int discontinuity_flag;
+    int cnt_dropped_flag;
+    int n_frames;
 
-        int seconds_value;
-        int minutes_value;
-        int hours_value;
+    int seconds_value;
+    int minutes_value;
+    int hours_value;
 
-        int seconds_flag;
-        int minutes_flag;
-        int hours_flag;
+    int seconds_flag;
+    int minutes_flag;
+    int hours_flag;
 
-        int time_offset;
+    int time_offset;
 } picture_timestamp_t;
 
 typedef struct
 {
-  int _is_initialized;
-  int cpb_removal_delay;
-  int dpb_output_delay;
-  int pic_struct;
-  picture_timestamp_t clock_timestamps[3]; // 3 is the maximum possible value
+    int _is_initialized;
+    int cpb_removal_delay;
+    int dpb_output_delay;
+    int pic_struct;
+    picture_timestamp_t clock_timestamps[3]; // 3 is the maximum possible value
 } sei_picture_timing_t;
 
 
 typedef struct
 {
-  int rbsp_size;
-  uint8_t* rbsp_buf;
+    int rbsp_size;
+    uint8_t* rbsp_buf;
 } slice_data_rbsp_t;
 
 typedef struct
@@ -375,9 +375,9 @@ typedef struct
     int crop_right;
     int crop_top;
     int crop_bottom;
-    float max_framerate;  // ÓÉSPS¼ÆËãµÃµ½µÄÖ¡ÂÊ£¬Îª0±íÊ¾SPSÖÐÃ»ÓÐÏàÓ¦µÄ×Ö¶Î¼ÆËã
-    int chroma_format_idc;  // YUVÑÕÉ«¿Õ¼ä 0: monochrome 1:420 2:422 3:444
-    int encoding_type;  // Îª1±íÊ¾CABAC 0±íÊ¾CAVLC
+    float max_framerate;  // ç”±SPSè®¡ç®—å¾—åˆ°çš„å¸§çŽ‡ï¼Œä¸º0è¡¨ç¤ºSPSä¸­æ²¡æœ‰ç›¸åº”çš„å­—æ®µè®¡ç®—
+    int chroma_format_idc;  // YUVé¢œè‰²ç©ºé—´ 0: monochrome 1:420 2:422 3:444
+    int encoding_type;  // ä¸º1è¡¨ç¤ºCABAC 0è¡¨ç¤ºCAVLC
     int bit_depth_luma;
     int bit_depth_chroma;
 } videoinfo_t;
@@ -385,9 +385,9 @@ typedef struct
 
 /**
    H264 stream
-   Contains data structures for all NAL types that can be handled by this library.  
-   When reading, data is read into those, and when writing it is written from those.  
-   The reason why they are all contained in one place is that some of them depend on others, we need to 
+   Contains data structures for all NAL types that can be handled by this library.
+   When reading, data is read into those, and when writing it is written from those.
+   The reason why they are all contained in one place is that some of them depend on others, we need to
    have all of them available to read or write correctly.
  */
 typedef struct
@@ -396,7 +396,7 @@ typedef struct
     sps_t* sps;
     pps_t* pps;
     aud_t* aud;
-    sei_t* sei; //This is a TEMP pointer at whats in h->seis...    
+    sei_t* sei; //This is a TEMP pointer at whats in h->seis...
     int num_seis;
     slice_header_t* sh;
     slice_data_rbsp_t* slice_data;
@@ -499,12 +499,12 @@ void write_sei_payload( h264_stream_t* h, bs_t* b, int payloadType, int payloadS
 #define NAL_UNIT_TYPE_END_OF_STREAM                 11    // End of stream
 #define NAL_UNIT_TYPE_FILLER                        12    // Filler data
 #define NAL_UNIT_TYPE_SPS_EXT                       13    // Sequence parameter set extension
-                                             // 14..18    // Reserved
+// 14..18    // Reserved
 #define NAL_UNIT_TYPE_CODED_SLICE_AUX               19    // Coded slice of an auxiliary coded picture without partitioning
-                                             // 20..23    // Reserved
-                                             // 24..31    // Unspecified
+// 20..23    // Reserved
+// 24..31    // Unspecified
 
- 
+
 
 //7.4.3 Table 7-6. Name association to slice_type
 #define SH_SLICE_TYPE_P        0        // P (P slice)
@@ -534,7 +534,7 @@ void write_sei_payload( h264_stream_t* h, bs_t* b, int payloadType, int payloadS
 #define SAR_15_11     11             // 15:11
 #define SAR_64_33     12             // 64:33
 #define SAR_160_99    13             // 160:99
-                                     // 14..254           Reserved
+// 14..254           Reserved
 #define SAR_Extended      255        // Extended_SAR
 
 //7.4.3.1 Table 7-7 modification_of_pic_nums_idc operations for modification of reference picture lists

@@ -1,4 +1,4 @@
-#include "stdafx.h" // for MFC
+ï»¿#include "stdafx.h" // for MFC
 
 #include <stdio.h>
 #ifdef linux
@@ -12,12 +12,12 @@ static unsigned char g_szIOBuffer[IO_BUFFER_SIZE];
 
 H264BS2Video::H264BS2Video()
     :m_infctx(NULL),
-    m_outfctx(NULL),
-    m_instream(NULL),
-    m_outstream(NULL),
-    m_avio(NULL),
-    m_videoidx(-1),
-    m_isfile(0)
+     m_outfctx(NULL),
+     m_instream(NULL),
+     m_outstream(NULL),
+     m_avio(NULL),
+     m_videoidx(-1),
+     m_isfile(0)
 {
     m_avbuffer.ptr = NULL;
 }
@@ -29,7 +29,7 @@ H264BS2Video::~H264BS2Video()
         free(m_avbuffer.ptr);
         m_avbuffer.ptr = NULL;
     }
-    
+
     close();
 }
 
@@ -37,7 +37,7 @@ int H264BS2Video::openVideoFile(const char* videofile, int width, int height, in
 {
     int ret = 0;
 
-    av_register_all(); // ×¢²áĞ­Òé£¬µÈ
+    av_register_all(); // æ³¨å†Œåè®®ï¼Œç­‰
 
     avformat_alloc_output_context2(&m_outfctx, NULL, NULL, videofile);
 
@@ -48,9 +48,9 @@ int H264BS2Video::openVideoFile(const char* videofile, int width, int height, in
         return -1;
     }
 
-    // ×¢£ºÊ¹ÓÃÒÔÏÂ²ÎÊı£¬ÎŞ·¨Éú³ÉÕı³£µÄmp4
+    // æ³¨ï¼šä½¿ç”¨ä»¥ä¸‹å‚æ•°ï¼Œæ— æ³•ç”Ÿæˆæ­£å¸¸çš„mp4
     if (m_outfctx->oformat->flags & AVFMT_GLOBALHEADER)
-    m_outstream->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+        m_outstream->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     m_outstream->codec->codec_id = AV_CODEC_ID_H264;
     m_outstream->codec->codec_type = AVMEDIA_TYPE_VIDEO;
@@ -98,9 +98,9 @@ int H264BS2Video::openVideoFile(const char* rawfile, const char* videofile, int 
 {
     int ret = 0;
 
-    av_register_all(); // ×¢²áĞ­Òé£¬µÈ
+    av_register_all(); // æ³¨å†Œåè®®ï¼Œç­‰
 
-	// ´ÓÎÄ¼şÅĞ¶ÏÊÓÆµ¸ñÊ½
+    // ä»æ–‡ä»¶åˆ¤æ–­è§†é¢‘æ ¼å¼
     ret = avformat_open_input(&m_infctx, rawfile, NULL, NULL);
     if (ret != 0)
     {
@@ -115,7 +115,7 @@ int H264BS2Video::openVideoFile(const char* rawfile, const char* videofile, int 
         return -1;
     }
 
-    // ÕÒµ½ÊÓÆµÁ÷
+    // æ‰¾åˆ°è§†é¢‘æµ
     for (unsigned int i = 0; i < m_infctx->nb_streams; i++)
     {
         if (m_infctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
@@ -140,10 +140,10 @@ int H264BS2Video::openVideoFile(const char* rawfile, const char* videofile, int 
         return -1;
     }
 
-    // ¸´ÖÆ
+    // å¤åˆ¶
     avcodec_copy_context(m_outstream->codec, m_instream->codec);
 
-    // ×¢£ºÊ¹ÓÃÒÔÏÂ²ÎÊı£¬ÔòÉú³ÉµÄaviÎÄ¼ş»áÓĞÂíÈü¿ËÏÖÏó£¬µ«mp4È´Ã»ÓĞ
+    // æ³¨ï¼šä½¿ç”¨ä»¥ä¸‹å‚æ•°ï¼Œåˆ™ç”Ÿæˆçš„aviæ–‡ä»¶ä¼šæœ‰é©¬èµ›å…‹ç°è±¡ï¼Œä½†mp4å´æ²¡æœ‰
 #if 0
     m_outstream->codec->bit_rate = bitrate;
 
@@ -219,7 +219,7 @@ static int writeBuffer(void *opaque, unsigned char *buf, int size)
 
     if (pIO->pos + size > pIO->totalSize)
     {
-        // ÖØĞÂÉêÇë ¸ù¾İÊıÖµÖğ²½¼Ó´ó
+        // é‡æ–°ç”³è¯· æ ¹æ®æ•°å€¼é€æ­¥åŠ å¤§
         int totalSize = pIO->totalSize*sizeof(char) * 3 / 2;
         unsigned char* ptr = (unsigned char*)realloc(pIO->ptr, totalSize);
         if (ptr == NULL)
@@ -250,17 +250,17 @@ static int64_t seekBuffer(void *opaque, int64_t offset, int whence)
 
     switch (whence)
     {
-        case SEEK_SET:
-            new_pos = offset;
-            break;
-        case SEEK_CUR:
-            new_pos = pIO->pos + offset;
-            break;
-        case SEEK_END:
-            new_pos = pIO->totalSize + offset;
-            break;
-        default:
-            return -1;
+    case SEEK_SET:
+        new_pos = offset;
+        break;
+    case SEEK_CUR:
+        new_pos = pIO->pos + offset;
+        break;
+    case SEEK_END:
+        new_pos = pIO->totalSize + offset;
+        break;
+    default:
+        return -1;
     }
 
     fake_pos = min(new_pos, pIO->totalSize);
@@ -297,9 +297,9 @@ int H264BS2Video::openVideoMem(const char* fmt, int width, int height, int fps, 
     av_register_all();
 
     m_avio =avio_alloc_context((unsigned char *)g_szIOBuffer, IO_BUFFER_SIZE, 1,
-                &m_avbuffer, NULL, writeBuffer, seekBuffer);
+                               &m_avbuffer, NULL, writeBuffer, seekBuffer);
 
-    // ¸ù¾İ´«µİµÄfmtÀ´È·¶¨ÊÇºÎÖÖ·â×°¸ñÊ½
+    // æ ¹æ®ä¼ é€’çš„fmtæ¥ç¡®å®šæ˜¯ä½•ç§å°è£…æ ¼å¼
     avformat_alloc_output_context2(&m_outfctx, NULL, fmt, NULL);
     m_outfctx->pb=m_avio;
     m_outfctx->flags=AVFMT_FLAG_CUSTOM_IO;
@@ -378,24 +378,24 @@ int H264BS2Video::writeFrame(void)
 
     av_init_packet(&avpkt);
 
-    // av_read_fram·µ»ØÏÂÒ»Ö¡£¬·¢Éú´íÎó»òÎÄ¼ş½áÊø·µ»Ø<0
+    // av_read_framè¿”å›ä¸‹ä¸€å¸§ï¼Œå‘ç”Ÿé”™è¯¯æˆ–æ–‡ä»¶ç»“æŸè¿”å›<0
     while (av_read_frame(m_infctx, &avpkt) >= 0)
     {
-        // ½âÂëÊÓÆµÁ÷
+        // è§£ç è§†é¢‘æµ
         if (avpkt.stream_index == m_videoidx)
         {
             //debug("write %d, size: %d\n", idx++, avpkt.size);
 
             if (avpkt.pts == AV_NOPTS_VALUE)
             {
-                // ¼ÆËãPTS/DTS
+                // è®¡ç®—PTS/DTS
                 AVRational time_base = m_instream->time_base;
                 int64_t duration=(int64_t)((double)AV_TIME_BASE/(double)av_q2d(m_instream->r_frame_rate));
                 avpkt.pts=(int64_t)((double)(idx*duration)/(double)(av_q2d(time_base)*AV_TIME_BASE));
                 avpkt.dts=avpkt.pts;
                 avpkt.duration=(int)((double)duration/(double)(av_q2d(time_base)*AV_TIME_BASE));
 
-                // ×ª»» PTS/DTS
+                // è½¬æ¢ PTS/DTS
                 avpkt.pts = av_rescale_q_rnd(avpkt.pts, m_instream->time_base, m_outstream->time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
                 avpkt.dts = av_rescale_q_rnd(avpkt.dts, m_instream->time_base, m_outstream->time_base, (AVRounding)(AV_ROUND_NEAR_INF|AV_ROUND_PASS_MINMAX));
                 avpkt.duration = (int)av_rescale_q(avpkt.duration, m_instream->time_base, m_outstream->time_base);
@@ -434,7 +434,7 @@ int H264BS2Video::close()
         if (m_isfile)
         {
             //printf("close...\n");
-            avio_close(m_outfctx->pb); // ¹Ø±ÕÎÄ¼ş
+            avio_close(m_outfctx->pb); // å…³é—­æ–‡ä»¶
         }
         avformat_free_context(m_outfctx);
         m_outfctx = NULL;
@@ -447,7 +447,7 @@ int H264BS2Video::close()
 
 void H264BS2Video::getBuffer(unsigned char** buffer, int* size)
 {
-    *buffer = m_avbuffer.ptr; 
+    *buffer = m_avbuffer.ptr;
     *size = m_avbuffer.realSize;
 }
 
@@ -455,7 +455,7 @@ void H264BS2Video::freeBuffer(void)
 {
     if(m_avbuffer.ptr != NULL)
     {
-        free(m_avbuffer.ptr); 
+        free(m_avbuffer.ptr);
         m_avbuffer.ptr = NULL;
     }
 }

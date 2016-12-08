@@ -1,4 +1,4 @@
-/*
+﻿/*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
@@ -33,7 +33,8 @@
 
 typedef uint32_t AVCRC;
 
-typedef enum {
+typedef enum
+{
     AV_CRC_8_ATM,
     AV_CRC_16_ANSI,
     AV_CRC_16_CCITT,
@@ -42,7 +43,7 @@ typedef enum {
     AV_CRC_16_ANSI_LE,  /*< reversed bitorder version of AV_CRC_16_ANSI */
     AV_CRC_24_IEEE = 12,
     AV_CRC_MAX,         /*< Not part of public API! Do not use outside libavutil. */
-}AVCRCId;
+} AVCRCId;
 
 /**
  * Initialize a CRC table.

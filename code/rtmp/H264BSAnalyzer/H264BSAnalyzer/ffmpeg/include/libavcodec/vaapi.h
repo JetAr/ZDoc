@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Video Acceleration API (shared data between FFmpeg and the video player)
  * HW decode acceleration for MPEG-2, MPEG-4, H.264 and VC-1
  *
@@ -47,7 +47,8 @@
  * function call. In any case, they must be valid prior to calling
  * decoding functions.
  */
-struct vaapi_context {
+struct vaapi_context
+{
     /**
      * Window system dependent data
      *

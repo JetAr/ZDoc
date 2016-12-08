@@ -1,4 +1,4 @@
-#include "stdafx.h" // for mfc
+ï»¿#include "stdafx.h" // for mfc
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +8,7 @@
 #include "bmp_utils.h"
 //#include "debug.h"
 
-// ×¢£ºÖ»Õë¶Ô24Î»Í¼Æ¬
+// æ³¨ï¼šåªé’ˆå¯¹24ä½å›¾ç‰‡
 int analyse_bmp_file(const char* bmp_file)
 {
 #if 0
@@ -45,7 +45,7 @@ int analyse_bmp_file(const char* bmp_file)
     width = bmpInfo.biWidth;
     height = (int)fabs((double)bmpInfo.biHeight);
 
-    switch(bmpInfo.biBitCount) 
+    switch(bmpInfo.biBitCount)
     {
     case 1:
         color_num = 2;
@@ -68,7 +68,7 @@ int analyse_bmp_file(const char* bmp_file)
 
     rgb_size1 = bmpHeader.bfSize - sizeof(BITMAPFILEHEADER) - sizeof(BITMAPINFOHEADER) - paltette_len;
     rgb_size2 = stride_byte*height;
-    // ´òÓ¡½á¹¹ÌåÖĞÃ¿¸ö³ÉÔ±
+    // æ‰“å°ç»“æ„ä½“ä¸­æ¯ä¸ªæˆå‘˜
     printf("file name: %s\n", bmp_file);
     printf("file type: %c%c %x\n", (bmpHeader.bfType)>>8, (bmpHeader.bfType)&0xff, bmpHeader.bfType);
     printf("file size: %d(B) = %0.2f(KB) = %0.2f(MB)\n", bmpHeader.bfSize, (float)bmpHeader.bfSize/1024.00, (float)bmpHeader.bfSize/1024.00/1024.00);
@@ -112,9 +112,9 @@ int read_bmp_file(const char* bmp_file, unsigned char** rgb_buffer,
     int tmp_width = 0;
     int tmp_height = 0;
     int rgb_size = 0;
-    int stride_byte = 0; // Ã¿ĞĞÕ¼ÓÃ×Ö½ÚÊı(4×Ö½Ú¶ÔÆë)
-    int width_byte = 0;  // Ã¿ĞĞÕæÕıÓĞĞ§×Ö½ÚÊı
-    int padding = 0;    // ĞèÒª¶ÔÆëµÄ×Ö½ÚÊı
+    int stride_byte = 0; // æ¯è¡Œå ç”¨å­—èŠ‚æ•°(4å­—èŠ‚å¯¹é½)
+    int width_byte = 0;  // æ¯è¡ŒçœŸæ­£æœ‰æ•ˆå­—èŠ‚æ•°
+    int padding = 0;    // éœ€è¦å¯¹é½çš„å­—èŠ‚æ•°
     unsigned char* tmp_buf = 0;
     int color_num = 0;
     int palette_len = 0;
@@ -150,30 +150,30 @@ int read_bmp_file(const char* bmp_file, unsigned char** rgb_buffer,
         goto end;
     }
     tmp_width = bmpInfo.biWidth;
-    tmp_height = (int)fabs((double)bmpInfo.biHeight);   // Ô¤·À¸ßÎª¸ºÊıµÄÇé¿ö
+    tmp_height = (int)fabs((double)bmpInfo.biHeight);   // é¢„é˜²é«˜ä¸ºè´Ÿæ•°çš„æƒ…å†µ
 
-    // ÕæÕıRGBÊı¾İ´óĞ¡
+    // çœŸæ­£RGBæ•°æ®å¤§å°
     rgb_size = tmp_width * tmp_height * bmpInfo.biBitCount/8;
 
     *width = tmp_width;
     *height = tmp_height;
     *size = rgb_size;
     /**
-     * Ã¿ĞĞÕ¼ÓÃ×Ö½ÚÊı£¬ÓëÏÂÊ½½á¹ûÏàÍ¬
+     * æ¯è¡Œå ç”¨å­—èŠ‚æ•°ï¼Œä¸ä¸‹å¼ç»“æœç›¸åŒ
      * stride_byte = (width * bmpInfo.biBitCount/8+3)/4*4;
      */
     stride_byte = ALIGN(tmp_width*bmpInfo.biBitCount/8, 4);
     width_byte = tmp_width * bmpInfo.biBitCount/8;
 
     /**
-     * ²¹Æë×Ö½Ú£¬ÓëÏÂÊ½½á¹ûÏàÍ¬
+     * è¡¥é½å­—èŠ‚ï¼Œä¸ä¸‹å¼ç»“æœç›¸åŒ
      * padding = (4 - width * 3 % 4) % 4;
-     * ÊµÏÖÎ´Ê¹ÓÃ
+     * å®ç°æœªä½¿ç”¨
      */
     padding = stride_byte - width_byte;
 
-    // ÅĞ¶Ïµ÷É«°å
-    switch(bmpInfo.biBitCount) 
+    // åˆ¤æ–­è°ƒè‰²æ¿
+    switch(bmpInfo.biBitCount)
     {
     case 1:
         color_num = 2;
@@ -189,26 +189,26 @@ int read_bmp_file(const char* bmp_file, unsigned char** rgb_buffer,
         color_num = 0;
         break;
     }
-    // todo£º¶ÁÈ¡µ÷É«°å
+    // todoï¼šè¯»å–è°ƒè‰²æ¿
     palette_len = color_num * sizeof (RGBQUAD);
 
-    // ¼ÆËãÆ«ÒÆÁ¿ÓëÊµ¼ÊÆ«ÒÆÁ¿±È½Ï£¬Èç²»µÈ£¬ÑÕÉ«Êı³ö´í
+    // è®¡ç®—åç§»é‡ä¸å®é™…åç§»é‡æ¯”è¾ƒï¼Œå¦‚ä¸ç­‰ï¼Œé¢œè‰²æ•°å‡ºé”™
     if (bmpHeader.bfOffBits != sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + palette_len)
     {
         ret = -1;
         goto end;
     }
 
-    printf("debug--:\nfile size: %d rgb size: %d %d stride byte: %d padding: %d BitCount: %d\n", 
-        (int)bmpHeader.bfSize, rgb_size, stride_byte*tmp_height, stride_byte, padding, bmpInfo.biBitCount);
+    printf("debug--:\nfile size: %d rgb size: %d %d stride byte: %d padding: %d BitCount: %d\n",
+           (int)bmpHeader.bfSize, rgb_size, stride_byte*tmp_height, stride_byte, padding, bmpInfo.biBitCount);
 
     if (color_num != 0)
     {
-        // Ìøµ½Í¼ÏñÊı¾İ´¦
+        // è·³åˆ°å›¾åƒæ•°æ®å¤„
         fseek(fp, palette_len, SEEK_CUR);
     }
 
-    // ÉêÇëºÏÊÊµÄÄÚ´æ
+    // ç”³è¯·åˆé€‚çš„å†…å­˜
     *rgb_buffer = (unsigned char *)malloc(sizeof(char) * rgb_size);
     if (*rgb_buffer == NULL)
     {
@@ -216,8 +216,8 @@ int read_bmp_file(const char* bmp_file, unsigned char** rgb_buffer,
         goto end;
     }
 #if 01
-    // ½«¶ÁÈ¡µÄÊı¾İµ¹×Å´æ·Åµ½»º³åÇø(¼´BMPÍ¼ÏñµÚÒ»ĞĞÊı¾İ·Åµ½»º³åÇø×îºóÒ»ĞĞ£¬µÈµÈ)£¬
-    // ÕâÑùÍ¼Ïñ²ÅÊÇÕı³£µÄ£¬·ñÔòÍ¼ÏñÊÇµ¹Á¢µÄ
+    // å°†è¯»å–çš„æ•°æ®å€’ç€å­˜æ”¾åˆ°ç¼“å†²åŒº(å³BMPå›¾åƒç¬¬ä¸€è¡Œæ•°æ®æ”¾åˆ°ç¼“å†²åŒºæœ€åä¸€è¡Œï¼Œç­‰ç­‰)ï¼Œ
+    // è¿™æ ·å›¾åƒæ‰æ˜¯æ­£å¸¸çš„ï¼Œå¦åˆ™å›¾åƒæ˜¯å€’ç«‹çš„
     tmp_buf = *rgb_buffer + rgb_size;
     for (i = 0; i < tmp_height; i++)
     {
@@ -232,7 +232,7 @@ int read_bmp_file(const char* bmp_file, unsigned char** rgb_buffer,
         fseek(fp, padding, SEEK_CUR);
     }
 #else
-    // Ë³Ğò¶ÁÎÄ¼ş£¬¶Áµ½µÄÍ¼ÏñÊÇµ¹Á¢µÄ
+    // é¡ºåºè¯»æ–‡ä»¶ï¼Œè¯»åˆ°çš„å›¾åƒæ˜¯å€’ç«‹çš„
     tmp_buf = *rgb_buffer;
     size_t readByte = 0;
     for (int i = 0; i < tmp_height; i++)
@@ -250,14 +250,14 @@ end:
 
 int write_bmp_file(const char* bmp_file, unsigned char* rgb_buffer, int width, int height)
 {
-#define BPP 24  // Ä¿Ç°Ö»¿¼ÂÇ24É«Î»Í¼
+#define BPP 24  // ç›®å‰åªè€ƒè™‘24è‰²ä½å›¾
 
     BITMAPFILEHEADER bmpHeader;
     BITMAPINFOHEADER bmpInfo;
     FILE* fp = NULL;
     int offset = 0;
-    int stride_byte = 0;    // Ã¿ĞĞÕ¼ÓÃ×Ö½ÚÊı(4×Ö½Ú¶ÔÆë)
-    int width_byte = 0;     // Ã¿ĞĞÕæÕıÓĞĞ§×Ö½ÚÊı
+    int stride_byte = 0;    // æ¯è¡Œå ç”¨å­—èŠ‚æ•°(4å­—èŠ‚å¯¹é½)
+    int width_byte = 0;     // æ¯è¡ŒçœŸæ­£æœ‰æ•ˆå­—èŠ‚æ•°
     int rgb_size = 0;
     int padding = 0;
     unsigned char* tmp_buf = NULL;
@@ -271,16 +271,16 @@ int write_bmp_file(const char* bmp_file, unsigned char* rgb_buffer, int width, i
         return -1;
     }
 
-    offset = sizeof(BITMAPINFOHEADER) + sizeof(BITMAPFILEHEADER);  //54×Ö½Ú
-    // 4×Ö½Ú¶ÔÆë ((width * 24 + 31) / 32) * 4
-    // ÈçÒÑ¾­¶ÔÆë£¬ÔòrowStrideÓëÊµ¼Ê¿íÒ»ÖÂ£¬Èç²»¶ÔÆërowStride»á±È¿í´óÒ»Ğ©
+    offset = sizeof(BITMAPINFOHEADER) + sizeof(BITMAPFILEHEADER);  //54å­—èŠ‚
+    // 4å­—èŠ‚å¯¹é½ ((width * 24 + 31) / 32) * 4
+    // å¦‚å·²ç»å¯¹é½ï¼Œåˆ™rowStrideä¸å®é™…å®½ä¸€è‡´ï¼Œå¦‚ä¸å¯¹é½rowStrideä¼šæ¯”å®½å¤§ä¸€äº›
     // stride_byte = ((width * 24 + 31) >> 5) << 2;
     stride_byte = ALIGN(width*BPP/8, 4);
     width_byte = width*BPP/8;
-    rgb_size = stride_byte * height;  // ÒÑ¿¼ÂÇ¶ÔÆë
+    rgb_size = stride_byte * height;  // å·²è€ƒè™‘å¯¹é½
 
     bmpHeader.bfType = ('M' << 8) | 'B';
-    bmpHeader.bfSize = offset + rgb_size;    // BMPÎÄ¼ş×Ü´óĞ¡
+    bmpHeader.bfSize = offset + rgb_size;    // BMPæ–‡ä»¶æ€»å¤§å°
     bmpHeader.bfReserved1 = 0;
     bmpHeader.bfReserved2 = 0;
     bmpHeader.bfOffBits = offset;
@@ -297,13 +297,13 @@ int write_bmp_file(const char* bmp_file, unsigned char* rgb_buffer, int width, i
     bmpInfo.biClrUsed = 0;
     bmpInfo.biClrImportant = 0;
 
-    // ĞèÒªÌî³ä×Ö½Ú£¬BMPÒªÇóÃ¿Ò»ĞĞÊı¾İ±ØĞë4×Ö½Ú¶ÔÆë£¬²»×ãÒÔ0²¹¡£
+    // éœ€è¦å¡«å……å­—èŠ‚ï¼ŒBMPè¦æ±‚æ¯ä¸€è¡Œæ•°æ®å¿…é¡»4å­—èŠ‚å¯¹é½ï¼Œä¸è¶³ä»¥0è¡¥ã€‚
     //padding = (4 - width * 3 % 4) % 4;
-    // Êµ¼ÊÎ´Ê¹ÓÃµ½
+    // å®é™…æœªä½¿ç”¨åˆ°
     padding = stride_byte - width_byte;
 
     printf("debug--:\nwidth: %d height: %d padding: %d rgb_size: %d, stride_byte: %d\n",
-                width, height, padding, rgb_size, stride_byte);
+           width, height, padding, rgb_size, stride_byte);
     tmp_buf = (unsigned char *)malloc(sizeof(char) * rgb_size);
     if (tmp_buf == NULL)
     {
@@ -311,10 +311,10 @@ int write_bmp_file(const char* bmp_file, unsigned char* rgb_buffer, int width, i
         goto end;
     }
     memset(tmp_buf, '\0', sizeof(char) * rgb_size);
-    // µ¹×Å¿½±´µ½»º³åÇø
+    // å€’ç€æ‹·è´åˆ°ç¼“å†²åŒº
     for (i = 0; i < height; i++)
     {
-        // Ã¿Ò»ĞĞµÄÊµ¼ÊÊı¾İÎªwidth * 3(R¡¢G¡¢B)
+        // æ¯ä¸€è¡Œçš„å®é™…æ•°æ®ä¸ºwidth * 3(Rã€Gã€B)
         memcpy(tmp_buf + i * stride_byte, rgb_buffer + (height - i - 1) * width_byte, width_byte);
     }
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * This file is part of FFmpeg.
  *
@@ -38,7 +38,7 @@ typedef struct AVVorbisParseContext AVVorbisParseContext;
  * @param s     Vorbis parser context
  */
 AVVorbisParseContext *av_vorbis_parse_init(const uint8_t *extradata,
-                                           int extradata_size);
+        int extradata_size);
 
 /**
  * Free the parser and everything associated with it.

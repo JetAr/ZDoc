@@ -1,4 +1,4 @@
-/*
+﻿/*
  * filter layer
  * Copyright (c) 2007 Bobby Bingham
  *
@@ -72,7 +72,8 @@ typedef struct AVFilterFormats AVFilterFormats;
  * should not store pointers to this structure directly, but instead use the
  * AVFilterBufferRef structure below.
  */
-typedef struct AVFilterBuffer {
+typedef struct AVFilterBuffer
+{
     uint8_t *data[8];           ///< buffer data for each plane/channel
 
     /**
@@ -122,7 +123,8 @@ typedef struct AVFilterBuffer {
  * AVFilterBufferRef is common to different media formats, audio specific
  * per reference properties must be separated out.
  */
-typedef struct AVFilterBufferRefAudioProps {
+typedef struct AVFilterBufferRefAudioProps
+{
     uint64_t channel_layout;    ///< channel layout of audio buffer
     int nb_samples;             ///< number of audio samples per channel
     int sample_rate;            ///< audio buffer sample rate
@@ -134,7 +136,8 @@ typedef struct AVFilterBufferRefAudioProps {
  * AVFilterBufferRef is common to different media formats, video specific
  * per reference properties must be separated out.
  */
-typedef struct AVFilterBufferRefVideoProps {
+typedef struct AVFilterBufferRefVideoProps
+{
     int w;                      ///< image width
     int h;                      ///< image height
     AVRational sample_aspect_ratio; ///< sample aspect ratio
@@ -155,7 +158,8 @@ typedef struct AVFilterBufferRefVideoProps {
  *
  * TODO: add anything necessary for frame reordering
  */
-typedef struct AVFilterBufferRef {
+typedef struct AVFilterBufferRef
+{
     AVFilterBuffer *buf;        ///< the buffer that this is a reference to
     uint8_t *data[8];           ///< picture/audio data for each plane
     /**
@@ -253,7 +257,8 @@ int avfilter_ref_get_channels(AVFilterBufferRef *ref);
  * to access the name and type fields; there should be no need to access
  * any other fields from outside of libavfilter.
  */
-struct AVFilterPad {
+struct AVFilterPad
+{
     /**
      * Pad name. The name is unique among inputs and among outputs, but an
      * input may have the same name as an output. This may be NULL if this
@@ -467,7 +472,8 @@ enum AVMediaType avfilter_pad_get_type(const AVFilterPad *pads, int pad_idx);
  * Filter definition. This defines the pads a filter contains, and all the
  * callback functions used to interact with the filter.
  */
-typedef struct AVFilter {
+typedef struct AVFilter
+{
     /**
      * Filter name. Must be non-NULL and unique among filters.
      */
@@ -630,7 +636,8 @@ typedef struct AVFilter {
 typedef struct AVFilterInternal AVFilterInternal;
 
 /** An instance of a filter */
-struct AVFilterContext {
+struct AVFilterContext
+{
     const AVClass *av_class;        ///< needed for av_log() and filters common options
 
     const AVFilter *filter;         ///< the AVFilter of which this is an instance
@@ -693,7 +700,8 @@ struct AVFilterContext {
  * which have been negotiated and agreed upon between the filter, such as
  * image dimensions, format, etc.
  */
-struct AVFilterLink {
+struct AVFilterLink
+{
     AVFilterContext *src;       ///< source filter
     AVFilterPad *srcpad;        ///< output pad on the source filter
 
@@ -757,7 +765,8 @@ struct AVFilterLink {
     int request_samples;
 
     /** stage of the initialization of the link properties (dimensions, etc) */
-    enum {
+    enum
+    {
         AVLINK_UNINIT = 0,      ///< not started
         AVLINK_STARTINIT,       ///< started, but incomplete
         AVLINK_INIT             ///< complete
@@ -912,7 +921,7 @@ int avfilter_config_links(AVFilterContext *filter);
 attribute_deprecated
 AVFilterBufferRef *
 avfilter_get_video_buffer_ref_from_arrays(uint8_t * const data[4], const int linesize[4], int perms,
-                                          int w, int h, enum AVPixelFormat format);
+        int w, int h, enum AVPixelFormat format);
 
 /**
  * Create an audio buffer reference wrapped around an already
@@ -930,11 +939,11 @@ avfilter_get_video_buffer_ref_from_arrays(uint8_t * const data[4], const int lin
  */
 attribute_deprecated
 AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_arrays(uint8_t **data,
-                                                             int linesize,
-                                                             int perms,
-                                                             int nb_samples,
-                                                             enum AVSampleFormat sample_fmt,
-                                                             uint64_t channel_layout);
+        int linesize,
+        int perms,
+        int nb_samples,
+        enum AVSampleFormat sample_fmt,
+        uint64_t channel_layout);
 /**
  * Create an audio buffer reference wrapped around an already
  * allocated samples buffer.
@@ -950,12 +959,12 @@ AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_arrays(uint8_t **data,
  */
 attribute_deprecated
 AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_arrays_channels(uint8_t **data,
-                                                                      int linesize,
-                                                                      int perms,
-                                                                      int nb_samples,
-                                                                      enum AVSampleFormat sample_fmt,
-                                                                      int channels,
-                                                                      uint64_t channel_layout);
+        int linesize,
+        int perms,
+        int nb_samples,
+        enum AVSampleFormat sample_fmt,
+        int channels,
+        uint64_t channel_layout);
 
 #endif
 
@@ -1164,7 +1173,8 @@ typedef int (avfilter_action_func)(AVFilterContext *ctx, void *arg, int jobnr, i
 typedef int (avfilter_execute_func)(AVFilterContext *ctx, avfilter_action_func *func,
                                     void *arg, int *ret, int nb_jobs);
 
-typedef struct AVFilterGraph {
+typedef struct AVFilterGraph
+{
     const AVClass *av_class;
 #if FF_API_FOO_COUNT
     attribute_deprecated
@@ -1263,8 +1273,8 @@ AVFilterGraph *avfilter_graph_alloc(void);
  *         avfilter_graph_get_filter()) on success or NULL on failure.
  */
 AVFilterContext *avfilter_graph_alloc_filter(AVFilterGraph *graph,
-                                             const AVFilter *filter,
-                                             const char *name);
+        const AVFilter *filter,
+        const char *name);
 
 /**
  * Get a filter instance identified by instance name from graph.
@@ -1317,7 +1327,8 @@ int avfilter_graph_create_filter(AVFilterContext **filt_ctx, const AVFilter *fil
  */
 void avfilter_graph_set_auto_convert(AVFilterGraph *graph, unsigned flags);
 
-enum {
+enum
+{
     AVFILTER_AUTO_CONVERT_ALL  =  0, /**< all automatic conversions enabled */
     AVFILTER_AUTO_CONVERT_NONE = -1, /**< all automatic conversions disabled */
 };
@@ -1346,7 +1357,8 @@ void avfilter_graph_free(AVFilterGraph **graph);
  * This struct specifies, per each not connected pad contained in the graph, the
  * filter context and the pad index required for establishing a link.
  */
-typedef struct AVFilterInOut {
+typedef struct AVFilterInOut
+{
     /** unique name for this input/output in the list */
     char *name;
 

@@ -1,10 +1,10 @@
-/**
+ï»¿/**
 
-H.264ÂëÁ÷×ª¿É²¥·ÅÊÓÆµ
+H.264ç æµè½¬å¯æ’­æ”¾è§†é¢‘
 
-note Ê¹ÓÃffmpeg°æ±¾Îª2.6.3£¬¸½´øµÄ¿âÎª¾²Ì¬¿â
+note ä½¿ç”¨ffmpegç‰ˆæœ¬ä¸º2.6.3ï¼Œé™„å¸¦çš„åº“ä¸ºé™æ€åº“
 
-ÂëÁ÷½öÏŞÓÚH.264
+ç æµä»…é™äºH.264
 
 */
 
@@ -18,7 +18,7 @@ extern "C" {
 }
 
 #ifdef WIN32
-// ¾²Ì¬¿â
+// é™æ€åº“
 #pragma comment(lib, "libgcc.a") // divdi3(), etc.
 #pragma comment(lib, "libmingwex.a") // snprintf()....
 #pragma comment(lib, "libiconv.a") // libiconv_open(), etc.
@@ -36,13 +36,13 @@ extern "C" {
 
 // low level debug
 #ifdef _LL_DEBUG_
-    #ifndef debug
-    #define debug(fmt, ...) printf(fmt, ##__VA_ARGS__)
-    #endif
-    #define LL_DEBUG(fmt, ...) printf("[DEBUG %s().%d @ %s]: " fmt, __func__, __LINE__, P_SRC, ##__VA_ARGS__)
+#ifndef debug
+#define debug(fmt, ...) printf(fmt, ##__VA_ARGS__)
+#endif
+#define LL_DEBUG(fmt, ...) printf("[DEBUG %s().%d @ %s]: " fmt, __func__, __LINE__, P_SRC, ##__VA_ARGS__)
 #else
-     #define debug(fmt, ...)
-    #define LL_DEBUG(fmt, ...)
+#define debug(fmt, ...)
+#define LL_DEBUG(fmt, ...)
 #endif
 
 
@@ -51,14 +51,15 @@ extern "C" {
 #endif
 
 /**
- @brief ÊÓÆµ»º³åÇø½á¹¹Ìå
+ @brief è§†é¢‘ç¼“å†²åŒºç»“æ„ä½“
 */
-typedef struct AVIOBufferContext {
+typedef struct AVIOBufferContext
+{
     unsigned char* ptr;
     int pos;
     int totalSize;
     int realSize;
-}AVIOBufferContext;
+} AVIOBufferContext;
 
 class H264BS2Video
 {
@@ -69,105 +70,105 @@ public:
 public:
 
     /**
-     * ´ò¿ªH.264ÊÓÆµÎÄ¼ş²¢³õÊ¼»¯
-     * 
-     * @param rawfile µÊÓÆµÎÄ¼şÂ·¾¶È«³Æ(°üÀ¨Ä¿Â¼ºÍÊÓÆµÎÄ¼şÃû³Æ)
-     * @param videofile ÊÓÆµÎÄ¼şÂ·¾¶È«³Æ(°üÀ¨Ä¿Â¼ºÍÊÓÆµÎÄ¼şÃû³Æ)
-     * @param width ÊÓÆµ¿í
-     * @param height ÊÓÆµ¸ß 
-     * @param fps Ö¡ÂÊ
-     * @param gop GOP´óĞ¡£¬Èç¹ûÊÓÆµÃ»ÓĞBÖ¡£¬ÔòGOP´óĞ¡ÎªIÖ¡¼ä¸ô
-     * @param bitrate ÊÓÆµÂëÂÊ£¬Ä¬ÈÏÎª2048kbps
+     * æ‰“å¼€H.264è§†é¢‘æ–‡ä»¶å¹¶åˆå§‹åŒ–
      *
-     * @return =< 0 ³É¹¦£º= 0£¬ Ê§°Ü = -1
+     * @param rawfile ç¥¼è§†é¢‘æ–‡ä»¶è·¯å¾„å…¨ç§°(åŒ…æ‹¬ç›®å½•å’Œè§†é¢‘æ–‡ä»¶åç§°)
+     * @param videofile è§†é¢‘æ–‡ä»¶è·¯å¾„å…¨ç§°(åŒ…æ‹¬ç›®å½•å’Œè§†é¢‘æ–‡ä»¶åç§°)
+     * @param width è§†é¢‘å®½
+     * @param height è§†é¢‘é«˜
+     * @param fps å¸§ç‡
+     * @param gop GOPå¤§å°ï¼Œå¦‚æœè§†é¢‘æ²¡æœ‰Bå¸§ï¼Œåˆ™GOPå¤§å°ä¸ºIå¸§é—´éš”
+     * @param bitrate è§†é¢‘ç ç‡ï¼Œé»˜è®¤ä¸º2048kbps
      *
-     * @note ±¾º¯ÊıÊÊÓ¦ÓÚ½«h264/h265ÂãÂëÁ÷ÎÄ¼ş×ª»»³ÉÖ¸¶¨·â×°µÄÊÓÆµÎÄ¼ş£¬ÒÑÖªÖ§³ÖµÄÓĞ£ºavi¡¢mp4¡¢mov¡£
-     *       ¿í¡¢¸ß¡¢ÂëÂÊµÈ²ÎÊıÊ¹ÓÃÔ­Ê¼ÂãÎÄ¼ş²ÎÊı£¬±¾º¯ÊıÉèÖÃµÄ²»ÉúĞ§¡£
+     * @return =< 0 æˆåŠŸï¼š= 0ï¼Œ å¤±è´¥ = -1
+     *
+     * @note æœ¬å‡½æ•°é€‚åº”äºå°†h264/h265è£¸ç æµæ–‡ä»¶è½¬æ¢æˆæŒ‡å®šå°è£…çš„è§†é¢‘æ–‡ä»¶ï¼Œå·²çŸ¥æ”¯æŒçš„æœ‰ï¼šaviã€mp4ã€movã€‚
+     *       å®½ã€é«˜ã€ç ç‡ç­‰å‚æ•°ä½¿ç”¨åŸå§‹è£¸æ–‡ä»¶å‚æ•°ï¼Œæœ¬å‡½æ•°è®¾ç½®çš„ä¸ç”Ÿæ•ˆã€‚
      */
     int openVideoFile(const char* rawfile, const char* videofile, int width=1920, int height=1080, int fps = 25, int gop = 10, int bitrate = 2097152);
-    
+
     /**
-     * ´ò¿ªH.264ÊÓÆµÎÄ¼ş²¢³õÊ¼»¯
+     * æ‰“å¼€H.264è§†é¢‘æ–‡ä»¶å¹¶åˆå§‹åŒ–
      *
-     * @param videofile ÊÓÆµÎÄ¼şÂ·¾¶È«³Æ(°üÀ¨Ä¿Â¼ºÍÊÓÆµÎÄ¼şÃû³Æ)
-     * @param width ÊÓÆµ¿í
-     * @param height ÊÓÆµ¸ß 
-     * @param fps Ö¡ÂÊ
-     * @param gop GOP´óĞ¡£¬Èç¹ûÊÓÆµÃ»ÓĞBÖ¡£¬ÔòGOP´óĞ¡ÎªIÖ¡¼ä¸ô
-     * @param bitrate ÊÓÆµÂëÂÊ£¬Ä¬ÈÏÎª2048kbps
+     * @param videofile è§†é¢‘æ–‡ä»¶è·¯å¾„å…¨ç§°(åŒ…æ‹¬ç›®å½•å’Œè§†é¢‘æ–‡ä»¶åç§°)
+     * @param width è§†é¢‘å®½
+     * @param height è§†é¢‘é«˜
+     * @param fps å¸§ç‡
+     * @param gop GOPå¤§å°ï¼Œå¦‚æœè§†é¢‘æ²¡æœ‰Bå¸§ï¼Œåˆ™GOPå¤§å°ä¸ºIå¸§é—´éš”
+     * @param bitrate è§†é¢‘ç ç‡ï¼Œé»˜è®¤ä¸º2048kbps
      *
-     * @return =< 0 ³É¹¦£º= 0£¬ Ê§°Ü = -1
+     * @return =< 0 æˆåŠŸï¼š= 0ï¼Œ å¤±è´¥ = -1
      *
-     * @note ±¾º¯ÊıÊÊÓ¦½«ÄÚ´æµÄÒ»Ö¡Ö¡Êı¾İ±£´æÎªÖ¸¶¨·â×°µÄÊÓÆµÎÄ¼ş£¬Èç´ÓÍøÂç¶øÀ´µÄÖ¡Êı¾İ¡£µ±Ç°Ö»²âÊÔ·â×°³Éavi¸ñÊ½µÄÊÓÆµÎÄ¼ş
+     * @note æœ¬å‡½æ•°é€‚åº”å°†å†…å­˜çš„ä¸€å¸§å¸§æ•°æ®ä¿å­˜ä¸ºæŒ‡å®šå°è£…çš„è§†é¢‘æ–‡ä»¶ï¼Œå¦‚ä»ç½‘ç»œè€Œæ¥çš„å¸§æ•°æ®ã€‚å½“å‰åªæµ‹è¯•å°è£…æˆaviæ ¼å¼çš„è§†é¢‘æ–‡ä»¶
      */
     int openVideoFile(const char* videofile, int width=1920, int height=1080, int fps = 25, int gop = 10, int bitrate = 2097152);
 
     /**
-     * ÉêÇëÄÚ²¿»º³åÇø
+     * ç”³è¯·å†…éƒ¨ç¼“å†²åŒº
      *
-     * @note ÓÃÓÚ´æ´¢×ªÂëºóµÄÊÓÆµÊı¾İ£¬ÈçÊ¹ÓÃÎÄ¼ş£¬ÎŞĞëµ÷ÓÃ±¾º¯Êı
+     * @note ç”¨äºå­˜å‚¨è½¬ç åçš„è§†é¢‘æ•°æ®ï¼Œå¦‚ä½¿ç”¨æ–‡ä»¶ï¼Œæ— é¡»è°ƒç”¨æœ¬å‡½æ•°
      */
     int allocBuffer(int size);
 
     /**
-     * ³õÊ¼»¯H.264ÊÓÆµ²ÎÊı
+     * åˆå§‹åŒ–H.264è§†é¢‘å‚æ•°
      *
-     * @param fmt ·â×°¸ñÊ½£¬avi¡¢mp4¡¢mkv£¬Ä¬ÈÏavi
-     * @param width ÊÓÆµ¿í
-     * @param height ÊÓÆµ¸ß 
-     * @param fps Ö¡ÂÊ
-     * @param gop GOP´óĞ¡£¬Èç¹ûÊÓÆµÃ»ÓĞBÖ¡£¬ÔòGOP´óĞ¡ÎªIÖ¡¼ä¸ô
-     * @param bitrate ÊÓÆµÂëÂÊ£¬Ä¬ÈÏÎª2048kbps
+     * @param fmt å°è£…æ ¼å¼ï¼Œaviã€mp4ã€mkvï¼Œé»˜è®¤avi
+     * @param width è§†é¢‘å®½
+     * @param height è§†é¢‘é«˜
+     * @param fps å¸§ç‡
+     * @param gop GOPå¤§å°ï¼Œå¦‚æœè§†é¢‘æ²¡æœ‰Bå¸§ï¼Œåˆ™GOPå¤§å°ä¸ºIå¸§é—´éš”
+     * @param bitrate è§†é¢‘ç ç‡ï¼Œé»˜è®¤ä¸º2048kbps
      *
-     * @return =< 0 ³É¹¦£º= 0£¬ Ê§°Ü = -1
+     * @return =< 0 æˆåŠŸï¼š= 0ï¼Œ å¤±è´¥ = -1
      *
-     * @note µ±Ç°Ö»²âÊÔ·â×°³Éavi¸ñÊ½µÄÊÓÆµÎÄ¼ş
+     * @note å½“å‰åªæµ‹è¯•å°è£…æˆaviæ ¼å¼çš„è§†é¢‘æ–‡ä»¶
      */
     int openVideoMem(const char* fmt = "avi", int width=1920, int height=1080, int fps = 25, int gop = 10, int bitrate = 2097152);
 
     /**
-     * ±£´æÒ»Ö¡H.264ÊÓÆµ
-     * @param bitstream H.264ÂëÁ÷»º³åÇø
-     * @param size  H.264ÂëÁ÷»º³åÇø´óĞ¡
-     * @param keyframe ¹Ø¼üÖ¡±êÖ¾(IÖ¡)£¬¹Ø¼üÖ¡Îª1£¬·ñÔòÎª0
+     * ä¿å­˜ä¸€å¸§H.264è§†é¢‘
+     * @param bitstream H.264ç æµç¼“å†²åŒº
+     * @param size  H.264ç æµç¼“å†²åŒºå¤§å°
+     * @param keyframe å…³é”®å¸§æ ‡å¿—(Iå¸§)ï¼Œå…³é”®å¸§ä¸º1ï¼Œå¦åˆ™ä¸º0
      *
      */
     int writeFrame(char* bitstream, int size, int keyframe);
-   
+
     /**
-     * ±£´æËùÓĞH.264ÊÓÆµ
+     * ä¿å­˜æ‰€æœ‰H.264è§†é¢‘
      *
-     * @return =< 0 ³É¹¦£º= 0£¬ Ê§°Ü = -1
+     * @return =< 0 æˆåŠŸï¼š= 0ï¼Œ å¤±è´¥ = -1
      */
     int writeFrame(void);
 
     /**
-     * ÊÍ·Å×ÊÔ´£¬Ğ´ÊÓÆµÎÄ¼şÎ²²¿Êı¾İ
+     * é‡Šæ”¾èµ„æºï¼Œå†™è§†é¢‘æ–‡ä»¶å°¾éƒ¨æ•°æ®
      *
-     * @note Èç¹û²»µ÷ÓÃ´Ëº¯Êı£¬ÏñAVIÕâÀàµÄÊÓÆµ£¬ÓĞµÄ²¥·ÅÆ÷ÎŞ·¨²¥·Å£¬
-     *       ÒòÎªÎ²²¿Êı¾İÎªÆäÖ¡Ë÷Òı£¬ÊÇ±ØĞëµÄ
+     * @note å¦‚æœä¸è°ƒç”¨æ­¤å‡½æ•°ï¼ŒåƒAVIè¿™ç±»çš„è§†é¢‘ï¼Œæœ‰çš„æ’­æ”¾å™¨æ— æ³•æ’­æ”¾ï¼Œ
+     *       å› ä¸ºå°¾éƒ¨æ•°æ®ä¸ºå…¶å¸§ç´¢å¼•ï¼Œæ˜¯å¿…é¡»çš„
      */
     int close(void);
 
     /**
-     * »ñÈ¡×ªÂëºóµÄÊÓÆµÊı¾İ£¬»º³åÇøÎªÀàÄÚ²¿Ê¹ÓÃ
-     * @param buffer »º³åÇø
-     * @param size  »º³åÇø´óĞ¡
+     * è·å–è½¬ç åçš„è§†é¢‘æ•°æ®ï¼Œç¼“å†²åŒºä¸ºç±»å†…éƒ¨ä½¿ç”¨
+     * @param buffer ç¼“å†²åŒº
+     * @param size  ç¼“å†²åŒºå¤§å°
      *
      */
     void getBuffer(unsigned char** buffer, int* size);
-    
+
     /**
-     * ÊÍ·Å×ÊÔ´ÄÚ²¿»º³åÇø
+     * é‡Šæ”¾èµ„æºå†…éƒ¨ç¼“å†²åŒº
      *
-     * @note Èç²»µ÷ÓÃ£¬ÔÚ±¾ÀàÎö¹¹º¯ÊıÖĞÒ²»á×ÔĞĞÊÍ·Å
+     * @note å¦‚ä¸è°ƒç”¨ï¼Œåœ¨æœ¬ç±»ææ„å‡½æ•°ä¸­ä¹Ÿä¼šè‡ªè¡Œé‡Šæ”¾
      */
     void freeBuffer(void);
-    
+
     /**
-     * ¸´Î»ÄÚ²¿»º³åÇø
+     * å¤ä½å†…éƒ¨ç¼“å†²åŒº
      *
-     * @note ´Ëº¯Êı»á¸´Ô­»º³åÇø²ÎÊı£¬ÕâÑù²»ÓÃÆµ·±ÉêÇë¡¢ÊÍ·Å×ÊÔ´
+     * @note æ­¤å‡½æ•°ä¼šå¤åŸç¼“å†²åŒºå‚æ•°ï¼Œè¿™æ ·ä¸ç”¨é¢‘ç¹ç”³è¯·ã€é‡Šæ”¾èµ„æº
      */
     void resetBuffer(void);
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
@@ -63,7 +63,8 @@
  * and that all newly added little-endian formats have (pix_fmt & 1) == 0.
  * This allows simpler detection of big vs little-endian.
  */
-enum AVPixelFormat {
+enum AVPixelFormat
+{
     AV_PIX_FMT_NONE = -1,
     AV_PIX_FMT_YUV420P,   ///< planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
     AV_PIX_FMT_YUYV422,   ///< packed YUV 4:2:2, 16bpp, Y0 Cb Y1 Cr
@@ -448,7 +449,8 @@ enum AVPixelFormat {
 /**
   * Chromaticity coordinates of the source primaries.
   */
-enum AVColorPrimaries {
+enum AVColorPrimaries
+{
     AVCOL_PRI_RESERVED0   = 0,
     AVCOL_PRI_BT709       = 1, ///< also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
     AVCOL_PRI_UNSPECIFIED = 2,
@@ -466,7 +468,8 @@ enum AVColorPrimaries {
 /**
  * Color Transfer Characteristic.
  */
-enum AVColorTransferCharacteristic {
+enum AVColorTransferCharacteristic
+{
     AVCOL_TRC_RESERVED0    = 0,
     AVCOL_TRC_BT709        = 1,  ///< also ITU-R BT1361
     AVCOL_TRC_UNSPECIFIED  = 2,
@@ -489,7 +492,8 @@ enum AVColorTransferCharacteristic {
 /**
  * YUV colorspace type.
  */
-enum AVColorSpace {
+enum AVColorSpace
+{
     AVCOL_SPC_RGB         = 0,  ///< order of coefficients is actually GBR, also IEC 61966-2-1 (sRGB)
     AVCOL_SPC_BT709       = 1,  ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
     AVCOL_SPC_UNSPECIFIED = 2,
@@ -509,7 +513,8 @@ enum AVColorSpace {
 /**
  * MPEG vs JPEG YUV range.
  */
-enum AVColorRange {
+enum AVColorRange
+{
     AVCOL_RANGE_UNSPECIFIED = 0,
     AVCOL_RANGE_MPEG        = 1, ///< the normal 219*2^(n-8) "MPEG" YUV ranges
     AVCOL_RANGE_JPEG        = 2, ///< the normal     2^n-1   "JPEG" YUV ranges
@@ -523,7 +528,8 @@ enum AVColorRange {
  *             1 2        1-6 are possible chroma positions
  *  X   X      5 6 X      0 is undefined/unknown position
  */
-enum AVChromaLocation {
+enum AVChromaLocation
+{
     AVCHROMA_LOC_UNSPECIFIED = 0,
     AVCHROMA_LOC_LEFT        = 1, ///< mpeg2/4, h264 default
     AVCHROMA_LOC_CENTER      = 2, ///< mpeg1, jpeg, h263

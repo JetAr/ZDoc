@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include "NaLParse.h"
 
@@ -6,7 +6,7 @@
     sprintf(m_tmpStore, __VA_ARGS__);\
     strcat(m_outputInfo, m_tmpStore);} while(0)
 
-// ÒÔÏÂ´úÂëÀ´×Ôh264_stream.c£¬µ¥¶À³öÀ´
+// ä»¥ä¸‹ä»£ç æ¥è‡ªh264_stream.cï¼Œå•ç‹¬å‡ºæ¥
 /***************************** debug ******************************/
 
 void CNalParser::h264_debug_sps(sps_t* sps)
@@ -23,7 +23,7 @@ void CNalParser::h264_debug_sps(sps_t* sps)
     my_printf(" level_idc : %d\r\n", sps->level_idc );
     my_printf(" seq_parameter_set_id : %d\r\n", sps->seq_parameter_set_id );
     if( sps->profile_idc == 100 || sps->profile_idc == 110 ||
-        sps->profile_idc == 122 || sps->profile_idc == 144 )
+            sps->profile_idc == 122 || sps->profile_idc == 144 )
     {
         my_printf(" chroma_format_idc : %d\r\n", sps->chroma_format_idc );
         if (sps->chroma_format_idc == 3)
@@ -203,14 +203,14 @@ void CNalParser::h264_debug_pps(pps_t* pps)
             }
         }
         else if( pps->slice_group_map_type == 3 ||
-            pps->slice_group_map_type == 4 ||
-            pps->slice_group_map_type == 5 )
+                 pps->slice_group_map_type == 4 ||
+                 pps->slice_group_map_type == 5 )
         {
             my_printf(" slice_group_change_direction_flag : %d\r\n", pps->slice_group_change_direction_flag );
             my_printf(" slice_group_change_rate_minus1 : %d\r\n", pps->slice_group_change_rate_minus1 );
         }
         else if( pps->slice_group_map_type == 6 )
-        {            
+        {
             my_printf(" pic_size_in_map_units_minus1 : %d\r\n", pps->pic_size_in_map_units_minus1 );
             for( int i = 0; i <= pps->pic_size_in_map_units_minus1; i++ )
                 my_printf(" slice_group_id[%d] : %d\r\n", i, pps->slice_group_id[i] );
@@ -263,17 +263,39 @@ void CNalParser::h264_debug_slice_header(h264_stream_t* h)
     const char* slice_type_name;
     switch(sh->slice_type)
     {
-    case SH_SLICE_TYPE_P :       slice_type_name = "P slice"; break;
-    case SH_SLICE_TYPE_B :       slice_type_name = "B slice"; break;
-    case SH_SLICE_TYPE_I :       slice_type_name = "I slice"; break;
-    case SH_SLICE_TYPE_SP :      slice_type_name = "SP slice"; break;
-    case SH_SLICE_TYPE_SI :      slice_type_name = "SI slice"; break;
-    case SH_SLICE_TYPE_P_ONLY :  slice_type_name = "P slice only"; break;
-    case SH_SLICE_TYPE_B_ONLY :  slice_type_name = "B slice only"; break;
-    case SH_SLICE_TYPE_I_ONLY :  slice_type_name = "I slice only"; break;
-    case SH_SLICE_TYPE_SP_ONLY : slice_type_name = "SP slice only"; break;
-    case SH_SLICE_TYPE_SI_ONLY : slice_type_name = "SI slice only"; break;
-    default :                    slice_type_name = "Unknown"; break;
+    case SH_SLICE_TYPE_P :
+        slice_type_name = "P slice";
+        break;
+    case SH_SLICE_TYPE_B :
+        slice_type_name = "B slice";
+        break;
+    case SH_SLICE_TYPE_I :
+        slice_type_name = "I slice";
+        break;
+    case SH_SLICE_TYPE_SP :
+        slice_type_name = "SP slice";
+        break;
+    case SH_SLICE_TYPE_SI :
+        slice_type_name = "SI slice";
+        break;
+    case SH_SLICE_TYPE_P_ONLY :
+        slice_type_name = "P slice only";
+        break;
+    case SH_SLICE_TYPE_B_ONLY :
+        slice_type_name = "B slice only";
+        break;
+    case SH_SLICE_TYPE_I_ONLY :
+        slice_type_name = "I slice only";
+        break;
+    case SH_SLICE_TYPE_SP_ONLY :
+        slice_type_name = "SP slice only";
+        break;
+    case SH_SLICE_TYPE_SI_ONLY :
+        slice_type_name = "SI slice only";
+        break;
+    default :
+        slice_type_name = "Unknown";
+        break;
     }
     my_printf(" slice_type : %d ( %s )\r\n", sh->slice_type, slice_type_name );
 
@@ -336,7 +358,7 @@ void CNalParser::h264_debug_slice_header(h264_stream_t* h)
                 {
                     my_printf("  modification_of_pic_nums_idc : %d\r\n", sh->rplm.rplm[i].modification_of_pic_nums_idc);
                     if( sh->rplm.rplm[i].modification_of_pic_nums_idc == 0 ||
-                        sh->rplm.rplm[i].modification_of_pic_nums_idc == 1 )
+                            sh->rplm.rplm[i].modification_of_pic_nums_idc == 1 )
                         my_printf("  abs_diff_pic_num_minus1 : %d\r\n", sh->rplm.rplm[i].abs_diff_pic_num_minus1 );
                     else if( sh->rplm.rplm[i].modification_of_pic_nums_idc == 2 )
                         my_printf("  long_term_pic_num : %d\r\n", sh->rplm.rplm[i].long_term_pic_num );
@@ -353,25 +375,25 @@ void CNalParser::h264_debug_slice_header(h264_stream_t* h)
                 {
                     my_printf("  modification_of_pic_nums_idc : %d\r\n", sh->rplm.rplm[i].modification_of_pic_nums_idc );
                     if( sh->rplm.rplm[i].modification_of_pic_nums_idc == 0 ||
-                        sh->rplm.rplm[i].modification_of_pic_nums_idc == 1 )
+                            sh->rplm.rplm[i].modification_of_pic_nums_idc == 1 )
                         my_printf("  abs_diff_pic_num_minus1 : %d\r\n", sh->rplm.rplm[i].abs_diff_pic_num_minus1 );
                     else if( sh->rplm.rplm[i].modification_of_pic_nums_idc == 2 )
                         my_printf("  long_term_pic_num : %d\r\n", sh->rplm.rplm[i].long_term_pic_num );
                 }
             }
         }
-        
+
     }
 
     // pred_weight_table()
     if( ( pps->weighted_pred_flag && ( is_slice_type( sh->slice_type, SH_SLICE_TYPE_P ) || is_slice_type( sh->slice_type, SH_SLICE_TYPE_SP ) ) ) ||
-        ( pps->weighted_bipred_idc == 1 && is_slice_type( sh->slice_type, SH_SLICE_TYPE_B ) ) )
+            ( pps->weighted_bipred_idc == 1 && is_slice_type( sh->slice_type, SH_SLICE_TYPE_B ) ) )
     {
         my_printf(" pred_weight_table()\r\n");
         my_printf("  luma_log2_weight_denom : %d\r\n", sh->pwt.luma_log2_weight_denom );
         if( sps->ChromaArrayType != 0 )
             my_printf("  chroma_log2_weight_denom : %d\r\n", sh->pwt.chroma_log2_weight_denom );
-        // ½«lumaºÍchroma·Ö¿ªÏÔÊ¾
+        // å°†lumaå’Œchromaåˆ†å¼€æ˜¾ç¤º
         if (sh->num_ref_idx_l0_active_minus1 > 0)
             my_printf("  luma_weight_l0()\r\n");
         for( int i = 0; i <= sh->num_ref_idx_l0_active_minus1; i++ )
@@ -450,12 +472,12 @@ void CNalParser::h264_debug_slice_header(h264_stream_t* h)
                 {
                     my_printf("   memory_management_control_operation : %d\r\n", sh->drpm.drpm[i].memory_management_control_operation );
                     if( sh->drpm.drpm[i].memory_management_control_operation == 1 ||
-                        sh->drpm.drpm[i].memory_management_control_operation == 3 )
+                            sh->drpm.drpm[i].memory_management_control_operation == 3 )
                         my_printf("   difference_of_pic_nums_minus1 : %d\r\n", sh->drpm.drpm[i].difference_of_pic_nums_minus1 );
                     if(sh->drpm.drpm[i].memory_management_control_operation == 2 )
                         my_printf("   long_term_pic_num : %d\r\n", sh->drpm.drpm[i].long_term_pic_num );
                     if( sh->drpm.drpm[i].memory_management_control_operation == 3 ||
-                        sh->drpm.drpm[i].memory_management_control_operation == 6 )
+                            sh->drpm.drpm[i].memory_management_control_operation == 6 )
                         my_printf("   long_term_frame_idx : %d\r\n", sh->drpm.drpm[i].long_term_frame_idx );
                     if( sh->drpm.drpm[i].memory_management_control_operation == 4 )
                         my_printf("   max_long_term_frame_idx_plus1 : %d\r\n", sh->drpm.drpm[i].max_long_term_frame_idx_plus1 );
@@ -483,7 +505,7 @@ void CNalParser::h264_debug_slice_header(h264_stream_t* h)
     }
 
     if( pps->num_slice_groups_minus1 > 0 &&
-        pps->slice_group_map_type >= 3 && pps->slice_group_map_type <= 5)
+            pps->slice_group_map_type >= 3 && pps->slice_group_map_type <= 5)
         my_printf(" slice_group_change_cycle : %d\r\n", sh->slice_group_change_cycle );
 
     my_printf("slice_data()\r\n");
@@ -496,15 +518,33 @@ void CNalParser::h264_debug_aud(aud_t* aud)
     const char* primary_pic_type_name;
     switch (aud->primary_pic_type)
     {
-    case AUD_PRIMARY_PIC_TYPE_I :       primary_pic_type_name = "I"; break;
-    case AUD_PRIMARY_PIC_TYPE_IP :      primary_pic_type_name = "I, P"; break;
-    case AUD_PRIMARY_PIC_TYPE_IPB :     primary_pic_type_name = "I, P, B"; break;
-    case AUD_PRIMARY_PIC_TYPE_SI :      primary_pic_type_name = "SI"; break;
-    case AUD_PRIMARY_PIC_TYPE_SISP :    primary_pic_type_name = "SI, SP"; break;
-    case AUD_PRIMARY_PIC_TYPE_ISI :     primary_pic_type_name = "I, SI"; break;
-    case AUD_PRIMARY_PIC_TYPE_ISIPSP :  primary_pic_type_name = "I, SI, P, SP"; break;
-    case AUD_PRIMARY_PIC_TYPE_ISIPSPB : primary_pic_type_name = "I, SI, P, SP, B"; break;
-    default : primary_pic_type_name = "Unknown"; break;
+    case AUD_PRIMARY_PIC_TYPE_I :
+        primary_pic_type_name = "I";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_IP :
+        primary_pic_type_name = "I, P";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_IPB :
+        primary_pic_type_name = "I, P, B";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_SI :
+        primary_pic_type_name = "SI";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_SISP :
+        primary_pic_type_name = "SI, SP";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_ISI :
+        primary_pic_type_name = "I, SI";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_ISIPSP :
+        primary_pic_type_name = "I, SI, P, SP";
+        break;
+    case AUD_PRIMARY_PIC_TYPE_ISIPSPB :
+        primary_pic_type_name = "I, SI, P, SP, B";
+        break;
+    default :
+        primary_pic_type_name = "Unknown";
+        break;
     }
     my_printf(" primary_pic_type : %d ( %s )\r\n", aud->primary_pic_type, primary_pic_type_name );
 }
@@ -524,45 +564,89 @@ void CNalParser::h264_debug_seis( h264_stream_t* h)
         my_printf(" payloadSize : %d\r\n", s->payloadSize );
         switch(s->payloadType)
         {
-        case SEI_TYPE_BUFFERING_PERIOD :          sei_type_name = "Buffering period"; break;
-        case SEI_TYPE_PIC_TIMING :                sei_type_name = "Pic timing"; break;
-        case SEI_TYPE_PAN_SCAN_RECT :             sei_type_name = "Pan scan rect"; break;
-        case SEI_TYPE_FILLER_PAYLOAD :            sei_type_name = "Filler payload"; break;
-        case SEI_TYPE_USER_DATA_REGISTERED_ITU_T_T35 : sei_type_name = "User data registered ITU-T T35"; break;
+        case SEI_TYPE_BUFFERING_PERIOD :
+            sei_type_name = "Buffering period";
+            break;
+        case SEI_TYPE_PIC_TIMING :
+            sei_type_name = "Pic timing";
+            break;
+        case SEI_TYPE_PAN_SCAN_RECT :
+            sei_type_name = "Pan scan rect";
+            break;
+        case SEI_TYPE_FILLER_PAYLOAD :
+            sei_type_name = "Filler payload";
+            break;
+        case SEI_TYPE_USER_DATA_REGISTERED_ITU_T_T35 :
+            sei_type_name = "User data registered ITU-T T35";
+            break;
         case SEI_TYPE_USER_DATA_UNREGISTERED :
+        {
+
+            my_printf(" sei_payload()\r\n");
+            my_printf("  user_data_unregistered()\r\n");
+            my_printf("   uuid_iso_iec_11578: ");
+            for (int j = 0; j < 16; j++)
+                my_printf("%X", s->payload[j]);
+            my_printf ("\r\n   ");
+            for (int j = 16; j < s->payloadSize; j++)
             {
-                
-                my_printf(" sei_payload()\r\n");
-                my_printf("  user_data_unregistered()\r\n");
-                my_printf("   uuid_iso_iec_11578: ");
-                for (int j = 0; j < 16; j++)
-                    my_printf("%X", s->payload[j]);
-                my_printf ("\r\n   ");
-                for (int j = 16; j < s->payloadSize; j++)
-                {
-                    my_printf("%c", s->payload[j]);
-                    if ((j+1) % 128 == 0) my_printf ("\r\n");
-                }
-                break;
+                my_printf("%c", s->payload[j]);
+                if ((j+1) % 128 == 0) my_printf ("\r\n");
             }
-            
-        case SEI_TYPE_RECOVERY_POINT :            sei_type_name = "Recovery point"; break;
-        case SEI_TYPE_DEC_REF_PIC_MARKING_REPETITION : sei_type_name = "Dec ref pic marking repetition"; break;
-        case SEI_TYPE_SPARE_PIC :                 sei_type_name = "Spare pic"; break;
-        case SEI_TYPE_SCENE_INFO :                sei_type_name = "Scene info"; break;
-        case SEI_TYPE_SUB_SEQ_INFO :              sei_type_name = "Sub seq info"; break;
-        case SEI_TYPE_SUB_SEQ_LAYER_CHARACTERISTICS : sei_type_name = "Sub seq layer characteristics"; break;
-        case SEI_TYPE_SUB_SEQ_CHARACTERISTICS :   sei_type_name = "Sub seq characteristics"; break;
-        case SEI_TYPE_FULL_FRAME_FREEZE :         sei_type_name = "Full frame freeze"; break;
-        case SEI_TYPE_FULL_FRAME_FREEZE_RELEASE : sei_type_name = "Full frame freeze release"; break;
-        case SEI_TYPE_FULL_FRAME_SNAPSHOT :       sei_type_name = "Full frame snapshot"; break;
-        case SEI_TYPE_PROGRESSIVE_REFINEMENT_SEGMENT_START : sei_type_name = "Progressive refinement segment start"; break;
-        case SEI_TYPE_PROGRESSIVE_REFINEMENT_SEGMENT_END : sei_type_name = "Progressive refinement segment end"; break;
-        case SEI_TYPE_MOTION_CONSTRAINED_SLICE_GROUP_SET : sei_type_name = "Motion constrained slice group set"; break;
-        case SEI_TYPE_FILM_GRAIN_CHARACTERISTICS : sei_type_name = "Film grain characteristics"; break;
-        case SEI_TYPE_DEBLOCKING_FILTER_DISPLAY_PREFERENCE : sei_type_name = "Deblocking filter display preference"; break;
-        case SEI_TYPE_STEREO_VIDEO_INFO :         sei_type_name = "Stereo video info"; break;
-        default: sei_type_name = "Unknown"; break;
+            break;
+        }
+
+        case SEI_TYPE_RECOVERY_POINT :
+            sei_type_name = "Recovery point";
+            break;
+        case SEI_TYPE_DEC_REF_PIC_MARKING_REPETITION :
+            sei_type_name = "Dec ref pic marking repetition";
+            break;
+        case SEI_TYPE_SPARE_PIC :
+            sei_type_name = "Spare pic";
+            break;
+        case SEI_TYPE_SCENE_INFO :
+            sei_type_name = "Scene info";
+            break;
+        case SEI_TYPE_SUB_SEQ_INFO :
+            sei_type_name = "Sub seq info";
+            break;
+        case SEI_TYPE_SUB_SEQ_LAYER_CHARACTERISTICS :
+            sei_type_name = "Sub seq layer characteristics";
+            break;
+        case SEI_TYPE_SUB_SEQ_CHARACTERISTICS :
+            sei_type_name = "Sub seq characteristics";
+            break;
+        case SEI_TYPE_FULL_FRAME_FREEZE :
+            sei_type_name = "Full frame freeze";
+            break;
+        case SEI_TYPE_FULL_FRAME_FREEZE_RELEASE :
+            sei_type_name = "Full frame freeze release";
+            break;
+        case SEI_TYPE_FULL_FRAME_SNAPSHOT :
+            sei_type_name = "Full frame snapshot";
+            break;
+        case SEI_TYPE_PROGRESSIVE_REFINEMENT_SEGMENT_START :
+            sei_type_name = "Progressive refinement segment start";
+            break;
+        case SEI_TYPE_PROGRESSIVE_REFINEMENT_SEGMENT_END :
+            sei_type_name = "Progressive refinement segment end";
+            break;
+        case SEI_TYPE_MOTION_CONSTRAINED_SLICE_GROUP_SET :
+            sei_type_name = "Motion constrained slice group set";
+            break;
+        case SEI_TYPE_FILM_GRAIN_CHARACTERISTICS :
+            sei_type_name = "Film grain characteristics";
+            break;
+        case SEI_TYPE_DEBLOCKING_FILTER_DISPLAY_PREFERENCE :
+            sei_type_name = "Deblocking filter display preference";
+            break;
+        case SEI_TYPE_STEREO_VIDEO_INFO :
+            sei_type_name = "Stereo video info";
+            break;
+        default:
+            sei_type_name = "Unknown";
+            break;
         }
     }
 }
@@ -582,34 +666,84 @@ void CNalParser::h264_debug_nal(h264_stream_t* h, nal_t* nal)
     const char* nal_unit_type_name;
     switch (nal->nal_unit_type)
     {
-    case  NAL_UNIT_TYPE_UNSPECIFIED :                   nal_unit_type_name = "Unspecified"; break;
-    case  NAL_UNIT_TYPE_CODED_SLICE_NON_IDR :           nal_unit_type_name = "Coded slice of a non-IDR picture"; break;
-    case  NAL_UNIT_TYPE_CODED_SLICE_DATA_PARTITION_A :  nal_unit_type_name = "Coded slice data partition A"; break;
-    case  NAL_UNIT_TYPE_CODED_SLICE_DATA_PARTITION_B :  nal_unit_type_name = "Coded slice data partition B"; break;
-    case  NAL_UNIT_TYPE_CODED_SLICE_DATA_PARTITION_C :  nal_unit_type_name = "Coded slice data partition C"; break;
-    case  NAL_UNIT_TYPE_CODED_SLICE_IDR :               nal_unit_type_name = "Coded slice of an IDR picture"; break;
-    case  NAL_UNIT_TYPE_SEI :                           nal_unit_type_name = "Supplemental enhancement information (SEI)"; break;
-    case  NAL_UNIT_TYPE_SPS :                           nal_unit_type_name = "Sequence parameter set"; break;
-    case  NAL_UNIT_TYPE_PPS :                           nal_unit_type_name = "Picture parameter set"; break;
-    case  NAL_UNIT_TYPE_AUD :                           nal_unit_type_name = "Access unit delimiter"; break;
-    case  NAL_UNIT_TYPE_END_OF_SEQUENCE :               nal_unit_type_name = "End of sequence"; break;
-    case  NAL_UNIT_TYPE_END_OF_STREAM :                 nal_unit_type_name = "End of stream"; break;
-    case  NAL_UNIT_TYPE_FILLER :                        nal_unit_type_name = "Filler data"; break;
-    case  NAL_UNIT_TYPE_SPS_EXT :                       nal_unit_type_name = "Sequence parameter set extension"; break;
-        // 14..18    // Reserved
-    case  NAL_UNIT_TYPE_CODED_SLICE_AUX :               nal_unit_type_name = "Coded slice of an auxiliary coded picture without partitioning"; break;
-        // 20..23    // Reserved
-        // 24..31    // Unspecified
-    default :                                           nal_unit_type_name = "Unknown"; break;
+    case  NAL_UNIT_TYPE_UNSPECIFIED :
+        nal_unit_type_name = "Unspecified";
+        break;
+    case  NAL_UNIT_TYPE_CODED_SLICE_NON_IDR :
+        nal_unit_type_name = "Coded slice of a non-IDR picture";
+        break;
+    case  NAL_UNIT_TYPE_CODED_SLICE_DATA_PARTITION_A :
+        nal_unit_type_name = "Coded slice data partition A";
+        break;
+    case  NAL_UNIT_TYPE_CODED_SLICE_DATA_PARTITION_B :
+        nal_unit_type_name = "Coded slice data partition B";
+        break;
+    case  NAL_UNIT_TYPE_CODED_SLICE_DATA_PARTITION_C :
+        nal_unit_type_name = "Coded slice data partition C";
+        break;
+    case  NAL_UNIT_TYPE_CODED_SLICE_IDR :
+        nal_unit_type_name = "Coded slice of an IDR picture";
+        break;
+    case  NAL_UNIT_TYPE_SEI :
+        nal_unit_type_name = "Supplemental enhancement information (SEI)";
+        break;
+    case  NAL_UNIT_TYPE_SPS :
+        nal_unit_type_name = "Sequence parameter set";
+        break;
+    case  NAL_UNIT_TYPE_PPS :
+        nal_unit_type_name = "Picture parameter set";
+        break;
+    case  NAL_UNIT_TYPE_AUD :
+        nal_unit_type_name = "Access unit delimiter";
+        break;
+    case  NAL_UNIT_TYPE_END_OF_SEQUENCE :
+        nal_unit_type_name = "End of sequence";
+        break;
+    case  NAL_UNIT_TYPE_END_OF_STREAM :
+        nal_unit_type_name = "End of stream";
+        break;
+    case  NAL_UNIT_TYPE_FILLER :
+        nal_unit_type_name = "Filler data";
+        break;
+    case  NAL_UNIT_TYPE_SPS_EXT :
+        nal_unit_type_name = "Sequence parameter set extension";
+        break;
+    // 14..18    // Reserved
+    case  NAL_UNIT_TYPE_CODED_SLICE_AUX :
+        nal_unit_type_name = "Coded slice of an auxiliary coded picture without partitioning";
+        break;
+    // 20..23    // Reserved
+    // 24..31    // Unspecified
+    default :
+        nal_unit_type_name = "Unknown";
+        break;
     }
     my_printf("nal_unit_type : %d ( %s )\r\n", nal->nal_unit_type, nal_unit_type_name );
 
-    if( nal->nal_unit_type == NAL_UNIT_TYPE_CODED_SLICE_NON_IDR) { h264_debug_slice_header(h); }
-    else if( nal->nal_unit_type == NAL_UNIT_TYPE_CODED_SLICE_IDR) { h264_debug_slice_header(h); }
-    else if( nal->nal_unit_type == NAL_UNIT_TYPE_SPS) { h264_debug_sps(h->sps); }
-    else if( nal->nal_unit_type == NAL_UNIT_TYPE_PPS) { h264_debug_pps(h->pps); }
-    else if( nal->nal_unit_type == NAL_UNIT_TYPE_AUD) { h264_debug_aud(h->aud); }
-    else if( nal->nal_unit_type == NAL_UNIT_TYPE_SEI) { h264_debug_seis( h ); }
+    if( nal->nal_unit_type == NAL_UNIT_TYPE_CODED_SLICE_NON_IDR)
+    {
+        h264_debug_slice_header(h);
+    }
+    else if( nal->nal_unit_type == NAL_UNIT_TYPE_CODED_SLICE_IDR)
+    {
+        h264_debug_slice_header(h);
+    }
+    else if( nal->nal_unit_type == NAL_UNIT_TYPE_SPS)
+    {
+        h264_debug_sps(h->sps);
+    }
+    else if( nal->nal_unit_type == NAL_UNIT_TYPE_PPS)
+    {
+        h264_debug_pps(h->pps);
+    }
+    else if( nal->nal_unit_type == NAL_UNIT_TYPE_AUD)
+    {
+        h264_debug_aud(h->aud);
+    }
+    else if( nal->nal_unit_type == NAL_UNIT_TYPE_SEI)
+    {
+        h264_debug_seis( h );
+    }
 }
 
 ////////////////////////////////////////////////////////
@@ -629,9 +763,9 @@ void CNalParser::h265_debug_ptl(profile_tier_level_t* ptl, int profilePresentFla
         my_printf(" general_non_packed_constraint_flag: %d\r\n", ptl->general_non_packed_constraint_flag);
         my_printf(" general_frame_only_constraint_flag: %d\r\n", ptl->general_frame_only_constraint_flag);
         if (ptl->general_profile_idc==4 || ptl->general_profile_compatibility_flag[4] ||
-            ptl->general_profile_idc==5 || ptl->general_profile_compatibility_flag[5] ||
-            ptl->general_profile_idc==6 || ptl->general_profile_compatibility_flag[6] ||
-            ptl->general_profile_idc==7 || ptl->general_profile_compatibility_flag[7])
+                ptl->general_profile_idc==5 || ptl->general_profile_compatibility_flag[5] ||
+                ptl->general_profile_idc==6 || ptl->general_profile_compatibility_flag[6] ||
+                ptl->general_profile_idc==7 || ptl->general_profile_compatibility_flag[7])
         {
             my_printf(" general_max_12bit_constraint_flag: %d\r\n", ptl->general_max_12bit_constraint_flag);
             my_printf(" general_max_10bit_constraint_flag: %d\r\n", ptl->general_max_10bit_constraint_flag);
@@ -649,9 +783,9 @@ void CNalParser::h265_debug_ptl(profile_tier_level_t* ptl, int profilePresentFla
             my_printf(" general_reserved_zero_43bits: %u\r\n", ptl->general_reserved_zero_43bits);// tocheck
         }
         if ((ptl->general_profile_idc>=1 && ptl->general_profile_idc<=5) ||
-            ptl->general_profile_compatibility_flag[1] || ptl->general_profile_compatibility_flag[2] ||
-            ptl->general_profile_compatibility_flag[3] || ptl->general_profile_compatibility_flag[4] ||
-            ptl->general_profile_compatibility_flag[5])
+                ptl->general_profile_compatibility_flag[1] || ptl->general_profile_compatibility_flag[2] ||
+                ptl->general_profile_compatibility_flag[3] || ptl->general_profile_compatibility_flag[4] ||
+                ptl->general_profile_compatibility_flag[5])
         {
             my_printf(" general_inbld_flag: %d\r\n", ptl->general_inbld_flag);
         }
@@ -660,7 +794,7 @@ void CNalParser::h265_debug_ptl(profile_tier_level_t* ptl, int profilePresentFla
             my_printf(" general_reserved_zero_bit: %d\r\n", ptl->general_reserved_zero_bit);
         }
     }
-        
+
     my_printf(" general_level_idc: %d\r\n", ptl->general_level_idc);
     for (int i = 0; i < max_sub_layers_minus1; i++)
     {
@@ -690,9 +824,9 @@ void CNalParser::h265_debug_ptl(profile_tier_level_t* ptl, int profilePresentFla
             my_printf("  sub_layer_non_packed_constraint_flag[%d]: %d\r\n", i, ptl->sub_layer_non_packed_constraint_flag[i]);
             my_printf("  sub_layer_frame_only_constraint_flag[%d]: %d\r\n", i, ptl->sub_layer_frame_only_constraint_flag[i]);
             if (ptl->sub_layer_profile_idc[i]==4 || ptl->sub_layer_profile_compatibility_flag[i][4] ||
-                ptl->sub_layer_profile_idc[i]==5 || ptl->sub_layer_profile_compatibility_flag[i][5] ||
-                ptl->sub_layer_profile_idc[i]==6 || ptl->sub_layer_profile_compatibility_flag[i][6] ||
-                ptl->sub_layer_profile_idc[i]==7 || ptl->sub_layer_profile_compatibility_flag[i][7])
+                    ptl->sub_layer_profile_idc[i]==5 || ptl->sub_layer_profile_compatibility_flag[i][5] ||
+                    ptl->sub_layer_profile_idc[i]==6 || ptl->sub_layer_profile_compatibility_flag[i][6] ||
+                    ptl->sub_layer_profile_idc[i]==7 || ptl->sub_layer_profile_compatibility_flag[i][7])
             {
                 my_printf("  sub_layer_max_12bit_constraint_flag[%d]: %d\r\n", i, ptl->sub_layer_max_12bit_constraint_flag[i]);
                 my_printf("  sub_layer_max_10bit_constraint_flag[%d]: %d\r\n", i, ptl->sub_layer_max_10bit_constraint_flag[i]);
@@ -711,11 +845,11 @@ void CNalParser::h265_debug_ptl(profile_tier_level_t* ptl, int profilePresentFla
             }
             // to check
             if ((ptl->sub_layer_profile_idc[i]>=1 && ptl->sub_layer_profile_idc[i]<=5) ||
-                ptl->sub_layer_profile_compatibility_flag[i][1] ||
-                ptl->sub_layer_profile_compatibility_flag[i][2] ||
-                ptl->sub_layer_profile_compatibility_flag[i][3] ||
-                ptl->sub_layer_profile_compatibility_flag[i][4] ||
-                ptl->sub_layer_profile_compatibility_flag[i][5])
+                    ptl->sub_layer_profile_compatibility_flag[i][1] ||
+                    ptl->sub_layer_profile_compatibility_flag[i][2] ||
+                    ptl->sub_layer_profile_compatibility_flag[i][3] ||
+                    ptl->sub_layer_profile_compatibility_flag[i][4] ||
+                    ptl->sub_layer_profile_compatibility_flag[i][5])
             {
                 my_printf("  sub_layer_inbld_flag[%d]: %d\r\n", i, ptl->sub_layer_inbld_flag[i]);
             }
@@ -729,7 +863,7 @@ void CNalParser::h265_debug_ptl(profile_tier_level_t* ptl, int profilePresentFla
             my_printf("  sub_layer_level_idc[%d]: %d\r\n", i, ptl->sub_layer_level_idc[i]);
         }
     }
-    
+
 }
 
 void CNalParser::h265_debug_sub_layer_hrd_parameters(sub_layer_hrd_parameters_t* subhrd, int sub_pic_hrd_params_present_flag, int CpbCnt, int subLayerId, const char* p)
@@ -754,9 +888,9 @@ void CNalParser::h265_debug_hrd_parameters(hrd_parameters_t* hrd, int commonInfP
         my_printf("  nal_hrd_parameters_present_flag: %d\r\n", hrd->nal_hrd_parameters_present_flag);
         my_printf("  vcl_hrd_parameters_present_flag: %d\r\n", hrd->vcl_hrd_parameters_present_flag);
         if (hrd->nal_hrd_parameters_present_flag ||
-            hrd->vcl_hrd_parameters_present_flag)
+                hrd->vcl_hrd_parameters_present_flag)
         {
-            
+
             my_printf("   sub_pic_hrd_params_present_flag: %d\r\n", hrd->sub_pic_hrd_params_present_flag);
             if (hrd->sub_pic_hrd_params_present_flag)
             {
@@ -789,7 +923,7 @@ void CNalParser::h265_debug_hrd_parameters(hrd_parameters_t* hrd, int commonInfP
         }
         if (!hrd->low_delay_hrd_flag[i])
             my_printf("   cpb_cnt_minus1[%d]: %d\r\n", i, hrd->cpb_cnt_minus1[i]);
-            
+
         if(hrd->nal_hrd_parameters_present_flag)
         {
             h265_debug_sub_layer_hrd_parameters(&(hrd->sub_layer_hrd_parameters), hrd->sub_pic_hrd_params_present_flag, hrd->cpb_cnt_minus1[i], i, "nal");
@@ -815,11 +949,11 @@ void CNalParser::h265_debug_vps(h265_vps_t* vps)
     // ptl
     my_printf("profile_tier_level()\r\n");
     h265_debug_ptl(&vps->ptl, 1, vps->vps_max_layers_minus1);
-    
+
     my_printf("vps_sub_layer_ordering_info_present_flag: %d\r\n", vps->vps_sub_layer_ordering_info_present_flag);
     my_printf("SubLayers\r\n");
     for (i = (vps->vps_sub_layer_ordering_info_present_flag ? 0 : vps->vps_max_sub_layers_minus1);
-        i <= vps->vps_max_sub_layers_minus1; i++ )
+            i <= vps->vps_max_sub_layers_minus1; i++ )
     {
         my_printf(" vps_max_dec_pic_buffering_minus1[%d]: %d\r\n", i, vps->vps_max_dec_pic_buffering_minus1[i]);
         my_printf(" vps_max_num_reorder_pics[%d]: %d\r\n", i, vps->vps_max_num_reorder_pics[i]);
@@ -1035,7 +1169,7 @@ void CNalParser::h265_debug_sps(h265_sps_t* sps)
     my_printf("log2_max_pic_order_cnt_lsb_minus4: %d\r\n", sps->log2_max_pic_order_cnt_lsb_minus4);
     my_printf("sps_sub_layer_ordering_info_present_flag: %d\r\n", sps->sps_sub_layer_ordering_info_present_flag);
     for (int i = (sps->sps_sub_layer_ordering_info_present_flag ? 0 : sps->sps_max_sub_layers_minus1);
-        i <= sps->sps_max_sub_layers_minus1; i++ )
+            i <= sps->sps_max_sub_layers_minus1; i++ )
     {
         my_printf(" sps_max_dec_pic_buffering_minus1[%d]: %d\r\n", i, sps->sps_max_dec_pic_buffering_minus1[i]);
         my_printf(" sps_max_num_reorder_pics[%d]: %d\r\n", i, sps->sps_max_num_reorder_pics[i]);
@@ -1231,10 +1365,18 @@ void CNalParser::h265_debug_aud(h265_aud_t* aud)
     const char* pic_type;
     switch (aud->pic_type)
     {
-    case H265_AUD_PRIMARY_PIC_TYPE_I :    pic_type = "I"; break;
-    case H265_AUD_PRIMARY_PIC_TYPE_IP :   pic_type = "P, I"; break;
-    case H265_AUD_PRIMARY_PIC_TYPE_IPB :  pic_type = "B, P, I"; break;
-    default : pic_type = "Unknown"; break;
+    case H265_AUD_PRIMARY_PIC_TYPE_I :
+        pic_type = "I";
+        break;
+    case H265_AUD_PRIMARY_PIC_TYPE_IP :
+        pic_type = "P, I";
+        break;
+    case H265_AUD_PRIMARY_PIC_TYPE_IPB :
+        pic_type = "B, P, I";
+        break;
+    default :
+        pic_type = "Unknown";
+        break;
     }
     my_printf("pic_type: %d ( %s ) \r\n", aud->pic_type, pic_type );
 }
@@ -1403,7 +1545,7 @@ void CNalParser::h265_debug_pred_weight_table(h265_stream_t* h)
             {
                 my_printf("  delta_luma_weight_l1[%d]: %d\r\n", i, pwt->delta_luma_weight_l1[i]);
                 my_printf("  luma_offset_l1[%d]: %d\r\n", i, pwt->luma_offset_l1[i]);
-                
+
             }
             if (pwt->chroma_weight_l1_flag[i])
             {
@@ -1446,10 +1588,18 @@ void CNalParser::h265_debug_slice_header(h265_stream_t* h)
         const char* slice_type_name;
         switch(hrd->slice_type)
         {
-            case H265_SH_SLICE_TYPE_P:  slice_type_name = "P slice"; break;
-            case H265_SH_SLICE_TYPE_B:  slice_type_name = "B slice"; break;
-            case H265_SH_SLICE_TYPE_I:  slice_type_name = "I slice"; break;
-            default :                   slice_type_name = "Unknown"; break;
+        case H265_SH_SLICE_TYPE_P:
+            slice_type_name = "P slice";
+            break;
+        case H265_SH_SLICE_TYPE_B:
+            slice_type_name = "B slice";
+            break;
+        case H265_SH_SLICE_TYPE_I:
+            slice_type_name = "I slice";
+            break;
+        default :
+            slice_type_name = "Unknown";
+            break;
         }
         my_printf(" slice_type: %d (%s)\r\n", hrd->slice_type, slice_type_name);
         if (pps->output_flag_present_flag)
@@ -1523,11 +1673,11 @@ void CNalParser::h265_debug_slice_header(h265_stream_t* h)
                 if (hrd->slice_type == H265_SH_SLICE_TYPE_B)
                     my_printf(" collocated_from_l0_flag: %d\r\n", hrd->collocated_from_l0_flag);
                 if ((hrd->collocated_from_l0_flag && hrd->num_ref_idx_l0_active_minus1 > 0) ||
-                    (!hrd->collocated_from_l0_flag && hrd->num_ref_idx_l1_active_minus1 > 0))
+                        (!hrd->collocated_from_l0_flag && hrd->num_ref_idx_l1_active_minus1 > 0))
                     my_printf(" collocated_ref_idx: %d\r\n", hrd->collocated_ref_idx);
             }
             if ((pps->weighted_pred_flag && hrd->slice_type == H265_SH_SLICE_TYPE_P) ||
-                (pps->weighted_bipred_flag && hrd->slice_type == H265_SH_SLICE_TYPE_B))
+                    (pps->weighted_bipred_flag && hrd->slice_type == H265_SH_SLICE_TYPE_B))
                 h265_debug_pred_weight_table(h);
             my_printf(" five_minus_max_num_merge_cand: %d\r\n", hrd->five_minus_max_num_merge_cand);
         }
@@ -1555,7 +1705,7 @@ void CNalParser::h265_debug_slice_header(h265_stream_t* h)
             }
         }
         my_printf("slice_loop_filter_across_slices_enabled_flag: %d\r\n", hrd->slice_loop_filter_across_slices_enabled_flag);
-        
+
     }
     if (pps->tiles_enabled_flag || pps->entropy_coding_sync_enabled_flag)
     {
@@ -1718,7 +1868,7 @@ void CNalParser::h265_debug_nal(h265_stream_t* h, h265_nal_t* nal)
     my_printf("nal_unit_type : %d ( %s )\r\n", nal->nal_unit_type, nal_unit_type_name);
     my_printf("nal_ref_idc : %d\r\n", nal->nuh_layer_id);
     my_printf("nuh_temporal_id_plus1 : %d\r\n", nal->nuh_temporal_id_plus1);
-    
+
     // nal unit
     if(my_nal_type == 0)
         h265_debug_vps(h->vps);

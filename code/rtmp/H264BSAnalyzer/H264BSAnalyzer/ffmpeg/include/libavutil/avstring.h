@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2007 Mans Rullgard
  *
  * This file is part of FFmpeg.
@@ -276,7 +276,8 @@ const char *av_dirname(char *path);
  */
 int av_match_name(const char *name, const char *names);
 
-enum AVEscapeMode {
+enum AVEscapeMode
+{
     AV_ESCAPE_MODE_AUTO,      ///< Use auto-selected escaping mode.
     AV_ESCAPE_MODE_BACKSLASH, ///< Use backslash escaping.
     AV_ESCAPE_MODE_QUOTE,     ///< Use single-quote escaping.

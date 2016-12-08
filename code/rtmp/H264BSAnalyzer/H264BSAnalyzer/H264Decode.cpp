@@ -1,4 +1,4 @@
-#include "stdafx.h" // for MFC
+ï»¿#include "stdafx.h" // for MFC
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,18 +31,18 @@ int debug(const char* fmt, ...)
 
 CH264Decoder::CH264Decoder()
     :m_skippedFrame(0),
-    m_picWidth(0),
-    m_picHeight(0),
-    m_videoStream(-1),
-    m_picBuffer(NULL),
-    m_fmtctx(NULL),
-    m_avctx(NULL),
-    m_picture(NULL),
-    m_frameRGB(NULL),
-    m_bufferYUV(NULL),
-    m_frameYUV(NULL),
-    m_imgctx(NULL),
-    m_imgctxyuv(NULL)
+     m_picWidth(0),
+     m_picHeight(0),
+     m_videoStream(-1),
+     m_picBuffer(NULL),
+     m_fmtctx(NULL),
+     m_avctx(NULL),
+     m_picture(NULL),
+     m_frameRGB(NULL),
+     m_bufferYUV(NULL),
+     m_frameYUV(NULL),
+     m_imgctx(NULL),
+     m_imgctxyuv(NULL)
 {
 
 }
@@ -65,7 +65,7 @@ int CH264Decoder::openVideoFile(const char* avifile)
     }
     av_register_all();
 
-    // ´ò¿ªÊÓÆµÎÄ¼ş
+    // æ‰“å¼€è§†é¢‘æ–‡ä»¶
     ret = avformat_open_input(&m_fmtctx, avifile, NULL, NULL);
     if (ret != 0)
     {
@@ -80,11 +80,11 @@ int CH264Decoder::openVideoFile(const char* avifile)
     }
 
 #ifdef _DEBUG_
-    // ´òÓ¡ÊÓÆµĞÅÏ¢
+    // æ‰“å°è§†é¢‘ä¿¡æ¯
     av_dump_format(m_fmtctx, 0, avifile, 0);
 #endif
 
-    // ÕÒÊÓÆµÁ÷
+    // æ‰¾è§†é¢‘æµ
     for (unsigned int i = 0; i < m_fmtctx->nb_streams; i++)
     {
         if (m_fmtctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
@@ -99,7 +99,7 @@ int CH264Decoder::openVideoFile(const char* avifile)
         return -1;
     }
 
-    // ´ò¿ª½âÂëÆ÷
+    // æ‰“å¼€è§£ç å™¨
     m_avctx = m_fmtctx->streams[m_videoStream]->codec;
     codec = avcodec_find_decoder(m_avctx->codec_id);
     if (codec == NULL)
@@ -114,13 +114,13 @@ int CH264Decoder::openVideoFile(const char* avifile)
         debug("open codec failed.\n");
         return -1;
     }
-    // ·ÖÅäframe
+    // åˆ†é…frame
     m_picture = av_frame_alloc();
     if (!m_picture)
     {
         return -1;
     }
-    // ·ÖÅä×ª»»³ÉRGBºóµÄframe
+    // åˆ†é…è½¬æ¢æˆRGBåçš„frame
     m_frameRGB = av_frame_alloc();
     if (!m_frameRGB)
     {
@@ -128,7 +128,7 @@ int CH264Decoder::openVideoFile(const char* avifile)
         return -1;
     }
     size = avpicture_get_size(AV_PIX_FMT_BGR24, m_avctx->width, m_avctx->height);
-    // m_picBufferÒªµ½×îºóÊÍ·Å
+    // m_picBufferè¦åˆ°æœ€åé‡Šæ”¾
     m_picBuffer = (unsigned char *)av_malloc(size);
     if (!m_picBuffer)
     {
@@ -137,9 +137,9 @@ int CH264Decoder::openVideoFile(const char* avifile)
         return -1;
     }
     avpicture_fill((AVPicture *)m_frameRGB, m_picBuffer, AV_PIX_FMT_BGR24, m_avctx->width, m_avctx->height);
-    // ´´½¨×ª»»ÉÏÏÂÎÄ
-    m_imgctx = sws_getContext(m_avctx->width, m_avctx->height, m_avctx->pix_fmt, m_avctx->width, m_avctx->height, 
-        AV_PIX_FMT_BGR24, SWS_BICUBIC, NULL, NULL, NULL);
+    // åˆ›å»ºè½¬æ¢ä¸Šä¸‹æ–‡
+    m_imgctx = sws_getContext(m_avctx->width, m_avctx->height, m_avctx->pix_fmt, m_avctx->width, m_avctx->height,
+                              AV_PIX_FMT_BGR24, SWS_BICUBIC, NULL, NULL, NULL);
     if (m_imgctx == NULL)
     {
         av_free(m_picture);
@@ -167,8 +167,8 @@ int CH264Decoder::openVideoFile(const char* avifile)
         return -1;
     }
     avpicture_fill((AVPicture *)m_frameYUV, m_bufferYUV, AV_PIX_FMT_YUV420P, m_avctx->width, m_avctx->height);
-    m_imgctxyuv = sws_getContext(m_avctx->width, m_avctx->height, m_avctx->pix_fmt, m_avctx->width, m_avctx->height, 
-        AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
+    m_imgctxyuv = sws_getContext(m_avctx->width, m_avctx->height, m_avctx->pix_fmt, m_avctx->width, m_avctx->height,
+                                 AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
     if (m_imgctxyuv == NULL)
     {
         av_free(m_picture);
@@ -239,7 +239,7 @@ int CH264Decoder::jumpToTime(int64_t time)
     AVRational AV_TIME = {1, AV_TIME_BASE};
     int ret = 0;
 
-    // Ìøµ½Ö¸¶¨Ê±¼ä
+    // è·³åˆ°æŒ‡å®šæ—¶é—´
     seekTarget = time * AV_TIME_BASE;
     if (seekTarget > m_fmtctx->duration || seekTarget < 0)
     {
@@ -257,16 +257,16 @@ int CH264Decoder::jumpToTime(int64_t time)
 
 int CH264Decoder::getFrame(unsigned char** yuvBuffer, unsigned char** rgbBuffer, int* size, int* width, int* height)
 {
-    int got_picture = 0;    // ÕÒµ½Ö¡±êÖ¾
+    int got_picture = 0;    // æ‰¾åˆ°å¸§æ ‡å¿—
     int len = 0;
     AVPacket avpkt = {0};
 
     av_init_packet(&avpkt);
     //int frame = 0;
-    // av_read_fram·µ»ØÏÂÒ»Ö¡£¬·¢Éú´íÎó»òÎÄ¼ş½áÊø·µ»Ø<0
+    // av_read_framè¿”å›ä¸‹ä¸€å¸§ï¼Œå‘ç”Ÿé”™è¯¯æˆ–æ–‡ä»¶ç»“æŸè¿”å›<0
     while (av_read_frame(m_fmtctx, &avpkt) >= 0)
     {
-        // ½âÂëÊÓÆµÁ÷
+        // è§£ç è§†é¢‘æµ
         if (avpkt.stream_index == m_videoStream)
         {
             len = avcodec_decode_video2(m_avctx, m_picture, &got_picture, &avpkt);
@@ -280,7 +280,7 @@ int CH264Decoder::getFrame(unsigned char** yuvBuffer, unsigned char** rgbBuffer,
             {
                 m_picWidth  = m_avctx->width;
                 m_picHeight = m_avctx->height;
-                // ´«³öÔ­Ê¼Êı¾İÖ¸Õë£¬ÓÉÓÚÄÚ²¿ÒÑ¾­ÉêÇëÁË£¬²»ÓÃÔÙ¿ª±ÙÊı¾İ
+                // ä¼ å‡ºåŸå§‹æ•°æ®æŒ‡é’ˆï¼Œç”±äºå†…éƒ¨å·²ç»ç”³è¯·äº†ï¼Œä¸ç”¨å†å¼€è¾Ÿæ•°æ®
                 if (yuvBuffer != NULL)
                 {
                     *yuvBuffer = m_picture->data[0];
@@ -294,7 +294,7 @@ int CH264Decoder::getFrame(unsigned char** yuvBuffer, unsigned char** rgbBuffer,
                     *rgbBuffer = convertToRgb();
                     if (size != NULL)
                     {
-                        *size = m_picWidth * m_picHeight * 3; // ÉÏÃæÖ¸¶¨ÁËrgb24£¬ËùÒÔÊÇw*h*3
+                        *size = m_picWidth * m_picHeight * 3; // ä¸Šé¢æŒ‡å®šäº†rgb24ï¼Œæ‰€ä»¥æ˜¯w*h*3
                     }
                 }
                 //printf("frame fmt: %d\n", m_picture->format);
@@ -312,7 +312,7 @@ int CH264Decoder::getFrame(unsigned char** yuvBuffer, unsigned char** rgbBuffer,
                 av_packet_unref(&avpkt);
                 return 1;
             } // end of got picture
-            // ÕâÀïÊÇ·ñÔÚÉÏÃæµÄifÖĞÅĞ¶ÏlenµÄÖµ£¿
+            // è¿™é‡Œæ˜¯å¦åœ¨ä¸Šé¢çš„ifä¸­åˆ¤æ–­lençš„å€¼ï¼Ÿ
             else
             {
                 m_skippedFrame++;
@@ -328,19 +328,19 @@ int CH264Decoder::getFrame(unsigned char** yuvBuffer, unsigned char** rgbBuffer,
 
 int CH264Decoder::getSkippedFrame(unsigned char** yuvBuffer, unsigned char** rgbBuffer, int* size, int* width, int* height)
 {
-    int got_picture = 0;    // ÕÒµ½Ö¡±êÖ¾
+    int got_picture = 0;    // æ‰¾åˆ°å¸§æ ‡å¿—
     int len = 0;
     AVPacket avpkt = {0};;
 
     av_init_packet(&avpkt);
 
-    // ÊÇ·ñ»¹ÓĞ»º´æµÄÖ¡
+    // æ˜¯å¦è¿˜æœ‰ç¼“å­˜çš„å¸§
     while (m_skippedFrame-- > 0)
     {
-        // ×¢£ºavpktÒªÇå¿ÕdataºÍsize£¬·ñÔòÎŞ·¨½âÂë
+        // æ³¨ï¼šavpktè¦æ¸…ç©ºdataå’Œsizeï¼Œå¦åˆ™æ— æ³•è§£ç 
         avpkt.data = NULL;
         avpkt.size = 0;
-        // ½âÂëÊÓÆµÁ÷ ×¢£º´ËÊ±Èç½âÂë³É¹¦£¬·µ»ØÖµÎª0
+        // è§£ç è§†é¢‘æµ æ³¨ï¼šæ­¤æ—¶å¦‚è§£ç æˆåŠŸï¼Œè¿”å›å€¼ä¸º0
         len = avcodec_decode_video2(m_avctx, m_picture, &got_picture, &avpkt);
         if (len < 0)
         {
@@ -352,7 +352,7 @@ int CH264Decoder::getSkippedFrame(unsigned char** yuvBuffer, unsigned char** rgb
         {
             m_picWidth  = m_avctx->width;
             m_picHeight = m_avctx->height;
-            // ´«³öÔ­Ê¼Êı¾İÖ¸Õë£¬ÓÉÓÚÄÚ²¿ÒÑ¾­ÉêÇëÁË£¬²»ÓÃÔÙ¿ª±ÙÊı¾İ
+            // ä¼ å‡ºåŸå§‹æ•°æ®æŒ‡é’ˆï¼Œç”±äºå†…éƒ¨å·²ç»ç”³è¯·äº†ï¼Œä¸ç”¨å†å¼€è¾Ÿæ•°æ®
             if (yuvBuffer != NULL)
             {
                 *yuvBuffer = m_picture->data[0];
@@ -391,8 +391,8 @@ int CH264Decoder::writeYUVFile(const char* filename)
     int len = m_picture->linesize[0];
     FILE* fp = NULL;
 
-    sws_scale(m_imgctxyuv, m_picture->data, m_picture->linesize, 0, m_avctx->height, 
-        m_frameYUV->data, m_frameYUV->linesize);
+    sws_scale(m_imgctxyuv, m_picture->data, m_picture->linesize, 0, m_avctx->height,
+              m_frameYUV->data, m_frameYUV->linesize);
 
     fp = fopen(filename, "wb");
     if (fp == NULL)
@@ -416,8 +416,8 @@ int CH264Decoder::writeYUVFile(const char* filename)
 
 unsigned char* CH264Decoder::convertToRgb()
 {
-    sws_scale(m_imgctx, m_picture->data, m_picture->linesize, 0, m_avctx->height, 
-        m_frameRGB->data, m_frameRGB->linesize);
+    sws_scale(m_imgctx, m_picture->data, m_picture->linesize, 0, m_avctx->height,
+              m_frameRGB->data, m_frameRGB->linesize);
 
     return m_frameRGB->data[0];
 }
@@ -440,7 +440,7 @@ int CH264Decoder::writeBMPFile(const char* filename)
 
     bmpInfo.biSize = sizeof(MYBITMAPINFOHEADER);
     bmpInfo.biWidth  = width;
-    bmpInfo.biHeight = -height; // !!!rgbÍ¼Ïñ±¾À´ÊÇµ¹¹ıÀ´µÄ£¬¼ÓÉÏ¸ººÅ²ÅÕı³£
+    bmpInfo.biHeight = -height; // !!!rgbå›¾åƒæœ¬æ¥æ˜¯å€’è¿‡æ¥çš„ï¼ŒåŠ ä¸Šè´Ÿå·æ‰æ­£å¸¸
     bmpInfo.biPlanes = 1;
     bmpInfo.biBitCount = 24;
     bmpInfo.biCompression = 0;
@@ -459,7 +459,7 @@ int CH264Decoder::writeBMPFile(const char* filename)
         return -1;
     }
 
-    // ÊÇ·ñĞèÒªÌî³ä£¬BMPÒªÇóÃ¿Ò»ĞĞÊı¾İ±ØĞë4×Ö½Ú¶ÔÆë£¬²»×ã¹»ÒÔ0²¹¡£
+    // æ˜¯å¦éœ€è¦å¡«å……ï¼ŒBMPè¦æ±‚æ¯ä¸€è¡Œæ•°æ®å¿…é¡»4å­—èŠ‚å¯¹é½ï¼Œä¸è¶³å¤Ÿä»¥0è¡¥ã€‚
     int padding = (4 - width * 3 % 4) % 4;
     char pad = '\0';
     int rgbSize = stride * height;
@@ -467,7 +467,7 @@ int CH264Decoder::writeBMPFile(const char* filename)
     if (padding)
     {
         debug("The bmp file need pad: %d bytes.\n", padding);
-        tmp_buf = (unsigned char *)malloc(sizeof(char) * rgbSize); // ¶ÔÆëºóµÄRGBÊı¾İ×Ü´óĞ¡
+        tmp_buf = (unsigned char *)malloc(sizeof(char) * rgbSize); // å¯¹é½åçš„RGBæ•°æ®æ€»å¤§å°
         for (int i = 0; i < height; i++)
         {
             memcpy(tmp_buf+i * stride, rgbBuffer+i*width*3, width*3);
@@ -570,7 +570,7 @@ int CH264Decoder::writeJPGFile(const char* filename)
     }
     //avpicture_fill((AVPicture *)frameJPG, picture_buf, fmtJPG, avctx->width, avctx->height);
     av_image_fill_arrays(frameJPG->data, frameJPG->linesize,
-                        picture_buf, fmtJPG, avctx->width, avctx->height, 1);
+                         picture_buf, fmtJPG, avctx->width, avctx->height, 1);
 
 #if 0
     buffer = (unsigned char *)av_malloc(size);
@@ -581,28 +581,28 @@ int CH264Decoder::writeJPGFile(const char* filename)
     memset(buffer, 0, size);
 #endif
 
-    // ×ª»»³ÉJPEG¸ñÊ½
-    // Ä¿±ê¸ñÊ½Ğ´ AV_PIX_FMT_YUV420P ¾ÍÕı³££¬Ğ´m_picture->format¾Í²»Õı³£¡£
+    // è½¬æ¢æˆJPEGæ ¼å¼
+    // ç›®æ ‡æ ¼å¼å†™ AV_PIX_FMT_YUV420P å°±æ­£å¸¸ï¼Œå†™m_picture->formatå°±ä¸æ­£å¸¸ã€‚
     imgctx = sws_getContext(JPGCodecCtx->width, JPGCodecCtx->height, (AVPixelFormat)m_picture->format, JPGCodecCtx->width,
                             JPGCodecCtx->height, static_cast<AVPixelFormat>(m_picture->format), SWS_BICUBIC, NULL, NULL, NULL); // JPGCodecCtx->pix_fmt fmtJPG
 
     debug("%s %d fmt: %d %d\n", __FUNCTION__, __LINE__, m_picture->format, AV_PIX_FMT_YUVJ420P);
     if (imgctx)
     {
-        sws_scale(imgctx, m_picture->data, m_picture->linesize, 0, JPGCodecCtx->height, 
-            frameJPG->data, frameJPG->linesize);
+        sws_scale(imgctx, m_picture->data, m_picture->linesize, 0, JPGCodecCtx->height,
+                  frameJPG->data, frameJPG->linesize);
         frameJPG->pts = 1;
         frameJPG->quality = JPGCodecCtx->global_quality;
         frameJPG->width = JPGCodecCtx->width;
         frameJPG->height = JPGCodecCtx->height;
         frameJPG->format = JPGCodecCtx->pix_fmt;
         //debug("----%s %d \n", __func__, __LINE__);
-        //sizeJPG = avcodec_encode_video(JPGCodecCtx, buffer, size, frameJPG);    // ±àÂë£¬bufferÎªjpegÊı¾İ
+        //sizeJPG = avcodec_encode_video(JPGCodecCtx, buffer, size, frameJPG);    // ç¼–ç ï¼Œbufferä¸ºjpegæ•°æ®
         memset(&avpkt, '\0', sizeof(AVPacket));
         //avpkt.data = NULL;
         //avpkt.size = 0;
         av_init_packet(&avpkt);
-        ret = avcodec_encode_video2(JPGCodecCtx, &avpkt, frameJPG, &got_picture);    // ±àÂë£¬bufferÎªjpegÊı¾İ
+        ret = avcodec_encode_video2(JPGCodecCtx, &avpkt, frameJPG, &got_picture);    // ç¼–ç ï¼Œbufferä¸ºjpegæ•°æ®
         if (ret < 0)
         {
             debug("encode to jpeg failed.\n");
@@ -624,7 +624,7 @@ int CH264Decoder::writeJPGFile(const char* filename)
             fwrite(buffer, 1, sizeJPG, fp);
             fclose(fp);
         } // end of got picture
-        sws_freeContext(imgctx);    // ±ØĞëÊÍ·Å£¬·ñÔòÄÚ´æĞ¹Â©
+        sws_freeContext(imgctx);    // å¿…é¡»é‡Šæ”¾ï¼Œå¦åˆ™å†…å­˜æ³„æ¼
         imgctx = NULL;
     }
 

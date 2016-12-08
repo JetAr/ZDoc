@@ -1,4 +1,4 @@
-#include "stdafx.h" // for mfc
+ï»¿#include "stdafx.h" // for mfc
 
 #ifdef linux
 #include <stdio.h>
@@ -9,7 +9,7 @@
 
 #include "tjpeg_utils.h"
 
-// jpeg¿âÍ·ÎÄ¼ş±ØĞë·Åµ½stdio.hºóÃæ
+// jpegåº“å¤´æ–‡ä»¶å¿…é¡»æ”¾åˆ°stdio.håé¢
 #include "libjpeg/include/turbojpeg.h"
 
 #ifdef WIN32
@@ -41,7 +41,7 @@ int tjpeg2rgb(unsigned char* jpeg_buffer, int jpeg_size, unsigned char* rgb_buff
 
     flags |= 0;
     ret = tjDecompress2(handle, jpeg_buffer, jpeg_size, rgb_buffer, width, 0,
-            height, pixelfmt, flags);
+                        height, pixelfmt, flags);
     if (ret < 0)
     {
         printf("compress to jpeg failed: %s\n", tjGetErrorStr());
@@ -57,7 +57,7 @@ int tjpeg2rgb_1(unsigned char* jpeg_buffer, int jpeg_size, unsigned char** rgb_b
     tjhandle handle = NULL;
     int width, height, subsample, colorspace;
     int flags = 0;
-    // Èç¹ûjpegÊÇ»ÒÍ¼£¬ÔòÖ¸¶¨RGB¸ñÊ½£¬×ª»»³öÀ´µÄÒ²ÊÇ»ÒÍ¼£¬pixelfmt²»ÓÃÖ¸¶¨ÊÇTJPF_GRAY
+    // å¦‚æœjpegæ˜¯ç°å›¾ï¼Œåˆ™æŒ‡å®šRGBæ ¼å¼ï¼Œè½¬æ¢å‡ºæ¥çš„ä¹Ÿæ˜¯ç°å›¾ï¼Œpixelfmtä¸ç”¨æŒ‡å®šæ˜¯TJPF_GRAY
     int pixelfmt = TJPF_RGB;//TJPF_BGR;//TJPF_RGB;
     int dstfmt = 0;
     int ret = 0;
@@ -79,7 +79,7 @@ int tjpeg2rgb_1(unsigned char* jpeg_buffer, int jpeg_size, unsigned char** rgb_b
     }
 
     ret = tjDecompress2(handle, jpeg_buffer, jpeg_size, *rgb_buffer, width, 0,
-            height, pixelfmt, flags);
+                        height, pixelfmt, flags);
     if (ret < 0)
     {
         printf("compress to jpeg failed: %s\n", tjGetErrorStr());
@@ -102,7 +102,7 @@ int trgb2jpeg(unsigned char* rgb_buffer, int width, int height, int quality, uns
     handle=tjInitCompress();
     //size=tjBufSize(width, height, subsamp);
     ret = tjCompress2(handle, rgb_buffer, width, 0, height, pixelfmt, jpeg_buffer, jpeg_size, subsamp,
-            quality, flags);
+                      quality, flags);
     if (ret < 0)
     {
         printf("compress to jpeg failed: %s\n", tjGetErrorStr());
@@ -118,7 +118,7 @@ int tjpeg2yuv(unsigned char* jpeg_buffer, int jpeg_size, unsigned char** yuv_buf
     tjhandle handle = NULL;
     int width, height, subsample, colorspace;
     int flags = 0;
-    int padding = 1; // 1»ò4¾ù¿É£¬µ«²»ÄÜÊÇ0
+    int padding = 1; // 1æˆ–4å‡å¯ï¼Œä½†ä¸èƒ½æ˜¯0
     int ret = 0;
 
     handle = tjInitDecompress();
@@ -129,7 +129,7 @@ int tjpeg2yuv(unsigned char* jpeg_buffer, int jpeg_size, unsigned char** yuv_buf
     flags |= 0;
 
     *yuv_type = subsample;
-    // ×¢£º¾­²âÊÔ£¬Ö¸¶¨µÄyuv²ÉÑù¸ñÊ½Ö»¶ÔYUV»º³åÇø´óĞ¡ÓĞÓ°Ïì£¬Êµ¼ÊÉÏ»¹ÊÇ°´JPEG±¾ÉíµÄYUV¸ñÊ½À´×ª»»µÄ
+    // æ³¨ï¼šç»æµ‹è¯•ï¼ŒæŒ‡å®šçš„yuvé‡‡æ ·æ ¼å¼åªå¯¹YUVç¼“å†²åŒºå¤§å°æœ‰å½±å“ï¼Œå®é™…ä¸Šè¿˜æ˜¯æŒ‰JPEGæœ¬èº«çš„YUVæ ¼å¼æ¥è½¬æ¢çš„
     *yuv_size = tjBufSizeYUV2(width, padding, height, subsample);
     *yuv_buffer =(unsigned char *)malloc(*yuv_size);
     if (*yuv_buffer == NULL)
@@ -139,7 +139,7 @@ int tjpeg2yuv(unsigned char* jpeg_buffer, int jpeg_size, unsigned char** yuv_buf
     }
 
     ret = tjDecompressToYUV2(handle, jpeg_buffer, jpeg_size, *yuv_buffer, width,
-			padding, height, flags);
+                             padding, height, flags);
     if (ret < 0)
     {
         printf("compress to jpeg failed: %s\n", tjGetErrorStr());
@@ -153,7 +153,7 @@ int tyuv2jpeg(unsigned char* yuv_buffer, int yuv_size, int width, int height, in
 {
     tjhandle handle = NULL;
     int flags = 0;
-    int padding = 1; // 1»ò4¾ù¿É£¬µ«²»ÄÜÊÇ0
+    int padding = 1; // 1æˆ–4å‡å¯ï¼Œä½†ä¸èƒ½æ˜¯0
     int need_size = 0;
     int ret = 0;
 
@@ -183,7 +183,7 @@ int trgb2yuv(unsigned char* rgb_buffer, int width, int height, unsigned char** y
 {
     tjhandle handle = NULL;
     int flags = 0;
-    int padding = 1; // 1»ò4¾ù¿É£¬µ«²»ÄÜÊÇ0
+    int padding = 1; // 1æˆ–4å‡å¯ï¼Œä½†ä¸èƒ½æ˜¯0
     int pixelfmt = TJPF_RGB;
     int ret = 0;
 
@@ -214,7 +214,7 @@ int tyuv2rgb(unsigned char* yuv_buffer, int yuv_size, int width, int height, int
 {
     tjhandle handle = NULL;
     int flags = 0;
-    int padding = 1; // 1»ò4¾ù¿É£¬µ«²»ÄÜÊÇ0
+    int padding = 1; // 1æˆ–4å‡å¯ï¼Œä½†ä¸èƒ½æ˜¯0
     int pixelfmt = TJPF_RGB;
     int need_size = 0;
     int ret = 0;

@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * This file is part of FFmpeg.
  *
@@ -45,7 +45,8 @@
  * AVFrame is an abstraction for reference-counted raw multimedia data.
  */
 
-enum AVFrameSideDataType {
+enum AVFrameSideDataType
+{
     /**
      * The data is the AVPanScan struct defined in libavcodec.
      */
@@ -114,7 +115,8 @@ enum AVFrameSideDataType {
     AV_FRAME_DATA_AUDIO_SERVICE_TYPE,
 };
 
-enum AVActiveFormatDescription {
+enum AVActiveFormatDescription
+{
     AV_AFD_SAME         = 8,
     AV_AFD_4_3          = 9,
     AV_AFD_16_9         = 10,
@@ -124,7 +126,8 @@ enum AVActiveFormatDescription {
     AV_AFD_SP_4_3       = 15,
 };
 
-typedef struct AVFrameSideData {
+typedef struct AVFrameSideData
+{
     enum AVFrameSideDataType type;
     uint8_t *data;
     int      size;
@@ -160,7 +163,8 @@ typedef struct AVFrameSideData {
  * av_opt_ptr() can be reordered. This allows 2 forks to add fields
  * without breaking compatibility with each other.
  */
-typedef struct AVFrame {
+typedef struct AVFrame
+{
 #define AV_NUM_DATA_POINTERS 8
     /**
      * pointer to the picture/channel planes.
@@ -453,20 +457,20 @@ typedef struct AVFrame {
     AVFrameSideData **side_data;
     int            nb_side_data;
 
-/**
- * @defgroup lavu_frame_flags AV_FRAME_FLAGS
- * Flags describing additional frame properties.
- *
- * @{
- */
+    /**
+     * @defgroup lavu_frame_flags AV_FRAME_FLAGS
+     * Flags describing additional frame properties.
+     *
+     * @{
+     */
 
-/**
- * The frame data may be corrupted, e.g. due to decoding errors.
- */
+    /**
+     * The frame data may be corrupted, e.g. due to decoding errors.
+     */
 #define AV_FRAME_FLAG_CORRUPT       (1 << 0)
-/**
- * @}
- */
+    /**
+     * @}
+     */
 
     /**
      * Frame flags, a combination of @ref lavu_frame_flags

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <string>
 #include <vector>
@@ -23,7 +23,7 @@ public:
     enum { IDD = IDD_PLAYDLG };
 
 public:
-    // ´ÓÖ÷´°¿ÚÄÃµ½ÊÓÆµÎÄ¼şĞÅÏ¢
+    // ä»ä¸»çª—å£æ‹¿åˆ°è§†é¢‘æ–‡ä»¶ä¿¡æ¯
     int SetVideoInfo(CString strFileName, int nWidth, int nHeight, int nTotalFrame, float nFps);
     void ShowFirstFrame();
     void SetBlack();
@@ -43,7 +43,7 @@ private:
     int SaveRGBFile(const char* pFileName);
     int SaveBGRFile(const char* pFileName);
     int SaveVideoFile(const char* pFileName);
-    
+
 private:
     BOOL m_fShowBlack;
     BOOL m_fPlayed;
@@ -59,9 +59,9 @@ private:
     BYTE* m_pbRgbBuffer;
     int m_iRgbSize;
     INT m_iBmpSize;
-    CString m_strPathName;   // ÊÓÆµÎÄ¼ş
+    CString m_strPathName;   // è§†é¢‘æ–‡ä»¶
 
-    CH264Decoder m_cDecoder;    // ½âÂëÆ÷
+    CH264Decoder m_cDecoder;    // è§£ç å™¨
 
     std::vector<std::vector<int> > m_vStartX;
 

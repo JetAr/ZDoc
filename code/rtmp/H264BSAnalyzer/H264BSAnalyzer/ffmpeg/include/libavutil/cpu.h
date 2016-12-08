@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2000, 2001, 2002 Fabrice Bellard
  *
  * This file is part of FFmpeg.
@@ -25,7 +25,7 @@
 
 #define AV_CPU_FLAG_FORCE    0x80000000 /* force usage of selected flags (OR) */
 
-    /* lower 16 bits - CPU features */
+/* lower 16 bits - CPU features */
 #define AV_CPU_FLAG_MMX          0x0001 ///< standard MMX
 #define AV_CPU_FLAG_MMXEXT       0x0002 ///< SSE integer functions or AMD MMX ext
 #define AV_CPU_FLAG_MMX2         0x0002 ///< SSE integer functions or AMD MMX ext
@@ -33,11 +33,11 @@
 #define AV_CPU_FLAG_SSE          0x0008 ///< SSE functions
 #define AV_CPU_FLAG_SSE2         0x0010 ///< PIV SSE2 functions
 #define AV_CPU_FLAG_SSE2SLOW 0x40000000 ///< SSE2 supported, but usually not faster
-                                        ///< than regular MMX/SSE (e.g. Core1)
+///< than regular MMX/SSE (e.g. Core1)
 #define AV_CPU_FLAG_3DNOWEXT     0x0020 ///< AMD 3DNowExt
 #define AV_CPU_FLAG_SSE3         0x0040 ///< Prescott SSE3 functions
 #define AV_CPU_FLAG_SSE3SLOW 0x20000000 ///< SSE3 supported, but usually not faster
-                                        ///< than regular MMX/SSE (e.g. Core1)
+///< than regular MMX/SSE (e.g. Core1)
 #define AV_CPU_FLAG_SSSE3        0x0080 ///< Conroe SSSE3 functions
 #define AV_CPU_FLAG_ATOM     0x10000000 ///< Atom processor, some SSSE3 instructions are slower
 #define AV_CPU_FLAG_SSE4         0x0100 ///< Penryn SSE4.1 functions

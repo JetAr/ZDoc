@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2012 Martin Storsjo
  *
  * This file is part of FFmpeg.
@@ -29,7 +29,8 @@
  * @{
  */
 
-enum AVHMACType {
+enum AVHMACType
+{
     AV_HMAC_MD5,
     AV_HMAC_SHA1,
     AV_HMAC_SHA224 = 10,

@@ -1,4 +1,4 @@
-#include "stdafx.h" // for mfc
+﻿#include "stdafx.h" // for mfc
 
 #include "h265_sei.h"
 

@@ -1,4 +1,4 @@
-// PlayDlg.cpp : implementation file
+ï»¿// PlayDlg.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -84,7 +84,7 @@ BOOL CPlayDlg::OnInitDialog()
         m_vStartX[1].push_back(rect.left);
     }
 
-    // ÌùÍ¼
+    // è´´å›¾
     m_bPlay.SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BM_PLAY)));
     m_bPlay.EnableWindow(TRUE);
     m_bStop.SetBitmap(LoadBitmap(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDB_BM_STOP)));
@@ -122,11 +122,11 @@ inline void RenderBitmap(CWnd *pWnd, Bitmap* pbmp)
     }
 }
 
-// ÏÔÊ¾Í¼Æ¬
+// æ˜¾ç¤ºå›¾ç‰‡
 void CPlayDlg::ShowPicture(BYTE* pbData, int iSize)
 {
     if (pbData == NULL) return;
-    CWnd* pWnd=GetDlgItem(IDC_VIDEO);   // IDC_VIDEO£ºpicture contral ¿Ø¼şID
+    CWnd* pWnd=GetDlgItem(IDC_VIDEO);   // IDC_VIDEOï¼špicture contral æ§ä»¶ID
     IStream* pPicture = NULL;
     CreateStreamOnHGlobal(NULL,TRUE,&pPicture);
     if( pPicture != NULL )
@@ -151,7 +151,7 @@ void CPlayDlg::Show(BYTE* pbData, int nSize, int nWidth, int nHeight)
     MYBITMAPFILEHEADER bmpHeader;
     MYBITMAPINFOHEADER bmpInfo;
 
-    // ÏÈÌí¼ÓBMPÍ·
+    // å…ˆæ·»åŠ BMPå¤´
     bmpHeader.bfType = 'MB';
     bmpHeader.bfSize = nSize + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
     bmpHeader.bfReserved1 = 0;
@@ -159,7 +159,7 @@ void CPlayDlg::Show(BYTE* pbData, int nSize, int nWidth, int nHeight)
     bmpHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
     bmpInfo.biSize   = sizeof(BITMAPINFOHEADER);
     bmpInfo.biWidth  = nWidth;
-    bmpInfo.biHeight = -nHeight;    // note BMPÍ¼ÏñÊÇµ¹¹ıÀ´µÄ
+    bmpInfo.biHeight = -nHeight;    // note BMPå›¾åƒæ˜¯å€’è¿‡æ¥çš„
     bmpInfo.biPlanes = 1;
     bmpInfo.biBitCount = 24;
     bmpInfo.biCompression = BI_RGB;
@@ -172,7 +172,7 @@ void CPlayDlg::Show(BYTE* pbData, int nSize, int nWidth, int nHeight)
     memcpy(m_pbBmpData, &bmpHeader, sizeof(BITMAPFILEHEADER));
     memcpy(m_pbBmpData+sizeof(BITMAPFILEHEADER), &bmpInfo, sizeof(BITMAPINFOHEADER));
     memcpy(m_pbBmpData+sizeof(BITMAPFILEHEADER)+sizeof(BITMAPINFOHEADER), pbData, nSize);
-    // ÏÔÊ¾
+    // æ˜¾ç¤º
     ShowPicture(m_pbBmpData, bmpHeader.bfSize);
 }
 
@@ -232,7 +232,7 @@ void CPlayDlg::ShowFirstFrame()
     OnBnClickedBtNext();
 }
 
-//picture¿Ø¼ş±³¾°É«ÎªºÚÉ«
+//pictureæ§ä»¶èƒŒæ™¯è‰²ä¸ºé»‘è‰²
 void CPlayDlg::SetBlack()
 {
     CRect rtTop;
@@ -267,7 +267,7 @@ void CPlayDlg::ShowingFrame()
     else
     {
         ret = m_cDecoder.getSkippedFrame(NULL, &m_pbRgbBuffer, &m_iRgbSize);
-        m_iRgbSize = m_iRgbSize ? m_iRgbSize: m_nWidth*m_nHeight*3; // ½âÂë»º´æµÄÖ¡Ê±£¬»ñÈ¡µÄsizeÎª0£¬ËùÒÔÕâÑùÅĞ¶Ï
+        m_iRgbSize = m_iRgbSize ? m_iRgbSize: m_nWidth*m_nHeight*3; // è§£ç ç¼“å­˜çš„å¸§æ—¶ï¼Œè·å–çš„sizeä¸º0ï¼Œæ‰€ä»¥è¿™æ ·åˆ¤æ–­
 
 #if 0
         CString strDebugInfo;
@@ -281,7 +281,7 @@ void CPlayDlg::ShowingFrame()
     }
 }
 
-// ÎÄ¼şÃû´ø%d %05dµÈ±íÊ¾±£´æËùÓĞÍ¼Æ¬
+// æ–‡ä»¶åå¸¦%d %05dç­‰è¡¨ç¤ºä¿å­˜æ‰€æœ‰å›¾ç‰‡
 static bool IsSingleFile(const char* filename)
 {
     std::string pathname = filename;
@@ -497,13 +497,13 @@ int CPlayDlg::SaveVideoFile(const char* pFileName)
         MessageBox("Write to video file failed");
         return -1;
     }
-    
+
     cSaveVideo.close();
 
     return 0;
 }
 
-// ´°¿Ú¹Ø±Õ
+// çª—å£å…³é—­
 void CPlayDlg::OnClose()
 {
     OnBnClickedBtStop();
@@ -527,10 +527,10 @@ void CPlayDlg::CloseVideo()
     {
         m_nFrameCount = 0;
         m_cDecoder.closeVideoFile();
-    }  
+    }
 }
 
-// Ê¹ÓÃ¹Ø±ÕÎÄ¼şÔÙ´ò¿ªµÄ·½Ê½£¬ÊÇÒòÎªÃ»ÓĞ·â×°ffmpegµÄ¸´Î»²Ù×÷
+// ä½¿ç”¨å…³é—­æ–‡ä»¶å†æ‰“å¼€çš„æ–¹å¼ï¼Œæ˜¯å› ä¸ºæ²¡æœ‰å°è£…ffmpegçš„å¤ä½æ“ä½œ
 void CPlayDlg::ReOpenVideo()
 {
     CloseVideo();
@@ -569,10 +569,10 @@ void CPlayDlg::OnTimer(UINT_PTR nIDEvent)
     if (m_nFrameCount >= m_nTotalFrame)
     {
         Pause();
-        
+
         m_fClosed = TRUE;
         CloseVideo();
-        if (m_fLoop) 
+        if (m_fLoop)
         {
             m_fPlayed = TRUE;
             OnBnClickedBtPlay();
@@ -596,7 +596,7 @@ void CPlayDlg::OnSize(UINT nType, int cx, int cy)
     }
 
     int startx = 1;
-    // Ë®Æ½Î»ÖÃÏàÍ¬µÄ°´Å¥
+    // æ°´å¹³ä½ç½®ç›¸åŒçš„æŒ‰é’®
     for (unsigned int i = 0; i < m_vStartX[0].size(); i++)
     {
         pWnd = GetDlgItem(m_vStartX[0][i]);
@@ -607,7 +607,7 @@ void CPlayDlg::OnSize(UINT nType, int cx, int cy)
     }
 }
 
-// ²¥·Å
+// æ’­æ”¾
 void CPlayDlg::OnBnClickedBtPlay()
 {
     if (m_strPathName.IsEmpty())
@@ -640,7 +640,7 @@ void CPlayDlg::OnBnClickedBtNext()
     ReOpenVideo();
 
     OnTimer(-1);
-    
+
     return;
 }
 
@@ -648,14 +648,14 @@ void CPlayDlg::OnBnClickedBtNext()
 void CPlayDlg::OnBnClickedBtSave()
 {
     char szFilter[] = "JPG File(*.jpg)|*.jpg|"
-                       "YUV File(*.yuv)|*.yuv|"
-                       "BMP File(*.bmp)|*.bmp|"
-                       "RGB File(*.rgb)|*.rgb|"
-                       "RGB File(*.bgr)|*.bgr|"
-                       "AVI File(*.avi)|*.avi|"
-                       "MP4 File(*.mp4)|*.mp4|"
-                       "MOV File(*.mov)|*.mov|"
-                       "||";
+                      "YUV File(*.yuv)|*.yuv|"
+                      "BMP File(*.bmp)|*.bmp|"
+                      "RGB File(*.rgb)|*.rgb|"
+                      "RGB File(*.bgr)|*.bgr|"
+                      "AVI File(*.avi)|*.avi|"
+                      "MP4 File(*.mp4)|*.mp4|"
+                      "MOV File(*.mov)|*.mov|"
+                      "||";
     char szFileName[128] = "foobar";
     char* pExt = _T("jpg");
 
@@ -676,7 +676,7 @@ void CPlayDlg::OnBnClickedBtSave()
     std::string::size_type pos = pathname.find_last_of('.');
     if (pos != std::string::npos)
     {
-        
+
     }
     std::string extname = pathname.substr(pos+1);
 
@@ -684,11 +684,11 @@ void CPlayDlg::OnBnClickedBtSave()
     std::string filename = pathname.substr(pos1+1, pos-pos1-1);
     if (pos != std::string::npos)
     {
-        
+
     }
     std::string dirname = filename.substr(0, pos1);
 #endif
-    
+
     _splitpath(m_strPathName, NULL, NULL, szFileName, NULL);
     strFile.Format(_T("%s_%d.%s"), szFileName, m_nFrameCount, pExt);
 
@@ -745,7 +745,7 @@ void CPlayDlg::OnBnClickedCkLoop()
     m_fLoop = pBtn->GetCheck();
 }
 
-BOOL CPlayDlg::PreTranslateMessage(MSG* pMsg) 
+BOOL CPlayDlg::PreTranslateMessage(MSG* pMsg)
 {
     if(pMsg->message == WM_KEYDOWN)
     {

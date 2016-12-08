@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include "avutil.h"
 #include "attributes.h"
 
-typedef struct AVFifoBuffer {
+typedef struct AVFifoBuffer
+{
     uint8_t *buffer;
     uint8_t *rptr, *wptr, *end;
     uint32_t rndx, wndx;

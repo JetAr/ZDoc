@@ -1,4 +1,4 @@
-/*
+﻿/*
  * A 32-bit implementation of the XTEA algorithm
  * Copyright (c) 2012 Samuel Pitoiset
  *
@@ -32,7 +32,8 @@
  * @{
  */
 
-typedef struct AVXTEA {
+typedef struct AVXTEA
+{
     uint32_t key[16];
 } AVXTEA;
 

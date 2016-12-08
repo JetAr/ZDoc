@@ -1,4 +1,4 @@
-#ifndef _H264DECODE_H
+ï»¿#ifndef _H264DECODE_H
 #define _H264DECODE_H
 
 extern "C" {
@@ -9,7 +9,7 @@ extern "C" {
 }
 
 #ifdef WIN32
-// ¾²Ì¬¿â
+// é™æ€åº“
 #pragma comment(lib, "libgcc.a") // divdi3(), etc.
 #pragma comment(lib, "libmingwex.a") // snprintf()....
 #pragma comment(lib, "libiconv.a") // libiconv_open(), etc.
@@ -28,113 +28,116 @@ typedef unsigned short  WORD;
 typedef unsigned long   DWORD;
 typedef long            LONG;
 
-// 2×Ö½Ú¶ÔÆë
+// 2å­—èŠ‚å¯¹é½
 #pragma pack(2)
-typedef struct tagMYBITMAPFILEHEADER {
-        WORD    bfType;
-        DWORD   bfSize;
-        WORD    bfReserved1;
-        WORD    bfReserved2;
-        DWORD   bfOffBits;
+typedef struct tagMYBITMAPFILEHEADER
+{
+    WORD    bfType;
+    DWORD   bfSize;
+    WORD    bfReserved1;
+    WORD    bfReserved2;
+    DWORD   bfOffBits;
 } MYBITMAPFILEHEADER;
 
 // 40
-// ÉÏÃæ¸ü¸ÄÎª2×Ö½Ú¶ÔÆë£¬ÏÖÔÚÒª»Ö¸´ÎªÔ­À´Ä¬ÈÏ8×Ö½Ú¶ÔÆë
+// ä¸Šé¢æ›´æ”¹ä¸º2å­—èŠ‚å¯¹é½ï¼Œç°åœ¨è¦æ¢å¤ä¸ºåŸæ¥é»˜è®¤8å­—èŠ‚å¯¹é½
 #pragma pack(8)
-typedef struct tagMYBITMAPINFOHEADER{
-        DWORD      biSize;
-        LONG       biWidth;
-        LONG       biHeight;
-        WORD       biPlanes;
-        WORD       biBitCount;
-        DWORD      biCompression;
-        DWORD      biSizeImage;
-        LONG       biXPelsPerMeter;
-        LONG       biYPelsPerMeter;
-        DWORD      biClrUsed;
-        DWORD      biClrImportant;
+typedef struct tagMYBITMAPINFOHEADER
+{
+    DWORD      biSize;
+    LONG       biWidth;
+    LONG       biHeight;
+    WORD       biPlanes;
+    WORD       biBitCount;
+    DWORD      biCompression;
+    DWORD      biSizeImage;
+    LONG       biXPelsPerMeter;
+    LONG       biYPelsPerMeter;
+    DWORD      biClrUsed;
+    DWORD      biClrImportant;
 } MYBITMAPINFOHEADER;
 
-class CH264Decoder {
+class CH264Decoder
+{
 public:
     CH264Decoder();
     ~CH264Decoder();
 
     /**
-    * openVideoFile - ´ò¿ªH264ÊÓÆµ
-    * 
-    * @param  avifile H264¸ñÊ½µÄAVIÊÓÆµÎÄ¼şÃû³Æ
+    * openVideoFile - æ‰“å¼€H264è§†é¢‘
     *
-    * @return 0 - ³É¹¦   -1 - Ê§°Ü(°üÀ¨ÕÒ²»µ½½âÂëÆ÷¡¢·ÖÅäÄÚ´æ²»³É¹¦)
-    */  
+    * @param  avifile H264æ ¼å¼çš„AVIè§†é¢‘æ–‡ä»¶åç§°
+    *
+    * @return 0 - æˆåŠŸ   -1 - å¤±è´¥(åŒ…æ‹¬æ‰¾ä¸åˆ°è§£ç å™¨ã€åˆ†é…å†…å­˜ä¸æˆåŠŸ)
+    */
     int openVideoFile(const char* avifile);
 
     /**
-    * closeVideoFile - ¹Ø±ÕÊÓÆµ²¢ÊÍ·Å×ÊÔ´
-    * 
+    * closeVideoFile - å…³é—­è§†é¢‘å¹¶é‡Šæ”¾èµ„æº
+    *
     */
     void closeVideoFile(void);
 
     /**
-    * jumpToTime - Ìøµ½Ö¸¶¨Ê±¼ä
+    * jumpToTime - è·³åˆ°æŒ‡å®šæ—¶é—´
     *
-    * @param     time£ºÊ±¼ä£¬ÒÔÃëÎªµ¥Î»
+    * @param     timeï¼šæ—¶é—´ï¼Œä»¥ç§’ä¸ºå•ä½
     *
-    * @return    0 - ³É¹¦   -1 £­Ìø×ª²»³É¹¦»òÖ¸¶¨Ê±¼ä³¬³öÊÓÆµ×ÜÊ±¼ä»òĞ¡ÓÚ0
+    * @return    0 - æˆåŠŸ   -1 ï¼è·³è½¬ä¸æˆåŠŸæˆ–æŒ‡å®šæ—¶é—´è¶…å‡ºè§†é¢‘æ€»æ—¶é—´æˆ–å°äº0
     */
     int jumpToTime(int64_t time);
 
     /**
-    * getFrame - ´ÓÊÓÆµÖĞ»ñÈ¡Ò»Ö¡Êı¾İ
-    * 
-    * @param[OUT] yuvBuffer ´«³ö²ÎÊı£¬±£´æÔ­Ê¼Êı¾İÖ¸Õë
-    * @param[OUT] rgbBuffer ´«³ö²ÎÊı£¬RGBÊı¾İÖ¸Õë
-    * @param[OUT] size      ´«³ö²ÎÊı£¬Ô­Ê¼Êı¾İ´óĞ¡
-    * @param[OUT] width     ´«³ö²ÎÊı£¬¿í
-    * @param[OUT] height    ´«³ö²ÎÊı£¬¸ß
+    * getFrame - ä»è§†é¢‘ä¸­è·å–ä¸€å¸§æ•°æ®
     *
-    * @return  1 - ³É¹¦   0 - Ã»ÓĞ¶Áµ½Ö¡(ÊÓÆµ½áÊøÁË)  -1 - ½âÂëÊ§°Ü
+    * @param[OUT] yuvBuffer ä¼ å‡ºå‚æ•°ï¼Œä¿å­˜åŸå§‹æ•°æ®æŒ‡é’ˆ
+    * @param[OUT] rgbBuffer ä¼ å‡ºå‚æ•°ï¼ŒRGBæ•°æ®æŒ‡é’ˆ
+    * @param[OUT] size      ä¼ å‡ºå‚æ•°ï¼ŒåŸå§‹æ•°æ®å¤§å°
+    * @param[OUT] width     ä¼ å‡ºå‚æ•°ï¼Œå®½
+    * @param[OUT] height    ä¼ å‡ºå‚æ•°ï¼Œé«˜
     *
-    * @note  ´«³ö²ÎÊıÖĞµÄ¿íºÍ¸ßÖ¸ÊÓÆµÊı¾İµÄ¿íºÍ¸ß
-    *        Ô­Ê¼Êı¾İÎªYUV420P¸ñÊ½
-    *        ÓĞĞ©ÊÓÆµ²»ÒÔIÖ¡¿ªÊ¼£¬µ÷ÓÃjumpToTime(0)¿ÉÌøµ½¿ªÊ¼µÄIÖ¡
-    *        ¸Ãº¯Êıµ÷ÓÃav_read_frame£¬»á·µ»ØÒ»ÏÂÖ¡£¬¼´>0±íÃ÷ÊÓÆµÖĞ»¹ÓĞÊı¾İ£¬¿ÉÒÔ¼ÌĞø¶ÁÈ¡
+    * @return  1 - æˆåŠŸ   0 - æ²¡æœ‰è¯»åˆ°å¸§(è§†é¢‘ç»“æŸäº†)  -1 - è§£ç å¤±è´¥
+    *
+    * @note  ä¼ å‡ºå‚æ•°ä¸­çš„å®½å’Œé«˜æŒ‡è§†é¢‘æ•°æ®çš„å®½å’Œé«˜
+    *        åŸå§‹æ•°æ®ä¸ºYUV420Pæ ¼å¼
+    *        æœ‰äº›è§†é¢‘ä¸ä»¥Iå¸§å¼€å§‹ï¼Œè°ƒç”¨jumpToTime(0)å¯è·³åˆ°å¼€å§‹çš„Iå¸§
+    *        è¯¥å‡½æ•°è°ƒç”¨av_read_frameï¼Œä¼šè¿”å›ä¸€ä¸‹å¸§ï¼Œå³>0è¡¨æ˜è§†é¢‘ä¸­è¿˜æœ‰æ•°æ®ï¼Œå¯ä»¥ç»§ç»­è¯»å–
     */
     int getFrame(unsigned char** yuvBuffer = NULL, unsigned char** rgbBuffer = NULL, int* size = NULL, int* width = NULL, int* height = NULL);
 
     /**
-    * getSkippedFrame - »ñÈ¡ffmpeg»º³åµÄÖ¡
-    * 
-    * @param[OUT] yuvBuffer ´«³ö²ÎÊı£¬±£´æÔ­Ê¼Êı¾İÖ¸Õë
-    * @param[OUT] rgbBuffer ´«³ö²ÎÊı£¬RGBÊı¾İÖ¸Õë
-    * @param[OUT] size      ´«³ö²ÎÊı£¬Ô­Ê¼Êı¾İ´óĞ¡
-    * @param[OUT] width     ´«³ö²ÎÊı£¬¿í
-    * @param[OUT] height    ´«³ö²ÎÊı£¬¸ß
+    * getSkippedFrame - è·å–ffmpegç¼“å†²çš„å¸§
     *
-    * @return  1 - ³É¹¦   0 - Ã»ÓĞ»º³åÖ¡(ÊÓÆµ½áÊøÁË)  -1 - ½âÂëÊ§°Ü
+    * @param[OUT] yuvBuffer ä¼ å‡ºå‚æ•°ï¼Œä¿å­˜åŸå§‹æ•°æ®æŒ‡é’ˆ
+    * @param[OUT] rgbBuffer ä¼ å‡ºå‚æ•°ï¼ŒRGBæ•°æ®æŒ‡é’ˆ
+    * @param[OUT] size      ä¼ å‡ºå‚æ•°ï¼ŒåŸå§‹æ•°æ®å¤§å°
+    * @param[OUT] width     ä¼ å‡ºå‚æ•°ï¼Œå®½
+    * @param[OUT] height    ä¼ å‡ºå‚æ•°ï¼Œé«˜
     *
-    * @note  ÓĞµÄÖ¡AĞèÒª²Î¿¼ºóÃæµÄÖ¡B£¬µ«°´Ë³Ğò£¬ffmpeg»¹Ã»ÓĞ½âµ½BÖ¡£¬Ã»ÓĞÄÜÁ¦½âA£¬»á»º´æÆğÀ´¡£
-    *        Õâ¸öº¯Êı¶ÁÈ¡ffmpeg»º³åÇøÖĞ»¹ÓĞµÄÖ¡¡£
-    *        ÒÉÎÊ£ºÈç¹ûÊÇ¿ªÍ·¼¸Ö¡Ìø¹ı²»½â£¬µ½×îºó²Åµ÷ÓÃÕâ¸öº¯Êı£¬µÃµ½µÄÖ¡ÊÇ¿ªÊ¼µÄ»¹ÊÇ×îºóµÄ£¿¡ª¡ª²âÊÔ½á¹û±íÃ÷£¬ÊÇ×îºóµÄ
+    * @return  1 - æˆåŠŸ   0 - æ²¡æœ‰ç¼“å†²å¸§(è§†é¢‘ç»“æŸäº†)  -1 - è§£ç å¤±è´¥
+    *
+    * @note  æœ‰çš„å¸§Aéœ€è¦å‚è€ƒåé¢çš„å¸§Bï¼Œä½†æŒ‰é¡ºåºï¼Œffmpegè¿˜æ²¡æœ‰è§£åˆ°Bå¸§ï¼Œæ²¡æœ‰èƒ½åŠ›è§£Aï¼Œä¼šç¼“å­˜èµ·æ¥ã€‚
+    *        è¿™ä¸ªå‡½æ•°è¯»å–ffmpegç¼“å†²åŒºä¸­è¿˜æœ‰çš„å¸§ã€‚
+    *        ç–‘é—®ï¼šå¦‚æœæ˜¯å¼€å¤´å‡ å¸§è·³è¿‡ä¸è§£ï¼Œåˆ°æœ€åæ‰è°ƒç”¨è¿™ä¸ªå‡½æ•°ï¼Œå¾—åˆ°çš„å¸§æ˜¯å¼€å§‹çš„è¿˜æ˜¯æœ€åçš„ï¼Ÿâ€”â€”æµ‹è¯•ç»“æœè¡¨æ˜ï¼Œæ˜¯æœ€åçš„
     */
     int getSkippedFrame(unsigned char** yuvBuffer = NULL, unsigned char** rgbBuffer = NULL, int* size = NULL, int* width = NULL, int* height = NULL);
 
     /**
-    * writeYUVFile - Ğ´YUVÎÄ¼şµ½Ö¸¶¨ÎÄ¼ş
+    * writeYUVFile - å†™YUVæ–‡ä»¶åˆ°æŒ‡å®šæ–‡ä»¶
     *
-    * @param   filename  Í¼Æ¬ÎÄ¼şÃû³Æ
+    * @param   filename  å›¾ç‰‡æ–‡ä»¶åç§°
     *
-    * @return  0 - ³É¹¦  -1 - Ğ´ÎÄ¼şÊ§°Ü
+    * @return  0 - æˆåŠŸ  -1 - å†™æ–‡ä»¶å¤±è´¥
     *
     */
     int writeYUVFile(const char* filename);
 
     /**
-    * writeBmpFile - Ğ´BMPÍ¼Æ¬µ½Ö¸¶¨ÎÄ¼ş
+    * writeBmpFile - å†™BMPå›¾ç‰‡åˆ°æŒ‡å®šæ–‡ä»¶
     *
-    * @param   filename  Í¼Æ¬ÎÄ¼şÃû³Æ
+    * @param   filename  å›¾ç‰‡æ–‡ä»¶åç§°
     *
-    * @return  0 - ³É¹¦  -1 - Ğ´ÎÄ¼şÊ§°Ü
+    * @return  0 - æˆåŠŸ  -1 - å†™æ–‡ä»¶å¤±è´¥
     *
     */
     int writeBMPFile(const char* filename);
@@ -142,11 +145,11 @@ public:
     int writeBMPFile2(const char* filename);
 
     /**
-    * writeBmpFile - Ğ´JPEGÍ¼Æ¬µ½Ö¸¶¨ÎÄ¼ş
+    * writeBmpFile - å†™JPEGå›¾ç‰‡åˆ°æŒ‡å®šæ–‡ä»¶
     *
-    * @param   filename  Í¼Æ¬ÎÄ¼şÃû³Æ
+    * @param   filename  å›¾ç‰‡æ–‡ä»¶åç§°
     *
-    * @return  0 - ³É¹¦  -1 - Ğ´ÎÄ¼şÊ§°Ü
+    * @return  0 - æˆåŠŸ  -1 - å†™æ–‡ä»¶å¤±è´¥
     *
     */
     int writeJPGFile(const char* filename);
@@ -155,9 +158,9 @@ public:
 
 private:
     /**
-    *  convertToRgb - ½«½â³öÀ´µÄÊı¾İ×ª»»ÎªRGB¸ñÊ½(Êµ¼ÊÎªBGR24)
+    *  convertToRgb - å°†è§£å‡ºæ¥çš„æ•°æ®è½¬æ¢ä¸ºRGBæ ¼å¼(å®é™…ä¸ºBGR24)
     *
-    * @return ·µ»ØRGBÊı¾İÖ¸Õë
+    * @return è¿”å›RGBæ•°æ®æŒ‡é’ˆ
     */
     unsigned char* convertToRgb();
 
@@ -166,7 +169,7 @@ private:
     int m_picWidth;
     int m_picHeight;
 
-    int m_videoStream;    // ÊÓÆµÁ÷Ë÷Òı
+    int m_videoStream;    // è§†é¢‘æµç´¢å¼•
     unsigned char* m_picBuffer;
     AVFormatContext* m_fmtctx;
     AVCodecContext* m_avctx;

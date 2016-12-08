@@ -1,4 +1,4 @@
-/*
+﻿/*
  * The Video Decode and Presentation API for UNIX (VDPAU) is used for
  * hardware-accelerated decoding of MPEG-1/2, H.264 and VC-1.
  *
@@ -58,7 +58,8 @@
 #include "version.h"
 
 #if FF_API_BUFS_VDPAU
-union AVVDPAUPictureInfo {
+union AVVDPAUPictureInfo
+{
     VdpPictureInfoH264        h264;
     VdpPictureInfoMPEG1Or2    mpeg;
     VdpPictureInfoVC1          vc1;
@@ -87,7 +88,8 @@ typedef int (*AVVDPAU_Render2)(struct AVCodecContext *, struct AVFrame *,
  * be used outside of libavcodec. Use av_vdpau_alloc_context() to allocate an
  * AVVDPAUContext.
  */
-typedef struct AVVDPAUContext {
+typedef struct AVVDPAUContext
+{
     /**
      * VDPAU decoder handle
      *
@@ -127,12 +129,12 @@ typedef struct AVVDPAUContext {
     attribute_deprecated
     int bitstream_buffers_used;
 
-   /**
-     * Table of bitstream buffers.
-     * The user is responsible for freeing this buffer using av_freep().
-     *
-     * Set by libavcodec.
-     */
+    /**
+      * Table of bitstream buffers.
+      * The user is responsible for freeing this buffer using av_freep().
+      *
+      * Set by libavcodec.
+      */
     attribute_deprecated
     VdpBitstreamBuffer *bitstream_buffers;
 #endif
@@ -226,7 +228,8 @@ int av_vdpau_get_profile(AVCodecContext *avctx, VdpDecoderProfile *profile);
  * picture parameter, bitstream information etc which are passed
  * between the FFmpeg decoder and its clients.
  */
-struct vdpau_render_state {
+struct vdpau_render_state
+{
     VdpVideoSurface surface; ///< Used as rendered surface, never changed.
 
     int state; ///< Holds FF_VDPAU_STATE_* values.

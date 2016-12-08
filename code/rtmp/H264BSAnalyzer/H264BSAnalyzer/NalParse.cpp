@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +28,7 @@ int CNalParser::init(const char* filename, CTreeCtrl* tree)
 {
     m_filename = filename;
 
-    // judge file 
+    // judge file
     m_nType = judeVideoFile(m_filename);
 
     if (m_nType == FILE_UNK)
@@ -52,7 +52,7 @@ int CNalParser::init(const char* filename, CTreeCtrl* tree)
         }
         m_hH264 = h264_new();
     }
-    
+
     if (tree != NULL)
     {
         m_pTree = tree;
@@ -115,7 +115,7 @@ int CNalParser::probeNALU(vector<NALU_t>& vNal, int num)
         {
             break;
         }
-        nalLen = getAnnexbNALU(m_pFile, &n);//Ã¿Ö´ĞĞÒ»´Î£¬ÎÄ¼şµÄÖ¸ÕëÖ¸Ïò±¾´ÎÕÒµ½µÄNALUµÄÄ©Î²£¬ÏÂÒ»¸öÎ»ÖÃ¼´ÎªÏÂ¸öNALUµÄÆğÊ¼Âë0x000001
+        nalLen = getAnnexbNALU(m_pFile, &n);//æ¯æ‰§è¡Œä¸€æ¬¡ï¼Œæ–‡ä»¶çš„æŒ‡é’ˆæŒ‡å‘æœ¬æ¬¡æ‰¾åˆ°çš„NALUçš„æœ«å°¾ï¼Œä¸‹ä¸€ä¸ªä½ç½®å³ä¸ºä¸‹ä¸ªNALUçš„èµ·å§‹ç 0x000001
         n.offset = offset;
         n.num = nal_num;
         offset = offset + nalLen;
@@ -139,19 +139,19 @@ int CNalParser::parseNALU(NALU_t& vNal, char** naluData, char** naluInfo)
     fseek(m_pFile, vNal.offset, SEEK_SET);
     fread(m_naluData, vNal.len, 1, m_pFile);
 
-    // ²»ĞèÒªÔÙ´Î²éÑ¯nal
+    // ä¸éœ€è¦å†æ¬¡æŸ¥è¯¢nal
     //find_nal_unit(m_naluData, vNal.len, &nal_start, &nal_end);
-    memset(m_outputInfo, '\0', OUTPUT_SIZE); // Êä³öÄÚÈİÏÈÇå¿Õ
+    memset(m_outputInfo, '\0', OUTPUT_SIZE); // è¾“å‡ºå†…å®¹å…ˆæ¸…ç©º
     if (m_nType == 1)
     {
-        // ´Ëº¯Êı·ÖÎöÊ±£¬ÊÇ²»°üº¬startcodeµÄ£¬ËùÒÔÒª¼õÈ¥startcodeLen
+        // æ­¤å‡½æ•°åˆ†ææ—¶ï¼Œæ˜¯ä¸åŒ…å«startcodeçš„ï¼Œæ‰€ä»¥è¦å‡å»startcodeLen
         h265_read_nal_unit(m_hH265, &m_naluData[vNal.startcodeLen], vNal.len - vNal.startcodeLen);
-        h265_debug_nal_t(m_hH265,m_hH265->nal);    // ´òÓ¡µ½m_outputInfoÖĞ
+        h265_debug_nal_t(m_hH265,m_hH265->nal);    // æ‰“å°åˆ°m_outputInfoä¸­
     }
     else
     {
         read_nal_unit(m_hH264, &m_naluData[vNal.startcodeLen], vNal.len - vNal.startcodeLen);
-        h264_debug_nal_t(m_hH264, m_hH264->nal);  // ´òÓ¡µ½m_outputInfoÖĞ
+        h264_debug_nal_t(m_hH264, m_hH264->nal);  // æ‰“å°åˆ°m_outputInfoä¸­
     }
 
     *naluData = (char*)m_naluData;
@@ -189,10 +189,10 @@ static int ue(char *buff, int len, int &start_bit)
 }
 
 /**
-½âÎöNAL£¬·µ»ØÁ½¸ö¿ªÊ¼×Ö·ûÖ®¼ä¼ä¸ôµÄ×Ö½ÚÊı£¬¼´°üº¬startcodeµÄNALUµÄ³¤¶È
+è§£æNALï¼Œè¿”å›ä¸¤ä¸ªå¼€å§‹å­—ç¬¦ä¹‹é—´é—´éš”çš„å­—èŠ‚æ•°ï¼Œå³åŒ…å«startcodeçš„NALUçš„é•¿åº¦
 
-note£ºÒ»¸öÊÓÆµÎÄ¼şÖĞ²»Í¬µÄNAL£¬startcode¿ÉÄÜ²»Ò»Ñù¡£±ÈÈçSPSÎª4×Ö½Ú£¬µ«SEI¿ÉÄÜÎª3×Ö½Ú
-todo:Ã¿´Î¶ÁÒ»¸ö×Ö½Ú£¬½ÏÂı£¬ÓĞÎŞºÃµÄ·½·¨£¿
+noteï¼šä¸€ä¸ªè§†é¢‘æ–‡ä»¶ä¸­ä¸åŒçš„NALï¼Œstartcodeå¯èƒ½ä¸ä¸€æ ·ã€‚æ¯”å¦‚SPSä¸º4å­—èŠ‚ï¼Œä½†SEIå¯èƒ½ä¸º3å­—èŠ‚
+todo:æ¯æ¬¡è¯»ä¸€ä¸ªå­—èŠ‚ï¼Œè¾ƒæ…¢ï¼Œæœ‰æ— å¥½çš„æ–¹æ³•ï¼Ÿ
 */
 
 int CNalParser::getAnnexbNALU(FILE* fp, NALU_t* nalu)
@@ -206,77 +206,77 @@ int CNalParser::getAnnexbNALU(FILE* fp, NALU_t* nalu)
     if ((buffer = (unsigned char*)calloc (MAX_NAL_SIZE, sizeof(char))) == NULL)
         printf("Could not allocate buffer memory\n");
 
-    if (3 != fread (buffer, 1, 3, fp))//´ÓÂëÁ÷ÖĞ¶Á3¸ö×Ö½Ú
+    if (3 != fread (buffer, 1, 3, fp))//ä»ç æµä¸­è¯»3ä¸ªå­—èŠ‚
     {
         free(buffer);
         return 0;
     }
-    info2 = findStartcode3(buffer);//ÅĞ¶ÏÊÇ·ñÎª0x000001
+    info2 = findStartcode3(buffer);//åˆ¤æ–­æ˜¯å¦ä¸º0x000001
     if(info2 != 1)
     {
-        //Èç¹û²»ÊÇ£¬ÔÙ¶ÁÒ»¸ö×Ö½Ú
-        if(1 != fread(buffer+3, 1, 1, fp))//¶ÁÒ»¸ö×Ö½Ú
+        //å¦‚æœä¸æ˜¯ï¼Œå†è¯»ä¸€ä¸ªå­—èŠ‚
+        if(1 != fread(buffer+3, 1, 1, fp))//è¯»ä¸€ä¸ªå­—èŠ‚
         {
             free(buffer);
             return 0;
         }
-        info3 = findStartcode4(buffer);//ÅĞ¶ÏÊÇ·ñÎª0x00000001
-        if (info3 != 1)//Èç¹û²»ÊÇ£¬·µ»Ø-1
+        info3 = findStartcode4(buffer);//åˆ¤æ–­æ˜¯å¦ä¸º0x00000001
+        if (info3 != 1)//å¦‚æœä¸æ˜¯ï¼Œè¿”å›-1
         {
             free(buffer);
             return -1;
         }
         else
         {
-            //Èç¹ûÊÇ0x00000001,µÃµ½¿ªÊ¼Ç°×ºÎª4¸ö×Ö½Ú
+            //å¦‚æœæ˜¯0x00000001,å¾—åˆ°å¼€å§‹å‰ç¼€ä¸º4ä¸ªå­—èŠ‚
             nalu->startcodeLen = 4;
         }
     }
     else
     {
-        //Èç¹ûÊÇ0x000001,µÃµ½¿ªÊ¼Ç°×ºÎª3¸ö×Ö½Ú
+        //å¦‚æœæ˜¯0x000001,å¾—åˆ°å¼€å§‹å‰ç¼€ä¸º3ä¸ªå­—èŠ‚
         nalu->startcodeLen = 3;
     }
 
     pos = nalu->startcodeLen;
-    //²éÕÒÏÂÒ»¸ö¿ªÊ¼×Ö·ûµÄ±êÖ¾Î»
+    //æŸ¥æ‰¾ä¸‹ä¸€ä¸ªå¼€å§‹å­—ç¬¦çš„æ ‡å¿—ä½
     found = 0;
     info2 = 0;
     info3 = 0;
 
     while (!found)
     {
-        if (feof(fp))//ÅĞ¶ÏÊÇ·ñµ½ÁËÎÄ¼şÎ²
+        if (feof(fp))//åˆ¤æ–­æ˜¯å¦åˆ°äº†æ–‡ä»¶å°¾
         {
             eof = 1;
             goto got_nal;
         }
-        buffer[pos++] = fgetc(fp);//¶ÁÒ»¸ö×Ö½Úµ½BUFÖĞ
+        buffer[pos++] = fgetc(fp);//è¯»ä¸€ä¸ªå­—èŠ‚åˆ°BUFä¸­
 
-        info3 = findStartcode4(&buffer[pos-4]);//ÅĞ¶ÏÊÇ·ñÎª0x00000001
+        info3 = findStartcode4(&buffer[pos-4]);//åˆ¤æ–­æ˜¯å¦ä¸º0x00000001
         if(info3 != 1)
-            info2 = findStartcode3(&buffer[pos-3]);//ÅĞ¶ÏÊÇ·ñÎª0x000001
+            info2 = findStartcode3(&buffer[pos-3]);//åˆ¤æ–­æ˜¯å¦ä¸º0x000001
 
         found = (info2 == 1 || info3 == 1);
     }
 
-    // startcode¿ÉÄÜÎª3£¬Ò²¿ÉÄÜÎª4£¬¹ÊÒªÈç´ËÅĞ¶Ï
+    // startcodeå¯èƒ½ä¸º3ï¼Œä¹Ÿå¯èƒ½ä¸º4ï¼Œæ•…è¦å¦‚æ­¤åˆ¤æ–­
     rewind = (info3 == 1)? -4 : -3;
 
-    if (0 != fseek (fp, rewind, SEEK_CUR))//°ÑÎÄ¼şÖ¸ÕëÖ¸ÏòÇ°Ò»¸öNALUµÄÄ©Î²
+    if (0 != fseek (fp, rewind, SEEK_CUR))//æŠŠæ–‡ä»¶æŒ‡é’ˆæŒ‡å‘å‰ä¸€ä¸ªNALUçš„æœ«å°¾
     {
         free(buffer);
         printf("Cannot fseek in the bit stream file");
     }
 
 got_nal:
-    // µ±´ïµ½ÎÄ¼şÄ©Î²Ê±£¬»ØÍË1¸öÎ»ÖÃ
+    // å½“è¾¾åˆ°æ–‡ä»¶æœ«å°¾æ—¶ï¼Œå›é€€1ä¸ªä½ç½®
     if (eof)
     {
         rewind = -1;
     }
 
-    // °üÀ¨ÆğÊ¼ÂëÔÚÄÚµÄ5¸ö×Ö½Ú
+    // åŒ…æ‹¬èµ·å§‹ç åœ¨å†…çš„5ä¸ªå­—èŠ‚
     if (nalu->startcodeLen == 3)
         sprintf(nalu->startcodeBuffer, "%02x%02x%02x%02x", buffer[0], buffer[1], buffer[2], buffer[3]);
     else
@@ -294,13 +294,13 @@ got_nal:
     }
     else
     {
-    // simple version
+        // simple version
 #if 0
         nal_header = buffer[nalu->startcodeLen];
         nalu->nalType = nal_header & 0x1f;// 5 bit
 
-        // »ñÈ¡sliceÀàĞÍ£ºIÖ¡¡¢PÖ¡¡¢BÖ¡
-        // ×¢£ºÔÚnalÀàĞÍÎª1~5Ê±»ñÈ¡
+        // è·å–sliceç±»å‹ï¼šIå¸§ã€På¸§ã€Bå¸§
+        // æ³¨ï¼šåœ¨nalç±»å‹ä¸º1~5æ—¶è·å–
         if (nalu->nalType <= 5 && nalu->nalType >= 1)
         {
             int start_bit = 0;
@@ -322,7 +322,7 @@ got_nal:
 
     free(buffer);
 
-    return (pos+rewind);//·µ»ØÁ½¸ö¿ªÊ¼×Ö·ûÖ®¼ä¼ä¸ôµÄ×Ö½ÚÊı£¬¼´°üº¬ÓĞÇ°×ºµÄNALUµÄ³¤¶È
+    return (pos+rewind);//è¿”å›ä¸¤ä¸ªå¼€å§‹å­—ç¬¦ä¹‹é—´é—´éš”çš„å­—èŠ‚æ•°ï¼Œå³åŒ…å«æœ‰å‰ç¼€çš„NALUçš„é•¿åº¦
 }
 
 int CNalParser::findFirstNALU(FILE* fp, int* startcodeLenght)
@@ -340,12 +340,12 @@ int CNalParser::findFirstNALU(FILE* fp, int* startcodeLenght)
 
     while (!found && !feof(fp))
     {
-        buffer[pos++] = fgetc(fp);//¶ÁÒ»¸ö×Ö½Úµ½BUFÖĞ
+        buffer[pos++] = fgetc(fp);//è¯»ä¸€ä¸ªå­—èŠ‚åˆ°BUFä¸­
 
-        info3 = findStartcode4(&buffer[pos-4]);//ÅĞ¶ÏÊÇ·ñÎª0x00000001
+        info3 = findStartcode4(&buffer[pos-4]);//åˆ¤æ–­æ˜¯å¦ä¸º0x00000001
         if(info3 != 1)
         {
-            info2 = findStartcode3(&buffer[pos-3]);//ÅĞ¶ÏÊÇ·ñÎª0x000001
+            info2 = findStartcode3(&buffer[pos-3]);//åˆ¤æ–­æ˜¯å¦ä¸º0x000001
             if (info2)
             {
                 startcode_len = 3;
@@ -364,7 +364,7 @@ int CNalParser::findFirstNALU(FILE* fp, int* startcodeLenght)
         }
     }
 
-    // ÎÄ¼şÖ¸ÕëÒª»Ö¸´
+    // æ–‡ä»¶æŒ‡é’ˆè¦æ¢å¤
     fseek(fp, -startcode_len, SEEK_CUR);
 
     free(buffer);
@@ -381,18 +381,18 @@ FileType CNalParser::judeVideoFile(const char* filename)
 
     _splitpath(filename, NULL, NULL, NULL, szExt);
     if (!strcmp(&szExt[1], "h265") || !strcmp(&szExt[1], "265") ||
-        !strcmp(&szExt[1], "hevc"))
+            !strcmp(&szExt[1], "hevc"))
     {
         type = FILE_H265;
     }
     else if (!strcmp(&szExt[1], "h264") || !strcmp(&szExt[1], "264") ||
-        !strcmp(&szExt[1], "avc"))
+             !strcmp(&szExt[1], "avc"))
     {
         type = FILE_H264;
     }
     else
     {
-        // read content 
+        // read content
         FILE* fp = NULL;
         int offset = 0;
         int startcode = 0;

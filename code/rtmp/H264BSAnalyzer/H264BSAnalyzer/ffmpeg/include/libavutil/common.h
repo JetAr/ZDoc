@@ -1,4 +1,4 @@
-/*
+﻿/*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
@@ -44,9 +44,9 @@
 #include "libavutil/avconfig.h"
 
 // add by Late Lee
-#ifndef INT64_C 
-#define INT64_C(c) (c ## LL) 
-#define UINT64_C(c) (c ## ULL) 
+#ifndef INT64_C
+#define INT64_C(c) (c ## LL)
+#define UINT64_C(c) (c ## ULL)
 #endif
 
 #if AV_HAVE_BIGENDIAN

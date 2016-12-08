@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -21,7 +21,8 @@
 
 typedef struct AVThreadMessageQueue AVThreadMessageQueue;
 
-typedef enum AVThreadMessageFlags {
+typedef enum AVThreadMessageFlags
+{
 
     /**
      * Perform non-blocking operation.
@@ -75,7 +76,7 @@ int av_thread_message_queue_recv(AVThreadMessageQueue *mq,
  * to cause the receiving thread to stop or suspend its operation.
  */
 void av_thread_message_queue_set_err_send(AVThreadMessageQueue *mq,
-                                          int err);
+        int err);
 
 /**
  * Set the receiving error code.
@@ -86,6 +87,6 @@ void av_thread_message_queue_set_err_send(AVThreadMessageQueue *mq,
  * suspend its operation.
  */
 void av_thread_message_queue_set_err_recv(AVThreadMessageQueue *mq,
-                                          int err);
+        int err);
 
 #endif /* AVUTIL_THREADMESSAGE_H */

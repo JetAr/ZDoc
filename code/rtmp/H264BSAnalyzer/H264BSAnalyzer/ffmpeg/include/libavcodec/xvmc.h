@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2003 Ivan Kalvachev
  *
  * This file is part of FFmpeg.
@@ -43,7 +43,8 @@
 #define AV_XVMC_ID                    0x1DC711C0  /**< special value to ensure that regular pixel routines haven't corrupted the struct
                                                        the number is 1337 speak for the letters IDCT MCo (motion compensation) */
 
-attribute_deprecated struct xvmc_pix_fmt {
+attribute_deprecated struct xvmc_pix_fmt
+{
     /** The field contains the special constant value AV_XVMC_ID.
         It is used as a test that the application correctly uses the API,
         and that there is no corruption caused by pixel routines.
@@ -103,8 +104,8 @@ attribute_deprecated struct xvmc_pix_fmt {
     */
     XvMCSurface*    p_surface;
 
-/** Set by the decoder before calling ff_draw_horiz_band(),
-    needed by the XvMCRenderSurface function. */
+    /** Set by the decoder before calling ff_draw_horiz_band(),
+        needed by the XvMCRenderSurface function. */
 //@{
     /** Pointer to the surface used as past reference
         - application - unchanged

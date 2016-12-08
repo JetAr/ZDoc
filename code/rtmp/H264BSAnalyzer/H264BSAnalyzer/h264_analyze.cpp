@@ -1,19 +1,19 @@
-/* 
+﻿/*
  * h264bitstream - a library for reading and writing H.264 video
  * Copyright (C) 2005-2007 Auroras Entertainment, LLC
- * 
+ *
  * Written by Alex Izvorski <aizvorski@gmail.com>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -48,10 +48,10 @@ static struct option long_options[] =
 #endif
 
 static char options[] =
-"\t-o output file, defaults to test.264\n"
-"\t-p print information regarding this stream\n"
-"\t-v print more info\n"
-"\t-h print this message and exit\n";
+    "\t-o output file, defaults to test.264\n"
+    "\t-p print information regarding this stream\n"
+    "\t-v print more info\n"
+    "\t-h print this message and exit\n";
 
 void usage( )
 {
@@ -71,7 +71,11 @@ int main(int argc, char *argv[])
 
     h264_stream_t* h = h264_new();
 
-    if (argc < 2) { usage(); return EXIT_FAILURE; }
+    if (argc < 2)
+    {
+        usage();
+        return EXIT_FAILURE;
+    }
 
     int opt_verbose = 1;
     int opt_probe = 0;
@@ -86,20 +90,23 @@ int main(int argc, char *argv[])
     {
         switch ( c )
         {
-            case 'o':
-                if (h264_dbgfile == NULL) { h264_dbgfile = fopen( optarg, "wt"); }
-                break;
-            case 'p':
-                opt_probe = 1;
-                opt_verbose = 0;
-                break;
-            case 'v':
-                opt_verbose = atoi( optarg );
-                break;
-            case 'h':
-            default:
-                usage( );
-                return 1;
+        case 'o':
+            if (h264_dbgfile == NULL)
+            {
+                h264_dbgfile = fopen( optarg, "wt");
+            }
+            break;
+        case 'p':
+            opt_probe = 1;
+            opt_verbose = 0;
+            break;
+        case 'v':
+            opt_verbose = atoi( optarg );
+            break;
+        case 'h':
+        default:
+            usage( );
+            return 1;
         }
     }
 
@@ -111,10 +118,17 @@ int main(int argc, char *argv[])
 
 #endif
 
-    if (infile == NULL) { fprintf( stderr, "!! Error: could not open file: %s \n", strerror(errno)); exit(EXIT_FAILURE); }
+    if (infile == NULL)
+    {
+        fprintf( stderr, "!! Error: could not open file: %s \n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
 
-    if (h264_dbgfile == NULL) { h264_dbgfile = stdout; }
-    
+    if (h264_dbgfile == NULL)
+    {
+        h264_dbgfile = stdout;
+    }
+
 
     size_t rsz = 0;
     size_t sz = 0;
@@ -128,8 +142,12 @@ int main(int argc, char *argv[])
         rsz = fread(buf + sz, 1, BUFSIZE - sz, infile);
         if (rsz == 0)
         {
-            if (ferror(infile)) { fprintf( stderr, "!! Error: read failed: %s \n", strerror(errno)); break; }
-            break;  // if (feof(infile)) 
+            if (ferror(infile))
+            {
+                fprintf( stderr, "!! Error: read failed: %s \n", strerror(errno));
+                break;
+            }
+            break;  // if (feof(infile))
         }
 
         sz += rsz;
@@ -138,11 +156,11 @@ int main(int argc, char *argv[])
         {
             if ( opt_verbose > 0 )
             {
-               fprintf( h264_dbgfile, "!! Found NAL at offset %lld (0x%04llX), size %lld (0x%04llX) \n",
-                      (long long int)(off + (p - buf) + nal_start),
-                      (long long int)(off + (p - buf) + nal_start),
-                      (long long int)(nal_end - nal_start),
-                      (long long int)(nal_end - nal_start) );
+                fprintf( h264_dbgfile, "!! Found NAL at offset %lld (0x%04llX), size %lld (0x%04llX) \n",
+                         (long long int)(off + (p - buf) + nal_start),
+                         (long long int)(off + (p - buf) + nal_start),
+                         (long long int)(nal_end - nal_start),
+                         (long long int)(nal_end - nal_start) );
             }
 
             p += nal_start;
@@ -177,13 +195,13 @@ int main(int argc, char *argv[])
         }
 
         // if no NALs found in buffer, discard it
-        if (p == buf) 
+        if (p == buf)
         {
             fprintf( stderr, "!! Did not find any NALs between offset %lld (0x%04llX), size %lld (0x%04llX), discarding \n",
-                   (long long int)off, 
-                   (long long int)off, 
-                   (long long int)off + sz, 
-                   (long long int)off + sz);
+                     (long long int)off,
+                     (long long int)off,
+                     (long long int)off + sz,
+                     (long long int)off + sz);
 
             p = buf + sz;
             sz = 0;

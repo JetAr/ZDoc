@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -56,7 +56,8 @@
  * linesize is the buffer size, in bytes, for the 1 plane.
  *
  */
-enum AVSampleFormat {
+enum AVSampleFormat
+{
     AV_SAMPLE_FMT_NONE = -1,
     AV_SAMPLE_FMT_U8,          ///< unsigned 8 bits
     AV_SAMPLE_FMT_S16,         ///< signed 16 bits

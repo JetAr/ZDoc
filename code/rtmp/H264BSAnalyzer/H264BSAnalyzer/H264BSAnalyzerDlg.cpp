@@ -1,4 +1,4 @@
-
+ï»¿
 // H264BSAnalyzerDlg.cpp : implementation file
 //
 
@@ -23,7 +23,7 @@ public:
 // Dialog Data
     enum { IDD = IDD_ABOUTBOX };
 
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
     RECT m_pRectLink;
@@ -119,13 +119,13 @@ BOOL CH264BSAnalyzerDlg::OnInitDialog()
     SetIcon(m_hIcon, FALSE);        // Set small icon
 
     // TODO: Add extra initialization here
-    //ÕûĞĞÑ¡Ôñ£»ÓĞ±í¸ñÏß£»±íÍ·£»µ¥»÷¼¤»î
+    //æ•´è¡Œé€‰æ‹©ï¼›æœ‰è¡¨æ ¼çº¿ï¼›è¡¨å¤´ï¼›å•å‡»æ¿€æ´»
     DWORD dwExStyle=LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES|LVS_EX_HEADERDRAGDROP|LVS_EX_ONECLICKACTIVATE;
-    //±¨±í·ç¸ñ£»µ¥ĞĞÑ¡Ôñ£»¸ßÁÁÏÔÊ¾Ñ¡ÔñĞĞ
+    //æŠ¥è¡¨é£æ ¼ï¼›å•è¡Œé€‰æ‹©ï¼›é«˜äº®æ˜¾ç¤ºé€‰æ‹©è¡Œ
     m_h264NalList.ModifyStyle(0,LVS_SINGLESEL|LVS_REPORT|LVS_SHOWSELALWAYS);
     m_h264NalList.SetExtendedStyle(dwExStyle);
 
-    // ×ó¶ÔÆë
+    // å·¦å¯¹é½
     m_h264NalList.InsertColumn(0,_T("No."),LVCFMT_LEFT,50,0);
     m_h264NalList.InsertColumn(1,_T("Offset"),LVCFMT_LEFT,70,0);
     m_h264NalList.InsertColumn(2,_T("Length"),LVCFMT_LEFT,60,0);
@@ -140,9 +140,9 @@ BOOL CH264BSAnalyzerDlg::OnInitDialog()
     m_strFileUrl.Empty();
 
     m_edHexInfo.SetOptions(1, 1, 1, 1);
-    m_edHexInfo.SetBPR(16); // 16×Ö½Ú
+    m_edHexInfo.SetBPR(16); // 16å­—èŠ‚
 
-    // Ö÷´°¿Ú´óĞ¡
+    // ä¸»çª—å£å¤§å°
     GetClientRect(&m_rectMainWnd);
     //this->GetWindowRect(&m_rectMainWnd);
     //ScreenToClient(m_rectMainWnd);
@@ -164,7 +164,7 @@ BOOL CH264BSAnalyzerDlg::OnInitDialog()
     {
         m_hFileThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ThreadFuncReadFile, this, NULL, NULL );
     }
-    // Ôİ²»Ê¹ÓÃ
+    // æš‚ä¸ä½¿ç”¨
     /*
     if (m_hNALThread == INVALID_HANDLE_VALUE)
     {
@@ -176,9 +176,9 @@ BOOL CH264BSAnalyzerDlg::OnInitDialog()
 #define AddTreeItem(item, buffer) m_cTree.InsertItem(buffer,item)
 
 
-    HTREEITEM hItem = m_cTree.InsertItem("¸ù½ÚµãNAL",TVI_ROOT);///root
+    HTREEITEM hItem = m_cTree.InsertItem("æ ¹èŠ‚ç‚¹NAL",TVI_ROOT);///root
     CString strTemp;
-    strTemp.Format("NALÍ·½Úµãnal_unit_header");
+    strTemp.Format("NALå¤´èŠ‚ç‚¹nal_unit_header");
     HTREEITEM hSubItem = AddTreeItem(hItem, strTemp.GetBuffer());
 
     strTemp.Format("forbidden_zero_bit \t\t:0 (1 bit)");
@@ -190,7 +190,7 @@ BOOL CH264BSAnalyzerDlg::OnInitDialog()
     strTemp.Format("nuh_temporal_id_plus1 \t\t:0 (3 bit)");
     AddTreeItem(hSubItem, strTemp.GetBuffer());
 
-    strTemp.Format("VPS½Úµãvideo_parameter_set_rbsp()");
+    strTemp.Format("VPSèŠ‚ç‚¹video_parameter_set_rbsp()");
     HTREEITEM hItem1 = AddTreeItem(hItem, strTemp.GetBuffer());
 
     strTemp.Format("header()");
@@ -204,7 +204,7 @@ BOOL CH264BSAnalyzerDlg::OnInitDialog()
     AddTreeItem(hItem1, strTemp.GetBuffer());
 #endif
 
-    // ³õÊ¼»¯ ²¥·Å ¶Ô»°¿ò
+    // åˆå§‹åŒ– æ’­æ”¾ å¯¹è¯æ¡†
 #if 0
     if (m_pPlayDlg == NULL)
     {
@@ -277,7 +277,7 @@ HCURSOR CH264BSAnalyzerDlg::OnQueryDragIcon()
     return static_cast<HCURSOR>(m_hIcon);
 }
 
-//Ìí¼ÓÒ»Ìõ¼ÇÂ¼
+//æ·»åŠ ä¸€æ¡è®°å½•
 int CH264BSAnalyzerDlg::ShowNLInfo(NALU_t* nalu)
 {
     CString strTempIndex;
@@ -290,7 +290,7 @@ int CH264BSAnalyzerDlg::ShowNLInfo(NALU_t* nalu)
 
     if (nalu->type == 0)
     {
-        // NALµ¥ÔªÀàĞÍ
+        // NALå•å…ƒç±»å‹
         switch (nalu->nalType)
         {
         case 0:
@@ -367,7 +367,7 @@ int CH264BSAnalyzerDlg::ShowNLInfo(NALU_t* nalu)
     }
     else
     {
-        // NALµ¥ÔªÀàĞÍ
+        // NALå•å…ƒç±»å‹
         switch (nalu->nalType)
         {
         // to confirm type...
@@ -464,27 +464,27 @@ int CH264BSAnalyzerDlg::ShowNLInfo(NALU_t* nalu)
         }
     }
 
-    // ĞòºÅ
-    strTempIndex.Format(_T("%d"),nalu->num + 1);  // ÏòÁ¿ÖĞµÄĞòºÅ´Ó0¿ªÊ¼
-    // Êı¾İÆ«ÒÆ
+    // åºå·
+    strTempIndex.Format(_T("%d"),nalu->num + 1);  // å‘é‡ä¸­çš„åºå·ä»0å¼€å§‹
+    // æ•°æ®åç§»
     strOffset.Format(_T("%08X"), nalu->offset);
-    // ³¤¶È
+    // é•¿åº¦
     strNalLen.Format(_T("%d"),nalu->len);
-    // ÆğÊ¼Âë
+    // èµ·å§‹ç 
     strStartCode.Format(_T("%s"), nalu->startcodeBuffer);
 
-    //»ñÈ¡µ±Ç°¼ÇÂ¼ÌõÊı
+    //è·å–å½“å‰è®°å½•æ¡æ•°
     nIndex=m_h264NalList.GetItemCount();
-    //¡°ĞĞ¡±Êı¾İ½á¹¹
+    //â€œè¡Œâ€æ•°æ®ç»“æ„
     LV_ITEM lvitem;
     lvitem.mask=LVIF_TEXT;
     lvitem.iItem=nIndex;
     lvitem.iSubItem=0;
-    //×¢£ºvframe_index²»¿ÉÒÔÖ±½Ó¸³Öµ£¡
-    //Îñ±ØÊ¹ÓÃf_indexÖ´ĞĞFormat!ÔÙ¸³Öµ£¡
+    //æ³¨ï¼švframe_indexä¸å¯ä»¥ç›´æ¥èµ‹å€¼ï¼
+    //åŠ¡å¿…ä½¿ç”¨f_indexæ‰§è¡ŒFormat!å†èµ‹å€¼ï¼
     lvitem.pszText=(LPSTR)strTempIndex.GetBuffer();;
 
-    //------------------------ÏÔÊ¾ÔÚListÖĞ
+    //------------------------æ˜¾ç¤ºåœ¨Listä¸­
     m_h264NalList.InsertItem(&lvitem);
     m_h264NalList.SetItemText(nIndex,1,strOffset);
     m_h264NalList.SetItemText(nIndex,2,strNalLen);
@@ -504,7 +504,7 @@ void CH264BSAnalyzerDlg::SystemClear()
     m_nValTotalNum = 0;
 }
 
-// ´ò¿ªH264ÂëÁ÷ÎÄ¼ş
+// æ‰“å¼€H264ç æµæ–‡ä»¶
 void CH264BSAnalyzerDlg::OnBnClickedH264InputurlOpen()
 {
     // TODO: Add your control notification handler code here
@@ -513,7 +513,7 @@ void CH264BSAnalyzerDlg::OnBnClickedH264InputurlOpen()
 
     if(m_strFileUrl.IsEmpty()==TRUE)
     {
-        AfxMessageBox(_T("ÎÄ¼şÂ·¾¶Îª¿Õ£¬Çë´ò¿ªÎÄ¼ş£¡£¡"));
+        AfxMessageBox(_T("æ–‡ä»¶è·¯å¾„ä¸ºç©ºï¼Œè¯·æ‰“å¼€æ–‡ä»¶ï¼ï¼"));
         return;
     }
     CString strTemp;
@@ -565,7 +565,7 @@ void CH264BSAnalyzerDlg::ReadFile(void)
         // H.265
         if (m_cVideoInfo.type)
         {
-            // profileÀàĞÍ
+            // profileç±»å‹
             switch (m_cVideoInfo.profile_idc)
             {
             case PROFILE_NONE:
@@ -654,7 +654,7 @@ void CH264BSAnalyzerDlg::ReadFile(void)
         }
         else // h264
         {
-            // profileÀàĞÍ
+            // profileç±»å‹
             switch (m_cVideoInfo.profile_idc)
             {
             case 66:
@@ -728,11 +728,11 @@ void CH264BSAnalyzerDlg::ReadFile(void)
             m_cVideoInfo.width, m_cVideoInfo.height,
             m_cVideoInfo.crop_left, m_cVideoInfo.crop_right,
             m_cVideoInfo.crop_top, m_cVideoInfo.crop_bottom,
-            strVideoFormat, strBitDepth, 
+            strVideoFormat, strBitDepth,
             strProfileInfo, strLevelInfo, strTierInfo,
             m_cVideoInfo.encoding_type ? "CABAC" : "CAVLC",
             m_cVideoInfo.max_framerate, m_nSliceIndex
-            );
+        );
         GetDlgItem(IDC_EDIT_SIMINFO)->SetWindowText(strSimpleInfo);
         m_fCanPlay = TRUE;
     }
@@ -756,12 +756,12 @@ void CH264BSAnalyzerDlg::PaseNal(void)
         ret = m_cParser.parseNALU(m_strFileUrl.GetBuffer(),m_nNalOffset,m_nNalLen,this);
         if (ret < 0)
         {
-            AfxMessageBox("½âÎöNALÊ±³ö´í£¬¿ÉÄÜÊÇÎÄ¼ş¶ÁÈ¡³ö´í¡£");
+            AfxMessageBox("è§£æNALæ—¶å‡ºé”™ï¼Œå¯èƒ½æ˜¯æ–‡ä»¶è¯»å–å‡ºé”™ã€‚");
         }
     }
 }
 */
-// Ë«»÷(µ¥»÷)Ä³Ò»Ïî£¬½øĞĞNALÏêÏ¸·ÖÎö
+// åŒå‡»(å•å‡»)æŸä¸€é¡¹ï¼Œè¿›è¡ŒNALè¯¦ç»†åˆ†æ
 void CH264BSAnalyzerDlg::OnLvnItemActivateH264Nallist(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMITEMACTIVATE pNMIA = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
@@ -782,12 +782,12 @@ void CH264BSAnalyzerDlg::OnLvnItemActivateH264Nallist(NMHDR *pNMHDR, LRESULT *pR
     ret = m_cParser.parseNALU(m_vNalTypeVector[nIndex], &nalData, &nalInfo);
     if (ret < 0)
     {
-        AfxMessageBox("½âÎöNALÊ±³ö´í£¬¿ÉÄÜÊÇÎÄ¼ş¶ÁÈ¡³ö´í¡£");
+        AfxMessageBox("è§£æNALæ—¶å‡ºé”™ï¼Œå¯èƒ½æ˜¯æ–‡ä»¶è¯»å–å‡ºé”™ã€‚");
     }
 
-    // ÏÔÊ¾Ê®Áù½øÖÆ
+    // æ˜¾ç¤ºåå…­è¿›åˆ¶
     m_edHexInfo.SetData((LPBYTE)nalData, m_vNalTypeVector[nIndex].len);
-    ::SendMessage(GetDlgItem(IDC_EDIT_HEX)->m_hWnd,WM_KILLFOCUS,-1,0); // ²»Òª¿Ø¼ş½¹µã
+    ::SendMessage(GetDlgItem(IDC_EDIT_HEX)->m_hWnd,WM_KILLFOCUS,-1,0); // ä¸è¦æ§ä»¶ç„¦ç‚¹
 #endif
 
     *pResult = 0;
@@ -797,12 +797,12 @@ void CH264BSAnalyzerDlg::OnLvnItemActivateH264Nallist(NMHDR *pNMHDR, LRESULT *pR
 void CH264BSAnalyzerDlg::OnLvnKeydownH264Nallist(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMLVKEYDOWN pLVKeyDown = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     POSITION ps;
     int nIndex = 0;
     int ret = 0;
 
-    // ²»ÊÇÉÏÏÂ¹â±êµÄ£¬²»ÏìÓ¦
+    // ä¸æ˜¯ä¸Šä¸‹å…‰æ ‡çš„ï¼Œä¸å“åº”
     if (pLVKeyDown->wVKey != VK_UP && pLVKeyDown->wVKey != VK_DOWN)
     {
         return;
@@ -852,12 +852,12 @@ void CH264BSAnalyzerDlg::OnLvnKeydownH264Nallist(NMHDR *pNMHDR, LRESULT *pResult
     ret = m_cParser.parseNALU(m_vNalTypeVector[nIndex], &nalData, &nalInfo);
     if (ret < 0)
     {
-        AfxMessageBox("½âÎöNALÊ±³ö´í£¬¿ÉÄÜÊÇÎÄ¼ş¶ÁÈ¡³ö´í¡£");
+        AfxMessageBox("è§£æNALæ—¶å‡ºé”™ï¼Œå¯èƒ½æ˜¯æ–‡ä»¶è¯»å–å‡ºé”™ã€‚");
     }
 
-    // ÏÔÊ¾Ê®Áù½øÖÆ
+    // æ˜¾ç¤ºåå…­è¿›åˆ¶
     m_edHexInfo.SetData((LPBYTE)nalData, m_vNalTypeVector[nIndex].len);
-    ::SendMessage(GetDlgItem(IDC_EDIT_HEX)->m_hWnd,WM_KILLFOCUS,-1,0); // ²»Òª¿Ø¼ş½¹µã
+    ::SendMessage(GetDlgItem(IDC_EDIT_HEX)->m_hWnd,WM_KILLFOCUS,-1,0); // ä¸è¦æ§ä»¶ç„¦ç‚¹
 #endif
 
     *pResult = 0;
@@ -895,34 +895,34 @@ void CH264BSAnalyzerDlg::OnNMCustomdrawH264Nallist(NMHDR *pNMHDR, LRESULT *pResu
 
         nItem = static_cast<int>( pLVCD->nmcd.dwItemSpec );
 
-        CString strTemp = m_h264NalList.GetItemText(nItem,5);   // µÚ5ÁĞÊÇÀàĞÍ£¬ÅĞ¶ÏÖ®
+        CString strTemp = m_h264NalList.GetItemText(nItem,5);   // ç¬¬5åˆ—æ˜¯ç±»å‹ï¼Œåˆ¤æ–­ä¹‹
         if(strncmp(strTemp,"SLICE", 5)==0)
         {
-            clrNewBkColor = RGB(0,255,255);       //ÇàÉ«
+            clrNewBkColor = RGB(0,255,255);       //é’è‰²
         }
         else if(strncmp(strTemp,"VPS", 3)==0)
         {
-            clrNewBkColor = RGB(255,0,255);        //×ÏÉ«
+            clrNewBkColor = RGB(255,0,255);        //ç´«è‰²
         }
         else if(strncmp(strTemp,"SPS", 3)==0)
         {
-            clrNewBkColor = RGB(255,255,0);        //»ÆÉ«
+            clrNewBkColor = RGB(255,255,0);        //é»„è‰²
         }
         else if(strncmp(strTemp,"PPS", 3)==0)
         {
-            clrNewBkColor = RGB(255,153,0);        //¿§·ÈÉ«
+            clrNewBkColor = RGB(255,153,0);        //å’–å•¡è‰²
         }
         else if(strncmp(strTemp,"SEI", 3)==0)
         {
-            clrNewBkColor = RGB(128,128,192);       //»ÒÉ«
+            clrNewBkColor = RGB(128,128,192);       //ç°è‰²
         }
         else if(strncmp(strTemp,"IDR", 3)==0)
         {
-            clrNewBkColor = RGB(255,0,0);          //ºìÉ«
+            clrNewBkColor = RGB(255,0,0);          //çº¢è‰²
         }
         else if(strncmp(strTemp,"P Slice", 7)==0)
         {
-            // Ö»ÓĞµÚ5ÁĞ²ÅÏÔÊ¾ÕâÀïÉèÖÃµÄÑÕÉ«
+            // åªæœ‰ç¬¬5åˆ—æ‰æ˜¾ç¤ºè¿™é‡Œè®¾ç½®çš„é¢œè‰²
             if (pLVCD->iSubItem == 5)
                 clrNewTextColor = RGB(0,0,255); // Blue
         }
@@ -946,15 +946,15 @@ void CH264BSAnalyzerDlg::OnNMCustomdrawH264Nallist(NMHDR *pNMHDR, LRESULT *pResu
 }
 
 
-// Ö÷½çÃæĞèÒªÉèÖÃAccept FilesÎªTRUE
+// ä¸»ç•Œé¢éœ€è¦è®¾ç½®Accept Filesä¸ºTRUE
 void CH264BSAnalyzerDlg::OnDropFiles(HDROP hDropInfo)
 {
     CDialogEx::OnDropFiles(hDropInfo);
 
     char* pFilePathName =(char *)malloc(MAX_URL_LENGTH);
-    ::DragQueryFile(hDropInfo, 0, (LPSTR)pFilePathName, MAX_URL_LENGTH);  // »ñÈ¡ÍÏ·ÅÎÄ¼şµÄÍêÕûÎÄ¼şÃû£¬×î¹Ø¼ü£¡
+    ::DragQueryFile(hDropInfo, 0, (LPSTR)pFilePathName, MAX_URL_LENGTH);  // è·å–æ‹–æ”¾æ–‡ä»¶çš„å®Œæ•´æ–‡ä»¶åï¼Œæœ€å…³é”®ï¼
     m_strFileUrl.Format(_T("%s"), pFilePathName);
-    ::DragFinish(hDropInfo);   // ×¢ÒâÕâ¸ö²»ÄÜÉÙ£¬ËüÓÃÓÚÊÍ·ÅWindows Îª´¦ÀíÎÄ¼şÍÏ·Å¶ø·ÖÅäµÄÄÚ´æ
+    ::DragFinish(hDropInfo);   // æ³¨æ„è¿™ä¸ªä¸èƒ½å°‘ï¼Œå®ƒç”¨äºé‡Šæ”¾Windows ä¸ºå¤„ç†æ–‡ä»¶æ‹–æ”¾è€Œåˆ†é…çš„å†…å­˜
     free(pFilePathName);
 
     FILE* fp = fopen(m_strFileUrl.GetBuffer(), "r+b");
@@ -979,7 +979,7 @@ void CH264BSAnalyzerDlg::OnFileOpen()
     CString strFilePath;
     char szFilter[] = "H.264 or H.265 Files(*.h264;*.264;*.h265;*.265)|*.h264;*.264;*.h265;*.265|All Files(*.*)|*.*||";
     CFileDialog fileDlg(TRUE, "H.264", NULL, OFN_HIDEREADONLY | OFN_NOCHANGEDIR | OFN_FILEMUSTEXIST, szFilter);
-    fileDlg.GetOFN().lpstrTitle = _T("Ñ¡ÔñH.264»òH.265ÂëÁ÷ÎÄ¼ş");   // ±êÌâ
+    fileDlg.GetOFN().lpstrTitle = _T("é€‰æ‹©H.264æˆ–H.265ç æµæ–‡ä»¶");   // æ ‡é¢˜
     if (fileDlg.DoModal() != IDOK)
     {
         return;
@@ -1016,18 +1016,18 @@ void CH264BSAnalyzerDlg::OnHelpAbout()
 void CH264BSAnalyzerDlg::OnHowtoUsage()
 {
     // TODO: Add your command handler code here
-    char* help = "ÓÃ·¨£º\r\n"
-        "1¡¢´ò¿ªÎÄ¼ş\r\n"
-        "1)Ê¹ÓÃfile²Ëµ¥´ò¿ª£»2)½«ÎÄ¼şÍÏµ½±¾½çÃæ\r\n"
-        "2¡¢³ÌĞò×Ô¶¯½âÎö£¬½Ï´óÎÄ¼şºÄÊ±½Ï´ó\r\n"
-        "3¡¢Ë«»÷Ä³Ò»ÏîNAL£¬¼´¿ÉµÃµ½ÏêÏ¸ĞÅÏ¢\r\n"
-        "4¡¢´ò¿ªÎÄ¼şºó£¬Ê¹ÓÃPlay¿É½øĞĞ²¥·Å¡¢ÔİÍ£¡¢Í£Ö¹¡¢±£´æÍ¼Æ¬/ÊÓÆµµÈ²Ù×÷\r\n"
-        "ÏŞÖÆ£º±¾³ÌĞò½öÄÜ·ÖÎöH264/H265ÂëÁ÷ÎÄ¼ş£¬ÆäËüÎÄ¼şÎŞ·¨·ÖÎö\r\n"
-        "±¾³ÌĞò·ÖÎö´óĞÍÎÄ¼ş½ÏÂı£¬Ò²¿ÉÄÜ»áÓĞÎÊÌâ\r\n";
+    char* help = "ç”¨æ³•ï¼š\r\n"
+                 "1ã€æ‰“å¼€æ–‡ä»¶\r\n"
+                 "1)ä½¿ç”¨fileèœå•æ‰“å¼€ï¼›2)å°†æ–‡ä»¶æ‹–åˆ°æœ¬ç•Œé¢\r\n"
+                 "2ã€ç¨‹åºè‡ªåŠ¨è§£æï¼Œè¾ƒå¤§æ–‡ä»¶è€—æ—¶è¾ƒå¤§\r\n"
+                 "3ã€åŒå‡»æŸä¸€é¡¹NALï¼Œå³å¯å¾—åˆ°è¯¦ç»†ä¿¡æ¯\r\n"
+                 "4ã€æ‰“å¼€æ–‡ä»¶åï¼Œä½¿ç”¨Playå¯è¿›è¡Œæ’­æ”¾ã€æš‚åœã€åœæ­¢ã€ä¿å­˜å›¾ç‰‡/è§†é¢‘ç­‰æ“ä½œ\r\n"
+                 "é™åˆ¶ï¼šæœ¬ç¨‹åºä»…èƒ½åˆ†æH264/H265ç æµæ–‡ä»¶ï¼Œå…¶å®ƒæ–‡ä»¶æ— æ³•åˆ†æ\r\n"
+                 "æœ¬ç¨‹åºåˆ†æå¤§å‹æ–‡ä»¶è¾ƒæ…¢ï¼Œä¹Ÿå¯èƒ½ä¼šæœ‰é—®é¢˜\r\n";
     MessageBox(help);
 }
 
-// about¶Ô»°¿òµÄ¶«¶«
+// aboutå¯¹è¯æ¡†çš„ä¸œä¸œ
 BOOL CAboutDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
@@ -1052,7 +1052,7 @@ void CAboutDlg::OnMouseMove(UINT nFlags, CPoint point)
     // TODO: Add your message handler code here and/or call default
     if (point.x > m_pRectLink.left && point.x < m_pRectLink.right && point.y < m_pRectLink.bottom && point.y > m_pRectLink.top)
     {
-        //±ä³ÉÊÖĞÎ    
+        //å˜æˆæ‰‹å½¢
         hCursor = ::LoadCursor (NULL, IDC_HAND);
         ::SetCursor(hCursor);
     }
@@ -1090,16 +1090,16 @@ void CAboutDlg::OnLButtonDown(UINT nFlags, CPoint point)
 }
 
 /**
-Ö÷´°¿ÚÊ¹ÓÃGetClientRectÊÇÒòÎªĞèÒªÓë±¾º¯ÊıµÄcx¡¢cy¼ÆËãËõ·Å±ÈÀı¡£
-¿Ø¼şÊ¹ÓÃGetWindowRectºÍScreenToClientÊÇÎªÁËµÃµ½Ïà¶ÔµÄ×ø±ê¡£
-note£º
-¹Ì¶¨µÄÊıÖµÊÇ²âÊÔµÃµ½µÄ¾­ÑéÖµ£¬ÎŞÀíÂÛÒÀ¾İ
+ä¸»çª—å£ä½¿ç”¨GetClientRectæ˜¯å› ä¸ºéœ€è¦ä¸æœ¬å‡½æ•°çš„cxã€cyè®¡ç®—ç¼©æ”¾æ¯”ä¾‹ã€‚
+æ§ä»¶ä½¿ç”¨GetWindowRectå’ŒScreenToClientæ˜¯ä¸ºäº†å¾—åˆ°ç›¸å¯¹çš„åæ ‡ã€‚
+noteï¼š
+å›ºå®šçš„æ•°å€¼æ˜¯æµ‹è¯•å¾—åˆ°çš„ç»éªŒå€¼ï¼Œæ— ç†è®ºä¾æ®
 */
 void CH264BSAnalyzerDlg::OnSize(UINT nType, int cx, int cy)
 {
     CDialogEx::OnSize(nType, cx, cy);
 
-    // ·Ç·¨Öµ£¬Ê²Ã´Ò²²»×ö
+    // éæ³•å€¼ï¼Œä»€ä¹ˆä¹Ÿä¸åš
     if (cx <= 0 || cy <= 0) return;
 
     CRect rectList, rectHex, rectTxt, rectInfo, rectTree, rectMainWnd;
@@ -1141,7 +1141,7 @@ void CH264BSAnalyzerDlg::OnSize(UINT nType, int cx, int cy)
     int nNewWidth = 0;
     int nNewHeight = 0;
 
-    // ÁĞ±í¿ò
+    // åˆ—è¡¨æ¡†
     pWnd = GetDlgItem(IDC_H264_NALLIST);
     nNewWidth = (int)(fXRatio * (float)rectList.Width());
     nNewHeight = (int)(fYRatio * (float)rectList.Height());
@@ -1151,26 +1151,26 @@ void CH264BSAnalyzerDlg::OnSize(UINT nType, int cx, int cy)
     pWnd->GetWindowRect(&rectList);
     ScreenToClient(rectList);
 
-    // ÁĞ±í¿òÀïÃæµÄ
+    // åˆ—è¡¨æ¡†é‡Œé¢çš„
     nNewWidth = (int)(m_h264NalList.GetColumnWidth(4) * fXRatio);
     m_h264NalList.SetColumnWidth(4, nNewWidth);
     nNewWidth = (int)(m_h264NalList.GetColumnWidth(5) * fXRatio);
     m_h264NalList.SetColumnWidth(5, nNewWidth);
     ///////////////////////
 
-    // "Hex View" ÎÄ±¾
+    // "Hex View" æ–‡æœ¬
     pWnd = GetDlgItem(IDC_STATIC);
     pWnd->GetWindowRect(&rectTxt);
     ScreenToClient(rectTxt);
     pWnd->MoveWindow(rectTxt.left, rectList.Height(), rectTxt.Width(), rectTxt.Height());
-    
+
     pWnd->Invalidate();
     pWnd->SetWindowText("Hex View");
     pWnd->UpdateData();
     pWnd->GetWindowRect(&rectTxt);
     ScreenToClient(rectTxt);
 
-    // Ê®Áù½øÖÆ¿ò
+    // åå…­è¿›åˆ¶æ¡†
     pWnd = GetDlgItem(IDC_EDIT_HEX);
     nNewWidth = (int)(fXRatio * (float)rectHex.Width());
     nNewHeight = (int)(fYRatio * (float)rectHex.Height());
@@ -1180,7 +1180,7 @@ void CH264BSAnalyzerDlg::OnSize(UINT nType, int cx, int cy)
     pWnd->GetWindowRect(&rectHex);
     ScreenToClient(rectHex);
 
-    // ĞÅÏ¢¿ò
+    // ä¿¡æ¯æ¡†
     pWnd = GetDlgItem(IDC_EDIT_SIMINFO);
     nNewWidth = (int)(fXRatio * (float)rectInfo.Width());
     nNewHeight = (int)(fYRatio * (float)rectInfo.Height());
@@ -1190,7 +1190,7 @@ void CH264BSAnalyzerDlg::OnSize(UINT nType, int cx, int cy)
     pWnd->GetWindowRect(&rectInfo);
     ScreenToClient(rectInfo);
 
-    // Ê÷ĞÎ¿Ø¼ş¿ò
+    // æ ‘å½¢æ§ä»¶æ¡†
     pWnd = GetDlgItem(IDC_TREE1);
     nNewWidth = (int)(fXRatio * (float)rectTree.Width());
     nNewHeight = (int)(fYRatio * (float)rectTree.Height());
@@ -1198,7 +1198,7 @@ void CH264BSAnalyzerDlg::OnSize(UINT nType, int cx, int cy)
     pWnd->Invalidate();
     pWnd->UpdateData();
 
-    // ¸üĞÂµ±Ç°Ö÷´°¿Ú´óĞ¡
+    // æ›´æ–°å½“å‰ä¸»çª—å£å¤§å°
     GetClientRect(&m_rectMainWnd);
 }
 
@@ -1209,17 +1209,17 @@ void CH264BSAnalyzerDlg::OnPlayDlg()
         MessageBox("Parsing NALU, wait a momnent...");
         return;
     }
-    // ·ÇÄ£Ì¬¶Ô»°¿ò
+    // éæ¨¡æ€å¯¹è¯æ¡†
     if (m_pPlayDlg == NULL)
     {
         m_pPlayDlg = new CPlayDlg();
         m_pPlayDlg->Create(IDD_PLAYDLG, this);
     }
-    // °ÑÖ÷´°¿Ú´ò¿ªµÄÎÄ¼şĞÅÏ¢´«µ½×Ó´°¿Ú
+    // æŠŠä¸»çª—å£æ‰“å¼€çš„æ–‡ä»¶ä¿¡æ¯ä¼ åˆ°å­çª—å£
     int ret = m_pPlayDlg->SetVideoInfo(m_strFileUrl, m_cVideoInfo.width, m_cVideoInfo.height, m_nSliceIndex, m_cVideoInfo.max_framerate);
     if (ret < 0) return;
 
     m_pPlayDlg->ShowWindow(SW_SHOW);
 
-    m_pPlayDlg->ShowFirstFrame(); // ×¢£ºÔÚµ÷ÓÃShowWindowºóÔÙÏÔÊ¾µÚÒ»Ö¡Í¼Ïñ
+    m_pPlayDlg->ShowFirstFrame(); // æ³¨ï¼šåœ¨è°ƒç”¨ShowWindowåå†æ˜¾ç¤ºç¬¬ä¸€å¸§å›¾åƒ
 }

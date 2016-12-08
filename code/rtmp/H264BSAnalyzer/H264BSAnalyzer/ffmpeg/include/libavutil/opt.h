@@ -1,4 +1,4 @@
-/*
+﻿/*
  * AVOptions
  * copyright (c) 2005 Michael Niedermayer <michaelni@gmx.at>
  *
@@ -218,7 +218,8 @@
  * before the file is actually opened.
  */
 
-enum AVOptionType{
+enum AVOptionType
+{
     AV_OPT_TYPE_FLAGS,
     AV_OPT_TYPE_INT,
     AV_OPT_TYPE_INT64,
@@ -252,7 +253,8 @@ enum AVOptionType{
 /**
  * AVOption
  */
-typedef struct AVOption {
+typedef struct AVOption
+{
     const char *name;
 
     /**
@@ -271,7 +273,8 @@ typedef struct AVOption {
     /**
      * the default value for scalar options
      */
-    union {
+    union
+    {
         int64_t i64;
         double dbl;
         const char *str;
@@ -290,14 +293,14 @@ typedef struct AVOption {
 #define AV_OPT_FLAG_AUDIO_PARAM     8
 #define AV_OPT_FLAG_VIDEO_PARAM     16
 #define AV_OPT_FLAG_SUBTITLE_PARAM  32
-/**
- * The option is inteded for exporting values to the caller.
- */
+    /**
+     * The option is inteded for exporting values to the caller.
+     */
 #define AV_OPT_FLAG_EXPORT          64
-/**
- * The option may not be set through the AVOptions API, only read.
- * This flag only makes sense when AV_OPT_FLAG_EXPORT is also set.
- */
+    /**
+     * The option may not be set through the AVOptions API, only read.
+     * This flag only makes sense when AV_OPT_FLAG_EXPORT is also set.
+     */
 #define AV_OPT_FLAG_READONLY        128
 #define AV_OPT_FLAG_FILTERING_PARAM (1<<16) ///< a generic parameter which can be set by the user for filtering
 //FIXME think about enc-audio, ... style flags
@@ -313,7 +316,8 @@ typedef struct AVOption {
 /**
  * A single allowed range of values, or a single allowed value.
  */
-typedef struct AVOptionRange {
+typedef struct AVOptionRange
+{
     const char *str;
     /**
      * Value range.
@@ -336,7 +340,8 @@ typedef struct AVOptionRange {
 /**
  * List of AVOptionRange structs.
  */
-typedef struct AVOptionRanges {
+typedef struct AVOptionRanges
+{
     /**
      * Array of option ranges.
      *
@@ -566,7 +571,8 @@ int av_opt_get_key_value(const char **ropts,
                          unsigned flags,
                          char **rkey, char **rval);
 
-enum {
+enum
+{
 
     /**
      * Accept to parse a value without a key; the key will then be returned

@@ -1,9 +1,9 @@
-/**
+ï»¿/**
  * @file   tjpeg-utils.h
  * @author Late Lee
  * @date   2015-07-01 22:17:56
  * @brief
- *         ±¾ÎÄ¼ş½Ó¿Úº¯ÊıÖ»¿¼ÂÇRGB 24bitÇé¿ö£¬¼´3·ÖÁ¿£¬RGB32Î´¿¼ÂÇ
+ *         æœ¬æ–‡ä»¶æ¥å£å‡½æ•°åªè€ƒè™‘RGB 24bitæƒ…å†µï¼Œå³3åˆ†é‡ï¼ŒRGB32æœªè€ƒè™‘
  */
 
 #ifndef _TJPEG_UTILS_H
@@ -17,7 +17,7 @@ int tjpeg_header(unsigned char* jpeg_buffer, int jpeg_size, int* width, int* hei
 
 int tjpeg2rgb(unsigned char* jpeg_buffer, int jpeg_size, unsigned char* rgb_buffer, int* size);
 
-// Í¬ÉÏ£¬²»ÓÃ×Ô¼º·ÖÅä£¬µ«Òªµ÷ÓÃÕßÊÍ·Å
+// åŒä¸Šï¼Œä¸ç”¨è‡ªå·±åˆ†é…ï¼Œä½†è¦è°ƒç”¨è€…é‡Šæ”¾
 int tjpeg2rgb_1(unsigned char* jpeg_buffer, int jpeg_size, unsigned char** rgb_buffer, int* size);
 
 int trgb2jpeg(unsigned char* rgb_buffer, int width, int height, int quality, unsigned char** jpeg_buffer, unsigned long* jpeg_size);

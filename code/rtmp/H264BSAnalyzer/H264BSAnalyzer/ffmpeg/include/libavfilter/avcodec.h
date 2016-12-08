@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ AVFilterBufferRef *avfilter_get_video_buffer_ref_from_frame(const AVFrame *frame
  */
 attribute_deprecated
 AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_frame(const AVFrame *frame,
-                                                            int perms);
+        int perms);
 
 /**
  * Create and return a buffer reference from the data and properties
@@ -62,8 +62,8 @@ AVFilterBufferRef *avfilter_get_audio_buffer_ref_from_frame(const AVFrame *frame
  */
 attribute_deprecated
 AVFilterBufferRef *avfilter_get_buffer_ref_from_frame(enum AVMediaType type,
-                                                      const AVFrame *frame,
-                                                      int perms);
+        const AVFrame *frame,
+        int perms);
 #endif
 
 #endif /* AVFILTER_AVCODEC_H */
