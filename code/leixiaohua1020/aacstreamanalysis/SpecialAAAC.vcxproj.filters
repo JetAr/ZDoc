@@ -1,0 +1,392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="res\SpecialAAAC.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\SpecialAAAC.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\aac_logo.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\aac_ico.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\aac_ico.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\aac.ico">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\main_theme_aac.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\main_theme_aac_en.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SpecialAAAC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialAAACDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="aac_decode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="audio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="getopt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tns.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="syntax.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="structs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ssr_win.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ssr_ipqf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ssr_fb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ssr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="specrec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sine_win.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_tf_grid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_syntax.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_qmf_c.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_qmf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_noise.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_huff.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_hfgen.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_hfadj.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_fbt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_e_nf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_dec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sbr_dct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rvlc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pulse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ps_tables.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ps_dec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pns.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="output.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="neaacdec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ms.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mp4ffint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mp4ff_int_types.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mp4ff.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mp4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mdct_tab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mdct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lt_predict.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="kbd_win.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="is.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="iq_table.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="id3v2tag.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ic_predict.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="huffman.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="fixed.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="filtbank.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="filestream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="faad.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="error.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="drm_dec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="drc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cfft_tab.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cfft.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="bits.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="analysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="aacinfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SpecialAAAC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialAAACDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="aac_decode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="audio.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="getopt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="bits.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cfft.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="decoder.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="drc.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="drm_dec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="error.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="filtbank.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="hcr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="huffman.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ic_predict.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="is.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lt_predict.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mdct.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4atom.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4ff.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4meta.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4sample.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4tagupdate.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mp4util.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ms.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="output.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pns.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ps_dec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ps_syntax.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pulse.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rvlc.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_dct.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_dec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_e_nf.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_fbt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_hfadj.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_hfgen.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_huff.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_qmf.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_syntax.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sbr_tf_grid.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="specrec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ssr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ssr_fb.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ssr_ipqf.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="syntax.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tns.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SpecialAAAC.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

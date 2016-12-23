@@ -1,0 +1,11 @@
+
+                ChangeLog file for ffmpegmfc
+
+Changes in 1.2:
+- Support use external ffmpeg.exe to convert media files.
+
+Changes in 1.1:
+- Add Unicode Character Set Support
+- Fixed some memory leaks
+- Fixed exit_program() function in ffmpeg.c to release the file when a conversion finished
+- Fixed some functions in TaskList

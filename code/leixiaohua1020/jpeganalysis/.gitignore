@@ -1,0 +1,8 @@
+#¹ıÂË
+Debug/
+Release/
+ipch/
+#¹ıÂË
+*.sdf
+*.yuv
+*.tga
